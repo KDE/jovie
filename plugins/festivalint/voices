@@ -222,7 +222,7 @@ Comment=Deutsche weibliche, Festival
 
 [abc_diphone]
 Name=OGC abc
-Language=es
+Language=es_mx
 Gender=male
 Preload=false
 VolumeAdjustable=true
@@ -232,7 +232,7 @@ Comment=Mexican Spanish Male, OGC
 
 [hvs_diphone]
 Name=OGC hvs
-Language=es
+Language=es_mx
 Gender=female
 Preload=false
 VolumeAdjustable=true
