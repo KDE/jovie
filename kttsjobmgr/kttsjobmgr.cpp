@@ -580,7 +580,7 @@ void KttsJobMgrPart::slot_job_change_talker()
             i18n("Select Talker"),
             KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
             KDialogBase::Cancel,
-            this->widget(),
+            widget(),
             "selectTalker_dlg",
             true,
             true);
