@@ -28,9 +28,9 @@ KttsUtils::~KttsUtils() {
 
 /** 
  * Check if an XML document has a certain root element.
- * @param xmldoc                 The document to check for the element.
- * @param elementName      The element to check for in the document.
- * @returns                             true if the root element exists in the document, false otherwise.
+ * @param xmldoc             The document to check for the element.
+ * @param elementName        The element to check for in the document.
+ * @returns                  True if the root element exists in the document, false otherwise.
 */
 bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName) {
     // Strip all whitespace and go from there.
@@ -47,8 +47,18 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
         xmlStatementEnd += 2;  // len '?>' == 2
         doc = doc.right(doc.length() - xmlStatementEnd);
     }
+    // Take off leading comments, if they exist.
+    while(doc.startsWith("<!--") || doc.startsWith(" <!--")) {
+        int commentStatementEnd = doc.find("-->");
+        if(commentStatementEnd == -1) {
+            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            return false;
+        }
+        commentStatementEnd += 3; // len '>' == 2
+        doc = doc.right(doc.length() - commentStatementEnd);
+    }
     // Take off the doctype statement if it exists.
-    if(doc.startsWith("<!DOCTYPE") || doc.startsWith(" <!DOCTYPE")) {
+    while(doc.startsWith("<!DOCTYPE") || doc.startsWith(" <!DOCTYPE")) {
         int doctypeStatementEnd = doc.find(">");
         if(doctypeStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
@@ -64,10 +74,10 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
 /** 
  * Check if an XML document has a certain DOCTYPE.
  * @param xmldoc             The document to check for the doctype.
- * @param name                The doctype name to check for. Pass QString::null to not check the name.
+ * @param name               The doctype name to check for. Pass QString::null to not check the name.
  * @param publicId           The public ID to check for. Pass QString::null to not check the ID.
- * @param systemId          The system ID to check for. Pass QString::null to not check the ID.
- * @returns                         true if the parameters match the doctype, false otherwise.
+ * @param systemId           The system ID to check for. Pass QString::null to not check the ID.
+ * @returns                  True if the parameters match the doctype, false otherwise.
 */
 bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const QString &publicId, const QString &systemId*/) {
     // Strip all whitespace and go from there.
@@ -84,6 +94,16 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
         xmlStatementEnd += 2;  // len '?>' == 2
         doc = doc.right(doc.length() - xmlStatementEnd);
     }
-        // Take off the doctype statement if it exists.
-    return (doc.startsWith("<!DOCTYPE" + name) || doc.startsWith(" <!DOCTYPE" + name));
+    // Take off leading comments, if they exist.
+    while(doc.startsWith("<!--") || doc.startsWith(" <!--")) {
+        int commentStatementEnd = doc.find("-->");
+        if(commentStatementEnd == -1) {
+            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            return false;
+        }
+        commentStatementEnd += 3; // len '>' == 2
+        doc = doc.right(doc.length() - commentStatementEnd);
+    }
+    // Match the doctype statement if it exists.
+    return (doc.startsWith("<!DOCTYPE " + name) || doc.startsWith(" <!DOCTYPE " + name));
 }
