@@ -29,6 +29,9 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
+// KTTS includes.
+#include "utils.h"
+
 // FestivalInt includes.
 #include "festivalintproc.h"
 #include "festivalintproc.moc"
@@ -383,7 +386,7 @@ bool FestivalIntProc::sendIfReady()
 */
 bool FestivalIntProc::isSable(const QString &text)
 {
-    return (text.contains("<SABLE"));
+    return KttsUtils::hasRootElement( text, "SABLE" );
 }
 
 /**

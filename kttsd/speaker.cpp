@@ -37,6 +37,7 @@
 #include "speaker.h"
 #include "speaker.moc"
 #include "talkermgr.h"
+#include "utils.h"
 
 /**
 * The Speaker class takes sentences from the text queue, messages from the
@@ -839,13 +840,7 @@ void Speaker::pauseUtteranceByJobNum(const uint jobNum)
  */
 bool Speaker::isSsml(const QString &text)
 {
-    /// A slight improvement over the previous "check for a starting speak tag" method.
-    /// This checks to see if the root tag of the text is a <speak> tag. 
-    QDomDocument ssml;
-    ssml.setContent(text, false);  // No namespace processing.
-    /// Check to see if this is SSML
-    QDomElement root = ssml.documentElement();
-    return (root.tagName() == "speak");
+    return KttsUtils::hasRootElement( text, "speak" );
 }
 
 /**
