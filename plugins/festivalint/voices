@@ -90,7 +90,7 @@ Gender=male
 Preload=false
 VolumeAdjustable=true
 RateAdjustable=true
-PitchAdjustable=true
+PitchAdjustable=false
 Comment=Castilian Spanish Male
 Comment[es]=Español masculino
 
