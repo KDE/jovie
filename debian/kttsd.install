@@ -53,9 +53,9 @@ debian/tmp/usr/share/icons/hicolor/16x16/apps/kttsd.png
 debian/tmp/usr/share/icons/hicolor/22x22/apps/kttsd.png
 debian/tmp/usr/share/icons/hicolor/32x32/apps/kttsd.png
 debian/tmp/usr/share/icons/hicolor/48x48/apps/kttsd.png
-debian/tmp/usr/share/applnk/Settings/Accessibility/kcmkttsmgr.desktop
+debian/tmp/usr/share/applnk/Settings/Accessibility/kcmkttsd.desktop
 debian/tmp/usr/share/applnk/Application/kttsmgr.desktop
-debian/tmp/usr/share/applications/kde/kcmkttsmgr.desktop
+debian/tmp/usr/share/applications/kde/kcmkttsd.desktop
 debian/tmp/usr/share/applications/kde/kttsmgr.desktop
 debian/tmp/usr/share/locale/az/LC_MESSAGES/kttsd.mo
 debian/tmp/usr/share/locale/br/LC_MESSAGES/kttsd.mo

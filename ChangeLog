@@ -1,3 +1,8 @@
+2004-10-20  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
+        * kcm_kttsmgr and kcm_kttsd are now identical libraries/KCModules.
+          Applications should use kcm_kttsd.  When all apps have stopped
+          using kcm_kttsmgr, remove it.
+
 2004-10-19  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * The following installed files were renamed
           on or about 19 Oct 2004:

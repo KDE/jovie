@@ -29,11 +29,18 @@ fi
 
 set -x
 
+# kcm_kttsmgr and kcm_kttsd are now identical.  Apps should use
+# kcm_kttsd.  Once all apps no longer use kcm_kttsmgr, remove it.
+# Change made on or about 20 Oct 2004.
+
+# $LIBTOOL --mode=uninstall $PREFIX/lib/kde3/kcm_kttsmgr
+# rm -f $PREFIX/share/applnk/Settings/Accessibility/kcmkttsmgr.desktop
+rm -f $PREFIX/share/applications/kde/kcmkttsmgr.desktop
+
 # Renamed libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention
 # on or about 19 Oct 2004:
 
 $LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libkttsjobmgr
-
 
 # The following installed files were renamed
 # on or about 19 Oct 2004:

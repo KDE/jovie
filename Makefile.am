@@ -8,7 +8,6 @@ SUBDIRS = \
         kttsjobmgr \
         kcmkttsmgr \
         kttsmgr \
-        kcmkttsd \
         app-plugins
 
 # Generate API documentation.

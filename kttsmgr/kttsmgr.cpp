@@ -44,9 +44,9 @@ int main (int argc, char *argv[])
 
     KUniqueApplication app;
     
-    // The real work of KTSS Manager is done in the KControl Module kcmkttsmgr.
+    // The real work of KTSS Manager is done in the KControl Module kcmkttsd.
     KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-Speech Manager", 0, "kttsmgrdlg", false);
-    dlg.addModule("kcmkttsmgr");
+    dlg.addModule("kcmkttsd");
 
     // Create system tray object
     KttsMgrTray tray(&dlg);

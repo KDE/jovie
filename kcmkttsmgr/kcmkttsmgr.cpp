@@ -63,8 +63,11 @@ const bool textPostSndCheckValue = false;
 const QString textPostSndValue = "";
 
 // Make this a plug in.
+// Provide two identical modules.  Once all apps have stopped using
+// kcm_kttsmgr, remove it.
 typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kttsmgr, KCMKttsMgrFactory("kcmkttsmgr") );
+K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kcm_kttsd") );
+K_EXPORT_COMPONENT_FACTORY( kcm_kttsmgr, KCMKttsMgrFactory("kcm_kttsmgr") );
 
 /**
 * Constructor
