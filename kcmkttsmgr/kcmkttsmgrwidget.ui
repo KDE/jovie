@@ -185,7 +185,7 @@
                                             <bool>true</bool>
                                         </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
+                                            <string>Check to limit notification speaking to those messages displayed in popup windows only.</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -301,7 +301,7 @@
                                     <cstring>filtersList</cstring>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.</string>
+                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.  Filters modify text before it is spoken.  They can be used to substitute for mispoken words, transform XML from one form to another, or change the default Talker to be used for speech output.</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -468,7 +468,7 @@
                                     <cstring>sbdsList</cstring>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.</string>
+                                    <string>This is a list of all the configured Sentence Boundary Detector (SBD) Filters.  SBDs break long text jobs up into sentences, which reduces the time before a job begins speaking, and permits you to advance or rewind through a job.  SBDs are applied in the order listed (top to bottom) after all the normal filters at the top of this screen have been applied.  Filtering stops when the first SBD modifies the text.</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -614,7 +614,7 @@
                             <cstring>talkersList</cstring>
                         </property>
                         <property name="whatsThis" stdset="0">
-                            <string>This is a list of all the configured Talkers.  Talkers higher in the list have higher priority.</string>
+                            <string>This is a list of all the configured Talkers.  A Talker is a speech synthesizer that has been configured with a language, voice, gender, speaking rate, and volume.  Talkers higher in the list have higher priority.  The topmost Talker will be used when no talker attributes have been specified by an application.</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="1">
@@ -1075,6 +1075,9 @@
                         <property name="title">
                             <string>Out&amp;put Using</string>
                         </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;p&gt;Select the audio output method desired.  If you select &lt;b&gt;GStreamer&lt;/b&gt;, you must also select a &lt;b&gt;Sink&lt;/b&gt;.&lt;/p&gt;&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;:  You must have GStreamer &gt;= 0.87 to use GStreamer.&lt;/p&gt;</string>
+                        </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
@@ -1092,6 +1095,9 @@
                                 <property name="buttonGroupId">
                                     <number>0</number>
                                 </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check to use the KDE aRts system for audio output.</string>
+                                </property>
                             </widget>
                             <widget class="QRadioButton" row="1" column="0">
                                 <property name="name">
@@ -1102,6 +1108,9 @@
                                 </property>
                                 <property name="text">
                                     <string>GStrea&amp;mer</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;Check to use the GStreamer audio output system.  You must also select a &lt;b&gt;Sink&lt;/b&gt; plugin.&lt;/p&gt;</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget" row="2" column="0">
