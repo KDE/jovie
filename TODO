@@ -9,11 +9,17 @@ _ There are several issues with i18n:
       need to call KLocale::setMainCatalogue?  Also, what about kttsjobmgr, which is kpart
       used in kcmkttsmr?
     _ The plugin Makefile.am's lack message targets, or should they just use kttsmgr catalog?
+    _ The Makefile.am HOWTO seems to imply that messages target should only appear in
+      top-level directory. ??  Furthermore it seems to say .pot filename must match
+      application/part/module. ??
     _ I'm confused about this i18n stuff and could REALLY use some expert help..grc.
 _ Festival Interactive plugin:
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
 _ KTTSMgr:
+    _ GUI problems with latest kdelibs (HEAD 12/2004).  Can't size screen smaller than total
+      of headers in Talker KListView.  When restoring from system tray icon, tab widget
+      doesn't resize to full screen.  Size screen and it resizes.
     _ When speaking SSML, the window expands to maximum height to accomodate displaying the
       "Current Sentence", which is all of the SSML.  Annoying.  Better to not expand and display
       vertical scrollbar.
@@ -37,6 +43,8 @@ _ KTTSD:
     _ Add support for speech markers.
     _ Implement error signal handling in KTTSD.
     _ Add support for SSML, JSML, Sable and other Speech Markup languages.
+      _ Allow sentence parsing in combination with SSML markup so that users can advance,
+        rewind, etc.
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
