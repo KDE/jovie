@@ -130,6 +130,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         m_kttsmgrw->sinkComboBox->setEnabled(true);
         QStringList sinkList = player->getPluginList("Sink/Audio");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
+        m_kttsmgrw->sinkComboBox->clear();
         m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
     }
     delete player;

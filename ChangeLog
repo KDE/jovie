@@ -1,5 +1,6 @@
 2004-12-06  Gary Cramblitt (PhantomsDad)
         * Initial, but primitive support for SSML with Hadifix.
+        * Apply some Juk patches to GStreamerPlayer.
 
 2004-12-03  Gary Cramblitt (PhantomsDad)
         * Audio players are now plugins.  This permits distribution of binary packages
