@@ -241,49 +241,19 @@ To start the &kmyapplication; system, type the following command in a Konsole
 
 <para>or click on &kmyapplication; in the KDE Menu.</para>
 
-<para>
-<screenshot>
-<screeninfo>The KDE Text-to-Speech Manager (General tab).</screeninfo>
-	<mediaobjectco>
-		<imageobjectco>
-			<areaspec units="calspair">
-				<area id="pt-gen-1" coords="1 1"/>
-				<area id="pt-gen-2" coords="1 1"/>
-			</areaspec>
-			<imageobject>
-				<imagedata fileref="general.png" format="PNG"/>
-			</imageobject>
-		</imageobjectco>
-		<textobject>
-			<phrase>The KDE Text-to-Speech Manager (General tab)</phrase>
-		</textobject>
-	</mediaobjectco>
-</screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-gen-1"><para>Click here to select and configure a speech
-synthesis plugin.</para></callout>
-<callout arearefs="pt-gen-2"><para>Check this box to activate the KDE Text-to-Speech system.  This starts the KDE TTS Deamon (KTTSD).  Unchecking will stop KTTSD and deactivate the KDE TTS system.</para></callout>
-</calloutlist>
-</para>
-
-<para>If this is the first time running <command>kttsmgr</command>, do not
-check the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  Instead,
-first click on the <guilabel>Languages</guilabel> tab and see the next section
-(<xref linkend="select-plugin" />).
-When you have selected a default speech synthesis plugin, come
-back to the <guilabel>General</guilabel> tab and check the box to
-activate the speech system.</para>
+<para>If this is the first time running <command>kttsmgr</command>, or
+if you have not yet configured any Talkers, the <guilabel>Talkers</guilabel>
+screen appears.  See <xref linkend="select-plugin" />.
+If you have already configured at least one Talker, the <guilabel>General</guilabel>
+screen appears.  See <xref linkend="general" />.</para>
 
 </sect1>
 
 <sect1 id="select-plugin">
-<title>Selecting Synthesis Plugins</title>
+<title>Selecting Synthesis Plugins (Talkers)</title>
 
-<para>When you click the <guilabel>Languages</guilabel> tab in <command>kttsmgr</command>,
-the Languages screen appears.</para>
+<para>When you click the <guilabel>Talkers</guilabel> tab in <command>kttsmgr</command>,
+the <guilabel>Talkers</guilabel> screen appears.</para>
 
 <para>
 <screenshot>
@@ -291,18 +261,19 @@ the Languages screen appears.</para>
 	<mediaobjectco>
 		<imageobjectco>
 			<areaspec units="calspair">
-				<area id="pt-lang-1" coords="1 1"/>
-				<area id="pt-lang-2" coords="1 1"/>
-				<area id="pt-lang-3" coords="1 1"/>
-				<area id="pt-lang-4" coords="1 1"/>
-				<area id="pt-lang-5" coords="1 1"/>
+				<area id="pt-talker-1" coords="1 1"/>
+				<area id="pt-talker-2" coords="1 1"/>
+				<area id="pt-talker-3" coords="1 1"/>
+				<area id="pt-talker-4" coords="1 1"/>
+				<area id="pt-talker-5" coords="1 1"/>
+				<area id="pt-talker-6" coords="1 1"/>
 			</areaspec>
 			<imageobject>
-				<imagedata fileref="languages.png" format="PNG"/>
+				<imagedata fileref="talkers.png" format="PNG"/>
 			</imageobject>
 		</imageobjectco>
 		<textobject>
-			<phrase>The KDE Text-to-Speech Manager (Languages tab)</phrase>
+			<phrase>The KDE Text-to-Speech Manager (Talkers tab)</phrase>
 		</textobject>
 	</mediaobjectco>
 </screenshot>
@@ -310,30 +281,84 @@ the Languages screen appears.</para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-lang-1"><para>Select the language to be spoken.</para></callout>
-<callout arearefs="pt-lang-2"><para>Select the speech synthesis plugin.</para></callout>
-<callout arearefs="pt-lang-3"><para>Click to add the plugin to the list.</para></callout>
-<callout arearefs="pt-lang-4"><para>Click to make this the default language and plugin.</para></callout>
-<callout arearefs="pt-lang-5"><para>Click to configure the plugin.</para></callout>
+<callout arearefs="pt-talker-1"><para>Click to add a new <guilabel>Talker</guilabel>, which is a speech synthesis plugin.</para></callout>
+<callout arearefs="pt-talker-2"><para>All the configured <guilabel>Talkers</guilabel> are listed here.  Highest priority <guilabel>Talkers</guilabel> are listed at the top.  The top-most <guilabel>Talker</guilabel> will be used to do the speaking when an application does not specify a <guilabel>Talker.</guilabel></para></callout>
+<callout arearefs="pt-talker-3"><para>Click on a <guilabel>Talker</guilabel> in the list to highlight it and click this button to remove it.</para></callout>
+<callout arearefs="pt-talker-4"><para>Click on a <guilabel>Talker</guilabel> in the list to highlight it and click this button to display the synthesis plugin's configuration dialog.</para></callout>
+<callout arearefs="pt-talker-5"><para>Click on a <guilabel>Talker</guilabel> in the list to highlight it and click this button to move it down one row in the list.  The lower a <guilabel>Talker</guilabel> appears in the list, the lower its priority.</para></callout>
+<callout arearefs="pt-talker-6"><para>Click one of these buttons to apply the changes you have made to the running &kmyapplication; system.</para></callout>
 </calloutlist>
 </para>
 
-<warning>
-<para>Be sure to select a speech synthesis plugin in the list and click the
-<guibutton>Default</guibutton> button.  A green checkmark will appear next to the
-plugin in the list to indicate that it is the default.
+<para>When you click the <guilabel>Add</guilabel> button, the <guilabel>Add Talker</guilabel> screen appears.</para>
+
+<para>
+	<screenshot>
+		<screeninfo>Add Talker screen.</screeninfo>
+		<mediaobjectco>
+			<imageobjectco>
+				<areaspec units="calspair">
+					<area id="pt-addtalker-1" coords="1 1"/>
+					<area id="pt-addtalker-2" coords="1 1"/>
+					<area id="pt-addtalker-3" coords="1 1"/>
+				</areaspec>
+				<imageobject>
+					<imagedata fileref="addtalker.png" format="PNG"/>
+				</imageobject>
+			</imageobjectco>
+			<textobject>
+				<phrase>Add Talker screen</phrase>
+			</textobject>
+		</mediaobjectco>
+	</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-addtalker-1"><para>You can select a speech synthesis
+plugin by either <guilabel>Synthesizer</guilabel> name, or by the <guilabel>Language</guilabel> the synthesizer can speak.
+Check the radio button next to the corresponding box.  When the
+<guilabel>Language</guilabel> radio button is checked, the
+<guilabel>Language</guilabel> box displays all the languages supported by
+all available synthesizers, and the <guilabel>Synthesizer</guilabel> box
+displays only those synthesizers that support the chosen language.
+When the <guilabel>Synthesizer</guilabel> radio button is checked,
+the <guilabel>Synthesizer</guilabel> box displays all available
+synthesizers, and the <guilabel>Language</guilabel> box displays
+only the languages supported by the chosen synthesizer.</para></callout>
+<callout arearefs="pt-addtalker-2"><para>Choose the language and
+synthesizer plugin here.</para></callout>
+<callout arearefs="pt-addtalker-3"><para>When you click here,
+most synthesizer plugins will automatically configure themselves,
+choosing a default setup.  A new <guilabel>Talker</guilabel>
+will appear in the list on the <guilabel>Talkers</guilabel> tab.
+Click the <guilabel>Configure</guilabel>
+button to display or edit the <guilabel>Talker</guilabel>'s 
+configuration.  See <xref linkend="configure-plugin" /></para></callout>
+</calloutlist>
+</para>
+
+
+<warning><para>
+You must configure at least one <guilabel>Talker</guilabel> and click the <guilabel>Apply</guilabel> or <guilabel>OK</guilabel> buttons before you can start the 
+&kmyapplication; system and begin speaking text.  To start the &kmyapplication;
+system, click the <guilabel>General</guilabel> tab and check the
+<guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.
+see <xref linkend="general" />.
 </para>
 </warning>
 
 </sect1>
 
 <sect1 id="configure-plugin">
-<title>Configuring Synthesis Plugins</title>
+<title>Configuring Synthesis Plugins (Talkers)</title>
 
-<para>When you click the <guilabel>Properties</guilabel> tab in <command>kttsmgr</command>,
-or click the <guibutton>Configure</guibutton> button on the <guilabel>Languages screen,</guilabel>
-the <guilabel>Properties</guilabel> screen appears.  Each speech synthesis plugin has a different
-<guilabel>Properties</guilabel> screen.  The following is an example for
+<para>When you click the <guilabel>Add</guilabel> button on the
+<guilabel>Talkers</guilabel>tab and add a Talker, or click the
+<guilabel>Configure</guilabel> button,
+the <guilabel>Talker Configuration</guilabel> screen appears.
+Each speech synthesis plugin has a different
+<guilabel>Talker Configuration</guilabel> screen.  The following is an example for
 configuring the Festival Interactive plugin.  For specifics for each
 kind of plugin, see <xref linkend="configuration" /></para>
 
@@ -372,14 +397,85 @@ kind of plugin, see <xref linkend="configuration" /></para>
 
 <warning><para>
 Be sure to click the <guibutton>Apply</guibutton> button, otherwise your
-changes will not take effect.
+changes will not take effect in the running &kmyapplication; system.
 </para></warning>
 
 <para>Assuming the test worked, you are almost ready to begin using &kmyapplication;.
 Now go back to the <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech System (KTTSD) box.</guilabel>  This
-will start the KDE TTS Deamon.  You may now begin using &kmyapplication; to
+will start the KDE TTS Deamon.  See <xref linkend="general" />.
+You may now begin using &kmyapplication; to
 speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
+See <xref linkend="jobmgr" />.
+</para>
+
+</sect1>
+
+<sect1 id="general">
+<title>Starting KTTSD and Setting General Options</title>
+
+<para>Once you have configured at least one Talker,
+you can start the KDE Text-to-Speech System.  Click on the
+<guilabel>General</guilabel> tab.  The <guilabel>General</guilabel>
+screen appears.  You can also set some general options on this screen.
+</para>
+
+<para>
+	<screenshot>
+		<screeninfo>The KDE Text-to-Speech Manager (General tab).</screeninfo>
+		<mediaobjectco>
+			<imageobjectco>
+				<areaspec units="calspair">
+					<area id="pt-gen-1" coords="1 1"/>
+					<area id="pt-gen-2" coords="1 1"/>
+					<area id="pt-gen-3" coords="1 1"/>
+					<area id="pt-gen-4" coords="1 1"/>
+				</areaspec>
+				<imageobject>
+					<imagedata fileref="general.png" format="PNG"/>
+				</imageobject>
+			</imageobjectco>
+			<textobject>
+				<phrase>The KDE Text-to-Speech Manager (General tab)</phrase>
+			</textobject>
+		</mediaobjectco>
+	</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-gen-1"><para>Check this box to activate the &kmyapplication; system.  This starts the KDE TTS Deamon (KTTSD).  If KTTSD starts successfully,
+the <guilabel>Jobs</guilabel> tab will appear.
+Once KTTSD has been started, you can begin creating and speaking text jobs.
+See <xref linkend="jobmgr" />.  Unchecking will stop KTTSD and deactivate the KDE TTS system.
+<note><para>If this box is disabled, you have not yet configured any Talkers
+(or you forgot to click the <guilabel>Apply</guilabel> button).
+See <xref linkend="select-plugin"/>.</para></note>
+</para></callout>
+<callout arearefs="pt-gen-2"><para>Check this box to speak KDE notifications.
+See <xref linkend="knotify" /> for more information.</para></callout>
+<callout arearefs="pt-gen-3"><para>When this box is checked, an icon appears
+in the system tray whenever <command>kttsmgr</command> is running.  In this
+mode, clicking <guilabel>OK</guilabel> or <guilabel>Cancel</guilabel> does
+not cause <command>kttsmgr</command> to exit.  Instead, the screen
+disappears but <command>kttsmgr</command> continues running in the system
+tray.  Click the icon to restore the screen.  To quit <command>kttsmgr</command>,
+right-click on the icon in the system tray and choose <guilabel>Quit</guilabel>.
+When unchecked, an icon
+does not appear in the system tray.  Clicking <guilabel>OK</guilabel>
+or <guilabel>Cancel</guilabel> quits <command>kttsmgr</command>.
+<note><para>When <command>kttsmgr</command> exits, 
+&kmyapplication; keeps running if the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box is checked.</para></note>
+<note><para>This option does not take effect until the next time
+<command>kttsmgr</command> is started.</para></note>
+<note><para>This option has no effect when <command>kttsmgr</command> is
+running in the KDE Control Center.</para></note>
+</para></callout>
+<callout arearefs="pt-gen-4"><para>When this box is checked, the <command>kttsmgr</command> screen appears when you start <command>kttsmgr</command>.  If unchecked, the
+<command>kttsmgr</command> icon appears in the system tray when
+<command>kttsmgr</command> is started, but the screen does not appear.
+Click the icon in the system tray to make the screen appear.</para></callout>
+</calloutlist>
 </para>
 
 </sect1>
@@ -436,7 +532,8 @@ in the system tray to restore the screen.</para></callout>
 
 <note><para>The <guilabel>Jobs</guilabel> tab only appears when KTTSD is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
 <guilabel>General</guilabel> tab and check the
- <guilabel>Enable Text-to-Speech (KTTSD) box.</guilabel></para></note>
+<guilabel>Enable Text-to-Speech (KTTSD) box.</guilabel></para>
+</note>
 
 </sect1>
 
@@ -686,9 +783,9 @@ KDE DCOP interface to program <command>kttsd</command> object <command>kspeech</
 
 <para>To queue a text job to be spoken</para>
 
-<para><userinput>dcop kttsd kspeech setText "<replaceable>text</replaceable>"  "<replaceable>language</replaceable>"</userinput></para>
+<para><userinput>dcop kttsd kspeech setText "<replaceable>text</replaceable>"  "<replaceable>talker</replaceable>"</userinput></para>
 
-<para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>language</replaceable></userinput> is a language code
+<para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>talker</replaceable></userinput> is a language code
 such as <userinput><replaceable>en</replaceable></userinput>, <userinput><replaceable>cy</replaceable></userinput>, etc.  This command does
 not speak the text; instead it queues a text job for speaking.</para>
 
@@ -1002,7 +1099,7 @@ engines available.  Voice quality is generally good, there are quite
 a few languages and voices supported, and you can control the voice and
 speed of the generated speech from &kmyapplication;.</para>
 
-<para>Plugin Name: <guilabel>Festival Interactive</guilabel></para>
+<para>Synthesizer Name: <guilabel>Festival Interactive</guilabel></para>
 
 <para>URL: <ulink url="http://www.cstr.ed.ac.uk/projects/festival/">
 http://www.cstr.ed.ac.uk/projects/festival/</ulink>
@@ -1021,8 +1118,10 @@ Additional festival voices are available from</para>
 <para>festival is typically included with Linux distributions.  Check your
 distro CDs to see if it is included.</para>
 
-<para>Start <userinput>kttsmgr</userinput>, choose the appropriate language code and add <guilabel>Festival Interactive</guilabel>.
-Click the <guibutton>Configure</guibutton> button.  If the Festival voice files are not in the default location,
+<para>Start <userinput>kttsmgr</userinput>.  On the <guilabel>Talkers</guilabel> screen,
+click the <guilabel>Add</guilabel> button.  Choose <guilabel>Festival Interactive</guilabel> and a <guilabel>Language</guilabel>.
+If the <guilabel>Configure Talker</guilabel> screen does not appear, 
+click the <guibutton>Configure</guibutton> button.  If the Festival voice files are not in the default location,
 (<filename>/usr/share/festival/voices/</filename>), try <filename>/usr/local/share/festival/voices/</filename>.
 Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
 <guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
@@ -1040,7 +1139,7 @@ sacrifices voice quality somewhat.
 You cannot control the pitch, volume, or speed of this engine
 from &kmyapplication;.</para>
 
-<para>Plugin Name: <guilabel>Festival Lite (flite)</guilabel></para>
+<para>Synthesizer Name: <guilabel>Festival Lite (flite)</guilabel></para>
 
 <para>URL: <ulink url="http://www.speech.cs.cmu.edu/flite/index.html">
 http://www.speech.cs.cmu.edu/flite/index.html</ulink>
@@ -1068,7 +1167,7 @@ Voice quality is good, but language support is currently somewhat limited.
 You can control the voice, pitch, speed, and volume from <command>kttsmgr</command>.
 </para>
 
-<para>Plugin Name: <guilabel>Hadifix</guilabel></para>
+<para>Synthesizer Name: <guilabel>Hadifix</guilabel></para>
 
 <para>URL: see below</para>
 
@@ -1092,7 +1191,8 @@ http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</uli
 <step><para>Either copy <filename>txt2phorc</filename> to <filename>~/.txt2phorc</filename> or to <filename>/etc/txt2pho</filename>.
 Note that you drop the "rc" in file name.</para></step>
 <step><para>In <userinput>kttsmgr</userinput>, choose the German language (<guilabel>de</guilabel>), and add <guilabel>Hadifix</guilabel>.</para></step>
-<step><para>On the properties page, configure a voice and the paths to MBROLA and txt2pho.</para></step>
+<step><para>On the <guilabel>Configure Talker</guilabel> screen,
+configure a voice and the paths to MBROLA and txt2pho.</para></step>
 <step><para>Click the <guibutton>Test</guibutton> button to test.</para></step>
 </procedure>
 
@@ -1108,7 +1208,7 @@ It is light weight, but sacrifices voice quality somewhat.
 You cannot control the pitch, volume, or speed of this engine
 from &kmyapplication;.</para>
 
-<para>Plugin Name: <guilabel>Epos TTS Synthesis System</guilabel></para>
+<para>Synthesizer Name: <guilabel>Epos TTS Synthesis System</guilabel></para>
 
 <para>URL: <ulink url="http://epos.ure.cas.cz/">
 http://epos.ure.cas.cz/</ulink>
@@ -1116,12 +1216,12 @@ http://epos.ure.cas.cz/</ulink>
 
 <para>Debian Install Command: <userinput>apt-get install epos</userinput></para>
 
-<para>Start <command>kttsmgr</command>, choose Czeck or Slovak
-language code (<guilabel>cz</guilabel> or <guilabel>sk</guilabel>) and add 
-<guilabel>Epos TTS Synthesis System</guilabel>.
-Click <guibutton>Configure</guibutton> button.
+<para>Start <command>kttsmgr</command>.  On the <guilabel>Talkers</guilabel> tab,
+click the <guilabel>Add</guilabel> button.  Choose Czeck or Slovak
+language and <guilabel>Epos TTS Synthesis System</guilabel>.
 If the epos server executable and client are not
-in your PATH, specify the paths to these executables.  The options boxes
+in your PATH, specify the paths to these executables
+in the <guilabel>Configure Talker</guilabel> screen.  The options boxes
 permit you to pass additional options to the server and client.  In a konsole,
 type <userinput>epos -h</userinput> or <userinput>say -h</userinput>
 for information.</para>
@@ -1139,7 +1239,7 @@ system to use it.  It currently has limited voice and language support.
 You cannot control the pitch, volume, or speed of this engine
 from &kmyapplication;.</para>
 
-<para>Plugin Name: <guilabel>FreeTTS</guilabel></para>
+<para>Synthesizer Name: <guilabel>FreeTTS</guilabel></para>
 
 <para>URL: <ulink url="http://sourceforge.net/projects/freetts/">
 http://sourceforge.net/projects/freetts/</ulink>
@@ -1157,7 +1257,7 @@ http://sourceforge.net/projects/freetts/</ulink>
 <para>The command plugin permits you to use &kmyapplication; with any
 speech synthesis engine that can be run as a command in a Konsole.</para>
 
-<para>Plugin Name: <guilabel>Command</guilabel></para>
+<para>Synthesizer Name: <guilabel>Command</guilabel></para>
 
 <para>URL: none</para>
 
