@@ -1,5 +1,4 @@
-* In order to successfully build apidocs, you need package qt3-doc installed.
-  FWIW, I have the following packages installed (among many others, of course):
+* FWIW, I have the following packages installed (among many others, of course):
     libqt3-headers 3.3.3-4.1      Qt3 header files
     libqt3-mt-dev  3.3.3-4.1      Qt development files (Threaded)
     libqt3c102-mt  3.3.3-4.1      Qt GUI Library (Threaded runtime version), V
@@ -14,43 +13,30 @@
     kde-devel      3.1.2          The K Desktop Environment (development files
     kde-devel-extr 3.1.2-0.2      The K Desktop Environment (extra development
     exuberant-ctag 5.5.4-1        build tag file indexes of source code defini
-    
+
 * Here's my build procedure:
-    - cvs2dist kdenonbeta kttsd --version 0.2.0
-    - copy resulting kttsd-0.2.0.tar.gz to a work folder and rename to kttsd_0.2.0.orig.tar.gz
+    - If you have not installed kdelibs-dev for KDE 3.4:
+        - Copy the following 2 files from kdelibs/interfaces/kspeech to $KDEDIR/include/:
+            kspeech.h
+            kspeechsink.h
+        - Copy the following file from kdelibs/interfaces/kspeech to $KDEDIR/share/servicetypes/:
+            dcoptexttospeech.desktop
+    - cvs2dist kdeaccessibility kttsd --version 0.3.0
+    - copy resulting kttsd-0.3.0.tar.gz to a work folder and rename to kttsd_0.3.0.orig.tar.gz
       (Note underscore)
     - unpack tarball
-    - cd kttsd-0.2.0
+    - cd kttsd-0.3.0
     - rm -fR autom4te.cache
     - rm INDEX
     - cp -R kttsd/debian debian
-    - Add the following line to end of Makefile.am
-        include $(top_srcdir)/admin/Doxyfile.am
-    - Add --enable-debug=full to configure line in rules
+    - Add --enable-debug=full --enable-kttsd-gstreamer to configure line in rules
     - debuild -uc -us
-    
+
 * dpkg-shlibdeps is reporting:
     dpkg-shlibdeps: warning: could not find path for libktts.so.1
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
-  
-* In order to get the apidocs to debuild, I had to change the rules file
-  compared to the one in kdeaccessibility as follows:
-    109c109
-    <       #cd $(objdir) && \
-    ---
-    >       cd $(objdir) && \
-    218,219c218,221
-    < binary-indep: build-indep install-indep
-    <       $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
-    ---
-    > binary-indep: build-indep
-    >
-    > # binary-indep: build-indep install-indep
-    > #     $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 * lintian is reporting the following:
     W: kttsd-appplugins: missing-depends-line
 
 * Should rc files be installed to etc/ tree?
-
-* Remove kcm_kttsmgr library once KMouth stops using it.

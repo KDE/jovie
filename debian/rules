@@ -106,7 +106,7 @@ build-indep-stamp: configure-stamp
 	cd $(objdir) && \
 	$(MAKE)
 
-	cd $(objdir) && \
+	#cd $(objdir) && \
 	$(MAKE) apidox
 
 	touch build-indep-stamp
@@ -215,10 +215,8 @@ binary-common:
 	dh_builddeb
 
 # Build architecture independant packages using the common target.
-binary-indep: build-indep
-
-# binary-indep: build-indep install-indep
-# 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+binary-indep: build-indep install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 # Build architecture dependant packages using the common target.
 binary-arch: build-arch install-arch

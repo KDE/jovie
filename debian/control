@@ -39,25 +39,3 @@ Description: KTTSD GStreamer plugin
  GStreamer wav file plugin and at least one GStreamer
  output plugin (aRts, oss, or nas).
 
-Package: kttsd-dev
-Architecture: any
-Depends: kttsd, ${shlibs:Depends}
-Description: KDE Text-to-Speech system API developer files
- These are files needed to develop KDE applications that use
- the KDE Text-to-Speech system.
-
-Package: kttsd-appplugins
-Architecture: any
-Depends: kttsd, ${shlibs:Depends}
-Description: KDE Text-to-Speech system application plugins
- These are plugins for various KDE applications to enable them to
- speak text via the KDE Text-to-Speech system.
- .
- Includes
- --------
-  * A plugin for Konqueror web browser to enable speaking all or part
-    of a web page.
-  * A plugin for Kate text editor to enable speaking all or part of
-    plain text.
-  * A plugin for Kate embedded text editor to enable speaking all or
-    part of plain text when running Kate embedded in Konqueror.
