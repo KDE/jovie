@@ -1483,17 +1483,17 @@ Player* Speaker::createPlayerObject()
     {
         case 1 :
             {
-                plugInName = "KTTSD GStreamer Plugin";
+                plugInName = "kttsd_gstplugin";
                 break;
             }
         default:
             {
-                plugInName = "KTTSD Arts Plugin";
+                plugInName = "kttsd_artsplugin";
                 break;
             }
     }
     KTrader::OfferList offers = KTrader::self()->query(
-            "KTTSD/AudioPlugin", QString("Name == '%1'").arg(plugInName));
+            "KTTSD/AudioPlugin", QString("DesktopEntryName == '%1'").arg(plugInName));
 
     if(offers.count() == 1)
     {
