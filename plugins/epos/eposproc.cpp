@@ -65,8 +65,8 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     // kdDebug() << "Initializing plug in: Epos" << endl;
     // Retrieve path to epos executable.
     config->setGroup(configGroup);
-    m_eposServerExePath = config->readPathEntry("EposServerExePath", "epos");
-    m_eposClientExePath = config->readPathEntry("EposClientExePath", "say");
+    m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
+    m_eposClientExePath = config->readEntry("EposClientExePath", "say");
     m_eposLanguage = config->readEntry("Language", QString::null);
     m_time = config->readNumEntry("time", 100);
     m_pitch = config->readNumEntry("pitch", 100);

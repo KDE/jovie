@@ -49,7 +49,7 @@ bool FreeTTSProc::init(KConfig *config, const QString &configGroup) {
 	kdDebug() << "Running: FreeTTSProc::init()" << endl;
 	kdDebug() << "Initializing plug in: FreeTTS" << endl;
 	config->setGroup(configGroup);
-	m_freettsJarPath = config->readPathEntry("FreeTTSJarPath", "freetts.jar");
+	m_freettsJarPath = config->readEntry("FreeTTSJarPath", "freetts.jar");
 	kdDebug() << "FreeTTSProc::init: path to freetts.jar: " << m_freettsJarPath << endl;
 	return true;
 }

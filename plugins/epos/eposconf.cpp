@@ -100,8 +100,8 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     // kdDebug() << "EposConf::load: Running " << endl;
 
     config->setGroup(configGroup);
-    m_widget->eposServerPath->setURL(config->readPathEntry("EposServerExePath", "epos"));
-    m_widget->eposClientPath->setURL(config->readPathEntry("EposClientExePath", "say"));
+    m_widget->eposServerPath->setURL(config->readEntry("EposServerExePath", "epos"));
+    m_widget->eposClientPath->setURL(config->readEntry("EposClientExePath", "say"));
     m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
     m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "ISO 8859-2");
@@ -126,15 +126,15 @@ void EposConf::save(KConfig *config, const QString &configGroup){
     // kdDebug() << "EposConf::save: Running" << endl;
 
     config->setGroup("Epos");
-    config->writePathEntry("EposServerExePath",
+    config->writeEntry("EposServerExePath",
         realFilePath(m_widget->eposServerPath->url()));
-    config->writePathEntry("EposClientExePath", 
+    config->writeEntry("EposClientExePath", 
         realFilePath(m_widget->eposClientPath->url()));
     config->writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
     config->setGroup(configGroup);
-    config->writePathEntry("EposServerExePath", 
+    config->writeEntry("EposServerExePath", 
         realFilePath(m_widget->eposServerPath->url()));
-    config->writePathEntry("EposClientExePath", 
+    config->writeEntry("EposClientExePath", 
         realFilePath(m_widget->eposClientPath->url()));
     config->writeEntry("EposServerOptions", m_widget->eposServerOptions->text());
     config->writeEntry("EposClientOptions", m_widget->eposClientOptions->text());

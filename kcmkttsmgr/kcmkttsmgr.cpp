@@ -288,7 +288,7 @@ void KCMKttsMgr::load()
     m_kttsmgrw->textPreMsg->setEnabled(m_kttsmgrw->textPreMsgCheck->isChecked());
 
     m_kttsmgrw->textPreSndCheck->setChecked(m_config->readBoolEntry("TextPreSndEnabled", textPreSndCheckValue));
-    m_kttsmgrw->textPreSnd->setURL(m_config->readPathEntry("TextPreSnd", textPreSndValue));
+    m_kttsmgrw->textPreSnd->setURL(m_config->readEntry("TextPreSnd", textPreSndValue));
     m_kttsmgrw->textPreSnd->setEnabled(m_kttsmgrw->textPreSndCheck->isChecked());
 
     m_kttsmgrw->textPostMsgCheck->setChecked(m_config->readBoolEntry("TextPostMsgEnabled", textPostMsgCheckValue));
@@ -296,7 +296,7 @@ void KCMKttsMgr::load()
     m_kttsmgrw->textPostMsg->setEnabled(m_kttsmgrw->textPostMsgCheck->isChecked());
 
     m_kttsmgrw->textPostSndCheck->setChecked(m_config->readBoolEntry("TextPostSndEnabled", textPostSndCheckValue));
-    m_kttsmgrw->textPostSnd->setURL(m_config->readPathEntry("TextPostSnd", textPostSndValue));
+    m_kttsmgrw->textPostSnd->setURL(m_config->readEntry("TextPostSnd", textPostSndValue));
     m_kttsmgrw->textPostSnd->setEnabled(m_kttsmgrw->textPostSndCheck->isChecked());
 
     // Overall settings.
@@ -333,7 +333,7 @@ void KCMKttsMgr::load()
     m_kttsmgrw->keepAudioCheckBox->setChecked(
         m_config->readBoolEntry("KeepAudio",                                             m_kttsmgrw->keepAudioCheckBox->isChecked()));
     m_kttsmgrw->keepAudioPath->setURL(
-        m_config->readPathEntry("KeepAudioPath",
+        m_config->readEntry("KeepAudioPath",
         m_kttsmgrw->keepAudioPath->url()));
     m_kttsmgrw->keepAudioPath->setEnabled(m_kttsmgrw->keepAudioCheckBox->isChecked());
 
@@ -574,13 +574,13 @@ void KCMKttsMgr::save()
     m_config->writeEntry("TextPreMsg", m_kttsmgrw->textPreMsg->text());
 
     m_config->writeEntry("TextPreSndEnabled", m_kttsmgrw->textPreSndCheck->isChecked()); 
-    m_config->writePathEntry("TextPreSnd", PlugInConf::realFilePath(m_kttsmgrw->textPreSnd->url()));
+    m_config->writeEntry("TextPreSnd", PlugInConf::realFilePath(m_kttsmgrw->textPreSnd->url()));
 
     m_config->writeEntry("TextPostMsgEnabled", m_kttsmgrw->textPostMsgCheck->isChecked());
     m_config->writeEntry("TextPostMsg", m_kttsmgrw->textPostMsg->text());
 
     m_config->writeEntry("TextPostSndEnabled", m_kttsmgrw->textPostSndCheck->isChecked());
-    m_config->writePathEntry("TextPostSnd", PlugInConf::realFilePath(m_kttsmgrw->textPostSnd->url()));
+    m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(m_kttsmgrw->textPostSnd->url()));
 
     // Overall settings.
     m_config->writeEntry("EmbedInSysTray", m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
@@ -613,7 +613,7 @@ void KCMKttsMgr::save()
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
     m_config->writeEntry("AudioStretchFactor", m_kttsmgrw->timeBox->value());
     m_config->writeEntry("KeepAudio", m_kttsmgrw->keepAudioCheckBox->isChecked());
-    m_config->writePathEntry("KeepAudioPath", m_kttsmgrw->keepAudioPath->url());
+    m_config->writeEntry("KeepAudioPath", m_kttsmgrw->keepAudioPath->url());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;

@@ -132,12 +132,12 @@ int FestivalIntConf::voiceCodeToListIndex(const QString voiceCode)
 void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     //kdDebug() << "FestivalIntConf::load: Running" << endl;
     config->setGroup("FestivalInt");
-    QString exePath = config->readPathEntry("FestivalExecutablePath", "festival");
+    QString exePath = config->readEntry("FestivalExecutablePath", "festival");
     QString exeLocation = getLocation(exePath);
     if (!exeLocation.isEmpty()) exePath = exeLocation;
     exePath = realFilePath(exePath);
     config->setGroup(configGroup);
-    m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", exePath));
+    m_widget->festivalPath->setURL(config->readEntry("FestivalExecutablePath", exePath));
     m_widget->preloadCheckBox->setChecked(false);
     scanVoices();
     QString voiceSelected(config->readEntry("Voice"));
@@ -163,9 +163,9 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
 void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     // kdDebug() << "FestivalIntConf::save: Running" << endl;
     config->setGroup("FestivalInt");
-    config->writePathEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
+    config->writeEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
     config->setGroup(configGroup);
-    config->writePathEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
+    config->writeEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
     config->writeEntry("Voice", m_voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     config->writeEntry("volume", m_widget->volumeBox->value());
     config->writeEntry("time", m_widget->timeBox->value());

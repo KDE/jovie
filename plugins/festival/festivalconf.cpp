@@ -50,7 +50,7 @@ void FestivalConf::load(KConfig *config, const QString &configGroup){
    // kdDebug() << "Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
    config->setGroup(configGroup);
-   festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
+   festivalVoicesPath->setURL(config->readEntry("VoicesPath"));
    forceArts->setChecked(config->readBoolEntry("Arts"));
    scanVoices();
    QString voiceSelected(config->readEntry("Voice"));
@@ -69,7 +69,7 @@ void FestivalConf::save(KConfig *config, const QString &configGroup){
    // kdDebug() << "Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
    config->setGroup(configGroup);
-   config->writePathEntry("VoicesPath", festivalVoicesPath->url());
+   config->writeEntry("VoicesPath", festivalVoicesPath->url());
    config->writeEntry("Arts", forceArts->isChecked());
    config->writeEntry("Voice", voiceList[selectVoiceCombo->currentItem()].code);
 }

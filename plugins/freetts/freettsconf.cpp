@@ -72,11 +72,11 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
 	// kdDebug() << "FreeTTSConf::load: Running" << endl;
 
 	config->setGroup(configGroup);
-        QString freeTTSJar = config->readPathEntry("FreeTTSJarPath", QString::null);
+        QString freeTTSJar = config->readEntry("FreeTTSJarPath", QString::null);
         if (freeTTSJar.isEmpty())
         {
             config->setGroup("FreeTTS");
-            freeTTSJar = config->readPathEntry("FreeTTSJarPath", QString::null);
+            freeTTSJar = config->readEntry("FreeTTSJarPath", QString::null);
         }
 	if (freeTTSJar.isEmpty())
 	    freeTTSJar = getLocation("freetts.jar");
@@ -87,14 +87,14 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
 void FreeTTSConf::save(KConfig *config, const QString &configGroup){
 	// kdDebug() << "FreeTTSConf::save: Running" << endl;
 
-        config->setGroup("FreeTTS");
-        config->writePathEntry("FreeTTSJarPath",
-            realFilePath(m_widget->freettsPath->url()));
+    config->setGroup("FreeTTS");
+    config->writeEntry("FreeTTSJarPath",
+        realFilePath(m_widget->freettsPath->url()));
 
-	config->setGroup(configGroup);
-        if(m_widget->freettsPath->url().isEmpty())
-		KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
-	config->writePathEntry("FreeTTSJarPath", 
+    config->setGroup(configGroup);
+    if(m_widget->freettsPath->url().isEmpty())
+        KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
+    config->writeEntry("FreeTTSJarPath",
         realFilePath(m_widget->freettsPath->url()));
 }
 

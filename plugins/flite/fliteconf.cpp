@@ -68,11 +68,11 @@ void FliteConf::load(KConfig *config, const QString &configGroup){
     // kdDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup(configGroup);
-    QString fliteExe = config->readPathEntry("FliteExePath", QString::null);
+    QString fliteExe = config->readEntry("FliteExePath", QString::null);
     if (fliteExe.isEmpty())
     {
         config->setGroup("Flite");
-        fliteExe = config->readPathEntry("FliteExePath", "flite");
+        fliteExe = config->readEntry("FliteExePath", "flite");
     }
     m_widget->flitePath->setURL(fliteExe);
 }
@@ -81,10 +81,10 @@ void FliteConf::save(KConfig *config, const QString &configGroup){
     // kdDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup("Flite");
-    config->writePathEntry("FliteExePath", 
+    config->writeEntry("FliteExePath", 
         realFilePath(m_widget->flitePath->url()));
     config->setGroup(configGroup);
-    config->writePathEntry("FliteExePath",
+    config->writeEntry("FliteExePath",
         realFilePath(m_widget->flitePath->url()));
 }
 

@@ -82,15 +82,15 @@ bool SpeechData::readConfig(){
     textPreMsg = config->readEntry("TextPreMsg");
 
     textPreSndEnabled = config->readBoolEntry("TextPreSndEnabled", false);
-    textPreSnd = config->readPathEntry("TextPreSnd");
+    textPreSnd = config->readEntry("TextPreSnd");
 
     textPostMsgEnabled = config->readBoolEntry("TextPostMsgEnabled", false);
     textPostMsg = config->readEntry("TextPostMsg");
 
     textPostSndEnabled = config->readBoolEntry("TextPostSndEnabled", false);
-    textPostSnd = config->readPathEntry("TextPostSnd");
+    textPostSnd = config->readEntry("TextPostSnd");
     keepAudio = config->readBoolEntry("KeepAudio", false);
-    keepAudioPath = config->readPathEntry("KeepAudioPath", locateLocal("data", "kttsd/audio/"));
+    keepAudioPath = config->readEntry("KeepAudioPath", locateLocal("data", "kttsd/audio/"));
 
     // Notification (KNotify).
     notify = config->readBoolEntry("Notify", false);
