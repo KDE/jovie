@@ -23,17 +23,109 @@
 
 #include <kdedmodule.h>
 
+#include "speechdata.h"
+#include "speaker.h"
+
 class KTTSD : public KDEDModule{
     Q_OBJECT
     K_DCOP
 
     public:
+        /**
+         * Constructor
+         * Create objects, speechData and speaker
+         * Start thread
+         */
         KTTSD(const QCString &obj);
-//        void idle();
+
+        /**
+         * Destructor
+         * Terminate speaker thread
+         */
+        ~KTTSD();
+      
+       /**
+        * Holds if we are ok to go or not
+        */
+        bool ok;
+
+    private:
+        /**
+         * SpeechData containing all the data and the manipulating methods for all KTTSD
+         */
+        SpeechData *speechData;
+
+        /**
+         * Speaker that will be run as another thread, actually saying the messages, warning, texts
+         */
+        Speaker *speaker;
 
     k_dcop:
-        QString world();
-//        void registerMe(const QCString &app);
+        /**
+         * DCOP exported function to say warnings
+         */
+        void sayWarning(const QString &warning, const QString &language);
+
+        /**
+         * DCOP exported function to say messages
+         */
+        void sayMessage(const QString &message, const QString &language);
+
+        /**
+         * DCOP exported function to sat text
+         */
+        void setText(const QString &text, const QString &language);
+
+        /**
+         * Remove the text
+         */
+        void removeText();
+
+        /**
+         * Previous paragrah
+         */
+        void prevParText();
+
+        /**
+         * Previous sentence
+         */
+        void prevSenText();
+
+        /**
+         * Stop text
+         */
+        void pauseText();
+
+        /**
+         * Stop text and go to the begining
+         */
+        void stopText();
+
+        /**
+         * Start text
+         */
+        void playText();
+
+        /**
+         * Next sentence
+         */
+        void nextSenText();
+
+        /**
+         * Next paragrah
+         */
+        void nextParText();
+
+        /**
+         * Function exported in dcop to let other ones stop the service
+         */
+        //void exit();
+
+        /**
+         * This function is to re-start KTTSD
+         */
+        //void reinit();
+
 };
 
 #endif // _KTTSD_H_

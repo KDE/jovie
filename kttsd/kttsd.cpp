@@ -19,55 +19,158 @@
  // $Id$
 
 #include <qcstring.h>
-#include <kdebug.h>
 
-#include "kttsd.moc"
+#include <kdebug.h>
+#include <kapplication.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kgenericfactory.h>
 
 #include "kttsd.h"
+#include "speaker.h"
+
+#include "kttsd.moc"
 
 extern "C" {
     KDEDModule *create_kttsd(const QCString &obj){
         return new KTTSD(obj);
     }
 };
-/*
-class TestObject : public KShared{
-    public:
-        TestObject(const QCString &_app) : app(_app){
-            kdDebug() << "Running: TestObject::TestObject(const QCString &_app)" << endl;
-            qWarning("Creating TestObject belonging to '%s'", app.data());
-        }
-        ~TestObject(){
-            kdDebug() << "Running: TestObject::~TestObject()" << endl;
-            qWarning("Destructing TestObject belonging to '%s'", app.data());
-        }
-
-    protected:
-        QCString app;
-};
-*/
+// Make this a plug in.
+// Well, maybe in the future
+//typedef KGenericFactory<KTTSD, QCString &> KTTSDFactory;
+//K_EXPORT_COMPONENT_FACTORY( kded_kttsd, KTTSDFactory("kttsd") );
 
 KTTSD::KTTSD(const QCString &obj) : KDEDModule(obj){
     kdDebug() << "Running: KTTSD::KTTSD(const QCString &obj)" << endl;
     // Do stuff here
     //setIdleTimeout(15); // 15 seconds idle timeout.
+    kdDebug() << "Instantiating Speaker and running it as another thread" << endl;
+
+    // By default, everything is ok, don't worry, be happy
+    ok = true;
+
+    // Create speechData object, and load configuration checking for the return
+    speechData = new SpeechData();
+    if(!speechData->readConfig()){
+        KMessageBox::error(0, i18n("No default language defined. Without a default language the text to speech service cannot work. Text to speech service exiting"), i18n("Text To Speech error"));
+        ok = false;
+        return;
+    }
+
+    // Create speaker object and load plug ins, checking for the return
+    speaker = new Speaker(speechData);
+    int load = speaker->loadPlugIns();
+    if(load == -1){
+        KMessageBox::error(0, i18n("No speech syntheziser plug in found. With no speech syntheziser is not posible to run. Text to speech service exiting."), i18n("Text To Speech error"));
+        ok = false;
+        return;
+    } else if(load == 0){
+        KMessageBox::error(0, i18n("Some speech syntheziser plug in was not found or corrupt"), i18n("Text To Speech error"));
+    }
+
+    // Let's rock!
+    speaker->start();
 }
 
-QString KTTSD::world(){
-    kdDebug() << "Running: KTTSD::world()" << endl;
-    return "Hello World!";
+/**
+ * Destructor
+ * Terminate speaker thread
+ */
+KTTSD::~KTTSD(){
+    kdDebug() << "Running: KTTSD::~KTTSD()" << endl;
+    kdDebug() << "Stoping KTTSD service" << endl;
+    speaker->exit();
 }
-/*
-void KTTSD::idle(){
-    kdDebug() << "Running: KTTSD::idle()" << endl;
-    qWarning("TestModule is idle.");
+
+/**
+ * DCOP exported function to say warnings
+ */
+void KTTSD::sayWarning(const QString &warning, const QString &language=NULL){
+    kdDebug() << "Running: KTTSD::sayWarning(const QString &warning, const QString &language=NULL)" << endl;
+    kdDebug() << "Adding '" << warning << "' to warning queue." << endl;
+    speechData->enqueueWarning(warning, language);
 }
-*/
-/*
-void KTTSD::registerMe(const QCString &app){
-    kdDebug() << "Running: KTTSD::registerMe(const QCString &app)" << endl;
-    insert(app, "kttsd", new TestObject(app));
-    // When 'app' unregisters with DCOP, the TestObject will get deleted.
+
+/**
+ * DCOP exported function to say messages
+ */
+void KTTSD::sayMessage(const QString &message, const QString &language=NULL){
+    kdDebug() << "Running: KTTSD::sayMessage(const QString &message, const QString &language=NULL)" << endl;
+    kdDebug() << "Adding '" << message << "' to message queue." << endl;
+    speechData->enqueueMessage(message, language);
 }
-*/
+
+/**
+ * DCOP exported function to sat text
+ */
+void KTTSD::setText(const QString &text, const QString &language=NULL){
+    kdDebug() << "Running: setText(const QString &text, const QString &language=NULL)" << endl;
+    kdDebug() << "Setting text: '" << text << "'" << endl;
+    speechData->setText(text, language);
+}
+
+/**
+ * Remove the text
+ */
+void KTTSD::removeText(){
+    kdDebug() << "Running: KTTSD::removeText()" << endl;
+    speechData->removeText();
+}
+
+/**
+ * Previous paragrah
+ */
+void KTTSD::prevParText(){
+    kdDebug() << "Running: KTTSD::prevParText()" << endl;
+    speechData->prevParText();
+}
+  
+/**
+ * Previous sentence
+ */  
+void KTTSD::prevSenText(){
+    kdDebug() << "Running: KTTSD::prevSenText()" << endl;
+    speechData->prevSenText();
+}
+
+/**
+ * Pause text
+ */
+void KTTSD::pauseText(){
+    kdDebug() << "Running: KTTSD::pauseText()" << endl;
+    speechData->pauseText();
+}
+
+/**
+ * Pause text and go to the begining
+ */
+void KTTSD::stopText(){
+    kdDebug() << "Running: KTTSD::stopText()" << endl;
+    speechData->stopText();
+}
+
+/**
+ * Start text
+ */
+void KTTSD::playText(){
+    kdDebug() << "Running: KTTSD::playText()" << endl;
+    speechData->playText();
+}
+ 
+/**
+ * Next sentence
+ */   
+void KTTSD::nextSenText(){
+    kdDebug() << "Running: KTTSD::nextSenText()" << endl;
+    speechData->nextSenText();
+}
+
+/**
+ * Next paragrah
+ */
+void KTTSD::nextParText(){
+    kdDebug() << "Running: KTTSD::nextParText()" << endl;
+    speechData->nextParText();
+}
 
