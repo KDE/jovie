@@ -30,31 +30,20 @@
     dpkg-shlibdeps: warning: could not find path for libktts.so.1
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
   
-* Problems including the API docs.
-    1.  Must add the line
-          include $(top_srcdir)/admin/Doxyfile.am
-        to root-level Makefile.am.
-    2.  The debuild-generated Makefile defines target apidox as apidox-no.
-        I'm not clear why this is.  If I do
-          cd kttsd-0.2.0
-          ./configure
-          cd kttsd
-          make apidox
-        it generates the API docs.  This has to be done as user kde-devel
-        who has KDEDIR=/home/share/kde-unstable and won't work for user gary
-        who has KDEDIR=/usr.
-  For now I have the "indep" targets commented out in debian/rules,
-  so debuild will run to completion.
-  
-  Here is relevant code in acinclude.m4.in
-    KDE_HAS_DOXYGEN=no
-    if test -n "$DOXYGEN" && test -x "$DOXYGEN" && test -f $QTDOCDIR/qsql.html; then
-    KDE_HAS_DOXYGEN=yes
-    fi
-    AC_SUBST(KDE_HAS_DOXYGEN)
-
-])
-
+* In order to get the apidocs to debuild, I had to change the rules file
+  compared to the one in kdeaccessibility as follows:
+    109c109
+    <       #cd $(objdir) && \
+    ---
+    >       cd $(objdir) && \
+    218,219c218,221
+    < binary-indep: build-indep install-indep
+    <       $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+    ---
+    > binary-indep: build-indep
+    >
+    > # binary-indep: build-indep install-indep
+    > #     $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 * lintian is reporting the following:
     W: kttsd-appplugins: missing-depends-line
