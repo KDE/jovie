@@ -111,47 +111,6 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLayoutWidget" row="1" column="0">
-                                <property name="name">
-                                    <cstring>layout15</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Fixed</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>21</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>enablePopupsOnlyCheckBox</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Messages in popup &amp;windows only</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
                             <widget class="QLayoutWidget" row="2" column="0">
                                 <property name="name">
                                     <cstring>layout14</cstring>
@@ -172,7 +131,7 @@
                                         </property>
                                         <property name="sizeHint">
                                             <size>
-                                                <width>50</width>
+                                                <width>40</width>
                                                 <height>21</height>
                                             </size>
                                         </property>
@@ -183,6 +142,47 @@
                                         </property>
                                         <property name="text">
                                             <string>&amp;Passive popups only</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget" row="1" column="0">
+                                <property name="name">
+                                    <cstring>layout15</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>16</width>
+                                                <height>21</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>enablePopupsOnlyCheckBox</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Messages in popup &amp;windows only</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
