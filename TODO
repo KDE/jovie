@@ -39,9 +39,9 @@ _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourcef
   Currently written in c, but it looks like future versions will require Java VM.
   Main problem at the moment is that dhvani sends audio directly to /dev/dsp with no option
   to send to a wav file.
-- Festival plugin (static library) crashes on first call to library.
-- Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
-- Command plugin crashes when using command 'flite -t "%t"' and flite can't get write access to /dev/dsp*.
+_ Festival plugin (static library) crashes on first call to library.
+_ Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
+_ Command plugin crashes when using command 'flite -t "%t"' and flite can't get write access to /dev/dsp*.
 _ IBM ViaVoice plugin?
 _ When stopText() is called, and Hadifix process is killed, the temporary wav file is not deleted,
   despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
