@@ -64,6 +64,7 @@ bool FestivalProc::init(const QString &lang, KConfig *config){
     voices.setGroup(config->readEntry("Voice"));
     voiceCode = "("+voices.readEntry("Code")+")";
     kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
+    
     return true;
 }
 
@@ -75,6 +76,7 @@ void FestivalProc::sayText(const QString &text){
 
     // Initialize Festival only if it's not initialized
     if(initialized == false){
+        kdDebug()<< "Initializing Festival" << endl;
         int heap_size = 210000;  // default scheme heap size
         int load_init_files = 1; // we want the festival init files loaded
 
@@ -83,7 +85,7 @@ void FestivalProc::sayText(const QString &text){
         initialized = true;
     } 
 
-    // Seting output thru arts if necesarry.
+    // Seting output thru arts if necessary.
     if(forceArts){
         kdDebug() << "Forcing Arts output" << endl;
         if(!festival_eval_command(EST_String("(Parameter.set 'Audio_Command \"artsplay $FILE\")"))){

@@ -1,11 +1,11 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  festivalplugin.cpp
-  Generating the factories so festival can be used as plug in.
+  festivalintplugin.cpp
+  Generating the factories so festival (interactive) can be used as plug in.
   -------------------
-  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
+  Copyright : (C) 2004 Gary Cramblitt
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
  ******************************************************************************/
 
 /***************************************************************************
@@ -20,9 +20,9 @@
 
 #include <kgenericfactory.h>
 
-#include "festivalconf.h"
-#include "festivalproc.h"
+#include "festivalintconf.h"
+#include "festivalintproc.h"
 
-typedef K_TYPELIST_2( FestivalProc, FestivalConf ) Festival;
-K_EXPORT_COMPONENT_FACTORY( libfestivalplugin, KGenericFactory<Festival>("plugin_Festival") );
+typedef K_TYPELIST_2( FestivalIntProc, FestivalIntConf ) Festival;
+K_EXPORT_COMPONENT_FACTORY( libfestivalintplugin, KGenericFactory<Festival>("plugin_FestivalInt") );
 

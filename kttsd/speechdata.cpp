@@ -142,9 +142,9 @@ bool SpeechData::warningInQueue(){
     bool temp = !warnings.isEmpty();
     warningsMutex.unlock();
     if(temp){
-        kdDebug() << "The warnings queue is empty" << endl;
-    } else {
         kdDebug() << "The warnings queue is NOT empty" << endl;
+    } else {
+        kdDebug() << "The warnings queue is empty" << endl;
     }
     return temp;
 }
@@ -187,9 +187,9 @@ bool SpeechData::messageInQueue(){
     bool temp = !messages.isEmpty();
     messagesMutex.unlock();
     if(temp){
-        kdDebug() << "The messages queue is empty" << endl;
-    } else {
         kdDebug() << "The messages queue is NOT empty" << endl;
+    } else {
+        kdDebug() << "The messages queue is empty" << endl;
     }
     return temp;
 }

@@ -29,7 +29,7 @@
 
 int main (int argc, char *argv[]){
    KLocale::setMainCatalogue("kdelibs");
-   KAboutData aboutdata("kttsd", I18N_NOOP("KDE"),
+   KAboutData aboutdata("kttsd", I18N_NOOP("kttsd"),
          "0.1.0", I18N_NOOP("Speech synthesis"),
          KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
    aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Developer"),"pupeno@pupeno.com");

@@ -84,6 +84,8 @@ KTTSD::KTTSD(QWidget *parent, const char *name) : kttsdUI(parent, name), DCOPObj
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     tray->setPixmap (icon);
     connect(tray, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
+    connect(tray, SIGNAL(aboutSelected()), this, SLOT(aboutSelected()));
+    connect(tray, SIGNAL(helpSelected()), this, SLOT(helpSelected()));
 
     aboutDlg = new KAboutApplication (0, "KDE Text To Speech Deamon", false);
 

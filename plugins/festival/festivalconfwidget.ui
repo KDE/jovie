@@ -194,7 +194,10 @@
 <customwidgets>
     <customwidget>
         <class>PlugInConf</class>
+        <!--
         <header location="global">/home/pupeno/src/kde/kde-head/kdenonbeta/kttsd/libkttsd/pluginconf.h</header>
+        -->
+        <header location="global">pluginconf.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

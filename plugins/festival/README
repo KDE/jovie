@@ -3,7 +3,10 @@ If you intend to edit the GUI (festivalconfig.ui) you will have to first
 copy kttsd/libkttsd/pluginconf.h to a standard include directory
 like $KDEDIR/include/ since the interface has been tweaked to derive
 from PlugInConf instead of QWidget and Qt Designer refuses to open it
-if the header is not properly place.
+if the header is not found.
+
+The existence of file est_string_config.h solves the following problem.
+It should not be necessary to perform the following tweaks anymore:
 
 Another important thing to do is tweak some festival headers.
 EST_Chunk.h and EST_String.h both includes est_string_config.h if 

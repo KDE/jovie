@@ -1,0 +1,14 @@
+This is the directory containing the Festival (Interactive) plug in.
+If you intend to edit the GUI (festivalintconfwidget.ui) you will have
+to first copy kttsd/libkttsd/pluginconf.h to a standard include directory
+like $KDEDIR/include/ since the interface has been tweaked to derive
+from PlugInConf instead of QWidget and Qt Designer refuses to open it
+if the header is not found.
+
+Force Arts option is not currently working.  In the meantime, you can
+turn off Force Arts, but make sure that Festival has write access to
+the audio device
+
+  chmod a+rw /dev/dsp*
+
+
