@@ -1133,25 +1133,23 @@ licenses.  See each engine's documentation or website for details.</para></note>
 part of KDE CVS.  You should remove it if you are releasing your
 application --> 
 
-<para>FUTURE
+<para>
 &install.intro.documentation;
 </para>
 
 <para>(FUTURE) Debian Install Command: <command>apt-get install kdeaccessibility</command></para>
 
 <note>
-<para>As of 2 Dec 2004, &kmyapplication; has not yet been moved into the
-kdeaccessibility package.  We expect to do this very soon.
-In the meantime, you will find links to source and binary packages
+<para>You will find links to source and binary packages
 on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
 KDE Accessibility</ulink> web site (http://accessibility.kde.org).</para>
 
 <para>If you have access to KDE CVS, you can download &kmyapplication;
-by checking out the <command>kdenonbeta</command> module.  &kmyapplication;
+by checking out the <command>kdeaccessibility</command> module.  &kmyapplication;
 will be found in the <command>kttsd</command> directory.  You can also
-download a nightly tarball of all kdenonbeta from
-<ulink url="ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2">
-ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2</ulink></para>
+download a nightly tarball of all kdeaccessibility from
+<ulink url="ftp://ftp.kde.org/pub/kde/unstable/latest/kdeaccessibility.tar.bz2">
+ftp://ftp.kde.org/pub/kde/unstable/latest/kdeaccessibility.tar.bz2</ulink></para>
 </note>
 
 </sect1>
@@ -1177,7 +1175,7 @@ and spoken languages are currently supported.</para>
 
 <row>
 <entry>Festival</entry>
-<entry>American English, British, Spanish, German, Finnish, Czech</entry>
+<entry>American English, British, Spanish, German, Finnish, Czech, Polish</entry>
 </row>
 
 <row>
@@ -1325,12 +1323,12 @@ make install
 </programlisting>
 
 <para>If you downloaded the &kmyapplication; source from the
-<command>kdenonbeta</command> CVS module, or downloaded the nightly
+<command>kdeaccessibility</command> CVS module, or downloaded the nightly
 CVS tarball, use the following commands to compile and install.
 </para>
 
 <programlisting>
-cd kdenonbeta
+cd kdeaccessibility
 echo kttsd>inst-apps
 make -f Makefile.cvs
 ./configure
@@ -1339,32 +1337,6 @@ make
 su
 make install
 </programlisting>
-
-<para>If you are working from the CVS kdenonbeta module and
-wish to build the KTTS API documents using Doxygen, proceed as follows.
-Add the following line (if not already present) to
-<command>kdenonbeta/configure.in.in</command>.</para>
-
-<programlisting>
-KDE_INIT_DOXYGEN([The KDE API Reference], [Version $VERSION])
-</programlisting>
-
-<para>Then do the following commands.</para>
-
-<programlisting>
-cd kdenonbeta
-make -f Makefile.cvs
-./configure
-cd kttsd
-make apidox
-</programlisting>
-
-<para>You should now have the docs in <command>kdenonbeta/apidocs/kttsd</command>.
-The KDE Speech API (the API used by KDE applications to speak text) is in file
-<command>apidocs/kttsd/html/classkspeech.html</command>.
-The KTTSD Plugin API (the API used by KTTSD to interface with its plugins) is
-in file <command>apidocs/kttsd/html/classPlugInProc.html</command>.
-</para>
 
 </sect1>
 
@@ -1426,6 +1398,12 @@ The German voices have limited distribution.
 http://www.ling.helsinki.fi/suopuhe/download/</ulink>.
 </para>
 
+<para>A Polish male voice is available from </para>
+
+<para><ulink url="http://www.artegence.com/download/voicexml/speech/festival_polish_voice.tgz">
+http://www.artegence.com/download/voicexml/speech/festival_polish_voice.tgz</ulink>.
+</para>
+
 <para>Festival is typically included with &Linux; distributions.  Check your
 distro CDs to see if it is included.</para>
 
@@ -1436,6 +1414,12 @@ click the <guibutton>Edit</guibutton> button.  If the Festival executable progra
 is not in your PATH, enter the full path to the executable.
 Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
 <guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
+
+<note>
+<para>When using the Polish or Czech languages, be sure the <guilabel>Encoding</guilabel>
+option is set to <userinput>ISO 8859-2</userinput>.
+</para>
+</note>
 
 <!-- ...................................................................... -->
 
