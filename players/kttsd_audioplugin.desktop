@@ -2,3 +2,13 @@
 Type=ServiceType
 X-KDE-ServiceType=KTTSD/AudioPlugin
 Comment=Audio Plugin for KTTSD
+Comment[bg]=Аудио приставка на KTTSD
+Comment[da]=Lyd-plugin for KTTSD
+Comment[hu]=Hangmodul a KTTSD-hez
+Comment[nl]=Audio-plugin voor KTTSD
+Comment[pt]='Plugin' Áudio para o KTTSD
+Comment[pt_BR]='Plugin' Áudio para o KTTSD
+Comment[ru]=Модуль вывода звука KTTSD
+Comment[sv]=Ljudinsticksprogram för KTTSD
+Comment[ta]= KTTSDக்கான கேட்பொலி சொருகுப்பொருள்
+Comment[uk]=Звуковий втулок для KTTSD

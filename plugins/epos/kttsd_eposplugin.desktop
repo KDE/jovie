@@ -1,15 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Epos TTS Synthesis System
+Name[da]=Epos TTS Synthesis-system
+Name[hu]=Epos szövegfelolvasó motor
+Name[nl]=Epos TTS Synthesis-systeem
 Name[pt]=Sistema de Síntese Epos TTS
 Name[pt_BR]=Sistema de Síntese Epos TTS
-Name[sr]=Систем за синтезу Epos TTS
-Name[sv]=Epos TTS talsyntessystem
+Name[sv]=Epos TTS syntessystem
+Name[ta]=Epos TTS கூட்டிணைப்பு அமைப்பு
 Comment=Epos TTS speech synthesizer
+Comment[bg]=Синтезатор на глас Epos TTS
+Comment[da]=Epos TTS tale-synthesizer
+Comment[hu]=Epos TTS beszédszintetizátor
+Comment[nl]=Epos TTS spraaksynthesizer
 Comment[pt]=O sintetizador de fala Epos TTS
 Comment[pt_BR]=O sintetizador de fala Epos TTS
-Comment[sr]=Синтетизатор говора Epos TTS
 Comment[sv]=Epos TTS talsyntes
+Comment[ta]=Epos TTS பேச்சு கூட்டிணைப்பான்
+Comment[uk]=Синтезатор мовлення Epos TTS
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_eposplugin
