@@ -18,9 +18,15 @@ Home-page:      http://accessibility.kde.org/developer/kttsd/
 Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/KDE3.x/
                 1K kttsd.lsm
                 2M kttsd-0.2.0.src.tar.bz2
-                2M kttsd-0.2.0.src.rpm
-                2M kttsd-0.2.0.bin.suse.i386.rpm
-                2M kttsd-0.2.0.bin.deb
+                4.6M kttsd-0.2.0.suse9.2-10.i586.rpm
+                66 kttsd-0.2.0.suse9.2-10.i586.rpm.md5
+                883K kttsd-0.2.0.suse9.2-10.src.rpm
+                65 kttsd-0.2.0.suse9.2-10.src.rpm.md5
+                171K kttsd-gstreamer-0.2.0.suse9.2-10.i586.rpm
+                76 kttsd-gstreamer-0.2.0.suse9.2-10.i586.rpm.md5
+                1M kttsd_0.2.0_i386.deb
+                266K kttsd-appplugins_0.2.0_i386.deb
+                78K kttsd-dev_0.2.0_i386.deb
 Alternate-site: 
 Original-site:  
 Platforms:      KDE 3.2 or greater
