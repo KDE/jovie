@@ -8,7 +8,7 @@ kttsd_LDFLAGS = $(all_libraries) -module -avoid-version
 kttsd_LDADD = $(LIB_KDECORE) $(LIB_KIO) $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 messages:
-	$(XGETTEXT) -nki18n $(kttsd_SOURCES) -o $(podir)/kttsd.pot
+	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
 
 services_DATA = kttsd.desktop
 servicesdir = $(kde_servicesdir)
