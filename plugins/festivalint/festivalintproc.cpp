@@ -210,7 +210,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         }
     }
     // If we just started Festival, or voiceCode has changed, send code to Festival.
-    if (m_runningVoiceCode != voiceCode and !voiceCode.isEmpty()) {
+    if (m_runningVoiceCode != voiceCode && !voiceCode.isEmpty()) {
         sendToFestival("(voice_" + voiceCode + ")");
         m_runningVoiceCode = voiceCode;
     }

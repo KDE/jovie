@@ -609,7 +609,7 @@ void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
     // Walk through jobs and delete any other finished jobs.
     for (mlJob* job = textJobs.first(); (job); job = textJobs.next())
     {
-        if (job->jobNum != finishedJobNum and job->state == KSpeech::jsFinished)
+        if (job->jobNum != finishedJobNum && job->state == KSpeech::jsFinished)
         {
             removedJobs.append(removedJob(job->appId, job->jobNum));
             textJobs.removeRef(job);
@@ -678,7 +678,7 @@ mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSe
         }
         else
         {
-            if ((job->state != KSpeech::jsSpeakable) and (job->state != KSpeech::jsSpeaking))
+            if ((job->state != KSpeech::jsSpeakable) && (job->state != KSpeech::jsSpeaking))
             {
                 job = getNextSpeakableJob(job->jobNum);
                 if (job) seq =+ job->seq;

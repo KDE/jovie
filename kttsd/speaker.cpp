@@ -180,7 +180,7 @@ void Speaker::doUtterances()
     // Used to prevent exiting prematurely.
     m_again = true;
 
-    while(m_again and !m_exitRequested)
+    while(m_again && !m_exitRequested)
     {
         m_again = false;
 
@@ -389,7 +389,7 @@ void Speaker::doUtterances()
                         {
                             int jobState =
                                 m_speechData->getTextJobState(it->sentence->jobNum);
-                            if ((jobState == KSpeech::jsSpeaking) or
+                            if ((jobState == KSpeech::jsSpeaking) ||
                                 (jobState == KSpeech::jsSpeakable))
                             {
                                 if (it->plugin->getState() == psIdle)
@@ -461,7 +461,7 @@ void Speaker::doUtterances()
             }
             // Try to keep at least two utterances in the queue waiting to be played,
             // and no more than 3 transforming at one time.
-            if ((waitingCnt < 2) and (transformingCnt < 3))
+            if ((waitingCnt < 2) && (transformingCnt < 3))
                 if (getNextUtterance()) m_again = true;
         } else {
             // See if another utterance is ready to be worked on.
@@ -899,7 +899,7 @@ bool Speaker::getNextUtterance()
                 uint seq = m_lastSeq;
                 mlText* sentence = m_speechData->getNextSentenceText(jobNum, seq);
                 // Skip over blank lines.
-                while (sentence and sentence->text.isEmpty())
+                while (sentence && sentence->text.isEmpty())
                 {
                     jobNum = sentence->jobNum;
                     seq = sentence->seq;
@@ -942,7 +942,7 @@ bool Speaker::getNextUtterance()
             }
         }
         // If the new utterance is a Warning or Message...
-        if ((utt->utType == utWarning) or (utt->utType == utMessage))
+        if ((utt->utType == utWarning) || (utt->utType == utMessage))
         {
             uttIterator itEnd = m_uttQueue.end();
             uttIterator it = m_uttQueue.begin();
@@ -953,24 +953,24 @@ bool Speaker::getNextUtterance()
                 // Interruptions, and in-process text,
                 // but before Resumes, waiting text or signals.
                 if (utt->utType == utWarning)
-                    while ( it != itEnd and 
-                            ((it->utType == utScreenReader) or 
-                            (it->utType == utWarning) or
-                            (it->utType == utInterruptMsg) or
+                    while ( it != itEnd && 
+                            ((it->utType == utScreenReader) || 
+                            (it->utType == utWarning) ||
+                            (it->utType == utInterruptMsg) ||
                             (it->utType == utInterruptSnd))) ++it;
                 // New Messages go after Screen Reader Output, Warnings, other Messages,
                 // Interruptions, and in-process text,
                 // but before Resumes, waiting text or signals.
                 if (utt->utType == utMessage)
-                    while ( it != itEnd and 
-                            ((it->utType == utScreenReader) or 
-                            (it->utType == utWarning) or
-                            (it->utType == utMessage) or
-                            (it->utType == utInterruptMsg) or
+                    while ( it != itEnd && 
+                            ((it->utType == utScreenReader) ||
+                            (it->utType == utWarning) ||
+                            (it->utType == utMessage) ||
+                            (it->utType == utInterruptMsg) ||
                             (it->utType == utInterruptSnd))) ++it;
                 if (it != itEnd)
-                    if (it->utType == utText and 
-                        ((it->state == usPlaying) or 
+                    if (it->utType == utText &&
+                        ((it->state == usPlaying) ||
                         (it->state == usSaying))) ++it;
                 // If now pointing at a text message, we are interrupting.
                 // Insert optional Interruption message and sound.
@@ -1176,7 +1176,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
                         // If plugin supports asynchronous mode, and it is busy, halt it.
             PlugInProc* plugin = it->plugin;
             if (it->plugin->supportsAsync())
-                if ((plugin->getState() == psSaying) or (plugin->getState() == psSynthing))
+                if ((plugin->getState() == psSaying) || (plugin->getState() == psSynthing))
             {
                 kdDebug() << "Speaker::deleteUtterance calling stopText" << endl;
                 plugin->stopText();
@@ -1282,7 +1282,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         case usStretched:
         {
                 // Don't start playback yet if text job is paused.
-            if ((it->utType != utText) or
+            if ((it->utType != utText) ||
                  (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
 
@@ -1311,7 +1311,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         {
             // Unpause playback only if user has resumed.
             // kdDebug() << "Speaker::startPlayingUtterance: checking whether to resume play" << endl;
-            if ((it->utType != utText) or
+            if ((it->utType != utText) ||
                  (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
                 // kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
@@ -1583,7 +1583,7 @@ bool Speaker::event ( QEvent * e )
 {
     // TODO: Do something with event numbers 106 (error; keepGoing=True)
     // and 107 (error; keepGoing=False).
-    if ((e->type() >= (QEvent::User + 101)) and (e->type() <= (QEvent::User + 105)))
+    if ((e->type() >= (QEvent::User + 101)) && (e->type() <= (QEvent::User + 105)))
     {
         // kdDebug() << "Speaker::event: received event." << endl;
         doUtterances();
