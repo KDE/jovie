@@ -8,7 +8,7 @@ Standards-Version: 3.6.1.1
 Package: kttsd
 Architecture: any
 Depends: ${shlibs:Depends}
-Suggests: kttsd-appplugins, festival, festival-doc, festvox-kallpc, flite, epos,
+Suggests: festival, festival-doc, festvox-kallpc, flite, epos,
  xsltproc, sox, kttsd-gstreamer
 Description: KDE Text-to-Speech system
  KTTS, the KDE Text-to-Speech (TTS) system, is a plug-in based dcop service
@@ -38,4 +38,3 @@ Description: KTTSD GStreamer plugin
  audio output via GStreamer.  You will also need the
  GStreamer wav file plugin and at least one GStreamer
  output plugin (aRts, oss, or nas).
-

@@ -34,7 +34,6 @@
     - debuild -uc -us
 
 * dpkg-shlibdeps is reporting:
-    dpkg-shlibdeps: warning: could not find path for libktts.so.1
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
 
 * lintian is reporting the following:
