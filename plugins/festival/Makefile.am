@@ -6,7 +6,7 @@ METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libfestivalplugin.la
 
-CXXFLAGS = $(CXXFLAGS_FESTIVAL)
+AM_CXXFLAGS = $(CXXFLAGS_FESTIVAL)
 
 libfestivalplugin_la_SOURCES = festivalconfwidget.ui festivalconf.cpp festivalproc.cpp festivalplugin.cpp
 libfestivalplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) -L$(SPEECH_TOOLS_LIBDIR) -L$(FESTIVAL_LIBDIR)
