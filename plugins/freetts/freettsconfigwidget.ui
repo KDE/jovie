@@ -95,7 +95,7 @@
 <customwidgets>
     <customwidget>
         <class>PlugInConf</class>
-        <header location="global">proklam/libproklam/pluginconf.h</header>
+        <header location="global">kttsd/libkttsd/pluginconf.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

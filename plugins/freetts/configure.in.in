@@ -2,9 +2,9 @@ dnl ================
 dnl checks for FreeTTS
 dnl ================
 
-AC_ARG_ENABLE(proklam-freetts,
-              AC_HELP_STRING([--enable-proklam-freetts],
-                             [build Proklam FreeTTS Plugin [default=no]]),
+AC_ARG_ENABLE(kttsd-freetts,
+              AC_HELP_STRING([--enable-kttsd-freetts],
+                             [build KTTSD FreeTTS Plugin [default=no]]),
               freetts_plugin=$enableval,
               freetts_plugin=no)
 
@@ -14,4 +14,4 @@ if test "x$freetts_plugin" = "xyes"; then
   compile_freetts_plugin="yes"
 fi
 
-AM_CONDITIONAL(include_proklam_freetts, test "x$compile_freetts_plugin" = "xyes")
+AM_CONDITIONAL(include_kttsd_freetts, test "x$compile_freetts_plugin" = "xyes")

@@ -85,7 +85,7 @@ void FestivalConf::scanVoices(){
    kdDebug() << "Running: FestivalConf::scanVoices()" << endl;
    voiceList.clear();
    selectVoiceCombo->clear();
-   KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/proklam/festival/voices", true, false);
+   KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festival/voices", true, false);
    QStringList groupList = voices.groupList();
    QDir mainPath(this->festivalVoicesPath->url());
    voice voiceTemp;

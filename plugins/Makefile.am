@@ -1,16 +1,16 @@
-if include_proklam_festival
+if include_kttsd_festival
   festival_DIR = festival
 endif
 
-#if include_proklam_festivalcs
+#if include_kttsd_festivalcs
 #  festivalcs_DIR = festivalcs
 #endif
 
-#if include_proklam_freetts
+#if include_kttsd_freetts
 #  freetts_DIR = freetts
 #endif
 
-if include_proklam_command
+if include_kttsd_command
   command_DIR = command
 endif
 

@@ -28,7 +28,7 @@ bool CommandProc::init(const QString &lang, KConfig *config){
   kdDebug() << "Initializing plug in: Command" << endl;
 
   tts = new TextToSpeechSystem ();
-  // KConfig *config = new KConfig("proklamrc");
+  // KConfig *config = new KConfig("kttsdrc");
   tts->readOptions(config, QString("Lang_")+lang);
   delete config;
 

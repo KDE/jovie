@@ -25,7 +25,7 @@ bool FestivalCSProc::init(){
   kdDebug() << "Running: FestivalCSProc::init()" << endl;
 /*  kdDebug() << "Initializing plug in: FestivalCS" << endl;
   
-  KConfig *config = new KConfig("proklamrc");
+  KConfig *config = new KConfig("kttsdrc");
   config->setGroup("FestivalCS");
   
   int heap_size = 210000;  // default scheme heap size

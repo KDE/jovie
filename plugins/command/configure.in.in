@@ -2,9 +2,9 @@ dnl ==========================
 dnl checks for Command plug in
 dnl ==========================
 
-AC_ARG_ENABLE(proklam-command,
-              AC_HELP_STRING([--enable-proklam-command],
-                             [build Proklam Command Plugin [default=yes]]),
+AC_ARG_ENABLE(kttsd-command,
+              AC_HELP_STRING([--enable-kttsd-command],
+                             [build KTTSD Command Plugin [default=yes]]),
               command_plugin=$enableval,
               command_plugin=yes)
 
@@ -14,4 +14,4 @@ if test "x$command_plugin" = "xyes"; then
   compile_command_plugin="yes"
 fi
 
-AM_CONDITIONAL(include_proklam_command, test "x$compile_command_plugin" = "xyes")
+AM_CONDITIONAL(include_kttsd_command, test "x$compile_command_plugin" = "xyes")

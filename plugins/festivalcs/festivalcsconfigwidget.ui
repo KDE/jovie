@@ -88,7 +88,7 @@
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Ip address or hostname of the Festival server.&lt;br&gt; If you run the server in your computer (by Proklam or other method), leave 127.0.0.1 (or other name or ip that will match your computer) in this field.</string>
+                        <string>Ip address or hostname of the Festival server.&lt;br&gt; If you run the server in your computer (by KTTSD or other method), leave 127.0.0.1 (or other name or ip that will match your computer) in this field.</string>
                         <comment>What's this text</comment>
                     </property>
                 </widget>
@@ -324,7 +324,7 @@ If empty, standar output will be used.</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Ip address or hostname of the Festival server.&lt;br&gt;
-If you run the server in your computer (by Proklam or other method), leave 127.0.0.1 (or other name or ip that will match your computer) in this field.</string>
+If you run the server in your computer (by KTTSD or other method), leave 127.0.0.1 (or other name or ip that will match your computer) in this field.</string>
                         <comment>What's this text</comment>
                     </property>
                 </widget>
@@ -350,7 +350,7 @@ If you run the server in your computer (by Proklam or other method), leave 127.0
 <customwidgets>
     <customwidget>
         <class>PlugInConf</class>
-        <header location="global">proklam/libproklam/pluginconf.h</header>
+        <header location="global">kttsd/libkttsd/pluginconf.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

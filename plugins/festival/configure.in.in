@@ -2,9 +2,9 @@ dnl ===========================
 dnl checks for Festival Plug In
 dnl ===========================
 
-AC_ARG_ENABLE(proklam-festival,
-              AC_HELP_STRING([--enable-proklam-festival],
-                             [build Proklam Festival plugin [default=yes]]),
+AC_ARG_ENABLE(kttsd-festival,
+              AC_HELP_STRING([--enable-kttsd-festival],
+                             [build KTTSD Festival plugin [default=yes]]),
               festival_plugin=$enableval,
               festival_plugin=yes)
 
@@ -105,4 +105,4 @@ fi
 dnl Festival include files refuses to build with -pedantic, let's workarround it :(
 CXXFLAGS_FESTIVAL=`echo "$CXXFLAGS" | sed -e 's/-pedantic//'`
 
-AM_CONDITIONAL(include_proklam_festival, test "x$compile_festival_plugin" = "xyes")
+AM_CONDITIONAL(include_kttsd_festival, test "x$compile_festival_plugin" = "xyes")

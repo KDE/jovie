@@ -1,7 +1,7 @@
-## This should force the compilation of proklam first, wich is what provides libproklam.la
-COMPILE_FIRST = $(top_srcdir)/proklam/libproklam
+## This should force the compilation of kttsd first, wich is what provides libkttsd.la
+COMPILE_FIRST = $(top_srcdir)/kttsd/libkttsd
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
-INCLUDES = -I$(top_srcdir)/proklam/libproklam -I$(SPEECH_TOOLS_INCDIR) -I$(FESTIVAL_INCDIR) $(all_includes)
+INCLUDES = -I$(top_srcdir)/kttsd/libkttsd -I$(SPEECH_TOOLS_INCDIR) -I$(FESTIVAL_INCDIR) $(all_includes)
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libfestivalplugin.la
@@ -19,5 +19,5 @@ festivaldata_DATA = voices
 festivaldatadir = $(kde_datadir)/kttsd/festival/
 
 $(top_srcdir)/kttsd/libkttsd/libkttsd.la:
-	@echo "Please, compile libproklam first"
-	## I hope to find a way to force the compilation of proklam
+	@echo "Please, compile libkttsd first"
+	## I hope to find a way to force the compilation of kttsd 

@@ -53,13 +53,13 @@ bool FestivalProc::init(const QString &lang, KConfig *config){
 
     // To save resources, this founction should get a KConfig too
     // This KConfig will be passed to this function (already opened) from speaker.cpp
-    // KConfig *config = new KConfig("proklamrc");
+    // KConfig *config = new KConfig("kttsdrc");
     // KConfig *config = KGlobal::config();
     config->setGroup(QString("Lang_")+lang);
     forceArts = config->readBoolEntry("Arts");
 
     // Get the code for the selected voice
-    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/proklam/festival/voices", true, false);
+    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festival/voices", true, false);
 
     voices.setGroup(config->readEntry("Voice"));
     voiceCode = "("+voices.readEntry("Code")+")";
