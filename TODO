@@ -1,12 +1,6 @@
 _ Should kttsmgr and kttsd Makefile.am's have $(KDE_RPATH)?
 _ Add option to kill plugin process when no longer needed so that memory can be recovered.
   Or maybe some sort of "nice" setting so that process will be swapped out when no longer needed.
-_ The Speak File function does not handle text files encoded differently from the desktop
-  setting.  For example, if desktop is UTF-8 or ISO 8859-1, an ISO 8859-2 file (polish for example)
-  is mangled and does not speak properly.  The best solution is to change KFileOpenDialog
-  to KEncodingFileOpenDialog and then pass the user's chosen encoding to kspeech::setFile,
-  but this will break any existing applications using setFile().  Are there any besides
-  KTTSMgr, I wonder?
 _ Command plugin encodes text on command line using %t in user's chosen encoding, but
   if this differs from user's desktop default encoding, doesn't work.  KProcess always
   encodes command line stuff using user's default encoding.  There is no point, therefore,

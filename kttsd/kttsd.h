@@ -183,6 +183,8 @@ class KTTSD : public QObject, virtual public kspeech
         *                       If NULL, defaults to the user's default talker.
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
+        * @param encoding       Name of the encoding to use when reading the file.  If
+        *                       NULL or Empty, uses default stream encoding.
         * @return               Job number.  0 if an error occurs.
         *
         * Plain text is parsed into individual sentences using the current sentence delimiter.
@@ -198,7 +200,8 @@ class KTTSD : public QObject, virtual public kspeech
         * @see getTextCount
         * @see startText
         */
-        virtual uint setFile(const QString &filename, const QString &talker=NULL);
+        virtual uint setFile(const QString &filename, const QString &talker=NULL,
+            const QString& encoding=NULL);
 
         /**
         * Get the number of sentences in a text job.

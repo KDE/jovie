@@ -1,6 +1,8 @@
 2005-01-09  Gary Cramblitt (PhantomsDad)
         * Epos plugin defaults to ISO 8859-2 encoding.  Pass encoded text to Epos client
           via Stdin rather than command line to avoid encoding problem.
+        * Added encoding parameter to kspeech::setFile method.  This allows for speaking a
+          file that is encoded different from global desktop default.
 
 2005-01-07  Gary Cramblitt (PhantomsDad)
         * Start to Filters capability.  StringReplacer Filter implemented in KTTSMgr GUI,

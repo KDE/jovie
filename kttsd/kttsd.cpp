@@ -22,6 +22,7 @@
 #include <qcstring.h>
 #include <qclipboard.h>
 #include <qtextstream.h>
+#include <qtextcodec.h>
 #include <qfile.h>
 
 // KDE includes.
@@ -315,6 +316,8 @@ int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
 *                       If NULL, defaults to the user's default talker.
 *                       If no plugin has been configured for the specified Talker code,
 *                       defaults to the closest matching talker.
+* @param encoding       Name of the encoding to use when reading the file.  If
+*                       NULL or Empty, uses default stream encoding.
 * @return               Job number.  0 if an error occurs.
 *
 * Plain text is parsed into individual sentences using the current sentence delimiter.
@@ -330,7 +333,8 @@ int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
 * @see getTextCount
 * @see startText
 */
-uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/)
+uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/,
+    const QString &encoding /*=NULL*/)
 {
     // kdDebug() << "KTTSD::setFile: Running" << endl;
     if (!m_speaker) return 0;
@@ -339,6 +343,9 @@ uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/)
     if ( file.open(IO_ReadOnly) )
     {
         QTextStream stream(&file);
+        if (encoding != NULL)
+            if (!encoding.isEmpty())
+                stream.setCodec(QTextCodec::codecForName(encoding.latin1()));
         jobNum = m_speechData->setText(stream.read(), talker, getAppId());
         file.close();
     }

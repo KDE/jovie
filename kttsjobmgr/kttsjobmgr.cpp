@@ -32,7 +32,7 @@
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kfiledialog.h>
+#include <kencodingfiledialog.h>
 #include <kapplication.h>
 #include <kinputdialog.h>
 
@@ -623,8 +623,14 @@ void KttsJobMgrPart::slot_speak_clipboard()
 
 void KttsJobMgrPart::slot_speak_file()
 {
-    QString filename = KFileDialog::getOpenFileName();
-    setFile(filename, NULL);
+    KEncodingFileDialog dlg;
+    KEncodingFileDialog::Result result = dlg.getOpenFileNameAndEncoding();
+    if (result.fileNames.count() == 1)
+    {
+        // kdDebug() << "KttsJobMgr::slot_speak_file: calling setFile with filename " <<
+        //     result.fileNames[0] << " and encoding " << result.encoding << endl;
+        setFile(result.fileNames[0], NULL, result.encoding);
+    }
 }
 
 void KttsJobMgrPart::slot_refresh()
