@@ -26,13 +26,15 @@
 
 #include "festivalintproc.h"
 #include "festivalintproc.moc"
- 
+
 /** Constructor */
 FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList& ) : 
     PlugInProc( parent, name ){
     // kdDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
     m_ready = true;
     m_writingStdin = false;
+    m_waitingQueryVoices = false;
+    m_waitingStop = false;
     m_festProc = 0;
     m_state = psIdle;
 }
@@ -69,15 +71,13 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     // kdDebug() << "FestivalIntProc::init: Initializing plug in: Festival" << endl;
 
     config->setGroup(configGroup);
-
-    // Get the code for the selected voice
-    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices", true, false);
-
-    voices.setGroup(config->readEntry("Voice"));
-    m_voiceCode = "("+voices.readEntry("Code")+")";
+    m_voiceCode = config->readEntry("Voice");
+    m_festivalExePath = config->readEntry("FestivalExecutablePath", "festival");
     // kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
-    
     m_time = config->readNumEntry("time",    100);
+    // If voice should be pre-loaded, start Festival and load the voice.
+    m_preload = config->readBoolEntry("Preload", false);
+    if (m_preload) startEngine(m_festivalExePath, m_voiceCode);
     return true;
 }
 
@@ -89,7 +89,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    synth(text, QString::null, m_voiceCode, m_time);
+    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time);
 }
 
 /**
@@ -104,11 +104,90 @@ void FestivalIntProc::sayText(const QString &text)
 */
 void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
 {
-    synth(text, suggestedFilename, m_voiceCode, m_time);
+    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time);
 };
 
 /**
+* Sends command to Festival to query for a list of supported voice codes.
+* Fires queryVoicesFinished when completed.
+* @return                       False if busy doing something else and therefore cannot
+*                               do the query.
+*/
+bool FestivalIntProc::queryVoices(const QString &festivalExePath)
+{
+    if (m_state != psIdle && m_waitingQueryVoices && m_waitingStop) return false;
+    // Start Festival if not already running.
+    startEngine(festivalExePath, QString::null);
+    // Set state, waiting for voice codes list from Festival.
+    m_waitingQueryVoices = true;
+    // Send command to query the voice codes.
+    sendToFestival("(print (mapcar (lambda (pair) (car pair)) voice-locations))");
+    return true;
+}
+
+/**
+* Start Festival engine.
+* @param festivalExePath         Path to the Festival executable, or just "festival".
+* @param voiceCode               Voice code in which to speak text.
+*/
+void FestivalIntProc::startEngine(const QString &festivalExePath, const QString &voiceCode)
+{
+    // Initialize Festival only if it's not initialized
+    if (m_festProc)
+    {
+        // Stop Festival if a different EXE is requested.
+        // If festProc exists but is not running, it is because it was stopped.
+        if ((festivalExePath != m_festivalExePath) || !m_festProc->isRunning())
+        {
+            delete m_festProc;
+            m_festProc = 0;
+        }
+    }
+    if(!m_festProc)
+    {
+        // kdDebug()<< "FestivalIntProc::startEngine: Creating Festival object" << endl;
+        m_festProc = new KProcess;
+        *m_festProc << festivalExePath;
+        *m_festProc << "--interactive";
+        connect(m_festProc, SIGNAL(processExited(KProcess*)),
+                this, SLOT(slotProcessExited(KProcess*)));
+        connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+                this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
+                this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        connect(m_festProc, SIGNAL(wroteStdin(KProcess*)),
+                this, SLOT(slotWroteStdin(KProcess*)));
+    }
+    if (!m_festProc->isRunning())
+    {
+        // kdDebug() << "FestivalIntProc::startEngine: Starting Festival process" << endl;
+        m_runningVoiceCode = QString::null;
+        m_runningTime = 100;
+        m_ready = false;
+        m_outputQueue.clear();
+        if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
+        {
+            // kdDebug()<< "FestivalIntProc:startEngine: Festival initialized" << endl;
+            m_festivalExePath = festivalExePath;
+        }
+        else
+        {
+            kdDebug() << "FestivalIntProc::startEngine: Error starting Festival process.  Is festival in the PATH?" << endl;
+            m_ready = true;
+            m_state = psIdle;
+            return;
+        }
+    }
+    // If we just started Festival, or voiceCode has changed, send code to Festival.
+    if (m_runningVoiceCode != voiceCode and !voiceCode.isEmpty()) {
+        sendToFestival("(voice_" + voiceCode + ")");
+        m_runningVoiceCode = voiceCode;
+    }
+}
+
+/**
 * Say or Synthesize text.
+* @param festivalExePath         Path to the Festival executable, or just "festival".
 * @param text                    The text to be synthesized.
 * @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
 *                                synthesize and audibilize the text.
@@ -116,61 +195,18 @@ void FestivalIntProc::synthText(const QString& text, const QString& suggestedFil
 * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
 */
 void FestivalIntProc::synth(
+    const QString & festivalExePath,
     const QString &text,
     const QString &synthFilename,
     const QString& voiceCode,
     const int time)
 {
-    // kdDebug() << "FestivalIntProc::synth: Running" << endl;
+    // kdDebug() << "FestivalIntProc::synth: festivalExePath = " << festivalExePath
+    //         << " voiceCode = " << voiceCode << endl;
 
     // Initialize Festival only if it's not initialized
-    if (m_festProc)
-        // If festProc exists but is not running, it is because it was stopped.
-        // Recreate festProc object.
-        if (!m_festProc->isRunning())
-        {
-            delete m_festProc;
-            m_festProc = 0;
-        }
-    if(!m_festProc)
-    {
-        // kdDebug()<< "FestivalIntProc::synth: Creating Festival object" << endl;
-        m_festProc = new KProcess;
-        *m_festProc << "festival";
-        *m_festProc << "--interactive";
-        connect(m_festProc, SIGNAL(processExited(KProcess*)),
-            this, SLOT(slotProcessExited(KProcess*)));
-        connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-        connect(m_festProc, SIGNAL(wroteStdin(KProcess*)),
-            this, SLOT(slotWroteStdin(KProcess*)));
-    }
-    m_outputQueue.clear();
-    if (!m_festProc->isRunning())
-    {
-        // kdDebug() << "FestivalIntProc::synth: Starting Festival process" << endl;
-        m_runningVoiceCode = QString::null;
-        m_runningTime = 100;
-        m_ready = false;
-        if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
-        {
-            // kdDebug()<< "FestivalIntProc:synth: Festival initialized" << endl;
-        }
-        else
-        {
-            kdDebug() << "FestivalIntProc::synth: Error starting Festival process.  Is festival in the PATH?" << endl;
-            m_ready = true;
-            m_state = psIdle;
-            return;
-        }
-    }
-    // If we just started Festival, or voiceCode has changed, send code to Festival.
-    if (m_runningVoiceCode != voiceCode) {
-        sendToFestival(voiceCode);
-        m_runningVoiceCode = voiceCode;
-    }
+    startEngine(festivalExePath, voiceCode);
+    // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
         QString timeMsg = QString("(Parameter.set 'Duration_Stretch %1)").arg(
             1.0/(float(time)/100.0), 0, 'f', 1);
@@ -187,7 +223,6 @@ void FestivalIntProc::synth(
     saidText.replace("--", "");
 
     // Ok, let's rock.
-    // If no longer running, it has been stopped.  Bail out.
     if (synthFilename.isNull())
     {
         m_state = psSaying;
@@ -243,7 +278,7 @@ bool FestivalIntProc::sendIfReady()
     m_festProc->writeStdin(text.latin1(), text.length());
     return true;
 }
-        
+
 /**
 * Get the generated audio filename from synthText.
 * @return                        Name of the audio file the plugin generated.
@@ -266,9 +301,20 @@ void FestivalIntProc::stopText(){
                 m_state = psIdle;
             else
             {
-                // kdDebug() << "FestivalIntProc::stopText: killing Festival." << endl;
-                m_waitingStop = true;
-                m_festProc->kill();
+                // If using a preloaded voice, killing Festival is a bad idea because of
+                // huge startup times.  So if synthing (not saying), let Festival continue
+                // synthing.  When it completes, we will emit the stopped signal.
+                if (m_preload && (m_state == psSynthing))
+                {
+                    m_waitingStop = true;
+                    // kdDebug() << "FestivalIntProc::stopText: Optimizing stopText() for preloaded voice." << endl;
+                }
+                else
+                {
+                    // kdDebug() << "FestivalIntProc::stopText: killing Festival." << endl;
+                    m_waitingStop = true;
+                    m_festProc->kill();
+                }
             }
         } else m_state = psIdle;
     } else m_state = psIdle;
@@ -279,18 +325,33 @@ void FestivalIntProc::slotProcessExited(KProcess*)
     // kdDebug() << "FestivalIntProc:slotProcessExited: Festival process has exited." << endl;
     m_ready = true;
     pluginState prevState = m_state;
-    if (m_waitingStop)
+    if (m_waitingStop || m_waitingQueryVoices)
     {
-        m_waitingStop = false;
-        m_state = psIdle;
-        emit stopped();
+        if (m_waitingStop)
+        {
+            m_waitingStop = false;
+            m_state = psIdle;
+            // kdDebug() << "FestivalIntProc::slotProcessExited: emitting stopped signal" << endl;
+            emit stopped();
+        }
+        if (m_waitingQueryVoices)
+        {
+            // kdDebug() << "FestivalIntProc::slotProcessExited: canceling queryVoices operation" << endl;
+            m_waitingQueryVoices = false;
+            m_state = psIdle;
+        }
     } else {
-        m_state = psFinished;
+        if (m_state != psIdle) m_state = psFinished;
         if (prevState == psSaying)
+        {
+            // kdDebug() << "FestivalIntProc::slotProcessExited: emitting sayFinished signal" << endl;
             emit sayFinished();
-        else
+        } else
             if (prevState == psSynthing)
+            {
+                // kdDebug() << "FestivalIntProc::slotProcessExited: emitting synthFinished signal" << endl;
                 emit synthFinished();
+            }
     }
     delete m_festProc;
     m_festProc = 0;
@@ -301,19 +362,62 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     // kdDebug() << "FestivalIntProc::slotReceivedStdout: Received from Festival: " << buf << endl;
-    if (buf.contains("festival>") > 0) 
+    bool promptSeen = (buf.contains("festival>") > 0);
+    bool emitQueryVoicesFinished = false;
+    QStringList voiceCodesList;
+    if (m_waitingQueryVoices)
     {
+        // Look for opening ( and closing ).
+        buf.simplifyWhiteSpace();
+        if (buf.left(1) == "(")
+        {
+            int rightParen = buf.find(')');
+            if (rightParen > 0)
+            {
+                m_waitingQueryVoices = false;
+                // Extract contents between parens.
+                buf = buf.mid(1, rightParen - 1);
+                // Space separated list.
+                voiceCodesList = QStringList::split(" ", buf, false);
+                emitQueryVoicesFinished = true;
+            }
+        }
+    }
+    if (promptSeen)
+    {
+        // kdDebug() << "FestivalIntProc::slotReceivedStdout: Prompt seen" << endl;
         m_ready = true;
         if (!sendIfReady())
         {
+            // kdDebug() << "FestivalIntProc::slotReceivedStdout: All output sent. " << endl;
             pluginState prevState = m_state;
-            m_state = psFinished;
+            if (m_state != psIdle) m_state = psFinished;
             if (prevState == psSaying)
+            {
+                // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting sayFinished signal" << endl;
                 emit sayFinished();
-            else
+            } else
                 if (prevState == psSynthing)
-                    emit synthFinished();
+                {
+                    if (m_waitingStop)
+                    {
+                        m_waitingStop = false;
+                        m_state = psIdle;
+                        // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting optimized stopped signal" << endl;
+                        emit stopped();
+                    }
+                    else
+                    {
+                        // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting synthFinished signal" << endl;
+                        emit synthFinished();
+                    }
+                }
         }
+    }
+    if (emitQueryVoicesFinished)
+    {
+        // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting queryVoicesFinished" << endl;
+        emit queryVoicesFinished(voiceCodesList);
     }
 }
 
@@ -325,17 +429,23 @@ void FestivalIntProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 
 void FestivalIntProc::slotWroteStdin(KProcess* /*proc*/)
 {
-    // kdDebug() << "FestivalIntProc::slotWroteStdin" << endl;
+    // kdDebug() << "FestivalIntProc::slotWroteStdin: Running" << endl;
     m_writingStdin = false;
     if (!sendIfReady())
     {
+        // kdDebug() << "FestivalIntProc::slotWroteStdin: all output sent" << endl;
         pluginState prevState = m_state;
-        m_state = psFinished;
+        if (m_state != psIdle) m_state = psFinished;
         if (prevState == psSaying)
+        {
+            // kdDebug() << "FestivalIntProc::slotWroteStdin: emitting sayFinished signal" << endl;
             emit sayFinished();
-        else
+        } else
             if (prevState == psSynthing)
+            {
+                // kdDebug() << "FestivalIntProc::slotWroteStdin: emitting synthFinished signal" << endl;
                 emit synthFinished();
+            }
     }
 }
 

@@ -35,17 +35,19 @@
 
 class FestivalIntProc;
 class KArtsServer;
+class KProgressDialog;
 namespace KDE {
     class PlayObject;
 }
 
 typedef struct voiceStruct{
-    QString code;
-    QString name;
+    QString code;               // Code as sent to Festival
+    QString name;               // Name as displayed and returned in Talker Code.
     QString comment;
-    QString path;
-    QString languageCode;
-    QString gender;
+    QString languageCode;       // Language code (en, es, etc)
+    QString gender;             // male, female, or neutral
+    bool preload;               // Start Festival and load this language when KTTSD is started.
+    bool rateAdjustable;        // True if the voice supports rate adjustments.
 } voice;
 
 class FestivalIntConf : public PlugInConf {
@@ -111,19 +113,21 @@ class FestivalIntConf : public PlugInConf {
         /** Scan for the different voices in festivalPath/lib */
         void scanVoices();
         void configChanged(){
-            kdDebug() << "FestivalIntConf::configChanged: Running" << endl;
+            // kdDebug() << "FestivalIntConf::configChanged: Running" << endl;
             emit changed(true);
         };
         void slotTest_clicked();
         void slotSynthFinished();
+        void slotSynthStopped();
         void timeBox_valueChanged(int percentValue);
         void timeSlider_valueChanged(int sliderValue);
+        void slotSelectVoiceCombo_activated();
+        void slotQueryVoicesFinished(const QStringList &voiceCodes);
 
    private:
         int percentToSlider(int percentValue);
         int sliderToPercent(int sliderValue);
         void setDefaultVoice();
-        QString getDefaultVoicesPath();
 
         // Configuration Widget.
         FestivalIntConfWidget* m_widget;
@@ -142,6 +146,10 @@ class FestivalIntConf : public PlugInConf {
         KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
+        // Progress dialog.
+        KProgressDialog* m_progressDlg;
+        // List of voice codes supported by Festival.
+        QStringList m_supportedVoiceCodes;
 
 };
 #endif // _FESTIVALINTCONF_H_

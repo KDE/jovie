@@ -1,129 +1,146 @@
-[kal]
+[kal_diphone]
 Name=Kal
 Name[es]=Kal
 Language=en_US
-Code=voice_kal_diphone
 Gender=male
+Preload=false
+RateAdjustable=true
 Comment=American Male
 Comment[es]=Americano masculino
-Path=english/kal_diphone/
 
-[ked]
+[ked_diphone]
 Name=Ked
 Name[es]=Ked
 Language=en_US
 Gender=male
-Code=voice_ked_diphone
+Preload=false
+RateAdjustable=true
 Comment=American Male
 Comment[es]=Americano masculino
-Path=english/ked_diphone/
 
-[us1]
+[us1_mbrola]
 Name=Us1
 Name[es]=Us1
 Language=en_US
 Gender=female
-Code=voice_us1_mbrola
+Preload=false
+RateAdjustable=true
 Comment=American Female, MBROLA
 Comment[es]=Americana femenina, MBROLA
-Path=english/us1_mbrola/
 
-[us2]
+[us2_mbrola]
 Name=Us2
 Name[es]=Us2
 Language=en_US
 Gender=male
-Code=voice_us2_mbrola
+Preload=false
+RateAdjustable=true
 Comment=American Male, MBROLA
 Comment[es]=Americano masculino, MBROLA
-Path=english/us2_mbrola/
 
-[us3]
+[us3_mbrola]
 Name=Us3
 Name[es]=Us3
 Language=en_US
 Gender=male
-Code=voice_us3_mbrola
+Preload=false
+RateAdjustable=true
 Comment=American Male, MBROLA
 Comment[es]=Americano masculino, MBROLA
-Path=english/us3_mbrola/
 
-[don]
+[don_diphone]
 Name=Don
 Name[es]=Don
 Language=en_GB
 Gender=male
-Code=voice_don_diphone
+Preload=false
+RateAdjustable=true
 Comment=British Male
 Comment[es]=Britanico masculino
-Path=english/don_diphone/
 
-[rab]
+[rab_diphone]
 Name=Rab
 Name[es]=Rab
 Language=en_GB
 Gender=male
-Code=voice_rab_diphone
+Preload=false
+RateAdjustable=true
 Comment=British Male
 Comment[es]=Britanico masculino
-Path=english/rab_diphone/
 
-[el]
+[el_diphone]
 Name=El
 Name[es]=El
 Language=es
 Gender=male
-Code=voice_el_diphone
-Comment=Spanish Male
+Preload=false
+RateAdjustable=true
+Comment=Castilian Spanish Male
 Comment[es]=Español masculino
-Path=spanish/el_diphone/
 
-[bdl]
+[cmu_us_bdl_arctic_hts]
 Name=Bdl ARCTIC
 Name[es]=Bdl ARCTIC
 Language=en_US
 Gender=male
-Code=voice_cmu_us_bdl_arctic_hts
+Preload=false
+RateAdjustable=true
 Comment=American Male, HTS
 Comment[es]=Americano masculino, HTS
-Path=english/cmu_us_bdl_arctic_hts/
 
-[slt]
+[cmu_us_slt_arctic_hts]
 Name=Slt ARCTIC
 Name[es]=Slt ARCTIC
 Language=en_US
 Gender=female
-Code=voice_cmu_us_slt_arctic_hts
+Preload=false
+RateAdjustable=true
 Comment=American Female, HTS
 Comment[es]=Americana femenina, HTS
-Path=english/cmu_us_slt_arctic_hts/
 
-[jmk]
+[cmu_us_jmk_arctic_hts]
 Name=Jmk ARCTIC
 Name[es]=Jmk ARCTIC
-Language=en_US
+Language=en_CA
 Gender=male
-Code=voice_cmu_us_jmk_arctic_hts
-Comment=American Male, HTS
-Comment[es]=Americano masculino, HTS
-Path=english/cmu_us_jmk_arctic_hts/
+Preload=false
+RateAdjustable=true
+Comment=Canadian English Male, HTS
 
-[awb]
+[cmu_us_awb_arctic_hts]
 Name=Awb ARCTIC
 Name[es]=Awb ARCTIC
-Language=en_US
+Language=en_GB
 Gender=male
-Code=voice_cmu_us_awb_arctic_hts
-Comment=American Male, HTS
+Preload=false
+RateAdjustable=true
+Comment=Scottish Male, HTS
 Comment[es]=Americano masculino, HTS
-Path=english/cmu_us_awb_arctic_hts/
 
-[ked_hts]
+[cstr_us_ked_timit_hts]
 Name=Ked Timit
 Name[es]=Ked Timit
 Language=en_US
 Gender=male
-Code=voice_cstr_us_ked_timit_hts
+Preload=false
+RateAdjustable=true
 Comment=American Male, HTS
 Comment[es]=Americano masculino, HTS
-Path=english/cstr_us_ked_timit_hts/
+
+[cstr_us_jmk_arctic_multisyn]
+Name=Jmk MultiSyn
+Name[es]=Jmk MultiSyn
+Language=en_CA
+Gender=male
+Preload=true
+RateAdjustable=false
+Comment=Canadian English Male, MultiSyn
+
+[cstr_us_awb_arctic_multisyn]
+Name=Awb MultiSyn
+Name[es]=Awb MultiSyn
+Language=en_GB
+Gender=male
+Preload=true
+RateAdjustable=false
+Comment=Scottish Male, MultiSyn

@@ -22,6 +22,7 @@
 #include <qapplication.h>
 
 // KDE includes.
+#include <klocale.h>
 #include <kdialog.h>
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
@@ -29,10 +30,12 @@
 #include <kplayobjectfactory.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
+#include <kprogress.h>
 
 // Flite Plugin includes.
 #include "fliteproc.h"
 #include "fliteconf.h"
+#include "fliteconf.moc"
 
 /** Constructor */
 FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
@@ -42,6 +45,7 @@ FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*ar
     m_fliteProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
+    m_progressDlg = 0;
     
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "FliteConfigWidgetLayout");
@@ -64,6 +68,7 @@ FliteConf::~FliteConf(){
     delete m_artsServer;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_fliteProc;
+    delete m_progressDlg;
 }
 
 void FliteConf::load(KConfig *config, const QString &configGroup){
@@ -129,21 +134,47 @@ void FliteConf::slotFliteTest_clicked()
     else
     {
         m_fliteProc = new FliteProc();
-        connect (m_fliteProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        connect (m_fliteProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "fliteplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
+
+    // Tell user to wait.
+    m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_flite_testdlg",
+        i18n("Testing"),
+        i18n("Testing."),
+        true);
+    m_progressDlg->progressBar()->hide();
+    m_progressDlg->setAllowCancel(true);
+
     // Play an English test.  Flite only supports English.
+    connect (m_fliteProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_fliteProc->synth(
-        "KDE is a modern graphical desktop for Unix computers.",
+        "K D E is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
         m_widget->flitePath->url());
+
+    // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
+    // or if user clicks Cancel button.
+    m_progressDlg->exec();
+    disconnect (m_fliteProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    if (m_progressDlg->wasCancelled()) m_fliteProc->stopText();
+    delete m_progressDlg;
+    m_progressDlg = 0;
 }
 
 void FliteConf::slotSynthFinished()
 {
+    // If user canceled, progress dialog is gone, so exit.
+    if (!m_progressDlg)
+    {
+        m_fliteProc->ackFinished();
+        return;
+    }
+    // Hide the Cancel button so user can't cancel in the middle of playback.
+    m_progressDlg->showCancelButton(false);
     // If currently playing (or finished playing), stop and delete play object.
     if (m_playObj)
     {
@@ -176,6 +207,12 @@ void FliteConf::slotSynthFinished()
     m_artsServer = 0;
     QFile::remove(m_waveFile);
     m_waveFile = QString::null;
+    if (m_progressDlg) m_progressDlg->close();
 }
 
-#include "fliteconf.moc"
+void FliteConf::slotSynthStopped()
+{
+    // Clean up after canceling test.
+    QString filename = m_fliteProc->getFilename();
+    if (!filename.isNull()) QFile::remove(filename);
+}

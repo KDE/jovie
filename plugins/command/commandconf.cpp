@@ -35,6 +35,7 @@
 #include <kcombobox.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
+#include <kprogress.h>
 
 // KTTS includes.
 #include <pluginconf.h>
@@ -42,16 +43,16 @@
 // Command Plugin includes.
 #include "commandproc.h"
 #include "commandconf.h"
-#include "commandconf.moc"
 
 /** Constructor */
 CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    kdDebug() << "CommandConf::CommandConf: Running" << endl;
+    // kdDebug() << "CommandConf::CommandConf: Running" << endl;
     m_playObj = 0;
     m_artsServer = 0;
     m_commandProc = 0;
+    m_progressDlg = 0;
 
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "CommandConfigWidgetLayout");
@@ -75,16 +76,17 @@ CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& 
 /** Destructor */
 CommandConf::~CommandConf()
 {
-    kdDebug() << "CommandConf::~CommandConf: Running" << endl;
+    // kdDebug() << "CommandConf::~CommandConf: Running" << endl;
     if (m_playObj) m_playObj->halt();
     delete m_playObj;
     delete m_artsServer;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_commandProc;
+    delete m_progressDlg;
 }
 
 void CommandConf::load(KConfig *config, const QString &configGroup) {
-    kdDebug() << "CommandConf::load: Running" << endl;
+    // kdDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(configGroup);
     m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
     m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", true));
@@ -107,7 +109,7 @@ void CommandConf::load(KConfig *config, const QString &configGroup) {
 }
 
 void CommandConf::save(KConfig *config, const QString &configGroup) {
-    kdDebug() << "CommandConf::save: Running" << endl;
+    // kdDebug() << "CommandConf::save: Running" << endl;
     config->setGroup(configGroup);
     config->writeEntry("Command", m_widget->urlReq->url());
     config->writeEntry("StdIn", m_widget->stdInButton->isChecked());
@@ -123,7 +125,7 @@ void CommandConf::save(KConfig *config, const QString &configGroup) {
 }
 
 void CommandConf::defaults(){
-    kdDebug() << "CommandConf::defaults: Running" << endl;
+    // kdDebug() << "CommandConf::defaults: Running" << endl;
     m_widget->urlReq->setURL("cat -");
     m_widget->stdInButton->setChecked(true);
     buildCodecList();
@@ -142,7 +144,10 @@ QString CommandConf::getTalkerCode()
     QString url = m_widget->urlReq->url();
     if (!url.isEmpty())
     {
-        return QString(
+        // Must contain either text or file parameter, otherwise, does nothing!
+        if ((url.contains("%t") > 0) || (url.contains("%f") > 0))
+        {
+            return QString(
                 "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                 "<prosody volume=\"%4\" rate=\"%5\" />"
                 "<kttsd synthesizer=\"%6\" />")
@@ -152,6 +157,7 @@ QString CommandConf::getTalkerCode()
                 .arg("medium")
                 .arg("medium")
                 .arg("Command");
+        }
     }
     return QString::null;
 }
@@ -171,33 +177,60 @@ void CommandConf::buildCodecList () {
 
 void CommandConf::slotCommandTest_clicked()
 {
-    kdDebug() << "CommandConf::slotCommandTest_clicked(): " << endl;
+    // kdDebug() << "CommandConf::slotCommandTest_clicked(): " << endl;
     // If currently synthesizing, stop it.
     if (m_commandProc)
         m_commandProc->stopText();
     else
     {
         m_commandProc = new CommandProc();
-        connect (m_commandProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        connect (m_commandProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
+
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "commandplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
+
+    // Tell user to wait.
+    m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_command_testdlg",
+        i18n("Testing"),
+        i18n("Testing."),
+        true);
+    m_progressDlg->progressBar()->hide();
+    m_progressDlg->setAllowCancel(true);
+
     // Play an English test.
     // TODO: Need a way to generate language-specific text.
+    connect (m_commandProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_commandProc->synth(
-        "KDE is a modern graphical desktop for Unix computers.",
+        "K D E is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
         m_widget->urlReq->url(),
         m_widget->stdInButton->isChecked(),
         m_widget->characterCodingBox->currentItem(),
         QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())),
         m_languageCode);
+
+    // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
+    // or if user clicks Cancel button.
+    m_progressDlg->exec();
+    disconnect (m_commandProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    if (m_progressDlg->wasCancelled()) m_commandProc->stopText();
+    delete m_progressDlg;
+    m_progressDlg = 0;
 }
 
 void CommandConf::slotSynthFinished()
 {
+    // If user canceled, progress dialog is gone, so exit.
+    if (!m_progressDlg)
+    {
+        m_commandProc->ackFinished();
+        return;
+    }
+    // Hide the Cancel button so user can't cancel in the middle of playback.
+    m_progressDlg->showCancelButton(false);
     // If currently playing (or finished playing), stop and delete play object.
     if (m_playObj)
     {
@@ -230,4 +263,14 @@ void CommandConf::slotSynthFinished()
     m_artsServer = 0;
     QFile::remove(m_waveFile);
     m_waveFile = QString::null;
+    if (m_progressDlg) m_progressDlg->close();
 }
+
+void CommandConf::slotSynthStopped()
+{
+    // Clean up after canceling test.
+    QString filename = m_commandProc->getFilename();
+    if (!filename.isNull()) QFile::remove(filename);
+}
+
+#include "commandconf.moc"

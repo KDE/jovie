@@ -34,6 +34,7 @@
 
 class CommandProc;
 class KArtsServer;
+class KProgressDialog;
 namespace KDE {
     class PlayObject;
 }
@@ -100,11 +101,12 @@ class CommandConf : public PlugInConf {
 
     private slots:
         void configChanged(){
-            kdDebug() << "CommandConf::configChanged: Running" << endl;
+            // kdDebug() << "CommandConf::configChanged: Running" << endl;
             emit changed(true);
         };
         void slotCommandTest_clicked();
         void slotSynthFinished();
+        void slotSynthStopped();
 
     private:
         QString m_languageCode;
@@ -123,5 +125,7 @@ class CommandConf : public PlugInConf {
         KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
+        // Progress dialog.
+        KProgressDialog* m_progressDlg;
 };
 #endif      // _COMMANDCONF_H_

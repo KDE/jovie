@@ -24,6 +24,9 @@
     <property name="caption">
         <string>Flite Config UI</string>
     </property>
+    <property name="whatsThis" stdset="0">
+        <string>This is the configuration dialog for the Festival Lite (Flite) speech synthesis engine.</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -64,7 +67,10 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Festival Lite (flite) Configuration</string>
+                <string>Festival &amp;Lite (flite) Configuration</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This is the configuration dialog for the Festival Lite (Flite) speech synthesis engine.</string>
             </property>
             <grid>
                 <property name="name">
@@ -103,13 +109,16 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Flite executable path:</string>
+                                <string>&amp;Flite executable path:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
+                                <cstring>flitePath</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If Flite is in your PATH environment variable, simply enter "flite", otherwise specify the complete path to the Flite executable program.</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
@@ -127,6 +136,9 @@
                             <property name="url" stdset="0">
                                 <string>flite</string>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If Flite is in your PATH environment variable, simply enter "flite", otherwise specify the complete path to the Flite executable program.</string>
+                            </property>
                         </widget>
                     </hbox>
                 </widget>
@@ -135,7 +147,10 @@
                         <cstring>fliteTest</cstring>
                     </property>
                     <property name="text">
-                        <string>Test</string>
+                        <string>&amp;Test</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
                     </property>
                 </widget>
                 <spacer row="1" column="0">

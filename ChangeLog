@@ -1,3 +1,35 @@
+2004-11-11  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
+        * Support for Festival 2.0. and Festival MultiSyn voices in FestivalInt plugin.
+        * Query Festival for available voices, rather than scanning for directories.
+        * Support for multiple versions of Festival executable.  Now asks for EXE path rather
+          than voices path.
+        * Allow preload of Festival voices that take a long time to load.
+          If set, Festival is started when KTTSD starts and the voice is loaded.
+        * When stopText() is called and FestivalInt plugin is synthing (not saying) using
+          a pre-loaded voice, instead of killing Festival, which would cost hugely in
+          re-startup time, Festival is allowed to finish synthing and result is discarded.
+          This improves performance when rewinding/fastforwarding.
+        * Corrected FestivalInt voices file as to voice descriptions and languages.
+          Added MultiSyn voices.
+        * Added accelerators and WhatsThis help to FestivalInt, Command, Epos, Flite, and Hadifix
+          configuration dialogs.
+        * Added modal, cancelable, progress dialog while Testing in FestivalInt, Command, Epos,
+          Flite, FreeTTS, and Hadifix configuration dialogs.
+          This prevents a crash when user clicks OK or Cancel before test has completed.
+        * Command plugin always displays configuration dialog when added, i.e., never
+          autoconfigs.
+        * Speed adjustment disabled when using MultiSyn Festival voices.
+        * Allow KTTSMgr screen to be resized to minimum size.  Allow splitter to resize jobs
+          ListView to minimum vertical size.
+        * No longer attempt to build Festival plugin (static linking to Festival/Speech Tools
+          libaries).  User must explicitly request via ./configure --enable-kttsd-festival.
+          Code is woefully behind, I cannot get it to work, and probably wouldn't work
+          anymore even if I could get it to link and get past crash on first call to library.
+          FestivalInt seems to work just fine..grc.
+
+2004-11-10  Paul Giannaros (Cerulean)
+        * getTalkerCodes() returning corrupted talker codes.
+
 2004-11-04  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Add English languages to FreeTTS desktop file so they show up in Add Talker dialog.
         * When starting kttsmgr, if no Talkers are configured, default to Talker page.

@@ -145,18 +145,34 @@ class FestivalIntProc : public PlugInProc{
         * If the plugin returns True, it need not implement @ref sayText .
         */
         virtual bool supportsSynth();
-    
+
         /**
         * Say or Synthesize text with the given voice code.
+        * @param festivalExePath         Path to the Festival executable, or just "festival".
         * @param text                    The text to be synthesized.
         * @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
         *                                synthesize and audibilize the text.
         * @param voiceCode               Voice code.
         * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
         */
-        void synth(const QString &text, const QString &synthFilename, 
-            const QString& voiceCode, const int time);
-        
+        void synth(const QString &festivalExePath, const QString &text,
+            const QString &synthFilename, const QString& voiceCode, const int time);
+
+        /**
+        * Sends commands to Festival to query for a list of supported voice codes.
+        * Fires queryVoicesFinished when completed.
+        * @return                       False if busy doing something else and therefore cannot
+        *                               do the query.
+        */
+        bool queryVoices(const QString &festivalExePath);
+
+    signals:
+        /**
+        * This signal fires upon completion of a queryVoices operation.
+        * The list of voice codes do not have "voice_" prefix.
+        */
+        void queryVoicesFinished(const QStringList &voiceCodes);
+
     private slots:
         void slotProcessExited(KProcess* proc);
         void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
@@ -165,12 +181,19 @@ class FestivalIntProc : public PlugInProc{
 
     private:
         /**
+        * Start Festival engine.
+        * @param festivalExePath         Path to the Festival executable, or just "festival".
+        * @param voiceCode               Voice code in which to speak text.
+        */
+        void startEngine(const QString &festivalExePath, const QString &voiceCode);
+
+        /**
         * If ready for more output, sends the given text to Festival process, otherwise,
         * puts it in the queue.
         * @param text                    Text to send or queue.
         */
         void sendToFestival(const QString& text);
-        
+
         /**
         * If Festival is ready for more input and there is more output to send, send it.
         * To be ready for more input, the Stdin buffer must be empty and the "festival>"
@@ -180,22 +203,33 @@ class FestivalIntProc : public PlugInProc{
         *                                has exited.
         */
         bool sendIfReady();
-        
+
+        /**
+        * Path to the Festival executable.
+        */
+        QString m_festivalExePath;
+
         /**
         * Selected voice (from config).
         */
         QString m_voiceCode;
-        
+
+        /**
+        * True if the voice is preloaded.  Also used as a flag to supress killing
+        * Festival, since startup time will be excessive.
+        */
+        bool m_preload;
+
         /**
         * Selected speed (from config).
         */
         int m_time;
-        
+
         /**
         * Running voice.
         */
         QString m_runningVoiceCode;
-        
+
         /**
         * Running time (speed).
         */
@@ -205,28 +239,33 @@ class FestivalIntProc : public PlugInProc{
          * Festival process
          */
         KProcess* m_festProc;
-        
+
         /**
         * Synthesis filename.
         */
         QString m_synthFilename;
-        
+
         /**
          * True when festival is ready for another input.
          */
         volatile bool m_ready;
-        
+
         /**
         * Plugin state.
         */
         pluginState m_state;
-        
+
         /**
         * True when stopText has been called.  Used to force transition to psIdle when
-        * Flite exits.
+        * Festival exits.
         */
         bool m_waitingStop;
-        
+
+        /**
+        * True when queryVoices has been called.
+        */
+        bool m_waitingQueryVoices;
+
         /**
         * A queue of outputs to be sent to the Festival process.
         * Since Festival requires us to wait until the "festival>" prompt before
@@ -234,7 +273,7 @@ class FestivalIntProc : public PlugInProc{
         * commands and send each one when the ReceivedStdOut signal fires.
         */
         QStringList m_outputQueue;
-        
+
         bool m_writingStdin;
 };
 

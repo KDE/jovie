@@ -32,6 +32,7 @@
 
 class KArtsServer;
 class QStringList;
+class KProgressDialog;
 
 class FreeTTSConf : public PlugInConf {
 	Q_OBJECT 
@@ -97,12 +98,13 @@ class FreeTTSConf : public PlugInConf {
 		 * @returns                   The full path to the file or an empty QString.
 		 */
 	
-	public slots:
+	private slots:
 		void configChanged(bool t = true) { 
 			emit changed(t); 
 		};
 		void slotFreeTTSTest_clicked();
 		void slotSynthFinished();
+                void slotSynthStopped();
 	
 	private:
                 /// Language code.
@@ -122,5 +124,8 @@ class FreeTTSConf : public PlugInConf {
 		
 		/// Synthesized wave file name.
 		QString m_waveFile;
+
+                /// Progress dialog.
+                KProgressDialog* m_progressDlg;
 };
 #endif

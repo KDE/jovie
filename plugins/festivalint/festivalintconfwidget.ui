@@ -24,6 +24,9 @@
     <property name="caption">
         <string>Festival Config UI</string>
     </property>
+    <property name="whatsThis" stdset="0">
+        <string>This is the dialog for configuring the Festival speech synthesizer in interactive mode.</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -64,7 +67,10 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Festival Interactive Configuration</string>
+                <string>Festival &amp;Interactive Configuration</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This is the dialog for configuring the Festival speech synthesizer in interactive mode.</string>
             </property>
             <grid>
                 <property name="name">
@@ -103,18 +109,21 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>&amp;Festival voices directory:</string>
+                                <string>&amp;Festival executable:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
+                                <cstring>festivalPath</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If Festival is in your PATH environment variable, just enter "festival", otherwise specify the full path to the Festival executable program.</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
                             <property name="name">
-                                <cstring>festivalVoicesPath</cstring>
+                                <cstring>festivalPath</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -123,6 +132,9 @@
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If Festival is in your PATH environment variable, just enter "festival", otherwise specify the full path to the Festival executable program.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -154,6 +166,9 @@
                             <property name="buddy" stdset="0">
                                 <cstring>selectVoiceCombo</cstring>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Select a voice to speak text with.  MultiSyn voices are high quality but are slow to load.  If no voices are shown, check the Festival executable path.  You must install at least one Festival voice.  If you have installed a voice and still none are shown, check your Festival configuration.  (See the README that comes with Festival.)</string>
+                            </property>
                         </widget>
                         <widget class="KComboBox">
                             <property name="name">
@@ -166,6 +181,9 @@
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Select a voice to speak text with.  MultiSyn voices are high quality but are slow to load.  If no voices are shown, check the Festival executable path.  You must install at least one Festival voice.  If you have installed a voice and still none are shown, check your Festival configuration.  (See the README that comes with Festival.)</string>
                             </property>
                         </widget>
                         <widget class="KPushButton">
@@ -202,6 +220,9 @@
                             <property name="text">
                                 <string>Speed:</string>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                            </property>
                         </widget>
                         <widget class="KIntSpinBox">
                             <property name="name">
@@ -231,7 +252,7 @@
                                 <number>100</number>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Sets the speed of the speech.</string>
+                                <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
                             </property>
                         </widget>
                         <widget class="QSlider">
@@ -260,22 +281,36 @@
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Sets the speed of the speech.</string>
+                                <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
                             </property>
                         </widget>
                     </hbox>
                 </widget>
                 <widget class="QLayoutWidget" row="3" column="0">
                     <property name="name">
-                        <cstring>layout10</cstring>
+                        <cstring>layout6</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>preloadCheckBox</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Load this voice when starting KTTSD</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+L</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If checked, Festival will be started and this voice will be loaded when the Text-to-Speech Deamon (KTTSD) is started.  Check when a voice requires a long time to load in Festival (for example, multisyn voices), otherwise, leave unchecked.</string>
+                            </property>
+                        </widget>
                         <spacer>
                             <property name="name">
-                                <cstring>spacer2</cstring>
+                                <cstring>spacer3</cstring>
                             </property>
                             <property name="orientation">
                                 <enum>Horizontal</enum>
@@ -285,7 +320,7 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>410</width>
+                                    <width>101</width>
                                     <height>20</height>
                                 </size>
                             </property>
@@ -295,7 +330,13 @@
                                 <cstring>testButton</cstring>
                             </property>
                             <property name="text">
-                                <string>Test</string>
+                                <string>&amp;Test</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+T</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Click to test the configuration.  Festival will be started and a test sentence will be spoken.</string>
                             </property>
                         </widget>
                     </hbox>

@@ -36,6 +36,7 @@
 // Epos Plugin includes.
 #include "eposproc.h"
 #include "eposconf.h"
+#include "eposconf.moc"
 
 /** Constructor */
 EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
@@ -45,6 +46,7 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
     m_eposProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
+    m_progressDlg = 0;
 
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "EposConfigWidgetLayout");
@@ -76,6 +78,7 @@ EposConf::~EposConf(){
     delete m_artsServer;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_eposProc;
+    delete m_progressDlg;
 }
 
 void EposConf::load(KConfig *config, const QString &configGroup){
@@ -186,17 +189,27 @@ void EposConf::slotEposTest_clicked()
     else
     {
         m_eposProc = new EposProc();
-        connect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        connect (m_eposProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "eposplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
+
+    // Tell user to wait.
+    m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_epos_testdlg",
+        i18n("Testing"),
+        i18n("Testing."),
+        true);
+    m_progressDlg->progressBar()->hide();
+    m_progressDlg->setAllowCancel(true);
+
     // Play an English test.
     // TODO: Need czeck or slavak test message.
     // TODO: Whenever server options change, the server must be restarted.
+    connect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_eposProc->synth(
-        "KDE is a modern graphical desktop for Unix computers.",
+        "K D E is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
         m_widget->eposServerPath->url(),
         m_widget->eposClientPath->url(),
@@ -204,10 +217,26 @@ void EposConf::slotEposTest_clicked()
         m_widget->eposClientOptions->text(),
         m_widget->characterCodingBox->currentItem(),
         QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())));
+
+    // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
+    // or if user clicks Cancel button.
+    m_progressDlg->exec();
+    disconnect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    if (m_progressDlg->wasCancelled()) m_eposProc->stopText();
+    delete m_progressDlg;
+    m_progressDlg = 0;
 }
 
 void EposConf::slotSynthFinished()
 {
+    // If user canceled, progress dialog is gone, so exit.
+    if (!m_progressDlg)
+    {
+        m_eposProc->ackFinished();
+        return;
+    }
+    // Hide the Cancel button so user can't cancel in the middle of playback.
+    m_progressDlg->showCancelButton(false);
     // If currently playing (or finished playing), stop and delete play object.
     if (m_playObj)
     {
@@ -240,6 +269,12 @@ void EposConf::slotSynthFinished()
     m_artsServer = 0;
     QFile::remove(m_waveFile);
     m_waveFile = QString::null;
+    if (m_progressDlg) m_progressDlg->close();
 }
 
-#include "eposconf.moc"
+void EposConf::slotSynthStopped()
+{
+    // Clean up after canceling test.
+    QString filename = m_eposProc->getFilename();
+    if (!filename.isNull()) QFile::remove(filename);
+}

@@ -25,6 +25,7 @@
 // KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kprogress.h>
 
 // KTTS includes.
 #include <pluginconf.h>
@@ -34,6 +35,7 @@
 
 class EposProc;
 class KArtsServer;
+class KProgressDialog;
 namespace KDE {
     class PlayObject;
 }
@@ -105,6 +107,7 @@ class EposConf : public PlugInConf {
         };
         void slotEposTest_clicked();
         void slotSynthFinished();
+        void slotSynthStopped();
 
     private:
         // Language code.
@@ -123,5 +126,7 @@ class EposConf : public PlugInConf {
         KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
+        // Progress dialog.
+        KProgressDialog* m_progressDlg;
 };
 #endif // _EPOSCONF_H_

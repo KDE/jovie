@@ -24,6 +24,9 @@
     <property name="caption">
         <string>Epos Config UI</string>
     </property>
+    <property name="whatsThis" stdset="0">
+        <string>This is the configuration dialog for the Epos Czech and Slovak speech synthesizer.</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -47,7 +50,10 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Epos Configuration</string>
+                <string>E&amp;pos Configuration</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This is the configuration dialog for the Epos Czech and Slovak speech synthesizer.</string>
             </property>
             <grid>
                 <property name="name">
@@ -88,6 +94,9 @@
                             <property name="buddy" stdset="0">
                                 <cstring>festivalVoicesPath</cstring>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
+                            </property>
                         </widget>
                         <widget class="KURLRequester">
                             <property name="name">
@@ -103,6 +112,9 @@
                             </property>
                             <property name="url" stdset="0">
                                 <string>epos</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -136,6 +148,9 @@
                             <property name="buddy" stdset="0">
                                 <cstring>festivalVoicesPath</cstring>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If the Epos client program will be found due to the PATH environment variable, simply enter "say" here.  Otherwise, specify the full path to the Epos client program.</string>
+                            </property>
                         </widget>
                         <widget class="KURLRequester">
                             <property name="name">
@@ -151,6 +166,9 @@
                             </property>
                             <property name="url" stdset="0">
                                 <string>say</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If the Epos client program will be found due to the PATH environment variable, simply enter "say" here.  Otherwise, specify the full path to the Epos client program.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -184,13 +202,16 @@
                             <property name="buddy" stdset="0">
                                 <cstring>festivalVoicesPath</cstring>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
+                            </property>
                         </widget>
                         <widget class="QLineEdit">
                             <property name="name">
                                 <cstring>eposServerOptions</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Specify options to be passed to Epos server.</string>
+                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -225,7 +246,13 @@
                                 <cstring>eposTest</cstring>
                             </property>
                             <property name="text">
-                                <string>Test</string>
+                                <string>&amp;Test</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+T</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Click to test the configuration.  If correct, you will hear a sentence spoken.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -243,7 +270,7 @@
                         </sizepolicy>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>This combo box specifies which character encoding is used for passing the text.</string>
+                        <string>Specifies which character encoding is used for passing the text.</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="4" column="0">
@@ -294,13 +321,16 @@
                             <property name="buddy" stdset="0">
                                 <cstring>festivalVoicesPath</cstring>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
+                            </property>
                         </widget>
                         <widget class="QLineEdit">
                             <property name="name">
                                 <cstring>eposClientOptions</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Specify options to be passed to Epos client.  Do not use -o.</string>
+                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
                             </property>
                         </widget>
                     </hbox>

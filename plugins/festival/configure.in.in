@@ -4,9 +4,9 @@ dnl ===========================
 
 AC_ARG_ENABLE(kttsd-festival,
               AC_HELP_STRING([--enable-kttsd-festival],
-                             [build KTTSD Festival plugin [default=yes]]),
+                             [build KTTSD Festival plugin [default=no]]),
               festival_plugin=$enableval,
-              festival_plugin=yes)
+              festival_plugin=no)
 
 AC_ARG_WITH(festival-includes,
             AC_HELP_STRING([--with-festival-includes=DIR],

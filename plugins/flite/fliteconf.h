@@ -34,6 +34,7 @@
 
 class FliteProc;
 class KArtsServer;
+class KProgressDialog;
 namespace KDE {
     class PlayObject;
 }
@@ -105,6 +106,7 @@ class FliteConf : public PlugInConf {
         };
         void slotFliteTest_clicked();
         void slotSynthFinished();
+        void slotSynthStopped();
 
     private:
         // Language code.
@@ -119,5 +121,7 @@ class FliteConf : public PlugInConf {
         KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
+        // Progress dialog.
+        KProgressDialog* m_progressDlg;
 };
 #endif // _FLITECONF_H_

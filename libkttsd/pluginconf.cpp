@@ -145,6 +145,7 @@ QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }
 QString PlugInConf::getLocation(const QString &name) {
     // Iterate over the path and see if 'name' exists in it. Return the
     // full path to it if it does. Else return an empty QString.
+    if (QFile::exists(name)) return name;
     kdDebug() << "PluginConf::getLocation: Searching for " << name << " in the path.." << endl;
     kdDebug() << m_path << endl;
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {

@@ -16,6 +16,7 @@
  *																					 *
  ***************************************************************************/
 
+// Qt includes. 
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
@@ -23,6 +24,7 @@
 #include <qfile.h>
 #include <qapplication.h>
 
+// KDE includes.
 #include <kdialog.h>
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
@@ -32,9 +34,12 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kprogress.h>
 
+// KTTS includes.
 #include <pluginconf.h>
 
+// FreeTTS includes.
 #include "freettsconf.h"
 #include "freettsconfigwidget.h"
 
@@ -46,6 +51,7 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/
 	m_freettsProc = 0;
 	m_artsServer = 0;
 	m_playObj = 0;
+        m_progressDlg = 0;
 	
 	QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
 								KDialog::spacingHint(), "FreeTTSConfigWidgetLayout");
@@ -68,6 +74,7 @@ FreeTTSConf::~FreeTTSConf() {
 	delete m_artsServer;
 	if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
 	delete m_freettsProc;
+        delete m_progressDlg;
 }
 
 void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
@@ -157,27 +164,54 @@ QString FreeTTSConf::getTalkerCode()
 void FreeTTSConf::slotFreeTTSTest_clicked()
 {
 	// kdDebug() << "FreeTTSConf::slotFreeTTSTest_clicked(): Running" << endl;
-    // If currently synthesizing, stop it.
+        // If currently synthesizing, stop it.
 	if (m_freettsProc)
 		m_freettsProc->stopText();
-	else {
+	else
+        {
 		m_freettsProc = new FreeTTSProc();
-		connect (m_freettsProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
-	}
-    // Create a temp file name for the wave file.
+                connect (m_freettsProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
+        }
+        // Create a temp file name for the wave file.
 	KTempFile tempFile (locateLocal("tmp", "freettsplugin-"), ".wav");
 	QString tmpWaveFile = tempFile.file()->name();
 	tempFile.close();
+
+        // Tell user to wait.
+        m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_freetts_testdlg",
+            i18n("Testing"),
+            i18n("Testing."),
+            true);
+        m_progressDlg->progressBar()->hide();
+        m_progressDlg->setAllowCancel(true);
+
 	// Play an English test.  I think FreeTTS only officialy supports English, but if anyone knows of someone
 	// whos built up a different language lexicon and has it working with FreeTTS gimme an email at ceruleanblaze@gmail.com
-	m_freettsProc->synth(
+        connect (m_freettsProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        m_freettsProc->synth(
 			"K D E is a modern graphical desktop for Unix computers.",
 	tmpWaveFile,
 	m_widget->freettsPath->url());
+
+        // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
+        // or if user clicks Cancel button.
+        m_progressDlg->exec();
+        disconnect (m_freettsProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        if (m_progressDlg->wasCancelled()) m_freettsProc->stopText();
+        delete m_progressDlg;
+        m_progressDlg = 0;
 }
 
 void FreeTTSConf::slotSynthFinished()
 {
+    // If user canceled, progress dialog is gone, so exit.
+    if (!m_progressDlg)
+    {
+        m_freettsProc->ackFinished();
+        return;
+    }
+    // Hide the Cancel button so user can't cancel in the middle of playback.
+    m_progressDlg->showCancelButton(false);
     // If currently playing (or finished playing), stop and delete play object.
 	if (m_playObj) {
 		m_playObj->halt();
@@ -209,6 +243,14 @@ void FreeTTSConf::slotSynthFinished()
 	m_artsServer = 0;
 	QFile::remove(m_waveFile);
 	m_waveFile = QString::null;
+        if (m_progressDlg) m_progressDlg->close();
+}
+
+void FreeTTSConf::slotSynthStopped()
+{
+    // Clean up after canceling test.
+    QString filename = m_freettsProc->getFilename();
+    if (!filename.isNull()) QFile::remove(filename);
 }
 
 #include "freettsconf.moc"

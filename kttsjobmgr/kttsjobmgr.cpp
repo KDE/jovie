@@ -148,6 +148,9 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     // Do not sort the list.
     m_jobListView->setSorting(-1);
     
+    // Splitter to resize Job ListView to minimum height.
+    splitter->setResizeMode(m_jobListView, QSplitter::Stretch);
+    
     // Create a VBox for the current sentence and sentence label.
     QVBox* sentenceVBox = new QVBox(splitter);
     

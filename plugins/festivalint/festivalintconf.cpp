@@ -41,6 +41,8 @@
 #include <kplayobject.h>
 #include <kplayobjectfactory.h>
 #include <knuminput.h>
+#include <kprocio.h>
+#include <kprogress.h>
 
 // KTTS includes.
 #include <pluginconf.h>
@@ -58,20 +60,22 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
     m_festProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
-    
+    m_progressDlg = 0;
+
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "FestivalIntConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new FestivalIntConfWidget(this, "FestivalIntConfigWidget");
     layout->addWidget(m_widget);
-    
-    m_widget->festivalVoicesPath->setMode(KFile::Directory);
-    defaults();
-    
-    connect(m_widget->festivalVoicesPath, SIGNAL(textChanged(const QString&)),
+
+    m_widget->festivalPath->setMode(KFile::File | KFile::ExistingOnly);
+    m_widget->festivalPath->setFilter("*");
+//    defaults();
+
+    connect(m_widget->festivalPath, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
     connect(m_widget->selectVoiceCombo, SIGNAL(activated(const QString&)),
-        this, SLOT(configChanged()));
+            this, SLOT(slotSelectVoiceCombo_activated()));
     connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
     connect(m_widget->rescan, SIGNAL(clicked()), this, SLOT(scanVoices()));
     connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
@@ -80,6 +84,7 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
         this, SLOT(timeSlider_valueChanged(int)));
     connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->preloadCheckBox, SIGNAL(clicked()), this, SLOT(configChanged()));
 }
 
 /** Destructor */
@@ -90,44 +95,53 @@ FestivalIntConf::~FestivalIntConf(){
     delete m_artsServer;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_festProc;
+    delete m_progressDlg;
 }
 
 void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     // kdDebug() << "FestivalIntConf::load: Running" << endl;
 
     config->setGroup("FestivalInt");
-    m_widget->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath",
-        getDefaultVoicesPath()));
+    m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", "festival"));
     config->setGroup(configGroup);
+    QString exePath = m_widget->festivalPath->url();
+    m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", exePath));
+    m_widget->preloadCheckBox->setChecked(false);
     scanVoices();
-    setDefaultVoice();
     QString voiceSelected(config->readEntry("Voice"));
     for(uint index = 0 ; index < voiceList.count(); ++index){
         // kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
-        if(voiceSelected == voiceList[index].code){
+        if(voiceSelected == voiceList[index].code)
+        {
             // kdDebug() << "FestivalIntConf::load: setting voice to " << voiceSelected << endl;
             m_widget->selectVoiceCombo->setCurrentItem(index);
+            m_widget->preloadCheckBox->setChecked(voiceList[index].preload);
             break;
         }
     }
     m_widget->timeBox->setValue(config->readNumEntry("time",    100));
+    m_widget->preloadCheckBox->setChecked(config->readBoolEntry(
+         "Preload", m_widget->preloadCheckBox->isChecked()));
 }
 
 void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     // kdDebug() << "FestivalIntConf::save: Running" << endl;
 
     config->setGroup("FestivalInt");
-    config->writePathEntry("VoicesPath", m_widget->festivalVoicesPath->url());
+    config->writePathEntry("FestivalExecutablePath", m_widget->festivalPath->url());
     config->setGroup(configGroup);
+    config->writePathEntry("FestivalExecutablePath", m_widget->festivalPath->url());
     config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
-    config->writeEntry ("time", m_widget->timeBox->value());
+    config->writeEntry("time", m_widget->timeBox->value());
+    config->writeEntry("Preload", m_widget->preloadCheckBox->isChecked());
 }
 
 void FestivalIntConf::defaults(){
     // kdDebug() << "FestivalIntConf::defaults: Running" << endl;
-    m_widget->festivalVoicesPath->setURL(getDefaultVoicesPath());
+    m_widget->festivalPath->setURL("festival");
     m_widget->timeBox->setValue(100);
     timeBox_valueChanged(100);
+    m_widget->preloadCheckBox->setChecked(false);
     scanVoices();
 }
 
@@ -158,24 +172,6 @@ QString FestivalIntConf::getTalkerCode()
                 .arg("Festival Interactive");
     } else normalTalkerCode = QString::null;
     return normalTalkerCode;
-}
-
-QString FestivalIntConf::getDefaultVoicesPath()
-{
-    // Get default path to voice files.
-    // TODO: Ask Festival where they are:
-    //    $ festival
-    //    Festival Speech Synthesis System 1.4.3:release Jan 2003
-    //    Copyright (C) University of Edinburgh, 1996-2003. All rights reserved.
-    //    For details type `(festival_warranty)'
-    //    festival> datadir
-    //    "/usr/share/festival"
-    //    festival> (quit)
-    QDir voicesPath;
-    voicesPath = voicesPath.homeDirPath() + "/festival/voices/";
-    if (!voicesPath.exists()) voicesPath = "/usr/local/share/festival/voices/";
-    if (!voicesPath.exists()) voicesPath = "/usr/share/festival/voices/";
-    return voicesPath.path() + voicesPath.separator();
 }
 
 void FestivalIntConf::setDefaultVoice()
@@ -214,41 +210,121 @@ void FestivalIntConf::setDefaultVoice()
                 }
             }
         }
+        // If not found, pick first voice that is not "Unknown".
+        if (!found)
+        {
+            for(index = 0 ; index < voiceList.count(); ++index)
+            {
+                if (voiceList[index].name != i18n("Unknown"))
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
         if (found)
         {
             // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << voiceList[index].code << endl;
             m_widget->selectVoiceCombo->setCurrentItem(index);
+            m_widget->preloadCheckBox->setChecked(voiceList[index].preload);
+            if (voiceList[index].rateAdjustable)
+            {
+                m_widget->timeBox->setEnabled(true);
+                m_widget->timeSlider->setEnabled(true);
+            }
+            else
+            {
+                m_widget->timeBox->setValue(100);
+                timeBox_valueChanged(100);
+                m_widget->timeBox->setEnabled(false);
+                m_widget->timeSlider->setEnabled(false);
+            }
         }
     }
 }
 
-void FestivalIntConf::scanVoices(){
+void FestivalIntConf::scanVoices()
+{
     // kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
     voiceList.clear();
     m_widget->selectVoiceCombo->clear();
-    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices", true, false);
-    QStringList groupList = voices.groupList();
-    QDir mainPath(m_widget->festivalVoicesPath->url());
-    voice voiceTemp;
-    for(QStringList::Iterator it = groupList.begin(); it != groupList.end(); ++it ){
-        voices.setGroup(*it);
-        voiceTemp.path = voices.readEntry("Path");
-        mainPath.setPath(m_widget->festivalVoicesPath->url() + voiceTemp.path);
-        if(!mainPath.exists()){
-            // kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
-            continue;
-        } else {
-            // kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " exists" << endl;
+    m_widget->selectVoiceCombo->insertItem(i18n("Scanning..please wait."));
+    m_widget->selectVoiceCombo->setEnabled(false);
+
+    // Clear existing list of supported voice codes.
+    m_supportedVoiceCodes.clear();
+    m_widget->selectVoiceCombo->clear();
+
+    QString exePath = m_widget->festivalPath->url();
+    if (!getLocation(exePath).isEmpty())
+    {
+        // Set up a progress dialog.
+        m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_queryvoices",
+            i18n("Query Voices"),
+            i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
+            true);
+        m_progressDlg->progressBar()->hide();
+        m_progressDlg->setAllowCancel(true);
+
+        // Create Festival process and request a list of voice codes.
+        if (m_festProc)
+            m_festProc->stopText();
+        else
+        {
+            m_festProc = new FestivalIntProc();
+            connect (m_festProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
         }
-        voiceTemp.code = *it;
-        voiceTemp.name = voices.readEntry("Name");
-        voiceTemp.comment = voices.readEntry("Comment");
-        voiceTemp.languageCode = voices.readEntry("Language");
-        voiceTemp.gender = voices.readEntry("Gender", "neutral");
-        voiceList.append(voiceTemp);
-        m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
+        connect (m_festProc, SIGNAL(queryVoicesFinished(const QStringList&)),
+            this, SLOT(slotQueryVoicesFinished(const QStringList&)));
+        m_festProc->queryVoices(exePath);
+
+        // Display progress dialog modally.
+        m_progressDlg->exec();
+        // kdDebug() << "FestivalIntConf::scanVoices: back from progressDlg->exec()" << endl;
+
+        // Processing continues until either user clicks Cancel button, or until
+        // Festival responds with the list.  When Festival responds with list,
+        // the progress dialog is closed.
+
+        disconnect (m_festProc, SIGNAL(queryVoicesFinished(const QStringList&)),
+            this, SLOT(slotQueryVoicesFinished(const QStringList&)));
+        if (!m_progressDlg->wasCancelled()) m_festProc->stopText();
+        delete m_progressDlg;
+        m_progressDlg = 0;
     }
+
+    if (!m_supportedVoiceCodes.isEmpty())
+    {
+        // Festival known voices list.
+        KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices",
+            true, false);
+        QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
+        for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
+        {
+            QString code = *it;
+            voices.setGroup(code);
+            voiceStruct voiceTemp;
+            voiceTemp.code = code;
+            voiceTemp.name = voices.readEntry("Name", i18n("Unknown"));
+            voiceTemp.languageCode = voices.readEntry("Language", m_languageCode);
+            // Get translated comment, fall back to English comment, fall back to code.
+            voiceTemp.comment = voices.readEntry("Comment["+voiceTemp.languageCode+"]",
+                voices.readEntry("Comment", code));
+            voiceTemp.gender = voices.readEntry("Gender", "neutral");
+            voiceTemp.preload = voices.readBoolEntry("Preload", false);
+            voiceTemp.rateAdjustable = voices.readBoolEntry("RateAdjustable", true);
+            voiceList.append(voiceTemp);
+            m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
+        }
+    }
+    m_widget->selectVoiceCombo->setEnabled(true);
     setDefaultVoice();
+}
+
+void FestivalIntConf::slotQueryVoicesFinished(const QStringList &voiceCodes)
+{
+    m_supportedVoiceCodes = voiceCodes;
+    if (m_progressDlg) m_progressDlg->close();
 }
 
 void FestivalIntConf::slotTest_clicked()
@@ -260,34 +336,59 @@ void FestivalIntConf::slotTest_clicked()
     else
     {
         m_festProc = new FestivalIntProc();
-        connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        connect (m_festProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "festivalintplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
-    
+
     // Get the code for the selected voice.
-    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() +
-        "/kttsd/festivalint/voices", true, false);
-    voices.setGroup(voiceList[m_widget->selectVoiceCombo->currentItem()].code);
-    QString voiceCode = "("+voices.readEntry("Code")+")";
+    QString voiceCode = voiceList[m_widget->selectVoiceCombo->currentItem()].code;
+
     // Use the translated name of the voice as the test message.
-    QString testMsg = voices.readEntry("Comment[" + m_languageCode + "]");
-    // Fall back to English if no such translation.
-    if (testMsg.isNull()) testMsg = voices.readEntry("Comment");
+    QString testMsg = voiceList[m_widget->selectVoiceCombo->currentItem()].comment;
     // Fall back if none.
-    if (testMsg.isNull()) testMsg = "KDE is a modern graphical desktop for UNIX computers.";
+    if (testMsg == voiceCode) testMsg =
+        i18n("K D E is a modern graphical desktop for UNIX computers.");
+
+    // Tell user to wait.
+    m_progressDlg = new KProgressDialog(m_widget, "ktts_festivalint_testdlg",
+        i18n("Testing"),
+        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
+        true);
+    m_progressDlg->progressBar()->hide();
+    m_progressDlg->setAllowCancel(true);
+
     // kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
+    connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_festProc->synth(
+        m_widget->festivalPath->url(),
         testMsg,
         tmpWaveFile,
         voiceCode,
         m_widget->timeBox->value());
+
+    // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
+    // or if user clicks Cancel button.
+    m_progressDlg->exec();
+    disconnect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    if (m_progressDlg->wasCancelled()) m_festProc->stopText();
+    delete m_progressDlg;
+    m_progressDlg = 0;
 }
 
 void FestivalIntConf::slotSynthFinished()
 {
+    // kdDebug() << "FestivalIntConf::slotSynthFinished: Running" << endl;
+    // If user canceled, progress dialog is gone, so exit.
+    if (!m_progressDlg)
+    {
+        m_festProc->ackFinished();
+        return;
+    }
+    // Hide the Cancel button so user can't cancel in the middle of playback.
+    m_progressDlg->showCancelButton(false);
     // If currently playing (or finished playing), stop and delete play object.
     if (m_playObj)
     {
@@ -320,6 +421,35 @@ void FestivalIntConf::slotSynthFinished()
     m_artsServer = 0;
     QFile::remove(m_waveFile);
     m_waveFile = QString::null;
+    if (m_progressDlg) m_progressDlg->close();
+}
+
+void FestivalIntConf::slotSynthStopped()
+{
+    // Clean up after canceling test.
+    QString filename = m_festProc->getFilename();
+    // kdDebug() << "FestivalIntConf::slotSynthStopped: filename = " << filename << endl;
+    if (!filename.isNull()) QFile::remove(filename);
+}
+
+void FestivalIntConf::slotSelectVoiceCombo_activated()
+{
+    int index = m_widget->selectVoiceCombo->currentItem();
+    m_widget->preloadCheckBox->setChecked(
+        voiceList[index].preload);
+    if (voiceList[index].rateAdjustable)
+    {
+        m_widget->timeBox->setEnabled(true);
+        m_widget->timeSlider->setEnabled(true);
+    }
+    else
+    {
+        m_widget->timeBox->setValue(100);
+        timeBox_valueChanged(100);
+        m_widget->timeBox->setEnabled(false);
+        m_widget->timeSlider->setEnabled(false);
+    }
+    configChanged();
 }
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent
