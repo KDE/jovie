@@ -145,8 +145,8 @@ int Speaker::loadPlugIns(){
         // Get the name of the plug in we will try to load
         QString plugInName = speechData->config->readEntry("PlugIn");
 
-        // Query for all the Proklam SynthPlugins and store the list in offers
-        KTrader::OfferList offers = KTrader::self()->query("Proklam/SynthPlugin", QString("Name == '%1'").arg(plugInName));
+        // Query for all the KTTSD SynthPlugins and store the list in offers
+        KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin", QString("Name == '%1'").arg(plugInName));
 
         if(offers.count() > 1){
             bad++;

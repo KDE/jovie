@@ -21,12 +21,12 @@
 #ifndef _KTTSD_H_
 #define _KTTSD_H_
 
-#include <kdedmodule.h>
+#include <dcopobject.h>
 
 #include "speechdata.h"
 #include "speaker.h"
 
-class KTTSD : public KDEDModule{
+class KTTSD : public QObject, public DCOPObject{
     Q_OBJECT
     K_DCOP
 
@@ -36,7 +36,7 @@ class KTTSD : public KDEDModule{
          * Create objects, speechData and speaker
          * Start thread
          */
-        KTTSD(const QCString &obj);
+        KTTSD(QObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor
@@ -44,9 +44,9 @@ class KTTSD : public KDEDModule{
          */
         ~KTTSD();
       
-       /**
-        * Holds if we are ok to go or not
-        */
+        /**
+         * Holds if we are ok to go or not
+         */
         bool ok;
 
     private:

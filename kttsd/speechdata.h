@@ -4,7 +4,7 @@
   all the data on the memory.
   It maintains queues, mutex, a wait condition and has methods to enque 
   messages and warnings and manage the text that is thread safe.
-  We could say that this is the common repository between the Proklam class
+  We could say that this is the common repository between the KTTSD class
   (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
   ------------------- 
@@ -48,7 +48,7 @@ struct mlText{
  * SpeechData class which is in charge of maintaining all the data on the memory.
  * It maintains queues, mutex, a wait condition and has methods to enque 
  * messages and warnings and manage the text that is thread safe.
- * We could say that this is the common repository between the Proklam class
+ * We could say that this is the common repository between the KTTSD class
  * (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
  * functions)
  */
@@ -158,7 +158,7 @@ class SpeechData{
       /**
        * Wait condition for new text, messages or warnings.
        * When there's no text, messages or warnings this wait condition
-       * will prevent Proklam from doing useless and CPU consuming loops.
+       * will prevent KTTSD from doing useless and CPU consuming loops.
        */
       QWaitCondition newTMW;
 

@@ -4,7 +4,7 @@
   all the data on the memory.
   It maintains queues, mutex, a wait condition and has methods to enque 
   messages and warnings and manage the text that is thread safe.
-  We could say that this is the common repository between the Proklam class
+  We could say that this is the common repository between the KTTSD class
   (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
   ------------------- 
@@ -54,12 +54,13 @@ SpeechData::SpeechData(){
     messagesMutex.unlock();
 
     // Load configuration
-    config = KGlobal::config();
+    //config = KGlobal::config();
+    config = new KConfig("kttsdrc");
 }
 
 bool SpeechData::readConfig(){
     // Load configuration
-    // Set the group general for the configuration of proklam itself (no plug ins)
+    // Set the group general for the configuration of KTTSD itself (no plug ins)
     config->setGroup("General");
 
     // Load the configuration of the text interruption messages and sound

@@ -24,25 +24,14 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
 
 #include "kttsd.h"
 #include "speaker.h"
 
 #include "kttsd.moc"
 
-extern "C" {
-    KDEDModule *create_kttsd(const QCString &obj){
-        return new KTTSD(obj);
-    }
-};
-// Make this a plug in.
-// Well, maybe in the future
-//typedef KGenericFactory<KTTSD, QCString &> KTTSDFactory;
-//K_EXPORT_COMPONENT_FACTORY( kded_kttsd, KTTSDFactory("kttsd") );
-
-KTTSD::KTTSD(const QCString &obj) : KDEDModule(obj){
-    kdDebug() << "Running: KTTSD::KTTSD(const QCString &obj)" << endl;
+KTTSD::KTTSD( QObject *parent, const char *name) : QObject(parent, name), DCOPObject("kspeech"){
+    kdDebug() << "Running: KTTSD::KTTSD( QObject *parent, const char *name)" << endl;
     // Do stuff here
     //setIdleTimeout(15); // 15 seconds idle timeout.
     kdDebug() << "Instantiating Speaker and running it as another thread" << endl;
