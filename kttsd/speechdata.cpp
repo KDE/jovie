@@ -226,7 +226,6 @@ bool SpeechData::messageInQueue(){
     return temp;
 }
 
-#if SUPPORT_SSML
 /**
 * Determines whether the given text is SSML markup.
 */
@@ -236,7 +235,6 @@ bool SpeechData::isSsml(const QString &text)
     // to use a SAX parser and look for any SSML tags.  Return true on the first found.
     return (text.contains("<speak") > 0);
 }
-#endif
 
 /**
 * Parses a block of text into sentences using the application-specified regular expression
@@ -254,13 +252,11 @@ QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=
 {
     // There has to be a better way
     // kdDebug() << "I'm getting: " << endl << text << " from application " << appId << endl;
-#if SUPPORT_SSML
     if (isSsml(text))
     {
         QString tempList(text);
         return tempList;
     }
-#endif
     // See if app has specified a custom sentence delimiter and use it, otherwise use default.
     QRegExp sentenceDelimiter;
     if (sentenceDelimiters.find(appId) != sentenceDelimiters.end())

@@ -33,10 +33,7 @@
 #include <pluginproc.h>
 #include <stretcher.h>
 #include <talkercode.h>
-
-#if SUPPORT_SSML
 #include <ssmlconvert.h>
-#endif
 
 class Player;
 class QTimer;
@@ -64,10 +61,8 @@ enum uttType
 enum uttState
 {
     usNone,                      /**< Null state. Brand new utterance. */
-#if SUPPORT_SSML
     usWaitingTransform,          /**< Waiting to be transformed (XSLT) */
     usTransforming,              /**< Transforming the utterance (XSLT). */
-#endif 
     usWaitingSay,                /**< Waiting to start synthesis. */
     usWaitingSynth,              /**< Waiting to be synthesized and audibilized. */
     usWaitingSignal,             /**< Waiting to emit a textStarted or textFinished signal. */
@@ -90,9 +85,7 @@ struct Utt{
     uttType utType;              /* The type of utterance (text, msg, screen reader) */
     bool isSSML;                 /* True if the utterance contains SSML markup. */
     uttState state;              /* Processing state of the utterance. */
-#if SUPPORT_SSML
     SSMLConvert* transformer;    /* XSLT transformer. */
-#endif
     PlugInProc* plugin;          /* The plugin that synthesizes the utterance. */
     Stretcher* audioStretcher;   /* Audio stretcher object.  Adjusts speed. */
     QString audioUrl;            /* Filename containing synthesized audio.  Null if
@@ -483,12 +476,11 @@ class Speaker : public QObject{
         */
         QString jobStateToStr(int state);
 
-#if SUPPORT_SSML
         /**
         * Determines whether the given text is SSML markup.
         */
         bool isSsml(const QString &text);
-#endif
+
         /**
         * Determines the initial state of an utterance.  If the utterance contains
         * SSML, the state is set to usWaitingTransform.  Otherwise, if the plugin

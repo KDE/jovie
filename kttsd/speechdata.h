@@ -34,9 +34,6 @@
 #include <kconfig.h>
 #include <kspeech.h>
 
-// Change to 1 to enable SSML support.
-#define SUPPORT_SSML 1
-
 /**
 * Struct containing a text cell, for messages, warnings, and texts.
 * Contains the text itself, the associated talker, 
@@ -574,12 +571,10 @@ class SpeechData : public QObject {
         */
         QMap<QCString, QString> sentenceDelimiters;
 
-#if SUPPORT_SSML
         /**
         * Determines whether the given text is SSML markup.
         */
         bool isSsml(const QString &text);
-#endif
 
         /**
         * Given an appId, returns the last (most recently queued) job with that appId.
