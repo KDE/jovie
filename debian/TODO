@@ -1,29 +1,30 @@
 * Here's my build procedure:
     - cvs2dist kdenonbeta kttsd --version 0.2.0
-    - unpack tarball in another location
-    - cd to that location
+    - copy resulting kttsd-0.2.0.tar.gz to a work folder and rename to kttsd_0.2.0.orig.tar.gz
+      (Note underscore)
+    - unpack tarball
+    - cd kttsd-0.2.0
+    - cp -R kttsd/debian debian
     - debuild -uc -us
     
-* I keep getting
-    dpkg-gencontrol: warning: unknown substitution variable ${misc:Depends}
-  should I just remove that from the control file?  (It was put there by
-  dh_make.)
-  
 * dpkg-shlibdeps is reporting:
     dpkg-shlibdeps: warning: could not find path for libktts.so.1
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
   
-* How do I do the library and doc symlinks, i.e.,
-    debian/tmp/usr/lib/libkttsd.so.1 -> libkttsd.so.1.0.0
-    debian/tmp/usr/lib/libkttsd.so -> libkttsd.so.1.0.0
+* How do I do API doc symlinks?  This was in the initial package I built using
+  dh_make:
     debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common
+  Currently, I get the following directory tree
+    debian/tmp/usr/share/doc/kde/HTML/en/kttsd-0.2.0-apidocs/common -> /usr/share/doc/kde/HTML/en/common
+    debian/tmp/usr/share/doc/kde/HTML/en/kttsd-0.2.0-apidocs/kttsd/html/kttsd
+  but the latter is empty, probably because I've turned off arch-indep in the rules
+  file, and that appears to do the make apidox.  However, with that turned on,
+  I get errors.
 
 * lintian is reporting the following:
     W: kttsd source: changelog-should-mention-nmu
     W: kttsd source: source-nmu-has-incorrect-version-number 0.2.0
     W: kttsd-appplugins: missing-depends-line
-    E: kttsd: ldconfig-symlink-missing-for-shlib usr/lib/libkttsd.so.1 usr/lib/libkttsd.so.1.0.0 libkttsd.so.1
-    E: kttsd: ldconfig-symlink-missing-for-shlib usr/lib/libktts.so.1 usr/lib/libktts.so.1.0.0 libktts.so.1
 
 * Should rc files be installed to etc/ tree?
 

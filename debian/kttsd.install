@@ -1,8 +1,10 @@
 debian/tmp/usr/bin/kttsd
 debian/tmp/usr/bin/kttsmgr
 debian/tmp/usr/lib/libkttsd.so.1.0.0
+debian/tmp/usr/lib/libkttsd.so.1
 debian/tmp/usr/lib/libkttsd.la
 debian/tmp/usr/lib/libktts.so.1.0.0
+debian/tmp/usr/lib/libktts.so.1
 debian/tmp/usr/lib/libktts.la
 debian/tmp/usr/lib/kde3/libfestivalintplugin.so
 debian/tmp/usr/lib/kde3/libfestivalintplugin.la
@@ -27,6 +29,14 @@ debian/tmp/usr/share/apps/kttsd/icons/hicolor/22x22/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsd/icons/hicolor/32x32/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsd/icons/hicolor/48x48/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsjobmgr/kttsjobmgrui.rc
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/common
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/general.png
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/index.cache.bz2
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/index.docbook
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/interruption.png
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/jobs.png
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/languages.png
+debian/tmp/usr/share/doc/kde/HTML/en/kttsd/properties.png
 debian/tmp/usr/share/services/festivalint.desktop
 debian/tmp/usr/share/services/command.desktop
 debian/tmp/usr/share/services/hadifix.desktop
