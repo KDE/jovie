@@ -1,3 +1,11 @@
+2004-05-22  Cramblitt <garycramblitt@comcast.net>
+        * Change menu item to "Speak Text" on the Tools menu in app-plugins.  Also start KTTSD if it is
+          not running.
+
+2004-05-21  Cramblitt <garycramblitt@comcast.net>
+        * Bug fix.  Upon startup of kttsmgr, Remove button and Properties tab not enabled despite
+          default language selected.
+          
 2004-05-19  Cramblitt <garycramblitt@comcast.net>
         * Allow kttsmgr screen to be resized as narrow as possible.
         * Correct some mispellings.
