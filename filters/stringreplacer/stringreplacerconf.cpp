@@ -35,6 +35,9 @@
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kregexpeditorinterface.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
 
 // KTTS includes.
 #include "filterconf.h"
@@ -49,7 +52,8 @@
 */
 StringReplacerConf::StringReplacerConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
     KttsFilterConf(parent, name),
-    m_editDlg(0)
+    m_editDlg(0),
+    m_editWidget(0)
 {
     // kdDebug() << "StringReplacerConf::StringReplacerConf: Running" << endl;
 
@@ -72,6 +76,9 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const char *name, const
         this, SLOT(slotRemoveButton_clicked()));
     connect(m_widget->substLView, SIGNAL(selectionChanged()),
             this, SLOT(enableDisableButtons()));
+
+    // Determine if kdeutils Regular Expression Editor is installed.
+    m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
 
     // Set up defaults.
     defaults();
@@ -397,18 +404,28 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     // Create a QHBox to host widget.
     QHBox* hBox = new QHBox(m_widget, "AddOrEditSubstitution_hbox" );
     // Create widget.
-    EditReplacementWidget* w =
-        new EditReplacementWidget( hBox, "AddOrEditSubstitution_widget" );
+    m_editWidget = new EditReplacementWidget( hBox, "AddOrEditSubstitution_widget" );
     // Set controls if editing existing.
+    m_editWidget->matchButton->setEnabled( false );
     if (!isAdd)
     {
-        if ( item->text(0) == "RegExp" ) w->regexpRadioButton->setChecked( true );
-        w->matchLineEdit->setText( item->text(1) );
-        w->substLineEdit->setText( item->text(2) );
+        if ( item->text(0) == "RegExp" )
+        {
+            m_editWidget->regexpRadioButton->setChecked( true );
+            m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
+        }
+        m_editWidget->matchLineEdit->setText( item->text(1) );
+        m_editWidget->substLineEdit->setText( item->text(2) );
     }
     // The match box may not be blank.
-    connect( w->matchLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( m_editWidget->matchLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(slotMatchLineEdit_textChanged(const QString&)) );
+    connect( m_editWidget->regexpRadioButton, SIGNAL(clicked()),
+         this, SLOT(slotTypeButtonGroup_clicked()) );
+    connect( m_editWidget->wordRadioButton, SIGNAL(clicked()),
+         this, SLOT(slotTypeButtonGroup_clicked()) );
+    connect( m_editWidget->matchButton, SIGNAL(clicked()),
+         this, SLOT(slotMatchButton_clicked()) );
     // Display the box in a dialog.
     m_editDlg = new KDialogBase(
         KDialogBase::Swallow,
@@ -422,14 +439,15 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     // Disable OK button if match field blank.
     m_editDlg->setMainWidget( hBox );
     m_editDlg->setHelp( "", "kttsd" );
-    m_editDlg->enableButton( KDialogBase::Ok, !w->matchLineEdit->text().isEmpty() );
+    m_editDlg->enableButton( KDialogBase::Ok, !m_editWidget->matchLineEdit->text().isEmpty() );
     int dlgResult = m_editDlg->exec();
     QString substType = i18n( "Word" );
-    if ( w->regexpRadioButton->isChecked() ) substType = "RegExp";
-    QString match = w->matchLineEdit->text();
-    QString subst = w->substLineEdit->text();
+    if ( m_editWidget->regexpRadioButton->isChecked() ) substType = "RegExp";
+    QString match = m_editWidget->matchLineEdit->text();
+    QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;
     m_editDlg = 0;
+    m_editWidget = 0;
     if (dlgResult != QDialog::Accepted) return;
     // TODO: Also delete hBox and w?
     if ( match.isEmpty() ) return;
@@ -464,4 +482,37 @@ void StringReplacerConf::slotRemoveButton_clicked()
     delete item;
     enableDisableButtons();
     configChanged();
+}
+
+void StringReplacerConf::slotTypeButtonGroup_clicked()
+{
+    // Enable Regular Expression Editor button if editor is installed (requires kdeutils).
+    if ( !m_editWidget ) return;
+    m_editWidget->matchButton->setEnabled( m_editWidget->regexpRadioButton->isOn() &&  m_reEditorInstalled );
+}
+
+void StringReplacerConf::slotMatchButton_clicked()
+{
+    // Show Regular Expression Editor dialog if it is installed.
+    if ( !m_editWidget ) return;
+    if ( !m_editDlg ) return;
+    if ( !m_reEditorInstalled ) return;
+    QDialog *editorDialog = 
+        KParts::ComponentFactory::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
+    if ( editorDialog )
+    {
+        // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
+        KRegExpEditorInterface *reEditor =
+            static_cast<KRegExpEditorInterface *>(editorDialog->qt_cast( "KRegExpEditorInterface" ) );
+        Q_ASSERT( reEditor ); // This should not fail!// now use the editor.
+        reEditor->setRegExp( m_editWidget->matchLineEdit->text() );
+        int dlgResult = editorDialog->exec();
+        if ( dlgResult == QDialog::Accepted )
+        {
+            QString re = reEditor->regExp();
+            m_editWidget->matchLineEdit->setText( re );
+            m_editDlg->enableButton( KDialogBase::Ok, re.isEmpty() );
+        }
+        delete editorDialog;
+    } else return;
 }

@@ -17,7 +17,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup" row="0" column="0">
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>typeButtonGroup</cstring>
             </property>
@@ -61,71 +61,79 @@
         </widget>
         <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout4</cstring>
             </property>
-            <hbox>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>matchLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Match:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>matchLineEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>substLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replace with:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>matchLineEdit</cstring>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget" row="1" column="1">
+            <property name="name">
+                <cstring>layout6</cstring>
+            </property>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>layout5</cstring>
                     </property>
-                    <vbox>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="KLineEdit">
                             <property name="name">
-                                <cstring>matchLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Match:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
                                 <cstring>matchLineEdit</cstring>
                             </property>
                         </widget>
-                        <widget class="QLabel">
+                        <widget class="KPushButton">
                             <property name="name">
-                                <cstring>substLabel</cstring>
+                                <cstring>matchButton</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Replace with:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>matchLineEdit</cstring>
+                                <string>...</string>
                             </property>
                         </widget>
-                    </vbox>
+                    </hbox>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="KLineEdit">
                     <property name="name">
-                        <cstring>layout3</cstring>
+                        <cstring>substLineEdit</cstring>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>matchLineEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>substLineEdit</cstring>
-                            </property>
-                        </widget>
-                    </vbox>
                 </widget>
-            </hbox>
+            </vbox>
         </widget>
     </grid>
 </widget>
@@ -134,6 +142,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

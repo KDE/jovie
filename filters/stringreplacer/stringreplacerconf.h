@@ -32,6 +32,7 @@
 #include "stringreplacerconfwidget.h"
 
 class KDialogBase;
+class EditReplacementWidget;
 
 class StringReplacerConf : public KttsFilterConf
 {
@@ -116,6 +117,8 @@ class StringReplacerConf : public KttsFilterConf
         void slotEditButton_clicked();
         void slotRemoveButton_clicked();
         void slotMatchLineEdit_textChanged(const QString& text);
+        void slotTypeButtonGroup_clicked();
+        void slotMatchButton_clicked();
 
         // EnablesDisables buttons depending upon current item in list view.
         void enableDisableButtons();
@@ -128,8 +131,11 @@ class StringReplacerConf : public KttsFilterConf
 
         // Configuration Widget.
         StringReplacerConfWidget* m_widget;
-        // Edit Dialog.
+        // Edit Dialog and widget.
         KDialogBase* m_editDlg;
+        EditReplacementWidget* m_editWidget;
+        // True if kdeutils Regular Expression Editor is installed.
+        bool m_reEditorInstalled;
         // Language Code.
         QString m_languageCode;
 };
