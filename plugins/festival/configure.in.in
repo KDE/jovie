@@ -88,7 +88,7 @@ fi
 dnl check libraries
 festival_libdirs="$ac_festival_libdir /usr/lib /usr/local/lib /usr/lib/festival /usr/local/lib/festival"
 AC_FIND_FILE("libFestival.a", $festival_libdirs, festival_libdir)
-if test festival_libdir = NO
+if test $festival_libdir = NO
 then
   compile_festival_plugin="no"
 else
