@@ -482,6 +482,17 @@ class Speaker : public QObject{
         QString makeSuggestedFilename();
         
         /**
+        * Get the real path of a filename and convert it to local encoding.
+        */
+        QString getRealFilePath(const QString filename);
+        
+        
+        /**
+        * Creates and returns a player object based on user option.
+        */
+        Player* createPlayerObject();
+        
+        /**
          * QDict of the loaded plug ins for diferent languages
          */
         QDict<PlugInProc> loadedPlugIns;
@@ -510,6 +521,13 @@ class Speaker : public QObject{
         * Used to prevent doUtterances from prematurely exiting.
         */
         bool m_again;
+        
+        /**
+        * Which audio player to use.
+        *  0 = aRts
+        *  1 = gstreamer
+        */
+        int m_playerOption;
         
         /**
         * Timer for monitoring audio player.

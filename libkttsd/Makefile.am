@@ -6,6 +6,14 @@ AM_CPPFLAGS = -I$(kde_includes)/arts $(all_includes)
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
 
+##################################################
+# check to see if GStreamer is available
+##################################################
+if link_lib_GST
+gstlibs = -lkdegst -lkdegstplay
+endif
+##################################################
+
 #########################################################################
 # LIBRARY SECTION
 #########################################################################
@@ -15,11 +23,12 @@ lib_LTLIBRARIES = libkttsd.la
 
 # The source, library search path, and link libraries.
 libkttsd_la_SOURCES = \
-    pluginproc.cpp \
-		pluginconf.cpp \
-		artsplayer.cpp
+        pluginproc.cpp \
+        pluginconf.cpp \
+        artsplayer.cpp \
+        gstreamerplayer.cpp
 libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
-libkttsd_la_LIBADD = $(LIB_KIO) -lartskde
+libkttsd_la_LIBADD = $(gstlibs) $(LIB_KIO) -lartskde
 
 # This library is installed as a service.
 servicetypes_DATA = kttsd.desktop

@@ -35,6 +35,7 @@
 // KTTSD includes.
 #include "speaker.h"
 #include "artsplayer.h"
+#include "gstreamerplayer.h"
 #include "speaker.moc"
 #include "threadedplugin.h"
 
@@ -116,6 +117,10 @@ Speaker::Speaker( SpeechData *speechData, QObject *parent, const char *name) :
     m_lastSeq = 0;
     loadedPlugIns.setAutoDelete(true);
     m_timer = new QTimer(this, "kttsdAudioTimer");
+    m_playerOption = 0;  // default to aRts.
+    // TODO: gstreamer 0.6 has issues with some wav files and unfortunately,
+    // the gst bindings are for 0.6 (as of Aug 2004).  When bindings are upgraded,
+    // try using gstreamer again.
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 }
@@ -420,7 +425,7 @@ void Speaker::doUtterances()
                             // See if synthesis is completed.
                             if (it->plugin->getState() == psFinished)
                             {
-                                it->audioUrl = it->plugin->getFilename();
+                                it->audioUrl = getRealFilePath(it->plugin->getFilename());
                                 kdDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl << endl;
                                 it->plugin->ackFinished();
                                 it->state = usSynthed;
@@ -1193,7 +1198,8 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 if ((it->utType != utText) or
                     (m_speechData->getTextJobState(it->sentence->jobNum) != kspeech::jsPaused))
                 {
-                    it->audioPlayer = new ArtsPlayer();
+                    
+                    it->audioPlayer = createPlayerObject();
                     prePlaySignals(it);
                     it->audioPlayer->startPlay(it->audioUrl);
                     it->state = usPlaying;
@@ -1302,8 +1308,35 @@ QString Speaker::makeSuggestedFilename()
     QString waveFile = tempFile.file()->name();
     tempFile.close();
     kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
-    return waveFile;
+    return getRealFilePath(waveFile);
 }
+
+/**
+* Get the real path of a filename and convert it to local encoding.
+*/
+QString Speaker::getRealFilePath(const QString filename)
+{
+    char real[PATH_MAX];
+    realpath(QFile::encodeName(filename),real);
+    return QFile::decodeName(real);
+}
+
+/**
+* Creates and returns a player object based on user option.
+*/
+Player* Speaker::createPlayerObject()
+{
+    Player* p = 0;
+    switch(m_playerOption)
+    {
+#if HAVE_GSTREAMER
+        case 1 : p = new GStreamerPlayer; break;
+#endif
+        default: p = new ArtsPlayer; break;
+    }
+    return p;
+}
+
 
 /* Slots ==========================================================*/
 
