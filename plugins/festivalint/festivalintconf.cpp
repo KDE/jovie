@@ -348,6 +348,9 @@ void FestivalIntConf::scanVoices()
     m_voiceList.clear();
     m_widget->selectVoiceCombo->clear();
     m_widget->selectVoiceCombo->insertItem(i18n("Scanning..please wait."));
+
+    // Save current state of selectVoiceCombo box and disable.
+    bool selectVoiceComboEnabled = m_widget->selectVoiceCombo->isEnabled();
     m_widget->selectVoiceCombo->setEnabled(false);
 
     // Clear existing list of supported voice codes.
@@ -427,6 +430,9 @@ void FestivalIntConf::scanVoices()
         m_widget->selectVoiceCombo->setEnabled(true);
     }
     setDefaultVoice(voiceCodeToListIndex(currentVoiceCode));
+    // Emit configChanged if the enabled state of the selectVoiceCombo has changed.
+    // This occurs when user changes Festival EXE path, then clicks Rescan.
+    if (selectVoiceComboEnabled != m_widget->selectVoiceCombo->isEnabled()) configChanged();
 }
 
 void FestivalIntConf::slotQueryVoicesFinished(const QStringList &voiceCodes)
