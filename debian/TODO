@@ -28,7 +28,6 @@
     - Unpack tarball
     - cd kttsd-0.3.0
     - rm -fR autom4te.cache
-    - rm INDEX
     - cp -R kttsd/debian debian
     - Add --enable-debug=full --enable-kttsd-gstreamer to configure line in rules
     - debuild -uc -us
@@ -40,3 +39,18 @@
     W: kttsd-appplugins: missing-depends-line
 
 * Should rc files be installed to etc/ tree?
+
+* debuild is ending like this.  Why:
+    dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
+    dh_gencontrol
+    dh_md5sums
+    dh_builddeb
+    dpkg-deb: building package `kttsd' in `../kttsd_0.3.0-1_i386.deb'.
+    dpkg-deb: building package `kttsd-gstreamer' in `../kttsd-gstreamer_0.3.0-1_i386.deb'.
+    make[1]: Leaving directory `/home/share/src/kttsd-0.3.0/kttsd-0.3.0'
+    dh_testdir
+    dh_testroot
+    dh_clean -k -i
+    dh_clean: I have no package to build
+    make: *** [install-indep] Error 1
+
