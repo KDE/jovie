@@ -145,7 +145,7 @@ void StringReplacerConf::load(KConfig* /*config*/, const QString& configGroup){
     m_widget->languageLineEdit->setText( language );
 
     // Word list.
-    QListViewItem* item;
+    QListViewItem* item = 0;
     QDomNodeList wordList = doc.elementsByTagName("word");
     int wordListCount = wordList.count();
     for (int wordIndex = 0; wordIndex < wordListCount; wordIndex++)
