@@ -38,5 +38,4 @@ SUBDIRS = \
         $(command_DIR) \
         $(hadifax_DIR) \
         $(flite_DIR) \
-        $(epos_DIR) \
-        festivalint command hadifax flite epos
+        $(epos_DIR)
