@@ -227,3 +227,32 @@ void Speaker::requestExit(){
     exitRequested = true;
     speechData->newTMW.wakeOne();
 }
+
+/**
+* SpeakerTerminator 
+*
+* A separate thread to request that the speaker thread exit, and when it does, emits a signal.
+* We need to do this in a separate thread because the main thread cannot call speaker->wait(),
+* otherwise it would block the QT event loop and hang the program.
+*/
+SpeakerTerminator::SpeakerTerminator(Speaker *speaker, QObject *parent, const char *name) :
+    QObject(parent, name),
+    QThread(),
+    speaker(speaker)
+{
+    kdDebug() << "SpeakerTerminator::SpeakerTerminator: running" << endl;
+}
+
+void SpeakerTerminator::run()
+{
+    if (speaker)
+    {
+        speaker->requestExit();
+        kdDebug() << "SpeakerTerminator::run: Waiting for speaker to finish" << endl;
+        speaker->wait();
+        kdDebug() << "SpeakerTerminator::run: speaker has finished." << endl;
+        emit speakerFinished();
+    }
+    deleteLater();
+}
+

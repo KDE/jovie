@@ -1,7 +1,6 @@
 - Standarize the .desktop files
 - Improve language selection and management in the KTTSD's configuration. Languages added shouldn't be shown in the list of languages to add. Default languages should show only the current languages. Languages should be shown as names and not codes. Languages should be erased from the default language combo box.
 - Add ability to configure more than one plugin for a language, but with different voices. Call them "talkers".
-- After changing configuration, re-initialize KTTSD without clearing all jobs.
 - Add async mode with a stop function at plugin level, i.e., develop improved KTTSD plugin API.
 - Add support for XML::Sable and other Speech Markup languages.
 - Continue revision of KDE Speech API (kspeech.h).
@@ -19,7 +18,6 @@ _ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the 
   disappear.  Why?
 - kttsmgr is too large for lower res screens, mostly because of Hadifax plugin.
   Use a vertical scroller in Properties tab and make entire screen smaller.
-- kttsd hangs if reinit() is called while it is speaking.
 
 Widgets needed usefull for the whole KDE
 - Language selection widgets, configurable and versatile.

@@ -41,7 +41,8 @@ KTTSD::KTTSD(QObject *parent, const char *name) :
     //setIdleTimeout(15); // 15 seconds idle timeout.
     
     speaker = 0;
-    speechData = 0;    
+    speechData = 0;
+    if (!initializeSpeechData()) return;   
     if (!initializeSpeaker()) return;
     
     // Let's rock!
@@ -51,16 +52,19 @@ KTTSD::KTTSD(QObject *parent, const char *name) :
     kttsdStarted();
 }
 
-bool KTTSD::initializeSpeaker()
+/*
+* Create and initialize the SpeechData object.
+*/
+bool KTTSD::initializeSpeechData()
 {
-    kdDebug() << "Instantiating Speaker and running it as another thread" << endl;
-
-    // By default, everything is ok, don't worry, be happy
-    ok = true;
-
     // Create speechData object, and load configuration, checking if valid config loaded.
-    speechData = new SpeechData();
-    // If user has not yet configured KTTSD, display configuration dialog.
+    bool created = false;
+    if (!speechData)
+    {
+        created = true;
+        speechData = new SpeechData();
+    }
+    // Load configuration.
     if (!speechData->readConfig())
     {
         KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
@@ -70,20 +74,36 @@ bool KTTSD::initializeSpeaker()
         return false;
     }
 
-    connect (speechData, SIGNAL(textStarted(const QCString&, const uint)), 
-        this, SLOT(slotTextStarted(const QCString&, const uint)));
-    connect (speechData, SIGNAL(textFinished(const QCString&, const uint)), 
-        this, SLOT(slotTextFinished(const QCString&, const uint)));
-    connect (speechData, SIGNAL(textStopped(const QCString&, const uint)), 
-        this, SLOT(slotTextStopped(const QCString&, const uint)));
-    connect (speechData, SIGNAL(textPaused(const QCString&, const uint)), 
-        this, SLOT(slotTextPaused(const QCString&, const uint)));
-    connect (speechData, SIGNAL(textResumed(const QCString&, const uint)), 
-        this, SLOT(slotTextResumed(const QCString&, const uint)));
-    connect (speechData, SIGNAL(textSet(const QCString&, const uint)), 
-        this, SLOT(slotTextSet(const QCString&, const uint)));
-    connect (speechData, SIGNAL(textRemoved(const QCString&, const uint)), 
-        this, SLOT(slotTextRemoved(const QCString&, const uint)));
+    if (created)
+    {
+        connect (speechData, SIGNAL(textStarted(const QCString&, const uint)), 
+            this, SLOT(slotTextStarted(const QCString&, const uint)));
+        connect (speechData, SIGNAL(textFinished(const QCString&, const uint)), 
+            this, SLOT(slotTextFinished(const QCString&, const uint)));
+        connect (speechData, SIGNAL(textStopped(const QCString&, const uint)), 
+            this, SLOT(slotTextStopped(const QCString&, const uint)));
+        connect (speechData, SIGNAL(textPaused(const QCString&, const uint)), 
+            this, SLOT(slotTextPaused(const QCString&, const uint)));
+        connect (speechData, SIGNAL(textResumed(const QCString&, const uint)), 
+            this, SLOT(slotTextResumed(const QCString&, const uint)));
+        connect (speechData, SIGNAL(textSet(const QCString&, const uint)), 
+            this, SLOT(slotTextSet(const QCString&, const uint)));
+        connect (speechData, SIGNAL(textRemoved(const QCString&, const uint)), 
+            this, SLOT(slotTextRemoved(const QCString&, const uint)));
+    }
+
+    return true;
+}
+
+/*
+* Create and initialize the Speaker object.
+*/
+bool KTTSD::initializeSpeaker()
+{
+    kdDebug() << "Instantiating Speaker and running it as another thread" << endl;
+
+    // By default, everything is ok, don't worry, be happy
+    ok = true;
 
     // Create speaker object and load plug ins, checking for the return
     speaker = new Speaker(speechData);
@@ -596,12 +616,9 @@ void KTTSD::speakerFinished()
     kdDebug() << "KTTSD::speakerFinished: running" << endl;
     delete speaker;
     speaker = 0;
-    kdDebug() << "KTTSD::reinit: deleting speechData" << endl;
-    if (speechData) delete speechData;
-    kdDebug() << "KTTSD::reinit: speechData deleted" << endl;
-    speechData = 0;
 
     kdDebug() << "Starting KTTSD service" << endl;
+    if (!initializeSpeechData()) return;
     if (!initializeSpeaker()) return;
     speaker->start();
     kdDebug() << "emitting DCOP signal kttsdStarted()" << endl;
@@ -680,34 +697,6 @@ const QCString KTTSD::getAppId()
     QCString appId;
     if (client) appId = client->senderId();
     return appId;
-}
-
-/**
-* SpeakerTerminator 
-*
-* A separate thread to request that the speaker thread exit, and when it does, emits a signal.
-* We need to do this in a separate thread because the main thread cannot call speaker->wait(),
-* otherwise it would block the QT event loop and hang the program.
-*/
-SpeakerTerminator::SpeakerTerminator(Speaker *speaker, QObject *parent, const char *name) :
-    QObject(parent, name),
-    QThread(),
-    speaker(speaker)
-{
-    kdDebug() << "SpeakerTerminator::SpeakerTerminator: running" << endl;
-}
-
-void SpeakerTerminator::run()
-{
-    if (speaker)
-    {
-        speaker->requestExit();
-        kdDebug() << "SpeakerTerminator::run: Waiting for speaker to finish" << endl;
-        speaker->wait();
-        kdDebug() << "SpeakerTerminator::run: speaker has finished." << endl;
-        emit speakerFinished();
-    }
-    deleteLater();
 }
 
 #include "kttsd.moc"

@@ -160,6 +160,10 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     
     // Connect DCOP Signals emitted by KTTSD to our own DCOP methods.
     connectDCOPSignal("kttsd", "kspeech",
+        "kttsdStarted()",
+        "kttsdStarted()",
+        false);
+    connectDCOPSignal("kttsd", "kspeech",
         "markerSeen(QCString,QString)",
         "markerSeen(QCString,QString)",
         false);
@@ -592,6 +596,11 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 }
 
 /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
+
+/**
+* This signal is emitted when KTTSD starts or restarts after a call to reinit.
+*/
+ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
 
 /**
 * This signal is emitted when the speech engine/plugin encounters a marker in the text.

@@ -134,4 +134,28 @@ class Speaker : public QObject, public QThread{
         bool exitRequested;
 };
 
+/**
+* SpeakerTerminator 
+*
+* A separate thread to request that the speaker thread exit, and when it does, emits a signal.
+* We need to do this in a separate thread because the main thread cannot call speaker->wait(),
+* otherwise it would block the QT event loop and hang the program.
+*/
+class SpeakerTerminator: public QObject, public QThread 
+{
+    Q_OBJECT
+
+    public:
+        SpeakerTerminator(Speaker *speaker, QObject *parent = 0, const char *name = 0);
+    
+    signals:
+        void speakerFinished();
+    
+    protected:   
+        virtual void run();
+    
+    private:
+        Speaker* speaker;
+};
+
 #endif // _SPEAKER_H_

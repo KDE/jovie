@@ -39,7 +39,6 @@
 /**
 * Constructor
 * Sets text to be stopped and warnings and messages queues to be autodelete.
-* Loads configuration.
 */
 SpeechData::SpeechData(){
     kdDebug() << "Running: SpeechData::SpeechData()" << endl;
@@ -48,6 +47,7 @@ SpeechData::SpeechData(){
     reading = false;
     jobCounter = 0;
     textIterator = 0;
+    config = 0;
     textJobs.setAutoDelete(true);
     textMutex.unlock();
 
@@ -61,13 +61,14 @@ SpeechData::SpeechData(){
     messages.setAutoDelete(true);
     messagesMutex.unlock();
 
-    // Load configuration
-    //config = KGlobal::config();
-    config = new KConfig("kttsdrc");
 }
 
 bool SpeechData::readConfig(){
     // Load configuration
+    if (config) delete config;
+    //config = KGlobal::config();
+    config = new KConfig("kttsdrc");
+    
     // Set the group general for the configuration of KTTSD itself (no plug ins)
     config->setGroup("General");
 
@@ -116,8 +117,8 @@ SpeechData::~SpeechData(){
         emit textRemoved(job->appId, job->jobNum);
     }
     textMutex.unlock();
-    delete config;
-    delete textIterator;
+    if (config) delete config;
+    if (textIterator) delete textIterator;
 }
 
 /**

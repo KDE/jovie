@@ -340,14 +340,9 @@ void KCMKttsMgr::save()
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
     if (kttsdRunning)
     {
-        if(KMessageBox::questionYesNo(this, i18n("Do you want to restart the Text-to-Speech system?  (Existing speech jobs will be lost.)"), i18n("Reload configuration ?")) == KMessageBox::Yes)
-        {
-            kdDebug() << "Restarting KTTSD" << endl;
-            QByteArray data;
-            client->send("kttsd", "kspeech", "reinit()", data);
-        } else {
-            kdDebug() << "NOT restarting KTTSD by user option" << endl;
-        }
+        kdDebug() << "Restarting KTTSD" << endl;
+        QByteArray data;
+        client->send("kttsd", "kspeech", "reinit()", data);
     }
 } 
 

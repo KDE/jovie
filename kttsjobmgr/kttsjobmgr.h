@@ -74,6 +74,10 @@ protected:
     // ASYNC kttsdExiting(bool) { };
     
     /**
+    * This signal is emitted when KTTSD starts or restarts after a call to reinit.
+    */
+    ASYNC kttsdStarted();
+    /**
     * This signal is emitted when the speech engine/plugin encounters a marker in the text.
     * @param appId          DCOP application ID of the application that queued the text.
     * @param markerName     The name of the marker seen.
