@@ -1,0 +1,15 @@
+2002-11-21  Pupeno  <pupeno@pupeno.com>
+
+	* Full port to the new architecture finished. Some fine tunning still needed.
+
+2002-09-25  Pupeno  <pupeno@pupeno.com>
+
+	* Festival Cliente/Server plug in added. Festival plug in was added initially in the project. FreeTTS never was meant to work yet.
+
+2002-07-28  Pupeno  <pupeno@pupeno.com>
+
+	* ChangeLog created.
+
+
+
+

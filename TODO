@@ -1,0 +1,9 @@
+- Standarize the .desktop files
+- Improve language selection and management in the KTTSD's configuration. Languages added shouldn't be shown in the list of languages to add. Default languages should show only the current languages. Languages should be shown as names and not codes. Languages should be erased from the default language combo box.
+- Add async mode with a stop function at plug in level.
+- Add support for XML::Sable.
+
+Widgets needed usefull for the whole KDE
+- Language selection widgets, configurable and versatil.
+- A good password line edit which will allow to set the password.
+- A Tab Widget with buttons on the tab to close (remove) the tabs.
