@@ -60,6 +60,15 @@ class KCMKttsMgr :
     Q_OBJECT
 
     public:
+        enum widgetPages
+        {
+            wpGeneral = 0,          // General tab.
+            wpLanguages = 1,        // Languages tab.
+            wpPluginProperties = 2, // Plugin properties tab.
+            wpInterruption = 3,     // Interruption tab.
+            wpJobs = 4              // Jobs tab.
+        };
+        
         KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);
 
         ~KCMKttsMgr();

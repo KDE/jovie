@@ -333,17 +333,29 @@ void KCMKttsMgr::save()
 void KCMKttsMgr::defaults() {
     // kdDebug() << "Running: KCMKttsMgr::defaults()"<< endl;
     
-    m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
-    m_kttsmgrw->textPreMsg->setText(textPreMsgValue);
-    
-    m_kttsmgrw->textPreSndCheck->setChecked(textPreSndCheckValue);
-    m_kttsmgrw->textPreSnd->setURL(textPreSndValue);
-    
-    m_kttsmgrw->textPostMsgCheck->setChecked(textPostMsgCheckValue);
-    m_kttsmgrw->textPostMsg->setText(textPostMsgValue);
-    
-    m_kttsmgrw->textPostSndCheck->setChecked(textPostSndCheckValue);
-    m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
+    int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
+    bool changed = false;
+    if (currentPageIndex == wpInterruption)
+    {
+        m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
+        m_kttsmgrw->textPreMsg->setText(textPreMsgValue);
+        
+        m_kttsmgrw->textPreSndCheck->setChecked(textPreSndCheckValue);
+        m_kttsmgrw->textPreSnd->setURL(textPreSndValue);
+        
+        m_kttsmgrw->textPostMsgCheck->setChecked(textPostMsgCheckValue);
+        m_kttsmgrw->textPostMsg->setText(textPostMsgValue);
+        
+        m_kttsmgrw->textPostSndCheck->setChecked(textPostSndCheckValue);
+        m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
+        changed = true;
+    }
+    if (currentPageIndex == wpPluginProperties)
+    {
+        if (m_pluginWidget) m_pluginWidget->defaults();
+        changed = true;
+    }
+    if (changed) configChanged();
 }
 
 /**
@@ -621,7 +633,7 @@ void KCMKttsMgr::updateRemoveButton(){
             m_kttsmgrw->mainTab->removePage(m_pluginWidget);
         // Set up Properties tab for newly selected plugin.
         m_pluginWidget = m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn;
-        m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", 2);
+        m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", wpPluginProperties);
         if (currentTab) m_kttsmgrw->mainTab->setCurrentPage(currentTab);
     } else {
         m_kttsmgrw->removeLanguageButton->setEnabled(false);
@@ -738,7 +750,7 @@ void KCMKttsMgr::kttsdExiting()
 */
 void KCMKttsMgr::configurePlugin()
 {
-    if (m_pluginWidget) m_kttsmgrw->mainTab->setCurrentPage(2);
+    if (m_pluginWidget) m_kttsmgrw->mainTab->setCurrentPage(wpPluginProperties);
 }
 
 // System tray context menu entries
