@@ -1,0 +1,5 @@
+# This is a comment
+# and another one
+# a html 'b' or 'strong' tag is mapped to 'emphasis level="strong"'
+b:emphasis level="strong"
+strong:emphasis level="strong"
