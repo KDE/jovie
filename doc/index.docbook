@@ -1239,7 +1239,14 @@ of these engines.
 <listitem>
 <para>The <command>sox</command> audio utility is needed for
 adjusting overall speech speed, but not required.  Debian users can install
-sox with the command <command>apt-get install sox</command>.</para>
+sox with the command <command>apt-get install sox</command>.
+Sox is included on most &Linux; distribution CDs.</para>
+</listitem>
+
+<listitem>
+<para>The <command>xsltproc</command> utility is needed for
+SSML support, but not required.  Debian users can install
+xsltproc with the command <command>apt-get install xsltproc</command>.</para>
 </listitem>
 
 <listitem>
