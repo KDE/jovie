@@ -41,7 +41,6 @@ class KttsFilterConf;
 class KListViewItem;
 class KAboutData;
 class KConfig;
-class KAboutApplication;
 class QPopupMenu;
 
 /**
@@ -118,9 +117,14 @@ class KCMKttsMgr :
         /**
         * This slot is used to emit the signal changed when any widget changes the configuration 
         */
-        void configChanged(){
-            // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
-            emit changed(true);
+        void configChanged()
+        {
+            if (!m_suppressConfigChanged)
+            {
+                // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
+                m_changed = true;
+                emit changed(true);
+            }
         };
         /**
         * This slot is called whenever user checks/unchecks item in Filters list.
@@ -314,11 +318,6 @@ class KCMKttsMgr :
         KParts::ReadOnlyPart *m_jobMgrPart;
 
         /**
-        * About dialog.
-        */
-        KAboutApplication *m_aboutDlg;
-
-        /**
         * Plugin configuration dialog.
         */
         KDialogBase* m_configDlg;
@@ -350,8 +349,19 @@ class KCMKttsMgr :
 
         /**
         * Last SBD filter ID.  Used to generate to new ID.
-         */
+        */
         int m_lastSbdID;
+
+        /**
+        * True if the configuration has been changed.
+        */
+        bool m_changed;
+
+        /**
+        * When True, suppresses emission of changed() signal.  Used to suppress this
+        * signal while loading configuration.
+        */
+        bool m_suppressConfigChanged;
 
         /**
         * Dictionary mapping language names to codes.
@@ -424,11 +434,6 @@ class KCMKttsMgr :
         void slot_configureTalker();
         void slot_configureNormalFilter();
         void slot_configureSbdFilter();
-
-        /**
-        * Displays about dialog.
-        */
-        void aboutSelected();
 
         /**
         * Slots for the Talker/Filter Configuration dialogs.

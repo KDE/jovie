@@ -46,10 +46,10 @@
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
-#include <kaboutapplication.h>
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <kinputdialog.h>
+#include <kmessagebox.h>
 
 // KTTS includes.
 #include "talkercode.h"
@@ -103,8 +103,11 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
 
     // Initialize some variables.
+    m_config = 0;
     m_jobMgrPart = 0;
     m_configDlg = 0;
+    m_changed = false;
+    m_suppressConfigChanged = false;
 
     // Add the KTTS Manager widget
     QGridLayout *layout = new QGridLayout(this, 0, 0);
@@ -242,9 +245,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         "kttsdExiting()",
         false);
 
-    // About Dialog.
-    m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text-to-Speech Manager", false);
-
     // See if KTTSD is already running, and if so, create jobs tab.
     if (kapp->dcopClient()->isApplicationRegistered("kttsd"))
         kttsdStarted();
@@ -252,9 +252,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         // Start KTTSD if check box is checked.
         enableKttsdToggled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
-    // Switch to Talkers tab if none configured.
+    // Switch to Talkers tab if none configured,
+    // otherwise switch to Jobs tab if it is active.
     if (m_kttsmgrw->talkersList->childCount() == 0)
         m_kttsmgrw->mainTab->setCurrentPage(wpTalkers);
+    else if (m_kttsmgrw->enableKttsdCheckBox->isChecked())
+        m_kttsmgrw->mainTab->setCurrentPage(wpJobs);
 } 
 
 /**
@@ -262,6 +265,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 */
 KCMKttsMgr::~KCMKttsMgr(){
     // kdDebug() << "KCMKttsMgr::~KCMKttsMgr: Running" << endl;
+    delete m_config;
 }
 
 /**
@@ -275,6 +279,10 @@ KCMKttsMgr::~KCMKttsMgr(){
 void KCMKttsMgr::load()
 {
     // kdDebug() << "KCMKttsMgr::load: Running" << endl;
+
+    m_changed = false;
+    // Don't emit changed() signal while loading.
+    m_suppressConfigChanged = true;
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
     m_config->setGroup("General");
@@ -590,6 +598,9 @@ void KCMKttsMgr::load()
     updateFilterButtons();
     updateSbdButtons();
     slotGstreamerRadioButton_toggled(m_kttsmgrw->gstreamerRadioButton->isChecked());
+
+    m_changed = false;
+    m_suppressConfigChanged = false;
 }
 
 /**
@@ -601,6 +612,8 @@ void KCMKttsMgr::load()
 void KCMKttsMgr::save()
 {
     // kdDebug() << "KCMKttsMgr::save: Running" << endl;
+    m_changed = false;
+
     // Clean up config.
     m_config->deleteGroup("General");
 
@@ -749,6 +762,16 @@ void KCMKttsMgr::save()
 void KCMKttsMgr::slotTabChanged()
 {
     setButtons(buttons());
+    int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
+    if (currentPageIndex == wpJobs)
+    {
+        if (m_changed)
+        {
+            KMessageBox::information(m_kttsmgrw,
+                i18n("You have made changes to the configuration but have not saved them yet.  "
+                     "Click Apply to save the changes or Cancel to abandon the changes."));
+        }
+    }
 }
 
 /**
@@ -1180,7 +1203,13 @@ void KCMKttsMgr::slot_addTalker()
         // Display configuration dialog.
         configureTalker();
         // Did user Cancel?
-        if (!m_loadedTalkerPlugIn) return;
+        if (!m_loadedTalkerPlugIn)
+        {
+            m_configDlg->setMainWidget(0);
+            delete m_configDlg;
+            m_configDlg = 0;
+            return;
+        }
         talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
     }
 
@@ -1229,6 +1258,12 @@ void KCMKttsMgr::slot_addTalker()
     // Don't need plugin in memory anymore.
     delete m_loadedTalkerPlugIn;
     m_loadedTalkerPlugIn = 0;
+    if (m_configDlg)
+    {
+        m_configDlg->setMainWidget(0);
+        delete m_configDlg;
+        m_configDlg = 0;
+    }
 
     // kdDebug() << "KCMKttsMgr::addTalker: done." << endl;
 }
@@ -1325,7 +1360,13 @@ void KCMKttsMgr::addFilter( bool sbd)
     configureFilter();
 
     // Did user Cancel?
-    if (!m_loadedFilterPlugIn) return;
+    if (!m_loadedFilterPlugIn)
+    {
+        m_configDlg->setMainWidget(0);
+        delete m_configDlg;
+        m_configDlg = 0;
+        return;
+    }
 
     // Get user's name for Filter.
     QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
@@ -1397,6 +1438,9 @@ void KCMKttsMgr::addFilter( bool sbd)
     // Don't need plugin in memory anymore.
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
+    m_configDlg->setMainWidget(0);
+    delete m_configDlg;
+    m_configDlg = 0;
 
     // kdDebug() << "KCMKttsMgr::addFilter: done." << endl;
 }
@@ -1719,7 +1763,13 @@ void KCMKttsMgr::slot_configureTalker()
     configureTalker();
 
     // Did user Cancel?
-    if (!m_loadedTalkerPlugIn) return;
+    if (!m_loadedTalkerPlugIn)
+    {
+        m_configDlg->setMainWidget(0);
+        delete m_configDlg;
+        m_configDlg = 0;
+        return;
+    }
 
     // Get Talker Code.  Note that plugin may return a code different from before.
     QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
@@ -1743,6 +1793,9 @@ void KCMKttsMgr::slot_configureTalker()
 
     delete m_loadedTalkerPlugIn;
     m_loadedTalkerPlugIn = 0;
+    m_configDlg->setMainWidget(0);
+    delete m_configDlg;
+    m_configDlg = 0;
 }
 
 void KCMKttsMgr::slot_configureNormalFilter()
@@ -1782,7 +1835,13 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     configureFilter();
 
     // Did user Cancel?
-    if (!m_loadedFilterPlugIn) return;
+    if (!m_loadedFilterPlugIn)
+    {
+        m_configDlg->setMainWidget(0);
+        delete m_configDlg;
+        m_configDlg = 0;
+        return;
+    }
 
     // Get user's name for the plugin.
     QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
@@ -1816,6 +1875,9 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
 
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
+    m_configDlg->setMainWidget(0);
+    delete m_configDlg;
+    m_configDlg = 0;
 }
 
 /**
@@ -1984,16 +2046,12 @@ void KCMKttsMgr::slotEnableNotifyCheckBoxToggled(bool checked)
 }
 
 
-// System tray context menu entries.
-void KCMKttsMgr::aboutSelected(){
-    m_aboutDlg->show();
-}
-
 /**
 * This slot is called whenever user checks/unchecks item in Filters list.
 */
 void KCMKttsMgr::slotFiltersList_stateChanged()
 {
+    kdDebug() << "KCMKttsMgr::slotFiltersList_stateChanged: calling configChanged" << endl;
     configChanged();
 }
 
