@@ -29,6 +29,12 @@ fi
 
 set -x
 
+# libktts removed.  See kdeaccessibility/kttsd/kcmkttsmgr/Makefile.am
+# for example how to build without it.
+# on or about 20 Dec 2004.
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libktts
+$LIBTOOL --mode=uninstall $PREFIX/lib/libktts
+
 # ServiceType kttsd.desktop renamed to kttsd_synthplugin.desktop,
 # which distinquishes it from kttsd.desktop in the services dir
 # and more accurately reflects its purpose

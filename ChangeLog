@@ -1,3 +1,10 @@
+2004-12-20  Gary Cramblitt (PhantomsDad)
+        * kdenonbeta/kttsd moved to kdeaccessibility/kttsd.
+        * kdenonbeta/kttsd/libktts moved to kdelibs/interfaces/kspeech.  libktts dropped.
+        * kdenonbeta/app-plugins/khtml-plugin moved to kdebase/konqueror/kttsplugin.
+        * kdenonbeta/app-plugins/kate-plugin moved to kdebase/kate/plugins/ktts.
+        * kdenonbeta/app-plugins/katepart-plugin moved to kdebase/kate/plugin/katepartktts.
+
 2004-12-19  Gary Cramblitt (PhantomsDad)
         * Change Festival voices from ini to xml format.  Permit translators to translate voice names.
         * Add "--enable-kttsd-gstreamer" option to configure, defaulting to no.

@@ -1,3 +1,8 @@
+_ kcmkttsmgr.desktop file UTF-8 got hosed by Kate/Develop.
+_ The khmtlktts plugin should automatically sense if KTTSD is installed and if not,
+  hide menu item.  If installed, but not configured, prompt user to run kttsmgr.
+_ Clean up kspeech/kspeechsink api documentation for kdelibs.
+_ katepartktts seems to be a casualty of move to kdebase.  Not working.
 _ Audio Plugins:
     _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.
       Since the desktop files are translated, is this a problem??  Works when I do
@@ -48,6 +53,7 @@ _ KTTSD:
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
 _ Convert to KConfig XT.
+_ Add option to automatically turn down music player volume while speaking (via dcop).
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
   English (at the moment) and is alpha, don't think it is worth it now.
 _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/
