@@ -351,21 +351,12 @@ QString StringReplacerConf::saveToFile(const QString& filename)
 */
 void StringReplacerConf::defaults(){
     // kdDebug() << "StringReplacerConf::defaults: Running" << endl;
-    // Default language is English.
+    // Default language is none.
     m_languageCodeList.clear();
-    m_languageCodeList += "en";
-    QString language = KGlobal::locale()->twoAlphaToLanguageName("en");
-    m_widget->languageLineEdit->setText(language);
+    m_widget->languageLineEdit->setText( "" );
     // Default name.
-    m_widget->nameLineEdit->setText(i18n("String Replacer") + " (" + language + ")");
-    // Add some default words.
-    QListView* lView = m_widget->substLView;
-    lView->clear();
-    QListViewItem* item = new KListViewItem(lView, substitutionTypeToString(stWord), "KDE", "K D E");
-    item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "TTS", "T T S");
-    item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "KTTS", "K T T S");
-    item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "KTTSD", "K T T S D");
-    item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "kttsd", "K T T S D");
+    m_widget->nameLineEdit->setText( i18n("String Replacer") );
+    m_widget->substLView->clear();
     // Default App ID is blank.
     m_widget->appIdLineEdit->setText( "" );
     enableDisableButtons();
@@ -483,9 +474,13 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     // Replace language in the user's filter name.
     QString s2 = m_widget->nameLineEdit->text();
     if (m_languageCodeList.count() > 1) language = i18n("Multiple Languages");
-    s2.replace(s1, language);
-    s2.replace(i18n("Multiple Languages"), language);
+    if ( !s1.isEmpty() )
+    {
+        s2.replace( s1, language );
+        s2.replace( i18n("Multiple Languages"), language );
+    }
     s2.replace(" ()", "");
+    if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ")";
     m_widget->nameLineEdit->setText(s2);
     configChanged();
 }
