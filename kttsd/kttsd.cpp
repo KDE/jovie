@@ -369,6 +369,7 @@ void KTTSD::closeSelected(){
 }
 
 void KTTSD::quitSelected(){
+    stopText();
     kapp->quit();
 }
 

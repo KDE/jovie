@@ -25,6 +25,7 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <qthread.h>
+#include <kprocio.h>
 
 // #include <festival.h>
 
@@ -46,7 +47,11 @@ FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStri
 /** Destructor */
 FestivalIntProc::~FestivalIntProc(){
     kdDebug() << "Running: FestivalIntProc::~FestivalIntProc()" << endl;
-    if (initialized) delete festProc;
+    if (initialized)
+    {
+        stopText();
+        if (festProc) delete festProc;
+    }
 }
 
 /** Initializate the speech */
@@ -158,9 +163,28 @@ void FestivalIntProc::stopText(){
     kdDebug() << "Running: FestivalIntProc::stopText()" << endl;
     if (initialized)
     {
-      festProc->writeStdin(QString("(audio_mode 'shutup)"), true);
-      festProc->writeStdin(QString("(quit)"), true);
-      festProc->kill();
+        if (ready)
+        {
+            festProc->writeStdin(QString("(quit)"), true);
+            if (festProc) festProc->wait(1);
+        } 
+        else
+        {
+            // This is an ugly hack, but it seems to be the only way to kill
+            // a running KProcess without causing a crash.
+            pid_t pid = festProc->pid();
+            if (pid)
+            {
+                int status;
+                kill(pid, SIGTERM);
+                waitpid(pid, &status, 0);
+            }
+        }
+        if (festProc) festProc->closeAll();
+        initialized = false;
+        ready = true;
+        if (festProc) delete festProc;
+        festProc = 0;
     }
     kdDebug() << "Festival stopped." << endl;
 }
