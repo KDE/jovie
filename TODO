@@ -12,14 +12,16 @@
 - Integrate with KNotify.  Perhaps this can be done by hooking passive popups?
 - Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
 _ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the system tray.)
-  Probably requires some sort of hack to KCMultiDialog.
+  Probably requires some sort of hack to KCMultiDialog.  Kopete has same behaviour, so maybe this
+  isn't really a problem?
 - Command plugin crashes when using command 'flite -t "%t"' and festival can't get write access to /dev/dsp*.
 - In the job manager tab of kttsmgr, one can drag the toolbars elsewhere, but the buttons
   disappear.  Why?
 - kttsmgr is too tall for lower res screens, mostly because of Hadifax plugin.
   Use a vertical scroller in Properties tab and make entire screen smaller.
+_ IBM ViaVoice plugin?
 
-Widgets needed usefull for the whole KDE
+Widgets needed; useful for whole KDE:
 - Language selection widgets, configurable and versatile.
 - A good password line edit which will allow to set the password.
 - A Tab Widget with buttons on the tab to close (remove) the tabs (see Konversation).

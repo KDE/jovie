@@ -45,6 +45,7 @@
 #include <kconfig.h>
 #include <kaboutapplication.h>
 #include <kpopupmenu.h>
+#include <knotifyclient.h>
 
 #include "kcmkttsmgr.moc"
 #include "kcmkttsmgr.h"
@@ -89,7 +90,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     KCModule(KCMKttsMgrFactory::instance(), parent, name),
     DCOPObject("kttsmgr_kspeechsink")
 {
-    kdDebug() << "KCMKttsMgr contructor running." << endl;
+    // kdDebug() << "KCMKttsMgr contructor running." << endl;
     
     // Initialize some variables.
     m_jobMgrPart = 0;
@@ -175,6 +176,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         "kttsdExiting()",
         "kttsdExiting()",
         false);
+        
+    // Hook KNotify signal.
+    if (!connectDCOPSignal(0, 0, 
+        "notifySignal(QString,QString,QString,QString,QString,int,int,int,int)",
+        "notificationSignal(QString,QString,QString,QString,QString,int,int,int,int)",
+        false)) kdDebug() << "connectDCOPSignal for knotify failed" << endl;
     
     // See if KTTSD is already running.
     if (client->isApplicationRegistered("kttsd"))
@@ -184,7 +191,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         enableKttsdToggled(false);
 
     // About Dialog.
-    m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text To Speech Manager", false);
+    m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text-to-Speech Manager", false);
     
 } 
 
@@ -192,7 +199,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 * Destructor
 */
 KCMKttsMgr::~KCMKttsMgr(){
-kdDebug() << "Running: KCMKttsMgr::~KCMKttsMgr()" << endl;
+    // kdDebug() << "Running: KCMKttsMgr::~KCMKttsMgr()" << endl;
 }
 
 /**
@@ -205,7 +212,7 @@ kdDebug() << "Running: KCMKttsMgr::~KCMKttsMgr()" << endl;
 */
 void KCMKttsMgr::load()
 {
-    kdDebug() << "Running: KCMKttsMgr::load()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::load()"<< endl;
 
     // Get rid of everything first for the sake of the reset button
     // Maybe we should do something here to jump to the right tab if the reset button was presed being in tab, anyway, that's not so bad
@@ -321,7 +328,7 @@ void KCMKttsMgr::save()
     
     // Iterate thru loaded languages and store their configuration
     for(QDictIterator<languageRelatedObjects> it(m_loadedLanguages); it.current() ; ++it){
-        kdDebug() << "Saving: " << it.currentKey() << endl;
+        // kdDebug() << "Saving: " << it.currentKey() << endl;
         
         // Let's check if this is the default language
         if(it.current()->listItem->pixmap(2)){
@@ -354,7 +361,7 @@ void KCMKttsMgr::save()
 * uses when started without a config file.
 */
 void KCMKttsMgr::defaults() {
-    kdDebug() << "Running: KCMKttsMgr::defaults()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::defaults()"<< endl;
     
     m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
     m_kttsmgrw->textPreMsg->setText(textPreMsgValue);
@@ -390,7 +397,7 @@ void KCMKttsMgr::defaults() {
 * not needed in this case.
 */
 void KCMKttsMgr::init(){
-    kdDebug() << "Running: KCMKttsMgr::init()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::init()"<< endl;
 } 
 
 /**
@@ -400,7 +407,7 @@ void KCMKttsMgr::init(){
 * modules using setButtons.
 */
 int KCMKttsMgr::buttons() {
-    kdDebug() << "Running: KCMKttsMgr::buttons()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::buttons()"<< endl;
     return KCModule::Ok|KCModule::Apply|KCModule::Help|KCModule::Reset;
 } 
 
@@ -409,11 +416,11 @@ int KCMKttsMgr::buttons() {
 * That is displayed in the sidebar in the KControl
 */
 QString KCMKttsMgr::quickHelp() const{
-    kdDebug() << "Running: KCMKttsMgr::quickHelp()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::quickHelp()"<< endl;
     return i18n(
-        "<h1>Text To Speech</h1>"
-        "<p>This is the configuration for the text to speech dcop service</p>"
-        "<p>This allows other applications to access text to speech resources</p>"
+        "<h1>Text-to-Speech</h1>"
+        "<p>This is the configuration for the text-to-speech dcop service</p>"
+        "<p>This allows other applications to access text-to-speech resources</p>"
         "<p>Be sure to configure a default language for the language you are using as this will be the language used by most of the applications</p>");
 }
 
@@ -434,12 +441,12 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 * Loads the configuration plug in for a specific plug in
 */
 PlugInConf *KCMKttsMgr::loadPlugIn(const QString &plugInName){
-    kdDebug() << "Running: KCMKttsMgr::loadPlugIn(const QString &plugInName)"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::loadPlugIn(const QString &plugInName)"<< endl;
 
     // Iterate thru the plug in m_offers to find the plug in that matches the plugInName
     for(unsigned int i=0; i < m_offers.count() ; ++i){
         // Compare the plug in to be loeaded with the entry in m_offers[i]
-        kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
+        // kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
         if(m_offers[i]->name() == plugInName){
         // When the entry is found, load the plug in
         // First create a factory for the library
@@ -471,8 +478,8 @@ PlugInConf *KCMKttsMgr::loadPlugIn(const QString &plugInName){
 * widgets to later call it.
 */
 void KCMKttsMgr::addLanguage(){
-    kdDebug() << "Running: KCMKttsMgr::addLanguage()"<< endl;
-    kdDebug() << "Adding plug in " << m_kttsmgrw->plugInSelection->currentText() << " for language " << m_kttsmgrw->languageSelection->currentText() << endl;
+    // kdDebug() << "Running: KCMKttsMgr::addLanguage()"<< endl;
+    // kdDebug() << "Adding plug in " << m_kttsmgrw->plugInSelection->currentText() << " for language " << m_kttsmgrw->languageSelection->currentText() << endl;
     
     if(m_loadedLanguages.find(m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()]) == 0){
         if(m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()] == "other"){
@@ -490,8 +497,8 @@ void KCMKttsMgr::addLanguage(){
 * Add a language to the pool of languages for the lang/plugIn pair
 */
 void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName){
-    kdDebug() << "Running: KCMKttsMgr::addLanguage(const QString &lang, const QString &plugInName)"<< endl;
-    kdDebug() << "Adding plug in " << plugInName << " for language " << language << endl;
+    // kdDebug() << "Running: KCMKttsMgr::addLanguage(const QString &lang, const QString &plugInName)"<< endl;
+    // kdDebug() << "Adding plug in " << plugInName << " for language " << language << endl;
     
     // If the language is not in the map, let's add it.
     if(!m_languagesMap.contains(language)){
@@ -499,37 +506,37 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
     }
     
     // This object will contain pointers to all the objects related to a single language/plug in pair.
-    kdDebug() << "Creating newLanguage" << endl;
+    // kdDebug() << "Creating newLanguage" << endl;
     languageRelatedObjects *newLanguage = new languageRelatedObjects();
     
     // Load the plug in
-    kdDebug() << "Creating the new plugIn" << endl;
+    // kdDebug() << "Creating the new plugIn" << endl;
     newLanguage->plugIn = loadPlugIn(plugInName);
     
     // If there wasn't any error, let's go on
     if(newLanguage->plugIn){
         // Create the item in the list and add it and store the pointer in the structure
-        kdDebug() << "Creating the new listItem" << endl;
+        // kdDebug() << "Creating the new listItem" << endl;
     
         newLanguage->listItem = new KListViewItem(m_kttsmgrw->languagesList, m_languagesMap[language], plugInName);
     
         // Store the name of the plug in in the structure
-        kdDebug() << "Storing the plug in name" << endl;
+        // kdDebug() << "Storing the plug in name" << endl;
         newLanguage->plugInName = plugInName;
     
         // Add the plugin configuration widget to the Properties tab WidgetStack.
-        kdDebug() << "Adding the tab" << endl;
+        // kdDebug() << "Adding the tab" << endl;
         m_kttsmgrw->PluginWidgetStack->addWidget(newLanguage->plugIn, -1);
 
         // Let plug in changes be as global changed to show apply button.
-        kdDebug() << "Connecting" << endl;
+        // kdDebug() << "Connecting" << endl;
         connect(  newLanguage->plugIn, SIGNAL( changed(bool) ), this, SLOT( configChanged() )  );
     
         // Let's insert it in the QDict to keep track of language structure
-        kdDebug() << "Inserting the newLanguage in the QDict" << endl;
+        // kdDebug() << "Inserting the newLanguage in the QDict" << endl;
         m_loadedLanguages.insert( language, newLanguage);
     
-        kdDebug() << "Done" <<endl;
+        // kdDebug() << "Done" <<endl;
     } else {
         KMessageBox::error(0, i18n("Speech syntheziser plug in library not found or corrupted"), i18n("Plug in not found"));
     }
@@ -566,7 +573,7 @@ void KCMKttsMgr::initLanguageCode (const QString &code) {
 * widgets to later call it.
 */
 void KCMKttsMgr::removeLanguage(){
-    kdDebug() << "Running: KCMKttsMgr::removeLanguage()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::removeLanguage()"<< endl;
     
     // Get the selected language
     QListViewItem *itemToRemove = m_kttsmgrw->languagesList->selectedItem();
@@ -581,7 +588,7 @@ void KCMKttsMgr::removeLanguage(){
 * Remove a language named lang
 */
 void KCMKttsMgr::removeLanguage(const QString &language){
-    kdDebug() << "Running: KCMKttsMgr::removeLanguage(const QString &language)"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::removeLanguage(const QString &language)"<< endl;
     if(m_loadedLanguages[language]){
         // Remove the KListViewItem object
         m_kttsmgrw->languagesList->takeItem(m_loadedLanguages[language]->listItem);
@@ -600,7 +607,7 @@ void KCMKttsMgr::removeLanguage(const QString &language){
 * widgets to later call it.
 */
 void KCMKttsMgr::setDefaultLanguage(){
-    kdDebug() << "Running: KCMKttsMgr::setDefaultLanguage()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::setDefaultLanguage()"<< endl;
     // Get the selected language
     QListViewItem *defaultLanguageItem = m_kttsmgrw->languagesList->selectedItem();
     
@@ -614,7 +621,7 @@ void KCMKttsMgr::setDefaultLanguage(){
 * Set the default language
 */
 void KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage){
-    kdDebug() << "Running: KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage)"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage)"<< endl;
     // Yes should be a beautiful tick icon
     for(QDictIterator<languageRelatedObjects> it(m_loadedLanguages); it.current() ; ++it){
         if(it.currentKey() == defaultLanguage){
@@ -634,7 +641,7 @@ void KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage){
 * Update the status of the Remove button
 */
 void KCMKttsMgr::updateRemoveButton(){
-    kdDebug() << "Running: KCMKttsMgr::updateRemoveButton()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton()"<< endl;
     if(m_kttsmgrw->languagesList->selectedItem()){
         m_kttsmgrw->removeLanguageButton->setEnabled(true);
         QString language = m_kttsmgrw->languagesList->selectedItem()->text(0);
@@ -652,7 +659,7 @@ void KCMKttsMgr::updateRemoveButton(){
 * Update the status of the Default button
 */
 void KCMKttsMgr::updateDefaultButton(){
-    kdDebug() << "Running: KCMKttsMgr::updateDefaultButton()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::updateDefaultButton()"<< endl;
     if(m_kttsmgrw->languagesList->selectedItem()){
         if(!m_kttsmgrw->languagesList->selectedItem()->pixmap(2)){
             m_kttsmgrw->makeDefaultLanguage->setEnabled(true);
@@ -673,7 +680,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     static bool reenter;
     if (reenter) return;
     reenter = true;
-    kdDebug() << "Running enableKttsdToggled" << endl;
+    // kdDebug() << "Running enableKttsdToggled" << endl;
     // See if KTTSD is running.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
@@ -707,7 +714,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
 */
 void KCMKttsMgr::kttsdStarted()
 {
-    kdDebug() << "KCMKttsMgr::kttsdStarted running" << endl;
+    // kdDebug() << "KCMKttsMgr::kttsdStarted running" << endl;
     bool kttsdLoaded = (m_jobMgrPart != 0);
     // Load Job Manager Part library.
     if (!kttsdLoaded)
@@ -741,7 +748,7 @@ void KCMKttsMgr::kttsdStarted()
 */
 void KCMKttsMgr::kttsdExiting()
 {
-    kdDebug() << "KCMKttsMgr::kttsdExiting running" << endl;
+    // kdDebug() << "KCMKttsMgr::kttsdExiting running" << endl;
     if (m_jobMgrPart)
     {
         m_kttsmgrw->mainTab->removePage(m_jobMgrPart->widget());
@@ -751,8 +758,29 @@ void KCMKttsMgr::kttsdExiting()
     m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
 }
 
+/**
+* This signal is emitted by KNotify when a notification event occurs.
+*/
+void KCMKttsMgr::notificationSignal( const QString&, const QString&,
+                                     const QString &text, const QString&, const QString&,
+                                     const int present, const int, const int, const int )
+{
+    if (!text.isNull())
+        if ( m_kttsmgrw->enableKttsdCheckBox->isChecked() )
+            if ( m_kttsmgrw->enableNotifyCheckBox->isChecked() )
+                if ( !m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()
+                    or (present & KNotifyClient::PassivePopup) )
+                    {
+                        kdDebug() << "KCMKttsMgr::notifySignal speaking " << text << endl;
+                        DCOPClient *client = kapp->dcopClient();
+                        QByteArray data;
+                        QDataStream arg(data, IO_WriteOnly);
+                        arg << text << "en";
+                        client->send("kttsd", "kspeech", "sayMessage(QString,QString)", data);
+                    }
+}
+
 // System tray context menu entries
 void KCMKttsMgr::aboutSelected(){
     m_aboutDlg->show();
 }
-

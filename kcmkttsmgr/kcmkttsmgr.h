@@ -58,9 +58,10 @@ class KCMKttsMgr :
     virtual public KSpeechSink
 {
    Q_OBJECT
+   K_DCOP
 
    public:
-        KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);;
+        KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);
 
         ~KCMKttsMgr();
       
@@ -118,6 +119,14 @@ class KCMKttsMgr :
         * Return the about information for this module
         */
         const KAboutData* aboutData() const;
+        
+    k_dcop:
+        /**
+        * This signal is emitted by KNotify when a notification event occurs.
+        */
+        void notificationSignal(const QString &event, const QString &fromApp,
+                                const QString &text, const QString &sound, const QString &file,
+                                const int present, const int level, const int winId, const int eventId );
     
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
@@ -248,6 +257,7 @@ class KCMKttsMgr :
         * Displays about dialog.
         */
         void aboutSelected();
+
 };
 
 #endif
