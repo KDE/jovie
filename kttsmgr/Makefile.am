@@ -14,12 +14,10 @@ METASOURCES = AUTO
 bin_PROGRAMS = kttsmgr
 
 kspeech_DIR = $(KTTS_KSPEECH_DIR)
-kspeechsink_DIR = $(KTTS_KSPEECH_DIR)
 
 # The source, library search path, and link libraries.
 kttsmgr_SOURCES =  \
 	kspeech.stub \
-	kspeechsink.skel \
 	kttsmgr.cpp
 
 kttsmgr_LDFLAGS = $(all_libraries) $(KDE_RPATH)
