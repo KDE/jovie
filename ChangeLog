@@ -1,3 +1,6 @@
+2004-12-18  Gary Cramblitt (PhantomsDad)
+        * Remove kcmkttsmgr.  Use kcmkttsd instead.
+
 2004-12-14  Gary Cramblitt (PhantomsDad)
         * Under KDE 3.2, FestivalInt plugin automatically finding /usr/share/festival, rather
           than /usr/bin/festival.

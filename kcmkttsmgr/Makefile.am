@@ -20,9 +20,7 @@ METASOURCES = AUTO
 # This is the kcmodule that gets installed.  It's name is used for all
 # of the other Makefile.am variables.
 
-# Build two identical libraries, but with different names.
-# Once all apps have stopped using kcm_kttsmgr, remove it.
-kde_module_LTLIBRARIES = kcm_kttsd.la kcm_kttsmgr.la
+kde_module_LTLIBRARIES = kcm_kttsd.la
 
 # The source, library search path, and link libraries.
 kcm_kttsd_la_SOURCES = \
@@ -33,14 +31,6 @@ kcm_kttsd_la_SOURCES = \
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined 
 kcm_kttsd_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_QT) $(LIB_KIO) $(LIB_KDECORE)
 
-kcm_kttsmgr_la_SOURCES = \
-	kcmkttsmgr.cpp \
-	kcmkttsmgrwidget.ui \
-	addtalker.cpp \
-	addtalkerwidget.ui
-kcm_kttsmgr_la_LDFLAGS = -avoid-version -module -no-undefined 
-kcm_kttsmgr_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_QT) $(LIB_KIO) $(LIB_KDECORE)
-
 # Header files that should not be installed.
 noinst_HEADERS = \
 	kcmkttsmgr.h \
@@ -49,7 +39,7 @@ noinst_HEADERS = \
 	addtalker.h
 
 # Install desktop file to application directory.
-apps_DATA = kcmkttsd.desktop kcmkttsmgr.desktop
+apps_DATA = kcmkttsd.desktop
 appsdir = $(kde_appsdir)/Settings/Accessibility
 
 # K Menu entry.

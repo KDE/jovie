@@ -22,8 +22,6 @@ debian/tmp/usr/lib/kde3/libkttsd_artsplugin.so
 debian/tmp/usr/lib/kde3/libkttsd_artsplugin.la
 debian/tmp/usr/lib/kde3/libkttsjobmgrpart.so
 debian/tmp/usr/lib/kde3/libkttsjobmgrpart.la
-debian/tmp/usr/lib/kde3/kcm_kttsmgr.so
-debian/tmp/usr/lib/kde3/kcm_kttsmgr.la
 debian/tmp/usr/lib/kde3/kcm_kttsd.so
 debian/tmp/usr/lib/kde3/kcm_kttsd.la
 debian/tmp/usr/share/servicetypes/kttsd_synthplugin.desktop

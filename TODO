@@ -48,7 +48,6 @@ _ KTTSD:
     _ Add support for SSML, JSML, Sable and other Speech Markup languages.
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
-_ Remove kcm_kttsmgr once all apps (KSayIt) have stopped using it.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
   English (at the moment) and is alpha, don't think it is worth it now.
 _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/
