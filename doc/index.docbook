@@ -90,8 +90,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2004-10-11</date>
-<releaseinfo>1.01.00</releaseinfo>
+<date>2004-12-02</date>
+<releaseinfo>1.02.00</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -124,6 +124,7 @@ Please at least include KDE, the KDE package it is in, the name
 <keyword>MBROLA</keyword>
 <keyword>freetts</keyword>
 <keyword>epos</keyword>
+<keyword>SSML</keyword>
 </keywordset>
 
 </bookinfo>
@@ -136,6 +137,8 @@ from time to time making it hard to manage for maintainers and for the CVS
 system. Any chapter labelled (OPTIONAL) may be left out at the author's
 discretion. Other chapters should not be left out in order to maintain a
 consistent documentation style across all KDE apps. -->
+
+<!-- ====================================================================== -->
 
 <chapter id="introduction">
 <title>Introduction</title>
@@ -153,7 +156,6 @@ nice capabilities for end users as well.</para>
 <para>User features:</para>
 
 <itemizedlist>
-<listitem><para>Speak contents of clipboard.</para></listitem>
 <listitem><para>Speak contents of a text file.</para></listitem>
 <listitem><para>Speak KDE notification events (KNotify).</para></listitem>
 <listitem><para>Speak all or part of the text of a web page in Konqueror.</para></listitem>
@@ -161,6 +163,7 @@ nice capabilities for end users as well.</para>
 including instances where Kate is embedded in another KDE application.</para></listitem>
 <listitem><para>Long text is parsed into sentences.  User may backup by sentence
 or paragraph, replay, pause, and stop playing.</para></listitem>
+<listitem><para>Audio output via aRts or GStreamer (version 0.8)</para></listitem>
 </itemizedlist>
 
 <para>Programmer features:</para>
@@ -174,7 +177,6 @@ or paragraph, replay, pause, and stop playing.</para></listitem>
 <listitem><para>FUTURE: Provide support for speech markup languages, such as VoiceXML, Sable, Java Speech Markup Language (JSML), and Speech Markup Meta-language (SMML).</para></listitem>
 <listitem><para>FUTURE: Provide limited support for embedded speech markers.</para></listitem>
 <listitem><para>Asynchronous to prevent system blocking.</para></listitem>
-<listitem><para>Plugin-based audio architecture. Currently supports aRts but will support additional audio engines in the future, such as gstreamer.</para></listitem>
 </itemizedlist>
 
 <para>&kmyapplication; actually consists of several programs:
@@ -207,6 +209,8 @@ all or a portion of a text file.
 </variablelist>
 </para>
 
+<!-- ...................................................................... -->
+
 <sect1 id="support">
 <title>Support</title>
 <para>
@@ -222,6 +226,8 @@ also hang out in IRC (irc.kde.org, channel #kde-accessibility).
 
 </chapter>
 
+<!-- ====================================================================== -->
+
 <chapter id="using-kapp">
 <title>Using &kmyapplication;</title>
 
@@ -229,6 +235,9 @@ also hang out in IRC (irc.kde.org, channel #kde-accessibility).
 <warning><para>Before you can use &kmyapplication;, you must install at least one speech
 synthesis engine and make sure it is working.  See <xref linkend="installation" />.
 </para></warning></para>
+
+<!-- ...................................................................... -->
+
 
 <sect1 id="starting-kttsmgr">
 <title>Starting <command>kttsmgr</command></title>
@@ -248,6 +257,9 @@ If you have already configured at least one Talker, the <guilabel>General</guila
 screen appears.  See <xref linkend="general" />.</para>
 
 </sect1>
+
+<!-- ...................................................................... -->
+
 
 <sect1 id="select-plugin">
 <title>Selecting Synthesis Plugins (Talkers)</title>
@@ -350,6 +362,9 @@ see <xref linkend="general" />.
 
 </sect1>
 
+<!-- ...................................................................... -->
+
+
 <sect1 id="configure-plugin">
 <title>Configuring Synthesis Plugins (Talkers)</title>
 
@@ -421,6 +436,9 @@ See <xref linkend="jobmgr" />.
 
 </sect1>
 
+<!-- ...................................................................... -->
+
+
 <sect1 id="general">
 <title>Starting KTTSD and Setting General Options</title>
 
@@ -490,6 +508,9 @@ Click the icon in the system tray to make the screen appear.</para></callout>
 
 </sect1>
 
+<!-- ...................................................................... -->
+
+
 <sect1 id="jobmgr">
 <title>Managing Text Jobs</title>
 
@@ -546,6 +567,72 @@ in the system tray to restore the screen.</para></callout>
 </note>
 
 </sect1>
+
+<!-- ...................................................................... -->
+
+<sect1 id="audio">
+<title>Audio Settings</title>
+
+<para>When you click the <guilabel>Audio</guilabel> tab in <command>kttsmgr</command>,
+the <guilabel>Audio</guilabel> screen appears.</para>
+
+<para>
+    <screenshot>
+        <screeninfo>The KDE Text-to-Speech Manager (Audio tab).</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-audio-1" coords="1 1"/>
+                    <area id="pt-audio-2" coords="1 1"/>
+                    <area id="pt-audio-3" coords="1 1"/>
+                    <area id="pt-audio-4" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="audio.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>The KDE Text-to-Speech Manager (Audio tab)</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-audio-1"><para>Select the method of audio output here.
+If <guilabel>GStreamer</guilabel> is grayed, &kmyapplication; was compiled
+without GStreamer support.
+</para></callout>
+<callout arearefs="pt-audio-2"><para>If GStreamer is selected for audio output,
+choose the GStreamer audio sink method here.  If no sinks are listed, you need
+to install at least one.  See <xref linkend="requirements" />.
+</para></callout>
+<callout arearefs="pt-audio-3"><para>Adjust the speed of talking here.
+50% is approximately twice as slow as normal while 200% is approximately
+twice as fast.
+</para></callout>
+<callout arearefs="pt-audio-4"><para>Be sure to click <guibutton>Apply</guibutton>
+to apply the new settings to the running &kmyapplication; system.
+</para></callout>
+</calloutlist>
+</para>
+
+<note><para>There are two ways to adjust the speed of speech in &kmyapplication;.
+Many of the <guilabel>Talkers</guilabel> have a <guilabel>Speed</guilabel>
+setting in their configuration dialogs, which you can display by clicking
+<guibutton>Edit</guibutton> on the <guilabel>Talkers</guilabel> screen.  This
+<guilabel>Speed</guilabel> setting on the <guilabel>Audio</guilabel> screen
+is in addition to the Talker speed setting and generally can be used
+even if the Talker does not support a speed setting.  For this speed setting
+to work, you must have the <command>sox</command>
+utility installed on your system (Debian users: 
+<command>apt-get install sox</command>).  Also, this speed setting is ignored
+when speaking text containing SSML.  (See <xref linkend="ssml" />)</para></note>
+
+</sect1>
+
+<!-- ...................................................................... -->
 
 <sect1 id="interruption">
 <title>Text Interruption Settings</title>
@@ -629,6 +716,9 @@ they are preempted by a higher-priority message.</para></note>
 
 </sect1>
 
+<!-- ...................................................................... -->
+
+
 <sect1 id="web">
 <title>Speaking Text from Web Pages</title>
 
@@ -647,6 +737,9 @@ web page you want spoken.  You can skip this step, but you will
 hear a lot of HTML headers and other invisible tags spoken.</para></tip>
 
 </sect1>
+
+<!-- ...................................................................... -->
+
 
 <sect1 id="kate">
 <title>Speaking Text from Kate Text Editor</title>
@@ -669,6 +762,8 @@ such as Konqueror or Quanta.</para></tip>
 
 </sect1>
 
+<!-- ...................................................................... -->
+
 <sect1 id="knotify">
 <title>Speaking Notifications (KNotify)</title>
 
@@ -687,14 +782,74 @@ have KDE speak the text of the IRC message to you.</para>
 <guilabel>Settings</guilabel> menu.  The specifics for configuring
 each application with KNotify vary from application to application.</para>
 
-<para>To enable &kmyapplication; to speak KNofify text notifications,
+<para>To enable &kmyapplication; to speak KNotify text notifications,
 start <command>kttsmgr</command>, click the <guilabel>General</guilabel> tab,
 and check the <guilabel>Speak notifications (KNotify)</guilabel> box.
 Then click the <guibutton>Apply</guibutton> button.</para>
 
 </sect1>
 
+<!-- ...................................................................... -->
+
+<sect1 id="ssml">
+<title>SSML</title>
+
+<para>The Speech Synthesis Markup Language (SSML) is a W3C standard
+for marking up text for speech output.  It provides tags for controlling
+voices, rate of speech, volume, gender, and pitch (tone).  It also
+provides tags for controlling how words are spoken, for instance
+spelling out abbreviations.  SSML is part of the VoiceXML specification,
+which is also a W3C standard.</para>
+
+<para>At this time, &kmyapplication; provides limited and very basic support for
+SSML.  It currently has the following restrictions.</para>
+
+<itemizedlist>
+<listitem><para>Works only with the Festival Interactive Talker.</para></listitem>
+<listitem><para>You must install the <command>rab_diphone</command>
+(British male) voice, as this is the default voice Festival uses when speaking
+SSML.</para></listitem>
+<listitem><para>The <guilabel>Speed</guilabel> setting on the <guilabel>Audio</guilabel>
+screen is ignored when speaking text containing SSML.</para></listitem>
+<listitem><para>You cannot rewind or advance by sentences within text
+containing SSML in the <guilabel>Jobs</guilabel> screen.</para></listitem>
+<listitem><para>If the <guilabel>Speed</guilabel> or <guilabel>Pitch</guilabel>
+settings in the Festival configuration dialog are not set to 100%, it
+will usually cause the SSML text to be spoken in a monotone.</para></listitem>
+</itemizedlist>
+
+<para>The following sample text can be used to experiment with SSML.</para>
+
+<programlisting><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE speak PUBLIC "-//W3C//DTD SYNTHESIS 1.0//EN"
+    "http://www.w3.org/TR/speech-synthesis/synthesis.dtd">
+
+<speak version="1.0" xml:lang="en-US">
+    <prosody pitch="low">
+        Who's been sleeping in my bed?
+    </prosody>
+    said papa bear.
+    <prosody pitch="medium">
+        Who's been sleeping in my bed?
+    </prosody>
+    said momma bear.
+    <prosody pitch="high">
+        Who's been sleeping in my bed?
+    </prosody>
+    said baby bear.
+</speak>
+]]></programlisting>
+
+<para>More robust support for SSML is planned for the next version of
+&kmyapplication;.
+</para>
+
+</sect1>
+
 </chapter>
+
+<!-- ====================================================================== -->
 
 <chapter id="commands">
 <title>Command Reference</title>
@@ -755,6 +910,8 @@ or menu bars. -->
 
 -->
 
+<!-- ====================================================================== -->
+
 <chapter id="developers">
 <title>Developer's Guide to &kmyapplication;</title>
 
@@ -774,8 +931,11 @@ a new speech synthesis engine.</para></listitem>
 DCOP Interface.
 Full documentation for both APIs is available online at the
 <ulink url="http://accessibility.kde.org/developer/kttsd/">
-KDE Accessibility web site.</ulink>
+KDE Accessibility</ulink> web site (http://accessibility.kde.org).
 </para>
+
+
+<!-- ...................................................................... -->
 
 
 <sect1 id="dcop-interface">
@@ -829,6 +989,8 @@ KDE Text-to-Speech API</ulink> online.</para>
 
 </chapter>
 
+<!-- ====================================================================== -->
+
 <chapter id="faq">
 <title>Questions and Answers</title>
 
@@ -874,7 +1036,7 @@ window, then start <command>kttsmgr</command> in the second.</para>
 I installed it, and I can use it in Festival, but it does not show up in <command>kttsmgr</command>.</para>
 </question>
 <answer>
-<para>Edit file <filename>$KDEHOME/share/apps/kttsd/festivalint/voices</filename> to
+<para>Edit file <command>$KDEHOME/share/apps/kttsd/festivalint/voices</command> to
 add the new voice.  The other entries can be used as a guide.  If you
 successfully add a voice, please send a patch to the developers along
 with the URL from which you obtained the voice file.</para>
@@ -902,6 +1064,7 @@ See <xref linkend="using-with-command" /></para>
 </chapter>
 
 
+<!-- ====================================================================== -->
 
 <chapter id="credits">
 
@@ -959,6 +1122,9 @@ licenses.  See each engine's documentation or website for details.</para></note>
 <appendix id="installation">
 <title>Installation</title>
 
+<!-- ...................................................................... -->
+
+
 <sect1 id="getting-kapp">
 <title>How to obtain &kmyapplication;</title>
 
@@ -973,26 +1139,58 @@ application -->
 <para>(FUTURE) Debian Install Command: <command>apt-get install kdeaccessibility</command></para>
 
 <note>
-<para>As of 11 Oct 2004, &kmyapplication; has not yet been moved into the
+<para>As of 2 Dec 2004, &kmyapplication; has not yet been moved into the
 kdeaccessibility package.  We expect to do this very soon.
-In the meantime, if you have access to KDE CVS, you can download &kmyapplication;
+In the meantime, you will find links to source and binary packages
+on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
+KDE Accessibility</ulink> web site (http://accessibility.kde.org).</para>
+
+<para>If you have access to KDE CVS, you can download &kmyapplication;
 by checking out the <command>kdenonbeta</command> module.  &kmyapplication;
 will be found in the <command>kttsd</command> directory.  You can also
-download a nightly tarball from
+download a nightly tarball of all kdenonbeta from
 <ulink url="ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2">
 ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2</ulink></para>
 </note>
 
 </sect1>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect1 id="requirements">
 <title>Requirements</title>
 
 <para>
-&kmyapplication; requires KDE version 3.2 or later.
+&kmyapplication; requires KDE version 3.2 or later.</para>
+
+<para>Binary packages also
+require GStreamer 0.8.  If you build &kmyapplication; from source,
+it will automatically configure itself not to use GStreamer if it is
+not installed.  You can obtain GStreamer from
 </para>
+
+<para><ulink url="http://gstreamer.freedesktop.org/">
+http://gstreamer.freedesktop.org/</ulink></para>
+
+<para>As of December 2004, Debian Testing users can install 
+GStreamer for use with &kmyapplication; using the following commands,
+but check the GStreamer website for the latest information.</para>
+
+<programlisting>
+apt-get install libgstreamer0.8-0
+apt-get install gstreamer0.8-misc
+apt-get install gstreamer0.8-tools
+apt-get install gstreamer0.8-oss
+apt-get install gstreamer0.8-alsa
+apt-get install libgstreamer-plugins0.8-0
+apt-get install libgstreamer-plugins0.8-0-dev
+apt-get install libgstreamer0.8-dev
+</programlisting>
+
+<para>The <command>sox</command> audio utility is needed for
+adjusting speech speed, but not required.  Debian users can install
+sox with the command <command>apt-get install sox</command>.</para>
 
 <para>
 In order to use &kmyapplication;, you must install a speech synthesis engine.
@@ -1005,7 +1203,7 @@ The following engines and spoken languages are currently supported.
 
 <row>
 <entry>Festival</entry>
-<entry>American English, British, Spanish, German</entry>
+<entry>American English, British, Spanish, German, Finnish</entry>
 </row>
 
 <row>
@@ -1056,7 +1254,8 @@ of these engines.
 
 </sect1>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect1 id="compilation">
 <title>Compilation and Installation</title>
@@ -1065,11 +1264,43 @@ of these engines.
 <!-- compilation instructions.  If your application requires any -->
 <!-- special handling, remove it, and replace with your own text. -->
 
-&install.compile.documentation;
+<!-- &install.compile.documentation; -->
 
-<note><para>If you downloaded the &kmyapplication; source from the
-<command>kdenonbeta</command> CVS module, use the following commands to
-compile and install.
+<para>If you downloaded &kmyapplication; as a tarball, log in
+as a normal user and untar the tarball to a suitable directory, 
+change to that directory, and enter the following commands.</para>
+
+<programlisting>
+./configure
+make
+</programlisting>
+
+<para>By default, the commands above will install &kmyapplication; to
+<command>/opt/kde3</command>.  If this directory is not in your
+<command>$KDEDIRS</command> path, you may need to add a
+<command>--prefix=<replaceable>target</replaceable></command> option.
+For example,</para>
+
+<programlisting>
+./configure --prefix=/usr/local
+make
+</programlisting>
+
+<note><para>On Debian systems, <command><replaceable>/usr/local</replaceable></command>
+is the usual place to install applications compiled from source code.
+</para></note>
+
+<para>Login as root and install the compiled &kmyapplication;
+using the following commands.</para>
+
+<programlisting>
+su
+make install
+</programlisting>
+
+<para>If you downloaded the &kmyapplication; source from the
+<command>kdenonbeta</command> CVS module, or downloaded the nightly
+CVS tarball, use the following commands to compile and install.
 </para>
 
 <programlisting>
@@ -1079,14 +1310,40 @@ make -f Makefile.cvs
 ./configure
 cd kttsd
 make
+su
 make install
-# If you have Doxygen installed
+</programlisting>
+
+<para>If you are working from the CVS kdenonbeta module and
+wish to build the KTTS API documents using Doxygen, proceed as follows.
+Add the following line (if not already present) to
+<command>kdenonbeta/configure.in.in</command>.</para>
+
+<programlisting>
+KDE_INIT_DOXYGEN([The KDE API Reference], [Version $VERSION])
+</programlisting>
+
+<para>Then do the following commands.</para>
+
+<programlisting>
+cd kdenonbeta
+make -f Makefile.cvs
+./configure
+cd kttsd
 make apidox
 </programlisting>
 
-</note>
+<para>You should now have the docs in <command>kdenonbeta/apidocs/kttsd</command>.
+The KDE Speech API (the API used by KDE applications to speak text) is in file
+<command>apidocs/kttsd/html/classkspeech.html</command>.
+The KTTSD Plugin API (the API used by KTTSD to interface with its plugins) is
+in file <command>apidocs/kttsd/html/classPlugInProc.html</command>.
+</para>
 
 </sect1>
+
+<!-- ...................................................................... -->
+
 
 <sect1 id="configuration">
 <title>Configuration</title>
@@ -1099,7 +1356,8 @@ make apidox
 <para><userinput>chmod a+rw <replaceable>/dev/dsp*</replaceable></userinput></para>
 </tip>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect2 id="using-with-festival">
 <title>Using with Festival (Interactive)</title>
@@ -1136,7 +1394,13 @@ for these voices, therefore, you must have the Festival source code.
 The German voices have limited distribution.
 </para>
 
-<para>Festival is typically included with Linux distributions.  Check your
+<para>A Finnish male voice is available from </para>
+
+<para><ulink url="http://www.ling.helsinki.fi/suopuhe/download/">
+http://www.ling.helsinki.fi/suopuhe/download/</ulink>.
+</para>
+
+<para>Festival is typically included with &Linux; distributions.  Check your
 distro CDs to see if it is included.</para>
 
 <para>Start <userinput>kttsmgr</userinput>.  On the <guilabel>Talkers</guilabel> screen,
@@ -1147,6 +1411,9 @@ is not in your PATH, enter the full path to the executable.
 Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
 <guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
 
+<!-- ...................................................................... -->
+
+
 <sect3 id="festival-with-mbrola">
 <title>Using Festival with MBROLA</title>
 
@@ -1156,7 +1423,7 @@ audio.  The MBROLA binary and MBROLA voice files can be downloaded from</para>
 
 <para><ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para>
 
-<para>Follow the instructions in the <filename>readme.txt</filename> that comes with
+<para>Follow the instructions in the <command>readme.txt</command> that comes with
 the download.</para>
 
 <para>Note that MBROLA is not a complete Text-to-Speech system.  MBROLA synthesizes
@@ -1176,6 +1443,9 @@ English voices.</para></listitem>
 </itemizedlist>
 </para>
 
+<!-- ...................................................................... -->
+
+
 <sect4 id="mbrola-wrappers">
 <title>Using Festival with MBROLA Wrappers</title>
 
@@ -1183,12 +1453,15 @@ English voices.</para></listitem>
 wrapper code is added to Festival to enable speech synthesis using
 MBROLA voice files.  Note that the MBROLA voice files are <emphasis>not</emphasis>
 installed in the MBROLA directory tree.  Instead, they are installed
-in the <filename>festival/lib/</filename> directory tree.  For instructions, see</para>
+in the <command>festival/lib/</command> directory tree.  For instructions, see</para>
 
 <para><ulink url="http://www.cstr.ed.ac.uk/projects/festival/mbrola.html">
 http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</ulink></para>
 
 </sect4>
+
+<!-- ...................................................................... -->
+
 
 <sect4 id="ims-german-festival">
 <title>Using IMS German Festival</title>
@@ -1199,11 +1472,11 @@ First install Festival and MBROLA, if you have not already done so.
 Next, download IMS German Festival, from 
 <ulink url="http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html">
 http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html</ulink>.
-Follow the instructions in the <filename>README</filename> that comes with the
+Follow the instructions in the <command>README</command> that comes with the
 download.  (Note, if using in combination with Festival 2.0, it is <emphasis>not</emphasis>
 necessary to apply the <command>fixes</command> tarball, but you must still
 rebuild festival.)  Finally, add the following
-lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
+lines to the <command>festival/lib/siteinit.scm</command> file.</para>
 
 <para>
 <programlisting>
@@ -1224,7 +1497,7 @@ lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
 </programlisting>
 </para>
 
-<para>(On some systems, the file you edit is <filename>/etc/festival.scm</filename>).  
+<para>(On some systems, the file you edit is <command>/etc/festival.scm</command>).  
 Only add the lines that correspond to the German voices you have installed.
 Substitute the correct path for <userinput><replaceable>/usr/local/mbrola/</replaceable></userinput>
 .  Also note that (at the time of this writing) 
@@ -1236,7 +1509,8 @@ IMS German Festival does not work with the de4, de5, or de6 German voices.</para
 
 </sect2>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect2 id="using-with-flite">
 <title>Using with Festival Lite (flite)</title>
@@ -1255,15 +1529,16 @@ http://www.speech.cs.cmu.edu/flite/index.html</ulink>
 
 <para>Debian Install Command: <userinput>apt-get install flite</userinput></para>
 
-<para>flite is typically included with Linux distributions.  Check your
+<para>flite is typically included with &Linux; distributions.  Check your
 distro CDs to see if it is included.</para>
 
 <para>Build and install flite following the instructions in the
-<filename>README</filename> that comes with it.</para>
+<command>README</command> that comes with it.</para>
 
 </sect2>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect2 id="using-with-hadifix">
 <title>Using with Hadifix (MBROLA and txt2pho)</title>
@@ -1286,16 +1561,16 @@ You can control the voice, pitch, speed, and volume from <command>kttsmgr</comma
 <procedure>
 <step><para>Download MBROLA binary from
 <ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para></step>
-<step><para>Install MBROLA to <filename>/usr/local/mbrola</filename> directory.</para></step>
+<step><para>Install MBROLA to <command>/usr/local/mbrola</command> directory.</para></step>
 <step><para>Download at least one german language file from the MBROLA site.
-Unzip to the <filename>/usr/local/mbrola</filename> directory.</para></step>
+Unzip to the <command>/usr/local/mbrola</command> directory.</para></step>
 <step><para>Download txt2pho from
 <ulink url="http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html">
 http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</ulink>.
 </para></step>
-<step><para>Unzip txt2pho to <filename>/usr/local/txt2pho</filename>.</para></step>
-<step><para>Edit <filename>txt2phorc</filename> file, putting correct data paths in.</para></step>
-<step><para>Either copy <filename>txt2phorc</filename> to <filename>~/.txt2phorc</filename> or to <filename>/etc/txt2pho</filename>.
+<step><para>Unzip txt2pho to <command>/usr/local/txt2pho</command>.</para></step>
+<step><para>Edit <command>txt2phorc</command> file, putting correct data paths in.</para></step>
+<step><para>Either copy <command>txt2phorc</command> to <command>~/.txt2phorc</command> or to <command>/etc/txt2pho</command>.
 Note that you drop the "rc" in file name.</para></step>
 <step><para>In <userinput>kttsmgr</userinput>, choose the German language (<guilabel>de</guilabel>), and add <guilabel>Hadifix</guilabel>.</para></step>
 <step><para>On the <guilabel>Configure Talker</guilabel> screen,
@@ -1305,10 +1580,11 @@ configure a voice and the paths to MBROLA and txt2pho.</para></step>
 
 </sect2>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect2 id="using-with-epos">
-<title>Using with Epos</title>
+    <title>Using with Epos</title>
 
 <para>Epos is a free Czeck and Slovak open source engine.
 It is light weight, but sacrifices voice quality somewhat.
@@ -1335,10 +1611,11 @@ for information.</para>
 
 </sect2>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect2 id="using-with-freetts">
-<title>Using with FreeTTS</title>
+    <title>Using with FreeTTS</title>
 
 <para>FreeTTS is a free open source speech engine written in Java(tm), which means
 that you must have the Java Virtual Machine software installed on your
@@ -1356,10 +1633,11 @@ http://sourceforge.net/projects/freetts/</ulink>
 
 </sect2>
 
-<!-- ====================================================================== -->
+<!-- ...................................................................... -->
+
 
 <sect2 id="using-with-command">
-<title>Using the Command Plugin</title>
+    <title>Using the Command Plugin</title>
 
 <para>The command plugin permits you to use &kmyapplication; with any
 speech synthesis engine that can be run as a command in a Konsole.</para>
