@@ -1,0 +1,17 @@
+dnl ==========================
+dnl checks for Hadifix plug in
+dnl ==========================
+
+AC_ARG_ENABLE(kttsd-hadifix,
+              AC_HELP_STRING([--enable-kttsd-hadifix],
+                             [build KTTSD Hadifix Plugin [default=yes]]),
+              hadifix_plugin=$enableval,
+              hadifix_plugin=yes)
+
+compile_hadifix_plugin="no"
+
+if test "x$hadifix_plugin" = "xyes"; then
+  compile_hadifix_plugin="yes"
+fi
+
+AM_CONDITIONAL(include_kttsd_hadifix, test "x$compile_hadifix_plugin" = "xyes")

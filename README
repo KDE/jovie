@@ -26,7 +26,7 @@ Requirements
 KDE 3.2.x and a speech synthesis engine, such as Festival.  Festival can be
 obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival is
 distributed with most Linux distros.  Check your distro CDs.  Also works
-with Hadifax, Epos, Festival Lite (flite),  or any command that can speak text,
+with Hadifix, Epos, Festival Lite (flite),  or any command that can speak text,
 such as FreeTTS.
 
 Support
@@ -127,13 +127,13 @@ Start kttsmgr settings dialog
   
 Choose the Festival Lite (flite) plugin.
 
-Using with Hadifax (mbrola and txt2pho)
+Using with Hadifix (mbrola and txt2pho)
 ---------------------------------------
  
-Hadifax consists of the mbrola diphone to speech synthesizer and txt2pho, a utility for converting
+Hadifix consists of the mbrola diphone to speech synthesizer and txt2pho, a utility for converting
 german text to diphones.
  
-If you do not already have Hadifax installed, do this:
+If you do not already have Hadifix installed, do this:
  
  - Download mbrola binary from
    http://tcts.fpms.ac.be/synthesis/mbrola.html
@@ -145,7 +145,7 @@ If you do not already have Hadifax installed, do this:
  - Unzip txt2pho to /usr/local/txt2pho.
  - Edit txt2phorc file, putting correct data paths in.
  - Either copy txt2phorc to ~/.txt2phorc or to /etc/txt2pho.  Note that you drop the "rc" in file name.
- - In kttsmgr, choose the German language (de), and add Hadifax.  On the properties page configure
+ - In kttsmgr, choose the German language (de), and add Hadifix.  On the properties page configure
    a voice and the paths to mbrola and txt2pho.
  
 Compiling the API docs
@@ -180,7 +180,7 @@ plugins            Plugins for KTTSD.  You must have at least one plugin to use 
   festivalint        Plugin for Festival using Festival Interactive mode (festival --interactive).
   flite              Plugin for Festival Lite.
   festivalcs         Plugin for Festival using Festival Client/Server mode.  Under development.
-  hadifax            Plugin for Hadifax.
+  hadifix            Plugin for Hadifix.
   freetts            Plugin for FreeTTS.
   epos               Plugin for Epos.
   command            Generic command plugin.

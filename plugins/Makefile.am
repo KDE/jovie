@@ -23,9 +23,9 @@ if include_kttsd_command
   command_DIR = command
 endif
 
-#kdevelop: hadifax_DIR = hadifax
-if include_kttsd_hadifax
-  hadifax_DIR = hadifax
+#kdevelop: hadifix_DIR = hadifix
+if include_kttsd_hadifix
+  hadifix_DIR = hadifix
 endif
 
 #kdevelop: flite_DIR = flite
@@ -44,6 +44,6 @@ SUBDIRS = \
         $(festivalcs_DIR) \
         $(freetts_DIR) \
         $(command_DIR) \
-        $(hadifax_DIR) \
+        $(hadifix_DIR) \
         $(flite_DIR) \
         $(epos_DIR)

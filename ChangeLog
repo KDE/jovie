@@ -1,3 +1,14 @@
+2004-09-04  Cramblitt <garycramblitt@comcast.net>
+        * Rename Hadifax to Hadifix.
+          NOTE: After rebuilding and installing, you will want to delete the
+                following files:
+                  $KDEDIR/lib/kde3/libhadifaxplugin.la
+                  $KDEDIR/lib/kde3/libhadifaxplugin.so
+                  $KDEDIR/share/services/hadifax.desktop
+
+2004-09-02  Paul Giannaros
+        * FreeTTS plugin.
+        
 2004-08-28  Cramblitt <garycramblitt@comcast.net>
         * GStreamer player added.  Doesn't work right now because gstreamer 0.6
           has issues with wav files.  Try again when KDE bindings (gst) have been

@@ -139,7 +139,7 @@
 *                    non-specific English, just "en".
 * - @e synthesizer.  The name of your plugin.  Keep short, but long enough to
 *                    distinquish different implementations.  For example,
-*                    Festival Int, Flite, Hadifax.  Use only letters, numbers
+*                    Festival Int, Flite, Hadifix.  Use only letters, numbers
 *                    spaces, and underscores (_) in your synthesizer name.
 * - @e gender.       May be "male", "female", or "neutral".
 * - @e name.         The voice code.  If your plugin does not support voices,
