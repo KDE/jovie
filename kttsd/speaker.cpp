@@ -138,7 +138,7 @@ Speaker::~Speaker(){
         for (it = m_uttQueue.begin(); it != m_uttQueue.end(); )
             it = deleteUtterance(it);
     }
-    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ndx++)
+    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
         delete m_loadedPlugIns[ndx].plugIn;
     m_loadedPlugIns.clear();
 }
@@ -152,7 +152,7 @@ int Speaker::loadPlugIns(){
     int bad = 0;
     
     m_talkerToPlugInCache.clear();
-    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ndx++)
+    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
         delete m_loadedPlugIns[ndx].plugIn;
     m_loadedPlugIns.clear();
     
@@ -719,7 +719,7 @@ uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
 QStringList Speaker::getTalkers()
 {
     QStringList talkerList;
-    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ndx++)
+    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
     {
         talkerList.append(m_loadedPlugIns[ndx].talkerCode);
     }
@@ -946,6 +946,7 @@ ParsedTalkerCode Speaker::parseTalkerCode(const QString &talkerCode)
 */
 int Speaker::talkerToPluginIndex(const QString& talker)
 {
+    // kdDebug() << "Speaker::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
     // If we have a cached match, return that.
     if (m_talkerToPlugInCache.contains(talker))
         return m_talkerToPlugInCache[talker];
@@ -954,18 +955,21 @@ int Speaker::talkerToPluginIndex(const QString& talker)
         // Parse the given talker.
         ParsedTalkerCode parsedTalkerCode = parseTalkerCode(talker);
         // If no language code specified, use the language code of the default plugin.
-        if (parsedTalkerCode.languageCode.isNull()) parsedTalkerCode.languageCode =
+        if (parsedTalkerCode.languageCode.isEmpty()) parsedTalkerCode.languageCode =
             m_loadedPlugIns[0].parsedTalkerCode.languageCode;
         // TODO: If there are no talkers configured in the language, %KTTSD will attempt
         //       to automatically configure one (see automatic configuraton discussion below)
         // The talker that matches on the most priority attributes wins.
         int loadedPlugInsCount = int(m_loadedPlugIns.count());
         QMemArray<int> priorityMatch(loadedPlugInsCount);
-        for (int ndx = 0; ndx < loadedPlugInsCount; ndx++)
+        for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
         {
             priorityMatch[ndx] = 0;
-            if (parsedTalkerCode.languageCode = m_loadedPlugIns[ndx].parsedTalkerCode.languageCode)
+            if (parsedTalkerCode.languageCode == m_loadedPlugIns[ndx].parsedTalkerCode.languageCode)
+            {
                 priorityMatch[ndx]++;
+                // kdDebug() << "Speaker::talkerToPluginIndex: Match on language " << parsedTalkerCode.languageCode << endl;
+            }
             if (parsedTalkerCode.countryCode.left(1) == "*")
                 if (parsedTalkerCode.countryCode.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.countryCode)
                     priorityMatch[ndx]++;
@@ -985,14 +989,14 @@ int Speaker::talkerToPluginIndex(const QString& talker)
                 if (parsedTalkerCode.plugInName.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.plugInName)
                     priorityMatch[ndx]++;
         }
-        int maxPriority = 0;
-        for (int ndx = 0; ndx < loadedPlugInsCount; ndx++)
+        int maxPriority = -1;
+        for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
         {
             if (priorityMatch[ndx] > maxPriority) maxPriority = priorityMatch[ndx];
         }
         int winnerCount = 0;
         int winner = -1;
-        for (int ndx = 0; ndx < loadedPlugInsCount; ndx++)
+        for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
         {
             if (priorityMatch[ndx] == maxPriority)
             {
@@ -1000,13 +1004,14 @@ int Speaker::talkerToPluginIndex(const QString& talker)
                 winner = ndx;
             }
         }
+        // kdDebug() << "Speaker::talkerToPluginIndex: winnerCount = " << winnerCount << " winner = " << winner << endl;
         // If a tie, the one that matches on the most preferred attributes wins.
         // If there is still a tie, the one nearest the top of the kttsmgr display
         // (first configured) will be chosen.
         if (winnerCount > 1)
         {
             QMemArray<int> preferredMatch(loadedPlugInsCount);
-            for (int ndx = 0; ndx < loadedPlugInsCount; ndx++)
+            for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
             {
                 preferredMatch[ndx] = 0;
                 if (priorityMatch[ndx] == maxPriority)
@@ -1031,8 +1036,8 @@ int Speaker::talkerToPluginIndex(const QString& talker)
                             preferredMatch[ndx]++;
                 }
             }
-            int maxPreferred = 0;
-            for (int ndx = 0; ndx < loadedPlugInsCount; ndx++)
+            int maxPreferred = -1;
+            for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
             {
                 if (preferredMatch[ndx] > maxPreferred) maxPreferred = preferredMatch[ndx];
             }
@@ -1052,6 +1057,7 @@ int Speaker::talkerToPluginIndex(const QString& talker)
         if (winner < 0) winner = 0;
         // Cache the answer.
         m_talkerToPlugInCache[talker] = winner;
+        // kdDebug() << "Speaker::talkerToPluginIndex: returning winner = " << winner << endl;
         return winner;
     }
 }
