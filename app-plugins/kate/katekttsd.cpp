@@ -36,7 +36,7 @@
 #include "katekttsd.h"
 #include "katekttsd.moc"
 
-K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "kttsd" ) )
+K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
 KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const char* name, const QStringList& )
     : KTextEditor::Plugin ( (KTextEditor::Document*) parent, name )
@@ -51,6 +51,7 @@ KateKttsdPlugin::~KateKttsdPlugin()
 void KateKttsdPlugin::addView(KTextEditor::View *view)
 {
     KateKttsdPluginView *nview = new KateKttsdPluginView (view, "KTTSD Plugin");
+    KGlobal::locale()->insertCatalogue("kttsd");
     m_views.append (nview);
 }
 
@@ -63,6 +64,7 @@ void KateKttsdPlugin::removeView(KTextEditor::View *view)
         m_views.remove (nview);
         delete nview;
     }
+    KGlobal::locale()->removeCatalogue("kttsd");
 }
 
 
