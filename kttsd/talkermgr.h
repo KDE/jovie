@@ -78,7 +78,7 @@ public:
      * If a plugin has not been loaded to match the talker, returns the default
      * plugin.
      */
-    int talkerToPluginIndex(const QString& talker);
+    int talkerToPluginIndex(const QString& talker) const;
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.
@@ -88,7 +88,7 @@ public:
      * If a plugin has not been loaded to match the talker, returns the default
      * plugin.
      */
-    PlugInProc* talkerToPlugin(const QString& talker);
+    PlugInProc* talkerToPlugin(const QString& talker) const;
 
     /**
      * Given a talker code, returns the parsed TalkerCode of the closest matching Talker.
@@ -122,7 +122,7 @@ public:
      * @see talkers
      * @see getTalkers
      */
-    QString userDefaultTalker();
+    QString userDefaultTalker() const;
 
     /**
      * Determine whether the currently-configured speech plugin supports a speech markup language.
@@ -133,7 +133,7 @@ public:
      *                       talker supports the indicated speech markup language.
      * @see kttsdMarkupType
      */
-    bool supportsMarkup(const QString& talker, const uint markupType);
+    bool supportsMarkup(const QString& talker, const uint markupType) const;
 
 private:
 

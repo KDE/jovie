@@ -872,7 +872,7 @@ QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
 *                       If no plugin has been configured for the specified Talker code,
 *                       defaults to the closest matching talker.
 */
-void SpeechData::changeTextTalker(const uint jobNum, const QString &talker)
+void SpeechData::changeTextTalker(const QString &talker, uint jobNum)
 {
     mlJob* job = findJobByJobNum(jobNum);
     if (job) job->talker = talker;

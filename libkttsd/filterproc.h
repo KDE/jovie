@@ -16,10 +16,10 @@
  *                                                                            *
  ******************************************************************************/
 
-// Qt includes.
 #ifndef _FILTERPROC_H_
 #define _FILTERPROC_H_
 
+// Qt includes.
 #include <qobject.h>
 #include <qstringlist.h>
 
@@ -119,6 +119,12 @@ public:
      * has in fact stopped and state returns to fsIdle;
      */
     virtual void stopFiltering();
+
+    /**
+     * Did this filter do anything?  If the filter returns the input as output
+     * unmolested, it should return False when this method is called.
+     */
+    virtual bool wasModified();
 
 signals:
     /**

@@ -343,7 +343,7 @@ class SpeechData : public QObject {
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        void changeTextTalker(const uint jobNum, const QString &talker);
+        void changeTextTalker(const QString &talker, uint jobNum);
 
         /**
         * Move a text job down in the queue so that it is spoken later.

@@ -188,7 +188,7 @@ QPtrList<PlugInProc> TalkerMgr::getLoadedPlugIns()
  * If a plugin has not been loaded to match the talker, returns the default
  * plugin.
  */
-int TalkerMgr::talkerToPluginIndex(const QString& talker)
+int TalkerMgr::talkerToPluginIndex(const QString& talker) const
 {
     // kdDebug() << "TalkerMgr::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
     // If we have a cached match, return that.
@@ -303,8 +303,10 @@ int TalkerMgr::talkerToPluginIndex(const QString& talker)
         }
         // If no winner found, use the first plugin.
         if (winner < 0) winner = 0;
-        // Cache the answer.
-        m_talkerToPlugInCache[talker] = winner;
+        // Cache the answer. 
+        // FIXME this is really ugly but needed at the moment (because of const)
+        // The best thing to do would be to emit a signal that lets us know to cache this talker.
+        const_cast<TalkerMgr*>(this)->m_talkerToPlugInCache[talker] = winner;
         // kdDebug() << "TalkerMgr::talkerToPluginIndex: returning winner = " << winner << endl;
         return winner;
     }
@@ -323,7 +325,7 @@ int TalkerMgr::talkerToPluginIndex(const QString& talker)
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
  */
-PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker)
+PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker) const
 {
     int talkerNdx = talkerToPluginIndex(talker);
     return m_loadedPlugIns[talkerNdx].plugIn;
@@ -369,7 +371,7 @@ QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
  * @see talkers
  * @see getTalkers
  */
-QString TalkerMgr::userDefaultTalker()
+QString TalkerMgr::userDefaultTalker() const
 {
     return m_loadedPlugIns[0].talkerCode;
 }
@@ -383,7 +385,7 @@ QString TalkerMgr::userDefaultTalker()
  *                       talker supports the indicated speech markup language.
  * @see kttsdMarkupType
  */
-bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/)
+bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/) const
 {
     kdDebug() << "TalkerMgr::supportsMarkup: Testing talker " << talker << endl;
     QString matchingTalker = talker;

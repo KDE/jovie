@@ -68,7 +68,7 @@ class KTTSD : public QObject, virtual public kspeech
         *                       talker supports the indicated speech markup language.
         * @see kttsdMarkupType
         */
-        virtual bool supportsMarkup(const QString &talker=NULL, const uint markupType = 0);
+        virtual bool supportsMarkup(const QString &talker=NULL, const uint markupType = 0) const;
 
         /**
         * Determine whether the currently-configured speech plugin supports markers in speech markup.
@@ -77,7 +77,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @return               True if the plugin currently configured for the indicated
         *                       talker supports markers.
         */
-        virtual bool supportsMarkers(const QString &talker=NULL);
+        virtual bool supportsMarkers(const QString &talker=NULL) const;
 
         /**
         * Say a message as soon as possible, interrupting any other speech in progress.
@@ -315,7 +315,7 @@ class KTTSD : public QObject, virtual public kspeech
         * Determine if kttsd is currently speaking any text jobs.
         * @return               True if currently speaking any text jobs.
         */
-        virtual bool isSpeakingText();
+        virtual bool isSpeakingText() const;
 
         /**
         * Remove a text job from the queue.
@@ -419,7 +419,7 @@ class KTTSD : public QObject, virtual public kspeech
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC changeTextTalker(const uint jobNum=0, const QString &talker=NULL);
+        virtual ASYNC changeTextTalker(const QString &talker, uint jobNum=0);
 
         /**
         * Get the user's default talker.
@@ -570,7 +570,7 @@ class KTTSD : public QObject, virtual public kspeech
         * Fixex a talker argument passed in via dcop.
         * If NULL or "0" return QString::null.
         */
-        QString fixNullString(const QString &talker);
+        QString fixNullString(const QString &talker) const;
 
         /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD

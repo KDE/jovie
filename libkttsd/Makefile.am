@@ -21,7 +21,9 @@ libkttsd_la_SOURCES = \
 	stretcher.cpp \
 	talkercode.cpp \
 	filterproc.cpp \
-	filterconf.cpp
+	filterconf.cpp \
+	sbdfilterproc.cpp
+
 libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
 libkttsd_la_LIBADD = $(LIB_KIO)
 

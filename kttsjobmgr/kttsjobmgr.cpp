@@ -593,7 +593,7 @@ void KttsJobMgrPart::slot_job_change_talker()
             if (talkerItem)
             {
                 uint index = talkersListItems.findIndex(talkerItem);
-                changeTextTalker(jobNum, talkerCodesList[index]);
+                changeTextTalker(talkerCodesList[index], jobNum);
                 refreshJob(jobNum);
             }
         }

@@ -56,13 +56,13 @@ TalkerCode::~TalkerCode() { }
 /**
  * Properties.
  */
-QString TalkerCode::languageCode() { return m_languageCode; }
-QString TalkerCode::countryCode() { return m_countryCode; }
-QString TalkerCode::voice() { return m_voice; }
-QString TalkerCode::gender() { return m_gender; }
-QString TalkerCode::volume() { return m_volume; }
-QString TalkerCode::rate() { return m_rate; }
-QString TalkerCode::plugInName() { return m_plugInName; }
+QString TalkerCode::languageCode() const { return m_languageCode; }
+QString TalkerCode::countryCode() const { return m_countryCode; }
+QString TalkerCode::voice() const { return m_voice; }
+QString TalkerCode::gender() const { return m_gender; }
+QString TalkerCode::volume() const { return m_volume; }
+QString TalkerCode::rate() const { return m_rate; }
+QString TalkerCode::plugInName() const { return m_plugInName; }
 
 void TalkerCode::setLanguageCode(const QString &languageCode) { m_languageCode = languageCode; }
 void TalkerCode::setCountryCode(const QString &countryCode) { m_countryCode = countryCode; }

@@ -117,3 +117,10 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  * has in fact stopped and state returns to fsIdle;
  */
 /*virtual*/ void KttsFilterProc::stopFiltering() { }
+
+/**
+ * Did this filter do anything?  If the filter returns the input as output
+ * unmolested, it should return False when this method is called.
+ */
+/*virtual*/ bool KttsFilterProc::wasModified() { return true; }
+

@@ -43,13 +43,13 @@ class TalkerCode
         /**
          * Properties.
          */
-        QString languageCode();       /* lang="xx" */
-        QString countryCode();        /* lang="yy_xx */
-        QString voice();              /* name="xxx" */
-        QString gender();             /* gender="xxx" */
-        QString volume();             /* volume="xxx" */
-        QString rate();               /* rate="xxx" */
-        QString plugInName();         /* synthesizer="xxx" */
+        QString languageCode() const;       /* lang="xx" */
+        QString countryCode() const;        /* lang="yy_xx */
+        QString voice() const;              /* name="xxx" */
+        QString gender() const;             /* gender="xxx" */
+        QString volume() const;             /* volume="xxx" */
+        QString rate() const;               /* rate="xxx" */
+        QString plugInName() const;         /* synthesizer="xxx" */
 
         /**
          * Returns the language code plus country code (if any).

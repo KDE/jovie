@@ -1,3 +1,4 @@
+_ Add Aaron Seigo's system tray quit dialog.  See kde-devel mailing list for 14 Jan 2005.
 _ Large HTML/SSML pages take forever to synthesize.  kttsd appears to be hung, but it is
   generating the individual wave files and merging them.  The way to fix this is to write
   the Sentence Boundary Detection plugin that can handle SSML.

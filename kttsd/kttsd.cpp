@@ -181,7 +181,7 @@ KTTSD::~KTTSD(){
 *                       talker supports the indicated speech markup language.
 * @see kttsdMarkupType
 */
-bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/)
+bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/) const
 {
     if (markupType != kspeech::mtSsml) return false;
     if (!m_talkerMgr) return false;
@@ -196,7 +196,7 @@ bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupTyp
 *                       talker supports markers.
 * TODO: Waiting on plugin API.
 */
-bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) { return false; }
+bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) const { return false; }
 
 /**
 * Say a message as soon as possible, interrupting any other speech in progress.
@@ -503,7 +503,7 @@ QString KTTSD::getTextJobSentence(const uint jobNum /*=0*/, const uint seq /*=1*
 * Determine if kttsd is currently speaking any text jobs.
 * @return               True if currently speaking any text jobs.
 */
-bool KTTSD::isSpeakingText()
+bool KTTSD::isSpeakingText() const
 {
     if (!m_speaker) return false;
     return m_speaker->isSpeakingText();
@@ -634,9 +634,9 @@ QStringList KTTSD::getTalkers()
 *                       If no plugin has been configured for the specified Talker code,
 *                       defaults to the closest matching talker.
 */
-void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=NULL*/)
+void KTTSD::changeTextTalker(const QString &talker, uint jobNum)
 {
-    m_speechData->changeTextTalker(applyDefaultJobNum(jobNum), fixNullString(talker));
+    m_speechData->changeTextTalker(fixNullString(talker), applyDefaultJobNum(jobNum));
 }
 
 /**
@@ -902,7 +902,7 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
 * Fixex a string argument passed in via dcop.
 * If NULL or "0" return QString::null.
 */
-QString KTTSD::fixNullString(const QString &talker)
+QString KTTSD::fixNullString(const QString &talker) const
 {
     if (!talker) return QString::null;
     if (talker == "0") return QString::null;
