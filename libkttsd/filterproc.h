@@ -22,7 +22,11 @@
 // Qt includes.
 #include <qobject.h>
 #include <qstringlist.h>
+
+// KDE includes.
 #include <kdemacros.h>
+#include "kdeexportfix.h"
+
 class TalkerCode;
 class KConfig;
 

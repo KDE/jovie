@@ -24,11 +24,12 @@
 // KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdemacros.h>
+#include "kdeexportfix.h"
 
 // KTTS includes.
 #include "testplayer.h"
 
-#include <kdemacros.h>
 /**
 * @interface PlugInConf
 *

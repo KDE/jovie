@@ -19,6 +19,8 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <kdemacros.h>
+#include "kdeexportfix.h"
+
 // #include "filehandle.h"
 
 class KDE_EXPORT Player : virtual public QObject

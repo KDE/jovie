@@ -18,9 +18,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-class QString;
-
 #include <kdemacros.h>
+#include "kdeexportfix.h"
+
+class QString;
 
 class KDE_EXPORT KttsUtils {
 

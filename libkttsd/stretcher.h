@@ -21,6 +21,7 @@
 #define _STRETCHER_H_
 
 #include <kdemacros.h>
+#include "kdeexportfix.h"
 
 class KProcess;
 

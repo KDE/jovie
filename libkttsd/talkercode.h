@@ -23,6 +23,8 @@
 // Qt includes.
 #include <qstring.h>
 #include <kdemacros.h>
+#include "kdeexportfix.h"
+
 class KDE_EXPORT TalkerCode
 {
     public:

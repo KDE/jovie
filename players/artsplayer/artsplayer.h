@@ -21,6 +21,7 @@
 
 #include <config.h>
 #include <kdemacros.h>
+#include "kdeexportfix.h"
 
 #include "player.h"
 

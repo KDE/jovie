@@ -20,6 +20,7 @@
 #define _TESTPLAYER_H_
 
 #include <kdemacros.h>
+#include "kdeexportfix.h"
 
 class Player;
 class Stretcher;

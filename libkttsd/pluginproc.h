@@ -22,6 +22,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <kdemacros.h>
+#include "kdeexportfix.h"
 #include <kconfig.h>
 
 /**
