@@ -20,6 +20,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qthread.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -31,108 +32,139 @@
 /** Constructor */
 FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList& ) : 
     PlugInProc( parent, name ){
-    kdDebug() << "Running: FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList &args)" << endl;
-    ready = true;
-    festProc = 0;
+    // kdDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
+    m_ready = true;
+    m_festProc = 0;
+    m_state = psIdle;
 }
 
 /** Destructor */
 FestivalIntProc::~FestivalIntProc(){
-    kdDebug() << "Running: FestivalIntProc::~FestivalIntProc()" << endl;
-    if (festProc)
+    // kdDebug() << "FestivalIntProc::~FestivalIntProc: Running" << endl;
+    if (m_festProc)
     {
-        stopText();
-        delete festProc;
+        if (m_festProc->isRunning())
+        {
+            if (m_ready)
+            {
+                m_state = psIdle;
+                // kdDebug() << "FestivalIntProc::~FestivalIntProc: telling Festival to quit." << endl;
+                m_ready = false;
+                m_waitingStop = true;
+                m_festProc->writeStdin(QString("(quit)"), true);
+            }
+            else
+            {
+                // kdDebug() << "FestivalIntProc::~FestivalIntProc: killing Festival." << endl;
+                m_waitingStop = true;
+                m_festProc->kill();
+            }
+        }
+        delete m_festProc;
     }
 }
 
-/** Initializate the speech */
+/** Initialize the speech */
 bool FestivalIntProc::init(const QString &lang, KConfig *config){
-    kdDebug() << "Running: FestivalIntProc::init(const QString &lang)" << endl;
-    kdDebug() << "Initializing plug in: Festival" << endl;
+    // kdDebug() << "FestivalIntProc::init: Initializing plug in: Festival" << endl;
 
     // To save resources, this function should get a KConfig too
     // This KConfig will be passed to this function (already opened) from speaker.cpp
     // KConfig *config = new KConfig("kttsdrc");
     // KConfig *config = KGlobal::config();
     config->setGroup(QString("Lang_")+lang);
-    forceArts = config->readBoolEntry("Arts");
 
     // Get the code for the selected voice
-    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festival/voices", true, false);
+    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices", true, false);
 
     voices.setGroup(config->readEntry("Voice"));
-    voiceCode = "("+voices.readEntry("Code")+")";
-    kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
+    m_voiceCode = "("+voices.readEntry("Code")+")";
+    // kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
     
     return true;
 }
 
-/** Say a text
-    text: The text to be speech
+/** 
+* Say a text.  Synthesize and audibilize it.
+* @param text                    The text to be spoken.
+*
+* If the plugin supports asynchronous operation, it should return immediately.
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    kdDebug() << "Running: FestivalIntProc::sayText(const QString &text)" << endl;
+    synth(text, QString::null, m_voiceCode);
+}
+
+/**
+* Synthesize text into an audio file, but do not send to the audio device.
+* @param text                    The text to be synthesized.
+* @param suggestedFilename       Full pathname of file to create.  The plugin
+*                                may ignore this parameter and choose its own
+*                                filename.  KTTSD will query the generated
+*                                filename using getFilename().
+*
+* If the plugin supports asynchronous operation, it should return immediately.
+*/
+void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
+{
+    synth(text, suggestedFilename, m_voiceCode);
+};
+
+/**
+* Say or Synthesize text.
+* @param text                    The text to be synthesized.
+* @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
+*                                synthesize and audibilize the text.
+* @param voiceCode               Voice code in which to speak text.
+*/
+void FestivalIntProc::synth(
+    const QString &text,
+    const QString &synthFilename,
+    const QString& voiceCode)
+{
+    // kdDebug() << "FestivalIntProc::synth: Running" << endl;
 
     // Initialize Festival only if it's not initialized
-    if(!festProc)
-    {
-        kdDebug()<< "FestivalIntProc::sayText: Creating Festival object" << endl;
-        festProc = new KProcIO;
-        if (forceArts) *festProc << "artsdsp";
-        *festProc << "festival";
-        *festProc << "--interactive";
-        connect(festProc, SIGNAL(processExited(KProcess*)), this, SLOT(festProcExited(KProcess*)));
-        connect(festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(festProcReceivedStdout(KProcess*, char*, int)));
-        connect(festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(festProcReceivedStderr(KProcess*, char*, int)));
-    }
-    if (!festProc->isRunning())
-    {
-        kdDebug()<< "FestivalIntProc::sayText: Starting Festival process" << endl;
-        if (festProc->start(KProcess::NotifyOnExit, KProcess::All))
+    if (m_festProc)
+        // If festProc exists but is not running, it is because it was stopped.
+        // Recreate festProc object.
+        if (!m_festProc->isRunning())
         {
-            ready = false;
-            // Selecting the voice
-            waitTilReady();
-            ready = false;
-            festProc->writeStdin(voiceCode, true);
+            delete m_festProc;
+            m_festProc = 0;
+        }
+    if(!m_festProc)
+    {
+        // kdDebug()<< "FestivalIntProc::synth: Creating Festival object" << endl;
+        m_festProc = new KProcess;
+        *m_festProc << "festival";
+        *m_festProc << "--interactive";
+        connect(m_festProc, SIGNAL(processExited(KProcess*)),
+            this, SLOT(slotProcessExited(KProcess*)));
+        connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    }
+    m_outputQueue.clear();
+    if (!m_festProc->isRunning())
+    {
+        // kdDebug() << "FestivalIntProc::synth: Starting Festival process" << endl;
+        m_ready = false;
+        if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
+        {
+            // kdDebug()<< "FestivalIntProc:synth: Festival initialized" << endl;
+            sendToFestival(voiceCode);
         }
         else
         {
-            kdDebug() << "FestivalIntProc::sayText: Error starting Festival process.  Is festival in the PATH?" << endl;
+            kdDebug() << "FestivalIntProc::synth: Error starting Festival process.  Is festival in the PATH?" << endl;
+            m_ready = true;
+            m_state = psIdle;
             return;
         }
     }
-    kdDebug()<< "FestivalIntProc:sayText: Festival initialized" << endl;
 
-/*
-        // Setting output thru arts if necessary.
-        // Note: Force Arts does not currently work correctly because the artsplay command returns
-        // immediately, causing Festival to send prompt, whereupon we send another sentence...etc.
-        // As a result, the sentences get spoken on top of each other.
-        if(forceArts){
-            kdDebug() << "Forcing Arts output" << endl;
-            waitTilReady();
-            ready = false;
-            // On my system, artsplay won't play a file unless the file extension is set.
-            // Problem with this solution is it leaves files in /tmp directory.  audio_xxxx.snd
-            // Need a better solution.
-            festProc->writeStdin(QString("(Parameter.set 'Audio_Command \"mv $FILE $FILE.snd && artsplay $FILE.snd\")"), true);
-            waitTilReady();
-            ready = false;
-            festProc->writeStdin(QString("(Parameter.set 'Audio_Method 'Audio_Command)"), true);
-            waitTilReady();
-            ready = false;
-            festProc->writeStdin(QString("(Parameter.set 'Audio_Required_Format 'snd)"), true);
-            // Make Festival wait until sentence is spoken before sending prompt.
-            waitTilReady();
-            ready = false;
-            festProc->writeStdin(QString("(audio_mode 'sync)"), true);
-        }
-*/
     
     // Encode quotation characters.
     QString saidText = text;
@@ -142,65 +174,181 @@ void FestivalIntProc::sayText(const QString &text)
     // Remove certain comment characters.
     saidText.replace("--", "");
 
-    // Ok, let's rock
-    waitTilReady();
-    ready = false;
-    kdDebug() << "Saying text: '" << saidText << "' using Festival plug in with voice " << voiceCode << endl;
-    festProc->writeStdin("(SayText \"" + saidText + "\")", true);
-    waitTilReady();
-    // If using artsdsp, wait an additional second between sentences to prevent the beginning of one
-    // sentence from overlapping the end of the previous sentence.  Not sure *why* this is necessary,
-    // but there it is.
-    if (forceArts) festProc->wait(1);
-    kdDebug() << "Finished saying text" << endl;
+    // Ok, let's rock.
+    // If no longer running, it has been stopped.  Bail out.
+    if (synthFilename.isNull())
+    {
+        m_state = psSaying;
+        m_synthFilename = QString::null;
+        // kdDebug() << "FestivalIntProc::synth: Saying text: '" << saidText << "' using Festival plug in with voice "
+        //    << voiceCode << endl;
+        saidText = "(SayText \"" + saidText + "\")";
+        sendToFestival(saidText);
+    } else {
+        m_state = psSynthing;
+        m_synthFilename = synthFilename;
+        // kdDebug() << "FestivalIntProc::synth: Synthing text: '" << saidText << "' using Festival plug in with voice "
+        //    << voiceCode << endl;
+        saidText = "(set! utt1 (Utterance Text \"" + 
+            saidText + 
+            "\"))(utt.synth utt1)(utt.save.wave utt1 \"" + synthFilename + "\")";
+        sendToFestival(saidText);
+    }
 }
+
+/**
+* If ready for more output, sends the given text to Festival process, otherwise,
+* puts it in the queue.
+* @param text                    Text to send or queue.
+*/
+void FestivalIntProc::sendToFestival(const QString& text)
+{
+    if (text.isNull()) return;
+    m_outputQueue.append(text);
+    sendIfReady();
+}
+
+/**
+* If Festival is ready for more input and there is more output to send, send it.
+* @return                        True if something was sent to Festival.
+*/
+bool FestivalIntProc::sendIfReady()
+{
+    if (!m_ready) return false;
+    if (m_outputQueue.isEmpty()) return false;
+    if (!m_festProc->isRunning()) return false;
+    QString text = m_outputQueue[0];
+    text += "\n";
+    m_outputQueue.pop_front();
+    m_ready = false;
+    // kdDebug() << "FestivalIntProc::sendIfReady: sending to Festival: " << text << endl;
+    m_festProc->writeStdin(text.latin1(), text.length());
+    return true;
+}
+        
+/**
+* Get the generated audio filename from synthText.
+* @return                        Name of the audio file the plugin generated.
+*                                Null if no such file.
+*
+* The plugin must not re-use the filename.
+*/
+QString FestivalIntProc::getFilename() { return m_synthFilename; }
 
 /**
  * Stop text
  */
 void FestivalIntProc::stopText(){
-    kdDebug() << "Running: FestivalIntProc::stopText()" << endl;
-    if (festProc)
+    // kdDebug() << "FestivalIntProc::stopText: Running" << endl;
+    if (m_festProc)
     {
-        if (ready)
+        if (m_festProc->isRunning())
         {
-            kdDebug() << "FestivalIntProc::stopText: telling Festival to quit." << endl;
-            festProc->writeStdin(QString("(quit)"), true);
-        }
+            if (m_ready)
+                m_state = psIdle;
+            else
+            {
+                // kdDebug() << "FestivalIntProc::stopText: killing Festival." << endl;
+                m_waitingStop = true;
+                m_festProc->kill();
+            }
+        } else m_state = psIdle;
+    } else m_state = psIdle;
+}
+
+void FestivalIntProc::slotProcessExited(KProcess*)
+{
+    // kdDebug() << "FestivalIntProc:slotProcessExited: Festival process has exited." << endl;
+    m_ready = true;
+    pluginState prevState = m_state;
+    if (m_waitingStop)
+    {
+        m_waitingStop = false;
+        m_state = psIdle;
+        emit stopped();
+    } else {
+        m_state = psFinished;
+        if (prevState == psSaying)
+            emit sayFinished();
         else
+            if (prevState == psSynthing)
+                emit synthFinished();
+    }
+    delete m_festProc;
+    m_festProc = 0;
+    m_outputQueue.clear();
+}
+
+void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+{
+    QString buf = QString::fromLatin1(buffer, buflen);
+    // kdDebug() << "FestivalIntProc::slotReceivedStdout: Received from Festival: " << buf << endl;
+    if (buf.contains("festival>") > 0) 
+    {
+        m_ready = true;
+        if (!sendIfReady())
         {
-            kdDebug() << "FestivalIntProc::stopText: killing Festival." << endl;
-            festProc->kill();
-        }
-        if (festProc)
-        {
-            kdDebug() << "FestivalIntProc::stopText: waiting for Festival to exit." << endl;
-            festProc->wait(1);
+            pluginState prevState = m_state;
+            m_state = psFinished;
+            if (prevState == psSaying)
+                emit sayFinished();
+            else
+                if (prevState == psSynthing)
+                    emit synthFinished();
         }
     }
-    kdDebug() << "FestivalIntProc::stopText: Festival stopped." << endl;
 }
 
-void FestivalIntProc::festProcExited(KProcess*)
-{
-    kdDebug() << "FestivalIntProc:festProcExited: Festival process has exited." << endl;
-    ready = true;
-}
-
-void FestivalIntProc::festProcReceivedStdout(KProcess*, char* buffer, int buflen)
+void FestivalIntProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kdDebug() << "Received from Festival: " << buf << endl;
-    if (buf.contains("festival>") > 0) ready = true;
-    if (ready) kdDebug() << "Festival is ready for another sentence." << endl;
+    kdDebug() << "FestivalIntProc::slotReceivedStderr: Received error from Festival: " << buf << endl;
 }
 
-void FestivalIntProc::festProcReceivedStderr(KProcess*, char* buffer, int buflen)
+bool FestivalIntProc::isReady() { return m_ready; }
+
+/**
+* Return the current state of the plugin.
+* This function only makes sense in asynchronous mode.
+* @return                        The pluginState of the plugin.
+*
+* @see pluginState
+*/
+pluginState FestivalIntProc::getState() { return m_state; }
+
+/**
+* Acknowledges a finished state and resets the plugin state to psIdle.
+*
+* If the plugin is not in state psFinished, nothing happens.
+* The plugin may use this call to do any post-processing cleanup,
+* for example, blanking the stored filename (but do not delete the file).
+* Calling program should call getFilename prior to ackFinished.
+*/
+void FestivalIntProc::ackFinished()
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
-    kdDebug() << "Received error from Festival: " << buf << endl;
+    if (m_state == psFinished)
+    {
+        m_state = psIdle;
+        m_synthFilename = QString::null;
+    }
 }
 
-bool FestivalIntProc::isReady() { return ready; }
-
-void FestivalIntProc::waitTilReady() { while (!ready) festProc->wait(1); }
+/**
+* Returns True if the plugin supports asynchronous processing,
+* i.e., returns immediately from sayText or synthText.
+* @return                        True if this plugin supports asynchronous processing.
+*
+* If the plugin returns True, it must also implement @ref getState .
+* It must also emit @ref sayFinished or @ref synthFinished signals when
+* saying or synthesis is completed.
+*/
+bool FestivalIntProc::supportsAsync() { return true; }
+        
+/**
+* Returns True if the plugin supports synthText method,
+* i.e., is able to synthesize text to a sound file without
+* audibilizing the text.
+* @return                        True if this plugin supports synthText method.
+*/
+bool FestivalIntProc::supportsSynth() { return true; }
+    

@@ -1,10 +1,10 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  commandproc.h
-  Main speaking functions for the Command Plug in
+  fliteproc.h
+  Main speaking functions for the Festival Lite (Flite) Plug in
   -------------------
-  Copyright : (C) 2002 by Gunnar Schmi Dt and 2004 by Gary Cramblitt
+  Copyright : (C) 2004 by Gary Cramblitt
   -------------------
-  Original author: Gunnar Schmi Dt <kmouth@schmi-dt.de>
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
  ******************************************************************************/
 
@@ -18,39 +18,39 @@
 
 // $Id$
 
-#ifndef _COMMANDPROC_H_
-#define _COMMANDPROC_H_
+#ifndef _FLITEPROC_H_
+#define _FLITEPROC_H_
 
 // Qt includes.
-#include <qstringlist.h> 
+#include <qstringlist.h>
+#include <qmutex.h>
 
 // KTTS includes.
 #include <pluginproc.h>
 
 class KProcess;
-class QTextCodec;
 
-class CommandProc : public PlugInProc{
+class FliteProc : public PlugInProc{
     Q_OBJECT 
-  
+
     public:
-        enum CharacterCodec {
-            Local    = 0,
-            Latin1   = 1,
-            Unicode  = 2,
-            UseCodec = 3
-        };
-    
-        /** Constructor */
-        CommandProc( QObject* parent = 0, const char* name = 0,
-            const QStringList &args = QStringList());
-    
-        /** Destructor */
-        ~CommandProc();
-    
-        /** Initializate the speech */
-        bool init (const QString &lang, KConfig *config);
-    
+        /**
+         * Constructor
+         */
+        FliteProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+
+        /**
+         * Destructor
+         */
+        virtual ~FliteProc();
+
+        /**
+         * Initializate the speech engine.
+         * @param lang            Code giving the language to speak text in.  Example "en".
+         * @param config          Settings
+         */
+        virtual bool init(const QString &lang, KConfig *config);
+        
         /**
          * Say a text string.
          * @param text            The text to speak.
@@ -135,19 +135,15 @@ class CommandProc : public PlugInProc{
     
         /**
         * Say or Synthesize text.
-        * @param inputText               The text that shall be spoken
-        * @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
+        * @param text                    The text to be synthesized.
+        * @param synthFilename           If not Null, synthesize only to this filename, otherwise
         *                                synthesize and audibilize the text.
-        * @param userCmd                 The program that shall be executed for speaking
-        * @param stdIn                   True if the program shall recieve its data via
-        *                                standard input.
-        * @param encoding                The number of the encoding that shall be used
-        * @param codec                   The QTextCodec if encoding==UseCodec
-        * @param language                The language code (used for the %l macro)
+        * @param fliteExePath            Path to the flite executable.
         */
-        void synth(const QString& inputText, const QString& suggestedFilename,
-            const QString& userCmd, bool stdIn,
-            int encoding, QTextCodec *codec, QString& language);
+        void synth(
+            const QString &text,
+            const QString &synthFilename,
+            const QString &fliteExePath);
     
     private slots:
         void slotProcessExited(KProcess* proc);
@@ -156,41 +152,16 @@ class CommandProc : public PlugInProc{
         void slotWroteStdin(KProcess* proc);
 
     private:
-    
-        /**
-        * True if the plugin supports separate synthesis (option set by user).
-        */
-        bool m_supportsSynth;
         
         /**
-        * TTS command
+        * Path to flite executable (from config).
         */
-        QString m_ttsCommand;
-        
-        /**
-        * True if process should use Stdin.
-        */
-        bool m_stdin;
-        
-        /**
-        * Language Group.
-        */
-        QString m_language;
-        
-        /**
-        * Codec.
-        */
-        int m_codec;
+        QString m_fliteExePath;
         
         /**
          * Flite process
          */
-        KProcess* m_commandProc;
-        
-        /**
-        * Name of temporary file containing text.
-        */
-        QString m_textFilename;
+        KProcess* m_fliteProc;
         
         /**
         * Synthesis filename.
@@ -207,6 +178,7 @@ class CommandProc : public PlugInProc{
         * Flite exits.
         */
         bool m_waitingStop;
+        
 };
 
-#endif  // _COMMANDPROC_H_
+#endif // _FLITEPROC_H_

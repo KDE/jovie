@@ -482,6 +482,7 @@ class KTTSD : public QObject, virtual public kspeech
          * the status of the speechData object has changed
          */
         void slotTextSet(const QCString& appId, const uint jobNum);
+        void slotTextAppended(const QCString& appId, const uint jobNum, const int appId);
         void slotTextStarted(const QCString& appId, const uint jobNum);
         void slotTextFinished(const QCString& appId, const uint jobNum);
         void slotTextStopped(const QCString& appId, const uint jobNum);
@@ -494,11 +495,6 @@ class KTTSD : public QObject, virtual public kspeech
          */
         void configCommitted();
         
-        /*
-        * Fires when the SpeakerTerminator object has terminated the speaker.
-        */
-        void speakerFinished();
-    
     private:
         /*
         * Create and initialize the SpeechData object.
@@ -525,11 +521,6 @@ class KTTSD : public QObject, virtual public kspeech
          * Speaker that will be run as another thread, actually saying the messages, warnings, and texts
          */
         Speaker *speaker;
-
-        /*
-        * Object that will run in another thread to terminate the speaker.
-        */
-        SpeakerTerminator *speakerTerminator;
 };
 
 #endif // _KTTSD_H_

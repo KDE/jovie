@@ -1,3 +1,32 @@
+2004-08-07  Cramblitt <garycramblitt@comcast.net>
+        * Existing release marked with tag ktts-0-1.
+        * New version of KTTS is 0.2.
+        * Many changes to KTTSD and the KTTSD plugins.
+        * QThreads have been mostly eliminated, which were causing anomalies.
+        * See libkttsd/pluginproc.h for the new plugin API.  The new API is backwards
+          compatible to the old API.
+        * Plugins now perform synthesis separate from audibilizing, but they may do
+          both if needed.  If a plugin supports separate synthesis, it returns True
+          in supportsSynth() method.
+        * If a plugin supports separate synthesis, KTTSD sends the synthesized audio file
+          to aRts for playback.  The playback code has been designed with future
+          alternate playback plugins in mind, example gstreamer.  (The code was adapted
+          from Juk with minor changes.)
+        * Plugins may work asynchronously, provide status via state() method and emit
+          signals when an operation has completed.  If a plugin supports asynchronous
+          operation, it returns True in supportsAsync() method.
+        * If a plugin does not support asynchronous operation, it is wrapped in a QThread,
+          which is the same as before.  See threadedplugin.h/cpp.
+        * Because playback is separate from synthesis and plugins work asynchronously,
+          pauseText or stopText _immediately_ pause or stop playback in mid-sentence.
+        * New plugin, flite, added for direct support of Festival Lite.
+        * The festivalint, command, and hadifax plugins were rewritten to support
+          these new capabilities.  
+        * Need someone to rework the freetts plugin.  I don't have JVM.
+        * Each plugin (except festival and freetts) now has a "Test" button on the
+          configuration dialog.
+        * The option to play a sound on text interruption now works.
+          
 2004-07-10  Cramblitt <garycramblitt@comcast.net>
         * Warn user if festival not installed.
         * Install voices data file for festival interactive plugin even if

@@ -22,4 +22,9 @@ if include_kttsd_hadifax
   hadifax_DIR = hadifax
 endif
 
-SUBDIRS = $(festival_DIR) $(festivalint_DIR) $(festivalcs_DIR) $(freetts_DIR) $(command_DIR) $(hadifax_DIR)
+if include_kttsd_flite
+  flite_DIR = flite
+endif
+
+SUBDIRS = $(festival_DIR) $(festivalint_DIR) $(festivalcs_DIR) $(freetts_DIR) \
+			$(command_DIR) $(hadifax_DIR) $(flite_DIR) festivalint command hadifax flite

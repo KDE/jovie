@@ -83,9 +83,9 @@ KAboutData *KttsJobMgrFactory::aboutData()
 }
 
 KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
-    KParts::ReadOnlyPart(parent, name),
     DCOPStub("kttsd", "kspeech"),
-    DCOPObject("kttsjobmgr_kspeechsink")
+    DCOPObject("kttsjobmgr_kspeechsink"),
+    KParts::ReadOnlyPart(parent, name)
 {
     // Initialize some variables.
     selectOnTextSet = false;
@@ -756,6 +756,18 @@ ASYNC KttsJobMgrPart::textSet(const QCString&, const uint jobNum)
     }
     // If a job not already selected, select this one.
     autoSelectInJobListView();
+}
+
+/**
+* This signal is emitted whenever a new part is appended to a text job.
+* @param appId          The DCOP senderId of the application that created the job.
+* @param jobNum         Job number of the text job.
+* @param partNum        Part number of the new part.  Parts are numbered starting
+*                       at 1.
+*/
+ASYNC KttsJobMgrPart::textAppended(const QCString& appId, const uint jobNum, const int /*partNum*/)
+{
+    textSet(appId, jobNum);
 }
 
 /**

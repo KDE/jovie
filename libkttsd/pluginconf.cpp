@@ -25,14 +25,14 @@
  * Constructor 
  */
 PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, name){
-   kdDebug() << "Running: PlugInConf::PlugInConf( QWidget *parent, const char *name)" << endl;
+   kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
 }
 
 /**
  * Destructor 
  */
 PlugInConf::~PlugInConf(){
-   kdDebug() << "Running: PlugInConf::~PlugInConf()" << endl;
+   kdDebug() << "PlugInConf::~PlugInConf: Running" << endl;
 }
 
 /**
@@ -44,7 +44,7 @@ PlugInConf::~PlugInConf(){
  * so you probably want to call this method in the constructor.
  */
 void PlugInConf::load(KConfig *config, const QString &langGroup){
-   kdDebug() << "Running: PlugInConf::load(KConfig *config, const QString &langGroup)" << endl;
+   kdDebug() << "PlugInConf::load: Running" << endl;
 }
 
 /**
@@ -54,7 +54,7 @@ void PlugInConf::load(KConfig *config, const QString &langGroup){
  * or "Ok". 
  */
 void PlugInConf::save(KConfig *config, const QString &langGroup){
-   kdDebug() << "Running: PlugInConf::save(KConfig *config, const QString &langGroup)" << endl;
+   kdDebug() << "PlugInConf::save: Running" << endl;
 }
 
 /** 
@@ -64,5 +64,5 @@ void PlugInConf::save(KConfig *config, const QString &langGroup){
  * uses when started without a config file.
  */
 void PlugInConf::defaults(){
-   kdDebug() << "Running: PlugInConf::defaults()" << endl;
+   kdDebug() << "PlugInConf::defaults: Running" << endl;
 }

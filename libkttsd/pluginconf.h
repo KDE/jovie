@@ -74,7 +74,7 @@ class PlugInConf : public QWidget{
       * This slot is called when the configuration is changed
       */
       void configChanged(){
-         kdDebug() << "Running: PlugInConf::configChanged()"<< endl;
+         kdDebug() << "PlugInConf::configChanged: Running"<< endl;
          emit changed(true);
       };
 

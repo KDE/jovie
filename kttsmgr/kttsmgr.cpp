@@ -26,7 +26,7 @@
 int main (int argc, char *argv[])
 {
     KAboutData aboutdata("kttsmgr", I18N_NOOP("kttsmgr"),
-        "0.1.0", I18N_NOOP("Text-to-speech Manager"),
+        "0.2.0", I18N_NOOP("Text-to-Speech Manager"),
         KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
     aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
@@ -44,7 +44,7 @@ int main (int argc, char *argv[])
     KUniqueApplication app;
     
     // The real work of KTSS Manager is done in the KControl Module kcmkttsmgr.
-    KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-speech Manager", 0, "kttsmgrdlg", false);
+    KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-Speech Manager", 0, "kttsmgrdlg", false);
     dlg.addModule("kcmkttsmgr");
 
     // Create system tray object
@@ -59,8 +59,8 @@ int main (int argc, char *argv[])
 /*  KttsMgrTray class */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    KSystemTray(parent, "kttsmgrsystemtray"),
-    DCOPStub("kttsd", "kspeech")
+    DCOPStub("kttsd", "kspeech"),
+    KSystemTray(parent, "kttsmgrsystemtray")
 {
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);

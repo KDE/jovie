@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>FestivalIntConfWidget</class>
-<author>José Pablo Ezequiel Fernández</author>
+<class>FliteConfWidget</class>
+<author>Gary Cramblitt</author>
 <widget class="PlugInConf">
     <property name="name">
-        <cstring>FestivalIntConfWidget</cstring>
+        <cstring>FliteConfWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -22,7 +22,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Festival Config UI</string>
+        <string>Flite Config UI</string>
     </property>
     <grid>
         <property name="name">
@@ -41,13 +41,13 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>60</height>
+                    <height>100</height>
                 </size>
             </property>
         </spacer>
         <widget class="QGroupBox" row="0" column="0">
             <property name="name">
-                <cstring>festivalConfigurationBox</cstring>
+                <cstring>fliteConfigurationBox</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -64,7 +64,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Festival Interactive Configuration</string>
+                <string>Festival Lite (flite) Configuration</string>
             </property>
             <grid>
                 <property name="name">
@@ -78,7 +78,7 @@
                 </property>
                 <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>voicesPathBox</cstring>
+                        <cstring>flitePathBox</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -92,7 +92,7 @@
                         </property>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>festivalPathLabel</cstring>
+                                <cstring>flitePathLabel</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -103,7 +103,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>&amp;Festival voices directory:</string>
+                                <string>Flite executable path:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignVCenter|AlignRight</set>
@@ -114,7 +114,7 @@
                         </widget>
                         <widget class="KURLRequester">
                             <property name="name">
-                                <cstring>festivalVoicesPath</cstring>
+                                <cstring>flitePath</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -124,70 +124,21 @@
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>selectVoiceBox</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>selectVoiceLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Select voice:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>selectVoiceCombo</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>selectVoiceCombo</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>rescan</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Rescan</string>
-                                <comment>Rescan for voices</comment>
+                            <property name="url" stdset="0">
+                                <string>flite</string>
                             </property>
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QPushButton" row="2" column="1">
+                <widget class="QPushButton" row="1" column="1">
                     <property name="name">
-                        <cstring>testButton</cstring>
+                        <cstring>fliteTest</cstring>
                     </property>
                     <property name="text">
                         <string>Test</string>
                     </property>
                 </widget>
-                <spacer row="2" column="0">
+                <spacer row="1" column="0">
                     <property name="name">
                         <cstring>spacer2</cstring>
                     </property>
@@ -199,7 +150,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>410</width>
+                            <width>221</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -233,28 +184,10 @@
 </images>
 <connections>
     <connection>
-        <sender>festivalVoicesPath</sender>
+        <sender>flitePath</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>FestivalIntConfWidget</receiver>
+        <receiver>FliteConfWidget</receiver>
         <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>selectVoiceCombo</sender>
-        <signal>activated(int)</signal>
-        <receiver>FestivalIntConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>rescan</sender>
-        <signal>clicked()</signal>
-        <receiver>FestivalIntConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>rescan</sender>
-        <signal>clicked()</signal>
-        <receiver>FestivalIntConfWidget</receiver>
-        <slot>scanVoices()</slot>
     </connection>
 </connections>
 <includes>
@@ -265,15 +198,12 @@
 </includes>
 <slots>
     <slot access="private">configChanged()</slot>
-    <slot access="private">scanVoices()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>pluginconf.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

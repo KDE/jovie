@@ -1,7 +1,15 @@
 # Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
 # so keep them synchronized.
-INCLUDES = -I$(top_srcdir)/kttsd/libktts -I$(top_srcdir)/kttsd/libkttsd
-AM_CPPFLAGS = -I$(top_srcdir)/kttsd/libkttsd -I$(top_srcdir)/kttsd/libktts $(all_includes)
+INCLUDES = \
+	-I$(top_srcdir)/kttsd/libktts \
+	-I$(top_srcdir)/kttsd/libkttsd \
+	-I$(kde_includes)/arts \
+	$(all_includes)
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/kttsd/libkttsd \
+	-I$(top_srcdir)/kttsd/libktts \
+	-I$(kde_includes)/arts \
+	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
@@ -15,7 +23,13 @@ bin_PROGRAMS = kttsd
 
 # The source, library search path, and link libraries.
 # Note: .skel files cause DCOPIDL compiler to generate _skel.cpp file and compile it.
-kttsd_SOURCES = main.cpp kttsd.cpp speaker.cpp speechdata.cpp kttsd.skel
+kttsd_SOURCES = \
+  main.cpp \
+	kttsd.cpp \
+	speaker.cpp \
+	speechdata.cpp \
+	kttsd.skel \
+	threadedplugin.cpp
 kttsd_LDFLAGS = -avoid-version -module $(all_libraries)
 kttsd_LDADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_KDECORE) $(LIB_KIO) $(LIB_KUTILS)
 
@@ -26,3 +40,4 @@ kde_services_DATA = kttsd.desktop
 messages: rc.cpp
 	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
 
+noinst_HEADERS = threadedplugin.h

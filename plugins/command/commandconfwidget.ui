@@ -1,70 +1,36 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>FestivalIntConfWidget</class>
-<author>José Pablo Ezequiel Fernández</author>
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CommandConfWidget</class>
 <widget class="PlugInConf">
     <property name="name">
-        <cstring>FestivalIntConfWidget</cstring>
+        <cstring>CommandConfWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>559</width>
-            <height>233</height>
+            <width>582</width>
+            <height>287</height>
         </rect>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>7</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
     <property name="caption">
-        <string>Festival Config UI</string>
+        <string>CommandConfWidget</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <spacer row="1" column="0">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>60</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>festivalConfigurationBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="frameShape">
-                <enum>GroupBoxPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
+                <cstring>confiurationBox</cstring>
             </property>
             <property name="title">
-                <string>Festival Interactive Configuration</string>
+                <string>Command Configuration</string>
             </property>
             <grid>
                 <property name="name">
@@ -76,88 +42,118 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="Line" row="1" column="0">
                     <property name="name">
-                        <cstring>voicesPathBox</cstring>
+                        <cstring>line</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>urlLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ommand for speaking texts:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>urlReq</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="3" column="0">
+                    <property name="name">
+                        <cstring>urlReq</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This field specifies both the command used for speaking texts and its parameters. If you want to pass the text as a parameter, write %t at the place where the text should be inserted.  To pass a file of the text, write %f.  To synthesize only and let KTTSD play the synthesized text, write %w for the generated audio file.</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="5" column="0">
+                    <property name="name">
+                        <cstring>layout1</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="QLabel">
+                        <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>festivalPathLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
+                                <cstring>stdInButton</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Festival voices directory:</string>
+                                <string>&amp;Send the data as standard input</string>
                             </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
+                            <property name="accel">
+                                <string>Alt+S</string>
                             </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
+                            <property name="whatsThis" stdset="0">
+                                <string>This check box specifies whether the text is sent as standard input (stdin) to the speech synthesizer.</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <spacer>
                             <property name="name">
-                                <cstring>festivalVoicesPath</cstring>
+                                <cstring>spacer1</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>201</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>commandTestButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Test</string>
                             </property>
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="4" column="0">
                     <property name="name">
-                        <cstring>selectVoiceBox</cstring>
+                        <cstring>layout5</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>selectVoiceLabel</cstring>
+                                <cstring>characterCodingLabel</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>&amp;Select voice:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
+                                <string>Character &amp;encoding:</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>selectVoiceCombo</cstring>
+                                <cstring>characterCodingBox</cstring>
                             </property>
                         </widget>
                         <widget class="KComboBox">
                             <property name="name">
-                                <cstring>selectVoiceCombo</cstring>
+                                <cstring>characterCodingBox</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -167,46 +163,27 @@
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>rescan</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Rescan</string>
-                                <comment>Rescan for voices</comment>
+                            <property name="whatsThis" stdset="0">
+                                <string>This combo box specifies which character encoding is used for passing the text.</string>
                             </property>
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QPushButton" row="2" column="1">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>testButton</cstring>
+                        <cstring>explanationLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Test</string>
+                        <string>Parameters:
+  %t: Text to be spoken
+  %f: Filename of a temporary file containing the text
+  %l: Language (two letter code)
+  %w: Filename of a temporary file for generated audio</string>
                     </property>
                 </widget>
-                <spacer row="2" column="0">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>410</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
             </grid>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>
@@ -233,39 +210,47 @@
 </images>
 <connections>
     <connection>
-        <sender>festivalVoicesPath</sender>
+        <sender>characterCodingBox</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>FestivalIntConfWidget</receiver>
+        <receiver>CommandConfWidget</receiver>
         <slot>configChanged()</slot>
     </connection>
     <connection>
-        <sender>selectVoiceCombo</sender>
+        <sender>stdInButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>CommandConfWidget</receiver>
+        <slot>configChanged()</slot>
+    </connection>
+    <connection>
+        <sender>urlReq</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CommandConfWidget</receiver>
+        <slot>configChanged()</slot>
+    </connection>
+    <connection>
+        <sender>characterCodingBox</sender>
         <signal>activated(int)</signal>
-        <receiver>FestivalIntConfWidget</receiver>
+        <receiver>CommandConfWidget</receiver>
         <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>rescan</sender>
-        <signal>clicked()</signal>
-        <receiver>FestivalIntConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>rescan</sender>
-        <signal>clicked()</signal>
-        <receiver>FestivalIntConfWidget</receiver>
-        <slot>scanVoices()</slot>
     </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">pluginconf.h</include>
     <include location="global" impldecl="in declaration">kurlrequester.h</include>
+    <include location="global" impldecl="in declaration">klineedit.h</include>
+    <include location="global" impldecl="in declaration">kpushbutton.h</include>
+    <include location="global" impldecl="in declaration">kcombobox.h</include>
     <include location="global" impldecl="in implementation">pluginconf.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
+    <include location="global" impldecl="in implementation">klineedit.h</include>
+    <include location="global" impldecl="in implementation">kpushbutton.h</include>
+    <include location="global" impldecl="in implementation">kcombobox.h</include>
 </includes>
+<signals>
+    <signal>configurationChanged()</signal>
+</signals>
 <slots>
     <slot access="private">configChanged()</slot>
-    <slot access="private">scanVoices()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
@@ -274,6 +259,5 @@
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

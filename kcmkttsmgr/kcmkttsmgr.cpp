@@ -73,8 +73,8 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsmgr, KCMKttsMgrFactory("kcmkttsmgr") );
 * And the languages acording to the plug ins.
 */
 KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
-    KCModule(KCMKttsMgrFactory::instance(), parent, name),
-    DCOPObject("kttsmgr_kspeechsink")
+    DCOPObject("kttsmgr_kspeechsink"),
+    KCModule(KCMKttsMgrFactory::instance(), parent, name)
 {
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
     

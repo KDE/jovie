@@ -1,0 +1,15 @@
+if test "x$flite_bindir" = "xno"; then
+  if test "$compile_flite_plugin" = "yes"; then
+    echo ""
+    echo "======================================================="
+    echo "The Festival Lite (flite) program does not appear to be"
+    echo "installed on this system.  The Flite plugin will"
+    echo "be built, but you need to install Flite before you"
+    echo "can use it.  You can get it at"
+    echo "  http://www.speech.cs.cmu.edu/flite/index.html"
+    echo "Debian users: apt-get install flite"
+    echo "======================================================"
+    all_tests=bad
+  fi
+fi
+

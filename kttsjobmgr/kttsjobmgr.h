@@ -109,6 +109,15 @@ protected:
     ASYNC textSet(const QCString& appId, const uint jobNum);
 
     /**
+    * This signal is emitted whenever a new part is appended to a text job.
+    * @param appId          The DCOP senderId of the application that created the job.
+    * @param jobNum         Job number of the text job.
+    * @param partNum        Part number of the new part.  Parts are numbered starting
+    *                       at 1.
+    */
+    ASYNC textAppended(const QCString& appId, const uint jobNum, const int partNum);
+    
+    /**
     * This signal is emitted whenever speaking of a text job begins.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.

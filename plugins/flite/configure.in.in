@@ -1,0 +1,22 @@
+dnl =========================================
+dnl checks for Festival Lite (Flite)  Plug In
+dnl =========================================
+
+AC_ARG_ENABLE(kttsd-flite,
+              AC_HELP_STRING([--enable-kttsd-flite],
+                             [build KTTSD Festival Lite (flite) [default=yes]]),
+              flite_plugin=$enableval,
+              flite_plugin=yes)
+
+compile_flite_plugin="yes"
+
+if test "x$flite_plugin" = "xno"; then
+  compile_flite_plugin="no"
+fi
+
+dnl Check for flite executable.
+dnl Note that flite plugin is always built, unless
+dnl user overrides on configure command line.
+AC_PATH_PROG(flite_bindir, "flite", "no")
+
+AM_CONDITIONAL(include_kttsd_flite, test "x$compile_flite_plugin" != "xno")

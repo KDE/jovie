@@ -1,10 +1,10 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  commandconf.h
-  Configuration for the Command Plug in
+  fliteconf.h
+  Configuration widget and functions for Festival (Interactive) plug in
   -------------------
-  Copyright : (C) 2002,2004 by Gunnar Schmi Dt and Gary Cramblitt
+  Copyright : (C) 2004 by Gary Cramblitt
   -------------------
-  Original author: Gunnar Schmi Dt <kmouth@schmi-dt.de>
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
  ******************************************************************************/
 
@@ -17,39 +17,39 @@
  ***************************************************************************/
 
 // $Id$
-
-#ifndef _COMMANDCONF_H_
-#define _COMMANDCONF_H_
+ 
+#ifndef _FLITECONF_H_
+#define _FLITECONF_H_
 
 // Qt includes.
 #include <qstring.h>
-#include <qstringlist.h>
 
 // KDE includes.
 #include <kconfig.h>
+#include <kdebug.h>
 
 // KTTS includes.
 #include <pluginconf.h>
 
-// Command Plugin includes.
-#include "commandconfwidget.h"
+// Flite plugin includes.
+#include "fliteconfwidget.h"
 
-class CommandProc;
+class FliteProc;
 class KArtsServer;
 namespace KDE {
     class PlayObject;
 }
 
-class CommandConf : public CommandConfWidget {
+class FliteConf : public FliteConfWidget {
     Q_OBJECT 
-  
+
     public:
         /** Constructor */
-        CommandConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
-    
+        FliteConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+
         /** Destructor */
-        ~CommandConf();
-    
+        ~FliteConf();
+
         /** This method is invoked whenever the module should read its 
         * configuration (most of the times from a config file) and update the 
         * user interface. This happens when the user clicks the "Reset" button in 
@@ -75,20 +75,15 @@ class CommandConf : public CommandConfWidget {
 
     private slots:
         void configChanged(){
-            kdDebug() << "CommandConf::configChanged: Running" << endl;
+            kdDebug() << "FliteConf::configChanged: Running" << endl;
             emit changed(true);
         };
-        void slotCommandTest_clicked();
+        void slotFliteTest_clicked();
         void slotSynthFinished();
    
     private:
-        // Fill the Codec combobox.
-        void buildCodecList();
-
-        // Language Group.
-        QString m_language;
-        // Command synthesizer.
-        CommandProc* m_commandProc;
+        // Flite synthesizer.
+        FliteProc* m_fliteProc;
         // aRts server.
         KArtsServer* m_artsServer;
         // aRts player.
@@ -96,4 +91,4 @@ class CommandConf : public CommandConfWidget {
         // Synthesized wave file name.
         QString m_waveFile;
 };
-#endif      // _COMMANDCONF_H_
+#endif // _FLITECONF_H_
