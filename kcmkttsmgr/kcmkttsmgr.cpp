@@ -136,13 +136,13 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
     m_sbdPopmenu = new QPopupMenu( m_kttsmgrw, "SbdPopupMenu" );
-    m_sbdPopmenu->insertItem( i18n("Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
+    m_sbdPopmenu->insertItem( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
     m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
                               i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
     m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("down", KIcon::Small),
-                              i18n("Dow&n"), this, SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
-    m_sbdPopmenu->insertItem( i18n("Add..."), this, SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
-    m_sbdPopmenu->insertItem( i18n("Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
+                              i18n("Do&wn"), this, SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
+    m_sbdPopmenu->insertItem( i18n("&Add..."), this, SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
+    m_sbdPopmenu->insertItem( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
     m_kttsmgrw->sbdButton->setPopup( m_sbdPopmenu );
 
     // If GStreamer is available, enable its radio button.
