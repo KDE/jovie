@@ -94,30 +94,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->configureTalkerButton->setIconSet(
         KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
-    // Connect the signals from the KCMKtssMgrWidget to this class.
-    connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
-        this, SLOT(addTalker()));
-    connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
-        this, SLOT(lowerTalkerPriority()));
-    connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
-        this, SLOT(removeTalker()));
-    connect(m_kttsmgrw->configureTalkerButton, SIGNAL(clicked()),
-        this, SLOT(slot_configureTalker()));
-    connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
-        this, SLOT(updateTalkerButtons()));
-    connect(m_kttsmgrw, SIGNAL( configChanged() ),
-        this, SLOT( configChanged() ) );
-    connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
-        SLOT(enableKttsdToggled(bool)));
-    connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
-        this, SLOT(slotTabChanged()));
-
-    // Object for the KTTSD configuration.
-    m_config = new KConfig("kttsdrc");
-
-    // Load configuration.
-    load();
-
     // Register DCOP client.
     DCOPClient *client = kapp->dcopClient();
     if (!client->isRegistered())
@@ -125,6 +101,30 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         client->attach();
         client->registerAs(kapp->name());    
     }
+
+    // Object for the KTTSD configuration.
+    m_config = new KConfig("kttsdrc");
+
+    // Load configuration.
+    load();
+
+    // Connect the signals from the KCMKtssMgrWidget to this class.
+    connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
+            this, SLOT(addTalker()));
+    connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
+            this, SLOT(lowerTalkerPriority()));
+    connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
+            this, SLOT(removeTalker()));
+    connect(m_kttsmgrw->configureTalkerButton, SIGNAL(clicked()),
+            this, SLOT(slot_configureTalker()));
+    connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
+            this, SLOT(updateTalkerButtons()));
+    connect(m_kttsmgrw, SIGNAL( configChanged() ),
+            this, SLOT( configChanged() ) );
+    connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
+            SLOT(enableKttsdToggled(bool)));
+    connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
+            this, SLOT(slotTabChanged()));
 
     // Connect KTTSD DCOP signals to our slots.
     if (!connectDCOPSignal("kttsd", "kspeech",
@@ -136,16 +136,15 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         "kttsdExiting()",
         false);
 
-    // See if KTTSD is already running.
-    if (client->isApplicationRegistered("kttsd"))
-        kttsdStarted();
-    else
-        // Start KTTSD if check box is checked.
-        enableKttsdToggled(false);
-
     // About Dialog.
     m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text-to-Speech Manager", false);
 
+    // Start KTTSD if check box is checked.
+    enableKttsdToggled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
+
+    // Switch to Talkers tab if none configured.
+    if (m_kttsmgrw->talkersList->childCount() == 0)
+        m_kttsmgrw->mainTab->setCurrentPage(wpTalkers);
 } 
 
 /**
@@ -322,6 +321,20 @@ void KCMKttsMgr::save()
     m_config->writePathEntry("TextPostSnd", m_kttsmgrw->textPostSnd->url());
 
     // Overall settings.
+    // Uncheck and disable KTTSD checkbox if no Talkers are configured.
+    // Enable checkbox if at least one Talker is configured.
+    bool enableKttsdWasToggled = false;
+    if (m_kttsmgrw->talkersList->childCount() == 0)
+    {
+        enableKttsdWasToggled = m_kttsmgrw->enableKttsdCheckBox->isChecked();
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
+        // Might as well zero LastTalkerID as well.
+        m_lastTalkerID = "0";
+    }
+    else
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
+
     m_config->writeEntry("EnableKttsd", m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
     // Notification settings.
@@ -344,25 +357,20 @@ void KCMKttsMgr::save()
 
     m_config->sync();
 
-    // Uncheck and disable KTTSD checkbox if no Talkers are configured.
-    // Enable checkbox if at least one Talker is configured.
-    if (m_kttsmgrw->talkersList->childCount() == 0)
-    {
-        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
-        m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
+    // If we automatically unchecked the Enable KTTSD checkbox, stop KTTSD.
+    if (enableKttsdWasToggled)
         enableKttsdToggled(false);
-    }
     else
-        m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
-
-    // If KTTSD is running, reinitialize it.
-    DCOPClient *client = kapp->dcopClient();
-    bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
-    if (kttsdRunning)
     {
-        kdDebug() << "Restarting KTTSD" << endl;
-        QByteArray data;
-        client->send("kttsd", "kspeech", "reinit()", data);
+        // If KTTSD is running, reinitialize it.
+        DCOPClient *client = kapp->dcopClient();
+        bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
+        if (kttsdRunning)
+        {
+            kdDebug() << "Restarting KTTSD" << endl;
+            QByteArray data;
+            client->send("kttsd", "kspeech", "reinit()", data);
+        }
     }
 }
 
@@ -872,15 +880,16 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     static bool reenter;
     if (reenter) return;
     reenter = true;
-    // kdDebug() << "KCMKttsMgr::enableKttsdToggled: Running" << endl;
     // See if KTTSD is running.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
+    kdDebug() << "KCMKttsMgr::enableKttsdToggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
     if (m_kttsmgrw->enableKttsdCheckBox->isChecked())
     {
         if (!kttsdRunning)
         {
+            kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Starting KTTSD" << endl;
             QString error;
             if (KApplication::startServiceByName("KTTSD", QStringList(), &error))
             {
@@ -894,6 +903,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     {
     if (kttsdRunning)
         {
+            kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Stopping KTTSD" << endl;
             QByteArray data;
             client->send("kttsd", "kspeech", "kttsdExit()", data);
         }

@@ -53,7 +53,7 @@ int main (int argc, char *argv[])
     // Create system tray object
     KttsMgrTray tray(&dlg);
 
-    app.setMainWidget(&tray);
+    //app.setMainWidget(&tray);
     tray.show();
     dlg.show();
     return app.exec();

@@ -127,7 +127,7 @@ class KCMKttsMgr :
         enum widgetPages
         {
             wpGeneral = 0,          // General tab.
-            wpLanguages = 1,        // Languages tab.
+            wpTalkers = 1,          // Talkers tab.
             wpInterruption = 2,     // Interruption tab.
             wpJobs = 3              // Jobs tab.
         };

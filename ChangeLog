@@ -1,5 +1,6 @@
 2004-11-04  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Add English languages to FreeTTS desktop file so they show up in Add Talker dialog.
+        * When starting kttsmgr, if no Talkers are configured, default to Talker page.
         * In kttsmgr, uncheck and disable Enable TTS checkbox until at least one Talker
           has been configured.  Once at least one Talker is added, enable the checkbox.
           If all Talkers are removed, uncheck and disable the box and stop KTTSD.
