@@ -165,7 +165,7 @@ bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupTyp
 {
     if (markupType != kspeech::mtSsml) return false;
     if (!m_speaker) return false;
-    return m_speaker->supportsMarkup(talker, markupType);
+    return m_speaker->supportsMarkup(fixNullString(talker), markupType);
 }
 
 /**
@@ -194,7 +194,7 @@ bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) { return false; }
 void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=NULL*/)
 {
     if (!m_speaker) return;
-    m_speechData->setScreenReaderOutput(msg, talker, getAppId());
+    m_speechData->setScreenReaderOutput(msg, fixNullString(talker), getAppId());
     m_speaker->doUtterances();
 }
 
@@ -213,7 +213,7 @@ void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
     // kdDebug() << "KTTSD::sayWarning: Running" << endl;
     if (!m_speaker) return;
     kdDebug() << "KTTSD::sayWarning: Adding '" << warning << "' to warning queue." << endl;
-    m_speechData->enqueueWarning(warning, talker, getAppId());
+    m_speechData->enqueueWarning(warning, fixNullString(talker), getAppId());
     m_speaker->doUtterances();
 }
 
@@ -233,7 +233,7 @@ void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
     // kdDebug() << "KTTSD::sayMessage: Running" << endl;
     if (!m_speaker) return;
     kdDebug() << "KTTSD::sayMessage: Adding '" << message << "' to message queue." << endl;
-    m_speechData->enqueueMessage(message, talker, getAppId());
+    m_speechData->enqueueMessage(message, fixNullString(talker), getAppId());
     m_speaker->doUtterances();
 }
 
@@ -254,7 +254,7 @@ void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
 void KTTSD::setSentenceDelimiter(const QString &delimiter)
 {
     if (!m_speaker) return;
-    m_speechData->setSentenceDelimiter(delimiter, getAppId());
+    m_speechData->setSentenceDelimiter(fixNullString(delimiter), getAppId());
 }
 
 /**
@@ -284,7 +284,7 @@ uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
     // kdDebug() << "KTTSD::setText: Running" << endl;
     if (!m_speaker) return 0;
     kdDebug() << "KTTSD::setText: Setting text: '" << text << "'" << endl;
-    uint jobNum = m_speechData->setText(text, talker, getAppId());
+    uint jobNum = m_speechData->setText(text, fixNullString(talker), getAppId());
     return jobNum;
 }
 
@@ -343,10 +343,13 @@ uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/,
     if ( file.open(IO_ReadOnly) )
     {
         QTextStream stream(&file);
-        if (encoding != NULL)
-            if (!encoding.isEmpty())
-                stream.setCodec(QTextCodec::codecForName(encoding.latin1()));
-        jobNum = m_speechData->setText(stream.read(), talker, getAppId());
+        QString enc = fixNullString(encoding);
+        if (!enc.isEmpty())
+        {
+            QTextCodec* codec = QTextCodec::codecForName(enc.latin1());
+            if (codec) stream.setCodec(codec);
+        }
+        jobNum = m_speechData->setText(stream.read(), fixNullString(talker), getAppId());
         file.close();
     }
     return jobNum;
@@ -460,7 +463,7 @@ QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
 {
     if (!m_speaker) return QString::null;
-    return m_speaker->talkerCodeToTalkerId(talkerCode);
+    return m_speaker->talkerCodeToTalkerId(fixNullString(talkerCode));
 }
 
 /**
@@ -613,7 +616,7 @@ QStringList KTTSD::getTalkers()
 */
 void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=NULL*/)
 {
-    m_speechData->changeTextTalker(applyDefaultJobNum(jobNum), talker);
+    m_speechData->changeTextTalker(applyDefaultJobNum(jobNum), fixNullString(talker));
 }
 
 /**
@@ -870,6 +873,17 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
         if (!jNum) jNum = m_speechData->findAJobNumByAppId(0);
     }
     return jNum;
+}
+
+/*
+* Fixex a string argument passed in via dcop.
+* If NULL or "0" return QString::null.
+*/
+QString KTTSD::fixNullString(const QString &talker)
+{
+    if (!talker) return QString::null;
+    if (talker == "0") return QString::null;
+    return talker;
 }
 
 #include "kttsd.moc"

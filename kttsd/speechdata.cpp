@@ -307,15 +307,11 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
 {
     // kdDebug() << "Running: SpeechData::setText" << endl;
     QStringList tempList = parseText(text, appId);
-    if (talker != NULL)
-        textTalker = talker;
-    else
-        textTalker = QString::null;
     mlJob* job = new mlJob;
     uint jobNum = ++jobCounter;
     job->jobNum = jobNum;
     job->appId = appId;
-    job->talker = textTalker;
+    job->talker = talker;
     job->state = kspeech::jsQueued;
     job->seq = 0;
     job->sentences = tempList;
@@ -828,13 +824,7 @@ QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
 void SpeechData::changeTextTalker(const uint jobNum, const QString &talker)
 {
     mlJob* job = findJobByJobNum(jobNum);
-    if (job)
-    {
-        if (!talker.isEmpty())
-            job->talker = talker;
-        else
-            job->talker = QString::null;
-    }
+    if (job) job->talker = talker;
 }
 
 /**

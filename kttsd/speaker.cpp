@@ -841,8 +841,9 @@ QString Speaker::userDefaultTalker()
  */
 bool Speaker::supportsMarkup(const QString& talker, const uint /*markupType*/)
 {
+    kdDebug() << "Speaker::supportsMarkup: Testing talker " << talker << endl;
     QString matchingTalker = talker;
-    if (matchingTalker == NULL) matchingTalker = userDefaultTalker();
+    if (matchingTalker.isEmpty()) matchingTalker = userDefaultTalker();
     PlugInProc* plugin = talkerToPlugin(matchingTalker);
     return ( plugin->getSsmlXsltFilename() !=
         KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl");

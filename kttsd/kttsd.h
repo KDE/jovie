@@ -561,6 +561,12 @@ class KTTSD : public QObject, virtual public kspeech
         uint applyDefaultJobNum(const uint jobNum);
 
         /*
+        * Fixex a talker argument passed in via dcop.
+        * If NULL or "0" return QString::null.
+        */
+        QString fixNullString(const QString &talker);
+
+        /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD
          */
         SpeechData *m_speechData;
