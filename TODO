@@ -26,8 +26,6 @@ _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourcef
 _ IBM ViaVoice plugin?
 _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ Implement error signal handling in KTTSD.
-_ When GStreamer bindings become available, add as alternative to aRts.
-  Note that gstreamer 0.6 has issues with .wav files.
 _ When stopText() is called, and Hadifix process is killed, the temporary wav file is not deleted,
   despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
   to happen in the configuration dialog when canceling Tests.

@@ -20,12 +20,16 @@
 // synthesizer name.  The latter is a translated name, for example, "Festival Interactivo",
 // while the former is alway an English name, example "Festival Interactive".
 
+// C++ includes.
+#include <math.h>
+
 // Qt includes.
 #include <qtabwidget.h>
 #include <qcheckbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
+#include <qslider.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -40,6 +44,7 @@
 #include <kaboutdata.h>
 #include <kconfig.h>
 #include <kaboutapplication.h>
+#include <knuminput.h>
 
 // KTTS includes.
 #include "kcmkttsmgr.moc"
@@ -65,6 +70,8 @@ const QString textPostMsgValue = i18n("Resuming text.");
 
 const bool textPostSndCheckValue = false;
 const QString textPostSndValue = "";
+
+const int timeBoxValue = 100;
 
 // Make this a plug in.
 // Provide two identical modules.  Once all apps have stopped using
@@ -135,6 +142,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slot_configureTalker()));
     connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
             this, SLOT(updateTalkerButtons()));
+    connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
+            this, SLOT(timeBox_valueChanged(int)));
+    connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(timeSlider_valueChanged(int)));
+    connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_kttsmgrw, SIGNAL( configChanged() ),
             this, SLOT( configChanged() ) );
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
@@ -235,6 +248,8 @@ void KCMKttsMgr::load()
         case 1:
             m_kttsmgrw->gstreamerRadioButton->setChecked(true);
     }
+    m_kttsmgrw->timeBox->setValue(m_config->readNumEntry("AudioStretchFactor", timeBoxValue));
+    timeBox_valueChanged(m_kttsmgrw->timeBox->value());
 
     // Last plugin ID.  Used to generate a new ID for an added talker.
     m_lastTalkerID = 0;
@@ -398,6 +413,7 @@ void KCMKttsMgr::save()
     int audioOutputMethod = 0;
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
+    m_config->writeEntry("AudioStretchFactor", m_kttsmgrw->timeBox->value());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
@@ -538,6 +554,11 @@ void KCMKttsMgr::defaults() {
             {
                 changed = true;
                 m_kttsmgrw->artsRadioButton->setChecked(true);
+            }
+            if (m_kttsmgrw->timeBox->value() != timeBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->timeBox->setValue(timeBoxValue);
             }
     }
     if (changed) configChanged();
@@ -1188,6 +1209,30 @@ void KCMKttsMgr::configureTalker()
     connect(m_configDlg, SIGNAL( okClicked() ), this, SLOT( slotConfigDlg_OkClicked() ));
     connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigDlg_CancelClicked() ));
     m_configDlg->exec();
+}
+
+// Basically the slider values are logarithmic (0,...,1000) whereas percent
+// values are linear (50%,...,200%).
+//
+// slider = alpha * (log(percent)-log(50))
+// with alpha = 1000/(log(200)-log(50))
+
+int KCMKttsMgr::percentToSlider(int percentValue) {
+    double alpha = 1000 / (log(200) - log(50));
+    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
+}
+
+int KCMKttsMgr::sliderToPercent(int sliderValue) {
+    double alpha = 1000 / (log(200) - log(50));
+    return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
+}
+
+void KCMKttsMgr::timeBox_valueChanged(int percentValue) {
+    m_kttsmgrw->timeSlider->setValue (percentToSlider (percentValue));
+}
+
+void KCMKttsMgr::timeSlider_valueChanged(int sliderValue) {
+    m_kttsmgrw->timeBox->setValue (sliderToPercent (sliderValue));
 }
 
 void KCMKttsMgr::slotConfigDlg_ConfigChanged()

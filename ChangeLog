@@ -1,4 +1,6 @@
 2004-11-24  Gary Cramblitt (PhantomsDad)
+        * Add overall Speed control to KTTSMgr Audio tab.  This permits to speed up speech
+          even if the synth does not support it.  Must have sox installed for this to work.
         * Add Speed and Pitch controls to Epos plugin.  Also set language.
         * Better Speed adjustment for HTS voices.
 

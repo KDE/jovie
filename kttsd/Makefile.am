@@ -26,12 +26,13 @@ bin_PROGRAMS = kttsd
 # The source, library search path, and link libraries.
 # Note: .skel files cause DCOPIDL compiler to generate _skel.cpp file and compile it.
 kttsd_SOURCES = \
-  main.cpp \
+	main.cpp \
 	kttsd.cpp \
 	speaker.cpp \
 	speechdata.cpp \
 	kttsd.skel \
-	threadedplugin.cpp
+	threadedplugin.cpp \
+	stretcher.cpp
 kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
 kttsd_LDADD = \
 	$(top_builddir)/kttsd/libktts/libktts.la \
@@ -48,4 +49,4 @@ kde_services_DATA = kttsd.desktop
 messages: rc.cpp
 	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
 
-noinst_HEADERS = threadedplugin.h
+noinst_HEADERS = threadedplugin.h stretcher.h

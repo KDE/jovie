@@ -119,6 +119,8 @@ Speaker::Speaker( SpeechData *speechData, QObject *parent, const char *name) :
     m_timer = new QTimer(this, "kttsdAudioTimer");
     m_speechData->config->setGroup("General");
     m_playerOption = m_speechData->config->readNumEntry("AudioOutputMethod", 0);  // default to aRts.
+    // Map 50% to 100% onto 2.0 to 0.5.
+    m_audioStretchFactor = 1.0/(float(m_speechData->config->readNumEntry("AudioStretchFactor", 100))/100.0);
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 }
@@ -148,12 +150,12 @@ int Speaker::loadPlugIns(){
     // kdDebug() << "Running: Speaker::loadPlugIns()" << endl;
     int good = 0;
     int bad = 0;
-    
+
     m_talkerToPlugInCache.clear();
     for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
         delete m_loadedPlugIns[ndx].plugIn;
     m_loadedPlugIns.clear();
-    
+
     m_speechData->config->setGroup("General");
     QStringList talkerIDsList = m_speechData->config->readListEntry("TalkerIDs", ',');
     if (!talkerIDsList.isEmpty())
@@ -163,26 +165,26 @@ int Speaker::loadPlugIns(){
         for( QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
         {
             // kdDebug() << "Loading plugInProc for Talker ID " << *it << endl;
-            
+
             // Talker ID.
             QString talkerID = *it;
-    
+
             // Set the group for the language we're loading
             m_speechData->config->setGroup("Talker_" + talkerID);
-    
+
             // Get the name of the plug in we will try to load
             QString plugInName = m_speechData->config->readEntry("PlugIn", QString::null);
-            
+
             // Get the talker code.
             QString talkerCode = m_speechData->config->readEntry("TalkerCode", QString::null);
-            
+
             // Normalize the talker code.
             talkerCode = normalizeTalkerCode(talkerCode);
-    
+
             // Query for all the KTTSD SynthPlugins and store the list in offers
             KTrader::OfferList offers = KTrader::self()->query(
                 "KTTSD/SynthPlugin", QString("Name == '%1'").arg(plugInName));
-    
+
             if(offers.count() > 1){
                 bad++;
                 kdDebug() << "More than 1 plug in doesn't make any sense, well, let's use any" << endl;
@@ -318,7 +320,7 @@ void Speaker::doUtterances()
                 " Type: " << uttTypeToStr(it->utType) << 
                 " Text: " << it->sentence->text << endl;
         }
-        
+
         if (!m_uttQueue.isEmpty())
         {
             // Delete utterances that are finished.
@@ -367,6 +369,51 @@ void Speaker::doUtterances()
                             break;
                         }
                     case usSynthed:
+                        {
+                            // Don't bother stretching if factor is 1.0.
+                            if (m_audioStretchFactor == 1.0)
+                            {
+                                it->state = usStretched;
+                                m_again = true;
+                            }
+                            else
+                            {
+                                it->audioStretcher = new Stretcher();
+                                connect(it->audioStretcher, SIGNAL(stretchFinished()),
+                                    this, SLOT(slotStretchFinished()));
+                                if (it->audioStretcher->stretch(it->audioUrl, makeSuggestedFilename(),
+                                    m_audioStretchFactor))
+                                {
+                                    it->state = usStretching;
+                                    m_again = true;  // Is this needed?
+                                }
+                                else
+                                {
+                                    // If stretch failed, it is most likely caused by sox not being
+                                    // installed.  Just skip it.
+                                    it->state = usStretched;
+                                    m_again = true;
+                                    delete it->audioStretcher;
+                                    it->audioStretcher= 0;
+                                }
+                            }
+                            break;
+                        }
+                    case usStretching:
+                        {
+                            // See if Stretcher is finished.
+                            if (it->audioStretcher->getState() == Stretcher::ssFinished)
+                            {
+                                QFile::remove(it->audioUrl);
+                                it->audioUrl = it->audioStretcher->getOutFilename();
+                                it->state = usStretched;
+                                delete it->audioStretcher;
+                                it->audioStretcher = 0;
+                                m_again = true;
+                            }
+                            break;
+                        }
+                    case usStretched:
                         {
                             // If first in queue, start playback.
                             if (it == itBegin)
@@ -753,6 +800,8 @@ QString Speaker::uttStateToStr(uttState state)
         case usSaying:        return "usSaying";
         case usSynthing:      return "usSynthing";
         case usSynthed:       return "usSynthed";
+        case usStretching:    return "usStretching";
+        case usStretched:     return "usStretched";
         case usPlaying:       return "usPlaying";
         case usPaused:        return "usPaused";
         case usPreempted:     return "usPreempted";
@@ -1143,6 +1192,7 @@ bool Speaker::getNextUtterance()
     {
         gotOne = true;
         utt->audioPlayer = 0;
+        utt->audioStretcher = 0;
         utt->audioUrl = QString::null;
         utt->plugin = talkerToPlugin(utt->sentence->talker);
         if (utt->plugin->supportsSynth())
@@ -1213,7 +1263,7 @@ bool Speaker::getNextUtterance()
                         intrUtt.audioUrl = m_speechData->textPreSnd;
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptSnd;
-                        intrUtt.state = usSynthed;
+                        intrUtt.state = usStretched;
                         intrUtt.plugin = 0;
                         it = m_uttQueue.insert(it, intrUtt);
                         ++it;
@@ -1258,7 +1308,7 @@ bool Speaker::getNextUtterance()
                     resUtt.audioUrl = m_speechData->textPostSnd;
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeSnd;
-                    resUtt.state = usSynthed;
+                    resUtt.state = usStretched;
                     resUtt.plugin = 0;
                     it = m_uttQueue.insert(it, resUtt);
                     ++it;
@@ -1380,8 +1430,9 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
         case usWaitingSignal:
         case usSynthed:
         case usFinished:
+        case usStretched:
                 break;
-        
+
         case usSaying:
         case usSynthing:
             {
@@ -1393,6 +1444,12 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
                         kdDebug() << "Speaker::deleteUtterance calling stopText" << endl;
                         plugin->stopText();
                     }
+                break;
+            }
+        case usStretching:
+            {
+                delete it->audioStretcher;
+                it->audioStretcher = 0;
                 break;
             }
         case usPlaying:
@@ -1458,22 +1515,24 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         case usWaitingSignal:
         case usSaying:
         case usSynthing:
+        case usSynthed:
+        case usStretching:
         case usPlaying:
         case usFinished:
                 break;
-        
-        case usSynthed:
+
+        case usStretched:
             {
                 // Don't start playback yet if text job is paused.
                 if ((it->utType != utText) or
                     (m_speechData->getTextJobState(it->sentence->jobNum) != kspeech::jsPaused))
                 {
-                    
+
                     it->audioPlayer = createPlayerObject();
                     prePlaySignals(it);
                     it->audioPlayer->startPlay(it->audioUrl);
                     it->state = usPlaying;
-                    if (!m_timer->start(800, FALSE)) kdDebug() << 
+                    if (!m_timer->start(timerInterval, FALSE)) kdDebug() << 
                         "Speaker::startPlayingUtterance: timer.start failed" << endl;
                     started = true;
                 }
@@ -1489,7 +1548,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                     kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
                     it->audioPlayer->startPlay(QString::null);  // resume
                     it->state = usPlaying;
-                    if (!m_timer->start(800, FALSE)) kdDebug() << 
+                    if (!m_timer->start(timerInterval, FALSE)) kdDebug() << 
                         "Speaker::startPlayingUtterance: timer.start failed" << endl;
                     started = true;
                 }
@@ -1502,7 +1561,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 // Note: Must call stop(), even if player not currently playing.  Why?
                 it->audioPlayer->startPlay(QString::null);  // resume
                 it->state = usPlaying;
-                if (!m_timer->start(800, FALSE)) kdDebug() << 
+                if (!m_timer->start(timerInterval, FALSE)) kdDebug() << 
                     "Speaker::startPlayingUtterance: timer.start failed" << endl;
                 started = true;
                 break;
@@ -1577,6 +1636,7 @@ QString Speaker::makeSuggestedFilename()
     KTempFile tempFile (locateLocal("tmp", "kttsd-"), ".wav");
     QString waveFile = tempFile.file()->name();
     tempFile.close();
+    QFile::remove(waveFile);
     kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return getRealFilePath(waveFile);
 }
@@ -1644,6 +1704,16 @@ void Speaker::slotStopped()
     QApplication::postEvent(this, ev);
 }
 
+/**
+* Receiver from audio stretcher when stretching (speed adjustment) is finished.
+*/
+void Speaker::slotStretchFinished()
+{
+    // Convert to postEvent and return immediately.
+    QCustomEvent* ev = new QCustomEvent(QEvent::User + 104);
+    QApplication::postEvent(this, ev);
+}
+
 /** Received from PlugIn object when they encounter an error.
 * @param keepGoing               True if the plugin can continue processing.
 *                                False if the plugin cannot continue, for example,
@@ -1657,9 +1727,9 @@ void Speaker::slotError(const bool /*keepGoing*/, const QString& /*msg*/)
     // TODO: Do something with error messages.
     /*
     if (keepGoing)
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 104);
-    else
         QCustomEvent* ev = new QCustomEvent(QEvent::User + 105);
+    else
+        QCustomEvent* ev = new QCustomEvent(QEvent::User + 106);
     QApplication::postEvent(this, ev);
     */
 }
@@ -1692,9 +1762,9 @@ void Speaker::slotTimeout()
 */
 bool Speaker::event ( QEvent * e )
 {
-    // TODO: Do something with event numbers 104 (error; keepGoing=True)
-    // and 105 (error; keepGoing=False).
-    if ((e->type() >= (QEvent::User + 101)) and (e->type() <= (QEvent::User + 103)))
+    // TODO: Do something with event numbers 105 (error; keepGoing=True)
+    // and 106 (error; keepGoing=False).
+    if ((e->type() >= (QEvent::User + 101)) and (e->type() <= (QEvent::User + 104)))
     {
         kdDebug() << "Speaker::event: received event." << endl;
         doUtterances();

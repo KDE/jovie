@@ -153,6 +153,12 @@ class KCMKttsMgr :
         QString translatedRate(const QString &rate);
 
         /**
+        * Conversion functions for percent boxes to/from sliders.
+        */
+        int percentToSlider(int percentValue);
+        int sliderToPercent(int sliderValue);
+
+        /**
         * Given a talker code, normalizes it into a standard form and returns language code.
         * @param talkerCode      Unnormalized talker code.
         * @param languageCode    Parsed language code.
@@ -326,6 +332,12 @@ class KCMKttsMgr :
         void slotConfigDlg_DefaultClicked();
         void slotConfigDlg_OkClicked();
         void slotConfigDlg_CancelClicked();
+
+        /**
+        * Slots for Speed setting.
+        */
+        void timeBox_valueChanged(int percentValue);
+        void timeSlider_valueChanged(int sliderValue);
 
         /**
         * Other slots.

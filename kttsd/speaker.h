@@ -32,6 +32,7 @@
 // KTTSD includes.
 #include <speechdata.h>
 #include <pluginproc.h>
+#include <stretcher.h>
 
 class Player;
 class QTimer;
@@ -63,7 +64,9 @@ enum uttState
     usWaitingSignal,             /**< Waiting to emit a textStarted or textFinished signal. */
     usSaying,                    /**< Plugin is synthesizing and audibilizing. */
     usSynthing,                  /**< Plugin is synthesizing only. */
-    usSynthed,                   /**< Plugin has finished synthesizing.  Ready for playback, */
+    usSynthed,                   /**< Plugin has finished synthesizing.  Ready for stretch. */
+    usStretching,                /**< Adjusting speed. */
+    usStretched,                 /**< Speed adjustment finished.  Ready for playback. */
     usPlaying,                   /**< Playing on Audio Player. */
     usPaused,                    /**< Paused on Audio Player due to user action. */
     usPreempted,                 /**< Paused on Audio Player due to Screen Reader Output. */
@@ -78,6 +81,7 @@ struct Utt{
     uttType utType;              /* The type of utterance (text, msg, screen reader) */
     uttState state;              /* Processing state of the utterance. */
     PlugInProc* plugin;          /* The plugin that synthesizes the utterance. */
+    Stretcher* audioStretcher;   /* Audio stretcher object.  Adjusts speed. */
     QString audioUrl;            /* Filename containing synthesized audio.  Null if
                                     plugin has not yet synthesized the utterance, or if
                                     plugin does not support synthesis. */
@@ -113,6 +117,9 @@ struct TalkerInfo{
 * Iterator for queue of utterances.
 */
 typedef QValueVector<Utt>::iterator uttIterator;
+
+// Timer interval for checking whether audio playback is finished.
+const int timerInterval = 500;
 
 /**
  * This class is in charge of getting the messages, warnings and text from
@@ -406,6 +413,10 @@ class Speaker : public QObject{
         * Received from PlugIn objects when they asynchronously stopText.
         */
         void slotStopped();
+        /**
+        * Receiver from audio stretcher when stretching (speed adjustment) is finished.
+        */
+        void slotStretchFinished();
         /** Received from PlugIn object when they encounter an error.
         * @param keepGoing               True if the plugin can continue processing.
         *                                False if the plugin cannot continue, for example,
@@ -599,6 +610,11 @@ class Speaker : public QObject{
         *  1 = gstreamer
         */
         int m_playerOption;
+        
+        /**
+        * Audio stretch factor (Speed).
+        */
+        float m_audioStretchFactor;
         
         /**
         * Timer for monitoring audio player.
