@@ -1,7 +1,7 @@
 Begin4
 Title:          KTTS - the KDE Text-to-Speech system
-Version:        0.2.0
-Entered-date:   2004/12/11
+Version:        0.3.0
+Entered-date:   2005/02/26
 Description:    KTTS -- KDE Text-to-Speech -- is a subsystem within the KDE
                 desktop for conversion of text to audible speech. KTTS is
                 currently under development and aims to become the standard
@@ -17,17 +17,9 @@ Maintained-by:  garycramblitt@comcast.net (Gary Cramblitt)
 Home-page:      http://accessibility.kde.org/developer/kttsd/
 Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/KDE3.x/
                 1.7K kttsd.lsm
-                1.2M kttsd-0.2.0.src.tar.bz2
-                1M kttsd_0.2.0-1_i386.deb
-                14K kttsd-gstreamer_0.2.0-1_i386.deb
-                26K kttsd-appplugins_0.2.0-1_i386.deb
-                78K kttsd-dev_0.2.0-1_i386.deb
-                4.6M kttsd-0.2.0.suse9.2-10.i586.rpm
-                66 kttsd-0.2.0.suse9.2-10.i586.rpm.md5
-                883K kttsd-0.2.0.suse9.2-10.src.rpm
-                65 kttsd-0.2.0.suse9.2-10.src.rpm.md5
-                171K kttsd-gstreamer-0.2.0.suse9.2-10.i586.rpm
-                76 kttsd-gstreamer-0.2.0.suse9.2-10.i586.rpm.md5
+                3.5M kttsd-0.3.0.src.tar.bz2
+                4M kttsd_0.3.0-1_i386.deb
+                28K kttsd-gstreamer_0.3.0-1_i386.deb
 Alternate-site: 
 Original-site:  
 Platforms:      KDE 3.2 or greater
