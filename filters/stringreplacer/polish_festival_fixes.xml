@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author of filter: Mikolaj Machowski ( mikmach AT wp DOT pl ) -->
+<wordlist>
+ <name>Filtr polski / Filter for Polish Festival voice</name>
+ <language-code>pl</language-code>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[[^a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ\,\"\'\\@#$%^*+=`~-]]]></match>
+  <subst><![CDATA[ ]]></subst>
+ </word>
+</wordlist>
