@@ -57,13 +57,6 @@ debian/tmp/usr/share/apps/kttsd/stringreplacer/polish_festival_unspeakables.xml
 debian/tmp/usr/share/apps/kttsd/xmltransformer/xhtml2ssml.xsl
 debian/tmp/usr/share/apps/ktexteditor_kttsd/ktexteditor_kttsdui.rc
 
-debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/16x16/apps/kttsd.png
-debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/22x22/apps/kttsd.png
-debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/32x32/apps/kttsd.png
-debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/48x48/apps/kttsd.png
-debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/64x64/apps/kttsd.png
-debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/128x128/apps/kttsd.png
-
 debian/tmp/usr/share/doc/kde/HTML/*/kttsd/common
 debian/tmp/usr/share/doc/kde/HTML/*/kttsd/general.png
 debian/tmp/usr/share/doc/kde/HTML/*/kttsd/index.cache.bz2
