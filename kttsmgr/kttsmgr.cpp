@@ -34,6 +34,7 @@ int main (int argc, char *argv[])
     aboutdata.addAuthor("Gunnar Schmi Dt", I18N_NOOP("Contributor"),"gunnar@schmi-dt.de");
     aboutdata.addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"),"ojschmidt@kde.org");
     aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
+    aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
     KCmdLineArgs::init( argc, argv, &aboutdata );
     // KCmdLineArgs::addCmdLineOptions( options );
     KUniqueApplication::addCmdLineOptions();
