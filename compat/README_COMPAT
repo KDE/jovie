@@ -1,5 +1,6 @@
-This is a directory to keep KDE 3.2 compatibility in KTTSD.
-This directory permits distribution and compilation of kttsd for versions
-of KDE < 3.4.  It is a copy of kdelibs/interfaces/kspeech.
+This is a directory to keep compatibility in KTTSD.
+This directory permits distribution and compilation of the following kttsd components:
+  If KDE < 3.4, copy of kdelibs/interfaces/kspeech.
+  If KDE < 3.5, copy of kdelibs/pics (kttsd icons only)
 
-Last Sync: Tue Feb 15 18:00:00 EST 2004  by Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
+Last Sync: Sat Mar 26 18:00:00 EST 2004  by Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>

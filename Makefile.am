@@ -1,6 +1,6 @@
 # The build order must be libktts, then libkttsd, then the rest.
 SUBDIRS = \
-		$(KTTS_COMPAT_DIR) \
+        compat \
         libkttsd \
         players \
         plugins \
@@ -9,7 +9,7 @@ SUBDIRS = \
         kttsjobmgr \
         kcmkttsmgr \
         kttsmgr \
-		app-plugins
+        app-plugins
 
 messages: rc.cpp
 	$(EXTRACTRC) */*.rc */*/*.rc >> rc.cpp

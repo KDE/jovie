@@ -135,12 +135,50 @@ KDE_CHECK_HEADER(kspeech.h,
     [
     KTTS_KSPEECH_DIR='$(kde_includes)'
     KTTS_KSPEECH_INCLUDE=""
-    KTTS_COMPAT_DIR=""
+    KTTS_INTERFACES_DIR=""
     ],[
     KTTS_KSPEECH_DIR='$(top_srcdir)/kttsd/compat/interfaces/kspeech'
     KTTS_KSPEECH_INCLUDE='-I$(top_srcdir)/kttsd/compat/interfaces/kspeech'
-    KTTS_COMPAT_DIR='compat'
+    KTTS_INTERFACES_DIR="interfaces"
     ])
 AC_SUBST(KTTS_KSPEECH_DIR)
 AC_SUBST(KTTS_KSPEECH_INCLUDE)
-AC_SUBST(KTTS_COMPAT_DIR)
+AC_SUBST(KTTS_INTERFACES_DIR)
+
+dnl ================================================================================
+
+# --- Check for KDE < 3.5 ---
+# If so, install icons.
+
+AC_MSG_CHECKING([for KDE version])
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+kdeversion_save_CXXFLAGS="$CXXFLAGS"
+kdeversion_save_LIBS="$LIBS"
+LIBS="$LIBS $X_EXTRA_LIBS"
+CXXFLAGS="$CXXFLAGS $all_includes"
+
+AC_COMPILE_IFELSE([
+#include <kdeversion.h>
+#if ! ( KDE_IS_VERSION( 3, 4, 90 ) )
+#error KDE 3.4
+#endif
+],
+    KTTS_ICONS_DIR=""
+,
+    KTTS_ICONS_DIR="icons"
+)
+
+CXXFLAGS="$kdeversion_save_CXXFLAGS"
+LIBS="$kdeversion_save_LIBS"
+AC_LANG_RESTORE
+
+if test "$KTTS_ICONS_DIR" = ""; then
+    AC_MSG_RESULT([KDE 3.4.x or less])
+else
+    AC_MSG_RESULT([KDE 3.5 or later])
+fi
+
+AC_SUBST(KTTS_ICONS_DIR)
+
