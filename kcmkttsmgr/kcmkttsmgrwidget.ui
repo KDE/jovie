@@ -495,7 +495,7 @@
                                             <string>Co&amp;nfigure</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Click this button to edit the Sentence Boundary Detector configuration, or click and hold down to select other operations.</string>
+                                            <string>Click this button to edit the Sentence Boundary Detector (SBD) configuration or add additional SBD filters.</string>
                                         </property>
                                     </widget>
                                     <spacer>
