@@ -329,6 +329,8 @@ class PlugInConf : public QWidget{
 
         static QString realFilePath(const QString &filename);
 
+        static QString testMessage(const QString& languageCode);
+
     public slots:
         /**
         * This slot is used internally when the configuration is changed.  It is

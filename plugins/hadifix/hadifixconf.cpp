@@ -285,17 +285,12 @@ void HadifixConf::testButton_clicked () {
    // If you install the right voice files.  The hard part is finding and installing 
    // a working txt2pho for the desired language.  There seem to be some primitive french,
    // italian, and a few others, written in perl, but they have many issues.
-   // Go to the mbrola website and click on "TTS" to learn more.  Anyway, if someone
-   // gets those other languages working then we would need code something like this
-   // (but this code is *wrong*.)
-   //    KLocale* locale = KGlobal::locale();
-   //    QString oldLangCode = locale->language();
-   //    locale->setLanguage(d->languageCode);
-   //    QString msg = locale->translate("K D E is a modern graphical desktop for Unix computers.");
-   //    locale->setLanguage(oldLangCode);
+   // Go to the mbrola website and click on "TTS" to learn more.
 
+   // QString testMsg = "K D E ist eine moderne grafische Arbeitsumgebung für Unix-Computer.";
+   QString testMsg = testMessage(d->languageCode);
    connect (d->hadifixProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
-   d->hadifixProc->synth ("K D E ist eine moderne grafische Arbeitsumgebung für Unix-Computer.",
+   d->hadifixProc->synth (testMsg,
       realFilePath(d->configWidget->hadifixURL->url()),
       d->configWidget->isMaleVoice(),
       realFilePath(d->configWidget->mbrolaURL->url()),

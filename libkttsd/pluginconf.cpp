@@ -27,6 +27,7 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 
 // PluginConf includes.
 #include "pluginconf.h"
@@ -194,6 +195,37 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
         return QFile::decodeName(realpath_buffer);
     }
     return filename;
+}
+
+/*static*/ QString PlugInConf::testMessage(const QString& languageCode)
+{
+    QString key = "Name[" + languageCode + "]";
+    QString result;
+    QString def;
+    QFile file(locate("data", "kttsd/kcmkttsd_testmessage.desktop"));
+    if (file.open(IO_ReadOnly))
+    {
+        QTextStream stream(&file);
+        stream.setEncoding(QTextStream::UnicodeUTF8);
+        while ( !stream.atEnd() ) {
+            QString line = stream.readLine(); // line of text excluding '\n'
+            QStringList keyAndValue = QStringList::split("=", line);
+            if (keyAndValue.count() == 2)
+            {
+                if (keyAndValue[0] == key)
+                {
+                    result = keyAndValue[1];
+                    break;
+                }
+                if (keyAndValue[0] == "Name") def = keyAndValue[1];
+            }
+        }
+        file.close();
+    }
+    if (!result.isEmpty())
+        return result;
+    else
+        return def;
 }
 
 /**

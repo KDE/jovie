@@ -543,12 +543,12 @@ void FestivalIntConf::slotTest_clicked()
     // Get language code for the selected voice.
     QString languageCode = m_voiceList[m_widget->selectVoiceCombo->currentItem()].languageCode;
 
-    // Use the translated name of the voice as the test message.
-    QString testMsg = m_voiceList[m_widget->selectVoiceCombo->currentItem()].name;
+    // Get test message in the language of the voice.
+    QString testMsg = testMessage(languageCode);
 
     // Fall back if none.
-    if (testMsg == voiceCode) testMsg =
-        i18n("K D E is a modern graphical desktop for UNIX computers.");
+    if (testMsg.isEmpty())
+        testMsg = i18n("KDE is a modern graphical desktop for Unix computers.");
 
     // Get codec.
     QTextCodec* codec = PlugInProc::codecIndexToCodec(
@@ -565,15 +565,15 @@ void FestivalIntConf::slotTest_clicked()
     // kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
     connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_festProc->synth(
-            realFilePath(m_widget->festivalPath->url()),
-    testMsg,
-    tmpWaveFile,
-    voiceCode,
-    m_widget->timeBox->value(),
-    m_widget->frequencyBox->value(),
-    m_widget->volumeBox->value(),
-    languageCode,
-    codec);
+        realFilePath(m_widget->festivalPath->url()),
+        testMsg,
+        tmpWaveFile,
+        voiceCode,
+        m_widget->timeBox->value(),
+        m_widget->frequencyBox->value(),
+        m_widget->volumeBox->value(),
+        languageCode,
+        codec);
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
