@@ -169,14 +169,14 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     {
         QString languageCode = talkerCode->languageCode();
         // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
-        // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+        //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
         if ( !m_languageCodeList.contains( languageCode ) )
         {
             if ( !talkerCode->countryCode().isEmpty() )
             {
                 languageCode += '_' + talkerCode->countryCode();
                 // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
-                // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+                //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
                 if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
             } else return inputText;
         }

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wordlist>
- <name>Emoticons</name>
+ <name>Emoticons (English)</name>
+ <language-code>en</language-code>
  <appid>knotify</appid>
- <appid>konversation</appid>
- <appid>kvirc</appid>
- <appid>ksirc</appid>
- <appid>kopete</appid>
- <appid>gaim</appid>
  <word>
   <type>RegExp</type>
   <match><![CDATA[\s\:\)]]></match>
