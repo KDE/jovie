@@ -1,3 +1,9 @@
+2004-11-23  Gary Cramblitt (PhantomsDad)
+        * Add support for OGI English and Spanish voices.
+        * Update Handbook.
+        * Better Spanish translations for voice names.
+        * Better Speed adjustment for HTS voices.
+
 2004-11-22  Gary Cramblitt (PhantomsDad)
         * Add support for IMS German Festival.
         * Update Handbook.
