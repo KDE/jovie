@@ -4,11 +4,12 @@
   This class is in charge of getting the messages, warnings and text from
   the queue and call the plug ins function to actually speak the texts.
   This class runs as another thread, using QThreads
-  ------------------- 
-  Copyright : (C) 2002 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
   -------------------
-  Original author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
-  Current Maintainer: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org> 
+  Copyright:
+  (C) 2002-2003 by Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
+  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
+  -------------------
+  Original author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez
  ******************************************************************************/
 
 /******************************************************************************
@@ -18,8 +19,6 @@
  *    the Free Software Foundation; either version 2 of the License.          *
  *                                                                            *
  ******************************************************************************/
- 
-// $Id$
 
 #ifndef _SPEAKER_H_
 #define _SPEAKER_H_
@@ -56,6 +55,45 @@ class Speaker : public QObject, public QThread{
          */
         int loadPlugIns();
 
+        /**
+         * Tells the thread to exit
+         */
+        void requestExit();
+     signals:
+        /**
+         * Emitted whenever reading a text was started or resumed
+         */
+        void readingStarted();
+
+        /**
+         * Emitted whenever reading a text was finished,
+         * or paused, or stopped before it was finished
+         */
+        void readingStopped();
+
+        /**
+         * Emitted whenever a message or warning interrupts reading a text
+         */
+        void readingInterrupted();
+
+        /**
+         * Emitted whenever reading a text is resumed after it was interrupted
+         * Note: In function resumeText, readingStarted is called instead
+         */
+        void readingResumed();
+
+        /**
+         * Emitted whenever reading a paragraph was started or finished
+         */
+        void paragraphStarted();
+        void paragraphFinished();
+
+        /**
+         * Emitted whenever reading a sentence was started or finished
+         */
+        void sentenceStarted(QString text, QString language);
+        void sentenceFinished();
+
     protected:
         /**
          * Base function, where the thread will start
@@ -77,6 +115,11 @@ class Speaker : public QObject, public QThread{
          * Checks for playable texts (messages and warnings) and if there's any, it says it.
          */
         void checkSayText();
+
+        /**
+         * holds true if the thread was requested to exit
+         */
+        bool exitRequested;
 
         /**
          * QDict of the loaded plug ins for diferent languages

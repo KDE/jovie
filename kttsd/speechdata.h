@@ -2,16 +2,17 @@
   speechdata.h
   This contains the SpeechData class which is in charge of maintaining
   all the data on the memory.
-  It maintains queues, mutex, a wait condition and has methods to enque 
+  It maintains queues, mutex, a wait condition and has methods to enque
   messages and warnings and manage the text that is thread safe.
   We could say that this is the common repository between the KTTSD class
   (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
-  ------------------- 
-  Copyright : (C) 2002 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
   -------------------
-  Original author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
-  Current Maintainer: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org> 
+  Copyright:
+  (C) 2002-2003 by Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
+  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
+  -------------------
+  Original author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez
  ******************************************************************************/
 
 /******************************************************************************
@@ -21,13 +22,11 @@
  *    the Free Software Foundation; either version 2 of the License.          *
  *                                                                            *
  ******************************************************************************/
- 
-// $Id$
- 
+
 #ifndef _SPEECHDATA_H_
 #define _SPEECHDATA_H_
 
-#include <qptrqueue.h> 
+#include <qptrqueue.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
 #include <qstring.h>
@@ -46,13 +45,15 @@ struct mlText{
 
 /**
  * SpeechData class which is in charge of maintaining all the data on the memory.
- * It maintains queues, mutex, a wait condition and has methods to enque 
+ * It maintains queues, mutex, a wait condition and has methods to enque
  * messages and warnings and manage the text that is thread safe.
  * We could say that this is the common repository between the KTTSD class
  * (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
  * functions)
  */
-class SpeechData{
+class SpeechData : public QObject {
+   Q_OBJECT
+
    public:
       /**
        * Constructor
@@ -64,10 +65,10 @@ class SpeechData{
        * Destructor
        */
       ~SpeechData();
-      
+
       /**
        * Read the configuration
-       */ 
+       */
       bool readConfig();
 
       /**
@@ -81,9 +82,9 @@ class SpeechData{
       mlText dequeueWarning();
 
       /**
-       * Is there any Warning (thread safe)
+       * Are there any Warning (thread safe)
        */
-      bool isEmptyWarning();
+      bool warningInQueue();
 
       /**
        * Add a new message to the queue (thread safe)
@@ -96,12 +97,12 @@ class SpeechData{
       mlText dequeueMessage();
 
       /**
-       * Is there any Message (thread safe)
+       * Are there any Message (thread safe)
        */
-      bool isEmptyMessage();
+      bool messageInQueue();
 
       /**
-       * Sets a text to say it and navigate it (thread safe) (see also playText, stopText, etc)
+       * Sets a text to say it and navigate it (thread safe) (see also resumeText, stopText, etc)
        */
       void setText( const QString &, const QString &language=NULL  );
 
@@ -112,13 +113,13 @@ class SpeechData{
 
       /**
        * Get a sentence to speak it.
-       */     
-      mlText getSentenceText(); 
+       */
+      mlText getSentenceText();
 
       /**
        * Returns true if the text has not to be speaked (thread safe)
        */
-      bool isStopedText();
+      bool currentlyReading();
 
       /**
        * Jump to the previous paragrah (thread safe)
@@ -141,14 +142,22 @@ class SpeechData{
       void stopText();
 
       /**
-       * Start text (thread safe)
+       * Start text at the beginning (thread safe)
+       * Note: If no text is set, the call is ignored.
        */
-      void playText();
+      void startText();
+
+      /**
+       * Resume text if the text was paused
+       * Start text if the text was not started yet or if it was finished or stopped
+       * Otherwise ignored.
+       */
+      void resumeText();
 
       /**
        * Next sentence (thread safe)
        */
-      void nextSenText();    
+      void nextSenText();
 
       /**
        * Next paragrah (thread safe)
@@ -243,7 +252,7 @@ class SpeechData{
       bool parPostSndEnabled;
 
       /**
-       * Default language 
+       * Default language
        */
       QString defaultLanguage;
 
@@ -251,6 +260,42 @@ class SpeechData{
        * Configuration
        */
       KConfig *config;
+
+   signals:
+      /**
+       * Emitted after reading a text was started by function startText or resumeText
+       */
+      void textStarted();
+
+      /**
+       * Emitted after reading a text was finished
+       */
+      void textFinished();
+
+      /**
+       * Emitted whenever reading a text was stopped before it was finished
+       */
+      void textStopped();
+
+      /**
+       * Emitted whenever reading a text was paused by function pauseText
+       */
+      void textPaused();
+
+      /**
+       * Emitted whenever reading a text was resumed after having been paused
+       */
+      void textResumed();
+
+      /**
+       * Emitted after a text was set by function setText
+       */
+      void textSet();
+
+      /**
+       * Emitted after a text was removed by function removeText
+       */
+      void textRemoved();
 
    private:
       /**
@@ -290,8 +335,8 @@ class SpeechData{
 
       /**
        * holds true if the text is stoped
-       */ 
-      bool textPaused;    
+       */
+      bool reading;
 
       /**
        * Iterator of the sentenses of the text

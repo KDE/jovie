@@ -4,11 +4,12 @@
   This class is in charge of getting the messages, warnings and text from
   the queue and call the plug ins function to actually speak the texts.
   This class runs as another thread, using QThreads
-  ------------------- 
-  Copyright : (C) 2002 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
   -------------------
-  Original author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
-  Current Maintainer: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org> 
+  Copyright:
+  (C) 2002-2003 by Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
+  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
+  -------------------
+  Original author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez
  ******************************************************************************/
 
 /******************************************************************************
@@ -19,8 +20,6 @@
  *                                                                            *
  ******************************************************************************/
  
-// $Id$
-
 #include <qthread.h>
 
 #include <kdebug.h>
@@ -37,6 +36,7 @@
  */
 Speaker::Speaker( SpeechData *speechData, QObject *parent, const char *name) : QObject(parent, name), QThread(), speechData(speechData){
     kdDebug() << "Running: Speaker::Speaker()" << endl;
+    exitRequested = false;
 }
 
 /**
@@ -52,15 +52,18 @@ Speaker::~Speaker(){
 void Speaker::run(){
     kdDebug() << "Running: Speaker::run()" << endl;
     kdDebug() << "Speaker thread started" << endl;
-   
+
     while(true){
         kdDebug() << "Speaker going to sleep" << endl;
         speechData->newTMW.wait();
         kdDebug() << "Waking speaker up to process the new texts, messages, warnings" << endl;
 
+        if (exitRequested)
+          exit();
+
         checkSayWarning();
         checkSayMessage();
-        checkSayText();    
+        checkSayText();
    }
 }
 
@@ -69,7 +72,7 @@ void Speaker::run(){
  */
 void Speaker::checkSayWarning(){
     kdDebug() << "Running: Speaker::checkSayWarning()" << endl;
-    while(!speechData->isEmptyWarning()){
+    while(speechData->warningInQueue()){
         mlText temp = speechData->dequeueWarning();
         if(loadedPlugIns[temp.language]){
             loadedPlugIns[temp.language]->sayText(temp.text);
@@ -83,8 +86,8 @@ void Speaker::checkSayWarning(){
  * Checks for messages (and warnings) and if there's any, it says it.
  */
 void Speaker::checkSayMessage(){
-    while(!speechData->isEmptyMessage() or !speechData->isEmptyWarning()){
-        checkSayWarning();   
+    while(speechData->messageInQueue() or speechData->warningInQueue()){
+        checkSayWarning();
         mlText temp = speechData->dequeueMessage();
         if(loadedPlugIns[temp.language]){
             loadedPlugIns[temp.language]->sayText(temp.text);
@@ -98,32 +101,51 @@ void Speaker::checkSayMessage(){
  * Checks for playable texts (messages and warnings) and if there's any, it says it.
  */
 void Speaker::checkSayText(){
-    while(!speechData->isStopedText() or !speechData->isEmptyMessage() or !speechData->isEmptyWarning()){
-        if(!speechData->isEmptyWarning()){
+    if (speechData->currentlyReading()) {
+        emit readingStarted();
+        emit paragraphStarted();
+    }
+    while(speechData->currentlyReading() or speechData->messageInQueue() or speechData->warningInQueue()){
+        if(speechData->warningInQueue()){
+            emit readingInterrupted();
             if(speechData->parPreMsgEnabled){
                 loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->parPreMsg);
             }
-            checkSayWarning();        
+            checkSayWarning();
             if(speechData->parPostMsgEnabled){
                 loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->parPostMsg);
             }
-        }     
+            emit readingResumed();
+        }
         mlText temp = speechData->getSentenceText();
-        if(!speechData->isEmptyMessage() and (temp.text == "")){
-            if(speechData->textPreMsgEnabled){
-                loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->textPreMsg);
+        if (temp.text == "") {
+            emit paragraphFinished();
+            if(speechData->messageInQueue()){
+                emit readingInterrupted();
+                if(speechData->textPreMsgEnabled){
+                    loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->textPreMsg);
+                }
+                checkSayMessage();
+                if(speechData->textPostMsgEnabled){
+                    loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->textPostMsg);
+                }
+                emit readingResumed();
             }
-            checkSayMessage();        
-            if(speechData->textPostMsgEnabled){
-                loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->textPostMsg);
-            }
-        }
-        kdDebug() << "REALLY SAYING " << temp.text << endl;
-        if(loadedPlugIns[temp.language]){
-            loadedPlugIns[temp.language]->sayText(temp.text);
+            emit paragraphStarted();
         } else {
-            loadedPlugIns[speechData->defaultLanguage]->sayText(temp.text);
+            kdDebug() << "REALLY SAYING " << temp.text << endl;
+            emit sentenceStarted(temp.text, temp.language);
+            if(loadedPlugIns[temp.language]){
+                loadedPlugIns[temp.language]->sayText(temp.text);
+            } else {
+                loadedPlugIns[speechData->defaultLanguage]->sayText(temp.text);
+            }
+            emit sentenceFinished();
         }
+    }
+    if (speechData->currentlyReading()) {
+        emit paragraphFinished();
+        emit readingStopped();
     }
 }
 
@@ -133,7 +155,7 @@ void Speaker::checkSayText(){
 int Speaker::loadPlugIns(){
     kdDebug() << "Running: Speaker::loadPlugIns()" << endl;
     int good = 0, bad = 0;
-    
+
     QStringList langs = speechData->config->groupList().grep("Lang_");
     KLibFactory *factory;
     for( QStringList::Iterator it = langs.begin(); it != langs.end(); ++it ) {
@@ -172,7 +194,7 @@ int Speaker::loadPlugIns(){
                 kdDebug() << "Couldn't create the factory object from " << offers[0]->library() << endl;
                 bad++;
             }
-        }    
+        }
     }
     if(bad > 0){
         if(good == 0){
@@ -186,4 +208,13 @@ int Speaker::loadPlugIns(){
         // All the plug in were loaded perfectly
         return 1;
     }
+}
+
+/**
+ * Tells the thread to exit
+ */
+void Speaker::requestExit(){
+    kdDebug() << "Running: Speaker::requestExit()" << endl;
+    exitRequested = true;
+    speechData->newTMW.wakeOne();
 }

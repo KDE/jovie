@@ -2,10 +2,11 @@
   kttsd.h
   KTTSD main class
   -------------------
-  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
+  Copyright:
+  (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
 
 /***************************************************************************
@@ -16,17 +17,20 @@
  *                                                                         *
  ***************************************************************************/
 
-// $Id$
-
 #ifndef _KTTSD_H_
 #define _KTTSD_H_
 
+#include <kaboutapplication.h>
 #include <dcopobject.h>
+#include <ksystemtray.h>
 
 #include "speechdata.h"
 #include "speaker.h"
+#include "kttsdui.h"
 
-class KTTSD : public QObject, public DCOPObject{
+class KTTSDTray;
+
+class KTTSD : public kttsdUI, public DCOPObject {
     Q_OBJECT
     K_DCOP
 
@@ -36,18 +40,59 @@ class KTTSD : public QObject, public DCOPObject{
          * Create objects, speechData and speaker
          * Start thread
          */
-        KTTSD(QObject *parent = 0, const char *name = 0);
+        KTTSD(QWidget *parent = 0, const char *name = 0);
 
         /**
          * Destructor
          * Terminate speaker thread
          */
         ~KTTSD();
-      
+
         /**
          * Holds if we are ok to go or not
          */
         bool ok;
+    public slots:
+        /**
+         * These functions are called whenever either
+         * a button in the main window or a system tray
+         * contect menu entry is selected
+         */
+        void openSelected();
+        void startSelected();
+        void stopSelected();
+        void pauseSelected(bool paused);
+
+        void nextSentenceSelected();
+        void prevSentenceSelected();
+        void nextParagraphSelected();
+        void prevParagraphSelected();
+
+        void helpSelected();
+        void closeSelected();
+        void quitSelected();
+
+        void configureSelected();
+        void aboutSelected();
+
+        /**
+         * These functions are called whenever
+         * the status of the speaker object has changed
+         */
+        void sentenceStarted(QString text, QString language);
+        void sentenceFinished();
+
+        /**
+         * These functions are called whenever
+         * the status of the speechData object has changed
+         */
+        void textStarted();
+        void textFinished();
+        void textStopped();
+        void textPaused();
+        void textResumed();
+        void textSet();
+        void textRemoved();
 
     private:
         /**
@@ -59,6 +104,9 @@ class KTTSD : public QObject, public DCOPObject{
          * Speaker that will be run as another thread, actually saying the messages, warning, texts
          */
         Speaker *speaker;
+
+        KTTSDTray *tray;
+        KAboutApplication *aboutDlg;
 
     k_dcop:
         /**
@@ -92,7 +140,7 @@ class KTTSD : public QObject, public DCOPObject{
         void prevSenText();
 
         /**
-         * Stop text
+         * Pause text
          */
         void pauseText();
 
@@ -102,9 +150,14 @@ class KTTSD : public QObject, public DCOPObject{
         void stopText();
 
         /**
-         * Start text
+         * Start text at the beginning
          */
-        void playText();
+        void startText();
+
+        /**
+         * Start or resume text where it was paused
+         */
+        void resumeText();
 
         /**
          * Next sentence
@@ -128,4 +181,19 @@ class KTTSD : public QObject, public DCOPObject{
 
 };
 
+class KTTSDTray : public KSystemTray {
+    Q_OBJECT
+
+    public:
+        KTTSDTray (QWidget *parent=0, const char *name=0);
+        ~KTTSDTray();
+
+    signals:
+        /**
+         * These functions are called whenever an entry in system tray contect menu is selected
+         */
+        void configureSelected();
+        void aboutSelected();
+        void helpSelected();
+};
 #endif // _KTTSD_H_

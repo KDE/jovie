@@ -2,16 +2,17 @@
   speechdata.cpp
   This contains the SpeechData class which is in charge of maintaining
   all the data on the memory.
-  It maintains queues, mutex, a wait condition and has methods to enque 
+  It maintains queues, mutex, a wait condition and has methods to enque
   messages and warnings and manage the text that is thread safe.
   We could say that this is the common repository between the KTTSD class
   (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
-  ------------------- 
-  Copyright : (C) 2002 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
   -------------------
-  Original author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
-  Current Maintainer: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org> 
+  Copyright:
+  (C) 2002-2003 by Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
+  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
+  -------------------
+  Original author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez
  ******************************************************************************/
 
 /******************************************************************************
@@ -21,8 +22,7 @@
  *    the Free Software Foundation; either version 2 of the License.          *
  *                                                                            *
  ******************************************************************************/
- 
-// $Id$
+
 #include <stdlib.h>
 
 #include <kdebug.h>
@@ -30,6 +30,7 @@
 #include <kapplication.h>
 
 #include "speechdata.h"
+#include "speechdata.moc"
 
 /**
  * Constructor
@@ -40,7 +41,7 @@ SpeechData::SpeechData(){
     kdDebug() << "Running: SpeechData::SpeechData()" << endl;
     // The text should be stoped at the beggining (thread safe)
     textMutex.lock();
-    textPaused = true;
+    reading = false;
     textMutex.unlock();
 
     // Warnings queue to be autodelete  (thread safe)
@@ -100,7 +101,7 @@ bool SpeechData::readConfig(){
  * Destructor
  */
 SpeechData::~SpeechData(){
-    kdDebug() << "Running: SpeechData::~SpeechData()" << endl;  
+    kdDebug() << "Running: SpeechData::~SpeechData()" << endl;
 }
 
 /**
@@ -123,7 +124,7 @@ void SpeechData::enqueueWarning( const QString &warning, const QString &language
  * Pop (get and erase) a warning from the queue (thread safe)
  */
 mlText SpeechData::dequeueWarning(){
-    kdDebug() << "Running: SpeechData::dequeueWarning()" << endl;  
+    kdDebug() << "Running: SpeechData::dequeueWarning()" << endl;
     warningsMutex.lock();
     mlText *temp = warnings.dequeue();
     uint count = warnings.count();
@@ -133,12 +134,12 @@ mlText SpeechData::dequeueWarning(){
 }
 
 /**
- * Is there any Warning (thread safe)
+ * Are there any Warning (thread safe)
  */
-bool SpeechData::isEmptyWarning(){
-    kdDebug() << "Running: SpeechData::isEmptyWarning() const" << endl;    
+bool SpeechData::warningInQueue(){
+    kdDebug() << "Running: SpeechData::warningInQueue() const" << endl;
     warningsMutex.lock();
-    bool temp = warnings.isEmpty();
+    bool temp = !warnings.isEmpty();
     warningsMutex.unlock();
     if(temp){
         kdDebug() << "The warnings queue is empty" << endl;
@@ -168,7 +169,7 @@ void SpeechData::enqueueMessage( const QString &message, const QString &language
  * Pop (get and erase) a message from the queue (thread safe)
  */
 mlText SpeechData::dequeueMessage(){
-    kdDebug() << "Running: SpeechData::dequeueMessage()" << endl;  
+    kdDebug() << "Running: SpeechData::dequeueMessage()" << endl;
     messagesMutex.lock();
     mlText *temp = messages.dequeue();
     uint count = warnings.count();
@@ -178,12 +179,12 @@ mlText SpeechData::dequeueMessage(){
 }
 
 /**
- * Is there any Message (thread safe)
+ * Are there any Message (thread safe)
  */
-bool SpeechData::isEmptyMessage(){
-    kdDebug() << "Running: SpeechData::isEmptyMessage() const" << endl;    
+bool SpeechData::messageInQueue(){
+    kdDebug() << "Running: SpeechData::messageInQueue() const" << endl;
     messagesMutex.lock();
-    bool temp = messages.isEmpty();
+    bool temp = !messages.isEmpty();
     messagesMutex.unlock();
     if(temp){
         kdDebug() << "The messages queue is empty" << endl;
@@ -194,10 +195,10 @@ bool SpeechData::isEmptyMessage(){
 }
 
 /**
- * Sets a text to say it and navigate it (thread safe) (see also playText, stopText, etc)
+ * Sets a text to say it and navigate it (thread safe) (see also resumeText, stopText, etc)
  */
 void SpeechData::setText( const QString &text, const QString &language ){
-    kdDebug() << "Running: SpeechData::" << endl;
+    kdDebug() << "Running: SpeechData::setText" << endl;
     // There has to be a better way
     kdDebug() << "I'm getting: " << endl << text  << endl;
     QString temp = text;
@@ -207,12 +208,17 @@ void SpeechData::setText( const QString &text, const QString &language ){
     for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
         kdDebug() << "'" << *it << "'" << endl;
     }
+
     textMutex.lock();
+    bool wasReading = reading;
+    reading = false;
     textLanguage = language;
-    textPaused = true;
     textSents = tempList;
     textIterator = textSents.begin();
     textMutex.unlock();
+    if (wasReading)
+        emit textStopped();
+    emit textSet();
 }
 
 /**
@@ -221,15 +227,19 @@ void SpeechData::setText( const QString &text, const QString &language ){
 void SpeechData::removeText(){
     kdDebug() << "Running: SpeechData::removeText()" << endl;
     textMutex.lock();
-    textPaused = true;
+    bool wasReading = reading;
+    reading = false;
     textIterator = textSents.begin();
     textSents.clear();
     textMutex.unlock();
+    if (wasReading)
+        emit textStopped();
+    emit textRemoved();
 }
 
  /**
   * Get a sentence to speak it.
-  */     
+  */
 mlText SpeechData::getSentenceText(){
     kdDebug() << "Running: QString getSentenceText()" << endl;
     mlText *temp = new mlText();
@@ -238,19 +248,22 @@ mlText SpeechData::getSentenceText(){
     temp->language = textLanguage;
     textIterator++;
     if(textIterator == textSents.end()){
-        textPaused = true;
+        reading = false;
+        textIterator = textSents.begin();
     }
-    textMutex.unlock(); 
+    textMutex.unlock();
+    if (!reading)
+        emit textFinished();
     return *temp;
  }
 
 /**
  * Returns true if the text has not to be speaked (thread safe)
  */
-bool SpeechData::isStopedText(){
-    kdDebug() << "Running: SpeechData::isStopedText()" << endl;
+bool SpeechData::currentlyReading(){
+    kdDebug() << "Running: SpeechData::currentlyReading()" << endl;
     textMutex.lock();
-    bool temp = textPaused;
+    bool temp = reading;
     textMutex.unlock();
     return temp;
 }
@@ -273,7 +286,8 @@ void SpeechData::prevParText(){
 void SpeechData::prevSenText(){
     kdDebug() << "Running: SpeechData::prevSenText()" << endl;
     textMutex.lock();
-    textIterator--;
+    if (textIterator != textSents.begin())
+        textIterator--;
     textMutex.unlock();
 }
 
@@ -283,8 +297,9 @@ void SpeechData::prevSenText(){
 void SpeechData::pauseText(){
     kdDebug() << "Running: SpeechData::pauseText()" << endl;
     textMutex.lock();
-    textPaused = true;
+    reading = false;
     textMutex.unlock();
+    emit textPaused();
 }
 
 /**
@@ -293,31 +308,58 @@ void SpeechData::pauseText(){
 void SpeechData::stopText(){
     kdDebug() << "Running: SpeechData::stopText()" << endl;
     textMutex.lock();
-    textPaused = true;
+    reading = false;
     textIterator = textSents.begin();
     textMutex.unlock();
+    emit textStopped();
 }
 
 /**
- * Start text (thread safe)
+ * Start text at the beginning (thread safe)
  */
-void SpeechData::playText(){
-    kdDebug() << "Running: SpeechData::playText()" << endl;
+void SpeechData::startText(){
+    kdDebug() << "Running: SpeechData::startText()" << endl;
     textMutex.lock();
-    textPaused = false;
+    bool wasReading = reading;
+    reading = true;
+    textIterator = textSents.begin();
     textMutex.unlock();
     newTMW.wakeOne();
+    if (wasReading)
+        emit textStopped();
+    emit textStarted();
 }
-    
+
+/**
+ * Resume text if paused, otherwise start at the beginning
+ */
+void SpeechData::resumeText(){
+    kdDebug() << "Running: SpeechData::resumeText()" << endl;
+    textMutex.lock();
+    bool wasReading = reading;
+    bool wasStarted = (textIterator == textSents.begin());
+    reading = true;
+    textMutex.unlock();
+    newTMW.wakeOne();
+
+    if (!wasReading) {
+        if (wasStarted)
+            emit textStarted();
+        else
+            emit textResumed();
+    }
+}
+
 /**
  * Next sentence (thread safe)
  */
 void SpeechData::nextSenText(){
     kdDebug() << "Running: SpeechData::nextSenText()" << endl;
     textMutex.lock();
-    textIterator++;
+    if (textIterator != textSents.end())
+        textIterator++;
     textMutex.unlock();
-}    
+}
 
 /**
  * Next paragrah (thread safe)

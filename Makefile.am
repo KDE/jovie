@@ -1,2 +1,1 @@
-#SUBDIRS = libproklam libkspeech proklam plugins kcm_proklam
-SUBDIRS = libkttsd kcmkttsd plugins kttsd
+SUBDIRS = libkttsd kcmkttsd plugins kttsd icons app-plugins

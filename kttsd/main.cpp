@@ -2,10 +2,11 @@
   main.cpp
   Where the main function for KTTSD resides.
   -------------------
-  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
+  Copyright:
+  (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
 
 /***************************************************************************
@@ -15,7 +16,7 @@
  *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include <kuniqueapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -45,7 +46,7 @@ int main (int argc, char *argv[]){
    KUniqueApplication app;
    // This app is started automatically, no need for session management
    app.disableSessionManagement();
-   KTTSD *service = new KTTSD;
+   KTTSD *service = new KTTSD();
    
    // Are we ok to go ?
    if(!service->ok){
