@@ -28,7 +28,7 @@
 #include "freettsproc.h" 
 
 /** Constructor */
-FreeTTSProc::FreeTTSProc( QObject* parent, const char* name, const QStringList &args) : 
+FreeTTSProc::FreeTTSProc( QObject* parent, const char* name, const QStringList& /*args*/) : 
 	PlugInProc( parent, name ) {
 	kdDebug() << "Running: FreeTTSProc::FreeTTSProc" << endl;
 	m_state = psIdle;
@@ -78,6 +78,15 @@ void FreeTTSProc::sayText(const QString &text) {
 void FreeTTSProc::synthText(const QString& text, const QString& suggestedFilename) {
 	kdDebug() << "Running: FreeTTSProc::synthText" << endl;
 	synth(text, suggestedFilename, m_freettsJarPath);
+}
+
+// A little helper function because KDE 3.2 kdDebug() does not support QValueList<QCString>.
+QStringList argsToQStringList(const QValueList<QCString> list)
+{
+    QStringList newList;
+    QValueList<QCString>::ConstIterator it = list.begin();
+    for ( ; it != list.end(); ++it ) newList.append(*it);
+    return newList;
 }
 
 void FreeTTSProc::synth(
@@ -135,7 +144,7 @@ void FreeTTSProc::synth(
 	if (!m_freettsProc->start(KProcess::NotifyOnExit, KProcess::All)) {
 		kdDebug() << "FreeTTSProc::synth: Error starting FreeTTS process.  Is freetts.jar in the PATH?" << endl;
 		m_state = psIdle;
-		kdDebug() << "KProcess args: " << m_freettsProc->args() << endl;
+		kdDebug() << "KProcess args: " << argsToQStringList(m_freettsProc->args()) << endl;
 		return;
 	}
 	kdDebug()<< "FreeTTSProc:synth: FreeTTS initialized" << endl;
