@@ -167,7 +167,7 @@
                         <cstring>forceArts</cstring>
                     </property>
                     <property name="text">
-                        <string>F&amp;orce output through Arts</string>
+                        <string>F&amp;orce output through aRts</string>
                     </property>
                 </widget>
             </vbox>
