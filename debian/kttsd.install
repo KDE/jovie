@@ -25,7 +25,10 @@ debian/tmp/usr/lib/kde3/kcm_kttsmgr.la
 debian/tmp/usr/lib/kde3/kcm_kttsd.so
 debian/tmp/usr/lib/kde3/kcm_kttsd.la
 debian/tmp/usr/share/servicetypes/kttsd.desktop
+debian/tmp/usr/share/apps/kttsd/xslt/SSMLtoPlainText.xsl
 debian/tmp/usr/share/apps/kttsd/festivalint/voices
+debian/tmp/usr/share/apps/kttsd/festivalint/sabletowave.scm
+debian/tmp/usr/share/apps/kttsd/festivalint/xslt/SSMLtoSable.xsl
 debian/tmp/usr/share/apps/kttsd/icons/hicolor/16x16/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsd/icons/hicolor/22x22/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsd/icons/hicolor/32x32/apps/kttsd.png
