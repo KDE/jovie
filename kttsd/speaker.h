@@ -88,6 +88,7 @@ enum uttState
 struct Utt{
     mlText* sentence;            /* The text, talker, appId, and sequence num. */
     uttType utType;              /* The type of utterance (text, msg, screen reader) */
+    bool isSSML;                 /* True if the utterance contains SSML markup. */
     uttState state;              /* Processing state of the utterance. */
 #if SUPPORT_SSML
     SSMLConvert* transformer;    /* XSLT transformer. */

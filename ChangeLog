@@ -1,3 +1,7 @@
+2004-12-02  Gary Cramblitt (PhantomsDad)
+        * Bypass stretching (overall Speed setting) when utterance contains SSML.  sox
+          mangles SSML pitch settings.
+
 2004-12-01  Gary Cramblitt (PhantomsDad)
         * Some code reorganization.  New TalkerCode object in libkttsd.
         * Better Talker selection dialog when changing Talker in Jobs tab.

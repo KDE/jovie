@@ -412,7 +412,10 @@ void Speaker::doUtterances()
                     case usSynthed:
                         {
                             // Don't bother stretching if factor is 1.0.
-                            if (m_audioStretchFactor == 1.0)
+                            // Don't bother stretching if SSML.
+                            // TODO: This is because sox mangles SSML pitch settings.  Would be nice
+                            // to figure out how to avoid this.
+                            if (m_audioStretchFactor == 1.0 || it->isSSML)
                             {
                                 it->state = usStretched;
                                 m_again = true;
@@ -1152,7 +1155,7 @@ bool Speaker::isSsml(const QString &text)
 void Speaker::setInitialUtteranceState(Utt &utt)
 {
 #if SUPPORT_SSML
-    if (utt.state != usTransforming && isSsml(utt.sentence->text))
+    if ((utt.state != usTransforming) && utt.isSSML)
     {
         utt.state = usWaitingTransform;
         return;
@@ -1215,6 +1218,7 @@ bool Speaker::getNextUtterance()
     if (utt)
     {
         gotOne = true;
+        utt->isSSML = isSsml(utt->sentence->text);
         utt->state = usNone;
         utt->audioPlayer = 0;
         utt->audioStretcher = 0;
@@ -1286,6 +1290,7 @@ bool Speaker::getNextUtterance()
                         intrUtt.audioUrl = m_speechData->textPreSnd;
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptSnd;
+                        intrUtt.isSSML = false;
                         intrUtt.state = usStretched;
                         intrUtt.plugin = 0;
                         it = m_uttQueue.insert(it, intrUtt);
@@ -1303,6 +1308,7 @@ bool Speaker::getNextUtterance()
                         intrUtt.audioUrl = QString::null;
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptMsg;
+                        intrUtt.isSSML = isSsml(intrUtt.sentence->text);
                         intrUtt.plugin = talkerToPlugin(intrUtt.sentence->talker);
                         intrUtt.state = usNone;
                         setInitialUtteranceState(intrUtt);
@@ -1329,6 +1335,7 @@ bool Speaker::getNextUtterance()
                     resUtt.audioUrl = m_speechData->textPostSnd;
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeSnd;
+                    resUtt.isSSML = false;
                     resUtt.state = usStretched;
                     resUtt.plugin = 0;
                     it = m_uttQueue.insert(it, resUtt);
@@ -1346,6 +1353,7 @@ bool Speaker::getNextUtterance()
                     resUtt.audioUrl = QString::null;
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeMsg;
+                    resUtt.isSSML = isSsml(resUtt.sentence->text);
                     resUtt.plugin = talkerToPlugin(resUtt.sentence->talker);
                     resUtt.state = usNone;
                     setInitialUtteranceState(resUtt);
@@ -1374,6 +1382,7 @@ bool Speaker::getNextUtterance()
                         jobUtt.sentence->seq = 0;
                         jobUtt.audioUrl = QString::null;
                         jobUtt.utType = utEndOfJob;
+                        jobUtt.isSSML = false;
                         jobUtt.plugin = 0;
                         jobUtt.state = usWaitingSignal;
                         m_uttQueue.append(jobUtt);
@@ -1394,6 +1403,7 @@ bool Speaker::getNextUtterance()
                     jobUtt.sentence->seq = utt->sentence->seq;
                     jobUtt.audioUrl = QString::null;
                     jobUtt.utType = utStartOfJob;
+                    jobUtt.isSSML = false;
                     jobUtt.plugin = 0;
                     jobUtt.state = usWaitingSignal;
                     m_uttQueue.append(jobUtt);
@@ -1419,6 +1429,7 @@ bool Speaker::getNextUtterance()
                 jobUtt.sentence->seq = 0;
                 jobUtt.audioUrl = QString::null;
                 jobUtt.utType = utEndOfJob;
+                jobUtt.isSSML = false;
                 jobUtt.plugin = 0;
                 jobUtt.state = usWaitingSignal;
                 m_uttQueue.append(jobUtt);
