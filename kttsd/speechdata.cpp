@@ -217,7 +217,10 @@ void SpeechData::setText( const QString &text, const QString &language ){
     textMutex.lock();
     bool wasReading = reading;
     reading = false;
-    textLanguage = language;
+    if (language != NULL)
+        textLanguage = language;
+    else
+        textLanguage = defaultLanguage;
     textSents = tempList;
     textIterator = textSents.begin();
     textMutex.unlock();
