@@ -16,9 +16,6 @@
  *																					 *
  ***************************************************************************/
 
-#include <cstdlib>
-// getenv  
-
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
@@ -61,10 +58,6 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/
 	connect(m_widget->freettsPath, SIGNAL(textChanged(const QString&)),
 		this, SLOT(configChanged()));
 	connect(m_widget->freettsTest, SIGNAL(clicked()), this, SLOT(slotFreeTTSTest_clicked()));
-	
-// 	QString systemPath(getenv("PATH"));
-// // 	kdDebug() << "Path is " << systemPath << endl;
-// 	m_path = QStringList::split(":", systemPath);
 }
 
 /** Destructor */
