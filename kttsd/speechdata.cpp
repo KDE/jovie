@@ -116,7 +116,7 @@ SpeechData::~SpeechData(){
 * If an existing Screen Reader output is in progress, it is stopped and discarded and
 * replaced with this new message.
 */
-void SpeechData::setScreenReaderOutput(const QString &msg, const QString &talker /*=NULL*/, const QCString &appId /*=NULL*/ )
+void SpeechData::setScreenReaderOutput(const QString &msg, const QString &talker, const QCString &appId)
 {
     screenReaderOutput.text = msg;
     screenReaderOutput.talker = talker;
@@ -150,7 +150,7 @@ bool SpeechData::screenReaderOutputReady()
 /**
 * Add a new warning to the queue.
 */
-void SpeechData::enqueueWarning( const QString &warning, const QString &talker /*=NULL*/, const QCString &appId /*=NULL*/ ){
+void SpeechData::enqueueWarning( const QString &warning, const QString &talker, const QCString &appId){
     // kdDebug() << "Running: SpeechData::enqueueWarning( const QString &warning )" << endl;
     mlText *temp = new mlText();
     temp->text = warning;
@@ -193,7 +193,7 @@ bool SpeechData::warningInQueue(){
 /**
 * Add a new message to the queue.
 */
-void SpeechData::enqueueMessage( const QString &message, const QString &talker /*=NULL*/, const QCString& appId /*=NULL*/ ){
+void SpeechData::enqueueMessage( const QString &message, const QString &talker, const QCString& appId){
     // kdDebug() << "Running: SpeechData::enqueueMessage" << endl;
     mlText *temp = new mlText();
     temp->text = message;
@@ -282,7 +282,7 @@ QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=
 /**
 * Queues a text job.
 */
-uint SpeechData::setText( const QString &text, const QString &talker /*=NULL*/, const QCString &appId /*=NULL*/ )
+uint SpeechData::setText( const QString &text, const QString &talker, const QCString &appId)
 {
     // kdDebug() << "Running: SpeechData::setText" << endl;
     QStringList tempList = parseText(text, appId);
@@ -320,7 +320,7 @@ uint SpeechData::setText( const QString &text, const QString &talker /*=NULL*/, 
 * @see setText.
 * @see startText.
 */
-int SpeechData::appendText(const QString &text, const uint jobNum /*=0*/, const QCString& appId /*=NULL*/)
+int SpeechData::appendText(const QString &text, const uint jobNum, const QCString& appId)
 {
     // kdDebug() << "Running: SpeechData::appendText" << endl;
     QStringList tempList = parseText(text, appId);
@@ -375,7 +375,7 @@ mlJob* SpeechData::findLastJobByAppId(const QCString& appId)
 mlJob* SpeechData::findAJobByAppId(const QCString& appId)
 {
     mlJob* job = findLastJobByAppId(appId);
-    if (!job) job = textJobs.getLast();
+    // if (!job) job = textJobs.getLast();
     return job;
 }
 
@@ -634,7 +634,7 @@ uint SpeechData::getJobSequenceNum(const uint jobNum)
 * Changing the sentence delimiter does not affect other applications.
 * @see sentenceparsing
 */
-void SpeechData::setSentenceDelimiter(const QString &delimiter, const QCString appId /*=NULL*/)
+void SpeechData::setSentenceDelimiter(const QString &delimiter, const QCString appId)
 {
     sentenceDelimiters[appId] = delimiter;
 }
@@ -804,7 +804,7 @@ QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
 *                       If no plugin has been configured for the specified language code,
 *                       defaults to the user's default talker.
 */
-void SpeechData::changeTextTalker(const uint jobNum, const QString &talker /*=NULL*/)
+void SpeechData::changeTextTalker(const uint jobNum, const QString &talker)
 {
     mlJob* job = findJobByJobNum(jobNum);
     if (job)

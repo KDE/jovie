@@ -723,7 +723,7 @@ ASYNC KttsJobMgrPart::sentenceFinished(const QCString&, const uint jobNum, const
 
 /**
 * This signal is emitted whenever a new text job is added to the queue.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textSet(const QCString&, const uint jobNum)
@@ -772,7 +772,7 @@ ASYNC KttsJobMgrPart::textAppended(const QCString& appId, const uint jobNum, con
 
 /**
 * This signal is emitted whenever speaking of a text job begins.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textStarted(const QCString&, const uint jobNum)
@@ -791,7 +791,7 @@ ASYNC KttsJobMgrPart::textStarted(const QCString&, const uint jobNum)
 * job reaches the Finished state. (Only one job in the text queue may be
 * in state Finished at one time.)  If @ref startText or @ref resumeText is
 * called before the job is deleted, it will remain in the queue for speaking.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
@@ -807,26 +807,28 @@ ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
 
 /**
 * This signal is emitted whenever a speaking text job stops speaking.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
 {
+    kdDebug() << "KttsJobMgrPart::textStopped: Running" << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
         item->setText(jlvcState, stateToStr(kspeech::jsQueued));
-        item->setText(jlvcPosition, "0");
+        item->setText(jlvcPosition, "1");
     }
 }
 
 /**
 * This signal is emitted whenever a speaking text job is paused.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textPaused(const QCString&, const uint jobNum)
 {
+    kdDebug() << "KttsJobMgrPart::textPaused: Running" << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -836,7 +838,7 @@ ASYNC KttsJobMgrPart::textPaused(const QCString&, const uint jobNum)
 
 /**
 * This signal is emitted when a text job, that was previously paused, resumes speaking.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textResumed(const QCString&, const uint jobNum)
@@ -851,7 +853,7 @@ ASYNC KttsJobMgrPart::textResumed(const QCString&, const uint jobNum)
 /**
 * This signal is emitted whenever a text job is deleted from the queue.
 * The job is no longer in the queue when this signal is emitted.
-* @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
+* @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
 ASYNC KttsJobMgrPart::textRemoved(const QCString&, const uint jobNum)

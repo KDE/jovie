@@ -525,10 +525,13 @@ void Speaker::startText(const uint jobNum)
 */
 void Speaker::stopText(const uint jobNum)
 {
+    bool emitSignal = (m_speechData->getTextJobState(jobNum) == kspeech::jsSpeaking);
     deleteUtteranceByJobNum(jobNum);
     m_speechData->setJobSequenceNum(jobNum, 1);
     m_speechData->setTextJobState(jobNum, kspeech::jsQueued);
-    // TODO: call doUtterances to process other jobs?
+    if (emitSignal) textStopped(m_speechData->getAppIdByJobNum(jobNum), jobNum);
+    // Call doUtterances to process other jobs.
+    doUtterances();
 }
 
 /**
@@ -546,9 +549,11 @@ void Speaker::stopText(const uint jobNum)
 */
 void Speaker::pauseText(const uint jobNum)
 {
+    bool emitSignal = (m_speechData->getTextJobState(jobNum) == kspeech::jsSpeaking);
     pauseUtteranceByJobNum(jobNum);
     kdDebug() << "Speaker::pauseText: setting Job State of job " << jobNum << " to jsPaused" << endl;
     m_speechData->setTextJobState(jobNum, kspeech::jsPaused);
+    if (emitSignal) textPaused(m_speechData->getAppIdByJobNum(jobNum),jobNum);
 }
 
 /**

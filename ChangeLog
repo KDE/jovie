@@ -1,3 +1,17 @@
+2004-08-28  Cramblitt <garycramblitt@comcast.net>
+        * GStreamer player added.  Doesn't work right now because gstreamer 0.6
+          has issues with wav files.  Try again when KDE bindings (gst) have been
+          updated to gstreamer 0.8.
+        * If jobNum parameter in dcop calls is 0, default to last job queued by the
+          application, or if no such job, the current job (instead of last job).
+        * After call to stopText, if there more speakable jobs in the queue, they begin
+          speaking.
+        * Emit textPaused and textStopped signals as documented.
+        * Fix bug in festivalint plugin.  Hangs sometimes with short utterances caused
+          by writing to Stdin before Stdin buffer is empty.
+        * Better sentence parsing.
+        * Minor fixes to kttsjobmgrpart.
+        
 2004-08-09  Cramblitt <garycramblitt@comcast.net>
         * Remove requirement to copy pluginconf.h to $KDEDIR/include when running designer
           against plugin configuration widgets.

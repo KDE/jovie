@@ -171,7 +171,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @param text           The message to be spoken.
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
-        *                       but if no such job, applies to the last job queued by any application.
+        *                       but if no such job, applies to the current job (if any).
         * @return               Part number for the added part.  Parts are numbered starting at 1.
         *
         * The text is parsed into individual sentences.  Call getTextCount to retrieve
@@ -209,7 +209,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Get the number of sentences in a text job.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         * @return               The number of sentences in the job.  -1 if no such job.
         *
         * The sentences of a job are given sequence numbers from 1 to the number returned by this
@@ -243,7 +244,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Get the state of a text job.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         * @return               State of the job. -1 if invalid job number.
         *
         * @see kttsdJobState
@@ -253,7 +255,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Get information about a text job.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         * @return               A QDataStream containing information about the job.
         *                       Blank if no such job.
         *
@@ -294,7 +297,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Return a sentence of a job.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         * @param seq            Sequence number of the sentence.
         * @return               The specified sentence in the specified job.  If not such
         *                       job or sentence, returns "".
@@ -310,7 +314,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Remove a text job from the queue.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         *
         * The job is deleted from the queue and the @ref textRemoved signal is emitted.
         *
@@ -322,7 +327,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Start a text job at the beginning.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         *
         * Rewinds the job to the beginning.
         *
@@ -340,7 +346,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Stop a text job and rewind to the beginning.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         *
         * The job is marked not speakable and will not be speakable until @ref startText or @ref resumeText
         * is called.
@@ -355,7 +362,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Pause a text job.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         *
         * The job is marked as paused and will not be speakable until @ref resumeText or
         * @ref startText is called.
@@ -371,7 +379,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Start or resume a text job where it was paused.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         *
         * The job is marked speakable.
         *
@@ -397,7 +406,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Change the talker for a text job.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         * @param talker         New code for the language to be spoken in.  Example "en".
         *                       If NULL, defaults to the user's default talker.
         *                       If no plugin has been configured for the specified language code,
@@ -422,7 +432,8 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Move a text job down in the queue so that it is spoken later.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the current job (if any).
         *
         * If the job is currently speaking, it is paused.
         * If the next job in the queue is speakable, it begins speaking.
@@ -434,7 +445,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
-        *                       but if no such job, applies to the last job queued by any application.
+        *                       but if no such job, applies to the current job (if any).
         * @return               Part number of the part actually jumped to.
         *
         * If partNum is greater than the number of parts in the job, jumps to last part.
@@ -449,7 +460,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @param n              Number of sentences to advance (positive) or rewind (negative) in the job.
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
-        *                       but if no such job, applies to the last job queued by any application.
+        *                       but if no such job, applies to the current job (if any).
         * @return               Sequence number of the sentence actually moved to.  Sequence numbers
         *                       are numbered starting at 1.
         *
@@ -536,14 +547,22 @@ class KTTSD : public QObject, virtual public kspeech
         const QCString getAppId();
         
         /*
+        * If a job number is 0, returns the default job number for a command.
+        * Returns the job number of the last job queued by the application, or if
+        * no such job, the current job number.
+        * @return                Default job number.  0 if no such job.
+        */
+        uint applyDefaultJobNum(const uint jobNum);
+        
+        /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD
          */
-        SpeechData *speechData;
+        SpeechData *m_speechData;
 
         /*
          * Speaker that will be run as another thread, actually saying the messages, warnings, and texts
          */
-        Speaker *speaker;
+        Speaker *m_speaker;
 };
 
 #endif // _KTTSD_H_
