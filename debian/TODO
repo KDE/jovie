@@ -4,9 +4,11 @@
     dpkg-gencontrol: warning: unknown substitution variable ${misc:Depends}
   should I just remove that from the control file?  (It was put there by
   dh_make.)
-* Despite having moved libkttsd and libktts from kttsd.install to kttsd-dev.install,
-  debuild still includes them in the package, and the kttsd-dev and kttsd-appplugins
-  packages are essentially empty. ??
+* How do I do the library symlinks, i.e.,
+    debian/tmp/usr/lib/libkttsd.so.1 -> libkttsd.so.1.0.0
+    debian/tmp/usr/lib/libkttsd.so -> libkttsd.so.1.0.0
+    debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common
+
 * lintian is reporting the following:
     W: kttsd source: native-package-with-dash-version
     W: kttsd source: changelog-should-mention-nmu
