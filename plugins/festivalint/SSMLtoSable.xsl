@@ -21,6 +21,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" indent="no"/>
 
+<!-- speak: Indicates SSML markup. -->
+<xsl:template match="/speak">
+    <SABLE><xsl:apply-templates/></SABLE>
+</xsl:template>
 
 <!-- sub: The word that the text sounds like as abbreviations 
        can be pronounced differently. For example,
