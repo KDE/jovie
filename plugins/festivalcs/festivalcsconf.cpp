@@ -1,5 +1,4 @@
 /******************************************************************************
-  festivalcsconf.cpp
   -------------------
   Copyright : (C) 2003 by José Pablo Ezequiel Fernández <pupeno@pupeno.com>
   -------------------

@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  commandconf.h
   Configuration for the Command Plug in
   -------------------
   Copyright : (C) 2002,2004 by Gunnar Schmi Dt and Gary Cramblitt

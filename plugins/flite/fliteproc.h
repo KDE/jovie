@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  fliteproc.h
   Main speaking functions for the Festival Lite (Flite) Plug in
   -------------------
   Copyright : (C) 2004 by Gary Cramblitt

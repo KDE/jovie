@@ -1,5 +1,4 @@
 /****************************************************************************
-	freettsproc.cpp
 	Main speaking functions for the FreeTTS Plug in
 	-------------------
 	Copyright : (C) 2004 Paul Giannaros

@@ -1,5 +1,4 @@
 /****************************************************************************
-	freettsplugin.cpp
 	Factory generation for the FreeTTS plugin so it can actually be used
 	as such.	
 	-------------------

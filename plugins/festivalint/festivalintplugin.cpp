@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  festivalintplugin.cpp
   Generating the factories so festival (interactive) can be used as plug in.
   -------------------
   Copyright : (C) 2004 Gary Cramblitt

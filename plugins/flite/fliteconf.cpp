@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  fliteconf.cpp
   Configuration widget and functions for Festival (Interactive) plug in
   -------------------
   Copyright : (C) 2004 Gary Cramblitt

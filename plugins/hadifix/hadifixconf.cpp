@@ -1,6 +1,4 @@
 /***************************************************************************
-                          hadifixconf.cpp  - description
-                             -------------------
     begin                : Mon Okt 14 2002
     copyright            : (C) 2002 by Gunnar Schmi Dt
     email                : gunnar@schmi-dt.de
