@@ -177,6 +177,9 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         {
             // kdDebug()<< "FestivalIntProc:startEngine: Festival initialized" << endl;
             m_festivalExePath = festivalExePath;
+            // Load the SABLE to Wave module.
+            sendToFestival("(load \"" +
+                KGlobal::dirs()->resourceDirs("data").last() + "kttsd/festivalint/sabletowave.scm\")");
         }
         else
         {
@@ -289,13 +292,26 @@ void FestivalIntProc::synth(
         // float volumeValue = exp(log(volumeValue) * 2);
         // kdDebug() << "FestivalIntProc::synth: Synthing text: '" << saidText << "' using Festival plug in with voice "
         //    << voiceCode << endl;
-        saidText = "(define (insert_initial_pause utt) "
-            "(item.set_feat (utt.relation.first utt 'Segment) 'end 0.0))"
-            "(set! utt1 (Utterance Text \"" +
-            saidText + 
+        if (isSable(saidText))
+        {
+            // Synth the text and adjust volume.
+            saidText =
+                "(ktts_sabletowave \"" + saidText + "\" \"" +
+                synthFilename + "\" " +
+                QString::number(volumeValue) + ")";
+        }
+        else
+        {
+            saidText =
+                // Suppress pause at the beginning of each utterance.
+                "(define (insert_initial_pause utt) "
+                "(item.set_feat (utt.relation.first utt 'Segment) 'end 0.0))"
+                // Synth the text and adjust volume.
+                "(set! utt1 (Utterance Text \"" +  saidText + 
                 "\"))(utt.synth utt1)" +
                 "(utt.wave.rescale utt1 " + QString::number(volumeValue) + " t)" +
                 "(utt.save.wave utt1 \"" + synthFilename + "\")";
+        }
         sendToFestival(saidText);
     }
 }
@@ -334,6 +350,15 @@ bool FestivalIntProc::sendIfReady()
     m_writingStdin = true;
     m_festProc->writeStdin(text.latin1(), text.length());
     return true;
+}
+
+/**
+* Determine if the text has SABLE tags.  If so, we will have to use a different
+* synthesis method.
+*/
+bool FestivalIntProc::isSable(const QString &text)
+{
+    return (text.contains("<SABLE"));
 }
 
 /**

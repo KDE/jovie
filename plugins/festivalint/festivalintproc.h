@@ -218,6 +218,12 @@ class FestivalIntProc : public PlugInProc{
         bool sendIfReady();
 
         /**
+        * Determine if the text has SABLE tags.  If so, we will have to use a different
+        * synthesis method.
+        */
+        bool isSable(const QString &text);
+
+        /**
         * Path to the Festival executable.
         */
         QString m_festivalExePath;
