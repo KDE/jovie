@@ -29,7 +29,7 @@ class HadifixProc : public PlugInProc{
   Q_OBJECT 
   
   public:
-   enum VoiceGender {
+    enum VoiceGender {
         MaleGender      =  2,
         FemaleGender    =  1,
         NoGender        =  0,
@@ -173,6 +173,17 @@ class HadifixProc : public PlugInProc{
     *         HadifixSpeech::NoVoice if there is an error in the voice file
     */
     static VoiceGender determineGender(QString mbrola, QString voice, QString *output = 0);
+
+    /**
+     * Returns the name of an XSLT stylesheet that will convert a valid SSML file
+     * into a format that can be processed by the synth.  For example,
+     * The Festival plugin returns a stylesheet that will convert SSML into
+     * SABLE.  Any tags the synth cannot handle should be stripped (leaving
+     * their text contents though).  The default stylesheet strips all
+     * tags and converts the file to plain text.
+     * @return            Name of the XSLT file.
+     */
+    virtual QString getSsmlXsltFilename();
 
   private slots:
     void slotProcessExited(KProcess*);

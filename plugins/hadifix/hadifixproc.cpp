@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kprocess.h>
+#include <kstandarddirs.h>
 
 #include "hadifixproc.h"
 #include "hadifixproc.moc"
@@ -381,4 +382,18 @@ void HadifixProc::receivedStdout (KProcess *, char *buffer, int buflen) {
 
 void HadifixProc::receivedStderr (KProcess *, char *buffer, int buflen) {
    stdErr += QString::fromLatin1(buffer, buflen);
+}
+
+/**
+ * Returns the name of an XSLT stylesheet that will convert a valid SSML file
+ * into a format that can be processed by the synth.  For example,
+ * The Festival plugin returns a stylesheet that will convert SSML into
+ * SABLE.  Any tags the synth cannot handle should be stripped (leaving
+ * their text contents though).  The default stylesheet strips all
+ * tags and converts the file to plain text.
+ * @return            Name of the XSLT file.
+ */
+QString HadifixProc::getSsmlXsltFilename()
+{
+    return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/hadifix/xslt/SSMLtoTxt2pho.xsl";
 }
