@@ -34,7 +34,7 @@
 int main (int argc, char *argv[])
 {
     KAboutData aboutdata("kttsmgr", I18N_NOOP("KTTSMgr"),
-        "0.2.0", I18N_NOOP("Text-to-Speech Manager"),
+        "0.3.0", I18N_NOOP("Text-to-Speech Manager"),
         KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
     aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
@@ -42,6 +42,7 @@ int main (int argc, char *argv[])
     aboutdata.addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"),"ojschmidt@kde.org");
     aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
     aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
+    aboutdata.addCredit("David Powell", I18N_NOOP("Testing"), "achiestdragon@gmail.com");
     KCmdLineArgs::init( argc, argv, &aboutdata );
 
     // KCmdLineArgs::addCmdLineOptions( options );
