@@ -8,7 +8,8 @@ SUBDIRS = \
         icons \
         kttsjobmgr \
         kcmkttsmgr \
-        kttsmgr 
+        kttsmgr \
+	app-plugins
 
 # Generate API documentation.
 DOXYGEN_EXCLUDE = \
@@ -20,7 +21,8 @@ DOXYGEN_EXCLUDE = \
         kttsjobmgr \
         kcmkttsmgr \
         kttsmgr \
-        kcmkttsd 
+        kcmkttsd \
+	app-plugins
 
 include $(top_srcdir)/admin/Doxyfile.am
 

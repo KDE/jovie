@@ -1,0 +1,23 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KTextEditor KTTSD Plugin
+Comment=Adds a menu entry for speaking the text
+Comment[bg]=Приставка за връзка със синтезатора на глас (служи за изговаряне на текст)
+Comment[da]=Tilføjer en menuindgang til at læse teksten op
+Comment[he]=מוסיף תפריט להקראת הטקסט
+Comment[hu]=Szövegfelolvasó menüpont a Kate-hez
+Comment[nl]=Voegt een menuoptie toe voor het oplezen van de tekst
+Comment[pt]=Adiciona um item ao menu para ler o texto
+Comment[pt_BR]=Adiciona uma entrada de menu para o texto da conversa
+Comment[sv]=Lägger till ett menyalternativ för att läsa upp texten
+Comment[ta]=உரையை பேசுவதற்கு ஒரு பட்டி உள்ளீட்டை சேர்க்கிறது
+Comment[tr]=Metni konuşmak için bir menü girdisi oluşuturur
+Comment[uk]=Додає пункт меню для промови тексту
+Comment[zh_CN]=添加一个可阅读文本的菜单项
+Type=Service
+ServiceTypes=KTextEditor/Plugin
+X-KDE-Library=ktexteditor_kttsd
+X-Kate-Version=2.2
+MimeType=text/plain
+Icon=kttsd
+author=Olaf Jan Schmidt, ojschmidt@kde.org
