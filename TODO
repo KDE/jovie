@@ -37,8 +37,6 @@ _ KTTSMgr:
     _ The "Passive popups only" checkbox on General tab is sometimes enabled when
       "Speak notifications" is not checked.
     _ Add ability to quickly pick default Talker to systray menu.
-    _ A user had $HOME/festival directory and FestivalInt plugin used this path.  Need to
-      check that auto found path is an actual executable file somehow.
     _ KCMultiDialog has a bug that won't allow sizing the screen narrower than 640.
     _ When speaking SSML, the window expands to maximum height to accomodate displaying the
       "Current Sentence", which is all of the SSML.  Annoying.  Better to not expand and display
@@ -58,7 +56,7 @@ _ KTTSD:
       autoconfigure talkers for each requested language, if one has not already been configured.
     _ Add support for speech markers.
     _ Implement error signal handling in KTTSD.
-    _ Add support for SSML, JSML, Sable and other Speech Markup languages.
+    _ Add support for JSML and other Speech Markup languages.
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
 _ Other/General:
@@ -74,4 +72,4 @@ _ Other/General:
       to send to a wav file.
     _ Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
     _ IBM ViaVoice plugin?
-    _ Add KTTS plugin to Akkregator.
+    _ Add KTTS plugin to aKregator.

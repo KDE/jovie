@@ -148,22 +148,28 @@ QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }
 QString PlugInConf::getLocation(const QString &name) {
     // Iterate over the path and see if 'name' exists in it. Return the
     // full path to it if it does. Else return an empty QString.
-    if (QFile::exists(name)) return name;
+    
+    // If it's a file or a symlink pointing to a file, that's cool.
+    QFileInfo fileinfo(name);
+    if (fileinfo.isFile() || (fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile()))
+        return name;
     kdDebug() << "PluginConf::getLocation: Searching for " << name << " in the path.." << endl;
     kdDebug() << m_path << endl;
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
         QString fullName = *it;
+
         fullName += "/";
         fullName += name;
+        fileinfo.setFile(fullName);
         // The user either has the directory of the file in the path...
-        if(QFile::exists(fullName)) {
+        if(fileinfo.isFile() || fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile()) {
             return fullName;
-            kdDebug() << "PluginConf:getLocation: " << fullName << endl;
+//             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
-        // ....Or the file itself
+        // ....Or the file itself in the path (slightly freaky but hey.)
         else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
             return fullName;
-            kdDebug() << "PluginConf:getLocation: " << fullName << endl;
+//             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
     }
     return "";
@@ -191,7 +197,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
 
     /* If the path contains symlinks, get the real name */
     if (realpath( QFile::encodeName(filename).data(), realpath_buffer) != 0) {
-        //succes, use result from realpath
+        // succes, use result from realpath
         return QFile::decodeName(realpath_buffer);
     }
     return filename;
