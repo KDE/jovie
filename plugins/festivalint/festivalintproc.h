@@ -22,11 +22,8 @@
 #define _FESTIVALINTPROC_H_
 
 #include <qstringlist.h>
-
-// #include <festival.h>
-
-#include <pluginproc.h>
 #include <kprocio.h>
+#include <pluginproc.h>
 
 class FestivalIntProc : public PlugInProc{
     Q_OBJECT 
@@ -80,13 +77,6 @@ class FestivalIntProc : public PlugInProc{
          */
         QString voiceCode;
 
-
-        /**
-         * Keep track of initialization;
-         * It is static because festival has to be initializated only once (for all the application)
-         */
-        static bool initialized;
-        
         /**
          * Festival process
          */

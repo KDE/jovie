@@ -24,30 +24,22 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <qthread.h>
-#include <kprocio.h>
-
-// #include <festival.h>
-
-#include <unistd.h>
 
 #include "festivalintproc.h"
 #include "festivalintproc.moc"
-
  
-bool FestivalIntProc::initialized = false;
-
 /** Constructor */
 FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList& ) : 
     PlugInProc( parent, name ){
     kdDebug() << "Running: FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList &args)" << endl;
     ready = true;
+    festProc = 0;
 }
 
 /** Destructor */
 FestivalIntProc::~FestivalIntProc(){
     kdDebug() << "Running: FestivalIntProc::~FestivalIntProc()" << endl;
-    if (initialized)
+    if (festProc)
     {
         stopText();
         if (festProc) delete festProc;
@@ -79,29 +71,42 @@ bool FestivalIntProc::init(const QString &lang, KConfig *config){
 /** Say a text
     text: The text to be speech
 */
-void FestivalIntProc::sayText(const QString &text){
+void FestivalIntProc::sayText(const QString &text)
+{
     kdDebug() << "Running: FestivalIntProc::sayText(const QString &text)" << endl;
 
     // Initialize Festival only if it's not initialized
-    if(initialized == false){
-        kdDebug()<< "Initializing Festival" << endl;
+    if(!festProc)
+    {
+        kdDebug()<< "FestivalIntProc::sayText: Creating Festival object" << endl;
         festProc = new KProcIO;
-        if (forceArts) *festProc << "artsdsp";
-        *festProc << "festival";
-        *festProc << "--interactive";
         connect(festProc, SIGNAL(processExited(KProcess*)), this, SLOT(festProcExited(KProcess*)));
         connect(festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
             this, SLOT(festProcReceivedStdout(KProcess*, char*, int)));
         connect(festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
             this, SLOT(festProcReceivedStderr(KProcess*, char*, int)));
-        ready = false;
-        if (!festProc->start(KProcess::NotifyOnExit, KProcess::All))
+    }
+    if (!festProc->isRunning())
+    {
+        kdDebug()<< "FestivalIntProc::sayText: Starting Festival process" << endl;
+        if (forceArts) *festProc << "artsdsp";
+        *festProc << "festival";
+        *festProc << "--interactive";
+        if (festProc->start(KProcess::NotifyOnExit, KProcess::All))
         {
-            kdDebug() << "Error starting Festival process.  Is festival in the PATH?" << endl;
+            ready = false;
+            // Selecting the voice
+            waitTilReady();
+            ready = false;
+            festProc->writeStdin(voiceCode, true);
+        }
+        else
+        {
+            kdDebug() << "FestivalIntProc::sayText: Error starting Festival process.  Is festival in the PATH?" << endl;
             return;
         }
-        kdDebug()<< "Festival initialized" << endl;
-        initialized = true;
+    }
+    kdDebug()<< "FestivalIntProc:sayText: Festival initialized" << endl;
 
 /*
         // Setting output thru arts if necessary.
@@ -127,20 +132,14 @@ void FestivalIntProc::sayText(const QString &text){
             ready = false;
             festProc->writeStdin(QString("(audio_mode 'sync)"), true);
         }
-        */
-        
-        // Selecting the voice
-        waitTilReady();
-        ready = false;
-        festProc->writeStdin(voiceCode, true);
-    }
+*/
     
     // Encode quotation characters.
     QString saidText = text;
     saidText.replace("\\\"", "#!#!");
     saidText.replace("\"", "\\\"");
     saidText.replace("#!#!", "\\\"");
-    // Remove certain comment lines.
+    // Remove certain comment characters.
     saidText.replace("--", "");
 
     // Ok, let's rock
@@ -161,41 +160,31 @@ void FestivalIntProc::sayText(const QString &text){
  */
 void FestivalIntProc::stopText(){
     kdDebug() << "Running: FestivalIntProc::stopText()" << endl;
-    if (initialized)
+    if (festProc)
     {
         if (ready)
         {
+            kdDebug() << "FestivalIntProc::stopText: telling Festival to quit." << endl;
             festProc->writeStdin(QString("(quit)"), true);
-            if (festProc) festProc->wait(1);
-        } 
+        }
         else
         {
-            // This is an ugly hack, but it seems to be the only way to kill
-            // a running KProcess without causing a crash.
-            pid_t pid = festProc->pid();
-            if (pid)
-            {
-                int status;
-                kill(pid, SIGTERM);
-                waitpid(pid, &status, 0);
-            }
+            kdDebug() << "FestivalIntProc::stopText: killing Festival." << endl;
+            festProc->kill();
         }
-        if (festProc) festProc->closeAll();
-        initialized = false;
-        ready = true;
-        if (festProc) delete festProc;
-        festProc = 0;
+        if (festProc)
+        {
+            kdDebug() << "FestivalIntProc::stopText: waiting for Festival to exit." << endl;
+            festProc->wait(1);
+        }
     }
-    kdDebug() << "Festival stopped." << endl;
+    kdDebug() << "FestivalIntProc::stopText: Festival stopped." << endl;
 }
 
 void FestivalIntProc::festProcExited(KProcess*)
 {
-    kdDebug() << "Festival process has exited." << endl;
-    initialized = false;
+    kdDebug() << "FestivalIntProc:festProcExited: Festival process has exited." << endl;
     ready = true;
-    delete festProc;
-    festProc = 0;
 }
 
 void FestivalIntProc::festProcReceivedStdout(KProcess*, char* buffer, int buflen)
