@@ -54,7 +54,7 @@ private:
 
 class KttsJobMgrPart: 
     public KParts::ReadOnlyPart,
-    public kspeech_stub,
+    public KSpeech_stub,
     virtual public KSpeechSink
 {
     Q_OBJECT

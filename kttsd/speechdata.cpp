@@ -336,7 +336,7 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
     job->jobNum = jobNum;
     job->appId = appId;
     job->talker = talker;
-    job->state = kspeech::jsQueued;
+    job->state = KSpeech::jsQueued;
     job->seq = 0;
     job->sentences = QStringList();
     job->partSeqNums = QValueList<int>();
@@ -558,7 +558,7 @@ void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
     // Walk through jobs and delete any other finished jobs.
     for (mlJob* job = textJobs.first(); (job); job = textJobs.next())
     {
-        if (job->jobNum != finishedJobNum and job->state == kspeech::jsFinished)
+        if (job->jobNum != finishedJobNum and job->state == KSpeech::jsFinished)
         {
             removedJobs.append(removedJob(job->appId, job->jobNum));
             textJobs.removeRef(job);
@@ -587,7 +587,7 @@ mlJob* SpeechData::getNextSpeakableJob(const uint prevJobNum)
 {
     for (mlJob* job = textJobs.first(); (job); job = textJobs.next())
         if (job->jobNum != prevJobNum)
-            if (job->state == kspeech::jsSpeakable)
+            if (job->state == KSpeech::jsSpeakable)
             {
                 waitJobFiltering(job);
                 return job;
@@ -627,7 +627,7 @@ mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSe
         }
         else
         {
-            if ((job->state != kspeech::jsSpeakable) and (job->state != kspeech::jsSpeaking))
+            if ((job->state != KSpeech::jsSpeakable) and (job->state != KSpeech::jsSpeaking))
             {
                 job = getNextSpeakableJob(job->jobNum);
                 if (job) seq =+ job->seq;
@@ -776,13 +776,13 @@ int SpeechData::getTextJobState(const uint jobNum)
 * If the new state is Finished, deletes other expired jobs.
 *
 **/
-void SpeechData::setTextJobState(const uint jobNum, const kspeech::kttsdJobState state)
+void SpeechData::setTextJobState(const uint jobNum, const KSpeech::kttsdJobState state)
 {
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
         job->state = state;
-        if (state == kspeech::jsFinished) deleteExpiredJobs(jobNum);
+        if (state == KSpeech::jsFinished) deleteExpiredJobs(jobNum);
     }
 }
 

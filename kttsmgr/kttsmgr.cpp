@@ -91,7 +91,7 @@ int main (int argc, char *argv[])
 /*  KttsMgrTray class */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    DCOPStub("kttsd", "kspeech"),
+    DCOPStub("kttsd", "KSpeech"),
     KSystemTray(parent, "kttsmgrsystemtray")
 {
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);

@@ -29,14 +29,14 @@
 * KTTSD - the KDE Text-to-speech Deamon.
 *
 * Provides the capability for applications to speak text.
-* Applications may speak text by sending DCOM messages to application "kttsd" object "kspeech".
+* Applications may speak text by sending DCOP messages to application "kttsd" object "KSpeech".
 *
 * @author José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
 * @author Olaf Schmidt <ojschmidt@kde.org>
 * @author Gary Cramblitt <garycramblitt@comcast.net>
 */
 
-class KTTSD : public QObject, virtual public kspeech
+class KTTSD : public QObject, virtual public KSpeech
 {
     Q_OBJECT
     K_DCOP
@@ -48,7 +48,7 @@ class KTTSD : public QObject, virtual public kspeech
         * Create objects, speechData and speaker.
         * Start thread
         */
-        KTTSD(QObject *parent=0, const char *name=0);
+        KTTSD(const QCString& objId, QObject *parent=0, const char *name=0);
 
         /**
         * Destructor.
@@ -567,7 +567,7 @@ class KTTSD : public QObject, virtual public kspeech
         uint applyDefaultJobNum(const uint jobNum);
 
         /*
-        * Fixex a talker argument passed in via dcop.
+        * Fixes a talker argument passed in via dcop.
         * If NULL or "0" return QString::null.
         */
         QString fixNullString(const QString &talker) const;
@@ -586,6 +586,59 @@ class KTTSD : public QObject, virtual public kspeech
         * Speaker that will be run as another thread, actually saying the messages, warnings, and texts
         */
         Speaker* m_speaker;
+};
+
+// kspeech is obsolete.  Applications should use KSpeech instead.
+class kspeech : public QObject, virtual public KSpeech
+{
+    Q_OBJECT
+    K_DCOP
+
+    public:
+        // Constructor.
+        kspeech(const QCString& objId, QObject *parent=0, const char *name=0);
+
+        // Destructor.
+        ~kspeech();
+
+        // Delegate all DCOP methods to KTTSD object.
+        virtual bool supportsMarkup(const QString &talker, uint markupType = 0) const;
+        virtual bool supportsMarkers(const QString &talker) const;
+        virtual ASYNC sayScreenReaderOutput(const QString &msg, const QString &talker);
+        virtual ASYNC sayWarning(const QString &warning, const QString &talker);
+        virtual ASYNC sayMessage(const QString &message, const QString &talker);
+        virtual ASYNC setSentenceDelimiter(const QString &delimiter);
+        virtual uint setText(const QString &text, const QString &talker);
+        virtual int appendText(const QString &text, uint jobNum=0);
+        virtual uint setFile(const QString &filename, const QString &talker,
+                             const QString& encoding);
+        virtual int getTextCount(uint jobNum=0);
+        virtual uint getCurrentTextJob();
+        virtual uint getTextJobCount();
+        virtual QString getTextJobNumbers();
+        virtual int getTextJobState(uint jobNum=0);
+        virtual QByteArray getTextJobInfo(uint jobNum=0);
+        virtual QString talkerCodeToTalkerId(const QString& talkerCode);
+        virtual QString getTextJobSentence(uint jobNum=0, uint seq=0);
+        virtual bool isSpeakingText() const;
+        virtual ASYNC removeText(uint jobNum=0);
+        virtual ASYNC startText(uint jobNum=0);
+        virtual ASYNC stopText(uint jobNum=0);
+        virtual ASYNC pauseText(uint jobNum=0);
+        virtual ASYNC resumeText(uint jobNum=0);
+        virtual QStringList getTalkers();
+        virtual ASYNC changeTextTalker(const QString &talker, uint jobNum=0 );
+        virtual QString userDefaultTalker();
+        virtual ASYNC moveTextLater(uint jobNum=0);
+        virtual int jumpToTextPart(int partNum, uint jobNum=0);
+        virtual uint moveRelTextSentence(int n, uint jobNum=0);
+        virtual ASYNC speakClipboard();
+        virtual void showDialog();
+        virtual void kttsdExit();
+        virtual void reinit();
+
+    private:
+        KTTSD m_kttsd;
 };
 
 #endif // _KTTSD_H_

@@ -46,8 +46,8 @@
 * Note that most of the real tts work occurs in Speaker.
 */
 
-KTTSD::KTTSD(QObject *parent, const char *name) : 
-    DCOPObject("kspeech"),
+KTTSD::KTTSD(const QCString& objId, QObject *parent, const char *name) :
+    DCOPObject(objId),
     QObject(parent, name)
 {
     // kdDebug() << "KTTSD::KTTSD Running" << endl;
@@ -183,7 +183,7 @@ KTTSD::~KTTSD(){
 */
 bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/) const
 {
-    if (markupType != kspeech::mtSsml) return false;
+    if (markupType != KSpeech::mtSsml) return false;
     if (!m_talkerMgr) return false;
     return m_talkerMgr->supportsMarkup(fixNullString(talker), markupType);
 }
@@ -899,7 +899,7 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
 }
 
 /*
-* Fixex a string argument passed in via dcop.
+* Fixes a string argument passed in via dcop.
 * If NULL or "0" return QString::null.
 */
 QString KTTSD::fixNullString(const QString &talker) const
@@ -908,6 +908,88 @@ QString KTTSD::fixNullString(const QString &talker) const
     if (talker == "0") return QString::null;
     return talker;
 }
+
+// kspeech is obsolete.  Applications should use KSpeech instead.
+
+// Constructor.
+kspeech::kspeech(const QCString& objId, QObject *parent, const char *name) :
+    DCOPObject(objId),
+    QObject(parent, name),
+    m_kttsd("KSpeech")
+{
+}
+
+// Destructor.
+kspeech::~kspeech() { };
+
+// Delegate all DCOP methods to KTTSD object.
+/*virtual*/ bool kspeech::supportsMarkup(const QString &talker, uint markupType) const
+            { return m_kttsd.supportsMarkup(talker, markupType); }
+/*virtual*/ bool kspeech::supportsMarkers(const QString &talker) const
+            { return m_kttsd.supportsMarkers(talker); }
+/*virtual*/ ASYNC kspeech::sayScreenReaderOutput(const QString &msg, const QString &talker)
+            { m_kttsd.sayScreenReaderOutput(msg, talker); }
+/*virtual*/ ASYNC kspeech::sayWarning(const QString &warning, const QString &talker)
+            { m_kttsd.sayWarning(warning, talker); }
+/*virtual*/ ASYNC kspeech::sayMessage(const QString &message, const QString &talker)
+            { m_kttsd.sayMessage(message, talker); }
+/*virtual*/ ASYNC kspeech::setSentenceDelimiter(const QString &delimiter)
+            { m_kttsd.setSentenceDelimiter(delimiter); }
+/*virtual*/ uint kspeech::setText(const QString &text, const QString &talker)
+            { return m_kttsd.setText(text, talker); }
+/*virtual*/ int kspeech::appendText(const QString &text, uint jobNum)
+            { return m_kttsd.appendText(text, jobNum); }
+/*virtual*/ uint kspeech::setFile(const QString &filename, const QString &talker,
+                        const QString& encoding)
+            { return m_kttsd.setFile(filename, talker, encoding); }
+/*virtual*/ int kspeech::getTextCount(uint jobNum)
+            { return m_kttsd.getTextCount(jobNum); }
+/*virtual*/ uint kspeech::getCurrentTextJob()
+            { return m_kttsd.getCurrentTextJob(); }
+/*virtual*/ uint kspeech::getTextJobCount()
+            { return m_kttsd.getTextJobCount(); }
+/*virtual*/ QString kspeech::getTextJobNumbers()
+            { return m_kttsd.getTextJobNumbers(); }
+/*virtual*/ int kspeech::getTextJobState(uint jobNum)
+            { return m_kttsd.getTextJobState(jobNum); }
+/*virtual*/ QByteArray kspeech::getTextJobInfo(uint jobNum)
+            { return m_kttsd.getTextJobInfo(jobNum); }
+/*virtual*/ QString kspeech::talkerCodeToTalkerId(const QString& talkerCode)
+            { return m_kttsd.talkerCodeToTalkerId(talkerCode); }
+/*virtual*/ QString kspeech::getTextJobSentence(uint jobNum, uint seq)
+            { return m_kttsd.getTextJobSentence(jobNum, seq); }
+/*virtual*/ bool kspeech::isSpeakingText() const
+            { return m_kttsd.isSpeakingText(); }
+/*virtual*/ ASYNC kspeech::removeText(uint jobNum)
+            { m_kttsd.removeText(jobNum); }
+/*virtual*/ ASYNC kspeech::startText(uint jobNum)
+            { m_kttsd.startText(jobNum); }
+/*virtual*/ ASYNC kspeech::stopText(uint jobNum)
+            { m_kttsd.stopText(jobNum); }
+/*virtual*/ ASYNC kspeech::pauseText(uint jobNum)
+            { m_kttsd.pauseText(jobNum); }
+/*virtual*/ ASYNC kspeech::resumeText(uint jobNum)
+            { m_kttsd.resumeText(jobNum); }
+/*virtual*/ QStringList kspeech::getTalkers()
+            { return m_kttsd.getTalkers(); }
+/*virtual*/ ASYNC kspeech::changeTextTalker(const QString &talker, uint jobNum )
+            { m_kttsd.changeTextTalker(talker, jobNum); }
+/*virtual*/ QString kspeech::userDefaultTalker()
+            { return m_kttsd.userDefaultTalker(); }
+/*virtual*/ ASYNC kspeech::moveTextLater(uint jobNum)
+            { m_kttsd.moveTextLater(jobNum); }
+/*virtual*/ int kspeech::jumpToTextPart(int partNum, uint jobNum)
+            { return m_kttsd.jumpToTextPart(partNum, jobNum); }
+/*virtual*/ uint kspeech::moveRelTextSentence(int n, uint jobNum)
+            { return m_kttsd.moveRelTextSentence(n, jobNum); }
+/*virtual*/ ASYNC kspeech::speakClipboard()
+            { m_kttsd.speakClipboard(); }
+/*virtual*/ void kspeech::showDialog()
+            { m_kttsd.showDialog(); }
+/*virtual*/ void kspeech::kttsdExit()
+            { m_kttsd.kttsdExit(); }
+/*virtual*/ void kspeech::reinit()
+            { m_kttsd.reinit(); }
 
 #include "kttsd.moc"
 

@@ -203,11 +203,11 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slotTabChanged()));
 
     // Connect KTTSD DCOP signals to our slots.
-    if (!connectDCOPSignal("kttsd", "kspeech",
+    if (!connectDCOPSignal("kttsd", "KSpeech",
         "kttsdStarted()",
         "kttsdStarted()",
         false)) kdDebug() << "connectDCOPSignal failed" << endl;
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "kttsdExiting()",
         "kttsdExiting()",
         false);
@@ -616,7 +616,7 @@ void KCMKttsMgr::save()
         {
             kdDebug() << "Restarting KTTSD" << endl;
             QByteArray data;
-            client->send("kttsd", "kspeech", "reinit()", data);
+            client->send("kttsd", "KSpeech", "reinit()", data);
         }
     }
 }
@@ -1420,7 +1420,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
         {
             // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Stopping KTTSD" << endl;
             QByteArray data;
-            client->send("kttsd", "kspeech", "kttsdExit()", data);
+            client->send("kttsd", "KSpeech", "kttsdExit()", data);
         }
     }
     reenter = false;

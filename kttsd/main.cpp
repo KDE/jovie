@@ -48,7 +48,11 @@ int main (int argc, char *argv[]){
    KUniqueApplication app;
    // This app is started automatically, no need for session management
    app.disableSessionManagement();
-   KTTSD *service = new KTTSD();
+   // TODO: kspeech is obsolete.  Use KSpeech instead.  For backwards compatibility,
+   // kspeech creates the "real" KSpeech object (KTTSD).  At some point in the future,
+   // change following statement to
+   //     KTTSD *service = new KTTSD("KSpeech");
+   kspeech *service = new kspeech("kspeech");
 
    // kdDebug() << "Entering event loop." << endl;
    return app.exec();

@@ -284,7 +284,7 @@ class Speaker : public QObject{
          */
         void readingResumed();
 
-        /* The following signals correspond to the signals in the kspeech interface. */
+        /* The following signals correspond to the signals in the KSpeech interface. */
 
         /**
         * This signal is emitted when the speech engine/plugin encounters a marker in the text.

@@ -95,7 +95,7 @@ KAboutData *KttsJobMgrFactory::aboutData()
 }
 
 KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
-    DCOPStub("kttsd", "kspeech"),
+    DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kttsjobmgr_kspeechsink"),
     KParts::ReadOnlyPart(parent, name)
 {
@@ -186,15 +186,15 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     autoSelectInJobListView();
 
     // Connect DCOP Signals emitted by KTTSD to our own DCOP methods.
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "kttsdStarted()",
         "kttsdStarted()",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "markerSeen(QCString,QString)",
         "markerSeen(QCString,QString)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "sentenceStarted(QCString,uint,uint)",
         "sentenceStarted(QCString,uint,uint)",
         false);
@@ -202,31 +202,31 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
         "sentenceFinished(QCString,uint,uint)",
         "sentenceFinished(QCString,uint,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textSet(QCString,uint)",
         "textSet(QCString,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textStarted(QCString,uint)",
         "textStarted(QCString,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textFinished(QCString,uint)",
         "textFinished(QCString,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textStopped(QCString,uint)",
         "textStopped(QCString,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textPaused(QCString,uint)",
         "textPaused(QCString,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textResumed(QCString,uint)",
         "textResumed(QCString,uint)",
         false);
-    connectDCOPSignal("kttsd", "kspeech",
+    connectDCOPSignal("kttsd", "KSpeech",
         "textRemoved(QCString,uint)",
         "textRemoved(QCString,uint)",
         false);
@@ -658,11 +658,11 @@ QString KttsJobMgrPart::stateToStr(int state)
 {
     switch( state )
     {
-        case kspeech::jsQueued: return        i18n("Queued");
-        case kspeech::jsSpeakable: return     i18n("Waiting");
-        case kspeech::jsSpeaking: return      i18n("Speaking");
-        case kspeech::jsPaused: return        i18n("Paused");
-        case kspeech::jsFinished: return      i18n("Finished");
+        case KSpeech::jsQueued: return        i18n("Queued");
+        case KSpeech::jsSpeakable: return     i18n("Waiting");
+        case KSpeech::jsSpeaking: return      i18n("Speaking");
+        case KSpeech::jsPaused: return        i18n("Paused");
+        case KSpeech::jsFinished: return      i18n("Finished");
         default: return                       i18n("Unknown");
     }
 }
@@ -927,7 +927,7 @@ ASYNC KttsJobMgrPart::sentenceStarted(const QCString&, const uint jobNum, const 
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsSpeaking));
+        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
         item->setText(jlvcPosition, QString::number(seq));
         m_currentSentence->setText(getTextJobSentence(jobNum, seq));
     }
@@ -947,7 +947,7 @@ ASYNC KttsJobMgrPart::sentenceFinished(const QCString&, const uint jobNum, const
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsSpeaking));
+        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
     }
 */
 }
@@ -1012,7 +1012,7 @@ ASYNC KttsJobMgrPart::textStarted(const QCString&, const uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsSpeaking));
+        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
         item->setText(jlvcPosition, "1");
     }
 }
@@ -1032,7 +1032,7 @@ ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsFinished));
+        item->setText(jlvcState, stateToStr(KSpeech::jsFinished));
         // Update sentence pointer, since signal may not be emitted for final CR.
         refreshJob(jobNum);
     }
@@ -1049,7 +1049,7 @@ ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsQueued));
+        item->setText(jlvcState, stateToStr(KSpeech::jsQueued));
         item->setText(jlvcPosition, "1");
     }
 }
@@ -1065,7 +1065,7 @@ ASYNC KttsJobMgrPart::textPaused(const QCString&, const uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsPaused));
+        item->setText(jlvcState, stateToStr(KSpeech::jsPaused));
     }
 }
 
@@ -1079,7 +1079,7 @@ ASYNC KttsJobMgrPart::textResumed(const QCString&, const uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsSpeaking));
+        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
     }
 }
 

@@ -16,7 +16,7 @@
 #include <ksystemtray.h>
 #include "kspeech_stub.h"
 
-class KttsMgrTray: public KSystemTray, public kspeech_stub
+class KttsMgrTray: public KSystemTray, public KSpeech_stub
 {
    Q_OBJECT
 

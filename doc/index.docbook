@@ -943,7 +943,7 @@ KDE Accessibility</ulink> web site (http://accessibility.kde.org).
 <title>The &kmyapplication; DCOP Interface</title>
 
 <para>Applications communicate requests for Text-to-Speech services via the
-KDE DCOP interface to program <command>kttsd</command> object <command>kspeech</command>.
+KDE DCOP interface to program <command>kttsd</command> object <command>KSpeech</command>.
 </para>
 
 <para>Enter the following commands in a Konsole.</para>
@@ -954,7 +954,7 @@ KDE DCOP interface to program <command>kttsd</command> object <command>kspeech</
 
 <para>To queue a text job to be spoken</para>
 
-<para><userinput>dcop kttsd kspeech setText "<replaceable>text</replaceable>"  "<replaceable>talker</replaceable>"</userinput></para>
+<para><userinput>dcop kttsd KSpeech setText "<replaceable>text</replaceable>"  "<replaceable>talker</replaceable>"</userinput></para>
 
 <para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>talker</replaceable></userinput> is a language code
 such as <userinput><replaceable>en</replaceable></userinput>, <userinput><replaceable>cy</replaceable></userinput>, etc.  This command does
@@ -962,25 +962,25 @@ not speak the text; instead it queues a text job for speaking.</para>
 
 <para>Example.</para>
 
-<para><userinput>dcop kttsd kspeech setText "This is a test." "en"</userinput></para>
+<para><userinput>dcop kttsd KSpeech setText "This is a test." "en"</userinput></para>
 
 <para>To speak the last queued text job</para>
 
-<para><userinput>dcop kttsd kspeech startText <replaceable>0</replaceable></userinput></para>
+<para><userinput>dcop kttsd KSpeech startText <replaceable>0</replaceable></userinput></para>
 
 <para>In this case, <userinput>0</userinput> refers to the last text job queued.  
 You may also specify a specific job number.  (If no job number is given, a <userinput>0</userinput> is required.)</para>
 
 <para>To stop the currently speaking text job</para>
 
-<para><userinput>dcop kttsd kspeech stopText 0</userinput></para>
+<para><userinput>dcop kttsd KSpeech stopText 0</userinput></para>
 
 <para>Depending upon the speech plugin used, speaking may not immediately stop.</para>
 
 <para>There are many more commands that can be sent.  To see a list of possible
 commands,</para>
 
-<para><userinput>dcop kttsd kspeech</userinput></para>
+<para><userinput>dcop kttsd KSpeech</userinput></para>
 
 <para>or read the 
 <ulink url="http://accessibility.kde.org/developer/kttsd/">

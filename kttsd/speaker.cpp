@@ -278,7 +278,7 @@ void Speaker::doUtterances()
                             if (it->utType == utStartOfJob)
                             {
                                 m_speechData->setTextJobState(
-                                    it->sentence->jobNum, kspeech::jsSpeaking);
+                                    it->sentence->jobNum, KSpeech::jsSpeaking);
                                 if (it->sentence->seq == 0)
                                     emit textStarted(it->sentence->appId,
                                         it->sentence->jobNum);
@@ -287,7 +287,7 @@ void Speaker::doUtterances()
                                         it->sentence->jobNum);
                             } else {
                                 m_speechData->setTextJobState(
-                                    it->sentence->jobNum, kspeech::jsFinished);
+                                    it->sentence->jobNum, KSpeech::jsFinished);
                                 emit textFinished(it->sentence->appId, it->sentence->jobNum);
                             }
                             it->state = usFinished;
@@ -381,15 +381,15 @@ void Speaker::doUtterances()
                         {
                             int jobState =
                                 m_speechData->getTextJobState(it->sentence->jobNum);
-                            if ((jobState == kspeech::jsSpeaking) or
-                                (jobState == kspeech::jsSpeakable))
+                            if ((jobState == KSpeech::jsSpeaking) or
+                                (jobState == KSpeech::jsSpeakable))
                             {
                                 if (it->plugin->getState() == psIdle)
                                 {
                                     // Set job to speaking state and set sequence number.
                                     mlText* sentence = it->sentence;
                                     m_currentJobNum = sentence->jobNum;
-                                    m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
+                                    m_speechData->setTextJobState(m_currentJobNum, KSpeech::jsSpeaking);
                                     m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
                                     prePlaySignals(it);
                                     // kdDebug() << "Async synthesis and audibilizing." << endl;
@@ -469,7 +469,7 @@ void Speaker::doUtterances()
  */
 bool Speaker::isSpeakingText()
 {
-    return (m_speechData->getTextJobState(m_currentJobNum) == kspeech::jsSpeaking);
+    return (m_speechData->getTextJobState(m_currentJobNum) == KSpeech::jsSpeaking);
 }
 
 /**
@@ -515,7 +515,7 @@ void Speaker::startText(const uint jobNum)
 {
     deleteUtteranceByJobNum(jobNum);
     m_speechData->setJobSequenceNum(jobNum, 1);
-    m_speechData->setTextJobState(jobNum, kspeech::jsSpeakable);
+    m_speechData->setTextJobState(jobNum, KSpeech::jsSpeakable);
     if (m_lastJobNum == jobNum)
     {
         m_lastJobNum = 0;
@@ -539,10 +539,10 @@ void Speaker::startText(const uint jobNum)
  */
 void Speaker::stopText(const uint jobNum)
 {
-    bool emitSignal = (m_speechData->getTextJobState(jobNum) == kspeech::jsSpeaking);
+    bool emitSignal = (m_speechData->getTextJobState(jobNum) == KSpeech::jsSpeaking);
     deleteUtteranceByJobNum(jobNum);
     m_speechData->setJobSequenceNum(jobNum, 1);
-    m_speechData->setTextJobState(jobNum, kspeech::jsQueued);
+    m_speechData->setTextJobState(jobNum, KSpeech::jsQueued);
     if (emitSignal) textStopped(m_speechData->getAppIdByJobNum(jobNum), jobNum);
     // Call doUtterances to process other jobs.
     doUtterances();
@@ -563,10 +563,10 @@ void Speaker::stopText(const uint jobNum)
  */
 void Speaker::pauseText(const uint jobNum)
 {
-    bool emitSignal = (m_speechData->getTextJobState(jobNum) == kspeech::jsSpeaking);
+    bool emitSignal = (m_speechData->getTextJobState(jobNum) == KSpeech::jsSpeaking);
     pauseUtteranceByJobNum(jobNum);
     kdDebug() << "Speaker::pauseText: setting Job State of job " << jobNum << " to jsPaused" << endl;
-    m_speechData->setTextJobState(jobNum, kspeech::jsPaused);
+    m_speechData->setTextJobState(jobNum, KSpeech::jsPaused);
     if (emitSignal) textPaused(m_speechData->getAppIdByJobNum(jobNum),jobNum);
 }
 
@@ -586,14 +586,14 @@ void Speaker::pauseText(const uint jobNum)
  */
 void Speaker::resumeText(const uint jobNum)
 {
-    if (m_speechData->getTextJobState(jobNum) != kspeech::jsPaused)
+    if (m_speechData->getTextJobState(jobNum) != KSpeech::jsPaused)
         startText(jobNum);
     else
     {
         if (jobNum == m_currentJobNum)
-            m_speechData->setTextJobState(jobNum, kspeech::jsSpeaking);
+            m_speechData->setTextJobState(jobNum, KSpeech::jsSpeaking);
         else
-            m_speechData->setTextJobState(jobNum, kspeech::jsSpeakable);
+            m_speechData->setTextJobState(jobNum, KSpeech::jsSpeakable);
         doUtterances();
     }
 }
@@ -607,8 +607,8 @@ void Speaker::resumeText(const uint jobNum)
  */
 void Speaker::moveTextLater(const uint jobNum)
 {
-    if (m_speechData->getTextJobState(jobNum) == kspeech::jsSpeaking)
-        m_speechData->setTextJobState(jobNum, kspeech::jsPaused);
+    if (m_speechData->getTextJobState(jobNum) == KSpeech::jsSpeaking)
+        m_speechData->setTextJobState(jobNum, KSpeech::jsPaused);
     deleteUtteranceByJobNum(jobNum);
     m_speechData->moveTextLater(jobNum);
     doUtterances();
@@ -769,11 +769,11 @@ QString Speaker::jobStateToStr(int state)
 {
     switch ( state )
     {
-        case kspeech::jsQueued:      return "jsQueued";
-        case kspeech::jsSpeakable:   return "jsSpeakable";
-        case kspeech::jsSpeaking:    return "jsSpeaking";
-        case kspeech::jsPaused:      return "jsPaused";
-        case kspeech::jsFinished:    return "jsFinished";
+        case KSpeech::jsQueued:      return "jsQueued";
+        case KSpeech::jsSpeakable:   return "jsSpeakable";
+        case KSpeech::jsSpeaking:    return "jsSpeaking";
+        case KSpeech::jsPaused:      return "jsPaused";
+        case KSpeech::jsFinished:    return "jsFinished";
     }
     return QString::null;
 }
@@ -1262,7 +1262,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         {
                 // Don't start playback yet if text job is paused.
             if ((it->utType != utText) or
-                 (m_speechData->getTextJobState(it->sentence->jobNum) != kspeech::jsPaused))
+                 (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
 
                 it->audioPlayer = createPlayerObject();
@@ -1272,7 +1272,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                         // Set job to speaking state and set sequence number.
                     mlText* sentence = it->sentence;
                     m_currentJobNum = sentence->jobNum;
-                    m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
+                    m_speechData->setTextJobState(m_currentJobNum, KSpeech::jsSpeaking);
                     m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
                     prePlaySignals(it);
                     it->state = usPlaying;
@@ -1291,7 +1291,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
             // Unpause playback only if user has resumed.
             // kdDebug() << "Speaker::startPlayingUtterance: checking whether to resume play" << endl;
             if ((it->utType != utText) or
-                 (m_speechData->getTextJobState(it->sentence->jobNum) != kspeech::jsPaused))
+                 (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
                 // kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
                 it->audioPlayer->startPlay(QString::null);  // resume

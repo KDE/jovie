@@ -62,7 +62,7 @@ struct mlText{
  */
 struct mlJob {
     uint jobNum;                 /* Job number. */
-    kspeech::kttsdJobState state; /* Job state. */
+    KSpeech::kttsdJobState state; /* Job state. */
     QCString appId;              /* DCOP senderId of the application that requested the speech job. */
     QString talker;              /* Requested Talker code in which to speak the text. */
     int seq;                     /* Current sentence being spoken. */
@@ -201,7 +201,7 @@ class SpeechData : public QObject {
         */
         void setSentenceDelimiter(const QString &delimiter, const QCString appId);
 
-        /* The following methods correspond to the methods in kspeech interface. */
+        /* The following methods correspond to the methods in KSpeech interface. */
 
         /**
         * Queue a text job.  Does not start speaking the text.
@@ -275,7 +275,7 @@ class SpeechData : public QObject {
         * @param state          New state for the job.
         *
         **/
-        void setTextJobState(const uint jobNum, const kspeech::kttsdJobState state);
+        void setTextJobState(const uint jobNum, const KSpeech::kttsdJobState state);
 
         /**
         * Get information about a text job.
