@@ -121,6 +121,10 @@ class KCMKttsMgr :
             // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
             emit changed(true);
         };
+        /**
+        * This slot is called whenever user checks/unchecks item in Filters list.
+        */
+        void slotFiltersList_stateChanged();
 
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */

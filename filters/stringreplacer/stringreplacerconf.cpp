@@ -59,7 +59,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const char *name, const
 
     // Create configuration widget.
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
-        KDialog::spacingHint(), "FestivalIntConfigWidgetLayout");
+        KDialog::spacingHint(), "StringReplacerConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new StringReplacerConfWidget(this, "StringReplacerConfigWidget");
     layout->addWidget(m_widget);
@@ -292,11 +292,13 @@ bool StringReplacerConf::supportsMultiInstance() { return true; }
  * Returns the name of the plugin.  Displayed in Filters tab of KTTSMgr.
  * If there can be more than one instance of a filter, it should return
  * a unique name for each instance.  The name should be translated for
- * the user if possible.
+ * the user if possible.  If the plugin is not correctly configured,
+ * return an empty string.
  * @return          Filter instance name.
  */
 QString StringReplacerConf::userPlugInName()
 {
+    if ( m_widget->substLView->childCount() == 0 ) return QString::null;
     QString instName = m_widget->nameLineEdit->text();
     if ( instName.isEmpty() )
     {

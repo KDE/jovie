@@ -179,8 +179,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slot_configureFilter()));
     connect(m_kttsmgrw->filtersList, SIGNAL(selectionChanged()),
             this, SLOT(updateFilterButtons()));
-    connect(m_kttsmgrw->filtersList, SIGNAL(stateChanged()),
-            this, SLOT(configChanged()));
+    //connect(m_kttsmgrw->filtersList, SIGNAL(stateChanged()),
+    //        this, SLOT(configChanged()));
 
     // Audio tab.
     connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
@@ -341,7 +341,7 @@ void KCMKttsMgr::load()
     // Query for all the KCMKTTSD SynthPlugins and store the list in offers.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
 
-    // Iterate thru the posible plug ins getting their language support codes.
+    // Iterate thru the possible plug ins getting their language support codes.
     for(unsigned int i=0; i < offers.count() ; ++i)
     {
         QString synthName = offers[i]->name();
@@ -380,7 +380,7 @@ void KCMKttsMgr::load()
         {
             QString filterID = *it;
             // kdDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
-            m_config->setGroup(QString("Filter_") + filterID);
+            m_config->setGroup("Filter_" + filterID);
             QString filterPlugInName = m_config->readEntry("PlugInName");
             QString userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
             bool multiInstance = m_config->readBoolEntry("MultiInstance", false);
@@ -403,37 +403,59 @@ void KCMKttsMgr::load()
     }
 
     // Add at least one unchecked instance of each available filter plugin if there is
-    // not already at least one instance.
+    // not already at least one instance and the filter can autoconfig itself.
     offers = KTrader::self()->query("KTTSD/FilterPlugin");
     for (unsigned int i=0; i < offers.count() ; ++i)
     {
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins(filterPlugInName) == 0)
         {
-            if (!filterItem)
-                filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
-                    filterPlugInName, QCheckListItem::CheckBox, this);
-            else
-                filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                    filterPlugInName, QCheckListItem::CheckBox, this);
-            m_lastFilterID++;
-            filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
-            filterItem->setText(flvcPlugInName, filterPlugInName);
-            // Must load plugin to determine if it supports multiple instances.
-            // TODO: Find a way to avoid this?
+            // Must load plugin to determine if it supports multiple instances
+            // and to see if it can autoconfigure itself.
             KttsFilterConf* filterPlugIn = loadFilterPlugin(filterPlugInName);
             if (filterPlugIn)
             {
-                if (filterPlugIn->supportsMultiInstance())
-                    filterItem->setText(flvcMultiInstance, "T");
-                else
-                    filterItem->setText(flvcMultiInstance, "F");
+                m_lastFilterID++;
+                QString filterID = QString::number(m_lastFilterID);
+                QString groupName = "Filter_" + filterID;
+                filterPlugIn->load(m_config, groupName);
+                QString userFilterName = filterPlugIn->userPlugInName();
+                if (!userFilterName.isEmpty())
+                {
+                    kdDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName << endl;
+                    if (!filterItem)
+                        filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
+                            userFilterName, QCheckListItem::CheckBox, this);
+                    else
+                        filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                            userFilterName, QCheckListItem::CheckBox, this);
+                    filterItem->setText(flvcFilterID, filterID);
+                    filterItem->setText(flvcPlugInName, filterPlugInName);
+                    bool multiInstance = filterPlugIn->supportsMultiInstance();
+                    if (multiInstance)
+                        filterItem->setText(flvcMultiInstance, "T");
+                    else
+                        filterItem->setText(flvcMultiInstance, "F");
+                    dynamic_cast<QCheckListItem*>(filterItem)->setOn(false);
+                    m_config->setGroup(groupName);
+                    filterPlugIn->save(m_config, groupName);
+                    m_config->setGroup(groupName);
+                    m_config->writeEntry("PlugInName", filterPlugInName);
+                    m_config->writeEntry("UserFilterName", userFilterName);
+                    m_config->writeEntry("Enabled", false);
+                    m_config->writeEntry("MultiInstance", multiInstance);
+                    filterIDsList.append(filterID);
+                } else m_lastFilterID--;
             } else
                 kdDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName << endl;
             delete filterPlugIn;
-            dynamic_cast<QCheckListItem*>(filterItem)->setOn(false);
         }
     }
+    // Rewrite list of FilterIDs in case we added any.
+    QString filterIDs = filterIDsList.join(",");
+    m_config->setGroup("General");
+    m_config->writeEntry("FilterIDs", filterIDs);
+    m_config->sync();
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     if (m_kttsmgrw->talkersList->childCount() == 0)
@@ -545,7 +567,7 @@ void KCMKttsMgr::save()
         }
     }
 
-    // Get ordered list of all filter IDs.
+    // Get ordered list of all filter IDs.  Record enabled state of each filter.
     QStringList filterIDsList;
     QListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
     while (filterItem)
@@ -553,9 +575,13 @@ void KCMKttsMgr::save()
         QListViewItem* nextFilterItem = filterItem->itemBelow();
         QString filterID = filterItem->text(flvcFilterID);
         filterIDsList.append(filterID);
+        bool checked = dynamic_cast<QCheckListItem*>(filterItem)->isOn();
+        m_config->setGroup("Filter_" + filterID);
+        m_config->writeEntry("Enabled", checked);
         filterItem = nextFilterItem;
     }
     QString filterIDs = filterIDsList.join(",");
+    m_config->setGroup("General");
     m_config->writeEntry("FilterIDs", filterIDs);
 
     // Erase obsolete Filter_nn sections.
@@ -1081,6 +1107,14 @@ void KCMKttsMgr::addFilter()
             filterPlugInNames.append(item->text(flvcPlugInName));
         item = item->nextSibling();
     }
+    // Append those available plugins not yet in the list at all.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    for (unsigned int i=0; i < offers.count() ; ++i)
+    {
+        QString filterPlugInName = offers[i]->name();
+        if (countFilterPlugins(filterPlugInName) == 0)
+            filterPlugInNames.append(filterPlugInName);
+    }
 
     // If no choice (shouldn't happen), bail out.
     // kdDebug() << "KCMKttsMgr::addFilter: filterPluginNames = " << filterPlugInNames << endl;
@@ -1124,52 +1158,58 @@ void KCMKttsMgr::addFilter()
     // Did user Cancel?
     if (!m_loadedFilterPlugIn) return;
 
-    // Let plugin save its configuration.
-    m_config->setGroup(QString("Filter_")+filterID);
-    m_loadedFilterPlugIn->save(m_config, QString("Filter_"+filterID));
-
-    // Record last Filter ID used for next add.
-    m_lastFilterID = filterID.toInt();
-
-    // Determine if filter supports multiple instances.
-    bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
-
-    // Record configuration data.  Note, might as well do this now.
+    // Get user's name for Filter.
     QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
-    m_config->setGroup(QString("Filter_")+filterID);
-    m_config->writeEntry("PlugInName", filterPlugInName);
-    m_config->writeEntry("UserFilterName", userFilterName);
-    m_config->writeEntry("MultiInstance", multiInstance);
-    m_config->writeEntry("Enabled", true);
-    m_config->sync();
 
-    // Add listview item.
-    QListViewItem* filterItem = m_kttsmgrw->filtersList->lastChild();
-    if (filterItem)
-        filterItem =
-            new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                userFilterName, QCheckListItem::CheckBox, this);
-    else
-        filterItem =
-            new KttsCheckListItem(m_kttsmgrw->filtersList,
-                userFilterName, QCheckListItem::CheckBox, this);
-    filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
-    filterItem->setText(flvcPlugInName, filterPlugInName);
-    if (multiInstance)
-        filterItem->setText(flvcMultiInstance, "T");
-    else
-        filterItem->setText(flvcMultiInstance, "F");
-    dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+    // If user properly configured the plugin, save its configuration.
+    if ( !userFilterName.isEmpty() )
+    {
+        // Let plugin save its configuration.
+        m_config->setGroup(QString("Filter_")+filterID);
+        m_loadedFilterPlugIn->save(m_config, QString("Filter_"+filterID));
 
-    // Make sure visible.
-    m_kttsmgrw->filtersList->ensureItemVisible(filterItem);
+        // Record last Filter ID used for next add.
+        m_lastFilterID = filterID.toInt();
 
-    // Select the new item, update buttons.
-    m_kttsmgrw->filtersList->setSelected(filterItem, true);
-    updateFilterButtons();
+        // Determine if filter supports multiple instances.
+        bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
 
-    // Inform Control Center that change has been made.
-    configChanged();
+        // Record configuration data.  Note, might as well do this now.
+        m_config->setGroup(QString("Filter_")+filterID);
+        m_config->writeEntry("PlugInName", filterPlugInName);
+        m_config->writeEntry("UserFilterName", userFilterName);
+        m_config->writeEntry("MultiInstance", multiInstance);
+        m_config->writeEntry("Enabled", true);
+        m_config->sync();
+
+        // Add listview item.
+        QListViewItem* filterItem = m_kttsmgrw->filtersList->lastChild();
+        if (filterItem)
+            filterItem =
+                new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                    userFilterName, QCheckListItem::CheckBox, this);
+        else
+            filterItem =
+                new KttsCheckListItem(m_kttsmgrw->filtersList,
+                    userFilterName, QCheckListItem::CheckBox, this);
+        filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
+        filterItem->setText(flvcPlugInName, filterPlugInName);
+        if (multiInstance)
+            filterItem->setText(flvcMultiInstance, "T");
+        else
+            filterItem->setText(flvcMultiInstance, "F");
+        dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+
+        // Make sure visible.
+        m_kttsmgrw->filtersList->ensureItemVisible(filterItem);
+
+        // Select the new item, update buttons.
+        m_kttsmgrw->filtersList->setSelected(filterItem, true);
+        updateFilterButtons();
+
+        // Inform Control Center that change has been made.
+        configChanged();
+    }
 
     // Don't need plugin in memory anymore.
     delete m_loadedFilterPlugIn;
@@ -1522,28 +1562,33 @@ void KCMKttsMgr::slot_configureFilter()
     // Did user Cancel?
     if (!m_loadedFilterPlugIn) return;
 
-    // Let plugin save its configuration.
-    m_config->setGroup(QString("Filter_")+filterID);
-    m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
-
     // Get user's name for the plugin.
     QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
 
-    // Save configuration.
-    m_config->setGroup(QString("Filter_")+filterID);
-    m_config->writeEntry("PlugInName", filterPlugInName);
-    m_config->writeEntry("UserFilterName", userFilterName);
-    m_config->writeEntry("Enabled", true);
-    m_config->writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
+    // If user properly configured the plugin, save the configuration.
+    if ( !userFilterName.isEmpty() )
+    {
 
-    m_config->sync();
+        // Let plugin save its configuration.
+        m_config->setGroup(QString("Filter_")+filterID);
+        m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
 
-    // Update display.
-    filterItem->setText(flvcUserName, userFilterName);
-    dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+        // Save configuration.
+        m_config->setGroup("Filter_"+filterID);
+        m_config->writeEntry("PlugInName", filterPlugInName);
+        m_config->writeEntry("UserFilterName", userFilterName);
+        m_config->writeEntry("Enabled", true);
+        m_config->writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
 
-    // Inform Control Center that configuration has changed.
-    configChanged();
+        m_config->sync();
+
+        // Update display.
+        filterItem->setText(flvcUserName, userFilterName);
+        dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+
+        // Inform Control Center that configuration has changed.
+        configChanged();
+    }
 
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
@@ -1665,7 +1710,7 @@ void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
 
 void KCMKttsMgr::slotConfigFilterDlg_ConfigChanged()
 {
-    m_configDlg->enableButtonOK(true);
+    m_configDlg->enableButtonOK( !m_loadedFilterPlugIn->userPlugInName().isEmpty() );
 }
 
 void KCMKttsMgr::slotConfigTalkerDlg_DefaultClicked()
@@ -1695,6 +1740,14 @@ void KCMKttsMgr::aboutSelected(){
     m_aboutDlg->show();
 }
 
+/**
+* This slot is called whenever user checks/unchecks item in Filters list.
+*/
+void KCMKttsMgr::slotFiltersList_stateChanged()
+{
+    configChanged();
+}
+
 // ----------------------------------------------------------------------------
 
 KttsCheckListItem::KttsCheckListItem( QListView *parent, QListViewItem *after,
@@ -1711,7 +1764,7 @@ KttsCheckListItem::KttsCheckListItem( QListView *parent,
 
 /*virtual*/ void KttsCheckListItem::stateChange(bool)
 {
-    if (m_kcmkttsmgr) m_kcmkttsmgr->configChanged();
+    if (m_kcmkttsmgr) m_kcmkttsmgr->slotFiltersList_stateChanged();
 }
 
 /*virtual*/ /*void resizeEvent( QResizeEvent ev )

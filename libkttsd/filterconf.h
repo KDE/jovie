@@ -92,7 +92,8 @@ class KttsFilterConf : public QWidget{
          * Returns the name of the plugin.  Displayed in Filters tab of KTTSMgr.
          * If there can be more than one instance of a filter, it should return
          * a unique name for each instance.  The name should be translated for
-         * the user if possible.
+         * the user if possible.  If the plugin is not correctly configured,
+         * return an empty string.
          * @return          Filter instance name.
          */
         virtual QString userPlugInName();

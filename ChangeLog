@@ -1,7 +1,17 @@
+2005-01-09  Gary Cramblitt (PhantomsDad)
+        * Epos plugin defaults to ISO 8859-2 encoding.  Pass encoded text to Epos client
+          via Stdin rather than command line to avoid encoding problem.
+
+2005-01-07  Gary Cramblitt (PhantomsDad)
+        * Start to Filters capability.  StringReplacer Filter implemented in KTTSMgr GUI,
+          but not yet implemented in kttsd.
+
 2004-12-31  Gary Cramblitt (PhantomsDad)
         * In KTTSD, if user has not yet configured any Talkers, prompt user and if they click
           Yes, run KTTSMgr.  User has option to turn off prompt.
         * Activate kspeech::showDialog() method.
+        * The khmtlktts plugin automatically senses if KTTSD is installed and if not,
+          hides menu item.
 
 2004-12-30  Gary Cramblitt (PhantomsDad)
         * Set LANG and LC_CTYPE environment variables before starting subprocess in Epos and

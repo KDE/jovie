@@ -1,3 +1,4 @@
+_ Should kttsmgr and kttsd Makefile.am's have $(KDE_RPATH)?
 _ Add option to kill plugin process when no longer needed so that memory can be recovered.
   Or maybe some sort of "nice" setting so that process will be swapped out when no longer needed.
 _ The Speak File function does not handle text files encoded differently from the desktop
@@ -6,12 +7,11 @@ _ The Speak File function does not handle text files encoded differently from th
   to KEncodingFileOpenDialog and then pass the user's chosen encoding to kspeech::setFile,
   but this will break any existing applications using setFile().  Are there any besides
   KTTSMgr, I wonder?
-_ Epos plugin should default to ISO 8859-2 encoding, rather than Local (whatever)?
-  It seems to work with UTF-8, Latin1, and ISO 8859-2.  Why? It shouldn't work if
-  encoding is Latin1 (ISO 8859-1), but it does (or at least it *seems* to work).
-  I don't speak czech or slovak, so I'm not really sure.
-_ The khmtlktts plugin should automatically sense if KTTSD is installed and if not,
-  hide menu item.
+_ Command plugin encodes text on command line using %t in user's chosen encoding, but
+  if this differs from user's desktop default encoding, doesn't work.  KProcess always
+  encodes command line stuff using user's default encoding.  There is no point, therefore,
+  in attempting to encode it differently, just mangles the text even more.  Short of modifying
+  KProcess, I see no way around this.  But perhaps a warning to user advising to use %f instead?
 _ Clean up kspeech/kspeechsink api documentation for kdelibs.
 _ Audio Plugins:
     _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.
