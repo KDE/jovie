@@ -291,6 +291,12 @@ bool TalkerChooserConf::supportsMultiInstance() { return true; }
  */
 QString TalkerChooserConf::userPlugInName()
 {
+    if (m_widget->languageLineEdit->text().isEmpty() &&
+        m_widget->synthComboBox->currentText().isEmpty() &&
+        m_widget->genderComboBox->currentText().isEmpty() &&
+        m_widget->volumeComboBox->currentText().isEmpty() &&
+        m_widget->rateComboBox->currentText().isEmpty())
+        return QString::null;
     QString instName = m_widget->nameLineEdit->text();
     return instName;
 }
