@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>633</width>
+            <width>585</width>
             <height>282</height>
         </rect>
     </property>
@@ -45,7 +45,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;General</string>
+                    <string>G&amp;eneral</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -698,75 +698,29 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Audio</string>
+                    <string>&amp;Audio</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <spacer row="2" column="0">
                         <property name="name">
-                            <cstring>audioButtonGroup</cstring>
+                            <cstring>spacer8</cstring>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>3</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <property name="title">
-                            <string>&amp;Output using</string>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
                         </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>artsRadioButton</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>20</x>
-                                    <y>30</y>
-                                    <width>120</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>a&amp;RTs</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+R</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>0</number>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>gstreamerRadioButton</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>20</x>
-                                    <y>60</y>
-                                    <width>120</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>&amp;GStreamer</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+G</string>
-                            </property>
-                        </widget>
-                    </widget>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>50</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>layout13</cstring>
@@ -859,23 +813,118 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <spacer row="2" column="0">
+                    <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
-                            <cstring>spacer8</cstring>
+                            <cstring>audioButtonGroup</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
+                        <property name="title">
+                            <string>Out&amp;put using</string>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>71</height>
-                            </size>
-                        </property>
-                    </spacer>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>artsRadioButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>a&amp;RTs</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+R</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>gstreamerRadioButton</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;GStreamer</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="2" column="0">
+                                <property name="name">
+                                    <cstring>layout8</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer9_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>30</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>sinkLabel</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Sink:</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the sound sink to be used for GStreamer output.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KComboBox">
+                                        <property name="name">
+                                            <cstring>sinkComboBox</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the sound sink to be used for GStreamer output.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </grid>
+                    </widget>
                     <spacer row="0" column="1">
                         <property name="name">
                             <cstring>spacer9</cstring>
@@ -888,7 +937,7 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>431</width>
+                                <width>370</width>
                                 <height>20</height>
                             </size>
                         </property>
@@ -1033,6 +1082,12 @@
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
+    <connection>
+        <sender>sinkComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainTab</tabstop>
@@ -1055,6 +1110,9 @@
     <tabstop>textPostMsg</tabstop>
     <tabstop>textPostSndCheck</tabstop>
     <tabstop>textPostSnd</tabstop>
+    <tabstop>artsRadioButton</tabstop>
+    <tabstop>sinkComboBox</tabstop>
+    <tabstop>timeBox</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">klocale.h</include>
@@ -1084,5 +1142,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

@@ -32,7 +32,8 @@ class TestPlayer : public QObject{
          * @param audioStretchFactor
          */
         TestPlayer(QObject *parent = 0, const char *name = 0,
-            const int playerOption = 0, const float audioStretchFactor = 1.0);
+            const int playerOption = 0, const float audioStretchFactor = 1.0,
+            const QString &sinkName = QString::null);
 
         /**
          * Destructor.
@@ -61,6 +62,11 @@ class TestPlayer : public QObject{
          */
         void play(const QString &waveFile);
 
+        /**
+        * Sets the GStreamer Sink Name.  Examples: "alsasink", "osssink", "nassink".
+        */
+        void setSinkName(const QString &sinkName);
+
     private:
         /**
          * Creates and returns a player object based on user option.
@@ -85,6 +91,11 @@ class TestPlayer : public QObject{
          * Audio stretch factor (Speed).
          */
         float m_audioStretchFactor;
+
+        /**
+        * GStreamer sink name.
+        */
+        QString m_sinkName;
 
         /**
          * Stretcher object.

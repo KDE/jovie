@@ -120,6 +120,8 @@ Speaker::Speaker( SpeechData *speechData, QObject *parent, const char *name) :
     m_playerOption = m_speechData->config->readNumEntry("AudioOutputMethod", 0);  // default to aRts.
     // Map 50% to 100% onto 2.0 to 0.5.
     m_audioStretchFactor = 1.0/(float(m_speechData->config->readNumEntry("AudioStretchFactor", 100))/100.0);
+    m_speechData->config->setGroup("GStreamerPlayer");
+    m_gstreamerSinkName = m_speechData->config->readEntry("SinkName", "osssink");
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 }
@@ -1757,7 +1759,12 @@ Player* Speaker::createPlayerObject()
     switch(m_playerOption)
     {
 #if HAVE_GSTREAMER
-        case 1 : p = new GStreamerPlayer; break;
+        case 1 : 
+            {
+                p = new GStreamerPlayer;
+                dynamic_cast<GStreamerPlayer*>(p)->setSinkName(m_gstreamerSinkName);
+                break;
+            }
 #endif
         default: p = new ArtsPlayer; break;
     }

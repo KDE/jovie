@@ -316,6 +316,11 @@ class KCMKttsMgr :
         void enableKttsdToggled(bool checked);
 
         /**
+        * This signal is emitted whenever user checks/unchecks the GStreamer radio button.
+        */
+        void slotGstreamerRadioButton_toggled(bool state);
+
+        /**
         * User has requested to display the Talker Configuration Dialog.
         */
         void slot_configureTalker();

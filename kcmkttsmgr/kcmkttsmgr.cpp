@@ -30,6 +30,7 @@
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qslider.h>
+#include <qlabel.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -45,12 +46,14 @@
 #include <kconfig.h>
 #include <kaboutapplication.h>
 #include <knuminput.h>
+#include <kcombobox.h>
 
 // KTTS includes.
 #include "kcmkttsmgr.moc"
 #include "kcmkttsmgr.h"
 #include "pluginconf.h"
 #include "testplayer.h"
+#include "gstreamerplayer.h"
 
 // Some constants.
 // Defaults set when clicking Defaults button.
@@ -111,9 +114,16 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->configureTalkerButton->setIconSet(
         KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
+    m_kttsmgrw->sinkComboBox->setEditable(false);
+
     // If GStreamer is available, enable its radio button.
 #if HAVE_GSTREAMER
-    m_kttsmgrw->gstreamerRadioButton->setEnabled(true); 
+    m_kttsmgrw->gstreamerRadioButton->setEnabled(true);
+    m_kttsmgrw->sinkLabel->setEnabled(true);
+    m_kttsmgrw->sinkComboBox->setEnabled(true);
+    QStringList sinkList = GStreamerPlayer::getPluginList("Sink/Audio");
+    kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
+    m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
 #endif
 
     // Register DCOP client.
@@ -143,6 +153,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slot_configureTalker()));
     connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
             this, SLOT(updateTalkerButtons()));
+    connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotGstreamerRadioButton_toggled(bool)));
     connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
     connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)),
@@ -333,7 +345,13 @@ void KCMKttsMgr::load()
     m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(
         m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
 
+    // GStreamer settings.
+    m_config->setGroup("GStreamerPlayer");
+    m_kttsmgrw->sinkComboBox->setCurrentText(m_config->readEntry("SinkName", "osssink"));
+
+    // Update controls based on new states.
     updateTalkerButtons();
+    slotGstreamerRadioButton_toggled(m_kttsmgrw->gstreamerRadioButton->isChecked());
 }
 
 /**
@@ -441,6 +459,10 @@ void KCMKttsMgr::save()
             if (!talkerIDsList.contains(groupTalkerID)) m_config->deleteGroup(groupName);
         }
     }
+
+    // GStreamer settings.
+    m_config->setGroup("GStreamerPlayer");
+    m_config->writeEntry("SinkName", m_kttsmgrw->sinkComboBox->currentText());
 
     m_config->sync();
 
@@ -1085,6 +1107,17 @@ void KCMKttsMgr::enableKttsdToggled(bool)
 }
 
 /**
+* This signal is emitted whenever user checks/unchecks the GStreamer radio button.
+*/
+void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
+{
+    m_kttsmgrw->sinkLabel->setEnabled(state);
+    m_kttsmgrw->sinkComboBox->setEnabled(state);
+}
+
+
+
+/**
 * This slot is called whenever KTTSD starts or restarts.
 */
 void KCMKttsMgr::kttsdStarted()
@@ -1213,8 +1246,10 @@ void KCMKttsMgr::configureTalker()
     int playerOption = 0;
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) playerOption = 1;
     float audioStretchFactor = 1.0/(float(m_kttsmgrw->timeBox->value())/100.0);
-    kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << endl;
-    TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", playerOption, audioStretchFactor);
+    QString sinkName = m_kttsmgrw->sinkComboBox->currentText();
+    kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;
+    TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", 
+        playerOption, audioStretchFactor, sinkName);
     m_loadedPlugIn->setPlayer(testPlayer);
     // Display the dialog.
     m_configDlg->exec();

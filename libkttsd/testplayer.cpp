@@ -39,13 +39,14 @@
  * Constructor.
  */
 TestPlayer::TestPlayer(QObject *parent, const char *name,
-    const int playerOption, const float audioStretchFactor) :
+    const int playerOption, const float audioStretchFactor, const QString &sinkName) :
     QObject(parent, name)
 {
     m_playerOption = playerOption;
     m_audioStretchFactor = audioStretchFactor;
     m_stretcher = 0;
     m_player = 0;
+    m_sinkName = sinkName;
 }
 
 /**
@@ -72,6 +73,8 @@ void TestPlayer::setPlayerOption(const int playerOption) { m_playerOption = play
  */
 void TestPlayer::setAudioStretchFactor(const float audioStretchFactor)
     { m_audioStretchFactor = audioStretchFactor; }
+
+void TestPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkName; }
 
 /**
  * Plays the specifified audio file and waits for completion.
@@ -127,7 +130,12 @@ Player* TestPlayer::createPlayerObject()
     switch(m_playerOption)
     {
 #if HAVE_GSTREAMER
-        case 1 : p = new GStreamerPlayer; break;
+        case 1 :
+            {
+                p = new GStreamerPlayer;
+                dynamic_cast<GStreamerPlayer*>(p)->setSinkName(m_sinkName);
+                break;
+            }
 #endif
         default: p = new ArtsPlayer; break;
     }

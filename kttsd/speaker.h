@@ -647,6 +647,11 @@ class Speaker : public QObject{
         float m_audioStretchFactor;
 
         /**
+        * GStreamer sink name to use.
+        */
+        QString m_gstreamerSinkName;
+
+        /**
         * Timer for monitoring audio player.
         */
         QTimer* m_timer;
