@@ -16,9 +16,6 @@
  *																					 *
  ***************************************************************************/
 
-#include <cstdlib>
-// getenv  
-
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
@@ -152,7 +149,7 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
 	// Play an English test.  I think FreeTTS only officialy supports English, but if anyone knows of someone
 	// whos built up a different language lexicon and has it working with FreeTTS gimme an email at ceruleanblaze@gmail.com
 	m_freettsProc->synth(
-			"KDE is a modern graphical desktop for Unix computers.",
+			"K D E is a modern graphical desktop for Unix computers.",
 	tmpWaveFile,
 	m_widget->freettsPath->url());
 }

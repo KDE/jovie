@@ -25,7 +25,7 @@
 #include <kstandarddirs.h>
 #include <kprocess.h>
 
-#include "freettsproc.h"
+#include "freettsproc.h" 
 
 /** Constructor */
 FreeTTSProc::FreeTTSProc( QObject* parent, const char* name, const QStringList &args) : 
@@ -36,7 +36,7 @@ FreeTTSProc::FreeTTSProc( QObject* parent, const char* name, const QStringList &
 	m_freettsProc = 0;
 }
 
-/** Destructor */
+/** Desctructor */
 FreeTTSProc::~FreeTTSProc() {
 	kdDebug() << "Running: FreeTTSProc::~FreeTTSProc" << endl;
 	if (m_freettsProc) {
@@ -91,6 +91,7 @@ void FreeTTSProc::synth(
 		if (m_freettsProc->isRunning()) m_freettsProc->kill();
 		delete m_freettsProc;
 		m_freettsProc = 0;
+        
 	}
 	
 	m_freettsProc = new KProcess;
@@ -248,11 +249,11 @@ void FreeTTSProc::ackFinished() {
  */
 bool FreeTTSProc::supportsAsync() { 
 // 	return true; 
-	return false;
+	return true;
 }
 
 /**
- * Returns True if the plugin supports synthText method,
+ * Returns True if the plugIn supports synthText method,
  * i.e., is able to synthesize text to a sound file without
  * audibilizing the text.
  * @return                        True if this plugin supports synthText method.
