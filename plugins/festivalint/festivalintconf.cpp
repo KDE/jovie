@@ -345,6 +345,11 @@ void FestivalIntConf::scanVoices()
     {
         // User's desktop language setting.
         QString desktopLanguageCode = KGlobal::locale()->language();
+        QString twoAlpha;
+        QString countryCode;
+        QString charSet;
+        KGlobal::locale()->splitLocale(desktopLanguageCode, twoAlpha, countryCode, charSet);
+        desktopLanguageCode = twoAlpha.lower();
         // Festival known voices list.
         KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices",
             true, false);
