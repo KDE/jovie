@@ -53,11 +53,7 @@ EposProc::~EposProc(){
         stopText();
         delete m_eposProc;
     }
-    if (m_eposServerProc)
-    {
-        m_eposServerProc->kill();
-        delete m_eposServerProc;
-    }
+    delete m_eposServerProc;
 }
 
 /** Initialize the speech */
@@ -68,8 +64,8 @@ bool EposProc::init(const QString& lang, KConfig* config){
     config->setGroup(QString("Lang_")+lang);
     m_eposServerExePath = config->readPathEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readPathEntry("EposClientExePath", "say");
-    m_eposServerOptions = config->readEntry("EposServerOptions", "");
-    m_eposClientOptions = config->readEntry("EposClientOptions", "");
+    m_eposServerOptions = config->readEntry("EposServerOptions", QString::null);
+    m_eposClientOptions = config->readEntry("EposClientOptions", QString::null);
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
     kdDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
     
@@ -93,7 +89,22 @@ bool EposProc::init(const QString& lang, KConfig* config){
             if (codecString == codecList->at(i)->name())
                 m_codec = UseCodec + i;
     }
+    // Start the Epos server if not already started.
+    if (!m_eposServerProc)
+    {
+        KProcess* m_eposServerProc = new KProcess;
+        *m_eposServerProc << m_eposServerExePath;
+        if (!m_eposServerOptions.isEmpty())
+            *m_eposServerProc << m_eposServerOptions;
+        connect(m_eposServerProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
+    }
+    
     kdDebug() << "EposProc::init: Initialized with codec: " << codecString << endl;
+    
     return true;
 }
 
@@ -162,9 +173,13 @@ void EposProc::synth(
     {
         KProcess* m_eposServerProc = new KProcess;
         *m_eposServerProc << eposServerExePath;
-        if (!eposServerOptions.isNull())
+        if (!eposServerOptions.isEmpty())
             *m_eposServerProc << eposServerOptions;
-        m_eposServerProc->start(KProcess::DontCare, KProcess::NoCommunication);
+        connect(m_eposServerProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
     }
     
     // Encode the text.
@@ -188,13 +203,13 @@ void EposProc::synth(
     m_eposProc = new KProcess;
     m_eposProc->setUseShell(true);
     *m_eposProc << eposClientExePath;
-    if (!suggestedFilename.isNull()) 
+    if (!suggestedFilename.isEmpty()) 
         *m_eposProc << "-o";
-    if (!eposClientOptions.isNull())
+    if (!eposClientOptions.isEmpty())
         *m_eposProc << eposClientOptions;
     // TODO: Set language (-l option) based on KTTSD language group.
     *m_eposProc << escText;
-    if (!suggestedFilename.isNull()) 
+    if (!suggestedFilename.isEmpty()) 
         *m_eposProc << " >" + suggestedFilename;
     connect(m_eposProc, SIGNAL(processExited(KProcess*)),
         this, SLOT(slotProcessExited(KProcess*)));
@@ -204,7 +219,7 @@ void EposProc::synth(
         this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
 //    connect(m_eposProc, SIGNAL(wroteStdin(KProcess*)),
 //        this, SLOT(slotWroteStdin(KProcess* )));
-    if (suggestedFilename.isNull())
+    if (suggestedFilename.isEmpty())
         m_state = psSaying;
     else
         m_state = psSynthing;
