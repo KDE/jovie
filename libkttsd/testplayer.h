@@ -19,12 +19,14 @@
 #ifndef _TESTPLAYER_H_
 #define _TESTPLAYER_H_
 
+#include <kdemacros.h>
+
 class Player;
 class Stretcher;
 
 // TODO: Make this work asynchronously.
 
-class TestPlayer : public QObject{
+class KDE_EXPORT TestPlayer : public QObject{
     public:
         /**
          * Constructor.

@@ -18,10 +18,10 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
-
+#include <kdemacros.h>
 // #include "filehandle.h"
 
-class Player : virtual public QObject
+class KDE_EXPORT Player : virtual public QObject
 {
     Q_OBJECT
 

@@ -22,11 +22,11 @@
 // Qt includes.
 #include <qobject.h>
 #include <qstringlist.h>
-
+#include <kdemacros.h>
 class TalkerCode;
 class KConfig;
 
-class KttsFilterProc : virtual public QObject
+class KDE_EXPORT KttsFilterProc : virtual public QObject
 {
     Q_OBJECT
 

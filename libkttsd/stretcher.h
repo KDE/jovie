@@ -20,9 +20,11 @@
 #ifndef _STRETCHER_H_
 #define _STRETCHER_H_
 
+#include <kdemacros.h>
+
 class KProcess;
 
-class Stretcher : public QObject{
+class KDE_EXPORT Stretcher : public QObject{
     Q_OBJECT
 
     public:

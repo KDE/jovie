@@ -20,7 +20,9 @@
 
 class QString;
 
-class KttsUtils {
+#include <kdemacros.h>
+
+class KDE_EXPORT KttsUtils {
 
 public:
     /// Constructor

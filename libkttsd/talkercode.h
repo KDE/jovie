@@ -22,8 +22,8 @@
 
 // Qt includes.
 #include <qstring.h>
-
-class TalkerCode
+#include <kdemacros.h>
+class KDE_EXPORT TalkerCode
 {
     public:
         /**

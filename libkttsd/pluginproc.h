@@ -21,7 +21,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-
+#include <kdemacros.h>
 #include <kconfig.h>
 
 /**
@@ -226,7 +226,7 @@ enum pluginState
     psFinished = 3               /**< Plugin has finished synthesizing.  Audio file is ready. */
 };
 
-class PlugInProc : virtual public QObject{
+class KDE_EXPORT PlugInProc : virtual public QObject{
     Q_OBJECT
 
     public:

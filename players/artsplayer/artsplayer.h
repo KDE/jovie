@@ -20,6 +20,7 @@
 #define ARTSPLAYER_H
 
 #include <config.h>
+#include <kdemacros.h>
 
 #include "player.h"
 
@@ -38,7 +39,7 @@ namespace KDE {
     class PlayObject;
 }
 
-class ArtsPlayer : public Player
+class KDE_EXPORT ArtsPlayer : public Player
 {
     Q_OBJECT
 

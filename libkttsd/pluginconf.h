@@ -28,6 +28,7 @@
 // KTTS includes.
 #include "testplayer.h"
 
+#include <kdemacros.h>
 /**
 * @interface PlugInConf
 *
@@ -205,7 +206,7 @@
 * order to synthesize speech.
 */
 
-class PlugInConf : public QWidget{
+class KDE_EXPORT PlugInConf : public QWidget{
     Q_OBJECT
 
     public:

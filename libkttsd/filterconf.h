@@ -25,8 +25,9 @@
 // KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdemacros.h>
 
-class KttsFilterConf : public QWidget{
+class KDE_EXPORT KttsFilterConf : public QWidget{
     Q_OBJECT
 
     public:
