@@ -7,7 +7,6 @@ _ Filters:
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
     _ Add KNewStuff capability for folks to upload/download filter configs.
 _ Audio Plugins:
-    _ The aRts plugin has some remnants of "JuK" code in it, which should be removed.  Search for "Juk".
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
     _ Add option to automatically turn down music player volume while speaking (via dcop).

@@ -35,12 +35,15 @@
 #include <kdeversion.h>
 
 // KTTSMgr includes.
+#include "kspeech.h"
 #include "kttsmgr.h"
 
 static const KCmdLineOptions options[] =
 {
     { "s", 0, 0 },
-    { "systray", I18N_NOOP("Start minimized in system tray."), 0 }
+    { "systray", I18N_NOOP("Start minimized in system tray."), 0 },
+    { "a", 0, 0 },
+    { "autoexit", I18N_NOOP("Exit when speaking is finished and minimized in system tray."), 0 }
 };
 
 int main (int argc, char *argv[])
@@ -128,6 +131,7 @@ int main (int argc, char *argv[])
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
     DCOPStub("kttsd", "KSpeech"),
+    DCOPObject("kttsmgr_kspeechsink"),
     KSystemTray(parent, "kttsmgrsystemtray")
 {
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
@@ -152,9 +156,50 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
+    // If --autoexit option given, exit when speaking stops.
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->isSet("autoexit"))
+    {
+        connectDCOPSignal("kttsd", "KSpeech",
+            "textFinished(QCString,uint)",
+            "textFinished(QCString,uint)",
+            false);
+        // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
+        parent->installEventFilter(this);
+    }
 }
 
 KttsMgrTray::~KttsMgrTray() { }
+
+void KttsMgrTray::textFinished(const QCString& /*appId*/, uint /*jobNum*/)
+{
+    kdDebug() << "KttsMgrTray::textFinished: running" << endl;
+    exitWhenFinishedSpeaking();
+}
+
+/*virtual*/ bool KttsMgrTray::eventFilter( QObject* /*o*/, QEvent* e )
+{
+    if ( e->type() == QEvent::Hide ) exitWhenFinishedSpeaking();
+    return false;
+}
+
+void KttsMgrTray::exitWhenFinishedSpeaking()
+{
+    // kdDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
+    if ( parentWidget()->isShown() ) return;
+    QString jobNums = getTextJobNumbers();
+    QStringList jobNumsList = QStringList::split(jobNums, ",");
+    uint jobNumsListCount = jobNumsList.count();
+    // Since there can only be 2 Finished jobs at a time, more than 2 jobs means at least
+    // one job is not Finished.
+    if (jobNumsListCount > 2) return;
+    // Exit if all jobs are Finished or there are no jobs.
+    for (uint ndx=0; ndx < jobNumsListCount; ++ndx)
+    {
+        if (getTextJobState(jobNumsList[ndx].toInt()) != KSpeech::jsFinished) return;
+    }
+    kapp->quit();
+}
 
 void KttsMgrTray::speakClipboardSelected()
 {

@@ -73,7 +73,7 @@ bool SpeechData::readConfig(){
     delete config;
     //config = KGlobal::config();
     config = new KConfig("kttsdrc");
-    
+
     // Set the group general for the configuration of KTTSD itself (no plug ins)
     config->setGroup("General");
 
@@ -96,6 +96,10 @@ bool SpeechData::readConfig(){
     notify = config->readBoolEntry("Notify", false);
     notifyPopupsOnly = config->readBoolEntry("NotifyPopupsOnly", true);
     notifyPassivePopupsOnly = config->readBoolEntry("NotifyPassivePopupsOnly", false);
+
+    // KTTSMgr auto start and auto exit.
+    autoStartManager = config->readBoolEntry("AutoStartManager", false);
+    autoExitManager = config->readBoolEntry("AutoExitManager", false);
 
     // Clear the pool of filter managers so that filters re-init themselves.
     QIntDictIterator<PooledFilterMgr> it( m_pooledFilterMgrs );

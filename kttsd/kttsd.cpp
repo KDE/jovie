@@ -596,7 +596,25 @@ void KTTSD::startText(const uint jobNum /*=0*/)
 {
     kdDebug() << "KTTSD::startText: Running" << endl;
     if (!m_speaker) return;
-    m_speaker->startText(applyDefaultJobNum(jobNum));
+    // Determine if we are starting speech.
+    bool startingSpeech = !isSpeakingText();
+    uint jNum = applyDefaultJobNum(jobNum);
+    m_speaker->startText(jNum);
+    // If this has started speech output, determine whether to autostart KTTSMgr.
+    if (startingSpeech)
+    {
+        if (m_speechData->autoStartManager)
+        {
+            // Do not start KTTSMgr unless at least 5 sentences are queued.
+            if (getTextCount(jNum) > 4)
+            {
+                QString cmd = "kttsmgr --systray";
+                if (m_speechData->autoExitManager) cmd.append(" --autoexit");
+                // Notice this fails if KTTSMgr is already running, which is what we want.
+                KRun::runCommand(cmd);
+            }
+        }
+    }
 }
 
 /**

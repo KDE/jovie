@@ -1055,7 +1055,8 @@ bool Speaker::getNextUtterance()
                         Utt intrUtt;
                         intrUtt.sentence = new mlText;
                         intrUtt.sentence->text = m_speechData->textPreMsg;
-                        intrUtt.sentence->talker = utt->sentence->talker;
+                        // Interruptions are spoken using default Talker.
+                        intrUtt.sentence->talker = QString::null;
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
                         intrUtt.sentence->seq = 0;
@@ -1100,7 +1101,7 @@ bool Speaker::getNextUtterance()
                     Utt resUtt;
                     resUtt.sentence = new mlText;
                     resUtt.sentence->text = m_speechData->textPostMsg;
-                    resUtt.sentence->talker = utt->sentence->talker;
+                    resUtt.sentence->talker = QString::null;
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
                     resUtt.sentence->seq = 0;

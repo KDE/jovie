@@ -13,16 +13,30 @@
 #ifndef KTTSMGR_H
 #define KTTSMGR_H
 
-#include <ksystemtray.h>
-#include "kspeech_stub.h"
+// Qt includes.
+#include <qevent.h>
 
-class KttsMgrTray: public KSystemTray, public KSpeech_stub
+// KDE includes.
+#include <ksystemtray.h>
+
+// KTTS includes.
+#include "kspeech_stub.h"
+#include "kspeechsink.h"
+
+class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
 {
     Q_OBJECT
 
     public:
         KttsMgrTray(QWidget *parent=0);
         ~KttsMgrTray();
+
+        void setExitWhenFinishedSpeaking();
+
+    protected:
+        // ASYNC textStarted(const QCString& appId, uint jobNum);
+        ASYNC textFinished(const QCString& appId, uint jobNum);
+        virtual bool eventFilter( QObject* o, QEvent* e );
 
     private slots:
 
@@ -35,6 +49,7 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub
 
     private:
         bool isKttsdRunning();
+        void exitWhenFinishedSpeaking();
 };
 
 #endif    // KTTSMGR_H

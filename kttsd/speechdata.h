@@ -541,6 +541,16 @@ class SpeechData : public QObject {
         bool notifyPassivePopupsOnly;
 
         /**
+        * Automatically start KTTSMgr whenever speaking.
+        */
+        bool autoStartManager;
+
+        /**
+        * Automatically exit auto-started KTTSMgr when speaking finishes.
+        */
+        bool autoExitManager;
+
+        /**
         * Configuration
         */
         KConfig *config;
