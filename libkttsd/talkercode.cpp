@@ -234,11 +234,14 @@ void TalkerCode::normalize()
  */
 void TalkerCode::parseTalkerCode(const QString &talkerCode)
 {
-    QString fullLanguageCode = talkerCode.section("lang=", 1, 1);
-    if (fullLanguageCode.isEmpty())
-        fullLanguageCode = talkerCode;
-    else
+    QString fullLanguageCode;
+    if (talkerCode.contains("\""))
+    {
+        fullLanguageCode = talkerCode.section("lang=", 1, 1);
         fullLanguageCode = fullLanguageCode.section('"', 1, 1);
+    }
+    else
+        fullLanguageCode = talkerCode;
     QString languageCode;
     QString countryCode;
     splitFullLanguageCode(fullLanguageCode, languageCode, countryCode);

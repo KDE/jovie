@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=String Replacer
+Comment=Generic String Replacement Filter Plugin for KTTS
+Type=Service
+ServiceTypes=KTTSD/FilterPlugin
+X-KDE-Library=libkttsd_stringreplacerplugin
+X-KDE-Languages=en,en_US,en_GB,en_CA,es,es_mx,cy,de,fi,cs,pl

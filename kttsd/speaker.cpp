@@ -1014,6 +1014,7 @@ int Speaker::talkerToPluginIndex(const QString& talker)
         for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
         {
             priorityMatch[ndx] = 0;
+            // kdDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
             if (parsedTalkerCode.languageCode() == m_loadedPlugIns[ndx].parsedTalkerCode.languageCode())
             {
                 priorityMatch[ndx]++;

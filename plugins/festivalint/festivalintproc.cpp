@@ -318,7 +318,8 @@ void FestivalIntProc::synth(
             saidText =
                 "(ktts_sabletowave \"" + saidText + "\" \"" +
                 synthFilename + "\" " +
-                QString::number(volumeValue) + ")";
+                QString::number(volumeValue) + 
+                " voice_" + voiceCode + ")";
         }
         else
         {

@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Filter Processing class.
+  Generic String Replacement Filter Processing class.
   This is the interface definition for text filters.
   -------------------
   Copyright:
@@ -16,17 +16,19 @@
  *                                                                            *
  ******************************************************************************/
 
+#ifndef _STRINGREPLACERPROC_H_
+#define _STRINGREPLACERPROC_H_
+
 // Qt includes.
-#ifndef _FILTERPROC_H_
-#define _FILTERPROC_H_
-
 #include <qobject.h>
-#include <qstringlist.h>
+#include <qtextstream.h>
+#include <qvaluelist.h>
+#include <qregexp.h>
 
-class TalkerCode;
-class KConfig;
+// KTTS includes.
+#include "filterproc.h"
 
-class KttsFilterProc : virtual public QObject
+class StringReplacerProc : virtual public KttsFilterProc
 {
     Q_OBJECT
 
@@ -34,12 +36,12 @@ public:
     /**
      * Constructor.
      */
-    KttsFilterProc( QObject *parent, const char *name );
+    StringReplacerProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
 
     /**
      * Destructor.
      */
-    virtual ~KttsFilterProc();
+    virtual ~StringReplacerProc();
 
     /**
      * Initialize the filter.
@@ -61,15 +63,14 @@ public:
      */
     virtual QString convert(QString& inputText, TalkerCode* talkerCode);
 
-signals:
-    /**
-     * If an error occurs, Filter should signal the error and return input as output in
-     * convert method.  If Filter should not be called in the future, perhaps because
-     * it could not find its configuration file, return False for keepGoing.
-     * @param keepGoing         False if the filter should not be called in the future.
-     * @param msg               Error message.
-     */
-    void error(const bool keepGoing, const QString &msg);
+private:
+    // Language supported by the filter.
+    QString m_languageCode;
+
+    // List of regular expressions to match.
+    QValueList<QRegExp> m_matchList;
+    // List of substitutions to replace matches.
+    QValueList<QString> m_substList;
 };
 
-#endif      // _FILTERPROC_H_
+#endif      // _STRINGREPLACERPROC_H_

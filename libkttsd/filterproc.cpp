@@ -16,24 +16,34 @@
  *                                                                            *
  ******************************************************************************/
 
+// KDE includes.
+#include <kdebug.h>
+
 // FilterProc includes.
 #include "filterproc.h"
 
 /**
  * Constructor.
  */
-KttsFilterProc::KttsFilterProc( QObject *parent, const char *name, const QStringList& /*args*/) :
-        QObject(parent, name) { }
+KttsFilterProc::KttsFilterProc( QObject *parent, const char *name) :
+        QObject(parent, name) 
+{
+    kdDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
+}
 
 /**
  * Destructor.
  */
-KttsFilterProc::~KttsFilterProc() { }
+KttsFilterProc::~KttsFilterProc()
+{
+    kdDebug() << "KttsFilterProc::~KttsFilterProc: Running" << endl;
+}
 
 /**
  * Initialize the filter.
  * @param config          Settings object.
  * @param configGroup     Settings Group.
+ * @return                False if filter is not ready to filter.
  *
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.

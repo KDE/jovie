@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>405</width>
+            <width>414</width>
             <height>282</height>
         </rect>
     </property>
@@ -221,6 +221,173 @@
                         </property>
                         <property name="whatsThis" stdset="0">
                             <string>When checked, KTTSMgr displays an icon in the system tray, and clicking OK or Cancel buttons does not stop KTTSMgr.  Use system tray context menu to quit KTTSMgr.  This setting takes effect when KTTSMgr is next started.  This setting has no effect when running in the KDE Control Center.</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Filters</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget" row="0" column="1">
+                        <property name="name">
+                            <cstring>layout9_2</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>addFilterButton</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add...</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Click to add and configure a new Filter.</string>
+                                    <comment>What's this text</comment>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>higherFilterPriorityButton</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Up</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Click to move selected filter up in the list.  Filters higher in the list are applied first.</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>lowerFilterPriorityButton</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Do&amp;wn</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Click to move a filter down in the list.  Filters lower in the list are applied last.</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>configureFilterButton</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit...</string>
+                                </property>
+                                <property name="toggleButton">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Click to configure options for the highlighted Filter.</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>removeFilterButton</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                                <property name="toggleButton">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Click to remove the highlighted Filter.</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer11_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="KListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Filter</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>filtersList</cstring>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.</string>
                         </property>
                     </widget>
                 </grid>
@@ -1045,6 +1212,12 @@
     <tabstop>enablePassiveOnlyCheckBox</tabstop>
     <tabstop>embedInSysTrayCheckBox</tabstop>
     <tabstop>showMainWindowOnStartupCheckBox</tabstop>
+    <tabstop>filtersList</tabstop>
+    <tabstop>addFilterButton</tabstop>
+    <tabstop>higherFilterPriorityButton</tabstop>
+    <tabstop>lowerFilterPriorityButton</tabstop>
+    <tabstop>configureFilterButton</tabstop>
+    <tabstop>removeFilterButton</tabstop>
     <tabstop>talkersList</tabstop>
     <tabstop>addTalkerButton</tabstop>
     <tabstop>higherTalkerPriorityButton</tabstop>
@@ -1078,6 +1251,10 @@
 <layoutdefaults spacing="6" margin="6"/>
 <includehints>
     <includehint>kcmodule.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>

@@ -36,6 +36,7 @@
 #include "kspeechsink.h"
 
 class PlugInConf;
+class KttsFilterConf;
 class KListViewItem;
 class KAboutData;
 class KConfig;
@@ -130,10 +131,11 @@ class KCMKttsMgr :
         enum widgetPages
         {
             wpGeneral = 0,          // General tab.
-            wpTalkers = 1,          // Talkers tab.
-            wpInterruption = 2,     // Interruption tab.
-            wpAudio = 3,            // Audio tab.
-            wpJobs = 4              // Jobs tab.
+            wpFilters = 1,          // Filters tab.
+            wpTalkers = 2,          // Talkers tab.
+            wpInterruption = 3,     // Interruption tab.
+            wpAudio = 4,            // Audio tab.
+            wpJobs = 5              // Jobs tab.
         };
 
         enum TalkerListViewColumn
@@ -145,6 +147,14 @@ class KCMKttsMgr :
             tlvcGender,
             tlvcVolume,
             tlvcRate,
+        };
+
+        enum FilterListViewColumn
+        {
+            flvcUserName,           // Name of filter as set by user and displayed.
+            flvcFilterID,           // Internal ID assigned to the filter (hidden).
+            flvcPlugInName,         // Name of the filter plugin (from .desktop file, hidden).
+            flvcMultiInstance       // True if multiple instances of this plugin are possible. (hidden)
         };
 
         /**
@@ -170,7 +180,7 @@ class KCMKttsMgr :
         *   <voice lang="en" name="fixed" gender="neutral"/>
         *   <prosody volume="medium" rate="medium"/>
         *   <kttsd synthesizer="Festival" />
-        */         
+        */
         QString defaultTalkerCode(const QString &languageCode, const QString &plugInName);
 
         /**
@@ -181,27 +191,38 @@ class KCMKttsMgr :
         void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
 
         /**
-        * Loads the configuration plugin for a named synthesizer.
-        * @param synthName        Name of the Synthesizer.  This is a translated name, and not
+        * Loads the configuration plugin for a named Talker plugin.
+        * @param name             Name of the Synthesizer.  This is a translated name, and not
         *                         necessarily the same as the plugIn name.
         *                         Example, "Festival Interactivo".
         */
-        PlugInConf *loadPlugin(const QString &synthName);
+        PlugInConf* loadTalkerPlugin(const QString& name);
 
         /**
-         * Display the Talker Configuration Dialog.
-         */
+        * Loads the configuration plugin for a named Filter plugin.
+        * @param plugInName       Name of the plugin.
+        */
+        KttsFilterConf* loadFilterPlugin(const QString& plugInName);
+
+        /**
+        * Display the Talker Configuration Dialog.
+        */
         void configureTalker();
+
+        /**
+        * Display the Filter Configuration Dialog.
+        */
+        void configureFilter();
+
+        /**
+        * Count number of configured Filters with the specified plugin name.
+        */
+        int countFilterPlugins(const QString& filterPlugInName);
 
         /**
         * Main widget
         */
         KCMKttsMgrWidget *m_kttsmgrw;
-
-        /**
-        * List of available plug ins
-        */
-        KTrader::OfferList m_offers;
 
         /**
         * Object holding all the configuration
@@ -224,14 +245,24 @@ class KCMKttsMgr :
         KDialogBase* m_configDlg;
 
         /**
-        * Plugin currently loaded into configuration dialog.
+        * Talker(synth) Plugin currently loaded into configuration dialog.
         */
-        PlugInConf *m_loadedPlugIn;
+        PlugInConf *m_loadedTalkerPlugIn;
+
+        /**
+        * Filter Plugin currently loaded into configuration dialog.
+        */
+        KttsFilterConf *m_loadedFilterPlugIn;
 
         /**
         * Last talker ID.  Used to generate a new ID.
         */
         int m_lastTalkerID;
+
+        /**
+        * Last filter ID.  Used to generate a new ID.
+        */
+        int m_lastFilterID;
 
         /**
         * Dictionary mapping language names to codes.
@@ -245,33 +276,38 @@ class KCMKttsMgr :
 
     private slots:
         /**
-        * Add a talker.
+        * Add a talker/filter.
         * This is a wrapper function that takes the parameters for the real talker from the
         * widgets to later call it.
         */
         void addTalker();
+        void addFilter();
 
         /**
-        * Remove talker. 
+        * Remove talker/filter.
         * This is a wrapper function that takes the parameters for the real removeTalker from the
         * widgets to later call it.
         */
         void removeTalker();
+        void removeFilter();
 
         /**
-         * This slot is called whenever user clicks the higherTalkerPriority button (up).
-         */
+        * This slot is called whenever user clicks the higher*Priority button (up).
+        */
         void higherTalkerPriority();
+        void higherFilterPriority();
 
         /**
-         * This slot is called whenever user clicks the lowerTalkerPriority button (down).
-         */
+        * This slot is called whenever user clicks the lower*Priority button (down).
+        */
         void lowerTalkerPriority();
+        void lowerFilterPriority();
 
         /**
-         * Update the status of the Talker buttons.
+        * Update the status of the Talker/Filter buttons.
         */
         void updateTalkerButtons();
+        void updateFilterButtons();
 
         /**
         * This slot is used to emit the signal changed when any widget changes the configuration 
@@ -292,9 +328,10 @@ class KCMKttsMgr :
         void slotGstreamerRadioButton_toggled(bool state);
 
         /**
-        * User has requested to display the Talker Configuration Dialog.
+        * User has requested to display the Talker/Filter Configuration Dialog.
         */
         void slot_configureTalker();
+        void slot_configureFilter();
 
         /**
         * Displays about dialog.
@@ -302,12 +339,14 @@ class KCMKttsMgr :
         void aboutSelected();
 
         /**
-        * Slots for the Talker Configuration dialog.
+        * Slots for the Talker/Filter Configuration dialogs.
         */
-        void slotConfigDlg_ConfigChanged();
-        void slotConfigDlg_DefaultClicked();
-        void slotConfigDlg_OkClicked();
-        void slotConfigDlg_CancelClicked();
+        void slotConfigTalkerDlg_ConfigChanged();
+        void slotConfigFilterDlg_ConfigChanged();
+        void slotConfigTalkerDlg_DefaultClicked();
+        void slotConfigFilterDlg_DefaultClicked();
+        void slotConfigTalkerDlg_CancelClicked();
+        void slotConfigFilterDlg_CancelClicked();
 
         /**
         * Slots for Speed setting.
@@ -319,7 +358,6 @@ class KCMKttsMgr :
         * Other slots.
         */
         void slotTabChanged();
-
 };
 
 #endif

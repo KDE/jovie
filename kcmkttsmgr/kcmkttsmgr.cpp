@@ -2,7 +2,7 @@
   KControl module for KTTSD configuration and Job Management
   -------------------
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
-  Copyright : (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
@@ -48,10 +48,12 @@
 #include <kaboutapplication.h>
 #include <knuminput.h>
 #include <kcombobox.h>
+#include <kinputdialog.h>
 
 // KTTS includes.
 #include "talkercode.h"
 #include "pluginconf.h"
+#include "filterconf.h"
 #include "testplayer.h"
 #include "player.h"
 
@@ -82,8 +84,6 @@ const QString textPostSndValue = "";
 const int timeBoxValue = 100;
 
 // Make this a plug in.
-// Provide two identical modules.  Once all apps have stopped using
-// kcm_kttsmgr, remove it.
 typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kcm_kttsd") );
 
@@ -141,7 +141,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     if (!client->isRegistered())
     {
         client->attach();
-        client->registerAs(kapp->name());    
+        client->registerAs(kapp->name());
     }
 
     // Object for the KTTSD configuration.
@@ -151,6 +151,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     load();
 
     // Connect the signals from the KCMKtssMgrWidget to this class.
+
+    // Talker tab.
     connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
             this, SLOT(addTalker()));
     connect(m_kttsmgrw->higherTalkerPriorityButton, SIGNAL(clicked()),
@@ -163,6 +165,22 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slot_configureTalker()));
     connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
             this, SLOT(updateTalkerButtons()));
+
+    // Filter tab.
+    connect(m_kttsmgrw->addFilterButton, SIGNAL(clicked()),
+            this, SLOT(addFilter()));
+    connect(m_kttsmgrw->higherFilterPriorityButton, SIGNAL(clicked()),
+            this, SLOT(higherFilterPriority()));
+    connect(m_kttsmgrw->lowerFilterPriorityButton, SIGNAL(clicked()),
+            this, SLOT(lowerFilterPriority()));
+    connect(m_kttsmgrw->removeFilterButton, SIGNAL(clicked()),
+            this, SLOT(removeFilter()));
+    connect(m_kttsmgrw->configureFilterButton, SIGNAL(clicked()),
+            this, SLOT(slot_configureFilter()));
+    connect(m_kttsmgrw->filtersList, SIGNAL(selectionChanged()),
+            this, SLOT(updateFilterButtons()));
+
+    // Audio tab.
     connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotGstreamerRadioButton_toggled(bool)));
     connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
@@ -171,10 +189,14 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(timeSlider_valueChanged(int)));
     connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_kttsmgrw, SIGNAL( configChanged() ),
-            this, SLOT( configChanged() ) );
+
+    // General tab.
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(enableKttsdToggled(bool)));
+
+    // Others.
+    connect(m_kttsmgrw, SIGNAL( configChanged() ),
+            this, SLOT( configChanged() ) );
     connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
 
@@ -277,6 +299,9 @@ void KCMKttsMgr::load()
     // Last plugin ID.  Used to generate a new ID for an added talker.
     m_lastTalkerID = 0;
 
+    // Last filter ID.  Used to generate a new ID for an added filter.
+    m_lastFilterID = 0;
+
     // Dictionary mapping languages to language codes.
     m_languagesToCodes.clear();
 
@@ -311,14 +336,14 @@ void KCMKttsMgr::load()
         }
     }
 
-    // Query for all the KCMKTTSD SynthPlugins and store the list in m_offers.
-    m_offers = KTrader::self()->query("KTTSD/SynthPlugin");
+    // Query for all the KCMKTTSD SynthPlugins and store the list in offers.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
 
     // Iterate thru the posible plug ins getting their language support codes.
-    for(unsigned int i=0; i < m_offers.count() ; ++i)
+    for(unsigned int i=0; i < offers.count() ; ++i)
     {
-        QString synthName = m_offers[i]->name();
-        QStringList languageCodes = m_offers[i]->property("X-KDE-Languages").toStringList();
+        QString synthName = offers[i]->name();
+        QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
         // Add language codes to the language-to-language code map.
         QStringList::ConstIterator endLanguages(languageCodes.constEnd());
         for( QStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
@@ -338,6 +363,75 @@ void KCMKttsMgr::load()
 
     // Add "Other" language.
     m_languagesToCodes[i18n("Other")] = "other";
+
+    // Load Filters.
+    QListViewItem* filterItem = 0;
+    m_kttsmgrw->filtersList->clear();
+    m_kttsmgrw->filtersList->setSortColumn(-1);
+    m_config->setGroup("General");
+    QStringList filterIDsList = m_config->readListEntry("FilterIDs", ',');
+    // kdDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList << endl;
+    if (!filterIDsList.isEmpty())
+    {
+        QStringList::ConstIterator itEnd = filterIDsList.constEnd();
+        for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
+        {
+            QString filterID = *it;
+            // kdDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
+            m_config->setGroup(QString("Filter_") + filterID);
+            QString filterPlugInName = m_config->readEntry("PlugInName");
+            QString userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
+            bool multiInstance = m_config->readBoolEntry("MultiInstance", false);
+            bool checked = m_config->readBoolEntry("Enabled", false);
+            if (!filterItem)
+                filterItem = new QCheckListItem(m_kttsmgrw->filtersList,
+                    userFilterName, QCheckListItem::CheckBox);
+            else
+                filterItem = new QCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                    userFilterName, QCheckListItem::CheckBox);
+            filterItem->setText(flvcFilterID, filterID);
+            filterItem->setText(flvcPlugInName, filterPlugInName);
+            if (multiInstance)
+                filterItem->setText(flvcMultiInstance, "T");
+            else
+                filterItem->setText(flvcMultiInstance, "F");
+            dynamic_cast<QCheckListItem*>(filterItem)->setOn(checked);
+            if (filterID.toInt() > m_lastFilterID) m_lastFilterID = filterID.toInt();
+        }
+    }
+
+    // Add at least one unchecked instance of each available filter plugin if there is
+    // not already at least one instance.
+    offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    for (unsigned int i=0; i < offers.count() ; ++i)
+    {
+        QString filterPlugInName = offers[i]->name();
+        if (countFilterPlugins(filterPlugInName) == 0)
+        {
+            if (!filterItem)
+                filterItem = new QCheckListItem(m_kttsmgrw->filtersList,
+                    filterPlugInName, QCheckListItem::CheckBox);
+            else
+                filterItem = new QCheckListItem(filterItem,
+                    filterPlugInName, QCheckListItem::CheckBox);
+            m_lastFilterID++;
+            filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
+            filterItem->setText(flvcPlugInName, filterPlugInName);
+            // Must load plugin to determine if it supports multiple instances.
+            // TODO: Find a way to avoid this?
+            KttsFilterConf* filterPlugIn = loadFilterPlugin(filterPlugInName);
+            if (filterPlugIn)
+            {
+                if (filterPlugIn->supportsMultiInstance())
+                    filterItem->setText(flvcMultiInstance, "T");
+                else
+                    filterItem->setText(flvcMultiInstance, "F");
+            } else
+                kdDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName << endl;
+            delete filterPlugIn;
+            dynamic_cast<QCheckListItem*>(filterItem)->setOn(false);
+        }
+    }
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     if (m_kttsmgrw->talkersList->childCount() == 0)
@@ -446,6 +540,30 @@ void KCMKttsMgr::save()
         {
             QString groupTalkerID = groupName.mid(7);
             if (!talkerIDsList.contains(groupTalkerID)) m_config->deleteGroup(groupName);
+        }
+    }
+
+    // Get ordered list of all filter IDs.
+    QStringList filterIDsList;
+    QListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
+    while (filterItem)
+    {
+        QListViewItem* nextFilterItem = filterItem->itemBelow();
+        QString filterID = filterItem->text(flvcFilterID);
+        filterIDsList.append(filterID);
+        filterItem = nextFilterItem;
+    }
+    QString filterIDs = filterIDsList.join(",");
+    m_config->writeEntry("FilterIDs", filterIDs);
+
+    // Erase obsolete Filter_nn sections.
+    for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
+    {
+        QString groupName = groupList[groupNdx];
+        if (groupName.left(7) == "Filter_")
+        {
+            QString groupFilterID = groupName.mid(7);
+            if (!filterIDsList.contains(groupFilterID)) m_config->deleteGroup(groupName);
         }
     }
 
@@ -638,44 +756,95 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 }
 
 /**
-* Loads the configuration plug in for a named plug in.
+* Loads the configuration plug in for a named talker plug in and type.
 */
-PlugInConf *KCMKttsMgr::loadPlugin(const QString &synthName)
+PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 {
     // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
-    // Iterate thru the plug in m_offers to find the plug in that matches the synthName.
-    for(unsigned int i=0; i < m_offers.count() ; ++i){
-        // Compare the plug in to be loaded with the entry in m_offers[i]
-        // kdDebug() << "Comparing " << m_offers[i]->name() << " to " << synthName << endl;
-        if(m_offers[i]->name() == synthName)
+    // Get list of plugins.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+
+    // Iterate thru the offers to find the plug in that matches the name.
+    for(unsigned int i=0; i < offers.count() ; ++i){
+        // Compare the plug in to be loaded with the entry in offers[i]
+        // kdDebug() << "Comparing " << offers[i]->name() << " to " << synthName << endl;
+        if(offers[i]->name() == name)
         {
             // When the entry is found, load the plug in
             // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(m_offers[i]->library().latin1());
+            KLibFactory *factory = KLibLoader::self()->factory(offers[i]->library().latin1());
             if(factory){
                 // If the factory is created successfully, instantiate the PlugInConf class for the
                 // specific plug in to get the plug in configuration object.
                 PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
-                        m_offers[i]->library().latin1(), NULL, m_offers[i]->library().latin1());
+                        offers[i]->library().latin1(), NULL, offers[i]->library().latin1());
                 if(plugIn){
                     // If everything went ok, return the plug in pointer.
                     return plugIn;
                 } else {
                     // Something went wrong, returning null.
+                    kdDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to instantiate PlugInConf class for plugin " << name << endl;
                     return NULL;
-                    kdDebug() << "KCMKttsMgr::loadPlugin: Unable to instantiate PlugInConf class for plugin " << synthName << endl;
                 }
             } else {
                 // Something went wrong, returning null.
-                kdDebug() << "KCMKttsMgr::loadPlugin: Unable to create Factory object for plugin " << synthName << endl;
+                kdDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to create Factory object for plugin " << name << endl;
                 return NULL;
             }
             break;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
-    kdDebug() << "KCMKttsMgr::loadPlugin: KTrader did not return an offer for plugin " << synthName << endl;
+    kdDebug() << "KCMKttsMgr::loadTalkerPlugin: KTrader did not return an offer for plugin " << name << endl;
+    return NULL;
+}
+
+/**
+ * Loads the configuration plug in for a named filter plug in.
+ */
+KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
+{
+    // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
+
+    // Get list of plugins.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+
+    // Iterate thru the offers to find the plug in that matches the name.
+    for(unsigned int i=0; i < offers.count() ; ++i){
+        // Compare the plug in to be loaded with the entry in offers[i]
+        // kdDebug() << "Comparing " << offers[i]->plugInName() << " to " << synthName << endl;
+        if(offers[i]->name() == plugInName)
+        {
+            // When the entry is found, load the plug in
+            // First create a factory for the library
+            KLibFactory *factory = KLibLoader::self()->factory(offers[i]->library().latin1());
+            if(factory){
+                // If the factory is created successfully, instantiate the KttsFilterConf class for the
+                // specific plug in to get the plug in configuration object.
+                int errorNo;
+                KttsFilterConf *plugIn =
+                    KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterConf>(
+                        offers[i]->library().latin1(), NULL, offers[i]->library().latin1(),
+                        QStringList(), &errorNo);
+                if(plugIn){
+                    // If everything went ok, return the plug in pointer.
+                    return plugIn;
+                } else {
+                    // Something went wrong, returning null.
+                    kdDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to instantiate KttsFilterConf class for plugin " << plugInName << " error: " << errorNo << endl;
+                    return NULL;
+                }
+            } else {
+                // Something went wrong, returning null.
+                kdDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to create Factory object for plugin " << plugInName << endl;
+                return NULL;
+            }
+            break;
+        }
+    }
+    // The plug in was not found (unexpected behaviour, returns null).
+    kdDebug() << "KCMKttsMgr::loadFilterPlugin: KTrader did not return an offer for plugin " << plugInName << endl;
     return NULL;
 }
 
@@ -744,8 +913,8 @@ void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talk
 }
 
 /**
-* Add a talker.
-*/
+ * Add a talker.
+ */
 void KCMKttsMgr::addTalker(){
     AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, this, "AddTalker_widget");
     KDialogBase* dlg = new KDialogBase(
@@ -795,14 +964,14 @@ void KCMKttsMgr::addTalker(){
         langLView->sort();
         // Display the box in a dialog.
         KDialogBase* dlg = new KDialogBase(
-            KDialogBase::Swallow,
-            i18n("Select Language"),
-            KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-            KDialogBase::Cancel,
-            m_kttsmgrw,
-            "SelectLanguage_dlg",
-            true,
-            true);
+                KDialogBase::Swallow,
+        i18n("Select Language"),
+        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
+        KDialogBase::Cancel,
+        m_kttsmgrw,
+        "SelectLanguage_dlg",
+        true,
+        true);
         dlg->setMainWidget(hBox);
         dlg->setHelp("select-plugin", "kttsd");
         dlg->setInitialSize(QSize(200, 500), false);
@@ -828,23 +997,23 @@ void KCMKttsMgr::addTalker(){
     m_config->sync();
 
     // Load the plugin.
-    m_loadedPlugIn = loadPlugin(synthName);
-    if (!m_loadedPlugIn) return;
+    m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
+    if (!m_loadedTalkerPlugIn) return;
 
     // Give plugin the user's language code and permit plugin to autoconfigure itself.
-    m_loadedPlugIn->setDesiredLanguage(languageCode);
-    m_loadedPlugIn->load(m_config, QString("Talker_")+talkerID);
+    m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
+    m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
 
     // If plugin was able to configure itself, it returns a full talker code.
     // If not, display configuration dialog for user to configure the plugin.
-    QString talkerCode = m_loadedPlugIn->getTalkerCode();
+    QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
     if (talkerCode.isEmpty())
     {
         // Display configuration dialog.
         configureTalker();
         // Did user Cancel?
-        if (!m_loadedPlugIn) return;
-        talkerCode = m_loadedPlugIn->getTalkerCode();
+        if (!m_loadedTalkerPlugIn) return;
+        talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
     }
 
     // If still no Talker Code, abandon.
@@ -852,7 +1021,7 @@ void KCMKttsMgr::addTalker(){
     {
         // Let plugin save its configuration.
         m_config->setGroup(QString("Talker_")+talkerID);
-        m_loadedPlugIn->save(m_config, QString("Talker_"+talkerID));
+        m_loadedTalkerPlugIn->save(m_config, QString("Talker_"+talkerID));
 
         // Record last Talker ID used for next add.
         m_lastTalkerID = talkerID.toInt();
@@ -868,12 +1037,12 @@ void KCMKttsMgr::addTalker(){
         QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
             talkerItem =
-                new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
-                    QString::number(m_lastTalkerID), language, synthName);
+                    new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
+                                      QString::number(m_lastTalkerID), language, synthName);
         else
             talkerItem =
-                new KListViewItem(m_kttsmgrw->talkersList, QString::number(m_lastTalkerID),
-                    language, synthName);
+                    new KListViewItem(m_kttsmgrw->talkersList, QString::number(m_lastTalkerID),
+                                      language, synthName);
 
         // Set additional columns of the listview item.
         updateTalkerItem(talkerItem, talkerCode);
@@ -890,14 +1059,125 @@ void KCMKttsMgr::addTalker(){
     }
 
     // Don't need plugin in memory anymore.
-    delete m_loadedPlugIn;
-    m_loadedPlugIn = 0;
+    delete m_loadedTalkerPlugIn;
+    m_loadedTalkerPlugIn = 0;
 
     // kdDebug() << "KCMKttsMgr::addTalker: done." << endl;
 }
 
 /**
-* Remove talker. 
+* Add a filter.
+*/
+void KCMKttsMgr::addFilter()
+{
+    // Build a list of filters that support multiple instances and let user choose.
+    QStringList filterPlugInNames;
+    QListViewItem* item = m_kttsmgrw->filtersList->firstChild();
+    while (item)
+    {
+        if (item->text(flvcMultiInstance) == "T")
+            filterPlugInNames.append(item->text(flvcPlugInName));
+        item = item->nextSibling();
+    }
+
+    // If no choice (shouldn't happen), bail out.
+    // kdDebug() << "KCMKttsMgr::addFilter: filterPluginNames = " << filterPlugInNames << endl;
+    if (filterPlugInNames.count() == 0) return;
+
+    // If exactly one choice, skip selection dialog, otherwise display list to user to select from.
+    bool okChosen = false;
+    QString filterPlugInName;
+    if (filterPlugInNames.count() > 1)
+    {
+        filterPlugInName = KInputDialog::getItem(
+            i18n("Select Filter"),
+            i18n("Filter"),
+            filterPlugInNames,
+            0,
+            false,
+            &okChosen,
+            m_kttsmgrw,
+            "selectfilter_kttsd");
+        if (!okChosen) return;
+    } else
+        filterPlugInName = filterPlugInNames[0];
+
+    // Assign a new Filter ID for the filter.  Wraps around to 1.
+    QString filterID = QString::number(m_lastFilterID + 1);
+
+    // Erase extraneous Filter configuration entries that might be there.
+    m_config->deleteGroup(QString("Filter_")+filterID);
+    m_config->sync();
+
+    // Load the plugin.
+    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
+    if (!m_loadedFilterPlugIn) return;
+
+    // Permit plugin to autoconfigure itself.
+    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
+
+    // Display configuration dialog for user to configure the plugin.
+    configureFilter();
+
+    // Did user Cancel?
+    if (!m_loadedFilterPlugIn) return;
+
+    // Let plugin save its configuration.
+    m_config->setGroup(QString("Filter_")+filterID);
+    m_loadedFilterPlugIn->save(m_config, QString("Filter_"+filterID));
+
+    // Record last Filter ID used for next add.
+    m_lastFilterID = filterID.toInt();
+
+    // Determine if filter supports multiple instances.
+    bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
+
+    // Record configuration data.  Note, might as well do this now.
+    QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
+    m_config->setGroup(QString("Filter_")+filterID);
+    m_config->writeEntry("PlugInName", filterPlugInName);
+    m_config->writeEntry("UserFilterName", userFilterName);
+    m_config->writeEntry("MultiInstance", multiInstance);
+    m_config->writeEntry("Enabled", true);
+    m_config->sync();
+
+    // Add listview item.
+    QListViewItem* filterItem = m_kttsmgrw->filtersList->lastChild();
+    if (filterItem)
+        filterItem =
+            new QCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                userFilterName, QCheckListItem::CheckBox);
+    else
+        filterItem =
+            new QCheckListItem(m_kttsmgrw->filtersList,
+                userFilterName, QCheckListItem::CheckBox);
+    filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
+    filterItem->setText(flvcPlugInName, filterPlugInName);
+    if (multiInstance)
+        filterItem->setText(flvcMultiInstance, "T");
+    else
+        filterItem->setText(flvcMultiInstance, "F");
+    dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+
+    // Make sure visible.
+    m_kttsmgrw->filtersList->ensureItemVisible(filterItem);
+
+    // Select the new item, update buttons.
+    m_kttsmgrw->filtersList->setSelected(filterItem, true);
+    updateFilterButtons();
+
+    // Inform Control Center that change has been made.
+    configChanged();
+
+    // Don't need plugin in memory anymore.
+    delete m_loadedFilterPlugIn;
+    m_loadedFilterPlugIn = 0;
+
+    // kdDebug() << "KCMKttsMgr::addFilter: done." << endl;
+}
+
+/**
+* Remove talker.
 */
 void KCMKttsMgr::removeTalker(){
     // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
@@ -920,6 +1200,40 @@ void KCMKttsMgr::removeTalker(){
 }
 
 /**
+* Remove filter.
+*/
+void KCMKttsMgr::removeFilter(){
+    // kdDebug() << "KCMKttsMgr::removeFilter: Running"<< endl;
+
+    // Get the selected filter.
+    QListViewItem *itemToRemove = m_kttsmgrw->filtersList->selectedItem();
+    if (!itemToRemove) return;
+
+    // Delete the filter from configuration file.
+//    QString filterID = itemToRemove->text(flvcFilterID);
+//    m_config->deleteGroup("Filter_"+filterID, true, false);
+
+    // If this is the only instance of a multi-instance plugin, or it is a single-instance plugin,
+    // instead of deleting it, uncheck it.
+    bool multiInstance = (itemToRemove->text(flvcMultiInstance) == "T");
+    QString filterPlugInName = itemToRemove->text(flvcPlugInName);
+    if (!multiInstance || countFilterPlugins(filterPlugInName) <= 1)
+    {
+        dynamic_cast<QCheckListItem*>(itemToRemove)->setOn(false);
+        configChanged();
+        return;
+    }
+
+    // Delete the filter from list view.
+    delete itemToRemove;
+
+    updateFilterButtons();
+
+    // Emit configuraton changed.
+    configChanged();
+}
+
+/**
 * This slot is called whenever user clicks the higherTalkerPriority button (up).
 */
 void KCMKttsMgr::higherTalkerPriority()
@@ -935,6 +1249,21 @@ void KCMKttsMgr::higherTalkerPriority()
 }
 
 /**
+ * This slot is called whenever user clicks the higherFilterPriority button (up).
+ */
+void KCMKttsMgr::higherFilterPriority()
+{
+    QListViewItem* filterItem = m_kttsmgrw->filtersList->selectedItem();
+    if (!filterItem) return;
+    QListViewItem* prevFilterItem = filterItem->itemAbove();
+    if (!prevFilterItem) return;
+    prevFilterItem->moveItem(filterItem);
+    m_kttsmgrw->filtersList->setSelected(filterItem, true);
+    updateFilterButtons();
+    configChanged();
+}
+
+/**
 * This slot is called whenever user clicks the lowerTalkerPriority button (down).
 */
 void KCMKttsMgr::lowerTalkerPriority()
@@ -946,6 +1275,23 @@ void KCMKttsMgr::lowerTalkerPriority()
     talkerItem->moveItem(nextTalkerItem);
     m_kttsmgrw->talkersList->setSelected(talkerItem, true);
     updateTalkerButtons();
+    configChanged();
+}
+
+/**
+* This slot is called whenever user clicks the lowerFilterPriority button (down).
+*/
+void KCMKttsMgr::lowerFilterPriority()
+{
+    // kdDebug() << "KCMKttsMgr::lowerFilterPriority: Running" << endl;
+    QListViewItem* filterItem = m_kttsmgrw->filtersList->selectedItem();
+    if (!filterItem) return;
+    QListViewItem* nextFilterItem = filterItem->itemBelow();
+    if (!nextFilterItem) return;
+    // kdDebug() << "KCMKttsMgr::lowerFilterPriority: moving " << filterItem->text(0) << " below " << nextFilterItem->text(0) << endl;
+    filterItem->moveItem(nextFilterItem);
+    m_kttsmgrw->filtersList->setSelected(filterItem, true);
+    updateFilterButtons();
     configChanged();
 }
 
@@ -968,6 +1314,34 @@ void KCMKttsMgr::updateTalkerButtons(){
         m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(false);
     }
     // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting"<< endl;
+}
+
+/**
+* Update the status of the Filter buttons.
+*/
+void KCMKttsMgr::updateFilterButtons(){
+    // kdDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
+    QListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
+    if (item) {
+        // Disable Remove button if single-instance or last of multi-instance plugin.
+        bool multiInstance = (item->text(flvcMultiInstance) == "T");
+        QString filterPlugInName = item->text(flvcPlugInName);
+        if (!multiInstance || countFilterPlugins(filterPlugInName) <= 1)
+            m_kttsmgrw->removeFilterButton->setEnabled(false);
+        else
+            m_kttsmgrw->removeFilterButton->setEnabled(true);
+        m_kttsmgrw->configureFilterButton->setEnabled(true);
+        m_kttsmgrw->higherFilterPriorityButton->setEnabled(
+                m_kttsmgrw->filtersList->selectedItem()->itemAbove() != 0);
+        m_kttsmgrw->lowerFilterPriorityButton->setEnabled(
+                m_kttsmgrw->filtersList->selectedItem()->itemBelow() != 0);
+    } else {
+        m_kttsmgrw->removeFilterButton->setEnabled(false);
+        m_kttsmgrw->configureFilterButton->setEnabled(false);
+        m_kttsmgrw->higherFilterPriorityButton->setEnabled(false);
+        m_kttsmgrw->lowerFilterPriorityButton->setEnabled(false);
+    }
+    // kdDebug() << "KCMKttsMgr::updateFilterButtons: Exiting"<< endl;
 }
 
 /**
@@ -1020,7 +1394,6 @@ void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
 }
 
 
-
 /**
 * This slot is called whenever KTTSD starts or restarts.
 */
@@ -1071,7 +1444,7 @@ void KCMKttsMgr::kttsdExiting()
 }
 
 /**
-* User has requested display talker configuration dialog.
+* User has requested display of talker configuration dialog.
 */
 void KCMKttsMgr::slot_configureTalker()
 {
@@ -1082,30 +1455,30 @@ void KCMKttsMgr::slot_configureTalker()
     QString synthName = talkerItem->text(tlvcSynthName);
     QString language = talkerItem->text(tlvcLanguage);
     QString languageCode = m_languagesToCodes[language];
-    m_loadedPlugIn = loadPlugin(synthName);
-    if (!m_loadedPlugIn) return;
+    m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
+    if (!m_loadedTalkerPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << synthName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
     m_config->setGroup(QString("Talker_")+talkerID);
-    m_loadedPlugIn->setDesiredLanguage(languageCode);
+    m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
     // kdDebug() << "KCMKttsMgr::slot_configureTalker: about to call plugin load() method with Talker ID = " << talkerID << endl;
-    m_loadedPlugIn->load(m_config, QString("Talker_")+talkerID);
+    m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
 
     // Display configuration dialog.
     configureTalker();
 
     // Did user Cancel?
-    if (!m_loadedPlugIn) return;
+    if (!m_loadedTalkerPlugIn) return;
 
     // Get Talker Code.  Note that plugin may return a code different from before.
-    QString talkerCode = m_loadedPlugIn->getTalkerCode();
+    QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
 
     // If plugin was successfully configured, save its configuration.
     if (!talkerCode.isEmpty())
     {
         m_config->setGroup(QString("Talker_")+talkerID);
-        m_loadedPlugIn->save(m_config, QString("Talker_")+talkerID);
+        m_loadedTalkerPlugIn->save(m_config, QString("Talker_")+talkerID);
         m_config->setGroup(QString("Talker_")+talkerID);
         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
@@ -1118,17 +1491,69 @@ void KCMKttsMgr::slot_configureTalker()
         configChanged();
     }
 
-    delete m_loadedPlugIn;
-    m_loadedPlugIn = 0;
+    delete m_loadedTalkerPlugIn;
+    m_loadedTalkerPlugIn = 0;
+}
+
+/**
+ * User has requested display of filter configuration dialog.
+ */
+void KCMKttsMgr::slot_configureFilter()
+{
+    // Get highlighted plugin from Filter ListView and load into memory.
+    QListViewItem* filterItem = m_kttsmgrw->filtersList->selectedItem();
+    if (!filterItem) return;
+    QString filterID = filterItem->text(flvcFilterID);
+    QString filterPlugInName = filterItem->text(flvcPlugInName);
+    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
+    if (!m_loadedFilterPlugIn) return;
+    // kdDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
+
+    // Tell plugin to load its configuration.
+    m_config->setGroup(QString("Filter_")+filterID);
+    // kdDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID << endl;
+    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
+
+    // Display configuration dialog.
+    configureFilter();
+
+    // Did user Cancel?
+    if (!m_loadedFilterPlugIn) return;
+
+    // Let plugin save its configuration.
+    m_config->setGroup(QString("Filter_")+filterID);
+    m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
+
+    // Get user's name for the plugin.
+    QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
+
+    // Save configuration.
+    m_config->setGroup(QString("Filter_")+filterID);
+    m_config->writeEntry("PlugInName", filterPlugInName);
+    m_config->writeEntry("UserFilterName", userFilterName);
+    m_config->writeEntry("Enabled", true);
+    m_config->writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
+
+    m_config->sync();
+
+    // Update display.
+    filterItem->setText(flvcUserName, userFilterName);
+    dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+
+    // Inform Control Center that configuration has changed.
+    configChanged();
+
+    delete m_loadedFilterPlugIn;
+    m_loadedFilterPlugIn = 0;
 }
 
 /**
 * Display talker configuration dialog.  The plugin is assumed already loaded into
-* memory referenced by m_loadedPlugIn.
+* memory referenced by m_loadedTalkerPlugIn.
 */
 void KCMKttsMgr::configureTalker()
 {
-    if (!m_loadedPlugIn) return;
+    if (!m_loadedTalkerPlugIn) return;
     m_configDlg = new KDialogBase(
         KDialogBase::Swallow,
         i18n("Talker Configuration"),
@@ -1139,31 +1564,73 @@ void KCMKttsMgr::configureTalker()
         true,
         true);
     m_configDlg->setInitialSize(QSize(700, 300), false);
-    m_configDlg->setMainWidget(m_loadedPlugIn);
+    m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
     m_configDlg->enableButtonOK(false);
-    connect(m_loadedPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigDlg_ConfigChanged() ));
-    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigDlg_DefaultClicked() ));
-    connect(m_configDlg, SIGNAL( okClicked() ), this, SLOT( slotConfigDlg_OkClicked() ));
-    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigDlg_CancelClicked() ));
+    connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
+    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));
+    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
     // Create a Player object for the plugin to use for testing.
     int playerOption = 0;
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) playerOption = 1;
     float audioStretchFactor = 1.0/(float(m_kttsmgrw->timeBox->value())/100.0);
     QString sinkName = m_kttsmgrw->sinkComboBox->currentText();
-    kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;
+    // kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;
     TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", 
         playerOption, audioStretchFactor, sinkName);
-    m_loadedPlugIn->setPlayer(testPlayer);
+    m_loadedTalkerPlugIn->setPlayer(testPlayer);
     // Display the dialog.
     m_configDlg->exec();
     // Done with Player object.
-    if (m_loadedPlugIn)
+    if (m_loadedTalkerPlugIn)
     {
         delete testPlayer;
-        m_loadedPlugIn->setPlayer(0);
+        m_loadedTalkerPlugIn->setPlayer(0);
     }
 }
+
+/**
+* Display filter configuration dialog.  The plugin is assumed already loaded into
+* memory referenced by m_loadedFilterPlugIn.
+*/
+void KCMKttsMgr::configureFilter()
+{
+    if (!m_loadedFilterPlugIn) return;
+    m_configDlg = new KDialogBase(
+        KDialogBase::Swallow,
+        i18n("Filter Configuration"),
+        KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Cancel,
+        KDialogBase::Cancel,
+        m_kttsmgrw,
+        "configureFilter_dlg",
+        true,
+        true);
+    m_configDlg->setInitialSize(QSize(500, 300), false);
+    m_configDlg->setMainWidget(m_loadedFilterPlugIn);
+    m_configDlg->setHelp("configure-filter", "kttsd");
+    m_configDlg->enableButtonOK(false);
+    connect(m_loadedFilterPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigFilterDlg_ConfigChanged() ));
+    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigFilterDlg_DefaultClicked() ));
+    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigFilterDlg_CancelClicked() ));
+    // Display the dialog.
+    m_configDlg->exec();
+}
+
+/**
+* Count number of configured Filters with the specified plugin name.
+*/
+int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
+{
+    int cnt = 0;
+    QListViewItem* item = m_kttsmgrw->filtersList->firstChild();
+    while (item)
+    {
+        if (item->text(flvcPlugInName) == filterPlugInName) ++cnt;
+        item = item->nextSibling();
+    }
+    return cnt;
+}
+
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent
 // values are linear (50%,...,200%).
@@ -1189,25 +1656,36 @@ void KCMKttsMgr::timeSlider_valueChanged(int sliderValue) {
     m_kttsmgrw->timeBox->setValue (sliderToPercent (sliderValue));
 }
 
-void KCMKttsMgr::slotConfigDlg_ConfigChanged()
+void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
 {
-    m_configDlg->enableButtonOK(!m_loadedPlugIn->getTalkerCode().isEmpty());
+    m_configDlg->enableButtonOK(!m_loadedTalkerPlugIn->getTalkerCode().isEmpty());
 }
 
-void KCMKttsMgr::slotConfigDlg_DefaultClicked()
+void KCMKttsMgr::slotConfigFilterDlg_ConfigChanged()
 {
-    m_loadedPlugIn->defaults();
+    m_configDlg->enableButtonOK(true);
 }
 
-void KCMKttsMgr::slotConfigDlg_OkClicked()
+void KCMKttsMgr::slotConfigTalkerDlg_DefaultClicked()
 {
-    // kdDebug() << "KCMKttsMgr::slotConfigDlg_OkClicked: Running" << endl;
+    m_loadedTalkerPlugIn->defaults();
 }
 
-void KCMKttsMgr::slotConfigDlg_CancelClicked()
+void KCMKttsMgr::slotConfigFilterDlg_DefaultClicked()
 {
-    delete m_loadedPlugIn;
-    m_loadedPlugIn = 0;
+    m_loadedFilterPlugIn->defaults();
+}
+
+void KCMKttsMgr::slotConfigTalkerDlg_CancelClicked()
+{
+    delete m_loadedTalkerPlugIn;
+    m_loadedTalkerPlugIn = 0;
+}
+
+void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
+{
+    delete m_loadedFilterPlugIn;
+    m_loadedFilterPlugIn = 0;
 }
 
 // System tray context menu entries.

@@ -1,6 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Filter Configuration class.
-  This is the interface definition for text filter configuration dialogs.
+  Generic String Replacement Filter Configuration class.
   -------------------
   Copyright:
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
@@ -16,8 +15,8 @@
  *                                                                            *
  ******************************************************************************/
 
-#ifndef _FILTERCONF_H_
-#define _FILTERCONF_H_
+#ifndef _STRINGREPLACERCONF_H_
+#define _STRINGREPLACERCONF_H_
 
 // Qt includes.
 #include <qwidget.h>
@@ -26,19 +25,33 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-class KttsFilterConf : public QWidget{
+// KTTS includes.
+#include "filterconf.h"
+
+// StringReplacer includes.
+#include "stringreplacerconfwidget.h"
+
+class KDialogBase;
+
+class StringReplacerConf : public KttsFilterConf
+{
     Q_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        KttsFilterConf( QWidget *parent = 0, const char *name = 0);
+        StringReplacerConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
 
         /**
         * Destructor 
         */
-        virtual ~KttsFilterConf();
+        virtual ~StringReplacerConf();
+
+        enum SubstitutionType {
+            stWord,                 // Word
+            stRegExp                // Regular Expression
+        };
 
         /**
         * This method is invoked whenever the module should read its 
@@ -97,38 +110,28 @@ class KttsFilterConf : public QWidget{
          */
         virtual QString userPlugInName();
 
-        static QString realFilePath(const QString &filename);
+    private slots:
+        void slotLanguageBrowseButton_clicked();
+        void slotAddButton_clicked();
+        void slotEditButton_clicked();
+        void slotRemoveButton_clicked();
+        void slotMatchLineEdit_textChanged(const QString& text);
 
-    public slots:
-        /**
-        * This slot is used internally when the configuration is changed.  It is
-        * typically connected to signals from the widgets of the configuration
-        * and should emit the @ref changed signal.
-        */
-        void configChanged(){
-            // kdDebug() << "KttsFilterConf::configChanged: Running"<< endl;
-            emit changed(true);
-        };
+        // EnablesDisables buttons depending upon current item in list view.
+        void enableDisableButtons();
 
-    signals:
-        /**
-        * This signal indicates that the configuration has been changed.
-        * It should be emitted whenever user changes something in the configuration widget.
-        */
-        void changed(bool);
+    private:
+        // Converts a Substitution Type to displayable string.
+        QString substitutionTypeToString(const int substitutionType);
+        // Displays the add/edit string replacement dialog.
+        void addOrEditSubstitution(bool isAdd);
 
-    protected:
-        /**
-        * Searches the $PATH variable for any file. If that file exists in the PATH, or
-        * is contained in any directory in the PATH, it returns the full path to it.
-        * @param name        The name of the file to search for.
-        * @returns           The path to the file on success, a blank QString
-        *                    if its not found.
-        */
-        QString getLocation(const QString &name);
-
-        /// The system path in a QStringList.
-        QStringList m_path;
+        // Configuration Widget.
+        StringReplacerConfWidget* m_widget;
+        // Edit Dialog.
+        KDialogBase* m_editDlg;
+        // Language Code.
+        QString m_languageCode;
 };
 
-#endif  //_FILTERCONF_H_
+#endif  //_STRINGREPLACERCONF_H_
