@@ -54,7 +54,7 @@ bool FestivalIntProc::init(const QString &lang, KConfig *config){
     kdDebug() << "Running: FestivalIntProc::init(const QString &lang)" << endl;
     kdDebug() << "Initializing plug in: Festival" << endl;
 
-    // To save resources, this founction should get a KConfig too
+    // To save resources, this function should get a KConfig too
     // This KConfig will be passed to this function (already opened) from speaker.cpp
     // KConfig *config = new KConfig("kttsdrc");
     // KConfig *config = KGlobal::config();
@@ -81,6 +81,7 @@ void FestivalIntProc::sayText(const QString &text){
     if(initialized == false){
         kdDebug()<< "Initializing Festival" << endl;
         festProc = new KProcIO;
+        if (forceArts) *festProc << "artsdsp";
         *festProc << "festival";
         *festProc << "--interactive";
         connect(festProc, SIGNAL(processExited(KProcess*)), this, SLOT(festProcExited(KProcess*)));
@@ -97,6 +98,7 @@ void FestivalIntProc::sayText(const QString &text){
         kdDebug()<< "Festival initialized" << endl;
         initialized = true;
 
+/*
         // Setting output thru arts if necessary.
         // Note: Force Arts does not currently work correctly because the artsplay command returns
         // immediately, causing Festival to send prompt, whereupon we send another sentence...etc.
@@ -120,6 +122,8 @@ void FestivalIntProc::sayText(const QString &text){
             ready = false;
             festProc->writeStdin(QString("(audio_mode 'sync)"), true);
         }
+        */
+        
         // Selecting the voice
         waitTilReady();
         ready = false;
@@ -140,6 +144,10 @@ void FestivalIntProc::sayText(const QString &text){
     kdDebug() << "Saying text: '" << saidText << "' using Festival plug in with voice " << voiceCode << endl;
     festProc->writeStdin("(SayText \"" + saidText + "\")", true);
     waitTilReady();
+    // If using artsdsp, wait an additional second between sentences to prevent the beginning of one
+    // sentence from overlapping the end of the previous sentence.  Not sure *why* this is necessary,
+    // but there it is.
+    if (forceArts) festProc->wait(1);
     kdDebug() << "Finished saying text" << endl;
 }
 
@@ -158,6 +166,7 @@ void FestivalIntProc::stopText(){
 
 void FestivalIntProc::festProcExited(KProcess*)
 {
+    kdDebug() << "Festival process has exited." << endl;
     initialized = false;
     ready = true;
     delete festProc;
