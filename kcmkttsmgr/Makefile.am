@@ -20,12 +20,12 @@ kspeechsink_DIR = $(kde_includes)
 
 # The source, library search path, and link libraries.
 kcm_kttsd_la_SOURCES = \
-    kspeech.stub kspeechsink.skel \
+	kspeech.stub kspeechsink.skel \
 	kcmkttsmgr.cpp \
 	kcmkttsmgrwidget.ui \
 	addtalker.cpp \
 	addtalkerwidget.ui
-kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined 
+kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
 kcm_kttsd_la_LIBADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KIO) 
