@@ -830,6 +830,23 @@ QString Speaker::userDefaultTalker()
     return m_loadedPlugIns[0].talkerCode;
 }
 
+/**
+ * Determine whether the currently-configured speech plugin supports a speech markup language.
+ * @param talker         Code for the talker to do the speaking.  Example "en".
+ *                       If NULL, defaults to the user's default talker.
+ * @param markupType     The kttsd code for the desired speech markup language.
+ * @return               True if the plugin currently configured for the indicated
+ *                       talker supports the indicated speech markup language.
+ * @see kttsdMarkupType
+ */
+bool Speaker::supportsMarkup(const QString& talker, const uint /*markupType*/)
+{
+    QString matchingTalker = talker;
+    if (matchingTalker == NULL) matchingTalker = userDefaultTalker();
+    PlugInProc* plugin = talkerToPlugin(matchingTalker);
+    return ( plugin->getSsmlXsltFilename() !=
+        KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl");
+}
 
 /* Private Methods ==========================================================*/
 

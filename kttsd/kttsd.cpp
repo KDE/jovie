@@ -159,9 +159,13 @@ KTTSD::~KTTSD(){
 * @return               True if the plugin currently configured for the indicated
 *                       talker supports the indicated speech markup language.
 * @see kttsdMarkupType
-* TODO: Waiting for plugin api.
 */
-bool KTTSD::supportsMarkup(const QString& /*talker=NULL*/, const uint /*markupType=0*/) { return false; }
+bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/)
+{
+    if (markupType != kspeech::mtSsml) return false;
+    if (!ready()) return false;
+    return m_speaker->supportsMarkup(talker, markupType);
+}
 
 /**
 * Determine whether the currently-configured speech plugin supports markers in speech markup.

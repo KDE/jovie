@@ -299,6 +299,17 @@ class Speaker : public QObject{
         */
         QString userDefaultTalker();
 
+        /**
+        * Determine whether the currently-configured speech plugin supports a speech markup language.
+        * @param talker         Code for the talker to do the speaking.  Example "en".
+        *                       If NULL, defaults to the user's default talker.
+        * @param markupType     The kttsd code for the desired speech markup language.
+        * @return               True if the plugin currently configured for the indicated
+        *                       talker supports the indicated speech markup language.
+        * @see kttsdMarkupType
+        */
+        bool supportsMarkup(const QString& talker, const uint markupType);
+
     signals:
         /**
          * Emitted whenever reading a text was started or resumed
