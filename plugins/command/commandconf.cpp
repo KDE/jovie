@@ -89,7 +89,7 @@ void CommandConf::load(KConfig *config, const QString &configGroup) {
     // kdDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(configGroup);
     m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
-    m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", true));
+    m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", false));
     QString codecString = config->readEntry("Codec", "Local");
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
     int codec;
@@ -127,7 +127,7 @@ void CommandConf::save(KConfig *config, const QString &configGroup) {
 void CommandConf::defaults(){
     // kdDebug() << "CommandConf::defaults: Running" << endl;
     m_widget->urlReq->setURL("cat -");
-    m_widget->stdInButton->setChecked(true);
+    m_widget->stdInButton->setChecked(false);
     buildCodecList();
     m_widget->urlReq->setShowLocalProtocol (false);
     buildCodecList();
@@ -144,8 +144,9 @@ QString CommandConf::getTalkerCode()
     QString url = m_widget->urlReq->url();
     if (!url.isEmpty())
     {
-        // Must contain either text or file parameter, otherwise, does nothing!
-        if ((url.contains("%t") > 0) || (url.contains("%f") > 0))
+        // Must contain either text or file parameter, or StdIn checkbox must be checked,
+        // otherwise, does nothing!
+        if ((url.contains("%t") > 0) || (url.contains("%f") > 0) || m_widget->stdInButton->isChecked())
         {
             return QString(
                 "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
