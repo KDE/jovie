@@ -1138,9 +1138,13 @@ QString Speaker::talkerCodeToTalkerId(const QString& talkerCode)
  */
 bool Speaker::isSsml(const QString &text)
 {
-    // TODO: This is really simple and braindead right now.  A better method might be
-    // to use a SAX parser and look for any SSML tags.  Return true on the first found.
-    return (text.contains("<speak") > 0);
+    /// A slight improvement over the previous "check for a starting speak tag" method.
+    /// This checks to see if the root tag of the text is a <speak> tag. 
+    QDomDocument ssml;
+    ssml.setContent(text, false);  // No namespace processing.
+    /// Check to see if this is SSML
+    QDomElement root = ssml.documentElement();
+    return (root.tagName() == "speak");
 }
 #endif
 
