@@ -187,4 +187,24 @@
   <match><![CDATA[AFAIK]]></match>
   <subst><![CDATA[as far as I know]]></subst>
  </word>
+<word>
+  <type>Word</type>
+  <match><![CDATA[btw]]></match>
+  <subst><![CDATA[by the way]]></subst>
+</word>
+<word>
+  <type>Word</type>
+  <match><![CDATA[brb]]></match>
+  <subst><![CDATA[be right back]]></subst>
+</word>
+<word>
+  <type>Word</type>
+  <match><![CDATA[cya]]></match>
+  <subst><![CDATA[see ya]]></subst>
+</word>
+<word>
+  <type>Word</type>
+  <match><![CDATA[gtg]]></match>
+  <subst><![CDATA[got to go]]></subst>
+</word>
 </wordlist>
