@@ -306,6 +306,8 @@ void FilterMgr::waitForFinished()
         // kdDebug() << "FilterMgr::waitForFinished: waiting" << endl;
         m_filterMgrThread->wait();
         // kdDebug() << "FilterMgr::waitForFinished: finished waiting" << endl;
+        m_state = fsFinished;
+        m_re = QString::null;
     }
 }
 
