@@ -1,7 +1,3 @@
-_ Notifications aren't currently filtered because they use sayMessage().  Allow filtering of
-  notifications.  (only setText and appendText are currently filtered.)
-  There should be a default filter with the following settings:
-     "<//kmail//.new mail" -> "new mail"
 _ More problems with KCMultiDialog.  In addition to not being able to size horizontally less than
   640, you cannot size vertically, once it has been minimized to systray, to less than the
   vertical size when it was minimized to the systray.

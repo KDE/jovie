@@ -1,3 +1,7 @@
+2005-01-22  Gary Cramblitt (PhantomsDad)
+        * Allow filtering of notifications.  (only setText and appendText are currently filtered.)
+        * Fix bug.  Synchronous filters not being run.
+
 2005-01-21  Gary Cramblitt (PhantomsDad)
         * Sentence Boundary Detector plugin now active.  This means that SSML is parsed into
           sentences and therefore can be rewound/advanced by sentence.  It also means that
