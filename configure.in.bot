@@ -1,4 +1,4 @@
-if test "x$have_gst" = "xno"; then
+if test "x$have_gst" = "xno" && test "x$gstreamer_plugin" = "xyes"; then
 	echo "**************************************************"
 	echo "*"
 	echo "* You do not seem to have GStreamer >= 0.8 installed."
@@ -7,6 +7,41 @@ if test "x$have_gst" = "xno"; then
 	echo "* KTTSD supports GStreamer output but will also"
 	echo "* work with aRts."
 	echo "*"
+    echo "* PACKAGERS: Please do not include the gstreamer plugin"
+    echo "* in binary distributions of kdeaccessibility as it"
+    echo "* creates unwanted dependencies.  Instead, include in a"
+    echo "* separate package, e.g., kdeaccessibility-extras."
+	echo "*"
 	echo "**************************************************"
 fi
-
+if test "x$have_gst" = "xyes" && test "x$gstreamer_plugin" = "xno"; then
+	echo "**************************************************"
+	echo "*"
+	echo "* You do seem to have GStreamer >= 0.8 installed."
+    echo "* but you did not choose to build the gstreamer plugin."
+	echo "* Without this aRts output will be used exclusively."
+    echo "* To enable GStreamer plugin, configure with"
+    echo "*"
+    echo "*   --enable-kttsd-gstreamer"
+	echo "*"
+	echo "* KTTSD supports GStreamer output but will also"
+	echo "* work with aRts."
+    echo "*"
+    echo "* PACKAGERS: Please do not include the gstreamer plugin"
+    echo "* in binary distributions of kdeaccessibility as it"
+    echo "* creates unwanted dependencies.  Instead, include in a"
+    echo "* separate package, e.g., kdeaccessibility-extras."
+	echo "*"
+	echo "**************************************************"
+fi
+if test "x$have_gst" = "xyes" && test "x$gstreamer_plugin" = "xyes"; then
+	echo "**************************************************"
+    echo "* The build of the GStreamer audio plugin has been enabled."
+    echo "*"
+    echo "* PACKAGERS: Please do not include the gstreamer plugin"
+    echo "* in binary distributions of kdeaccessibility as it"
+    echo "* creates unwanted dependencies.  Instead, include in a"
+    echo "* separate package, e.g., kdeaccessibility-extras."
+	echo "*"
+	echo "**************************************************"
+fi

@@ -86,6 +86,17 @@ See the KTTS Handbook
 for complete instructions on installing, compiling, configuring, and using
 KTTS.
 
+IMPORTANT NOTE TO BINARY PACKAGERS:
+Please do not distribute binary packages of kdeaccessibility with the
+gstreamer plugin, as this creates unwanted dependencies.  Instead,
+distribute the gstreamer plugin in a separate package, e.g.
+kde-accessibility-extras.  Thank you.
+
+To build KTTS with the gstreamer audio plugin add the following option
+to your configure command:
+
+  --enable-kttsd-gstreamer
+
 Support
 -------
 The KTTS website is

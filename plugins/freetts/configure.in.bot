@@ -4,9 +4,9 @@ if test "x$freetts_bindir" = "xno"; then
     echo "======================================================"
     echo "The freetts.jar Java archive has not been found on"
     echo "this system.  The FreeTTS plugin will be built,  "
-    echo "but you must install it before you can use it,"
-	 echo "or if it already installed you must set the path to"
-	 echo "it in the KDE Text-to-Speech Manager."
+    echo "but you must install FreeTTS it before you can use it,"
+    echo "or if it already installed you must set the path to"
+    echo "it in the KDE Text-to-Speech Manager."
     echo "FreeTTS is available from freetts.sourceforge.net" 
     echo "====================================================="
     all_tests=bad

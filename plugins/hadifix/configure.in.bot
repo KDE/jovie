@@ -18,7 +18,7 @@ if test "x$compile_hadifix_plugin" = "xyes"; then
       echo "                        hadifix/HADIFIXforMBROLA.html"
     fi
     echo ""
-    echo "Please read the README file for further information."
+    echo "Please read the KTTS Handbook for further information."
     echo "====================================================="
     all_tests=bad
   fi

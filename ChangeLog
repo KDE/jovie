@@ -1,5 +1,8 @@
 2004-12-19  Gary Cramblitt (PhantomsDad)
         * Change Festival voices from ini to xml format.  Permit translators to translate voice names.
+        * Add "--enable-kttsd-gstreamer" option to configure, defaulting to no.
+          Warn packagers not to distribute gstreamer in binary packages of kdeaccessibility as it
+          creates unwanted dependencies.
 
 2004-12-18  Gary Cramblitt (PhantomsDad)
         * Remove kcmkttsmgr.  Use kcmkttsd instead.

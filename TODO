@@ -5,18 +5,9 @@ _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
 _ There are several issues with i18n:
-    _ Voices file encoding is hosed (again).  dang Kate/Kdevelop!
     _ Since kcmkttsmgr can be invoked from kttsmgr, kcmshell kcmkttsd, or KControl, do I
       need to call KLocale::setMainCatalogue?  Also, what about kttsjobmgr, which is kpart
       used in kcmkttsmr?
-    _ FestivalInt plugin should be showing translated names of voices (Comment[xx] lines in
-      voices file) based on user's desktop setting.  But a user with Spanish desktop says it isn't
-      working.  Why?  Test with "KDE_LANG=es kttsmgr" command (but must have es installed).
-      Apparently, this statement not working as expected: 
-        voices.readEntry("Comment["+desktopLanguageCode+"]"
-      i.e., cannot read language-specific strings from file.
-    _ Need way to get translators to fill in rest of Comment[xx] lines in plugins/festivalint/voices
-      file.  Or maybe just install different translated versions of voices file?
     _ The plugin Makefile.am's lack message targets, or should they just use kttsmgr catalog?
     _ I'm confused about this i18n stuff and could REALLY use some expert help..grc.
 _ Festival Interactive plugin:
