@@ -23,7 +23,7 @@
 #include <kstandarddirs.h>
 
 #include <qdir.h>
-#include <qapp.h>
+#include <qapplication.h>
 
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
