@@ -2,16 +2,20 @@
 # -*- makefile -*-
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
+#
+# Modified to make a template file for a multi-binary package with separated
+# build-arch and build-indep targets  by Bill Allombert 2001
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
-DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-
+DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 CFLAGS = -Wall -g
 
@@ -24,64 +28,172 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
 
-config.status: configure
+objdir = $(CURDIR)/obj-$(DEB_BUILD_GNU_TYPE)
+
+-include debian/debiandirs
+
+debian/debiandirs: admin/debianrules
+	perl -w admin/debianrules echodirs > debian/debiandirs
+
+configure: configure-stamp
+configure-stamp:
 	dh_testdir
-	# Add here commands to configure the package.
-	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info --disable-rpath
 
+	# Apply Debian specific patches
+	if test -d $(CURDIR)/debian/patches ;\
+	then \
+		for i in $(CURDIR)/debian/patches/*.diff.uu ;\
+		do \
+			cd $(CURDIR)/debian/patches ;\
+			uudecode "$$i" ;\
+			cd $(CURDIR) ;\
+		done ;\
+		patches=$$(find $(CURDIR)/debian/patches -name *.diff | sort);\
+	fi ;\
+	if test ! -f patch-stamp; then \
+		for patch in $$patches ;\
+		do \
+			echo APPLYING PATCH\: "$${patch##*/}" ;\
+			patch -p1 < "$$patch" ;\
+		done ;\
+		touch patch-stamp ;\
+	fi
 
-build: build-stamp
+	# KDE CVS does not have aclocal.m4 or configure
+	if test ! -f configure; then \
+		$(MAKE) -f admin/Makefile.common ;\
+	fi
 
-build-stamp:  config.status
+	# ensure configure is executable
+	chmod +x configure
+
+	# make build directory
+	mkdir $(objdir)
+
+	# run configure with build tree $(objdir)
+	cd $(objdir) && \
+	../configure $(configkde)
+	# ../configure $(configkde) --enable-final
+
+	touch configure-stamp
+
+#Architecture
+build: build-arch build-indep
+
+build-arch: build-arch-stamp
+build-arch-stamp: configure-stamp
 	dh_testdir
 
-	# Add here commands to compile the package.
+	cd $(objdir) && \
 	$(MAKE)
-	#/usr/bin/docbook-to-man debian/kttsd.sgml > kttsd.1
 
-	touch build-stamp
+	# generate manpages
+	#for i in debian/man/*.sgml; do \
+		docbook-to-man $$i > `dirname $$i`/`basename $$i .sgml`.1 ;\
+	done
+
+	# Generate man pages
+	set -e; while read package binary; do \
+		soelim -Idebian/man debian/man/$$binary.man \
+		>debian/man/$$binary.1; \
+	done <debian/man/manpages.in
+
+	touch build-arch-stamp
+
+build-indep: build-indep-stamp
+build-indep-stamp: configure-stamp
+	dh_testdir
+
+	cd $(objdir) && \
+	$(MAKE)
+
+	#cd $(objdir) && \
+	$(MAKE) apidox
+
+	touch build-indep-stamp
+
+debian-clean:
+	dh_testdir
+	dh_testroot
+
+	dh_clean
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp 
+	rm -f build-arch-stamp build-indep-stamp configure-stamp \
+		debian/debiandirs debian/man/*.1
 
-	# Add here commands to clean up after the build process.
-	-$(MAKE) distclean
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
+	# Remove Debian specific patches
+	if test -d $(CURDIR)/debian/patches ;\
+	then \
+		patches=$$(find $(CURDIR)/debian/patches -name *.diff | sort -r);\
+	fi ;\
+	if test -f patch-stamp; then \
+		for patch in $$patches ;\
+		do \
+			echo REMOVING PATCH\: "$${patch##*/}" ;\
+			patch -p1 -R < "$$patch" ;\
+		done ;\
+		for i in $(CURDIR)/debian/patches/*.diff.uu ;\
+		do \
+			 rm -f "$${i%%.uu}" ;\
+		done ;\
+		rm -f patch-stamp ;\
+	fi
 
+	# Remove build tree
+	rm -rf $(objdir)
 
-	dh_clean 
+	# if Makefile exists run distclean
+	if test -f Makefile; then \
+		$(MAKE) distclean; \
+	fi
 
-install: build
+	if test -d CVS; then \
+		$(MAKE) -f admin/Makefile.common cvs-clean ;\
+	fi
+
+	dh_clean
+
+install: install-arch install-indep
+
+install-arch:
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
-	dh_installdirs
+	dh_clean -k -s
+	dh_installdirs -s
 
-	# Add here commands to install the package into debian/kttsd.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/kttsd
+	cd $(objdir) && \
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
+	dh_install -s
 
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build install
+install-indep:
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs ChangeLog
+	dh_clean -k -i
+	dh_installdirs -i
+
+	cd $(objdir) && \
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+
+	#cd $(objdir) && \
+	$(MAKE) install-apidox DESTDIR=$(CURDIR)/debian/tmp
+
+	dh_install -i
+
+# Must not depend on anything. This is to be called by
+# binary-arch/binary-indep
+# in another 'make' thread.
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
 	dh_installdocs
-	dh_installexamples
-#	dh_install
-#	dh_installmenu
-#	dh_installdebconf	
+#	dh_installexamples
+	dh_installmenu
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam
@@ -92,16 +204,24 @@ binary-arch: build install
 	dh_installman
 	dh_link
 	dh_strip
-	dh_compress
+	dh_compress -X.bz2 -X.css -X.dcl -X.docbook -X-license -X.tag
 	dh_fixperms
 #	dh_perl
 #	dh_python
-#	dh_makeshlibs
+	dh_makeshlibs -V
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install 
+# Build architecture independant packages using the common target.
+binary-indep: build-indep install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build-arch install-arch
+	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
+
+binary: binary-arch binary-indep
+.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure
