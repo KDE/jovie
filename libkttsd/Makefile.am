@@ -28,7 +28,7 @@ libkttsd_la_SOURCES = \
         pluginconf.cpp \
         artsplayer.cpp \
         gstreamerplayer.cpp
-libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
+libkttsd_la_LDFLAGS = -avoid-version $(all_libraries) -no-undefined
 libkttsd_la_LIBADD = $(gstlibs) $(LIB_KIO) -lartskde
 
 # This library is installed as a service.

@@ -1,3 +1,9 @@
+2004-10-13  Cramblitt <garycramblitt@comcast.net>
+        * Remove versioning from libkttsd.
+          NOTE: After rebuilding and installing, you will want to delete
+                the following file:
+                  $KDEDIR/lib/libkttsd.so.1.0.0
+
 2004-10-12  Cramblitt <garycramblitt@comcast.net>
         * Added Handbook.
         * Help button and system tray content menu display Handbook.

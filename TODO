@@ -1,3 +1,4 @@
+_ Rename libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention.
 _ Crash when adding a plugin with "Other" language, and not entering a language code
   in response to prompt.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
