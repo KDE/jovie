@@ -543,7 +543,7 @@ void FestivalIntProc::ackFinished()
 * saying or synthesis is completed.
 */
 bool FestivalIntProc::supportsAsync() { return true; }
-        
+
 /**
 * Returns True if the plugin supports synthText method,
 * i.e., is able to synthesize text to a sound file without
@@ -551,4 +551,18 @@ bool FestivalIntProc::supportsAsync() { return true; }
 * @return                        True if this plugin supports synthText method.
 */
 bool FestivalIntProc::supportsSynth() { return true; }
-    
+
+/**
+* Returns the name of an XSLT stylesheet that will convert a valid SSML file
+* into a format that can be processed by the synth.  For example,
+* The Festival plugin returns a stylesheet that will convert SSML into
+* SABLE.  Any tags the synth cannot handle should be stripped (leaving
+* their text contents though).  The default stylesheet strips all
+* tags and converts the file to plain text.
+* @return            Name of the XSLT file.
+*/
+QString FestivalIntProc::getSsmlXsltFilename()
+{
+    return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/festivalint/xslt/SSMLtoSable.xsl";
+}
+

@@ -32,7 +32,9 @@ kttsd_SOURCES = \
 	speechdata.cpp \
 	kttsd.skel \
 	threadedplugin.cpp \
-	stretcher.cpp
+	stretcher.cpp \
+	ssmlconvert.cpp
+
 kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
 kttsd_LDADD = \
 	$(top_builddir)/kttsd/libktts/libktts.la \
@@ -45,8 +47,13 @@ kttsd_LDADD = \
 # Install desktop file to standard services directory.
 kde_services_DATA = kttsd.desktop
 
+# Install data.
+kttsddatadir = $(kde_datadir)/kttsd/xslt/
+kttsddata_DATA = SSMLtoPlainText.xsl
+
 # Translation message files.
 messages: rc.cpp
 	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
 
-noinst_HEADERS = threadedplugin.h stretcher.h
+noinst_HEADERS = threadedplugin.h stretcher.h ssmlconvert.h
+

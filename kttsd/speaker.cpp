@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  speaker.cpp
   Speaker class.
   This class is in charge of getting the messages, warnings and text from
   the queue and call the plug ins function to actually speak the texts.
@@ -283,7 +282,7 @@ void Speaker::requestExit(){
 void Speaker::doUtterances()
 {
     // kdDebug() << "Running: Speaker::doUtterances()" << endl;
-    
+
     // Used to prevent exiting prematurely.
     m_again = true;
 
@@ -300,7 +299,7 @@ void Speaker::doUtterances()
         uttIterator it;
         uttIterator itBegin;
         uttIterator itEnd = 0;  // Init to zero to avoid compiler warning.
-        
+
         // If Screen Reader Output is waiting, we need to process it ASAP.
         if (m_speechData->screenReaderOutputReady())
         {
@@ -343,6 +342,45 @@ void Speaker::doUtterances()
                 uttState utState = it->state;
                 switch (utState)
                 {
+                    case usNone:
+                        {
+                            setInitialUtteranceState(*it);
+                            m_again = true;
+                            break;
+                        }
+#if SUPPORT_SSML
+                    case usWaitingTransform:
+                        {
+                            // Create an XSLT transformer and transform the text.
+                            it->transformer = new SSMLConvert();
+                            connect(it->transformer, SIGNAL(transformFinished()),
+                                this, SLOT(slotTransformFinished()));
+                            if (it->transformer->transform(it->sentence->text,
+                                it->plugin->getSsmlXsltFilename()))
+                                    it->state = usTransforming;
+                            else
+                            {
+                                // If an error occurs transforming, skip it.
+                                it->state = usTransforming;
+                                setInitialUtteranceState(*it);
+                            }
+                            m_again = true;
+                            break;
+                        }
+                    case usTransforming:
+                        {
+                            // See if transformer is finished.
+                            if (it->transformer->getState() == SSMLConvert::tsFinished)
+                            {
+                                // Get the transformed text.
+                                it->sentence->text = it->transformer->getOutput();
+                                // Set next state (usWaitingSynth or usWaitingSay)
+                                setInitialUtteranceState(*it);
+                                m_again = true;
+                            }
+                            break;
+                        }
+#endif
                     case usWaitingSignal:
                         {
                             // If first in queue, emit signal.
@@ -799,18 +837,23 @@ QString Speaker::uttStateToStr(uttState state)
 {
     switch (state)
     {
-        case usWaitingSay:    return "usWaitingSay";
-        case usWaitingSynth:  return "usWaitingSynth";
-        case usWaitingSignal: return "usWaitingSignal";
-        case usSaying:        return "usSaying";
-        case usSynthing:      return "usSynthing";
-        case usSynthed:       return "usSynthed";
-        case usStretching:    return "usStretching";
-        case usStretched:     return "usStretched";
-        case usPlaying:       return "usPlaying";
-        case usPaused:        return "usPaused";
-        case usPreempted:     return "usPreempted";
-        case usFinished:      return "usFinished";
+        case usNone:                return "usNone";
+#if SUPPORT_SSML
+        case usWaitingTransform:    return "usWaitingTransform";
+        case usTransforming:        return "usTransforming";
+#endif
+        case usWaitingSay:          return "usWaitingSay";
+        case usWaitingSynth:        return "usWaitingSynth";
+        case usWaitingSignal:       return "usWaitingSignal";
+        case usSaying:              return "usSaying";
+        case usSynthing:            return "usSynthing";
+        case usSynthed:             return "usSynthed";
+        case usStretching:          return "usStretching";
+        case usStretched:           return "usStretched";
+        case usPlaying:             return "usPlaying";
+        case usPaused:              return "usPaused";
+        case usPreempted:           return "usPreempted";
+        case usFinished:            return "usFinished";
     }
     return QString::null;
 }
@@ -1145,6 +1188,41 @@ QString Speaker::talkerCodeToTalkerId(const QString& talkerCode)
     return m_loadedPlugIns[talkerNdx].talkerID;
 }
 
+#if SUPPORT_SSML
+/**
+ * Determines whether the given text is SSML markup.
+ */
+bool Speaker::isSsml(const QString &text)
+{
+    // TODO: This is really simple and braindead right now.  A better method might be
+    // to use a SAX parser and look for any SSML tags.  Return true on the first found.
+    return (text.contains("<speak") > 0);
+}
+#endif
+
+/**
+* Determines the initial state of an utterance.  If the utterance contains
+* SSML, the state is set to usWaitingTransform.  Otherwise, if the plugin
+* supports async synthesis, sets to usWaitingSynth, otherwise usWaitingSay.
+* If an utterance has already been transformed, usWaitingTransform is
+* skipped to either usWaitingSynth or usWaitingSay.
+* @param utt             The utterance.
+*/
+void Speaker::setInitialUtteranceState(Utt &utt)
+{
+#if SUPPORT_SSML
+    if (utt.state != usTransforming && isSsml(utt.sentence->text))
+    {
+        utt.state = usWaitingTransform;
+        return;
+    }
+#endif
+    if (utt.plugin->supportsSynth())
+        utt.state = usWaitingSynth;
+    else
+        utt.state = usWaitingSay;
+}
+
 /**
 * Gets the next utterance to be spoken from speechdata and adds it to the queue.
 * @return                True if one or more utterances were added to the queue.
@@ -1196,14 +1274,13 @@ bool Speaker::getNextUtterance()
     if (utt)
     {
         gotOne = true;
+        utt->state = usNone;
         utt->audioPlayer = 0;
         utt->audioStretcher = 0;
         utt->audioUrl = QString::null;
         utt->plugin = talkerToPlugin(utt->sentence->talker);
-        if (utt->plugin->supportsSynth())
-            utt->state = usWaitingSynth;
-        else
-            utt->state = usWaitingSay;
+        // Save some time by setting initial state now.
+        setInitialUtteranceState(*utt);
         // Screen Reader Outputs need to be processed ASAP.
         if (utt->utType == utScreenReader)
         {
@@ -1286,10 +1363,8 @@ bool Speaker::getNextUtterance()
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptMsg;
                         intrUtt.plugin = talkerToPlugin(intrUtt.sentence->talker);
-                        if (intrUtt.plugin->supportsSynth())
-                            intrUtt.state = usWaitingSynth;
-                        else
-                            intrUtt.state = usWaitingSay;
+                        intrUtt.state = usNone;
+                        setInitialUtteranceState(intrUtt);
                         it = m_uttQueue.insert(it, intrUtt);
                         ++it;
                     }
@@ -1331,10 +1406,8 @@ bool Speaker::getNextUtterance()
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeMsg;
                     resUtt.plugin = talkerToPlugin(resUtt.sentence->talker);
-                    if (resUtt.plugin->supportsSynth())
-                        resUtt.state = usWaitingSynth;
-                    else
-                        resUtt.state = usWaitingSay;
+                    resUtt.state = usNone;
+                    setInitialUtteranceState(resUtt);
                     it = m_uttQueue.insert(it, resUtt);
                 }
             }
@@ -1413,7 +1486,7 @@ bool Speaker::getNextUtterance()
             }
         }
     }
-    
+
     return gotOne;
 }
 
@@ -1430,6 +1503,10 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
 {
     switch (it->state)
     {
+        case usNone:
+#if SUPPORT_SSML
+        case usWaitingTransform:
+#endif
         case usWaitingSay:
         case usWaitingSynth:
         case usWaitingSignal:
@@ -1438,6 +1515,14 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
         case usStretched:
                 break;
 
+#if SUPPORT_SSML
+        case usTransforming:
+            {
+                delete it->transformer;
+                it->transformer = 0;
+                break;
+            }
+#endif
         case usSaying:
         case usSynthing:
             {
@@ -1515,6 +1600,11 @@ bool Speaker::startPlayingUtterance(uttIterator it)
     uttState utState = it->state;
     switch (utState)
     {
+        case usNone:
+#if SUPPORT_SSML
+        case usWaitingTransform:
+        case usTransforming:
+#endif
         case usWaitingSay:
         case usWaitingSynth:
         case usWaitingSignal:
@@ -1712,12 +1802,22 @@ void Speaker::slotStopped()
 }
 
 /**
-* Receiver from audio stretcher when stretching (speed adjustment) is finished.
+* Received from audio stretcher when stretching (speed adjustment) is finished.
 */
 void Speaker::slotStretchFinished()
 {
     // Convert to postEvent and return immediately.
     QCustomEvent* ev = new QCustomEvent(QEvent::User + 104);
+    QApplication::postEvent(this, ev);
+}
+
+/**
+* Received from transformer (SSMLConvert) when transforming is finished.
+*/
+void Speaker::slotTransformFinished()
+{
+    // Convert to postEvent and return immediately.
+    QCustomEvent* ev = new QCustomEvent(QEvent::User + 105);
     QApplication::postEvent(this, ev);
 }
 
@@ -1734,9 +1834,9 @@ void Speaker::slotError(const bool /*keepGoing*/, const QString& /*msg*/)
     // TODO: Do something with error messages.
     /*
     if (keepGoing)
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 105);
-    else
         QCustomEvent* ev = new QCustomEvent(QEvent::User + 106);
+    else
+        QCustomEvent* ev = new QCustomEvent(QEvent::User + 107);
     QApplication::postEvent(this, ev);
     */
 }
@@ -1762,16 +1862,15 @@ void Speaker::slotTimeout()
     }
 }
 
-
 /**
 * Processes events posted by plugins.  When asynchronous plugins emit signals
 * they are converted into these events.
 */
 bool Speaker::event ( QEvent * e )
 {
-    // TODO: Do something with event numbers 105 (error; keepGoing=True)
-    // and 106 (error; keepGoing=False).
-    if ((e->type() >= (QEvent::User + 101)) and (e->type() <= (QEvent::User + 104)))
+    // TODO: Do something with event numbers 106 (error; keepGoing=True)
+    // and 107 (error; keepGoing=False).
+    if ((e->type() >= (QEvent::User + 101)) and (e->type() <= (QEvent::User + 105)))
     {
         kdDebug() << "Speaker::event: received event." << endl;
         doUtterances();

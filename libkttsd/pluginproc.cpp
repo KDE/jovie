@@ -16,10 +16,14 @@
  *                                                                         *
  ***************************************************************************/
 
+// Qt includes. 
 #include <qstring.h>
 
+// KDE includes.
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
+// PlugInProc includes.
 #include "pluginproc.h"
 #include "pluginproc.moc"
 
@@ -119,3 +123,16 @@ bool PlugInProc::supportsAsync() { return false; }
 */
 bool PlugInProc::supportsSynth() { return false; }
 
+/**
+* Returns the name of an XSLT stylesheet that will convert a valid SSML file
+* into a format that can be processed by the synth.  For example,
+* The Festival plugin returns a stylesheet that will convert SSML into
+* SABLE.  Any tags the synth cannot handle should be stripped (leaving
+* their text contents though).  The default stylesheet strips all
+* tags and converts the file to plain text.
+* @return            Name of the XSLT file.
+*/
+QString PlugInProc::getSsmlXsltFilename()
+{
+    return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl";
+}

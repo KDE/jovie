@@ -21,7 +21,11 @@ libkttsd_festivalintplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.l
 services_DATA = kttsd_festivalintplugin.desktop
 servicesdir = $(kde_servicesdir)
 
+# Install data files.
 festivalintdatadir = $(kde_datadir)/kttsd/festivalint/
 festivalintdata_DATA = voices
+
+festivalintxsltdatadir = $(kde_datadir)/kttsd/festivalint/xslt/
+festivalintxsltdata_DATA = SSMLtoSable.xsl
 
 noinst_HEADERS =  festivalintconfwidget.h

@@ -1,9 +1,7 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  speechdata.cpp
   This contains the SpeechData class which is in charge of maintaining
   all the data on the memory.
-  It maintains queues, mutex, a wait condition and has methods to enque
-  messages and warnings and manage the text that is thread safe.
+  It maintains queues manages the text.
   We could say that this is the common repository between the KTTSD class
   (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
@@ -228,18 +226,41 @@ bool SpeechData::messageInQueue(){
     return temp;
 }
 
+#if SUPPORT_SSML
+/**
+* Determines whether the given text is SSML markup.
+*/
+bool SpeechData::isSsml(const QString &text)
+{
+    // TODO: This is really simple and braindead right now.  A better method might be
+    // to use a SAX parser and look for any SSML tags.  Return true on the first found.
+    return (text.contains("<speak") > 0);
+}
+#endif
+
 /**
 * Parses a block of text into sentences using the application-specified regular expression
 * or (if not specified), the default regular expression.
 * @param text           The message to be spoken.
 * @param appId          The DCOP senderId of the application.  NULL if kttsd.
 * @return               List of parsed sentences.
+*
+* If the text contains SSML, it is not parsed into sentences at all.
+* TODO: Need a way to preserve SSML but still parse into sentences.
+* We will walk before we run for now and not sentence parse.
 */
 
 QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=NULL*/)
 {
     // There has to be a better way
     // kdDebug() << "I'm getting: " << endl << text << " from application " << appId << endl;
+#if SUPPORT_SSML
+    if (isSsml(text))
+    {
+        QString tempList(text);
+        return tempList;
+    }
+#endif
     // See if app has specified a custom sentence delimiter and use it, otherwise use default.
     QRegExp sentenceDelimiter;
     if (sentenceDelimiters.find(appId) != sentenceDelimiters.end())

@@ -1,9 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  speaker.h
   Speaker class.
+
   This class is in charge of getting the messages, warnings and text from
   the queue and call the plug ins function to actually speak the texts.
-  This class runs as another thread, using QThreads
   -------------------
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
@@ -34,6 +33,10 @@
 #include <pluginproc.h>
 #include <stretcher.h>
 
+#if SUPPORT_SSML
+#include <ssmlconvert.h>
+#endif
+
 class Player;
 class QTimer;
 
@@ -59,6 +62,11 @@ enum uttType
 */
 enum uttState
 {
+    usNone,                      /**< Null state. Brand new utterance. */
+#if SUPPORT_SSML
+    usWaitingTransform,          /**< Waiting to be transformed (XSLT) */
+    usTransforming,              /**< Transforming the utterance (XSLT). */
+#endif 
     usWaitingSay,                /**< Waiting to start synthesis. */
     usWaitingSynth,              /**< Waiting to be synthesized and audibilized. */
     usWaitingSignal,             /**< Waiting to emit a textStarted or textFinished signal. */
@@ -80,6 +88,9 @@ struct Utt{
     mlText* sentence;            /* The text, talker, appId, and sequence num. */
     uttType utType;              /* The type of utterance (text, msg, screen reader) */
     uttState state;              /* Processing state of the utterance. */
+#if SUPPORT_SSML
+    SSMLConvert* transformer;    /* XSLT transformer. */
+#endif
     PlugInProc* plugin;          /* The plugin that synthesizes the utterance. */
     Stretcher* audioStretcher;   /* Audio stretcher object.  Adjusts speed. */
     QString audioUrl;            /* Filename containing synthesized audio.  Null if
@@ -145,24 +156,24 @@ class Speaker : public QObject{
          * Load all the configured plug ins populating loadedPlugIns
          */
         int loadPlugIns();
-        
+
         /**
          * Tells the thread to exit
          */
         void requestExit();
-        
+
         /**
         * Main processing loop.  Dequeues utterances and sends them to the
         * plugins and/or Audio Player.
         */
         void doUtterances();
-        
+
         /**
         * Determine if kttsd is currently speaking any text jobs.
         * @return               True if currently speaking any text jobs.
         */
         bool isSpeakingText();
-        
+
         /**
         * Get the job number of the current text job.
         * @return               Job number of the current text job. 0 if no jobs.
@@ -172,7 +183,7 @@ class Speaker : public QObject{
         * @see isSpeakingText
         */
         uint getCurrentTextJob();
-     
+
         /**
         * Remove a text job from the queue.
         * @param jobNum         Job number of the text job.
@@ -183,7 +194,7 @@ class Speaker : public QObject{
         * that job begins speaking.
         */
         void removeText(const uint jobNum);
-        
+
         /**
         * Start a text job at the beginning.
         * @param jobNum         Job number of the text job.
@@ -200,7 +211,7 @@ class Speaker : public QObject{
         * the text queue and the @ref textFinished signal is emitted.
         */
         void startText(const uint jobNum);
-        
+
         /**
         * Stop a text job and rewind to the beginning.
         * @param jobNum         Job number of the text job.
@@ -214,7 +225,7 @@ class Speaker : public QObject{
         * (it might finish the current sentence).
         */
         void stopText(const uint jobNum);
-        
+
         /**
         * Pause a text job.
         * @param jobNum         Job number of the text job.
@@ -229,7 +240,7 @@ class Speaker : public QObject{
         * @see resumeText
         */
         void pauseText(const uint jobNum);
-        
+
         /**
         * Start or resume a text job where it was paused.
         * @param jobNum         Job number of the text job.
@@ -245,7 +256,7 @@ class Speaker : public QObject{
         * @see pauseText
         */
         void resumeText(const uint jobNum);
-        
+
         /**
         * Move a text job down in the queue so that it is spoken later.
         * @param jobNum         Job number of the text job.
@@ -254,7 +265,7 @@ class Speaker : public QObject{
         * If the next job in the queue is speakable, it begins speaking.
         */
         void moveTextLater(const uint jobNum);
-     
+
         /**
         * Jump to the first sentence of a specified part of a text job.
         * @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
@@ -267,7 +278,7 @@ class Speaker : public QObject{
         * Does not affect the current speaking/not-speaking state of the job.
         */
         int jumpToTextPart(const int partNum, const uint jobNum);
-     
+
         /**
         * Advance or rewind N sentences in a text job.
         * @param n              Number of sentences to advance (positive) or rewind (negative)
@@ -281,14 +292,14 @@ class Speaker : public QObject{
         * Does not affect the current speaking/not-speaking state of the job.
         */
         uint moveRelTextSentence(const int n, const uint jobNum);
-     
+
         /**
         * Get a list of the talkers configured in KTTS.
         * @return               A QStringList of fully-specified talker codes, one
         *                       for each talker user has configured.
         */
         QStringList Speaker::getTalkers();
-        
+
         /**
         * Given a Talker Code, returns the Talker ID of the talker that would speak
         * a text job with that Talker Code.
@@ -296,7 +307,7 @@ class Speaker : public QObject{
         * @return               Talker ID of the talker that would speak the text job.
         */
         QString talkerCodeToTalkerId(const QString& talkerCode);
-        
+
         /**
         * Get the user's default talker.
         * @return               A fully-specified talker code.
@@ -305,7 +316,7 @@ class Speaker : public QObject{
         * @see getTalkers
         */
         QString userDefaultTalker();
-    
+
     signals:
         /**
          * Emitted whenever reading a text was started or resumed
@@ -330,7 +341,7 @@ class Speaker : public QObject{
         void readingResumed();
 
         /* The following signals correspond to the signals in the kspeech interface. */
-        
+
         /**
         * This signal is emitted when the speech engine/plugin encounters a marker in the text.
         * @param appId          DCOP application ID of the application that queued the text.
@@ -338,7 +349,7 @@ class Speaker : public QObject{
         * @see markers
         */
         void markerSeen(const QCString& appId, const QString& markerName);
-        
+
         /**
         * This signal is emitted whenever a sentence begins speaking.
         * @param appId          DCOP application ID of the application that queued the text.
@@ -347,7 +358,7 @@ class Speaker : public QObject{
         */
         void sentenceStarted(QString text, QString language, const QCString& appId,
             const uint jobNum, const uint seq);
-        
+
         /**
         * This signal is emitted when a sentence has finished speaking.
         * @param appId          DCOP application ID of the application that queued the text.
@@ -355,14 +366,14 @@ class Speaker : public QObject{
         * @param seq            Sequence number of the text.
         */        
         void sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
-        
+
         /**
         * This signal is emitted whenever speaking of a text job begins.
         * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
         * @param jobNum         Job number of the text job.
         */
         void textStarted(const QCString& appId, const uint jobNum);
-        
+
         /**
         * This signal is emitted whenever a text job is finished.  The job has
         * been marked for deletion from the queue and will be deleted when another
@@ -373,7 +384,7 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         */
         void textFinished(const QCString& appId, const uint jobNum);
-        
+
         /**
         * This signal is emitted whenever a speaking text job stops speaking.
         * @param appId          The DCOP senderId of the application that created the job.
@@ -392,7 +403,7 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         */
         void textResumed(const QCString& appId, const uint jobNum);
-        
+
     protected:
         /**
         * Processes events posted by ThreadedPlugIns.
@@ -414,11 +425,15 @@ class Speaker : public QObject{
         */
         void slotStopped();
         /**
-        * Receiver from audio stretcher when stretching (speed adjustment) is finished.
+        * Received from audio stretcher when stretching (speed adjustment) is finished.
         */
         void slotStretchFinished();
+        /**
+        * Received from transformer (SSMLConvert) when transforming is finished.
+        */
+        void slotTransformFinished();
         /** Received from PlugIn object when they encounter an error.
-        * @param keepGoing               True if the plugin can continue processing.
+         * @param keepGoing               True if the plugin can continue processing.
         *                                False if the plugin cannot continue, for example,
         *                                the speech engine could not be started.
         * @param msg                     Error message.
@@ -445,7 +460,7 @@ class Speaker : public QObject{
         *                         individual fields.
         */
         ParsedTalkerCode parseTalkerCode(const QString &talkerCode);
-        
+
         /**
         * Given a talker code, returns pointer to the closest matching plugin.
         * @param talker          The talker (language) code.
@@ -455,7 +470,7 @@ class Speaker : public QObject{
         * plugin.
         */
         int talkerToPluginIndex(const QString& talker);
-        
+
         /**
         * Given a talker code, returns pointer to the closest matching plugin.
         * @param talker          The talker (language) code.
@@ -465,35 +480,51 @@ class Speaker : public QObject{
         * plugin.
         */
         PlugInProc* talkerToPlugin(QString& talker);
-        
+
         /**
          * Converts an utterance state enumerator to a displayable string.
         * @param state           Utterance state.
         * @return                Displayable string for utterance state.
         */
         QString uttStateToStr(uttState state);
-        
+
         /**
         * Converts an utterance type enumerator to a displayable string.
         * @param utType          Utterance type.
         * @return                Displayable string for utterance type.
         */
         QString uttTypeToStr(uttType utType);
-        
+
         /**
         * Converts a plugin state enumerator to a displayable string.
         * @param state           Plugin state.
         * @return                Displayable string for plugin state.
         */
         QString pluginStateToStr(pluginState state);
-        
+
         /**
         * Converts a job state enumerator to a displayable string.
         * @param state           Job state.
         * @return                Displayable string for job state.
         */
         QString jobStateToStr(int state);
-        
+
+#if SUPPORT_SSML
+        /**
+        * Determines whether the given text is SSML markup.
+        */
+        bool isSsml(const QString &text);
+#endif
+        /**
+        * Determines the initial state of an utterance.  If the utterance contains
+        * SSML, the state is set to usWaitingTransform.  Otherwise, if the plugin
+        * supports async synthesis, sets to usWaitingSynth, otherwise usWaitingSay.
+        * If an utterance has already been transformed, usWaitingTransform is
+        * skipped to either usWaitingSynth or usWaitingSay.
+        * @param utt             The utterance.
+        */
+        void setInitialUtteranceState(Utt &utt);
+
         /**
         * Gets the next utterance to be spoken from speechdata and adds it to the queue.
         * @return                True if one or more utterances were added to the queue.
@@ -505,7 +536,7 @@ class Speaker : public QObject{
         * Determines which plugin should be used for the utterance.
         */
         bool getNextUtterance();
-        
+
         /**
         * Given an iterator pointing to the m_uttQueue, deletes the utterance
         * from the queue.  If the utterance is currently being processed by a
@@ -527,53 +558,52 @@ class Speaker : public QObject{
         * @return                        True if an utterance began playing or resumed.
         */
         bool startPlayingUtterance(uttIterator it);
-        
+
         /**
         * Delete any utterances in the queue with this jobNum.
         * @param jobNum          The Job Number of the utterance(s) to delete.
         * If currently processing any deleted utterances, stop them.
         */
         void deleteUtteranceByJobNum(const uint jobNum);
-        
+
         /**
         * Pause the utterance with this jobNum and if it is playing on the Audio Player,
         * pause the Audio Player.
         * @param jobNum          The Job Number of the utterance to pause.
         */
         void pauseUtteranceByJobNum(const uint jobNum);
-        
+
         /**
         * Takes care of emitting reading interrupted/resumed and sentence started signals.
         * Should be called just before audibilizing an utterance.
         * @param it                      Iterator pointer to m_uttQueue.
         */
         void prePlaySignals(uttIterator it);
-        
+
         /**
         * Takes care of emitting sentenceFinished signal.
         * Should be called immediately after an utterance has completed playback.
         * @param it                      Iterator pointer to m_uttQueue.
         */
         void postPlaySignals(uttIterator it);
-        
+
         /**
         * Constructs a temporary filename for plugins to use as a suggested filename
         * for synthesis to write to.
         * @return                        Full pathname of suggested file.
         */
         QString makeSuggestedFilename();
-        
+
         /**
         * Get the real path of a filename and convert it to local encoding.
         */
         QString getRealFilePath(const QString filename);
-        
-        
+
         /**
         * Creates and returns a player object based on user option.
         */
         Player* createPlayerObject();
-        
+
         /**
          * Array of the loaded plug ins for different Talkers.
          */
@@ -583,56 +613,56 @@ class Speaker : public QObject{
          * SpeechData local pointer
          */
         SpeechData* m_speechData;
-        
+
         /**
          * True if the speaker was requested to exit.
          */
         volatile bool m_exitRequested;
-        
+
         /**
         * Queue of utterances we are currently processing.
         */
         QValueVector<Utt> m_uttQueue;
-        
+
         /**
         * True when text job reading has been interrupted.
         */
         bool m_textInterrupted;
-        
+
         /**
         * Used to prevent doUtterances from prematurely exiting.
         */
         bool m_again;
-        
+
         /**
         * Which audio player to use.
         *  0 = aRts
         *  1 = gstreamer
         */
         int m_playerOption;
-        
+
         /**
         * Audio stretch factor (Speed).
         */
         float m_audioStretchFactor;
-        
+
         /**
         * Timer for monitoring audio player.
         */
         QTimer* m_timer;
-        
+
         /**
         * Current Text job being processed.
         */
         uint m_currentJobNum;
-        
+
         /**
         * Job Number, appId, and sequence number of the last text sentence queued.
         */
         uint m_lastJobNum;
         QCString m_lastAppId;
         uint m_lastSeq;
-        
+
         /**
          * Cache of talker codes and index of closest matching Talker.
          */

@@ -45,12 +45,12 @@ class FestivalIntProc : public PlugInProc{
          * @param configGroup     Settings group.
          */
         virtual bool init(KConfig *config, const QString &configGroup);
-        
+
         /**
          * Returns true when festival is ready to speak a sentence.
          */
         bool isReady();
-        
+
         /**
          * Say a text string.
          * @param text            The text to speak.
@@ -71,7 +71,7 @@ class FestivalIntProc : public PlugInProc{
         * psFinished, when synthesis is completed.
         */
         virtual void synthText(const QString &text, const QString &suggestedFilename);
-        
+
         /**
         * Get the generated audio filename from call to @ref synthText.
         * @return                        Name of the audio file the plugin generated.
@@ -82,7 +82,7 @@ class FestivalIntProc : public PlugInProc{
         * KTTSD is finished using it.
         */
         virtual QString getFilename();
-        
+
         /**
         * Stop current operation (saying or synthesizing text).
         * Important: This function may be called from a thread different from the
@@ -99,7 +99,7 @@ class FestivalIntProc : public PlugInProc{
         * operation.
         */
         virtual void stopText();
-        
+
         /**
         * Return the current state of the plugin.
         * This function only makes sense in asynchronous mode.
@@ -108,7 +108,7 @@ class FestivalIntProc : public PlugInProc{
         * @see pluginState
         */
         virtual pluginState getState();
-        
+
         /**
         * Acknowledges a finished state and resets the plugin state to psIdle.
         *
@@ -118,7 +118,7 @@ class FestivalIntProc : public PlugInProc{
         * Calling program should call getFilename prior to ackFinished.
         */
         virtual void ackFinished();
-        
+
         /**
         * Returns True if the plugin supports asynchronous processing,
         * i.e., returns immediately from sayText or synthText.
@@ -129,7 +129,7 @@ class FestivalIntProc : public PlugInProc{
         * saying or synthesis is completed.
         */
         virtual bool supportsAsync();
-        
+
         /**
         * Returns True if the plugin supports synthText method,
         * i.e., is able to synthesize text to a sound file without
@@ -167,6 +167,17 @@ class FestivalIntProc : public PlugInProc{
         *                               do the query.
         */
         bool queryVoices(const QString &festivalExePath);
+
+        /**
+        * Returns the name of an XSLT stylesheet that will convert a valid SSML file
+        * into a format that can be processed by the synth.  For example,
+        * The Festival plugin returns a stylesheet that will convert SSML into
+        * SABLE.  Any tags the synth cannot handle should be stripped (leaving
+        * their text contents though).  The default stylesheet strips all
+        * tags and converts the file to plain text.
+        * @return            Name of the XSLT file.
+        */
+        QString getSsmlXsltFilename();
 
     signals:
         /**
@@ -231,7 +242,7 @@ class FestivalIntProc : public PlugInProc{
         * Selected pitch (frequency) (from config).
         */
         int m_pitch;
-        
+
         /**
          * Selected volume (from config).
          */
