@@ -62,7 +62,14 @@ CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& 
     layout->addWidget(m_widget);
     
     defaults();
-    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->characterCodingBox, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->characterCodingBox, SIGNAL(activated(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->stdInButton, SIGNAL(toggled(bool)),
+        this, SLOT(configChanged()));
+    connect(m_widget->urlReq, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
     connect(m_widget->commandTestButton, SIGNAL(clicked()),
         this, SLOT(slotCommandTest_clicked()));
 }

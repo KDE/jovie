@@ -53,7 +53,8 @@ FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*ar
     
     defaults();
     
-    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->flitePath, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
     connect(m_widget->fliteTest, SIGNAL(clicked()), this, SLOT(slotFliteTest_clicked()));
 }
 

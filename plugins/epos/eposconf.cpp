@@ -56,8 +56,18 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
     
     defaults();
     
-    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
-    connect(m_widget->eposTest, SIGNAL(clicked()), this, SLOT(slotEposTest_clicked()));
+    connect(m_widget->eposServerPath, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->eposClientPath, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->eposServerOptions, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->eposClientOptions, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->characterCodingBox, SIGNAL(activated(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->eposTest, SIGNAL(clicked()),
+        this, SLOT(slotEposTest_clicked()));
 }
 
 /** Destructor */

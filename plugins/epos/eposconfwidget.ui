@@ -328,38 +328,6 @@
 </widget>
 <customwidgets>
 </customwidgets>
-<connections>
-    <connection>
-        <sender>eposServerPath</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>EposConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>eposClientPath</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>EposConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>characterCodingBox</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>EposConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>eposServerOptions</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>EposConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>eposClientOptions</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>EposConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-</connections>
 <tabstops>
     <tabstop>eposServerPath</tabstop>
     <tabstop>eposServerOptions</tabstop>
@@ -372,9 +340,6 @@
     <include location="global" impldecl="in declaration">kurlrequester.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
 </includes>
-<slots>
-    <slot access="private">configChanged()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>

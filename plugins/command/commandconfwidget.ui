@@ -204,32 +204,6 @@
 </widget>
 <customwidgets>
 </customwidgets>
-<connections>
-    <connection>
-        <sender>characterCodingBox</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>CommandConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>stdInButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>CommandConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>urlReq</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>CommandConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-    <connection>
-        <sender>characterCodingBox</sender>
-        <signal>activated(int)</signal>
-        <receiver>CommandConfWidget</receiver>
-        <slot>configChanged()</slot>
-    </connection>
-</connections>
 <tabstops>
     <tabstop>urlReq</tabstop>
     <tabstop>characterCodingBox</tabstop>
@@ -249,9 +223,6 @@
 <signals>
     <signal>configurationChanged()</signal>
 </signals>
-<slots>
-    <slot access="private">configChanged()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>

@@ -65,8 +65,12 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
     m_widget->festivalVoicesPath->setMode(KFile::Directory);
     defaults();
     
-    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->festivalVoicesPath, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+    connect(m_widget->selectVoiceCombo, SIGNAL(activated(const QString&)),
+        this, SLOT(configChanged()));
     connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
+    connect(m_widget->rescan, SIGNAL(clicked()), this, SLOT(scanVoices()));
 }
 
 /** Destructor */
@@ -108,7 +112,7 @@ void FestivalIntConf::save(KConfig *config, const QString &langGroup){
 
 void FestivalIntConf::defaults(){
     kdDebug() << "FestivalIntConf::defaults: Running" << endl;
-    m_widget->festivalVoicesPath->setURL("flite");
+    m_widget->festivalVoicesPath->setURL("/usr/share/festival/voices/");
 }
 
 void FestivalIntConf::scanVoices(){
