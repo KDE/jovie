@@ -22,7 +22,6 @@
 #include <dcopclient.h>
 
 #include <qtabwidget.h>
-//#include <qwidgetstack.h>
 #include <qcheckbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
@@ -90,10 +89,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
     layout->addWidget(m_kttsmgrw);
     
-    // Start out with Properties tab disabled.  It will be enabled when user selects a language.
-//    m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, false);
-//    m_kttsmgrw->PluginWidgetStack->setEnabled(false);
-
     // Connect the signals from the KCMKtssMgrWidget to this class
     connect( m_kttsmgrw, SIGNAL( addLanguage() ), this, SLOT( addLanguage() ) );
     connect( m_kttsmgrw, SIGNAL( configChanged() ), this, SLOT( configChanged() ) );
@@ -448,6 +443,20 @@ void KCMKttsMgr::addLanguage(){
         } else {
             addLanguage( m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()], m_kttsmgrw->plugInSelection->currentText());
         }
+        
+        // Make sure added language is visible.
+        QListViewItem* listItem = m_loadedLanguages.find(
+            m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()])->listItem;
+        if (listItem)
+        {
+            m_kttsmgrw->languagesList->ensureItemVisible(listItem);
+        
+            // Select the new item, update buttons, and update Properties tab.
+            m_kttsmgrw->languagesList->setSelected(listItem, true);
+            updateDefaultButton();
+            updateRemoveButton();
+        }
+    
     } else {
         KMessageBox::error(0, i18n("This language already has a plugin assigned; please remove it before re-assigning it"), i18n("Language not valid"));
     }
@@ -484,10 +493,6 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
         // kdDebug() << "Storing the plug in name" << endl;
         newLanguage->plugInName = plugInName;
     
-        // Add the plugin configuration widget to the Properties tab WidgetStack.
-        // kdDebug() << "Adding the tab" << endl;
-//        m_kttsmgrw->PluginWidgetStack->addWidget(newLanguage->plugIn, -1);
-
         // Let plug in changes be as global changed to show apply button.
         // kdDebug() << "Connecting" << endl;
         connect(  newLanguage->plugIn, SIGNAL( changed(bool) ), this, SLOT( configChanged() )  );
@@ -495,7 +500,7 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
         // Let's insert it in the QDict to keep track of language structure
         // kdDebug() << "Inserting the newLanguage in the QDict" << endl;
         m_loadedLanguages.insert( language, newLanguage);
-    
+        
         // kdDebug() << "Done" <<endl;
     } else {
         KMessageBox::error(0, i18n("Speech syntheziser plugin library not found or corrupted."), i18n("Plugin not found"));
@@ -588,6 +593,7 @@ void KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage){
             kdDebug() << "Setting " << it.currentKey() << " as the default language" << endl;
             it.current()->listItem->setPixmap(2, DesktopIcon("ok", 16));
             m_kttsmgrw->languagesList->setSelected(it.current()->listItem, true);
+            m_kttsmgrw->languagesList->ensureItemVisible(it.current()->listItem);
 //            it.current()->listItem->setSelected(true);
         } else {
             kdDebug() << "UN-Setting " << it.currentKey() << " as the default language" << endl;
@@ -605,19 +611,16 @@ void KCMKttsMgr::updateRemoveButton(){
     if(m_kttsmgrw->languagesList->selectedItem()){
         m_kttsmgrw->removeLanguageButton->setEnabled(true);
         QString language = m_kttsmgrw->languagesList->selectedItem()->text(0);
-//        m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, true);
-//        m_kttsmgrw->PluginWidgetStack->setEnabled(true);
-//        m_kttsmgrw->PluginWidgetStack->raiseWidget(m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn);
+        // Remove Properties tab for old selected plugin.
         int currentTab = m_kttsmgrw->mainTab->currentPageIndex();
         if (m_pluginWidget)
             m_kttsmgrw->mainTab->removePage(m_pluginWidget);
+        // Set up Properties tab for newly selected plugin.
         m_pluginWidget = m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn;
         m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", 1);
         if (currentTab) m_kttsmgrw->mainTab->setCurrentPage(currentTab);
     } else {
         m_kttsmgrw->removeLanguageButton->setEnabled(false);
-//        m_kttsmgrw->PluginWidgetStack->setEnabled(false);
-//        m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, false);
         if (m_pluginWidget) m_kttsmgrw->mainTab->setTabEnabled(m_pluginWidget, false);
     }
 }

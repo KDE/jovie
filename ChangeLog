@@ -3,6 +3,8 @@
           against plugin configuration widgets.
         * Epos plugin not listing codecs.
         * Some plugins listing codecs multiple times.
+        * Select and ensure default language visible when first displaying kttsmgr.
+        * Auto select and prepare Properties tab when adding a new language in kttsmgr.
         
 2004-08-08  Cramblitt <garycramblitt@comcast.net>
         * Add plugin for Epos TTS Synthesis System (czech and slovak).
