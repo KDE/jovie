@@ -83,30 +83,9 @@ and delete the intermediate ones."
 ;;;
 (set! tts_hooks (list utt.synth ktts_save_record_wave))
 
-(define (ktts_sabletowave text filename volume def_voice)
-  ;; Override Festival, which insists on rab_diphone voice when speaking SABLE.
-  ;; But user might not have rab_diphone installed.
-  ;; Save current definition of voice_rab_diphone.
-  (set! save_voice_rab_diphone "")
-  (if (not (equal? def_voice "voice_rab_diphone"))
-  (begin
-    (unwind-protect
-      ((set! save_voice_rab_diphone voice_rab_diphone)
-      ()
-    )
-    ;; Redefine voice_rab_diphone
-    (set! voice_rab_diphone def_voice))
-  ))
+(define (ktts_sabletowave text filename volume)
   ;; Do the synthesis, which creates multiple wave files.
   (tts_text text 'sable)
   ;; Now put the waveforms together and adjust volume.
   (ktts_combine_waves filename volume)
-  (if (not (equal? save_voice_rab_diphone ""))
-  (begin
-    ;; Restore voice_rab_diphone function.
-    (unwind-protect
-      (set! voice_rab_diphone save_voice_rab_diphone)
-      ()
-    )
-  ))
 )
