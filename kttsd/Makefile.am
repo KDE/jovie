@@ -4,11 +4,13 @@ INCLUDES = \
 	-I$(top_srcdir)/kttsd/libktts \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(kde_includes)/arts \
+	-I$(CFLAGS_GST) \
 	$(all_includes)
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(top_srcdir)/kttsd/libktts \
 	-I$(kde_includes)/arts \
+	-I$(CFLAGS_GST) \
 	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
@@ -30,8 +32,14 @@ kttsd_SOURCES = \
 	speechdata.cpp \
 	kttsd.skel \
 	threadedplugin.cpp
-kttsd_LDFLAGS = -avoid-version -module $(all_libraries)
-kttsd_LDADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_KDECORE) $(LIB_KIO) $(LIB_KUTILS)
+kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
+kttsd_LDADD = \
+	$(top_builddir)/kttsd/libktts/libktts.la \
+	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
+	$(LIB_KDECORE) \
+	$(LDADD_GST) \
+	$(LIB_KIO) \
+	$(LIB_KUTILS)
 
 # Install desktop file to standard services directory.
 kde_services_DATA = kttsd.desktop

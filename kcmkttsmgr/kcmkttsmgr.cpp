@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  kcmkttsmgr.cpp
   KControl module for KTTSD configuration and Job Management
   -------------------
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
@@ -26,7 +25,7 @@
 #include <qcheckbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
-#include <qtoolbutton.h>
+#include <qradiobutton.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -103,6 +102,11 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
     m_kttsmgrw->configureTalkerButton->setIconSet(
         KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
+
+    // If GStreamer is available, enable its radio button.
+#if HAVE_GSTREAMER
+    m_kttsmgrw->gstreamerRadioButton->setEnabled(true); 
+#endif
 
     // Register DCOP client.
     DCOPClient *client = kapp->dcopClient();
@@ -218,6 +222,19 @@ void KCMKttsMgr::load()
         m_kttsmgrw->enableNotifyCheckBox->isChecked()));
     m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPassivePopupsOnly",
         m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()));
+
+    // Audio Output.
+    int audioOutputMethod = 0;
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    audioOutputMethod = m_config->readNumEntry("AudioOutputMethod", audioOutputMethod);
+    switch (audioOutputMethod)
+    {
+        case 0:
+            m_kttsmgrw->artsRadioButton->setChecked(true);
+            break;
+        case 1:
+            m_kttsmgrw->gstreamerRadioButton->setChecked(true);
+    }
 
     // Last plugin ID.  Used to generate a new ID for an added talker.
     m_lastTalkerID = 0;
@@ -377,6 +394,11 @@ void KCMKttsMgr::save()
     m_config->writeEntry("Notify", m_kttsmgrw->enableNotifyCheckBox->isChecked());
     m_config->writeEntry("NotifyPassivePopupsOnly", m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked());
 
+    // Audio Output.
+    int audioOutputMethod = 0;
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
+
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
     QListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
@@ -510,13 +532,20 @@ void KCMKttsMgr::defaults() {
                 m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
             }
             break;
+
+        case wpAudio:
+            if (!m_kttsmgrw->artsRadioButton->isChecked())
+            {
+                changed = true;
+                m_kttsmgrw->artsRadioButton->setChecked(true);
+            }
     }
     if (changed) configChanged();
 }
 
 /**
 * This is a static method which gets called to realize the modules settings
-* durign the startup of KDE. NOTE that most modules do not implement this
+* during the startup of KDE. NOTE that most modules do not implement this
 * method, but modules like the keyboard and mouse modules, which directly
 * interact with the X-server, need this method. As this method is static,
 * it can avoid to create an instance of the user interface, which is often

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KCMKttsMgrWidget</class>
 <author>Gary Cramblitt</author>
 <widget class="KCModule">
@@ -693,6 +693,77 @@
                     </spacer>
                 </grid>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Audio</string>
+                </attribute>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>audioButtonGroup</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>171</width>
+                            <height>91</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Output using</string>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>artsRadioButton</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>20</x>
+                                <y>30</y>
+                                <width>120</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>a&amp;RTs</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+R</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>0</number>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>gstreamerRadioButton</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>20</x>
+                                <y>60</y>
+                                <width>120</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>&amp;GStreamer</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+G</string>
+                        </property>
+                    </widget>
+                </widget>
+            </widget>
         </widget>
     </grid>
 </widget>
@@ -816,6 +887,18 @@
     <connection>
         <sender>showMainWindowOnStartupCheckBox</sender>
         <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>artsRadioButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>gstreamerRadioButton</sender>
+        <signal>toggled(bool)</signal>
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>

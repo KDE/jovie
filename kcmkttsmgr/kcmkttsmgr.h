@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  kcmkttsmgr.h
   KControl module for KTTSD configuration and job management
   -------------------
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
@@ -19,6 +18,8 @@
 
 #ifndef KCMKTTSMGR_H
 #define KCMKTTSMGR_H
+
+#include "config.h"
 
 // Qt includes.
 #include <qmap.h>
@@ -129,7 +130,8 @@ class KCMKttsMgr :
             wpGeneral = 0,          // General tab.
             wpTalkers = 1,          // Talkers tab.
             wpInterruption = 2,     // Interruption tab.
-            wpJobs = 3              // Jobs tab.
+            wpAudio = 3,            // Audio tab.
+            wpJobs = 4              // Jobs tab.
         };
 
         enum TalkerListViewColumn

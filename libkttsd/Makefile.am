@@ -1,19 +1,10 @@
 # Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
 # so keep them synchronized.
-INCLUDES = -I$(kde_includes)/arts $(all_includes)
-AM_CPPFLAGS = -I$(kde_includes)/arts $(all_includes)
+INCLUDES = -I$(kde_includes)/arts $(all_includes) $(CFLAGS_GST)
+AM_CPPFLAGS = -I$(kde_includes)/arts $(all_includes) $(CFLAGS_GST)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
-
-##################################################
-# check to see if GStreamer is available
-##################################################
-# gstreamer turned off.  Doesn't work with wave files anyway.
-# if link_lib_GST
-# gstlibs = -lkdegst -lkdegstplay
-# endif
-##################################################
 
 #########################################################################
 # LIBRARY SECTION
@@ -28,8 +19,8 @@ libkttsd_la_SOURCES = \
         pluginconf.cpp \
         artsplayer.cpp \
         gstreamerplayer.cpp
-libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
-libkttsd_la_LIBADD = $(gstlibs) $(LIB_KIO) -lartskde
+libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) $(LDFLAGS_GST) -no-undefined
+libkttsd_la_LIBADD = $(LDADD_GST) $(LIB_KIO) -lartskde
 
 # This library is installed as a service.
 servicetypes_DATA = kttsd.desktop

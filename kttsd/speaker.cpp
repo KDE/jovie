@@ -117,10 +117,8 @@ Speaker::Speaker( SpeechData *speechData, QObject *parent, const char *name) :
     m_lastJobNum = 0;
     m_lastSeq = 0;
     m_timer = new QTimer(this, "kttsdAudioTimer");
-    m_playerOption = 0;  // default to aRts.
-    // TODO: gstreamer 0.6 has issues with some wav files and unfortunately,
-    // the gst bindings are for 0.6 (as of Aug 2004).  When bindings are upgraded,
-    // try using gstreamer again.
+    m_speechData->config->setGroup("General");
+    m_playerOption = m_speechData->config->readNumEntry("AudioOutputMethod", 0);  // default to aRts.
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 }

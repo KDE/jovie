@@ -1,0 +1,12 @@
+if test "x$have_gst" = "xno"; then
+	echo "**************************************************"
+	echo "*"
+	echo "* You do not seem to have GStreamer >= 0.8 installed."
+	echo "* Without this aRts output will be used exclusively."
+	echo "*"
+	echo "* KTTSD supports GStreamer output but will also"
+	echo "* work with aRts."
+	echo "*"
+	echo "**************************************************"
+fi
+

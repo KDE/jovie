@@ -1,4 +1,4 @@
-_ Add "Higher Priority" button to KTTSMgr Talkers tab.  Also add drag N drop for the Talkers
+_ Add shortcut/accelerators for re-ordering of Talkers in KTTSMgr.  Also add drag N drop for the Talkers
   so it is easier to change the ordering.
 _ It is possible to configure multiple instances of Talkers with the exact same configuration.
 _ Add WhatsThis help.  The Jobs tab needs them.
