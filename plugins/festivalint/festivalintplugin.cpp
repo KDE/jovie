@@ -16,8 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-// $Id$
-
 #include <kgenericfactory.h>
 
 #include "festivalintconf.h"

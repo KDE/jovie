@@ -550,9 +550,9 @@
     <function access="protected" specifier="non virtual" returnType="int">percentToSlider( int percentValue )</function>
     <function access="protected" specifier="non virtual" returnType="int">sliderToPercent( int sliderValue )</function>
     <function access="private" specifier="non virtual">init()</function>
-    <function specifier="non virtual">addVoice( QString filename, bool isMale )</function>
-    <function specifier="non virtual">addVoice( QString filename, bool isMale, QString displayname )</function>
-    <function specifier="non virtual">setVoice( QString filename, bool isMale )</function>
+    <function specifier="non virtual">addVoice( const QString &amp;filename, bool isMale )</function>
+    <function specifier="non virtual">addVoice( const QString &amp;filename, bool isMale, const QString &amp;displayname )</function>
+    <function specifier="non virtual">setVoice( const QString &amp;filename, bool isMale )</function>
     <function specifier="non virtual" returnType="QString">getVoiceFilename()</function>
     <function specifier="non virtual" returnType="bool">isMaleVoice()</function>
 </functions>

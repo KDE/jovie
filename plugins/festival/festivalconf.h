@@ -5,7 +5,7 @@
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
  ******************************************************************************/
 
 /***************************************************************************
@@ -15,9 +15,7 @@
  *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  ***************************************************************************/
- 
- // $Id$
- 
+
 #ifndef _FESTIVALCONF_H_
 #define _FESTIVALCONF_H_
 

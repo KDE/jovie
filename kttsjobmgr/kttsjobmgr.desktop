@@ -1,7 +1,8 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=kttsjobmgrpart
-Name[xx]=xxkttsjobmgrpartxx
+Name[sv]=kttsjobmgr-programdel
 Comment=KDE Text-to-speech Job Manager
 Comment[da]=KDE's Tekst-til-tale jobhåndtering
 Comment[es]=Gestor de trabajos de texto a voz de KDE
@@ -10,7 +11,6 @@ Comment[nl]=KDE Text To Speech taakbeheer
 Comment[pt]=Gestor de Trabalhos do Texto para Fala do KDE
 Comment[pt_BR]=Gerenciador de Trabalhos de Conversão de Texto para Voz do KDE
 Comment[sr]=KDE-ов менаџер послова претварања текста у говор
-Comment[sr@Latn]=KDE-ов менаџер послова претварања текста у говор
 Comment[sv]=KDE:s text till tal jobbhantering
 Comment[xx]=xxKDE Text-to-speech Job Managerxx
 ServiceTypes=KParts/ReadOnlyPart

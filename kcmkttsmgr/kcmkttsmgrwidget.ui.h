@@ -7,9 +7,6 @@
 ** place of a destructor.
 *****************************************************************************/
 
-// $Id$
-
-
 void KCMKttsMgrWidget::slotAddLanguage(){
     kdDebug() << "Running: KCMKttsMgrWidget::slotAddLanguage()" << endl;
     emit addLanguage();

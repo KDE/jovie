@@ -15,8 +15,6 @@
  *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  ***************************************************************************/
- 
- // $Id$
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -37,7 +35,7 @@
 #include "festivalconf.moc"
 
 /** Constructor */
-FestivalConf::FestivalConf( QWidget* parent, const char* name, const QStringList &args) :
+FestivalConf::FestivalConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
    FestivalConfWidget( parent, name ){
    kdDebug() << "Running: FestivalConf::FestivalConf( QWidget* parent, const char* name, const QStringList &args)" << endl;
    festivalVoicesPath->setMode(KFile::Directory);
@@ -53,15 +51,15 @@ void FestivalConf::load(KConfig *config, const QString &langGroup){
    kdDebug() << "Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
    config->setGroup(langGroup);
-   this->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
-   this->forceArts->setChecked(config->readBoolEntry("Arts"));
+   festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
+   forceArts->setChecked(config->readBoolEntry("Arts"));
    scanVoices();
    QString voiceSelected(config->readEntry("Voice"));
-   for(int index = 0 ; index < voiceList.count(); ++index){
+   for(unsigned int index = 0 ; index < voiceList.count(); ++index){
       kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
       if(voiceSelected == voiceList[index].code){
          kdDebug() << "Match!" << endl;
-         this->selectVoiceCombo->setCurrentItem(index);  
+         selectVoiceCombo->setCurrentItem(index);  
          break;
       }
    }
@@ -72,9 +70,9 @@ void FestivalConf::save(KConfig *config, const QString &langGroup){
    kdDebug() << "Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
    config->setGroup(langGroup);
-   config->writePathEntry("VoicesPath", this->festivalVoicesPath->url());
-   config->writeEntry("Arts", this->forceArts->isChecked());
-   config->writeEntry("Voice", voiceList[this->selectVoiceCombo->currentItem()].code);
+   config->writePathEntry("VoicesPath", festivalVoicesPath->url());
+   config->writeEntry("Arts", forceArts->isChecked());
+   config->writeEntry("Voice", voiceList[selectVoiceCombo->currentItem()].code);
 }
 
 void FestivalConf::defaults(){
@@ -87,17 +85,17 @@ void FestivalConf::scanVoices(){
    selectVoiceCombo->clear();
    KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festival/voices", true, false);
    QStringList groupList = voices.groupList();
-   QDir mainPath(this->festivalVoicesPath->url());
+   QDir mainPath(festivalVoicesPath->url());
    voice voiceTemp;
    for(QStringList::Iterator it = groupList.begin(); it != groupList.end(); ++it ){
       voices.setGroup(*it);
       voiceTemp.path = voices.readEntry("Path");
-      mainPath.setPath(this->festivalVoicesPath->url() + voiceTemp.path);
+      mainPath.setPath(festivalVoicesPath->url() + voiceTemp.path);
       if(!mainPath.exists()){
-         kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
+         kdDebug() << "For " << *it << " the path " << festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
          continue;
       } else {
-         kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " exist" << endl;
+         kdDebug() << "For " << *it << " the path " << festivalVoicesPath->url() + voiceTemp.path << " exist" << endl;
       }
       voiceTemp.code = *it;
       voiceTemp.name = voices.readEntry("Name");

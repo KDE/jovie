@@ -1,10 +1,10 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=Festival Lite (flite)
 Comment=Festival Lite (flite) speech synthesizer
 Comment[pt]=O sintetizador de fala Festival Lite (flite)
 Comment[pt_BR]=O sintetizador de fala Festival Lite (flite)
 Comment[sr]=Синтетизатор говора Festival Lite (flite)
-Comment[sr@Latn]=Синтетизатор говора Festival Lite (flite)
 Comment[sv]=Festival Lite (flite) talsyntes
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=Festival Interactive
 Name[da]=Festival interaktiv
 Name[es]=Festival interactivo
@@ -18,7 +19,6 @@ Comment[pt]=O sintetizador de fala Festival
 Comment[pt_BR]=Sintetizador de Fala Festival
 Comment[ru]=Синтезатор речи Festival
 Comment[sr]=Синтетизатор говора Festival
-Comment[sr@Latn]=Синтетизатор говора Festival
 Comment[sv]=Festival talsyntes
 Comment[xx]=xxFestival speech synthetizerxx
 Comment[zh_CN]=Festival 语音合成器

@@ -16,8 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-// $Id$
-
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qthread.h>

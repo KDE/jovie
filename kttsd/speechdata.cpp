@@ -679,7 +679,7 @@ QString SpeechData::getTextJobNumbers()
     QPtrListIterator<mlJob> it(textJobs);
     for ( ; it.current(); ++it )
     {
-        if (jobs != "") jobs.append(",");
+        if (!jobs.isEmpty()) jobs.append(",");
         jobs.append(QString::number(it.current()->jobNum));
     }
     return jobs;
@@ -809,7 +809,7 @@ void SpeechData::changeTextTalker(const uint jobNum, const QString &talker)
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
-        if (talker != "")
+        if (!talker.isEmpty())
             job->talker = talker;
         else
             job->talker = defaultTalker;

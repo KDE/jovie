@@ -51,7 +51,7 @@ void HadifixConfigUI::init () {
    female = KGlobal::iconLoader()->loadIcon("female", KIcon::Small);
 }
 
-void HadifixConfigUI::addVoice (QString filename, bool isMale) {
+void HadifixConfigUI::addVoice (const QString &filename, bool isMale) {
    if (isMale) {
       if (!maleVoices.contains(filename)) {
          int id = voiceCombo->count();
@@ -68,7 +68,7 @@ void HadifixConfigUI::addVoice (QString filename, bool isMale) {
    }
 }
 
-void HadifixConfigUI::addVoice (QString filename, bool isMale, QString displayname) {
+void HadifixConfigUI::addVoice (const QString &filename, bool isMale, const QString &displayname) {
    addVoice (filename, isMale);
    
    if (isMale) {
@@ -81,7 +81,7 @@ void HadifixConfigUI::addVoice (QString filename, bool isMale, QString displayna
    }
 }
 
-void HadifixConfigUI::setVoice (QString filename, bool isMale) {
+void HadifixConfigUI::setVoice (const QString &filename, bool isMale) {
    addVoice (filename, isMale);
    if (isMale)
       voiceCombo->setCurrentItem (maleVoices[filename]);

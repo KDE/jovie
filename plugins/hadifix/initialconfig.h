@@ -52,17 +52,18 @@ QString findHadifixDataPath () {
 }
 
 /** Tries to find the an executable by looking onto the hard disk. */
-QString findExecutable (QStringList names, QString possiblePath) {
+QString findExecutable (const QStringList &names, const QString &possiblePath) {
    // a) Try to find it directly
-   QStringList::iterator it;
-   for (it = names.begin(); it != names.end(); ++it) {
+   QStringList::ConstIterator it;
+   QStringList::ConstIterator itEnd = names.constEnd();
+   for (it = names.constBegin(); it != itEnd; ++it) {
       QString executable = KStandardDirs::findExe (*it);
       if (!executable.isNull() && !executable.isEmpty())
          return executable;
    }
 
    // b) Try to find it in the path specified by the second parameter
-   for (it = names.begin(); it != names.end(); ++it) {
+   for (it = names.constBegin(); it != itEnd; ++it) {
       QFileInfo info (possiblePath+*it);
       if (info.exists() && info.isExecutable() && info.isFile()) {
          return info.absFilePath();
@@ -74,7 +75,7 @@ QString findExecutable (QStringList names, QString possiblePath) {
 }
 
 /** Tries to find the voice files by looking onto the hard disk. */
-QStringList findVoices(QString mbrolaExec, QString hadifixDataPath) {
+QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
    
    // First of all:
    // dereference links to the mbrola executable (if mbrolaExec is a link).
@@ -140,19 +141,21 @@ QStringList findVoices(QString mbrolaExec, QString hadifixDataPath) {
 }
 
 /** Returns a list of subdirs (with absolute paths) */
-QStringList findSubdirs (QStringList baseDirs) {
+QStringList findSubdirs (const QStringList &baseDirs) {
    QStringList result;
 
-   QStringList::iterator it;
-   for (it = baseDirs.begin(); it != baseDirs.end(); ++it) {
+   QStringList::ConstIterator it;
+   QStringList::ConstIterator itEnd = baseDirs.constEnd();
+   for (it = baseDirs.constBegin(); it != itEnd; ++it) {
       // a) get a list of directory names
       QDir baseDir (*it, QString::null,
                     QDir::Name|QDir::IgnoreCase, QDir::Dirs);
       QStringList list = baseDir.entryList();
 
       // b) produce absolute paths
-      QStringList::iterator iter;
-      for (iter = list.begin(); iter != list.end(); ++iter) {
+      QStringList::ConstIterator iter;
+      QStringList::ConstIterator iterEnd = list.constEnd();
+      for (iter = list.constBegin(); iter != iterEnd; ++iter) {
          if ((*iter != ".") && (*iter != ".."))
             result += *it + "/" + *iter;
       }

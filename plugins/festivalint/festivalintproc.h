@@ -16,8 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-// $Id$
-
 #ifndef _FESTIVALINTPROC_H_
 #define _FESTIVALINTPROC_H_
 
