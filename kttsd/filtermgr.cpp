@@ -70,11 +70,24 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
             QString filterID = *it;
             QString groupName = "Filter_" + filterID;
             config->setGroup( groupName );
-            QString filterPlugInName = config->readEntry( "PlugInName" );
+            QString desktopEntryName = config->readEntry( "DesktopEntryName" );
+            // If a DesktopEntryName is not in the config file, it was configured before
+            // we started using them, when we stored translated plugin names instead.
+            // Try to convert the translated plugin name to a DesktopEntryName.
+            // DesktopEntryNames are better because user can change their desktop language
+            // and DesktopEntryName won't change.
+            if (desktopEntryName.isEmpty())
+            {
+                QString filterPlugInName = config->readEntry("PlugInName", QString::null);
+                // See if the translated name will untranslate.  If not, well, sorry.
+                desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+                // Record the DesktopEntryName from now on.
+                if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
+            }
             if (config->readBoolEntry("Enabled"))
             {
                 // kdDebug() << "FilterMgr::init: filterID = " << filterID << endl;
-                KttsFilterProc* filterProc = loadFilterPlugin( filterPlugInName );
+                KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
                 if ( filterProc )
                 {
                     filterProc->init( config, groupName );
@@ -306,49 +319,64 @@ void FilterMgr::stopFiltering()
 void FilterMgr::setNoSBD(bool noSBD) { m_noSBD = noSBD; }
 bool FilterMgr::noSBD() { return m_noSBD; }
 
-// Loads the processing plug in for a named filter plug in.
-KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& plugInName)
+// Loads the processing plug in for a filter plug in given its DesktopEntryName.
+KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 {
     // kdDebug() << "FilterMgr::loadFilterPlugin: Running"<< endl;
 
-    // Get list of plugins.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    // Find the plugin.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+        QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
-    // Iterate thru the offers to find the plug in that matches the name.
-    for(unsigned int i=0; i < offers.count() ; ++i){
-        // Compare the plug in to be loaded with the entry in offers[i]
-        // kdDebug() << "Comparing " << offers[i]->plugInName() << " to " << synthName << endl;
-        if(offers[i]->name() == plugInName)
-        {
-            // When the entry is found, load the plug in
-            // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(offers[i]->library().latin1());
-            if(factory){
-                // If the factory is created successfully, instantiate the KttsFilterConf class for the
-                // specific plug in to get the plug in configuration object.
-                int errorNo;
-                KttsFilterProc *plugIn =
-                        KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterProc>(
-                        offers[i]->library().latin1(), NULL, offers[i]->library().latin1(),
-                QStringList(), &errorNo);
-                if(plugIn){
-                    // If everything went ok, return the plug in pointer.
-                    return plugIn;
-                } else {
-                    // Something went wrong, returning null.
-                    kdDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << plugInName << " error: " << errorNo << endl;
-                    return NULL;
-                }
+    if (offers.count() == 1)
+    {
+        // When the entry is found, load the plug in
+        // First create a factory for the library
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        if(factory){
+            // If the factory is created successfully, instantiate the KttsFilterConf class for the
+            // specific plug in to get the plug in configuration object.
+            int errorNo;
+            KttsFilterProc *plugIn =
+                    KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterProc>(
+                    offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
+            QStringList(), &errorNo);
+            if(plugIn){
+                // If everything went ok, return the plug in pointer.
+                return plugIn;
             } else {
                 // Something went wrong, returning null.
-                kdDebug() << "FilterMgr::loadFilterPlugin: Unable to create Factory object for plugin " << plugInName << endl;
+                kdDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << desktopEntryName << " error: " << errorNo << endl;
                 return NULL;
             }
-            break;
+        } else {
+            // Something went wrong, returning null.
+            kdDebug() << "FilterMgr::loadFilterPlugin: Unable to create Factory object for plugin "
+                << desktopEntryName << endl;
+            return NULL;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
-    kdDebug() << "FilterMgr::loadFilterPlugin: KTrader did not return an offer for plugin " << plugInName << endl;
+    kdDebug() << "FilterMgr::loadFilterPlugin: KTrader did not return an offer for plugin "
+         << desktopEntryName << endl;
     return NULL;
+}
+
+/**
+ * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
+ * @param name                   The translated plugin name.  From Name= line in .desktop file.
+ * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+ *                               QString::null if not found.
+ */
+QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
+{
+    if (name.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+    QString("Name == '%1'").arg(name));
+
+    if (offers.count() == 1)
+        return offers[0]->desktopEntryName();
+    else
+        return QString::null;
 }
 

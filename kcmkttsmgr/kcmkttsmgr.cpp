@@ -360,17 +360,35 @@ void KCMKttsMgr::load()
             QString fullLanguageCode;
             talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
             QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
-            QString synthName = m_config->readEntry("PlugIn", "");
-            // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
-            if (talkerItem)
-                talkerItem =
-                    new KListViewItem(m_kttsmgrw->talkersList, talkerItem, talkerID, language, synthName);
-            else
-                talkerItem =
-                    new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, synthName);
-            updateTalkerItem(talkerItem, talkerCode);
-            m_languagesToCodes[language] = fullLanguageCode;
-            if (talkerID.toInt() > m_lastTalkerID) m_lastTalkerID = talkerID.toInt();
+            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString::null);
+            // If a DesktopEntryName is not in the config file, it was configured before
+            // we started using them, when we stored translated plugin names instead.
+            // Try to convert the translated plugin name to a DesktopEntryName.
+            // DesktopEntryNames are better because user can change their desktop language
+            // and DesktopEntryName won't change.
+            QString synthName;
+            if (desktopEntryName.isEmpty())
+            {
+                synthName = m_config->readEntry("PlugIn", QString::null);
+                // See if the translated name will untranslate.  If not, well, sorry.
+                desktopEntryName = TalkerNameToDesktopEntryName(synthName);
+                // Record the DesktopEntryName from now on.
+                if (!desktopEntryName.isEmpty()) m_config->writeEntry("DesktopEntryName", desktopEntryName);
+            }
+            synthName = TalkerDesktopEntryNameToName(desktopEntryName);
+            if (!synthName.isEmpty())
+            {
+                // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
+                if (talkerItem)
+                    talkerItem =
+                        new KListViewItem(m_kttsmgrw->talkersList, talkerItem, talkerID, language, synthName);
+                else
+                    talkerItem =
+                        new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, synthName);
+                updateTalkerItem(talkerItem, talkerCode);
+                m_languagesToCodes[language] = fullLanguageCode;
+                if (talkerID.toInt() > m_lastTalkerID) m_lastTalkerID = talkerID.toInt();
+            }
         }
     }
 
@@ -419,38 +437,56 @@ void KCMKttsMgr::load()
             QString filterID = *it;
             // kdDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
             m_config->setGroup("Filter_" + filterID);
-            QString filterPlugInName = m_config->readEntry("PlugInName");
-            QString userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
-            bool multiInstance = m_config->readBoolEntry("MultiInstance", false);
-            // Determine if this filter is a Sentence Boundary Detector (SBD).
-            bool isSbd = m_config->readBoolEntry("IsSBD", false);
-            bool checked = m_config->readBoolEntry("Enabled", false);
-            if (isSbd)
+            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString::null);
+            // If a DesktopEntryName is not in the config file, it was configured before
+            // we started using them, when we stored translated plugin names instead.
+            // Try to convert the translated plugin name to a DesktopEntryName.
+            // DesktopEntryNames are better because user can change their desktop language
+            // and DesktopEntryName won't change.
+            QString filterPlugInName;
+            if (desktopEntryName.isEmpty())
             {
-                filterItem = m_kttsmgrw->sbdsList->lastChild();
-                if (!filterItem)
-                    filterItem = new KListViewItem(m_kttsmgrw->sbdsList,
-                        userFilterName, filterID, filterPlugInName);
-                else
-                    filterItem = new KListViewItem(m_kttsmgrw->sbdsList, filterItem,
-                        userFilterName, filterID, filterPlugInName);
-            } else {
-                filterItem = m_kttsmgrw->filtersList->lastChild();
-                if (!filterItem)
-                    filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
-                        userFilterName, QCheckListItem::CheckBox, this);
-                else
-                    filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                        userFilterName, QCheckListItem::CheckBox, this);
-                dynamic_cast<QCheckListItem*>(filterItem)->setOn(checked);
+                filterPlugInName = m_config->readEntry("PlugInName", QString::null);
+                // See if the translated name will untranslate.  If not, well, sorry.
+                desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+                // Record the DesktopEntryName from now on.
+                if (!desktopEntryName.isEmpty()) m_config->writeEntry("DesktopEntryName", desktopEntryName);
             }
-            filterItem->setText(flvcFilterID, filterID);
-            filterItem->setText(flvcPlugInName, filterPlugInName);
-            if (multiInstance)
-                filterItem->setText(flvcMultiInstance, "T");
-            else
-                filterItem->setText(flvcMultiInstance, "F");
-            if (filterID.toInt() > m_lastFilterID) m_lastFilterID = filterID.toInt();
+            filterPlugInName = FilterDesktopEntryNameToName(desktopEntryName);
+            if (!filterPlugInName.isEmpty())
+            {
+                QString userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
+                bool multiInstance = m_config->readBoolEntry("MultiInstance", false);
+                // Determine if this filter is a Sentence Boundary Detector (SBD).
+                bool isSbd = m_config->readBoolEntry("IsSBD", false);
+                bool checked = m_config->readBoolEntry("Enabled", false);
+                if (isSbd)
+                {
+                    filterItem = m_kttsmgrw->sbdsList->lastChild();
+                    if (!filterItem)
+                        filterItem = new KListViewItem(m_kttsmgrw->sbdsList,
+                            userFilterName, filterID, filterPlugInName);
+                    else
+                        filterItem = new KListViewItem(m_kttsmgrw->sbdsList, filterItem,
+                            userFilterName, filterID, filterPlugInName);
+                } else {
+                    filterItem = m_kttsmgrw->filtersList->lastChild();
+                    if (!filterItem)
+                        filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
+                            userFilterName, QCheckListItem::CheckBox, this);
+                    else
+                        filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                            userFilterName, QCheckListItem::CheckBox, this);
+                    dynamic_cast<QCheckListItem*>(filterItem)->setOn(checked);
+                }
+                filterItem->setText(flvcFilterID, filterID);
+                filterItem->setText(flvcPlugInName, filterPlugInName);
+                if (multiInstance)
+                    filterItem->setText(flvcMultiInstance, "T");
+                else
+                    filterItem->setText(flvcMultiInstance, "F");
+                if (filterID.toInt() > m_lastFilterID) m_lastFilterID = filterID.toInt();
+            }
         }
     }
 
@@ -460,7 +496,8 @@ void KCMKttsMgr::load()
     for (unsigned int i=0; i < offers.count() ; ++i)
     {
         QString filterPlugInName = offers[i]->name();
-        if (countFilterPlugins(filterPlugInName) == 0)
+        QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+        if (!desktopEntryName.isEmpty() && (countFilterPlugins(filterPlugInName) == 0))
         {
             // Must load plugin to determine if it supports multiple instances
             // and to see if it can autoconfigure itself.
@@ -506,7 +543,7 @@ void KCMKttsMgr::load()
                     m_config->setGroup(groupName);
                     filterPlugIn->save(m_config, groupName);
                     m_config->setGroup(groupName);
-                    m_config->writeEntry("PlugInName", filterPlugInName);
+                    m_config->writeEntry("DesktopEntryName", desktopEntryName);
                     m_config->writeEntry("UserFilterName", userFilterName);
                     m_config->writeEntry("Enabled", false);
                     m_config->writeEntry("MultiInstance", multiInstance);
@@ -514,7 +551,8 @@ void KCMKttsMgr::load()
                     filterIDsList.append(filterID);
                 } else m_lastFilterID--;
             } else
-                kdDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName << endl;
+                kdDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName 
+                    << " DesktopEntryName " << desktopEntryName << endl;
             delete filterPlugIn;
         }
     }
@@ -892,41 +930,38 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 {
     // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
-    // Get list of plugins.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+    // Find the plugin.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+        QString("Name == '%1'").arg(name));
 
-    // Iterate thru the offers to find the plug in that matches the name.
-    for(unsigned int i=0; i < offers.count() ; ++i){
-        // Compare the plug in to be loaded with the entry in offers[i]
-        // kdDebug() << "Comparing " << offers[i]->name() << " to " << synthName << endl;
-        if(offers[i]->name() == name)
-        {
-            // When the entry is found, load the plug in
-            // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(offers[i]->library().latin1());
-            if(factory){
-                // If the factory is created successfully, instantiate the PlugInConf class for the
-                // specific plug in to get the plug in configuration object.
-                PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
-                        offers[i]->library().latin1(), NULL, offers[i]->library().latin1());
-                if(plugIn){
-                    // If everything went ok, return the plug in pointer.
-                    return plugIn;
-                } else {
-                    // Something went wrong, returning null.
-                    kdDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to instantiate PlugInConf class for plugin " << name << endl;
-                    return NULL;
-                }
+    if (offers.count() == 1)
+    {
+        // When the entry is found, load the plug in
+        // First create a factory for the library
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        if(factory){
+            // If the factory is created successfully, instantiate the PlugInConf class for the
+            // specific plug in to get the plug in configuration object.
+            PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
+                    offers[0]->library().latin1(), NULL, offers[0]->library().latin1());
+            if(plugIn){
+                // If everything went ok, return the plug in pointer.
+                return plugIn;
             } else {
                 // Something went wrong, returning null.
-                kdDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to create Factory object for plugin " << name << endl;
+                kdDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to instantiate PlugInConf class for plugin " << name << endl;
                 return NULL;
             }
-            break;
+        } else {
+            // Something went wrong, returning null.
+            kdDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to create Factory object for plugin "
+                << name << endl;
+            return NULL;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
-    kdDebug() << "KCMKttsMgr::loadTalkerPlugin: KTrader did not return an offer for plugin " << name << endl;
+    kdDebug() << "KCMKttsMgr::loadTalkerPlugin: KTrader did not return an offer for plugin "
+        << name << endl;
     return NULL;
 }
 
@@ -937,40 +972,35 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 {
     // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
-    // Get list of plugins.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    // Find the plugin.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+        QString("Name == '%1'").arg(plugInName));
 
-    // Iterate thru the offers to find the plug in that matches the name.
-    for(unsigned int i=0; i < offers.count() ; ++i){
-        // Compare the plug in to be loaded with the entry in offers[i]
-        // kdDebug() << "Comparing " << offers[i]->plugInName() << " to " << synthName << endl;
-        if(offers[i]->name() == plugInName)
-        {
-            // When the entry is found, load the plug in
-            // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(offers[i]->library().latin1());
-            if(factory){
-                // If the factory is created successfully, instantiate the KttsFilterConf class for the
-                // specific plug in to get the plug in configuration object.
-                int errorNo;
-                KttsFilterConf *plugIn =
-                    KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterConf>(
-                        offers[i]->library().latin1(), NULL, offers[i]->library().latin1(),
-                        QStringList(), &errorNo);
-                if(plugIn){
-                    // If everything went ok, return the plug in pointer.
-                    return plugIn;
-                } else {
-                    // Something went wrong, returning null.
-                    kdDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to instantiate KttsFilterConf class for plugin " << plugInName << " error: " << errorNo << endl;
-                    return NULL;
-                }
+    if (offers.count() == 1)
+    {
+        // When the entry is found, load the plug in
+        // First create a factory for the library
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        if(factory){
+            // If the factory is created successfully, instantiate the KttsFilterConf class for the
+            // specific plug in to get the plug in configuration object.
+            int errorNo;
+            KttsFilterConf *plugIn =
+                KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterConf>(
+                    offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
+                    QStringList(), &errorNo);
+            if(plugIn){
+                // If everything went ok, return the plug in pointer.
+                return plugIn;
             } else {
                 // Something went wrong, returning null.
-                kdDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to create Factory object for plugin " << plugInName << endl;
+                kdDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to instantiate KttsFilterConf class for plugin " << plugInName << " error: " << errorNo << endl;
                 return NULL;
             }
-            break;
+        } else {
+            // Something went wrong, returning null.
+            kdDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to create Factory object for plugin " << plugInName << endl;
+            return NULL;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
@@ -1127,6 +1157,11 @@ void KCMKttsMgr::slot_addTalker()
     m_config->deleteGroup(QString("Talker_")+talkerID);
     m_config->sync();
 
+    // Convert translated plugin name to DesktopEntryName.
+    QString desktopEntryName = TalkerNameToDesktopEntryName(synthName);
+    // This shouldn't happen, but just in case.
+    if (desktopEntryName.isEmpty()) return;
+
     // Load the plugin.
     m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
     if (!m_loadedTalkerPlugIn) return;
@@ -1159,7 +1194,7 @@ void KCMKttsMgr::slot_addTalker()
 
         // Record configuration data.  Note, might as well do this now.
         m_config->setGroup(QString("Talker_")+talkerID);
-        m_config->writeEntry("PlugIn", synthName);
+        m_config->writeEntry("DesktopEntryName", desktopEntryName);
         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
         m_config->sync();
@@ -1272,6 +1307,11 @@ void KCMKttsMgr::addFilter( bool sbd)
     m_config->deleteGroup(QString("Filter_")+filterID);
     m_config->sync();
 
+    // Get DesktopEntryName from the translated name.
+    QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+    // This shouldn't happen, but just in case.
+    if (desktopEntryName.isEmpty()) return;
+
     // Load the plugin.
     m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
     if (!m_loadedFilterPlugIn) return;
@@ -1303,7 +1343,7 @@ void KCMKttsMgr::addFilter( bool sbd)
 
         // Record configuration data.  Note, might as well do this now.
         m_config->setGroup(QString("Filter_")+filterID);
-        m_config->writeEntry("PlugInName", filterPlugInName);
+        m_config->writeEntry("DesktopEntryName", desktopEntryName);
         m_config->writeEntry("UserFilterName", userFilterName);
         m_config->writeEntry("MultiInstance", multiInstance);
         m_config->writeEntry("Enabled", true);
@@ -1725,6 +1765,8 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     if (!filterItem) return;
     QString filterID = filterItem->text(flvcFilterID);
     QString filterPlugInName = filterItem->text(flvcPlugInName);
+    QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+    if (desktopEntryName.isEmpty()) return;
     m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
     if (!m_loadedFilterPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
@@ -1753,7 +1795,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
 
         // Save configuration.
         m_config->setGroup("Filter_"+filterID);
-        m_config->writeEntry("PlugInName", filterPlugInName);
+        m_config->writeEntry("DesktopEntryName", desktopEntryName);
         m_config->writeEntry("UserFilterName", userFilterName);
         m_config->writeEntry("Enabled", true);
         m_config->writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
@@ -1951,6 +1993,76 @@ void KCMKttsMgr::aboutSelected(){
 void KCMKttsMgr::slotFiltersList_stateChanged()
 {
     configChanged();
+}
+
+/**
+* Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
+* @param name                   The translated plugin name.  From Name= line in .desktop file.
+* @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+*                               QString::null if not found.
+*/
+QString KCMKttsMgr::TalkerNameToDesktopEntryName(const QString& name)
+{
+    if (name.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+        QString("Name == '%1'").arg(name));
+
+    if (offers.count() == 1)
+        return offers[0]->desktopEntryName();
+    else
+        return QString::null;
+}
+
+/**
+* Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
+* @param desktopEntryName       The DesktopEntryName.
+* @return                       The translated Name of the plugin, from Name= line in .desktop file.
+*/
+QString KCMKttsMgr::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
+{
+    if (desktopEntryName.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+    QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+
+    if (offers.count() == 1)
+        return offers[0]->name();
+    else
+        return QString::null;
+}
+
+/**
+ * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
+ * @param name                   The translated plugin name.  From Name= line in .desktop file.
+ * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+ *                               QString::null if not found.
+ */
+QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
+{
+    if (name.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+        QString("Name == '%1'").arg(name));
+
+    if (offers.count() == 1)
+        return offers[0]->desktopEntryName();
+    else
+        return QString::null;
+}
+
+/**
+ * Uses KTrader to convert a DesktopEntryName into a translated Filter Plugin Name.
+ * @param desktopEntryName       The DesktopEntryName.
+ * @return                       The translated Name of the plugin, from Name= line in .desktop file.
+ */
+QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName)
+{
+    if (desktopEntryName.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+        QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+
+    if (offers.count() == 1)
+        return offers[0]->name();
+    else
+        return QString::null;
 }
 
 // ----------------------------------------------------------------------------

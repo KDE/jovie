@@ -269,6 +269,36 @@ class KCMKttsMgr :
         int countFilterPlugins(const QString& filterPlugInName);
 
         /**
+        * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
+        * @param name                   The translated plugin name.  From Name= line in .desktop file.
+        * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+        *                               QString::null if not found.
+        */
+        QString TalkerNameToDesktopEntryName(const QString& name);
+
+        /**
+        * Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
+        * @param desktopEntryName       The DesktopEntryName.
+        * @return                       The translated Name of the plugin, from Name= line in .desktop file.
+        */
+        QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
+
+        /**
+         * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
+         * @param name                   The translated plugin name.  From Name= line in .desktop file.
+         * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+         *                               QString::null if not found.
+         */
+        QString FilterNameToDesktopEntryName(const QString& name);
+
+        /**
+         * Uses KTrader to convert a DesktopEntryName into a translated Filter Plugin Name.
+         * @param desktopEntryName       The DesktopEntryName.
+         * @return                       The translated Name of the plugin, from Name= line in .desktop file.
+         */
+        QString FilterDesktopEntryNameToName(const QString& desktopEntryName);
+
+        /**
         * Main widget
         */
         KCMKttsMgrWidget *m_kttsmgrw;

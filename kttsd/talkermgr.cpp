@@ -75,8 +75,22 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             // Set the group for the language we're loading
             config->setGroup("Talker_" + talkerID);
 
-            // Get the name of the plug in we will try to load
-            QString plugInName = config->readEntry("PlugIn", QString::null);
+            // Get the DesktopEntryName of the plugin we will try to load.
+            QString desktopEntryName = config->readEntry("DesktopEntryName", QString::null);
+
+            // If a DesktopEntryName is not in the config file, it was configured before
+            // we started using them, when we stored translated plugin names instead.
+            // Try to convert the translated plugin name to a DesktopEntryName.
+            // DesktopEntryNames are better because user can change their desktop language
+            // and DesktopEntryName won't change.
+            if (desktopEntryName.isEmpty())
+            {
+                QString synthName = config->readEntry("PlugIn", QString::null);
+                // See if the translated name will untranslate.  If not, well, sorry.
+                desktopEntryName = TalkerNameToDesktopEntryName(synthName);
+                // Record the DesktopEntryName from now on.
+                if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
+            }
 
             // Get the talker code.
             QString talkerCode = config->readEntry("TalkerCode", QString::null);
@@ -87,7 +101,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
 
             // Query for all the KTTSD SynthPlugins and store the list in offers
             KTrader::OfferList offers = KTrader::self()->query(
-                    "KTTSD/SynthPlugin", QString("Name == '%1'").arg(plugInName));
+                "KTTSD/SynthPlugin", QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
             if(offers.count() > 1){
                 bad++;
@@ -113,16 +127,16 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                         if (speech->supportsAsync())
                         {
                             speech->init(config, "Talker_" + talkerID);
-                            // kdDebug() << "Plug in " << plugInName << " created successfully." << endl;
+                            // kdDebug() << "Plug in " << desktopEntryName << " created successfully." << endl;
                             talkerInfo.plugIn = speech;
                         } else {
                             // Synchronous plugins are run in a separate thread.
                             // Init will start the thread and it will immediately go to sleep.
-                            QString threadedPlugInName = QString::fromLatin1("threaded") + plugInName;
+                            QString threadedPlugInName = QString::fromLatin1("threaded") + desktopEntryName;
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
                                     this, threadedPlugInName.latin1());
                             speechThread->init(config, "Talker_" + talkerCode);
-                            // kdDebug() << "Threaded Plug in " << plugInName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
+                            // kdDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
                             talkerInfo.plugIn = speechThread;
                         }
                         good++;
@@ -395,3 +409,20 @@ bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/)
             KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl");
 }
 
+/**
+ * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
+ * @param name                   The translated plugin name.  From Name= line in .desktop file.
+ * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+ *                               QString::null if not found.
+ */
+QString TalkerMgr::TalkerNameToDesktopEntryName(const QString& name)
+{
+    if (name.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+    QString("Name == '%1'").arg(name));
+
+    if (offers.count() == 1)
+        return offers[0]->desktopEntryName();
+    else
+        return QString::null;
+}
