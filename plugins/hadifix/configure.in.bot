@@ -3,9 +3,9 @@ if test "x$compile_hadifix_plugin" = "xyes"; then
     echo ""
     echo "======================================================"
     echo "Some of the tools needed to run Hadifix do not appear"
-    echo "to be installed on this system.  (mbrola and tx2pho
-    echo "were not found in the PATH or /etc/txt2pho was not
-    echo "found).  The Hadifix plugin will be built, but you need
+    echo "to be installed on this system.  (mbrola and txt2pho"
+    echo "were not found in the PATH or /etc/txt2pho was not"
+    echo "found).  The Hadifix plugin will be built, but you need"
     echo "to install the required tools before you can use it:"
     echo ""
     if test "x$hadifix_mbrola_bin" = "xno"; then
