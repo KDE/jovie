@@ -19,7 +19,9 @@ libkttsd_la_SOURCES = \
 	pluginconf.cpp \
 	testplayer.cpp \
 	stretcher.cpp \
-	talkercode.cpp
+	talkercode.cpp \
+	filterproc.cpp \
+	filterconf.cpp
 libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
 libkttsd_la_LIBADD = $(LIB_KIO)
 
