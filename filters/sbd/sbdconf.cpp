@@ -148,7 +148,7 @@ void SbdConf::save(KConfig* config, const QString& configGroup){
     config->writeEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text() );
     config->writeEntry("SentenceBoundary", m_widget->sbLineEdit->text() );
     config->writeEntry("LanguageCodes", m_languageCodeList );
-    config->writeEntry("AppID", m_widget->appIdLineEdit->text() );
+    config->writeEntry("AppID", m_widget->appIdLineEdit->text().replace(" ", "") );
 }
 
 /** 

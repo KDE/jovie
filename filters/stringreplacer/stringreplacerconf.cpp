@@ -295,7 +295,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     }
 
     // Application ID
-    QString appId = m_widget->appIdLineEdit->text();
+    QString appId = m_widget->appIdLineEdit->text().replace(" ", "");
     if ( !appId.isEmpty() )
     {
         QStringList appIdList = QStringList::split(",", appId);

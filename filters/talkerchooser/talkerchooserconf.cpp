@@ -216,7 +216,7 @@ void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
     config->setGroup( configGroup );
     config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry( "MatchRegExp", m_widget->reLineEdit->text() );
-    config->writeEntry( "AppIDs", m_widget->appIdLineEdit->text() );
+    config->writeEntry( "AppIDs", m_widget->appIdLineEdit->text().replace(" ", "") );
     QString val;
 
     val = m_languageCode;
