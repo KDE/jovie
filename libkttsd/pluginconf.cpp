@@ -16,23 +16,33 @@
  *                                                                         *
  ***************************************************************************/
 
-// $Id$
+// C++ library includes.
+#include <cstdlib>
 
+// Qt includes
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qstring.h>
+
+// PluginConf includes.
 #include "pluginconf.h"
 #include "pluginconf.moc"
 
 /**
- * Constructor 
- */
+* Constructor 
+*/
 PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, name){
-   kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
+    kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
+    QString systemPath(getenv("PATH"));
+    // kdDebug() << "Path is " << systemPath << endl;
+    m_path = QStringList::split(":", systemPath);
 }
 
 /**
- * Destructor 
- */
+* Destructor.
+*/
 PlugInConf::~PlugInConf(){
-   kdDebug() << "PlugInConf::~PlugInConf: Running" << endl;
+    kdDebug() << "PlugInConf::~PlugInConf: Running" << endl;
 }
 
 /**
@@ -49,7 +59,7 @@ PlugInConf::~PlugInConf(){
 *                    loading your configuration.
 */
 void PlugInConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
-   kdDebug() << "PlugInConf::load: Running" << endl;
+    kdDebug() << "PlugInConf::load: Running" << endl;
 }
 
 /**
@@ -63,7 +73,7 @@ void PlugInConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
 *                    saving your configuration.
 */
 void PlugInConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
-   kdDebug() << "PlugInConf::save: Running" << endl;
+    kdDebug() << "PlugInConf::save: Running" << endl;
 }
 
 /** 
@@ -74,7 +84,7 @@ void PlugInConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
 * be applied to the on-screen widgets; not to the config file.
 */
 void PlugInConf::defaults(){
-   kdDebug() << "PlugInConf::defaults: Running" << endl;
+    kdDebug() << "PlugInConf::defaults: Running" << endl;
 }
 
 /**
@@ -117,3 +127,32 @@ QString PlugInConf::getTalkerCode() { return QString::null; }
 * @return            A QStringList of supported language codes, or Null if unknown.
 */
 QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }
+
+/**
+* Return the full path to any program in the $PATH environmental variable
+* @param name        The name of the file to search for.
+* @returns           The path to the file on success, a blank QString
+*                    if its not found.
+*/
+QString PlugInConf::getLocation(const QString &name) {
+    // Iterate over the path and see if 'name' exists in it. Return the
+    // full path to it if it does. Else return an empty QString.
+    kdDebug() << "PluginConf::getLocation: Searching for " << name << " in the path.." << endl;
+    kdDebug() << m_path << endl;
+    for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
+        QString fullName = *it;
+        fullName += "/";
+        fullName += name;
+        // The user either has the directory of the file in the path...
+        if(QFile::exists(fullName)) {
+            return fullName;
+            kdDebug() << "PluginConf:getLocation: " << fullName << endl;
+        }
+        // ....Or the file itself
+        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+            return fullName;
+            kdDebug() << "PluginConf:getLocation: " << fullName << endl;
+        }
+    }
+    return "";
+}

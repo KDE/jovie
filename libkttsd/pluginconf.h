@@ -197,134 +197,147 @@
 *
 */
 class PlugInConf : public QWidget{
-   Q_OBJECT
+    Q_OBJECT
 
-   public:
-      /**
-      * Constructor 
-      */
-      PlugInConf( QWidget *parent = 0, const char *name = 0);
+    public:
+        /**
+        * Constructor 
+        */
+        PlugInConf( QWidget *parent = 0, const char *name = 0);
 
-      /**
-      * Destructor 
-      */
-      virtual ~PlugInConf();
+        /**
+        * Destructor 
+        */
+        virtual ~PlugInConf();
 
-      /**
-      * This method is invoked whenever the module should read its 
-      * configuration (most of the times from a config file) and update the 
-      * user interface. This happens when the user clicks the "Reset" button in 
-      * the control center, to undo all of his changes and restore the currently 
-      * valid settings.  Note that KTTSMGR calls this when the plugin is
-      * loaded, so it not necessary to call it in your constructor.
-      * The plugin should read its configuration from the specified group
-      * in the specified config file.
-      * @param config      Pointer to a KConfig object.
-      * @param configGroup Call config->setGroup with this argument before
-      *                    loading your configuration.
-      *
-      * When a plugin is first added to KTTSMGR, @e load will be called with
-      * a Null @e configGroup.  In this case, the plugin will not have
-      * any instance-specific parameters to load, but it may still wish
-      * to load parameters that apply to all instances of the plugin.
-      * 
-      * @see loadandsavemethods
-      */
-      virtual void load(KConfig *config, const QString &configGroup);
+        /**
+        * This method is invoked whenever the module should read its 
+        * configuration (most of the times from a config file) and update the 
+        * user interface. This happens when the user clicks the "Reset" button in 
+        * the control center, to undo all of his changes and restore the currently 
+        * valid settings.  Note that KTTSMGR calls this when the plugin is
+        * loaded, so it not necessary to call it in your constructor.
+        * The plugin should read its configuration from the specified group
+        * in the specified config file.
+        * @param config      Pointer to a KConfig object.
+        * @param configGroup Call config->setGroup with this argument before
+        *                    loading your configuration.
+        *
+        * When a plugin is first added to KTTSMGR, @e load will be called with
+        * a Null @e configGroup.  In this case, the plugin will not have
+        * any instance-specific parameters to load, but it may still wish
+        * to load parameters that apply to all instances of the plugin.
+        * 
+        * @see loadandsavemethods
+        */
+        virtual void load(KConfig *config, const QString &configGroup);
 
-      /**
-      * This function gets called when the user wants to save the settings in 
-      * the user interface, updating the config files or wherever the 
-      * configuration is stored. The method is called when the user clicks "Apply" 
-      * or "Ok". The plugin should save its configuration in the specified
-      * group of the specified config file.
-      * @param config      Pointer to a KConfig object.
-      * @param configGroup Call config->setGroup with this argument before
-      *                    saving your configuration.
-      */
-      virtual void save(KConfig *config, const QString &configGroup);
+        /**
+        * This function gets called when the user wants to save the settings in 
+        * the user interface, updating the config files or wherever the 
+        * configuration is stored. The method is called when the user clicks "Apply" 
+        * or "Ok". The plugin should save its configuration in the specified
+        * group of the specified config file.
+        * @param config      Pointer to a KConfig object.
+        * @param configGroup Call config->setGroup with this argument before
+        *                    saving your configuration.
+        */
+        virtual void save(KConfig *config, const QString &configGroup);
 
-      /** 
-      * This function is called to set the settings in the module to sensible
-      * default values. It gets called when hitting the "Default" button. The 
-      * default values should probably be the same as the ones the application 
-      * uses when started without a config file.  Note that defaults should
-      * be applied to the on-screen widgets; not to the config file.
-      */
-      virtual void defaults();
+        /** 
+        * This function is called to set the settings in the module to sensible
+        * default values. It gets called when hitting the "Default" button. The 
+        * default values should probably be the same as the ones the application 
+        * uses when started without a config file.  Note that defaults should
+        * be applied to the on-screen widgets; not to the config file.
+        */
+        virtual void defaults();
       
-      /**
-      * Indicates whether the plugin supports multiple instances.  Return
-      * False if only one instance of the plugin can run at a time, or
-      * if your plugin is limited to a single language, voice, gender, volume,
-      * and speed.
-      * @return            True if multiple instances are possible.
-      */
-      virtual bool supportsMultiInstance();
+        /**
+        * Indicates whether the plugin supports multiple instances.  Return
+        * False if only one instance of the plugin can run at a time, or
+        * if your plugin is limited to a single language, voice, gender, volume,
+        * and speed.
+        * @return            True if multiple instances are possible.
+        */
+        virtual bool supportsMultiInstance();
       
-      /**
-      * This function informs the plugin of the desired language to be spoken
-      * by the plugin.  The plugin should attempt to adapt itself to the
-      * specified language code, choosing sensible defaults if necessary.
-      * If the passed-in code is QString::null, no specific language has
-      * been chosen.
-      * @param lang        The desired language code or Null if none.
-      *
-      * If the plugin is unable to support the desired language, that is OK.
-      * Language codes are given by ISO 639-1 and are in lowercase.
-      * The code may also include an ISO 3166 country code in uppercase
-      * separated from the language code by underscore (_).  For
-      * example, en_GB.  If your plugin supports the given language, but
-      * not the given country, treat it as though the country
-      * code were not specified, i.e., adapt to the given language.
-      */
-      virtual void setDesiredLanguage(const QString lang);
+        /**
+        * This function informs the plugin of the desired language to be spoken
+        * by the plugin.  The plugin should attempt to adapt itself to the
+        * specified language code, choosing sensible defaults if necessary.
+        * If the passed-in code is QString::null, no specific language has
+        * been chosen.
+        * @param lang        The desired language code or Null if none.
+        *
+        * If the plugin is unable to support the desired language, that is OK.
+        * Language codes are given by ISO 639-1 and are in lowercase.
+        * The code may also include an ISO 3166 country code in uppercase
+        * separated from the language code by underscore (_).  For
+        * example, en_GB.  If your plugin supports the given language, but
+        * not the given country, treat it as though the country
+        * code were not specified, i.e., adapt to the given language.
+        */
+        virtual void setDesiredLanguage(const QString lang);
       
-      /**
-      * Return fully-specified talker code for the configured plugin.  This code
-      * uniquely identifies the configured instance of the plugin and distinquishes
-      * one instance from another.  If the plugin has not been fully configured,
-      * i.e., cannot yet synthesize, return QString::null.
-      * @return            Fully-specified talker code.
-      */
-      virtual QString getTalkerCode();
+        /**
+        * Return fully-specified talker code for the configured plugin.  This code
+        * uniquely identifies the configured instance of the plugin and distinquishes
+        * one instance from another.  If the plugin has not been fully configured,
+        * i.e., cannot yet synthesize, return QString::null.
+        * @return            Fully-specified talker code.
+        */
+        virtual QString getTalkerCode();
       
-      /**
-      * Return a list of all the languages possibly supported by the plugin.
-      * If your plugin can support any language, return Null.
-      * @return            A QStringList of supported language and optional country
-      *                    codes, or Null if any.
-      *
-      * The languge codes are given in ISO 639-1.  Lowercase should be used.
-      * If your plugin supports various national forms of a language, ISO 3166
-      * country codes should also be include in upperase and separated from
-      * the language code with underscore (_).  Examples:
-      *   en
-      *   en_US
-      *   en_GB
-      *   es
-      *   es_CL
-      * The list you return should be as specific as practicable.
-      */
-      virtual QStringList getSupportedLanguages();
+        /**
+        * Return a list of all the languages possibly supported by the plugin.
+        * If your plugin can support any language, return Null.
+        * @return            A QStringList of supported language and optional country
+        *                    codes, or Null if any.
+        *
+        * The languge codes are given in ISO 639-1.  Lowercase should be used.
+        * If your plugin supports various national forms of a language, ISO 3166
+        * country codes should also be include in upperase and separated from
+        * the language code with underscore (_).  Examples:
+        *   en
+        *   en_US
+        *   en_GB
+        *   es
+        *   es_CL
+        * The list you return should be as specific as practicable.
+        */
+        virtual QStringList getSupportedLanguages();
 
-   public slots:
-      /**
-      * This slot is used internally when the configuration is changed.  It is
-      * typically connected to signals from the widgets of the configuration
-      * and should emit the @ref changed signal.
-      */
-      void configChanged(){
-         kdDebug() << "PlugInConf::configChanged: Running"<< endl;
-         emit changed(true);
-      };
+    public slots:
+        /**
+        * This slot is used internally when the configuration is changed.  It is
+        * typically connected to signals from the widgets of the configuration
+        * and should emit the @ref changed signal.
+        */
+        void configChanged(){
+            kdDebug() << "PlugInConf::configChanged: Running"<< endl;
+            emit changed(true);
+        };
 
-   signals:
-      /**
-      * This signal indicates that the configuration has been changed.
-      * It should be emitted whenever user changes something in the configuration widget.
-      */
-      void changed(bool);
+    signals:
+        /**
+        * This signal indicates that the configuration has been changed.
+        * It should be emitted whenever user changes something in the configuration widget.
+        */
+        void changed(bool);
+      
+    protected:
+        /**
+        * Searches the $PATH variable for any file. If that file exists in the PATH, or
+        * is contained in any directory in the PATH, it returns the full path to it.
+        * @param name        The name of the file to search for.
+        * @returns           The path to the file on success, a blank QString
+        *                    if its not found.
+        */
+        QString getLocation(const QString &name);
+
+        /// The system path in a QStringList.
+        QStringList m_path;      
 };
 
 #endif  //_PLUGINCONF_H_
