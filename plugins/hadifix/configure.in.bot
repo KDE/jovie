@@ -1,0 +1,36 @@
+if test "x$compile_hadifix_plugin" = "xyes"; then
+  if test "x$hadifix_inst" = "xno"; then
+    echo ""
+    echo "======================================================"
+    echo "Some of the tools needed to run Hadifix do not appear"
+    echo "to be installed on this system.  The Hadifix plugin"
+    echo "will be built, but you need to install the required"
+    echo "tools before you can use it:"
+    echo ""
+    if test "x$hadifix_mbrola_bin" = "xno"; then
+      echo "- mbrola was not found. You can get it from"
+      echo "  http://tcts.fpms.ac.be/synthesis/mbrola.html"
+    fi
+    if test "x$hadifix_txt2pho_bin" = "xno"; then
+      echo "- txt2pho was not found. You can get it from"
+      echo "  http://www.ikp.uni-bonn.de/dt/forsch/phonetik/"
+      echo "                        hadifix/HADIFIXforMBROLA.html"
+    fi
+    echo ""
+    echo "Please read the README file for further information."
+    echo "====================================================="
+    all_tests=bad
+  fi
+  if test "x$hadifix_inst" = "xyes"; then
+    if test "x$hadifix_txt2pho" = "xno"; then
+      echo ""
+      echo "======================================================"
+      echo "The configuration file /etc/txt2pho was not found on"
+      echo "this system. This is no problem as long as all users"
+      echo "have a valid ~/.txt2phorc in their home directories if"
+      echo "they want to use the Hadifix plugin."
+      echo "======================================================"
+    fi
+  fi
+fi
+
