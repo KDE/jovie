@@ -628,6 +628,9 @@ void KCMKttsMgr::save()
         QListViewItem* nextSbdItem = sbdItem->itemBelow();
         QString filterID = sbdItem->text(slvcFilterID);
         filterIDsList.append(filterID);
+        m_config->setGroup("Filter_" + filterID);
+        m_config->writeEntry("Enabled", true);
+        m_config->writeEntry("IsSBD", true);
         sbdItem = nextSbdItem;
     }
     QString filterIDs = filterIDsList.join(",");
@@ -1831,6 +1834,12 @@ int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
     while (item)
     {
         if (item->text(flvcPlugInName) == filterPlugInName) ++cnt;
+        item = item->nextSibling();
+    }
+    item = m_kttsmgrw->sbdsList->firstChild();
+    while (item)
+    {
+        if (item->text(slvcPlugInName) == filterPlugInName) ++cnt;
         item = item->nextSibling();
     }
     return cnt;

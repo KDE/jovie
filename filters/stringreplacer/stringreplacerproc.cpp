@@ -88,18 +88,25 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
     // QDomNode nameNode = nameList.item( 0 );
     // m_widget->nameLineEdit->setText( nameNode.toElement().text() );
 
-    // Language Code setting.
+    // Language Codes setting.  List may be single element of comma-separated values,
+    // or multiple elements.
+    m_languageCodeList.clear();
     QDomNodeList languageList = doc.elementsByTagName( "language-code" );
-    QDomNode languageNode = languageList.item( 0 );
-    m_languageCode = languageNode.toElement().text();
+    for ( uint ndx=0; ndx < languageList.count(); ++ndx )
+    {
+        QDomNode languageNode = languageList.item( ndx );
+        m_languageCodeList += QStringList::split(',', languageNode.toElement().text(), false);
+    }
 
     // AppId.  Apply this filter only if DCOP appId of application that queued
-    // the text contains this string.
+    // the text contains this string.  List may be single element of comma-separated values,
+    // or multiple elements.
+    m_appIdList.clear();
     QDomNodeList appIdList = doc.elementsByTagName( "appid" );
-    if (appIdList.count() > 0)
+    for ( uint ndx=0; ndx < appIdList.count(); ++ndx )
     {
-        QDomNode appIdNode = appIdList.item( 0 );
-        m_appId = appIdNode.toElement().text().latin1();
+        QDomNode appIdNode = appIdList.item( ndx );
+        m_appIdList += QStringList::split(',', appIdNode.toElement().text(), false);
     }
 
     // Word list.
@@ -154,12 +161,31 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
 /*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
 {
     // If language doesn't match, return input unmolested.
-    // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if language code "
-    //    << talkerCode->languageCode() << " matches " << m_languageCode << endl;
-    if (m_languageCode != talkerCode->languageCode()) return inputText;
+    if ( !m_languageCodeList.isEmpty() )
+    {
+        QString languageCode = talkerCode->languageCode();
+        if ( !talkerCode->countryCode().isEmpty() ) languageCode += '_' + talkerCode->countryCode();
+        // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if language code "
+        //     << languageCode << " matches " << m_languageCodeList << endl;
+        if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
+    }
     // If appId doesn't match, return input unmolested.
-    if ( !m_appId.isEmpty() )
-        if ( !appId.contains(m_appId) ) return inputText;
+    if ( !m_appIdList.isEmpty() )
+    {
+        // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if appId "
+        //     << appId << " matches " << m_appIdList << endl;
+        bool found = false;
+        QString appIdStr = appId;
+        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        {
+            if ( !appIdStr.contains(m_appIdList[ndx]) )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) return inputText;
+    }
     QString newText = inputText;
     const int listCount = m_matchList.count();
     for ( int index = 0; index < listCount; index++ )

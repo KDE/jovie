@@ -24,6 +24,7 @@
 #include <qtextstream.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
+#include <qstringlist.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -66,10 +67,10 @@ public:
     virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
 private:
-    // Language supported by the filter.
-    QString m_languageCode;
-    // If not empty, apply filter only to apps containing this string.
-    QCString m_appId;
+    // Language codes supported by the filter.
+    QStringList m_languageCodeList;
+    // If not empty, apply filter only to apps containing one or more of these strings.
+    QStringList m_appIdList;
 
     // List of regular expressions to match.
     QValueList<QRegExp> m_matchList;

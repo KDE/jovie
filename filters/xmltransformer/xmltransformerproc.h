@@ -20,6 +20,7 @@
 
 // Qt includes.
 #include <qobject.h>
+#include <qstringlist.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -126,12 +127,12 @@ private:
     // Process output when xsltproc exits.
     void processOutput();
 
-    // If not empty, only apply to text queued by an application containing this string.
-    QCString m_appId;
+    // If not empty, only apply to text queued by an applications containing one of these strings.
+    QStringList m_appIdList;
     // If not empty, only apply to XML that has the specified root element.
-    QString m_rootElement;
+    QStringList m_rootElementList;
     // If not empty, only apply to XML that has the specified DOCTYPE spec.
-    QString m_doctype;
+    QStringList m_doctypeList;
     // The text that is being filtered.
     QString m_text;
     // Processing state.

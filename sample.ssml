@@ -1,1 +1,1 @@
-<speak><p><voice gender="male">Hello there, <prosody rate="x-slow">this is some extra slow text</prosody> and here <prosody pitch="high" rate="fast">is some fast high text</prosody></voice></p></speak>
+<speak><p><voice gender="male">Hello there.<prosody rate="x-slow">This is some extra slow text</prosody> and here <prosody pitch="high" rate="fast">is some fast high text</prosody></voice></p></speak>

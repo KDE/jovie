@@ -115,11 +115,16 @@ class StringReplacerConf : public KttsFilterConf
     private slots:
         void slotLanguageBrowseButton_clicked();
         void slotAddButton_clicked();
+        void slotUpButton_clicked();
+        void slotDownButton_clicked();
         void slotEditButton_clicked();
         void slotRemoveButton_clicked();
         void slotMatchLineEdit_textChanged(const QString& text);
         void slotTypeButtonGroup_clicked();
         void slotMatchButton_clicked();
+        void slotLoadButton_clicked();
+        void slotSaveButton_clicked();
+        void slotClearButton_clicked();
 
         // EnablesDisables buttons depending upon current item in list view.
         void enableDisableButtons();
@@ -129,6 +134,11 @@ class StringReplacerConf : public KttsFilterConf
         QString substitutionTypeToString(const int substitutionType);
         // Displays the add/edit string replacement dialog.
         void addOrEditSubstitution(bool isAdd);
+        // Loads word list and settings from a file.  Clearing configuration if clear is True.
+        QString loadFromFile( const QString& filename, bool clear);
+        // Saves word list and settings to a file.
+        QString saveToFile( const QString& filename );
+
 
         // Configuration Widget.
         StringReplacerConfWidget* m_widget;
@@ -137,8 +147,8 @@ class StringReplacerConf : public KttsFilterConf
         EditReplacementWidget* m_editWidget;
         // True if kdeutils Regular Expression Editor is installed.
         bool m_reEditorInstalled;
-        // Language Code.
-        QString m_languageCode;
+        // Language Codes.
+        QStringList m_languageCodeList;
 };
 
 #endif  //_STRINGREPLACERCONF_H_

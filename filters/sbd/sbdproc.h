@@ -48,7 +48,7 @@
 class TalkerCode;
 class KConfig;
 class QDomElement;
-class QDomDocument;
+class QDomNode;
 
 class SbdThread: public QObject, public QThread
 {
@@ -165,7 +165,10 @@ class SbdThread: public QObject, public QThread
         // Given a tag name, returns SsmlElemType.
         SsmlElemType tagToSsmlElemType(const QString tagName);
         // Parses an SSML element, pushing current settings onto the context stack.
-        void pushSsmlElem( SsmlElemType et, const QDomElement& e );
+        void pushSsmlElem( SsmlElemType et, const QDomElement& elem );
+        // Given an attribute name and value, constructs an XML representation of the attribute,
+        // i.e., name="value".
+        QString makeAttr( const QString& name, const QString& value );
         // Returns an XML representation of an SSML tag from the top of the context stack.
         QString makeSsmlElem( SsmlElemType et );
         // Pops element from the indicated context stack.
@@ -211,7 +214,7 @@ class SbdProc : virtual public KttsFilterProc
         /**
          * Constructor.
          */
-        SbdProc( QObject *parent, const char *name );
+        SbdProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
 
         /**
          * Destructor.

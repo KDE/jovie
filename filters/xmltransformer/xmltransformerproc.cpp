@@ -68,9 +68,9 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     m_UserFilterName = config->readEntry( "UserFilterName" );
     m_xsltFilePath = config->readEntry( "XsltFilePath" );
     m_xsltprocPath = config->readEntry( "XsltprocPath" );
-    m_rootElement = config->readEntry( "Root Element" );
-    m_doctype = config->readEntry( "DocType" );
-    m_appId = config->readEntry( "AppID" ).latin1();
+    m_rootElementList = config->readListEntry( "Root Element", "," );
+    m_doctypeList = config->readListEntry( "DocType", "," );
+    m_appIdList = config->readListEntry( "AppID", "," );
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );
 }
 
@@ -132,14 +132,50 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return false;
 
     // If not correct XML type, do nothing.
-    if ( !m_rootElement.isEmpty() )
-        if ( !KttsUtils::hasRootElement( inputText, m_rootElement ) ) return false;
-    if ( !m_doctype.isEmpty() )
-        if ( !KttsUtils::hasDoctype( inputText, m_doctype ) ) return false;
+    if ( !m_rootElementList.isEmpty() )
+    {
+        bool found = false;
+        for ( uint ndx=0; ndx < m_rootElementList.count(); ++ndx )
+        {
+            if ( KttsUtils::hasRootElement( inputText, m_rootElementList[ndx] ) )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) return false;
+    }
+    if ( !m_doctypeList.isEmpty() )
+    {
+        bool found = false;
+        for ( uint ndx=0; ndx < m_rootElementList.count(); ++ndx )
+        {
+            if ( KttsUtils::hasDoctype( inputText, m_doctypeList[ndx] ) )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) return false;
+    }
 
     // If appId doesn't match, return input unmolested.
-    if ( !m_appId.isEmpty() )
-        if ( !appId.contains(m_appId) ) return false;
+    if ( !m_appIdList.isEmpty() )
+    {
+        QString appIdStr = appId;
+        // kdDebug() << "XmlTransformrProc::convert: converting " << inputText << " if appId "
+        //     << appId << " matches " << m_appIdList << endl;
+        bool found = false;
+        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        {
+            if ( !appIdStr.contains(m_appIdList[ndx]) )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) return false;
+    }
 
     /// Write @param text to a temporary file.
     KTempFile inFile(locateLocal("tmp", "kttsd-"), ".xml");
