@@ -421,6 +421,9 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     QString countryCode;
     QString charSet;
     QString language;
+    // Blank line so user can select no language.
+    QListViewItem* item = new KListViewItem(langLView, "", "");
+    if (m_languageCodeList.isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ndx++)
     {
@@ -429,7 +432,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        QListViewItem* item = new KListViewItem(langLView, language, locale);
+        item = new KListViewItem(langLView, language, locale);
         if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
