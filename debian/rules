@@ -77,7 +77,8 @@ configure-stamp:
 	touch configure-stamp
 
 #Architecture
-build: build-arch build-indep
+build: build-arch
+# build: build-arch build-indep
 
 build-arch: build-arch-stamp
 build-arch-stamp: configure-stamp
