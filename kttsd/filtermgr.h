@@ -136,6 +136,12 @@ class FilterMgr : public KttsFilterProc
          */
         virtual void setSbRegExp(const QString& re);
 
+        /**
+         * Do not call SBD filters.
+         */
+        void setNoSBD(bool noSBD);
+        bool noSBD();
+
     protected:
         bool event ( QEvent * e );
 
@@ -168,6 +174,8 @@ class FilterMgr : public KttsFilterProc
         bool m_wasModified;
         // FilterMgr state.
         int m_state;
+        // True if SBD Filters should not be called.
+        bool m_noSBD;
 };
 
 #endif      // _FILTERMGR_H_

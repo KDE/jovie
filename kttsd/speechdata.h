@@ -573,7 +573,7 @@ class SpeechData : public QObject {
         /**
         * Queue of messages
         */
-        QPtrQueue<mlText> messages;
+        QPtrQueue<mlJob> messages;
 
         /**
         * Queue of text jobs.
@@ -662,7 +662,7 @@ class SpeechData : public QObject {
         /**
         * Assigns a FilterMgr to a job and starts filtering on it.
         */
-        void startJobFiltering(mlJob* job, const QString& text);
+        void startJobFiltering(mlJob* job, const QString& text, bool noSBD);
 
         /**
         * Waits for filtering to be completed on a job.

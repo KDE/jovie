@@ -35,6 +35,8 @@ FilterMgr::FilterMgr( QObject *parent, const char *name) :
 {
     // kdDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;
+    m_noSBD = false;
+    m_talkerCode = 0;
 }
 
 /**
@@ -157,10 +159,14 @@ void FilterMgr::nextFilter()
 {
     if ( m_filterProc )
     {
-        m_text = m_filterProc->getOutput();
-        m_filterProc->ackFinished();
-        if ( m_async )
+        if ( m_filterProc->supportsAsync() )
+        {
+            m_text = m_filterProc->getOutput();
+            m_filterProc->ackFinished();
             disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+        }
+        // if ( m_filterProc->wasModified() )
+        //     kdDebug() << "FilterMgr::nextFilter: Filter# " << m_filterIndex << " modified the text." << endl;
         if ( m_filterProc->wasModified() && m_filterProc->isSBD() )
         {
             m_state = fsFinished;
@@ -180,23 +186,33 @@ void FilterMgr::nextFilter()
         return;
     }
     m_filterProc = m_filterList.at(m_filterIndex);
+    if ( m_noSBD && m_filterProc->isSBD() )
+    {
+        m_state = fsFinished;
+        // Post an event which will be later emitted as a signal.
+        QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
+        QApplication::postEvent(this, ev);
+        return;
+    }
     m_filterProc->setSbRegExp( m_re );
     if ( m_async )
     {
-        // kdDebug() << "FilterMgr::nextFilter: calling asyncConvert on filter " << m_filterIndex << endl;
-        connect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-        if ( !m_filterProc->asyncConvert( m_text, m_talkerCode, m_appId ) )
+        if ( m_filterProc->supportsAsync() )
         {
-            disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-            m_filterProc = 0;
+            // kdDebug() << "FilterMgr::nextFilter: calling asyncConvert on filter " << m_filterIndex << endl;
+            connect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+            if ( !m_filterProc->asyncConvert( m_text, m_talkerCode, m_appId ) )
+            {
+                disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+                m_filterProc = 0;
+                nextFilter();
+            }
+        } else {
+            m_text = m_filterProc->convert( m_text, m_talkerCode, m_appId );
             nextFilter();
         }
     } else
-        if ( !m_filterProc->convert( m_text, m_talkerCode, m_appId ) )
-        {
-            m_filterProc = 0;
-            nextFilter();
-        }
+        m_text = m_filterProc->convert( m_text, m_talkerCode, m_appId );
 }
 
 // Received when each filter finishes.
@@ -282,6 +298,12 @@ void FilterMgr::stopFiltering()
 {
     m_re = re;
 }
+
+/**
+ * Do not call SBD filters.
+ */
+void FilterMgr::setNoSBD(bool noSBD) { m_noSBD = noSBD; }
+bool FilterMgr::noSBD() { return m_noSBD; }
 
 // Loads the processing plug in for a named filter plug in.
 KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& plugInName)

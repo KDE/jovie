@@ -185,12 +185,17 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
                 break;
             }
         }
-        if ( !found ) return inputText;
+        if ( !found )
+        {
+            // kdDebug() << "StringReplacerProc::convert: appId not found" << endl;
+            return inputText;
+        }
     }
     QString newText = inputText;
     const int listCount = m_matchList.count();
     for ( int index = 0; index < listCount; index++ )
     {
+        //kdDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index] << endl;
         newText.replace( m_matchList[index], m_substList[index] );
     }
     m_wasModified = true;

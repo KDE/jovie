@@ -221,6 +221,24 @@ bool SpeechData::warningInQueue(){
 */
 void SpeechData::enqueueMessage( const QString &message, const QString &talker, const QCString& appId){
     // kdDebug() << "Running: SpeechData::enqueueMessage" << endl;
+    mlJob* job = new mlJob();
+    ++jobCounter;
+    if (jobCounter == 0) ++jobCounter;  // Overflow is OK, but don't want any 0 jobNums.
+    uint jobNum = jobCounter;
+    job->jobNum = jobNum;
+    job->talker = talker;
+    job->appId = appId;
+    job->seq = 1;
+    messages.enqueue( job );
+    // If message came from knotify, filter it, otherwise, do not filter.
+    if (appId.left(7) == "knotify")
+    {
+        job->sentences = QStringList();
+        // Do not apply Sentence Boundary Detection filters to messages.
+        startJobFiltering( job, message, true );
+    } else
+        job->sentences = message;
+    /*
     mlText *temp = new mlText();
     temp->text = message;
     temp->talker = talker;
@@ -229,6 +247,7 @@ void SpeechData::enqueueMessage( const QString &message, const QString &talker, 
     messages.enqueue( temp );
     // uint count = messages.count();
     // kdDebug() << "Adding '" << temp->text << "' with talker '" << temp->talker << "' from application " << appId << " to the messages queue leaving a total of " << count << " items." << endl;
+    */
 }
 
 /**
@@ -239,8 +258,17 @@ void SpeechData::enqueueMessage( const QString &message, const QString &talker, 
 */
 mlText* SpeechData::dequeueMessage(){
     // kdDebug() << "Running: SpeechData::dequeueMessage()" << endl;
-    mlText *temp = messages.dequeue();
-    // uint count = warnings.count();
+    mlJob* job = messages.dequeue();
+    waitJobFiltering(job);
+    mlText* temp = new mlText();
+    temp->jobNum = job->jobNum;
+    temp->text = job->sentences.join("");
+    temp->talker = job->talker;
+    temp->appId = job->appId;
+    temp->seq = 1;
+    delete job;
+    /* mlText *temp = messages.dequeue(); */
+    // uint count = messages.count();
     // kdDebug() << "Removing '" << temp->text << "' with talker '" << temp->talker << "' from the messages queue leaving a total of " << count << " items." << endl;
     return temp;
 }
@@ -329,7 +357,9 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
 {
     // kdDebug() << "Running: SpeechData::setText" << endl;
     mlJob* job = new mlJob;
-    uint jobNum = ++jobCounter;
+    ++jobCounter;
+    if (jobCounter == 0) ++jobCounter;  // Overflow is OK, but don't want any 0 jobNums.
+    uint jobNum = jobCounter;
     job->jobNum = jobNum;
     job->appId = appId;
     job->talker = talker;
@@ -345,7 +375,7 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
     job->sentences = QStringList();
     job->partSeqNums = QValueList<int>();
     textJobs.append(job);
-    startJobFiltering(job, text);
+    startJobFiltering(job, text, false);
 #endif
     return jobNum;
 }
@@ -382,7 +412,7 @@ int SpeechData::appendText(const QString &text, const uint jobNum, const QCStrin
         emit textAppended(job->appId, jobNum, newPartNum);
 #else
         newPartNum = job->partSeqNums.count() + 1;
-        startJobFiltering(job, text);
+        startJobFiltering(job, text, false);
 #endif
     }
     return newPartNum;
@@ -658,7 +688,7 @@ mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSe
         temp->jobNum = job->jobNum;
         temp->seq = seq;
         // kdDebug() << "SpeechData::getNextSentenceText: return job number " << temp->jobNum << " seq " << temp->seq << endl;
-    } else kdDebug() << "SpeechData::getNextSentenceText: no more sentences in queue" << endl;
+    } // else kdDebug() << "SpeechData::getNextSentenceText: no more sentences in queue" << endl;
     return temp;
 }
 
@@ -972,7 +1002,7 @@ uint SpeechData::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
 /**
 * Assigns a FilterMgr to a job and starts filtering on it.
 */
-void SpeechData::startJobFiltering(mlJob* job, const QString& text)
+void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
 {
     // If filtering is already in progress for this job, do nothing.
     uint jobNum = job->jobNum;
@@ -1006,6 +1036,7 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text)
     // Flag the FilterMgr as busy and set it going.
     pooledFilterMgr->busy = true;
     pooledFilterMgr->job = job;
+    pooledFilterMgr->filterMgr->setNoSBD( noSBD );
     // Get TalkerCode structure of closest matching Talker.
     pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
     // Pass Sentence Boundary regular expression (if app overrode default);
@@ -1028,8 +1059,9 @@ void SpeechData::waitJobFiltering(const mlJob* job)
     if (!pooledFilterMgr) return;
     if (pooledFilterMgr->busy)
     {
-        kdDebug() << "SpeechData::waitJobFiltering: Waiting for filter to finish.  Not optimium.  " <<
-            "Try waiting for textSet signal before querying for job information." << endl;
+        if (!pooledFilterMgr->filterMgr->noSBD())
+            kdDebug() << "SpeechData::waitJobFiltering: Waiting for filter to finish.  Not optimium.  " <<
+                "Try waiting for textSet signal before querying for job information." << endl;
         pooledFilterMgr->filterMgr->waitForFinished();
         doFiltering();
     }
@@ -1068,21 +1100,29 @@ void SpeechData::doFiltering()
                     // TalkerCode object no longer needed.
                     delete pooledFilterMgr->talkerCode;
                     pooledFilterMgr->talkerCode = 0;
-                    // Split the text into sentences and store in the job.
-                    // The SBD plugin does all the real sentence parsing, inserting tabs at each
-                    // sentence boundary.
-                    QStringList sentences = QStringList::split("\t", text, false);
-                    int sentenceCount = job->sentences.count();
-                    job->sentences += sentences;
-                    job->partSeqNums.append(sentenceCount + sentences.count());
+                    if (filterMgr->noSBD())
+                        job->sentences = text;
+                    else
+                    {
+                        // Split the text into sentences and store in the job.
+                        // The SBD plugin does all the real sentence parsing, inserting tabs at each
+                        // sentence boundary.
+                        QStringList sentences = QStringList::split("\t", text, false);
+                        int sentenceCount = job->sentences.count();
+                        job->sentences += sentences;
+                        job->partSeqNums.append(sentenceCount + sentences.count());
+                    }
                     int partNum = job->partSeqNums.count();
                     // Clean up.
                     pooledFilterMgr->job = 0;
                     // Emit signal.
-                    if (partNum == 1)
-                        emit textSet(job->appId, job->jobNum);
-                    else
-                        emit textAppended(job->appId, job->jobNum, partNum);
+                    if (!filterMgr->noSBD())
+                    {
+                        if (partNum == 1)
+                            emit textSet(job->appId, job->jobNum);
+                        else
+                            emit textAppended(job->appId, job->jobNum, partNum);
+                    }
                 }
             }
         }

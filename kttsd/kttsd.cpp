@@ -789,8 +789,8 @@ void KTTSD::configCommitted() {
 * This signal is emitted by KNotify when a notification event occurs.
 */
 void KTTSD::notificationSignal( const QString&, const QString&,
-                                     const QString &text, const QString&, const QString&,
-                                     const int present, const int, const int, const int )
+    const QString &text, const QString&, const QString&,
+    const int present, const int, const int, const int )
 {
     if (!m_speaker) return;
     if (!text.isNull())

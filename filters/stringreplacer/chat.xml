@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wordlist>
  <name>Internet Relay Chat and IM</name>
+ <appid>knotify</appid>
  <appid>konversation</appid>
  <appid>kvirc</appid>
  <appid>ksirc</appid>
  <appid>kopete</appid>
  <appid>gaim</appid>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[^<([^>]+)>]]></match>
+  <subst><![CDATA[\1 says ]]></subst>
+ </word>
  <word>
   <type>RegExp</type>
   <match><![CDATA[\s\;\)]]></match>
@@ -120,5 +126,35 @@
   <type>RegExp</type>
   <match><![CDATA[\s\(s\)]]></match>
   <subst><![CDATA[ sleepy]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[np]]></match>
+  <subst><![CDATA[no problem]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[atm]]></match>
+  <subst><![CDATA[at the moment]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[imho]]></match>
+  <subst><![CDATA[in my humble opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[IMHO]]></match>
+  <subst><![CDATA[in my humble opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[iirc]]></match>
+  <subst><![CDATA[if I recall correctly]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[IIRC]]></match>
+  <subst><![CDATA[if I recall correctly]]></subst>
  </word>
 </wordlist>
