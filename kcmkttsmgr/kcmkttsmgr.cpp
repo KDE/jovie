@@ -72,13 +72,13 @@ const bool embedInSysTrayCheckBoxValue = true;
 const bool showMainWindowOnStartupCheckBoxValue = true;
 
 const bool textPreMsgCheckValue = true;
-QString textPreMsgValue = i18n("Text interrupted. Message.");
+const QString textPreMsgValue = i18n("Text interrupted. Message.");
 
 const bool textPreSndCheckValue = false;
 const QString textPreSndValue = "";
 
 const bool textPostMsgCheckValue = true;
-QString textPostMsgValue = i18n("Resuming text.");
+const QString textPostMsgValue = i18n("Resuming text.");
 
 const bool textPostSndCheckValue = false;
 const QString textPostSndValue = "";
@@ -768,10 +768,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
             }
-            if (m_kttsmgrw->textPreMsg->text() != textPreMsgValue)
+            if (m_kttsmgrw->textPreMsg->text() != i18n(textPreMsgValue.utf8()))
             {
                 changed = true;
-                m_kttsmgrw->textPreMsg->setText(textPreMsgValue);
+                m_kttsmgrw->textPreMsg->setText(i18n(textPreMsgValue.utf8()));
             }
             if (m_kttsmgrw->textPreSndCheck->isChecked() != textPreSndCheckValue)
             {
@@ -788,10 +788,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 m_kttsmgrw->textPostMsgCheck->setChecked(textPostMsgCheckValue);
             }
-            if (m_kttsmgrw->textPostMsg->text() != textPostMsgValue)
+            if (m_kttsmgrw->textPostMsg->text() != i18n(textPostMsgValue.utf8()))
             {
                 changed = true;
-                m_kttsmgrw->textPostMsg->setText(textPostMsgValue);
+                m_kttsmgrw->textPostMsg->setText(i18n(textPostMsgValue.utf8()));
             }
             if (m_kttsmgrw->textPostSndCheck->isChecked() != textPostSndCheckValue)
             {
