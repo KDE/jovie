@@ -3,21 +3,7 @@
 <xsl:output method="text" encoding="ISO-8859-1" indent="no"/>
 
 <xsl:template match="speak">
-&lt;SABLE&gt;
-    <xsl:apply-templates/>
-&lt;/SABLE&gt;
-</xsl:template>
-
-<xsl:template match="//prosody">
-        <xsl:if test="@pitch='x-high'">
-&lt;PITCH BASE="50%"&gt;<xsl:value-of select="."/>&lt;/PITCH&gt;
-        </xsl:if>
-        <xsl:if test="@pitch='medium'">
 <xsl:value-of select="."/>
-        </xsl:if>
-        <xsl:if test="@pitch='x-low'">
-&lt;PITCH BASE="-50%"&gt;<xsl:value-of select="."/>&lt;/PITCH&gt;
-        </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
