@@ -9,4 +9,8 @@ libfestivalintplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 services_DATA = festivalint.desktop
 servicesdir = $(kde_servicesdir)
+
+festivalintdatadir = $(kde_datadir)/kttsd/festivalint/
+festivalintdata_DATA = voices
+
 noinst_HEADERS =  festivalintconfwidget.h

@@ -1,0 +1,71 @@
+[kal]
+Name=Kal
+Name[es]=Kal
+Language=en_US
+Code=voice_kal_diphone
+Comment=American Male
+Comment[es]=Americano masculino
+Path=english/kal_diphone/
+
+[ked]
+Name=Ked
+Name[es]=Ked
+Language=en_US
+Code=voice_ked_diphone
+Comment=American Male
+Comment[es]=Americano masculino
+Path=english/ked_diphone/
+
+[us1]
+Name=Us1
+Name[es]=Us1
+Language=en_US
+Code=voice_us1_mbrola
+Comment=American Female, MBROLA
+Comment[es]=Americana femenina, MBROLA
+Path=english/us1_mbrola/
+
+[us2]
+Name=Us2
+Name[es]=Us2
+Language=en_US
+Code=voice_us2_mbrola
+Comment=American Male, MBROLA
+Comment[es]=Americano masculino, MBROLA
+Path=english/us2_mbrola/
+
+[us3]
+Name=Us3
+Name[es]=Us3
+Language=en_US
+Code=voice_us3_mbrola
+Comment=American Male, MBROLA
+Comment[es]=Americano masculino, MBROLA
+Path=english/us3_mbrola/
+
+[don]
+Name=Don
+Name[es]=Don
+Language=en_GB
+Code=voice_don_diphone
+Comment=British Male
+Comment[es]=Britanico masculino
+Path=english/don_diphone/
+
+[rab]
+Name=Rab
+Name[es]=Rab
+Language=en_GB
+Code=voice_rab_diphone
+Comment=British Male
+Comment[es]=Britanico masculino
+Path=english/rab_diphone/
+
+[el]
+Name=El
+Name[es]=El
+Language=es
+Code=voice_el_diphone
+Comment=Spanish Male
+Comment[es]=Español masculino
+Path=spanish/el_diphone/

@@ -37,7 +37,7 @@
 #include "festivalintconf.moc"
 
 /** Constructor */
-FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStringList &args) :
+FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
    FestivalIntConfWidget( parent, name ){
    kdDebug() << "Running: FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStringList &args)" << endl;
    festivalVoicesPath->setMode(KFile::Directory);
@@ -57,7 +57,7 @@ void FestivalIntConf::load(KConfig *config, const QString &langGroup){
    this->forceArts->setChecked(config->readBoolEntry("Arts"));
    scanVoices();
    QString voiceSelected(config->readEntry("Voice"));
-   for(int index = 0 ; index < voiceList.count(); ++index){
+   for(uint index = 0 ; index < voiceList.count(); ++index){
       kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
       if(voiceSelected == voiceList[index].code){
          kdDebug() << "Match!" << endl;
@@ -85,7 +85,7 @@ void FestivalIntConf::scanVoices(){
    kdDebug() << "Running: FestivalIntConf::scanVoices()" << endl;
    voiceList.clear();
    selectVoiceCombo->clear();
-   KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festival/voices", true, false);
+   KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices", true, false);
    QStringList groupList = voices.groupList();
    QDir mainPath(this->festivalVoicesPath->url());
    voice voiceTemp;
@@ -97,7 +97,7 @@ void FestivalIntConf::scanVoices(){
          kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
          continue;
       } else {
-         kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " exist" << endl;
+         kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " exists" << endl;
       }
       voiceTemp.code = *it;
       voiceTemp.name = voices.readEntry("Name");
