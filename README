@@ -26,8 +26,8 @@ Requirements
 KDE 3.2.x and a speech synthesis engine, such as Festival.  Festival can be
 obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival is
 distributed with most Linux distros.  Check your distro CDs.  Also works
-with Hadifax or any command that can speak text, such as FreeTTS or Festival Lite
-(flite).
+with Hadifax, Epos, Festival Lite (flite),  or any command that can speak text,
+such as FreeTTS.
 
 Support
 -------
@@ -182,6 +182,7 @@ plugins            Plugins for KTTSD.  You must have at least one plugin to use 
   festivalcs         Plugin for Festival using Festival Client/Server mode.  Under development.
   hadifax            Plugin for Hadifax.
   freetts            Plugin for FreeTTS.
+  epos               Plugin for Epos.
   command            Generic command plugin.
 kttsd              KTTSD itself.  Non-interactive deamon.
 icons              Icon for kttsmgr and KTTSD.

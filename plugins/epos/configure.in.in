@@ -1,0 +1,22 @@
+dnl =========================================
+dnl checks for Festival Lite (epos)  Plug In
+dnl =========================================
+
+AC_ARG_ENABLE(kttsd-epos,
+              AC_HELP_STRING([--enable-kttsd-epos],
+                             [build KTTSD Epos plugin [default=yes]]),
+              epos_plugin=$enableval,
+              epos_plugin=yes)
+
+compile_epos_plugin="yes"
+
+if test "x$epos_plugin" = "xno"; then
+  compile_epos_plugin="no"
+fi
+
+dnl Check for epos executable.
+dnl Note that epos plugin is always built, unless
+dnl user overrides on configure command line.
+AC_PATH_PROG(epos_bindir, "epos", "no")
+
+AM_CONDITIONAL(include_kttsd_epos, test "x$compile_epos_plugin" != "xno")

@@ -1,3 +1,6 @@
+2004-08-08  Cramblitt <garycramblitt@comcast.net>
+        * Add plugin for Epos TTS Synthesis System (czech and slovak).
+        
 2004-08-07  Cramblitt <garycramblitt@comcast.net>
         * Existing release marked with tag ktts-0-1.
         * New version of KTTS is 0.2.

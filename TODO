@@ -18,7 +18,6 @@ _ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the 
 - kttsmgr is too tall for lower res screens, mostly because of Hadifax plugin.
   Use a vertical scroller in Properties tab and make entire screen smaller?
 _ IBM ViaVoice plugin?
-_ Ethos plugin?
 _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ Implement error signal handling in KTTSD.
 

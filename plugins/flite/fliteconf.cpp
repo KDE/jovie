@@ -21,12 +21,12 @@
 // Qt includes.
 #include <qfile.h>
 #include <qapplication.h>
+
+// KDE includes.
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
 #include <kplayobject.h>
 #include <kplayobjectfactory.h>
-
-// KDE includes.
 #include <ktempfile.h>
 #include <kstandarddirs.h>
 

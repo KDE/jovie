@@ -1,0 +1,15 @@
+if test "x$epos_bindir" = "xno"; then
+  if test "$compile_epos_plugin" = "yes"; then
+    echo ""
+    echo "======================================================="
+    echo "The Epos program does not appear to be"
+    echo "installed on this system.  The epos plugin will"
+    echo "be built, but you need to install epos before you"
+    echo "can use it.  You can get it at"
+    echo "  http://epos.ure.cas.cz/"
+    echo "Debian users: apt-get install epos"
+    echo "======================================================"
+    all_tests=bad
+  fi
+fi
+

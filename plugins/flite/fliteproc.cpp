@@ -21,7 +21,6 @@
 // Qt includes.
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qthread.h>
 
 // KDE includes.
 #include <kdebug.h>
