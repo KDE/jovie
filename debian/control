@@ -31,14 +31,14 @@ Description: KDE Text-to-Speech system
 
 Package: kttsd-dev
 Architecture: any
-Depends: kttsd, ${shlibs:Depends)
+Depends: kttsd, ${shlibs:Depends}
 Description: KDE Text-to-Speech system API developer files
  These are files needed to develop KDE applications that use
  the KDE Text-to-Speech system.
 
 Package: kttsd-appplugins
 Architecture: any
-Depends: kttsd, ${shlibs:Depends)
+Depends: kttsd, ${shlibs:Depends}
 Description: KDE Text-to-Speech system application plugins
  These are plugins for various KDE applications to enable them to
  speak text via the KDE Text-to-Speech system.
