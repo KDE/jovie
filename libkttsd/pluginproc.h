@@ -249,7 +249,7 @@ class PlugInProc : virtual public QObject{
         virtual ~PlugInProc();
 
         /**
-        * Initializate the speech engine.
+        * Initialize the speech engine.
         * @param config          Settings object.
         * @param configGroup     Settings Group.
         *

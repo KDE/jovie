@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 
 class TalkerCode;
+class KConfig;
 
 class KttsFilterProc : virtual public QObject
 {
@@ -39,6 +40,16 @@ public:
      * Destructor.
      */
     virtual ~KttsFilterProc();
+
+    /**
+     * Initialize the filter.
+     * @param config          Settings object.
+     * @param configGroup     Settings Group.
+     *
+     * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
+     * separate configuration files of their own.
+     */
+    virtual bool init(KConfig *config, const QString &configGroup);
 
     /**
      * Convert input, returning output.

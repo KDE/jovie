@@ -30,6 +30,26 @@ KttsFilterProc::KttsFilterProc( QObject *parent, const char *name, const QString
  */
 KttsFilterProc::~KttsFilterProc() { }
 
+/**
+ * Initialize the filter.
+ * @param config          Settings object.
+ * @param configGroup     Settings Group.
+ *
+ * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
+ * separate configuration files of their own.
+ */
+bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
+    // kdDebug() << "PlugInProc::init: Running" << endl;
+    return false;
+}
+
+/**
+ * Convert input, returning output.
+ * @param inputText         Input text.
+ * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
+ *                          use for synthing the text.  Useful for extracting hints about
+ *                          how to filter the text.  For example, languageCode.
+ */
 /*virtual*/ QString KttsFilterProc::convert(QString& inputText, TalkerCode* /*talkerCode*/)
 {
     return inputText;
