@@ -1017,7 +1017,7 @@ int Speaker::talkerToPluginIndex(const QString& talker)
             if (parsedTalkerCode.languageCode() == m_loadedPlugIns[ndx].parsedTalkerCode.languageCode())
             {
                 priorityMatch[ndx]++;
-                // kdDebug() << "Speaker::talkerToPluginIndex: Match on language " << parsedTalkerCode.languageCode << endl;
+                // kdDebug() << "Speaker::talkerToPluginIndex: Match on language " << parsedTalkerCode.languageCode() << endl;
             }
             if (parsedTalkerCode.countryCode().left(1) == "*")
                 if (parsedTalkerCode.countryCode().mid(1) ==
