@@ -32,10 +32,6 @@ libkttsjobmgrpart_la_LIBADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KFILE) $(LIBVM) $(LIB_KPARTS)
 
-# Header files to be installed.
-kpartsincludedir = $(includedir)/kparts
-kpartsinclude_HEADERS = kttsjobmgr.h
-
 # Header files not to be installed.
 noinst_HEADERS = selecttalkerwidget.h
 

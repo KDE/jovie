@@ -3,7 +3,6 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(kde_includes)/arts \
-	$(CFLAGS_GST) \
 	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
 
@@ -34,11 +33,10 @@ kttsd_SOURCES = \
 	filtermgr.cpp \
 	talkermgr.cpp
 
-kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries) $(KDE_RPATH)
+kttsd_LDFLAGS = -avoid-version -module $(all_libraries) $(KDE_RPATH)
 kttsd_LDADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KDECORE) \
-	$(LDADD_GST) \
 	$(LIB_KIO) \
 	$(LIB_KUTILS)
 
