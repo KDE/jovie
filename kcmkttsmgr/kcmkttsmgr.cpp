@@ -215,7 +215,7 @@ void KCMKttsMgr::load()
         m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()));
 
     // Last plugin ID.  Used to generate a new ID for an added talker.
-    m_lastTalkerID = m_config->readEntry("LastTalkerID", "0");
+    m_lastTalkerID = 0;
 
     // Dictionary mapping languages to language codes.
     m_languagesToCodes.clear();
@@ -247,6 +247,7 @@ void KCMKttsMgr::load()
                     new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, synthName);
             updateTalkerItem(talkerItem, talkerCode);
             m_languagesToCodes[language] = languageCode;
+            if (talkerID.toInt() > m_lastTalkerID) m_lastTalkerID = talkerID.toInt();
         }
     }
 
@@ -360,7 +361,7 @@ void KCMKttsMgr::save()
         m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
         m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
         // Might as well zero LastTalkerID as well.
-        m_lastTalkerID = "0";
+        m_lastTalkerID = 0;
     }
     else
         m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
@@ -383,7 +384,19 @@ void KCMKttsMgr::save()
     }
     QString talkerIDs = talkerIDsList.join(",");
     m_config->writeEntry("TalkerIDs", talkerIDs);
-    m_config->writeEntry("LastTalkerID", m_lastTalkerID);
+
+    // Erase obsolete Talker_nn sections.
+    QStringList groupList = m_config->groupList();
+    int groupListCount = groupList.count();
+    for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
+    {
+        QString groupName = groupList[groupNdx];
+        if (groupName.left(7) == "Talker_")
+        {
+            QString groupTalkerID = groupName.mid(7);
+            if (!talkerIDsList.contains(groupTalkerID)) m_config->deleteGroup(groupName);
+        }
+    }
 
     m_config->sync();
 
@@ -826,7 +839,7 @@ void KCMKttsMgr::addTalker(){
     m_languagesToCodes[language] = languageCode;
 
     // Assign a new Talker ID for the talker.  Wraps around to 1.
-    QString talkerID = QString::number(m_lastTalkerID.toInt()+1);
+    QString talkerID = QString::number(m_lastTalkerID + 1);
 
     // Erase extraneous Talker configuration entries that might be there.
     m_config->deleteGroup(QString("Talker_")+talkerID);
@@ -860,7 +873,7 @@ void KCMKttsMgr::addTalker(){
         m_loadedPlugIn->save(m_config, QString("Talker_"+talkerID));
 
         // Record last Talker ID used for next add.
-        m_lastTalkerID = talkerID;
+        m_lastTalkerID = talkerID.toInt();
 
         // Record configuration data.  Note, might as well do this now.
         m_config->setGroup(QString("Talker_")+talkerID);
@@ -873,10 +886,12 @@ void KCMKttsMgr::addTalker(){
         QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
             talkerItem =
-                new KListViewItem(m_kttsmgrw->talkersList, talkerItem, m_lastTalkerID, language, synthName);
+                new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
+                    QString::number(m_lastTalkerID), language, synthName);
         else
             talkerItem =
-                new KListViewItem(m_kttsmgrw->talkersList, m_lastTalkerID, language, synthName);
+                new KListViewItem(m_kttsmgrw->talkersList, QString::number(m_lastTalkerID),
+                    language, synthName);
 
         // Set additional columns of the listview item.
         updateTalkerItem(talkerItem, talkerCode);
@@ -910,8 +925,8 @@ void KCMKttsMgr::removeTalker(){
     if (!itemToRemove) return;
 
     // Delete the talker from configuration file.
-    QString talkerID = itemToRemove->text(tlvcTalkerID);
-    m_config->deleteGroup("Talker_"+talkerID, true, false);
+//    QString talkerID = itemToRemove->text(tlvcTalkerID);
+//    m_config->deleteGroup("Talker_"+talkerID, true, false);
 
     // Delete the talker from list view.
     delete itemToRemove;

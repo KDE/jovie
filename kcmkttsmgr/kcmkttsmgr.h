@@ -252,7 +252,7 @@ class KCMKttsMgr :
         /**
         * Last talker ID.  Used to generate a new ID.
         */
-        QString m_lastTalkerID;
+        int m_lastTalkerID;
 
         /**
         * Dictionary mapping language names to codes.
