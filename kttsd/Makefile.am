@@ -6,7 +6,7 @@ INCLUDES = \
 	$(CFLAGS_GST) \
 	$(all_includes)
 
-# Let automoc handle all of the metsource files (moc).
+# Let am_edit/unsermake handle all of the metasource files (moc).
 METASOURCES = AUTO
 
 #########################################################################
@@ -40,9 +40,6 @@ kttsd_LDADD = \
 	$(LDADD_GST) \
 	$(LIB_KIO) \
 	$(LIB_KUTILS)
-
-# Define DCOP/Text-to-Speech Service Type.
-kde_servicetypes_DATA = dcoptexttospeech.desktop
 
 # Install desktop file to standard services directory.
 kde_services_DATA = kttsd.desktop
