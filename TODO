@@ -1,5 +1,13 @@
-_ Add shortcut/accelerators for re-ordering of Talkers in KTTSMgr.  Also add drag N drop for the Talkers
-  so it is easier to change the ordering.
+_ FestivalInt plugin should be showing translated names of voices (Comment[xx] lines in
+  voices file) based on user's desktop setting.  But a user with Spanish desktop says it isn't
+  working.  Why?
+_ Need way to get translators to fill in rest of Comment[xx] lines in plugins/festivalint/voices
+  file.
+_ Need someone to test the Finnish TTS to see if that is working correctly.
+_ Need someone who can read czech to try integrating this into KTTS: 
+  http://www.freebsoft.org/festival-czech
+_ Overall Audio Speed setting should be applied when using Test button in plugin Configure dialogs.
+_ Add drag N drop for the Talkers so it is easier to change the ordering.
 _ It is possible to configure multiple instances of Talkers with the exact same configuration.
 _ Add WhatsThis help.  The Jobs tab needs them.
 _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
@@ -17,7 +25,6 @@ _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourcef
 - Add support for SSML, JSML, Sable and other Speech Markup languages.
 - Continue revision of KDE Speech API (kspeech.h).
 - Add support for speech markers.
-- Finish Festival Client/Server plugin.
 - Festival plugin (static library) crashes on first call to library.
 - Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
 - Command plugin crashes when using command 'flite -t "%t"' and flite can't get write access to /dev/dsp*.

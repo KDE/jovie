@@ -289,7 +289,9 @@ void FestivalIntProc::synth(
         // float volumeValue = exp(log(volumeValue) * 2);
         // kdDebug() << "FestivalIntProc::synth: Synthing text: '" << saidText << "' using Festival plug in with voice "
         //    << voiceCode << endl;
-        saidText = "(set! utt1 (Utterance Text \"" + 
+        saidText = "(define (insert_initial_pause utt) "
+            "(item.set_feat (utt.relation.first utt 'Segment) 'end 0.0))"
+            "(set! utt1 (Utterance Text \"" +
             saidText + 
                 "\"))(utt.synth utt1)" +
                 "(utt.wave.rescale utt1 " + QString::number(volumeValue) + " t)" +
