@@ -1,0 +1,3 @@
+debian/tmp/usr/lib/kde3/libkttsd_gstplugin.so
+debian/tmp/usr/lib/kde3/libkttsd_gstplugin.la
+debian/tmp/usr/share/services/kttsd_gstplugin.desktop
