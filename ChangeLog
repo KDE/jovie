@@ -1,3 +1,7 @@
+2004-12-21  Gary Cramblitt (PhantomsDad)
+        * Require GStreamer 0.8.5 or above in configure.in.in.  SuSE 9.2 users have
+          GStreamer 0.8.0, which causes KTTSMgr to immediately crash on startup.
+
 2004-12-20  Gary Cramblitt (PhantomsDad)
         * kdenonbeta/kttsd moved to kdeaccessibility/kttsd.
         * kdenonbeta/kttsd/libktts moved to kdelibs/interfaces/kspeech.  libktts dropped.

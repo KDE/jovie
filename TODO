@@ -1,8 +1,8 @@
-_ kcmkttsmgr.desktop file UTF-8 got hosed by Kate/Develop.
+_ SuSE 9.2 users have GStreamer 0.8.0, which causes KTTSMgr to immediately crash on startup.
+  Need to prevent/detect this at runtime.
 _ The khmtlktts plugin should automatically sense if KTTSD is installed and if not,
   hide menu item.  If installed, but not configured, prompt user to run kttsmgr.
 _ Clean up kspeech/kspeechsink api documentation for kdelibs.
-_ katepartktts seems to be a casualty of move to kdebase.  Not working.
 _ Audio Plugins:
     _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.
       Since the desktop files are translated, is this a problem??  Works when I do
@@ -22,6 +22,8 @@ _ Festival Interactive plugin:
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
 _ KTTSMgr:
+    _ A user had $HOME/festival directory and FestivalInt plugin used this path.  Need to
+      check that auto found path is an actual executable file somehow.
     _ GUI problems with latest kdelibs (HEAD 12/2004).  Can't size screen smaller than total
       of headers in Talker KListView.  When restoring from system tray icon, tab widget
       doesn't resize to full screen.  Size screen and it resizes.

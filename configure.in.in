@@ -89,7 +89,7 @@ if test "$PKGCONFIGFOUND" = "yes" ; then
 
 	dnl start with 0.8
 	GST_MAJORMINOR=0.8
-	GST_REQ=0.8.0
+	GST_REQ=0.8.5
 	KDE_PKG_CHECK_MODULES(GST, \
 		gstreamer-$GST_MAJORMINOR >= $GST_REQ \
 		gstreamer-control-$GST_MAJORMINOR >= $GST_REQ \
