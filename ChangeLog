@@ -1,9 +1,12 @@
 2004-11-21  Gary Cramblitt (PhantomsDad)
         * Add volume control to Festival Interactive.
         * Accelerators for Festival Interactive configuration dialog.
+        * HTS voices only support Volume (not Speed or Pitch)
+        * Talker Codes reflect volume setting.
 
 2004-11-20  Gary Cramblitt (PhantomsDad)
         * Add pitch control to Festival Interactive.
+        * GStreamer plugin.
 
 2004-11-17  Gary Cramblitt (PhantomsDad)
         * Bug fix.  Hosed Talker in KTTSMgr after removing a Talker and clicking Cancel.

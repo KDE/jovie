@@ -47,6 +47,7 @@ typedef struct voiceStruct{
     QString languageCode;       // Language code (en, es, etc)
     QString gender;             // male, female, or neutral
     bool preload;               // Start Festival and load this language when KTTSD is started.
+    bool volumeAdjustable;      // True if the voice supports volume adjustments.
     bool rateAdjustable;        // True if the voice supports rate adjustments.
     bool pitchAdjustable;       // True if the voice supports pitch adjustments.
 } voice;

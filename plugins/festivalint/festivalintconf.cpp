@@ -176,6 +176,10 @@ QString FestivalIntConf::getTalkerCode()
     if (voiceList.count() > 0)
     {
         voiceStruct voiceTemp = voiceList[m_widget->selectVoiceCombo->currentItem()];
+        // Determine volume attribute.  soft < 75% <= medium <= 125% < loud.
+        QString volume = "medium";
+        if (m_widget->volumeBox->value() < 75) volume = "soft";
+        if (m_widget->volumeBox->value() > 125) volume = "loud";
         // Determine rate attribute.  slow < 75% <= medium <= 125% < fast.
         QString rate = "medium";
         if (m_widget->timeBox->value() < 75) rate = "slow";
@@ -187,7 +191,7 @@ QString FestivalIntConf::getTalkerCode()
                 .arg(voiceTemp.languageCode)
                 .arg(voiceTemp.name)
                 .arg(voiceTemp.gender)
-                .arg("medium")
+                .arg(volume)
                 .arg(rate)
                 .arg("Festival Interactive");
     } else normalTalkerCode = QString::null;
@@ -247,6 +251,18 @@ void FestivalIntConf::setDefaultVoice()
             // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << voiceList[index].code << endl;
             m_widget->selectVoiceCombo->setCurrentItem(index);
             m_widget->preloadCheckBox->setChecked(voiceList[index].preload);
+            if (voiceList[index].volumeAdjustable)
+            {
+                m_widget->volumeBox->setEnabled(true);
+                m_widget->volumeSlider->setEnabled(true);
+            }
+            else
+            {
+                m_widget->volumeBox->setValue(100);
+                volumeBox_valueChanged(100);
+                m_widget->volumeBox->setEnabled(false);
+                m_widget->volumeSlider->setEnabled(false);
+            }
             if (voiceList[index].rateAdjustable)
             {
                 m_widget->timeBox->setEnabled(true);
@@ -344,6 +360,7 @@ void FestivalIntConf::scanVoices()
                 voices.readEntry("Comment", code));
             voiceTemp.gender = voices.readEntry("Gender", "neutral");
             voiceTemp.preload = voices.readBoolEntry("Preload", false);
+            voiceTemp.volumeAdjustable = voices.readBoolEntry("VolumeAdjustable", true);
             voiceTemp.rateAdjustable = voices.readBoolEntry("RateAdjustable", true);
             voiceTemp.pitchAdjustable = voices.readBoolEntry("PitchAdjustable", true);
             voiceList.append(voiceTemp);
@@ -472,6 +489,18 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
     int index = m_widget->selectVoiceCombo->currentItem();
     m_widget->preloadCheckBox->setChecked(
         voiceList[index].preload);
+    if (voiceList[index].volumeAdjustable)
+    {
+        m_widget->volumeBox->setEnabled(true);
+        m_widget->volumeSlider->setEnabled(true);
+    }
+    else
+    {
+        m_widget->volumeBox->setValue(100);
+        volumeBox_valueChanged(100);
+        m_widget->volumeBox->setEnabled(false);
+        m_widget->volumeSlider->setEnabled(false);
+    }
     if (voiceList[index].rateAdjustable)
     {
         m_widget->timeBox->setEnabled(true);
