@@ -3,19 +3,19 @@
 <KDevPrjSession>
  <DocsAndViews NumberOfDocuments="5" >
   <Doc0 NumberOfViews="1" URL="file:/home/paul/Kdecvs/kdeaccessibility/kttsd/filters/xhtml2ssml.cpp" >
-   <View0 line="60" Type="Source" />
+   <View0 line="63" Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:/home/paul/Kdecvs/kdeaccessibility/kttsd/filters/xhtml2ssml.h" >
-   <View0 line="17" Type="Source" />
+   <View0 line="21" Type="Source" />
   </Doc1>
   <Doc2 NumberOfViews="1" URL="file:/home/paul/Kdecvs/kdeaccessibility/kttsd/filters/main.cpp" >
-   <View0 line="19" Type="Source" />
+   <View0 line="17" Type="Source" />
   </Doc2>
   <Doc3 NumberOfViews="1" URL="file:/home/paul/Kdecvs/kdeaccessibility/kttsd/filters/xmlelement.cpp" >
-   <View0 line="86" Type="Source" />
+   <View0 line="72" Type="Source" />
   </Doc3>
   <Doc4 NumberOfViews="1" URL="file:/home/paul/Kdecvs/kdeaccessibility/kttsd/filters/xmlelement.h" >
-   <View0 line="77" Type="Source" />
+   <View0 line="75" Type="Source" />
   </Doc4>
  </DocsAndViews>
  <pluginList>

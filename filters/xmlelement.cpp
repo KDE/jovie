@@ -1,9 +1,22 @@
+/****************************************************************************
+  XMLElement class
 
-/**
- * 
- * A tiny class representing an XML element with access to attributes and their values, local names, etc.
- *
- */
+  Representation of an XML element with methods for getting/setting
+  attributes and generating "opening" and "closing" tags.
+  -------------------
+  Copyright:
+  (C) 2004 by Paul Giannaros <ceruleanblaze@gmail.com>
+  -------------------
+  Original author: Paul Giannaros <ceruleanblaze@gmail.com>
+******************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ ***************************************************************************/
 
 #include "xmlelement.h"
 #include <qstringlist.h>
