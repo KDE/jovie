@@ -168,10 +168,18 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     if ( !m_languageCodeList.isEmpty() )
     {
         QString languageCode = talkerCode->languageCode();
-        if ( !talkerCode->countryCode().isEmpty() ) languageCode += '_' + talkerCode->countryCode();
-        // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if language code "
-        //     << languageCode << " matches " << m_languageCodeList << endl;
-        if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
+        // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
+        // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+        if ( !m_languageCodeList.contains( languageCode ) )
+        {
+            if ( !talkerCode->countryCode().isEmpty() )
+            {
+                languageCode += '_' + talkerCode->countryCode();
+                // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
+                // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+                if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
+            } else return inputText;
+        }
     }
     // If appId doesn't match, return input unmolested.
     if ( !m_appIdList.isEmpty() )
