@@ -36,11 +36,9 @@
 #include <kcmultidialog.h>
 
 #include "kttsd.h"
-#include "speaker.h"
-#include "kttsdui.h"
+//#include "speaker.h"
+//#include "kttsdui.h"
 #include "ktextbrowser.h"
-
-#include "kttsd.moc"
 
 KTTSD::KTTSD(QWidget *parent, const char *name) : kttsdUI(parent, name), DCOPObject("kspeech") {
     kdDebug() << "Running: KTTSD::KTTSD( QObject *parent, const char *name)" << endl;
@@ -521,3 +519,6 @@ KTTSDTray::KTTSDTray (QWidget *parent, const char *name) : KSystemTray (parent, 
 
 KTTSDTray::~KTTSDTray() {
 }
+
+#include "kttsd.moc"
+
