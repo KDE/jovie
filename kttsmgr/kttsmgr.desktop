@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Name=kttsmgr
+GenericName=KDE Text-to-speech Manager
 Name[xx]=xxkttsmgrxx
 Icon=kttsd
 Exec=kttsmgr -caption "%c" %i %m %u
@@ -9,6 +10,7 @@ Comment=KDE Text-to-speech Manager
 Comment[da]=KDE Tekst-til-tale håndtering
 Comment[es]=Gestor de texto a voz de KDE
 Comment[et]=KDE "tekst kõneks" haldur
+Comment[fr]=Gestionnaire de synthèse vocale pour KDE
 Comment[nl]=KDE Text To Speech-beheer
 Comment[pt]=Gestor do Texto para Fala do KDE
 Comment[pt_BR]=Gerenciador da Conversão de Texto para Voz do KDE
@@ -18,3 +20,5 @@ Comment[ta]=KDE உரையிலிருந்து பேச்சு ம�
 Comment[xx]=xxKDE Text-to-speech Managerxx
 MimeTypes=
 Terminal=false
+Categories=Qt;KDE;System;
+
