@@ -5,11 +5,6 @@ INCLUDES = \
 	-I$(kde_includes)/arts \
 	$(CFLAGS_GST) \
 	$(all_includes)
-AM_CPPFLAGS = \
-	-I$(top_srcdir)/kttsd/libkttsd \
-	-I$(kde_includes)/arts \
-	$(CFLAGS_GST) \
-	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
@@ -36,7 +31,7 @@ kttsd_SOURCES = \
 	threadedplugin.cpp \
 	ssmlconvert.cpp
 
-kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
+kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries) $(KDE_RPATH)
 kttsd_LDADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KDECORE) \

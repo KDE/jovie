@@ -20,7 +20,7 @@ kttsmgr_SOURCES =  \
 	kspeech.stub \
 	kttsmgr.cpp
 
-kttsmgr_LDFLAGS = $(all_libraries)
+kttsmgr_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kttsmgr_LDADD = \
 	$(LIB_KUTILS) \
 	$(LIB_KDEUI)
