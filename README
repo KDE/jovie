@@ -53,8 +53,8 @@ To run KTTSD
 
   kttsd
 
-Click on the kicker icon.  Click "Open text to read out" button, then click
-"Start reading" button.
+Click on the system tray icon.  Click "Open text to read out" button, 
+pick a plain text file, then click "Start reading" button.
 
 To set the text to be spoken
 
@@ -87,4 +87,4 @@ this, I'd be appreciative.. Gary Cramblitt <garycramblitt@comcast.net>.
 The Force Arts option does not currently work with Festival (Interactive)
 plugin.
 
-Festival (Client/Server), festicalcs, is not currently working.
+Festival (Client/Server), festivalcs, is not currently working.
