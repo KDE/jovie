@@ -157,4 +157,34 @@
   <match><![CDATA[IIRC]]></match>
   <subst><![CDATA[if I recall correctly]]></subst>
  </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[hmm]]></match>
+  <subst><![CDATA[hoom]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[wtf]]></match>
+  <subst><![CDATA[what the heck]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[WTF]]></match>
+  <subst><![CDATA[what the heck]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[wth]]></match>
+  <subst><![CDATA[what the heck]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[afaik]]></match>
+  <subst><![CDATA[as far as I know]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[AFAIK]]></match>
+  <subst><![CDATA[as far as I know]]></subst>
+ </word>
 </wordlist>
