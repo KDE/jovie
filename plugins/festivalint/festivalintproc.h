@@ -177,9 +177,14 @@ class FestivalIntProc : public PlugInProc{
         bool sendIfReady();
         
         /**
-         * Selected voice
+         * Selected voice (from config).
          */
         QString m_voiceCode;
+        
+        /**
+        * Running voice.
+        */
+        QString m_runningVoiceCode;
 
         /**
          * Festival process

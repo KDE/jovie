@@ -150,11 +150,11 @@ void FestivalIntProc::synth(
     if (!m_festProc->isRunning())
     {
         // kdDebug() << "FestivalIntProc::synth: Starting Festival process" << endl;
+        m_runningVoiceCode = QString::null;
         m_ready = false;
         if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
         {
             // kdDebug()<< "FestivalIntProc:synth: Festival initialized" << endl;
-            sendToFestival(voiceCode);
         }
         else
         {
@@ -164,8 +164,9 @@ void FestivalIntProc::synth(
             return;
         }
     }
+    // If we just started Festival, or voiceCode has changed, send code to Festival.
+    if (m_runningVoiceCode != voiceCode) sendToFestival(voiceCode);
 
-    
     // Encode quotation characters.
     QString saidText = text;
     saidText.replace("\\\"", "#!#!");

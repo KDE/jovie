@@ -168,6 +168,7 @@ void FestivalIntConf::slotTest_clicked()
     if (testMsg.isNull()) testMsg = voices.readEntry("Comment");
     // Fall back if none.
     if (testMsg.isNull()) testMsg = "KDE is a modern graphical desktop for UNIX computers.";
+    kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << endl;
     m_festProc->synth(
         testMsg,
         tmpWaveFile,
