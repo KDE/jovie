@@ -21,9 +21,13 @@ METASOURCES = AUTO
 # of the other Makefile.am variables.
 bin_PROGRAMS = kttsd
 
+kspeech_DIR = $(kde_includes)
+kspeechsink_DIR = $(kde_includes)
+
 # The source, library search path, and link libraries.
 # Note: .skel files cause DCOPIDL compiler to generate _skel.cpp file and compile it.
 kttsd_SOURCES = \
+    kspeech.skel kspeechsink.stub\
 	main.cpp \
 	kttsd.cpp \
 	speaker.cpp \
@@ -34,7 +38,6 @@ kttsd_SOURCES = \
 
 kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
 kttsd_LDADD = \
-	-lktts \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KDECORE) \
 	$(LDADD_GST) \

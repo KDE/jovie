@@ -15,11 +15,15 @@ METASOURCES = AUTO
 # of the other Makefile.am variables.
 bin_PROGRAMS = kttsmgr
 
+kspeech_DIR = $(kde_includes)
+
 # The source, library search path, and link libraries.
-kttsmgr_SOURCES =  kttsmgr.cpp
+kttsmgr_SOURCES =  \
+	kspeech.stub \
+	kttsmgr.cpp
+
 kttsmgr_LDFLAGS = $(all_libraries)
 kttsmgr_LDADD = \
-	-lktts \
 	$(LIB_KDECORE) $(LIB_KUTILS) \
 	$(LIB_KDEUI)
 

@@ -17,13 +17,16 @@ METASOURCES = AUTO
 # of the other Makefile.am variables.
 kde_module_LTLIBRARIES =  libkttsjobmgrpart.la
 
+kspeech_DIR = $(kde_includes)
+kspeechsink_DIR = $(kde_includes)
+
 # The source, library search path, and link libraries.
 libkttsjobmgrpart_la_SOURCES = \
+	kspeech.stub kspeechsink.skel \
 	kttsjobmgr.cpp \
 	selecttalkerwidget.ui
 libkttsjobmgrpart_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries) $(KDE_PLUGIN)
 libkttsjobmgrpart_la_LIBADD = \
-	-lktts \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KFILE) $(LIBVM) $(LIB_KPARTS)
 

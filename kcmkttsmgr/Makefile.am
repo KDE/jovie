@@ -20,15 +20,18 @@ METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = kcm_kttsd.la
 
+kspeech_DIR = $(kde_includes)
+kspeechsink_DIR = $(kde_includes)
+
 # The source, library search path, and link libraries.
 kcm_kttsd_la_SOURCES = \
+    kspeech.stub kspeechsink.skel \
 	kcmkttsmgr.cpp \
 	kcmkttsmgrwidget.ui \
 	addtalker.cpp \
 	addtalkerwidget.ui
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined 
 kcm_kttsd_la_LIBADD = \
-	-lktts \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_QT) \
 	$(LIB_KIO) \
