@@ -2,6 +2,8 @@ debian/tmp/usr/bin/kttsd
 debian/tmp/usr/bin/kttsmgr
 debian/tmp/usr/lib/libkttsd.so.1.0.0
 debian/tmp/usr/lib/libkttsd.la
+debian/tmp/usr/lib/libktts.so.1.0.0
+debian/tmp/usr/lib/libktts.la
 debian/tmp/usr/lib/kde3/libfestivalintplugin.so
 debian/tmp/usr/lib/kde3/libfestivalintplugin.la
 debian/tmp/usr/lib/kde3/libcommandplugin.so

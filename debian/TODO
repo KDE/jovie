@@ -1,6 +1,7 @@
 * Here's my build procedure:
     - cvs2dist kdenonbeta kttsd --version 0.2.0
     - unpack tarball in another location
+    - cd to that location
     - debuild -uc -us
     
 * I keep getting
@@ -14,13 +15,11 @@
     debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common
 
 * lintian is reporting the following:
-    W: kttsd source: native-package-with-dash-version
-    W: kttsd source: changelog-should-mention-nmu
-    W: kttsd source: source-nmu-has-incorrect-version-number 0.2.0-1
     E: kttsd-dev: no-shlibs-control-file usr/lib/libktts.so
     W: kttsd-dev: missing-depends-line
     W: kttsd-appplugins: missing-depends-line
     E: kttsd: ldconfig-symlink-missing-for-shlib usr/lib/libkttsd.so.1 usr/lib/libkttsd.so.1.0.0 libkttsd.so.1
+  My issue with the first E above is libktts is versionless.
 
 * Should rc files be installed to etc/ tree?
 

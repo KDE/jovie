@@ -1,4 +1,9 @@
 2004-10-13  Cramblitt <garycramblitt@comcast.net>
+        * libktts is now a versioned shared library.  You may need to remove the
+          unversioned library, ie.
+             rm $KDEDIR/lib/libktts.*
+             
+2004-10-13  Cramblitt <garycramblitt@comcast.net>
         * Revert previous change.  Sorry.
 
 2004-10-13  Cramblitt <garycramblitt@comcast.net>
