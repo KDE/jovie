@@ -29,6 +29,12 @@ fi
 
 set -x
 
+# Renamed libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention
+# on or about 19 Oct 2004:
+
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libkttsjobmgr
+
+
 # The following installed files were renamed
 # on or about 19 Oct 2004:
 #  In $KDEDIR/share/services/:

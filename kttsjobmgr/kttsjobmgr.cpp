@@ -38,7 +38,7 @@ extern "C"
     * the form 'void *init_lib<library name>()  It always returns a
     * new factory object
     */
-    void *init_libkttsjobmgr()
+    void *init_libkttsjobmgrpart()
     {
         return new KttsJobMgrFactory;
     }

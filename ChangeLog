@@ -18,6 +18,8 @@
               libeposkttsdplugin       -> libkttsd_eposplugin
               libfreettsplugin         -> libkttsd_freettsplugin
               
+          Rename libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention.
+              
           There is a new shell script, clean_obsolete.sh that will remove these
           obsolete files from your system.
         

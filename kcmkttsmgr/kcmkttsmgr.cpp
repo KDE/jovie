@@ -716,11 +716,11 @@ void KCMKttsMgr::kttsdStarted()
     // Load Job Manager Part library.
     if (!kttsdLoaded)
     {
-        KLibFactory *factory = KLibLoader::self()->factory( "libkttsjobmgr" );
+        KLibFactory *factory = KLibLoader::self()->factory( "libkttsjobmgrpart" );
         if (factory)
         {
             // Create the Job Manager part
-            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( m_kttsmgrw->mainTab, "kttsjobmgr",
+            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( m_kttsmgrw->mainTab, "kttsjobmgrpart",
                 "KParts::ReadOnlyPart" );
             if (m_jobMgrPart)
             {
@@ -731,7 +731,7 @@ void KCMKttsMgr::kttsdStarted()
             else
                 kdDebug() << "Could not create kttsjobmgr part." << endl;
         }
-        else kdDebug() << "Could not load libkttsjobmgr.  Is libkttsjobmgr installed?" << endl;
+        else kdDebug() << "Could not load libkttsjobmgrpart.  Is libkttsjobmgrpart installed?" << endl;
     }
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded)

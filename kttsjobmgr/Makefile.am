@@ -11,12 +11,12 @@ METASOURCES = AUTO
 #########################################################################
 # This is the kpart that gets installed.  It's name is used for all
 # of the other Makefile.am variables.
-kde_module_LTLIBRARIES =  libkttsjobmgr.la
+kde_module_LTLIBRARIES =  libkttsjobmgrpart.la
 
 # The source, library search path, and link libraries.
-libkttsjobmgr_la_SOURCES = kttsjobmgr.cpp
-libkttsjobmgr_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries) $(KDE_PLUGIN)
-libkttsjobmgr_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(LIB_KFILE) $(LIBVM) $(LIB_KPARTS)
+libkttsjobmgrpart_la_SOURCES = kttsjobmgr.cpp
+libkttsjobmgrpart_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries) $(KDE_PLUGIN)
+libkttsjobmgrpart_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(LIB_KFILE) $(LIBVM) $(LIB_KPARTS)
 
 # Header files to be installed.
 kpartsincludedir = $(includedir)/kparts
