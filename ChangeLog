@@ -1,3 +1,6 @@
+2005-03-02  Gary Cramblitt (PhantomsDad)
+        * BUG:100600 Fix for messages and warnings not spoken when text job is paused.
+
 2005-02-17  Gary Cramblitt (PhantomsDad)
         * Remove festival/ and festivalcs/ plugins from source tree.  AFAIK, these plugins don't work
           and nobody is using them.  And these are confusing packagers who think we have a build

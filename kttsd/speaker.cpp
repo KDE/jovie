@@ -227,6 +227,7 @@ void Speaker::doUtterances()
             }
             // Loop through utterance queue.
             int waitingCnt = 0;
+            int waitingMsgCnt = 0;
             int transformingCnt = 0;
             bool playing = false;
             int synthingCnt = 0;
@@ -235,6 +236,7 @@ void Speaker::doUtterances()
             for (it = itBegin; it != itEnd; ++it)
             {
                 uttState utState = it->state;
+                uttType utType = it->utType;
                 switch (utState)
                 {
                     case usNone:
@@ -283,7 +285,7 @@ void Speaker::doUtterances()
                         // If first in queue, emit signal.
                         if (it == itBegin)
                         {
-                            if (it->utType == utStartOfJob)
+                            if (utType == utStartOfJob)
                             {
                                 m_speechData->setTextJobState(
                                     it->sentence->jobNum, KSpeech::jsSpeaking);
@@ -360,8 +362,14 @@ void Speaker::doUtterances()
                             {
                                 playing = true;
                                 m_again = true;
-                            } else ++waitingCnt;
-                        } else ++waitingCnt;
+                            } else {
+                                ++waitingCnt;
+                                if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                            }
+                        } else {
+                            ++waitingCnt;
+                            if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                        }
                         break;
                     }
                     case usPlaying:
@@ -378,8 +386,14 @@ void Speaker::doUtterances()
                             {
                                 playing = true;
                                 m_again = true;
-                            } else ++waitingCnt;
-                        } else ++waitingCnt;
+                            } else {
+                                ++waitingCnt;
+                                if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                            }
+                        } else {
+                            ++waitingCnt;
+                            if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                        }
                         break;
                     }
                     case usWaitingSay:
@@ -405,9 +419,18 @@ void Speaker::doUtterances()
                                     playing = true;
                                     it->plugin->sayText(it->sentence->text);
                                     m_again = true;
-                                } else ++waitingCnt;
-                            } else ++waitingCnt;
-                        } else ++waitingCnt;
+                                } else {
+                                    ++waitingCnt;
+                                    if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                                }
+                            } else {
+                                ++waitingCnt;
+                                if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                            }
+                        } else {
+                            ++waitingCnt;
+                            if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
+                        }
                         break;
                     }
                     case usWaitingSynth:
@@ -426,6 +449,7 @@ void Speaker::doUtterances()
                             m_again = true;
                         }
                         ++waitingCnt;
+                        if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
                         break;
                     }
                     case usSaying:
@@ -439,6 +463,7 @@ void Speaker::doUtterances()
                         } else {
                             playing = true;
                             ++waitingCnt;
+                            if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
                         }
                         break;
                     }
@@ -454,9 +479,20 @@ void Speaker::doUtterances()
                             m_again = true;
                         } else ++synthingCnt;
                         ++waitingCnt;
+                        if (utType == utWarning || utType == utMessage) ++waitingMsgCnt;
                         break;
                     }
                     case usFinished: break;
+                }
+            }
+            // See if there are any messages or warnings to process.
+            // We keep up to 2 such utterances in the queue.
+            if ((waitingMsgCnt < 2) && (transformingCnt < 3))
+            {
+                if (m_speechData->warningInQueue() || m_speechData->messageInQueue())
+                {
+                    getNextUtterance();
+                    m_again = true;
                 }
             }
             // Try to keep at least two utterances in the queue waiting to be played,
@@ -993,7 +1029,7 @@ bool Speaker::getNextUtterance()
                         (it->state == usSaying))) ++it;
                 // If now pointing at a text message, we are interrupting.
                 // Insert optional Interruption message and sound.
-                if (it != itEnd) interrupting = (it->utType == utText);
+                if (it != itEnd) interrupting = (it->utType == utText && it->state != usPaused);
                 if (interrupting)
                 {
                     if (m_speechData->textPreSndEnabled)

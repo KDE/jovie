@@ -1,3 +1,7 @@
+_ kttsd has no .pot file but does have one message screen.  "At least one Talker must be configured.
+  "Would you like to configure KTTS now?".
+_ Festival crashes on really long sentences.  Even if it doesn't crash, it drones on lower and
+  lower in tone.  Need to detect really long sentences and try to break at comma.
 _ Update Handbook.  Add following link for Hadifix/MBROLA RPM users.  Install and you're done!
   http://rpmfind.creatis.insa-lyon.fr/linux/RPM/PLD/dists/ra/PLD/i586/PLD/RPMS/mbrola-301h-1.i586.html
 _ Although one can configure Canadian English voice in Festival, there is no way to choose
