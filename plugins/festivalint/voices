@@ -374,4 +374,16 @@
   <name>Polish Male</name>
 </voice>
 
+<voice>
+  <code>msu_ru_nsh_diphone</code>
+  <language>ru</language>
+  <codec>KOI8-R</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Russian Male</name>
+</voice>
+
 </voices>

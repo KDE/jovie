@@ -1,3 +1,10 @@
+_ Update Handbook.  Add following link for Hadifix/MBROLA RPM users.  Install and you're done!
+  http://rpmfind.creatis.insa-lyon.fr/linux/RPM/PLD/dists/ra/PLD/i586/PLD/RPMS/mbrola-301h-1.i586.html
+_ Add russion voice to festivalint/voices file.  Voice code is msu_ru_nsh_diphone.
+  Text encoding must be one of the cryllic sets.  K0I8-R "seemed" to work for me.
+  Supports volume and rate variation, but not pitch.  URL for voice file is
+  http://nshmyrev.narod.ru/festival/msu_ru_nsh_diphone.tar.gz.  Unpack to festival/lib/voices/russian/.
+  Any words it does not recognize are pronounced as "unpronouncable word" (in russian).
 _ Although one can configure Canadian English voice in Festival, there is no way to choose
   Canadian English in the Talker Chooser.
 _ Provide a way for those apps with KTTSD plugins to disable KNotifies, otherwise, users

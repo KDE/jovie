@@ -1,3 +1,12 @@
+2005-02-05  Gary Cramblitt (PhantomsDad)
+        * Version bumped to 0.3.0.
+        * Russian Festival voice added to voices file.  Download voice from
+          http://nshmyrev.narod.ru/festival/festival.html.  Must have Festival 1.95 beta or later.
+          Untar to festival/lib/voices/russian/ directory.  Encoding must be one of the
+          single-byte cryllics, such as KOI8-R.
+        * Ability to load/save Talker Chooser and XML Transformer configurations.
+        * Some bug fixes related to Filters.
+
 2005-01-24  Gary Cramblitt (PhantomsDad)
         * Add Talker Chooser Filter.
         * Add option on Audio tab to preserve generated audio files by copying to user-specified
