@@ -35,8 +35,8 @@
 
 /**
  * Constructor
- * Sets text to be stoped and warnings and messages queues to be autodelete.
- * Loads configuration
+ * Sets text to be stopped and warnings and messages queues to be autodelete.
+ * Loads configuration.
  */
 SpeechData::SpeechData(){
     kdDebug() << "Running: SpeechData::SpeechData()" << endl;
@@ -103,6 +103,7 @@ bool SpeechData::readConfig(){
  */
 SpeechData::~SpeechData(){
     kdDebug() << "Running: SpeechData::~SpeechData()" << endl;
+    delete config;
 }
 
 /**

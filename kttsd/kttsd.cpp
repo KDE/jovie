@@ -46,7 +46,9 @@ KTTSD::KTTSD(QWidget *parent, const char *name) : kttsdUI(parent, name), DCOPObj
     kdDebug() << "Running: KTTSD::KTTSD( QObject *parent, const char *name)" << endl;
     // Do stuff here
     //setIdleTimeout(15); // 15 seconds idle timeout.
-    
+
+    speaker = 0;
+    speechData = 0;    
     if (!initializeSpeaker()) return;
 
     // Create system tray object
@@ -104,12 +106,21 @@ bool KTTSD::initializeSpeaker()
     // By default, everything is ok, don't worry, be happy
     ok = true;
 
-    // Create speechData object, and load configuration checking for the return
+    // Create speechData object, and load configuration, checking if valid config loaded.
     speechData = new SpeechData();
-    if(!speechData->readConfig()){
-        KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
-        ok = false;
-        return false;
+    // If user has not yet configured KTTSD, display configuration dialog.
+    if (!speechData->readConfig())
+    {
+        delete speechData;
+        configureSelected();
+        speechData = new SpeechData();
+        // If still no valid configuration, bail out.
+        if (!speechData->readConfig())
+        {
+            KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
+            ok = false;
+            return false;
+        }
     }
 
     connect (speechData, SIGNAL(textStarted()), this, SLOT(textStarted()));
@@ -360,7 +371,7 @@ void KTTSD::speakClipboardSelected(){
 }
 
 void KTTSD::configCommitted() {
-    reinit();
+    if (speaker) reinit();
 }
 
 void KTTSD::closeSelected(){
