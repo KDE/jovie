@@ -1,3 +1,8 @@
+2004-05-19  Cramblitt <garycramblitt@comcast.net>
+        * Allow kttsmgr screen to be resized as narrow as possible.
+        * Correct some mispellings.
+        * When calling reinit() pauseText only if isSpeakingText().
+        
 2004-05-18  Cramblitt <garycramblitt@comcast.net>
         * Reinit() without losing existing queued text jobs, messages, or warnings.
         * When kttsd restarts because of reinit(), job manager part refreshes list.

@@ -19,6 +19,7 @@
 #include <kaction.h>
 #include <qdockarea.h>
 #include <qvbox.h>
+#include <qgrid.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -126,8 +127,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     m_jobListView->addColumn(i18n("State"));
     m_jobListView->addColumn(i18n("Position"));
     m_jobListView->addColumn(i18n("Sentences"));
-    m_jobListView->addColumn("");
-    m_jobListView->setResizeMode(QListView::LastColumn);
+    
     // Do not sort the list.
     m_jobListView->setSorting(-1);
     
@@ -136,7 +136,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     
     // Create a label for current sentence.
     QLabel* currentSentenceLabel = new QLabel(sentenceVBox);
-    currentSentenceLabel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, true));
+    currentSentenceLabel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
     currentSentenceLabel->setText(i18n("Current Sentence"));
     
     // Create a box to contain the current sentence.

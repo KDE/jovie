@@ -24,6 +24,7 @@
 #include <qtabwidget.h>
 #include <qwidgetstack.h>
 #include <qcheckbox.h>
+#include <qvbox.h>
 #include <qlayout.h>
 #include <qwaitcondition.h>
 
@@ -91,7 +92,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     kdDebug() << "KCMKttsMgr contructor running." << endl;
     
     // Initialize some variables.
-    m_JobMgrPart = 0;
+    m_jobMgrPart = 0;
     
     //Defaults
     //textPreMsgValue = i18n("Paragraph interrupted. Message.");
@@ -335,7 +336,7 @@ void KCMKttsMgr::save()
     
     m_config->sync();
     
-    // If KTTSD is running, ask user whether to restart KTTSD, and if yes, do so.
+    // If KTTSD is running, reinitialize it.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
     if (kttsdRunning)
@@ -706,7 +707,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
 void KCMKttsMgr::kttsdStarted()
 {
     kdDebug() << "KCMKttsMgr::kttsdStarted running" << endl;
-    bool kttsdLoaded = (m_JobMgrPart != 0);
+    bool kttsdLoaded = (m_jobMgrPart != 0);
     // Load Job Manager Part library.
     if (!kttsdLoaded)
     {
@@ -714,12 +715,12 @@ void KCMKttsMgr::kttsdStarted()
         if (factory)
         {
             // Create the Job Manager part
-            m_JobMgrPart = (KParts::ReadOnlyPart *)factory->create( this, "kttsjobmgr",
+            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( m_kttsmgrw->mainTab, "kttsjobmgr",
                 "KParts::ReadOnlyPart" );
-            if (m_JobMgrPart)
+            if (m_jobMgrPart)
             {
                 // Add the Job Manager part as a new tab.
-                m_kttsmgrw->mainTab->addTab(m_JobMgrPart->widget(), i18n("Jobs"));
+                m_kttsmgrw->mainTab->addTab(m_jobMgrPart->widget(), i18n("Jobs"));
                 kttsdLoaded = true;
             }
             else
@@ -740,11 +741,11 @@ void KCMKttsMgr::kttsdStarted()
 void KCMKttsMgr::kttsdExiting()
 {
     kdDebug() << "KCMKttsMgr::kttsdExiting running" << endl;
-    if (m_JobMgrPart)
+    if (m_jobMgrPart)
     {
-        m_kttsmgrw->mainTab->removePage(m_JobMgrPart->widget());
-        delete m_JobMgrPart;
-        m_JobMgrPart = 0;
+        m_kttsmgrw->mainTab->removePage(m_jobMgrPart->widget());
+        delete m_jobMgrPart;
+        m_jobMgrPart = 0;
     }
     m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
 }

@@ -184,8 +184,7 @@ private:
         jlvcLanguage = 2,             /**< Job language code */
         jlvcState = 3,                /**< Job State */
         jlvcPosition = 4,             /**< Current sentence of job. */
-        jlvcSentences = 5,            /**< Number of sentences in job. */
-        jlvcFiller = 6
+        jlvcSentences = 5             /**< Number of sentences in job. */
     };
     
     /**

@@ -16,7 +16,7 @@ _ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the 
 - Command plugin crashes when using command 'flite -t "%t"' and festival can't get write access to /dev/dsp*.
 - In the job manager tab of kttsmgr, one can drag the toolbars elsewhere, but the buttons
   disappear.  Why?
-- kttsmgr is too large for lower res screens, mostly because of Hadifax plugin.
+- kttsmgr is too tall for lower res screens, mostly because of Hadifax plugin.
   Use a vertical scroller in Properties tab and make entire screen smaller.
 
 Widgets needed usefull for the whole KDE

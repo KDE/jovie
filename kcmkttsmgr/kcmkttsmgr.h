@@ -192,7 +192,7 @@ class KCMKttsMgr :
         /**
         * KTTS Job Manager.
         */
-        KParts::ReadOnlyPart *m_JobMgrPart;
+        KParts::ReadOnlyPart *m_jobMgrPart;
     
         /**
         * About dialog.
