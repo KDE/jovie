@@ -116,14 +116,19 @@ class KTTSD : public kttsdUI, public DCOPObject {
         void sayWarning(const QString &warning, const QString &language);
 
         /**
-         * DCOP exported function to say messages
+         * DCOP exported function to say messages.
          */
         void sayMessage(const QString &message, const QString &language);
 
         /**
-         * DCOP exported function to sat text
+         * DCOP exported function to set text.
          */
         void setText(const QString &text, const QString &language);
+        
+        /**
+         * DCOP exported function to set text to contents of a file.
+         */
+        void setFile(const QString &filename, const QString &language);
 
         /**
          * Remove the text

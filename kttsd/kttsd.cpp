@@ -30,6 +30,9 @@
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
 #include <qclipboard.h>
+#include <qtextstream.h>
+#include <qfile.h>
+#include <kfiledialog.h>
 
 #include "kttsd.h"
 #include "speaker.h"
@@ -171,6 +174,21 @@ void KTTSD::setText(const QString &text, const QString &language=NULL){
 }
 
 /**
+ * DCOP exported function to set text to contents of a file.
+ */
+void KTTSD::setFile(const QString &filename, const QString &language=NULL)
+{
+    kdDebug() << "Running: setFile(const QString &filename, const QString &language=NULL)" << endl;
+    QFile file(filename);
+    if ( file.open(IO_ReadOnly) )
+    {
+        QTextStream stream(&file);
+        setText(stream.read(), language);
+        file.close();
+    }
+}
+
+/**
  * Remove the text
  */
 void KTTSD::removeText(){
@@ -245,8 +263,12 @@ void KTTSD::nextParText(){
 
 /***** Slots *****/
 // Buttons within the dialog
-void KTTSD::openSelected(){
-    setText("This is a test text. The function for opening existing texts has not been implemented yet. You can use DCOP, though. Just enter 'dcop kttsd kspeech setText <text> <language>' on the command line. <language> show be something like 'en', 'es', 'de', etc.", "en");
+void KTTSD::openSelected()
+{
+    QString filename = KFileDialog::getOpenFileName();
+    setFile(filename);
+
+//    setText("This is a test text. The function for opening existing texts has not been implemented yet. You can use DCOP, though. Just enter 'dcop kttsd kspeech setText <text> <language>' on the command line. <language> should be something like 'en', 'es', 'de', etc.", "en");
 }
 
 void KTTSD::startSelected(){

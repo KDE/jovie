@@ -12,8 +12,9 @@ dcop interface that later will be spoken.
 Features
 --------
 * Priority system for warnings and messages, while still playing regular texts.
-* Long text is parsed into sentences.  User may backup up sentences and paragraphs,
+* Long text is parsed into sentences.  User may backup by sentence or paragraph,
   replay, pause, and stop playing.
+* Speak contents of clipboard.
 
 Requirements
 ------------
@@ -39,6 +40,10 @@ kttsd/libkttsd/pluginconf.h to $KDEDIR/include/.
 Using
 -----
 Make sure your speech engine is working.
+
+You may need to grant Festival write access to the audio device.
+
+  chmod a+rw /dev/dsp*
 
 To configure the speech plugin for KTTSD
 
