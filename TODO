@@ -1,39 +1,48 @@
-_ FestivalInt plugin should be showing translated names of voices (Comment[xx] lines in
-  voices file) based on user's desktop setting.  But a user with Spanish desktop says it isn't
-  working.  Why?
-_ Need way to get translators to fill in rest of Comment[xx] lines in plugins/festivalint/voices
-  file.
-_ Need someone to test the Finnish TTS to see if that is working correctly.
-_ Need someone who can read czech to try integrating this into KTTS: 
-  http://www.freebsoft.org/festival-czech
-_ Overall Audio Speed should be a realtime setting, i.e., not necessary to click Apply.
-_ Overall Audio Speed setting should be applied when using Test button in plugin Configure dialogs.
-_ Add drag N drop for the Talkers so it is easier to change the ordering.
-_ It is possible to configure multiple instances of Talkers with the exact same configuration.
-_ Add WhatsThis help.  The Jobs tab needs them.
-_ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
-  language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
-  desktop language.  Must somehow let kttsmgr know about the newly configured Talker.
-_ In kttsmgr jobs tab, if user has made changes but not applied them, and then clicks
-  Speak Clipboard, Speak File, or Change Talker buttons, warn user to apply the changes first.
-  Or maybe disable Jobs tab if changes are pending?
-_ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
+_ There are several issues with i18n:
+    _ FestivalInt plugin should be showing translated names of voices (Comment[xx] lines in
+      voices file) based on user's desktop setting.  But a user with Spanish desktop says it isn't
+      working.  Why?  Test with "KDE_LANG=es kttsmgr" command.
+    _ Need way to get translators to fill in rest of Comment[xx] lines in plugins/festivalint/voices
+      file.  Or maybe just install different translated versions of voices file?
+    _ The plugin Makefile.am's lack message targets, or should they just use kttsmgr catalog?
+_ Festival Interactive plugin:
+    _ Need someone to test the Finnish TTS to see if that is working correctly.
+    _ Need someone who can read czech to try integrating this into KTTS: 
+      http://www.freebsoft.org/festival-czech
+_ KTTSMgr:
+    _ Overall Audio Speed should be a realtime setting, i.e., not necessary to click Apply.
+    _ Overall Audio Speed setting should be applied when using Test button in plugin Configure dialogs.
+    _ Add drag N drop for the Talkers so it is easier to change the ordering.
+    _ It is possible to configure multiple instances of Talkers with the exact same configuration.
+    _ Add WhatsThis help.  The Jobs tab needs them.
+    _ In kttsmgr jobs tab, if user has made changes but not applied them, and then clicks
+      Speak Clipboard, Speak File, or Change Talker buttons, warn user to apply the changes first.
+      Or maybe disable Jobs tab if changes are pending?
+    _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
+    _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
+    _ In the job manager tab, one can drag the toolbars elsewhere, but the buttons
+      disappear.  Why?
+_ KTTSD:
+    _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
+      language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
+      desktop language.  Must somehow let kttsmgr know about the newly configured Talker.
+    _ Continue revision of KDE Speech API (kspeech.h).
+    _ Add support for speech markers.
+    _ Implement error signal handling in KTTSD.
+    _ Add support for SSML, JSML, Sable and other Speech Markup languages.
+    _ Add method for apps to play a sound file, including in the middle of a job.
+      Could be done with SSML or with special Talker Code = "sound".
 _ Remove kcm_kttsmgr once all apps (KSayIt) have stopped using it.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
   English (at the moment) and is alpha, don't think it is worth it now.
 _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/
   Currently written in c, but it looks like future versions will require Java VM.
-- Add support for SSML, JSML, Sable and other Speech Markup languages.
-- Continue revision of KDE Speech API (kspeech.h).
-- Add support for speech markers.
+  Main problem at the moment is that dhvani sends audio directly to /dev/dsp with no option
+  to send to a wav file.
 - Festival plugin (static library) crashes on first call to library.
 - Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
 - Command plugin crashes when using command 'flite -t "%t"' and flite can't get write access to /dev/dsp*.
-- In the job manager tab of kttsmgr, one can drag the toolbars elsewhere, but the buttons
-  disappear.  Why?
 _ IBM ViaVoice plugin?
-_ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
-_ Implement error signal handling in KTTSD.
 _ When stopText() is called, and Hadifix process is killed, the temporary wav file is not deleted,
   despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
   to happen in the configuration dialog when canceling Tests.
