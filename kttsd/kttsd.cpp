@@ -261,6 +261,26 @@ void KTTSD::nextParText(){
     speechData->nextParText();
 }
 
+/**
+ * Speak the clipboard contents.
+ */
+ 
+void KTTSD::speakClipboard()
+{
+    // Get the clipboard object.
+    QClipboard *cb = kapp->clipboard();
+
+    // Copy text from the clipboard.
+    QString text = cb->text();
+    
+    // Speak it.
+    if ( !text.isNull() ) 
+    {
+        setText(text);
+        startText();
+    }
+}
+
 /***** Slots *****/
 // Buttons within the dialog
 void KTTSD::openSelected()
@@ -308,6 +328,10 @@ void KTTSD::helpSelected(){
     kapp->invokeHelp();
 }
 
+void KTTSD::speakClipboardSelected(){
+    speakClipboard();
+}
+
 void KTTSD::closeSelected(){
     hide();
 }
@@ -319,23 +343,6 @@ void KTTSD::quitSelected(){
 // System tray context menu entries
 void KTTSD::configureSelected(){
 
-}
-
-// Speak contents of the clipboard.
-void KTTSD::speakClipboardSelected()
-{
-    // Get the clipboard object.
-    QClipboard *cb = kapp->clipboard();
-
-    // Copy text from the clipboard.
-    QString text = cb->text();
-    
-    // Speak it.
-    if ( !text.isNull() ) 
-    {
-        setText(text);
-        startText();
-    }
 }
 
 void KTTSD::aboutSelected(){

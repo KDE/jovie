@@ -174,6 +174,11 @@ class KTTSD : public kttsdUI, public DCOPObject {
          * Next paragrah
          */
         void nextParText();
+        
+        /**
+         * Speak the clipboard contents.
+         */
+        void speakClipboard();
 
         /**
          * Function exported in dcop to let other ones stop the service
