@@ -77,8 +77,6 @@ class FreeTTSConf : public PlugInConf {
 		};
 		void slotFreeTTSTest_clicked();
 		void slotSynthFinished();
-	signals:
-		void changed(bool);
 	
 	private:
 		/// Configuration Widget.
