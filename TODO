@@ -20,6 +20,7 @@ _ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the 
 _ IBM ViaVoice plugin?
 _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ Implement error signal handling in KTTSD.
+_ Hadifax needs to be renamed to Hadifix.
 
 Widgets needed; useful for whole KDE:
 - Language selection widgets, configurable and versatile.
