@@ -142,7 +142,7 @@ void XmlTransformerConf::defaults(){
     // Default doctype to blank.
     m_widget->doctypeLineEdit->setText( "" );
     // Default App ID to blank.
-    m_widget->appIdLineEdit->setText(" ");
+    m_widget->appIdLineEdit->setText( "" );
     // kdDebug() << "XmlTransformerConf::defaults: Exiting" << endl;
 }
 
