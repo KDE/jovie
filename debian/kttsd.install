@@ -64,8 +64,6 @@ debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/48x48/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/64x64/apps/kttsd.png
 debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/128x128/apps/kttsd.png
 
-debian/tmp/usr/share/apps/kttsjobmgr/kttsjobmgrui.rc
-
 debian/tmp/usr/share/doc/kde/HTML/*/kttsd/common
 debian/tmp/usr/share/doc/kde/HTML/*/kttsd/general.png
 debian/tmp/usr/share/doc/kde/HTML/*/kttsd/index.cache.bz2
