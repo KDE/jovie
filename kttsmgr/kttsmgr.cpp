@@ -70,9 +70,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak clipboard contents"), this, SLOT(speakClipboardSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
-        i18n("kttsmgr &Handbook"), this, SLOT(helpSelected()));
-    // Handbook not available yet.
-    contextMenu()->setItemEnabled(id, false);
+        i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
         i18n("&About kttsmgr"), this, SLOT(aboutSelected()));
         
@@ -104,7 +102,7 @@ void KttsMgrTray::aboutSelected()
 
 void KttsMgrTray::helpSelected()
 {
-    kapp->invokeHelp();
+    kapp->invokeHelp(QString::null,"kttsd");
 }
 
 void KttsMgrTray::quitSelected()
