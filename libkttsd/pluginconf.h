@@ -1,12 +1,11 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   pluginconf.h
   This file is the template for the configuration plug ins.
-  ------------------- 
-  Copyright : (C) 2002 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
-              (C) 2003 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
   -------------------
-  Original author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
-  Current Maintainer: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org> 
+  Copyright : (C) 2002-2003 by Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez
+  -------------------
+  Original author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
+  Current Maintainer: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
  ******************************************************************************/
 
 /***************************************************************************
@@ -17,7 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// $Id: $
+// $Id$
 
 #ifndef _PLUGINCONF_H_
 #define _PLUGINCONF_H_

@@ -1,12 +1,11 @@
-/**************************************************************************
+/***************************************************** vim:set ts=4 sw=4 sts=4:
   festivalplugin.cpp
   Generating the factories so festival can be used as plug in.
-  ------------------- 
-  Copyright : (C) 2002 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
-              (C) 2003 by JosÈ Pablo Ezequiel "Pupeno" Fern·ndez
   -------------------
-  Original author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
-  Current Maintainer: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
+  Copyright : (C) 2002-2003 by Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez
+  -------------------
+  Original author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
+  Current Maintainer: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
  ******************************************************************************/
 
 /***************************************************************************
