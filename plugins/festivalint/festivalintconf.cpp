@@ -26,6 +26,7 @@
 #include <qcheckbox.h>
 #include <qdir.h>
 #include <qslider.h>
+#include <qdom.h>
 
 // KDE includes.
 #include <kdialog.h>
@@ -197,7 +198,7 @@ QString FestivalIntConf::getTalkerCode()
             "<prosody volume=\"%4\" rate=\"%5\" />"
             "<kttsd synthesizer=\"%6\" />")
             .arg(voiceTemp.languageCode)
-            .arg(voiceTemp.name)
+            .arg(voiceTemp.code)
             .arg(voiceTemp.gender)
             .arg(volume)
             .arg(rate)
@@ -330,6 +331,32 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
     }
 }
 
+/**
+ * Given an XML node and child element name, returns the string value from the child element.
+ * If no such child element, returns def.
+ */
+QString FestivalIntConf::readXmlString(QDomNode &node, const QString &elementName, const QString &def)
+{
+    QDomNode childNode = node.namedItem(elementName);
+    if (!childNode.isNull())
+        return childNode.toElement().text();
+    else
+        return def;
+}
+
+/**
+ * Given an XML node and child element name, returns the boolean value from the child element.
+ * If no such child element, returns def.
+ */
+bool FestivalIntConf::readXmlBool(QDomNode &node, const QString &elementName, bool def)
+{
+    QDomNode childNode = node.namedItem(elementName);
+    if (!childNode.isNull())
+        return (childNode.toElement().text() == "true");
+    else
+        return def;
+}
+
 void FestivalIntConf::scanVoices()
 {
     // kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
@@ -355,9 +382,9 @@ void FestivalIntConf::scanVoices()
     {
         // Set up a progress dialog.
         m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_queryvoices",
-                                            i18n("Query Voices"),
-                                            i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
-                                            true);
+            i18n("Query Voices"),
+            i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
+            true);
         m_progressDlg->progressBar()->hide();
         m_progressDlg->setAllowCancel(true);
 
@@ -397,28 +424,61 @@ void FestivalIntConf::scanVoices()
         QString charSet;
         KGlobal::locale()->splitLocale(desktopLanguageCode, twoAlpha, countryCode, charSet);
         desktopLanguageCode = twoAlpha.lower();
+
         // Festival known voices list.
-        KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices",
-                       true, false);
+        QString voicesFilename = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices";
+        QDomDocument voicesDoc("Festival Voices");
+        QFile voicesFile(voicesFilename);
+        if (voicesFile.open(IO_ReadOnly)) voicesDoc.setContent(&voicesFile);
+        voicesFile.close();
+        QDomNodeList voices = voicesDoc.elementsByTagName("voice");
+        uint voicesCount = voices.count();
+        if (voicesCount == 0)
+            kdDebug() << "FestivalIntConf::scanVoices: Unable to open " << voicesFilename << ".  Is KDEDIR defined?" << endl;
+
+        // Iterate thru list of voice codes returned by Festival,
+        // find matching entry in voices.xml file, and add to list of supported voices.
         QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
         for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
         {
             QString code = *it;
-            voices.setGroup(code);
-            voiceStruct voiceTemp;
-            voiceTemp.code = code;
-            voiceTemp.name = voices.readEntry("Name", i18n("Unknown"));
-            voiceTemp.languageCode = voices.readEntry("Language", m_languageCode);
-            // Get translated comment, fall back to English comment, fall back to code.
-            voiceTemp.comment = voices.readEntry("Comment["+desktopLanguageCode+"]",
-                    voices.readEntry("Comment", code));
-            voiceTemp.gender = voices.readEntry("Gender", "neutral");
-            voiceTemp.preload = voices.readBoolEntry("Preload", false);
-            voiceTemp.volumeAdjustable = voices.readBoolEntry("VolumeAdjustable", true);
-            voiceTemp.rateAdjustable = voices.readBoolEntry("RateAdjustable", true);
-            voiceTemp.pitchAdjustable = voices.readBoolEntry("PitchAdjustable", true);
-            m_voiceList.append(voiceTemp);
-            m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
+            bool found = false;
+            for (uint index=0; index < voicesCount; index++)
+            {
+                QDomNode voiceNode = voices.item(index);
+                QString voiceCode = readXmlString(voiceNode, "code", QString::null);
+                kdDebug() << "FestivalIntConf::scanVoices: Comparing code " << code << " to " << voiceCode << endl;
+                if (voiceCode == code)
+                {
+                    found = true;
+                    voiceStruct voiceTemp;
+                    voiceTemp.code = code;
+                    voiceTemp.name = readXmlString(voiceNode, "name", i18n("Unknown"));
+                    voiceTemp.languageCode = readXmlString(voiceNode, "language", m_languageCode);
+                    voiceTemp.gender = readXmlString(voiceNode, "gender", "neutral");
+                    voiceTemp.preload = readXmlBool(voiceNode, "preload", false);
+                    voiceTemp.volumeAdjustable = readXmlBool(voiceNode, "volume-adjustable", true);
+                    voiceTemp.rateAdjustable = readXmlBool(voiceNode, "rate-adjustable", true);
+                    voiceTemp.pitchAdjustable = readXmlBool(voiceNode, "pitch-adjustable", true);
+                    m_voiceList.append(voiceTemp);
+                    m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.code + ")");
+                    break;
+                }
+            }
+            if (!found)
+            {
+                voiceStruct voiceTemp;
+                voiceTemp.code = code;
+                voiceTemp.name = i18n("Unknown");
+                voiceTemp.languageCode = m_languageCode;
+                voiceTemp.gender = "neutral";
+                voiceTemp.preload = false;
+                voiceTemp.volumeAdjustable = true;
+                voiceTemp.rateAdjustable = true;
+                voiceTemp.pitchAdjustable = true;
+                m_voiceList.append(voiceTemp);
+                m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.code + ")");
+            }
         }
         m_widget->selectVoiceCombo->setEnabled(true);
     }
@@ -454,16 +514,16 @@ void FestivalIntConf::slotTest_clicked()
     QString voiceCode = m_voiceList[m_widget->selectVoiceCombo->currentItem()].code;
 
     // Use the translated name of the voice as the test message.
-    QString testMsg = m_voiceList[m_widget->selectVoiceCombo->currentItem()].comment;
+    QString testMsg = m_voiceList[m_widget->selectVoiceCombo->currentItem()].name;
     // Fall back if none.
     if (testMsg == voiceCode) testMsg =
-                i18n("K D E is a modern graphical desktop for UNIX computers.");
+        i18n("K D E is a modern graphical desktop for UNIX computers.");
 
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "ktts_festivalint_testdlg",
-                                        i18n("Testing"),
-                                        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
-                                        true);
+        i18n("Testing"),
+        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
+        true);
     m_progressDlg->progressBar()->hide();
     m_progressDlg->setAllowCancel(true);
 

@@ -34,11 +34,11 @@
 
 class FestivalIntProc;
 class KProgressDialog;
+class QDomNode;
 
 typedef struct voiceStruct{
     QString code;               // Code as sent to Festival
     QString name;               // Name as displayed and returned in Talker Code.
-    QString comment;
     QString languageCode;       // Language code (en, es, etc)
     QString gender;             // male, female, or neutral
     bool preload;               // Start Festival and load this language when KTTSD is started.
@@ -129,6 +129,18 @@ class FestivalIntConf : public PlugInConf {
    private:
         int percentToSlider(int percentValue);
         int sliderToPercent(int sliderValue);
+
+        /**
+        * Given an XML node and child element name, returns the string value from the child element.
+        * If no such child element, returns def.
+        */
+        QString readXmlString(QDomNode &node, const QString &elementName, const QString &def);
+
+        /**
+        * Given an XML node and child element name, returns the boolean value from the child element.
+        * If no such child element, returns def.
+        */
+        bool readXmlBool(QDomNode &node, const QString &elementName, bool def);
 
         /**
         * Given a voice code, returns index into m_voiceList array (and voiceCombo box).

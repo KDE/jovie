@@ -1,3 +1,6 @@
+2004-12-19  Gary Cramblitt (PhantomsDad)
+        * Change Festival voices from ini to xml format.  Permit translators to translate voice names.
+
 2004-12-18  Gary Cramblitt (PhantomsDad)
         * Remove kcmkttsmgr.  Use kcmkttsd instead.
 
