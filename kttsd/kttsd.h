@@ -56,13 +56,8 @@ class KTTSD : public QObject, virtual public kspeech
         */
         ~KTTSD();
 
-        /**
-        * Holds if we are ok to go or not.
-        */
-        bool ok;
-    
         /** DCOP exported functions for kspeech interface **/
-        
+
         /**
         * Determine whether the currently-configured speech plugin supports a speech markup language.
         * @param talker         Code for the talker to do the speaking.  Example "en".
@@ -73,7 +68,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see kttsdMarkupType
         */
         virtual bool supportsMarkup(const QString &talker=NULL, const uint markupType = 0);
-        
+
         /**
         * Determine whether the currently-configured speech plugin supports markers in speech markup.
         * @param talker         Code for the talker to do the speaking.  Example "en".
@@ -82,7 +77,7 @@ class KTTSD : public QObject, virtual public kspeech
         *                       talker supports markers.
         */
         virtual bool supportsMarkers(const QString &talker=NULL);
-        
+
         /**
         * Say a message as soon as possible, interrupting any other speech in progress.
         * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
@@ -97,7 +92,7 @@ class KTTSD : public QObject, virtual public kspeech
         * replaced with this new message.
         */
         virtual ASYNC sayScreenReaderOutput(const QString &msg, const QString &talker=NULL);
-        
+
         /**
         * Say a warning.  The warning will be spoken when the current sentence
         * stops speaking and takes precedence over Messages and regular text.  Warnings should only
@@ -139,7 +134,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see sentenceparsing
         */
         virtual ASYNC setSentenceDelimiter(const QString &delimiter);
-        
+
         /**
         * Queue a text job.  Does not start speaking the text.
         * @param text           The message to be spoken.
@@ -163,7 +158,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see startText
         */
         virtual uint setText(const QString &text, const QString &talker=NULL);
-        
+
         /**
         * Adds another part to a text job.  Does not start speaking the text.
         * (thread safe)
@@ -180,7 +175,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see startText.
         */
         int appendText(const QString &text, const uint jobNum=0);
-        
+
         /**
         * Queue a text job from the contents of a file.  Does not start speaking the text.
         * @param filename       Full path to the file to be spoken.  May be a URL.
@@ -204,7 +199,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see startText
         */
         virtual uint setFile(const QString &filename, const QString &talker=NULL);
-        
+
         /**
         * Get the number of sentences in a text job.
         * @param jobNum         Job number of the text job.
@@ -227,19 +222,19 @@ class KTTSD : public QObject, virtual public kspeech
         * @see isSpeakingText
         */
         virtual uint getCurrentTextJob();
-        
+
         /**
         * Get the number of jobs in the text job queue.
         * @return               Number of text jobs in the queue.  0 if none.
         */
         virtual uint getTextJobCount();
-        
+
         /**
         * Get a comma-separated list of text job numbers in the queue.
         * @return               Comma-separated list of text job numbers in the queue.
         */
         virtual QString getTextJobNumbers();
-        
+
         /**
         * Get the state of a text job.
         * @param jobNum         Job number of the text job.
@@ -250,7 +245,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see kttsdJobState
         */
         virtual int getTextJobState(const uint jobNum=0);
-        
+
         /**
         * Get information about a text job.
         * @param jobNum         Job number of the text job.
@@ -292,7 +287,7 @@ class KTTSD : public QObject, virtual public kspeech
                 @endverbatim
         */
         virtual QByteArray getTextJobInfo(const uint jobNum=0);
-       
+
         /**
         * Given a Talker Code, returns the Talker ID of the talker that would speak
         * a text job with that Talker Code.
@@ -300,7 +295,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @return               Talker ID of the talker that would speak the text job.
         */
         virtual QString talkerCodeToTalkerId(const QString& talkerCode);
-        
+
         /**
         * Return a sentence of a job.
         * @param jobNum         Job number of the text job.
@@ -311,13 +306,13 @@ class KTTSD : public QObject, virtual public kspeech
         *                       job or sentence, returns "".
         */
         virtual QString getTextJobSentence(const uint jobNum=0, const uint seq=1);
-       
+
         /**
         * Determine if kttsd is currently speaking any text jobs.
         * @return               True if currently speaking any text jobs.
         */
         virtual bool isSpeakingText();
-        
+
         /**
         * Remove a text job from the queue.
         * @param jobNum         Job number of the text job.
@@ -400,7 +395,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see pauseText
         */
         virtual ASYNC resumeText(const uint jobNum=0);
-        
+
         /**
         * Get a list of the talkers configured in KTTS.
         * @return               A QStringList of fully-specified talker codes, one
@@ -409,7 +404,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see talkers
         */
         virtual QStringList getTalkers();
-        
+
         /**
         * Change the talker for a text job.
         * @param jobNum         Job number of the text job.
@@ -421,7 +416,7 @@ class KTTSD : public QObject, virtual public kspeech
         *                       defaults to the closest matching talker.
         */
         virtual ASYNC changeTextTalker(const uint jobNum=0, const QString &talker=NULL);
-        
+
         /**
         * Get the user's default talker.
         * @return               A fully-specified talker code.
@@ -430,7 +425,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @see getTalkers
         */
         virtual QString userDefaultTalker();
-        
+
         /**
         * Move a text job down in the queue so that it is spoken later.
         * @param jobNum         Job number of the text job.
@@ -456,7 +451,7 @@ class KTTSD : public QObject, virtual public kspeech
         * Does not affect the current speaking/not-speaking state of the job.
         */
         int jumpToTextPart(const int partNum, const uint jobNum=0);
-        
+
         /**
         * Advance or rewind N sentences in a text job.
         * @param n              Number of sentences to advance (positive) or rewind (negative) in the job.
@@ -476,7 +471,7 @@ class KTTSD : public QObject, virtual public kspeech
         * Add the clipboard contents to the text queue and begin speaking it.
         */
         virtual ASYNC speakClipboard();
-        
+
         /**
         * Displays the %KTTS Manager dialog.  In this dialog, the user may backup or skip forward in
         * any text job by sentence or paragraph, rewind jobs, pause or resume jobs, or
@@ -495,7 +490,7 @@ class KTTSD : public QObject, virtual public kspeech
         virtual void reinit();
 
     protected:
-            
+
     k_dcop:
         /**
         * This signal is emitted by KNotify when a notification event occurs.
@@ -503,7 +498,7 @@ class KTTSD : public QObject, virtual public kspeech
         void notificationSignal(const QString &event, const QString &fromApp,
                                 const QString &text, const QString &sound, const QString &file,
                                 const int present, const int level, const int winId, const int eventId );
-    
+
     private slots:
         /*
          * These functions are called whenever
@@ -530,13 +525,19 @@ class KTTSD : public QObject, virtual public kspeech
          * Fires whenever user clicks Apply or OK buttons in Settings dialog.
          */
         void configCommitted();
-        
+
     private:
+        /*
+        * Checks if KTTSD is ready to speak and at least one talker is configured.
+        * If not, user is prompted to display the configuration dialog.
+        */
+        bool ready();
+
         /*
         * Create and initialize the SpeechData object.
         */
         bool initializeSpeechData();
-        
+
         /*
          * Create and initialize the speaker.
          */
@@ -547,7 +548,7 @@ class KTTSD : public QObject, virtual public kspeech
          * @return appId         The DCOP sendId of calling application.  NULL if called internally by kttsd itself.
          */
         const QCString getAppId();
-        
+
         /*
         * If a job number is 0, returns the default job number for a command.
         * Returns the job number of the last job queued by the application, or if
@@ -555,7 +556,7 @@ class KTTSD : public QObject, virtual public kspeech
         * @return                Default job number.  0 if no such job.
         */
         uint applyDefaultJobNum(const uint jobNum);
-        
+
         /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD
          */

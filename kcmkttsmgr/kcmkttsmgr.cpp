@@ -24,6 +24,7 @@
 #include <math.h>
 
 // Qt includes.
+#include <qwidget.h>
 #include <qtabwidget.h>
 #include <qcheckbox.h>
 #include <qvbox.h>
@@ -102,9 +103,9 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_configDlg = 0;
 
     // Add the KTTS Manager widget
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QGridLayout *layout = new QGridLayout(this, 0, 0);
     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
-    layout->addWidget(m_kttsmgrw);
+    layout->addWidget(m_kttsmgrw, 0, 0);
 
     // Give buttons icons.
     m_kttsmgrw->higherTalkerPriorityButton->setIconSet(
@@ -1214,4 +1215,9 @@ void KCMKttsMgr::aboutSelected(){
     m_aboutDlg->show();
 }
 
-
+/*virtual*/ /*void resizeEvent( QResizeEvent ev )
+{
+    dynamic_cast<KCModule>(resizeEvent(ev));
+    updateGeometry();
+}
+*/

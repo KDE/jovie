@@ -124,6 +124,8 @@ class KCMKttsMgr :
         */
         virtual void kttsdExiting();
 
+        // virtual void resizeEvent( QResizeEvent ev );
+
     private:
         enum widgetPages
         {
@@ -317,6 +319,7 @@ class KCMKttsMgr :
         * Other slots.
         */
         void slotTabChanged();
+
 };
 
 #endif

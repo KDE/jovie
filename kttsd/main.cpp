@@ -49,12 +49,8 @@ int main (int argc, char *argv[]){
    // This app is started automatically, no need for session management
    app.disableSessionManagement();
    KTTSD *service = new KTTSD();
-   
-   // Are we ok to go ?
-   if(!service->ok){
-      return(1);
-   }
-   
-   kdDebug() << "Entering event loop." << endl;
+
+   // kdDebug() << "Entering event loop." << endl;
    return app.exec();
+   delete service;
 }

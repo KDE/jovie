@@ -1,8 +1,15 @@
+_ The Speak File function does not handle text files encoded differently from the desktop
+  setting.  For example, if desktop is UTF-8 or ISO 8859-1, an ISO 8859-2 file (polish for example)
+  is mangled and does not speak properly.  The best solution is to change KFileOpenDialog
+  to KEncodingFileOpenDialog and then pass the user's chosen encoding to kspeech::setFile,
+  but this will break any existing applications using setFile().  Are there any besides
+  KTTSMgr, I wonder?
 _ Epos plugin should default to ISO 8859-2 encoding, rather than Local (whatever)?
-  It seems to work with UTF-8, Latin1, and ISO 8859-2.  Why, it shouldn't work if
-  encoding is Latin1 (ISO 8859-1), but it does?
+  It seems to work with UTF-8, Latin1, and ISO 8859-2.  Why? It shouldn't work if
+  encoding is Latin1 (ISO 8859-1), but it does (or at least it *seems* to work).
+  I don't speak czech or slovak, so I'm not really sure.
 _ The khmtlktts plugin should automatically sense if KTTSD is installed and if not,
-  hide menu item.  If installed, but not configured, prompt user to run kttsmgr.
+  hide menu item.
 _ Clean up kspeech/kspeechsink api documentation for kdelibs.
 _ Audio Plugins:
     _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.

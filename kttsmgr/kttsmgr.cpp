@@ -82,7 +82,8 @@ int main (int argc, char *argv[])
     }
     else app.setMainWidget(&dlg);
 
-    if (showMainWindowOnStartup) dlg.show();
+//    if (showMainWindowOnStartup) dlg.show();
+    if (showMainWindowOnStartup) tray->setActive();
     return app.exec();
     delete tray;
 }

@@ -1,3 +1,8 @@
+2004-12-31  Gary Cramblitt (PhantomsDad)
+        * In KTTSD, if user has not yet configured any Talkers, prompt user and if they click
+          Yes, run KTTSMgr.  User has option to turn off prompt.
+        * Activate kspeech::showDialog() method.
+
 2004-12-30  Gary Cramblitt (PhantomsDad)
         * Set LANG and LC_CTYPE environment variables before starting subprocess in Epos and
           and Command plugins.  Fix encoding bug in Epos plugin.  Move common encoding routines

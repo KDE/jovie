@@ -53,5 +53,5 @@ xdg_apps_DATA = kcmkttsd.desktop
 
 # Translation message files.
 messages: rc.cpp
-	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kcmkttsmgr.pot
+	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kcmkttsd.pot
 
