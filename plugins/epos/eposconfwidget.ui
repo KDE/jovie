@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>559</width>
-            <height>300</height>
+            <width>535</width>
+            <height>381</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -65,9 +65,9 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="2" column="0">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>layout13</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -75,148 +75,473 @@
                         </property>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>eposServerPathLabel</cstring>
+                                <cstring>characterCodingLabel</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
                                     <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
+                                    <vsizetype>5</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Epos server executable path:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
+                                <string>Character &amp;encoding:</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
+                                <cstring>characterCodingBox</cstring>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="KComboBox">
                             <property name="name">
-                                <cstring>eposServerPath</cstring>
+                                <cstring>characterCodingBox</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
-                            <property name="url" stdset="0">
-                                <string>epos</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
-                                <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
+                                <string>Specifies which character encoding is used for passing the text.</string>
                             </property>
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="1" column="0">
                     <property name="name">
-                        <cstring>layout3</cstring>
+                        <cstring>layout17</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>eposClientPathLabel</cstring>
+                                <cstring>layout14</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Epos client executable path:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the Epos client program will be found due to the PATH environment variable, simply enter "say" here.  Otherwise, specify the full path to the Epos client program.</string>
-                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>timeLabel</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Speed:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>timeBox</cstring>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>frequencyLabel</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Pitch:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>frequencyBox</cstring>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>eposClientPath</cstring>
+                                <cstring>layout15</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>timeBox</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="suffix">
+                                        <string> %</string>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>200</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>50</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>frequencyBox</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="suffix">
+                                        <string> %</string>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>200</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>50</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout16</cstring>
                             </property>
-                            <property name="url" stdset="0">
-                                <string>say</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the Epos client program will be found due to the PATH environment variable, simply enter "say" here.  Otherwise, specify the full path to the Epos client program.</string>
-                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>timeSlider</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>NoFocus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000</number>
+                                    </property>
+                                    <property name="lineStep">
+                                        <number>10</number>
+                                    </property>
+                                    <property name="pageStep">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>500</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>frequencySlider</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>NoFocus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000</number>
+                                    </property>
+                                    <property name="lineStep">
+                                        <number>10</number>
+                                    </property>
+                                    <property name="pageStep">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>500</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="0" column="0">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>layout13</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>eposServerOptionsLabel</cstring>
+                                <cstring>layout11</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Epos server options:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignLeft</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
-                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>eposServerPathLabel</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Epos server executable path:</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignVCenter</set>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>festivalVoicesPath</cstring>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>eposClientPathLabel</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Epos client executable path:</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignVCenter</set>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>festivalVoicesPath</cstring>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>If the Epos client program will be found due to the PATH environment variable, simply enter "say" here.  Otherwise, specify the full path to the Epos client program.</string>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
-                        <widget class="QLineEdit">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>eposServerOptions</cstring>
+                                <cstring>layout12</cstring>
                             </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
-                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="KURLRequester">
+                                    <property name="name">
+                                        <cstring>eposServerPath</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="url" stdset="0">
+                                        <string>epos</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
+                                    </property>
+                                </widget>
+                                <widget class="KURLRequester">
+                                    <property name="name">
+                                        <cstring>eposClientPath</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="url" stdset="0">
+                                        <string>say</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>If the Epos client program will be found due to the PATH environment variable, simply enter "say" here.  Otherwise, specify the full path to the Epos client program.</string>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
+                <widget class="QGroupBox" row="3" column="0">
+                    <property name="name">
+                        <cstring>advancedGroupBox</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Additional options (advanced)</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget" row="0" column="0">
+                            <property name="name">
+                                <cstring>layout14</cstring>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLayoutWidget" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>layout13</cstring>
+                                    </property>
+                                    <vbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLineEdit">
+                                            <property name="name">
+                                                <cstring>eposServerOptions</cstring>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLineEdit">
+                                            <property name="name">
+                                                <cstring>eposClientOptions</cstring>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
+                                            </property>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                                <widget class="QLayoutWidget" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>layout12</cstring>
+                                    </property>
+                                    <vbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLabel">
+                                            <property name="name">
+                                                <cstring>eposServerOptionsLabel</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>5</hsizetype>
+                                                    <vsizetype>1</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="text">
+                                                <string>Epos server:</string>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>AlignVCenter|AlignLeft</set>
+                                            </property>
+                                            <property name="buddy" stdset="0">
+                                                <cstring>festivalVoicesPath</cstring>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel">
+                                            <property name="name">
+                                                <cstring>eposClientOptionsLabel</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>5</hsizetype>
+                                                    <vsizetype>1</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="text">
+                                                <string>Epos client:</string>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>AlignVCenter|AlignLeft</set>
+                                            </property>
+                                            <property name="buddy" stdset="0">
+                                                <cstring>festivalVoicesPath</cstring>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
+                                            </property>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget" row="4" column="0">
                     <property name="name">
                         <cstring>layout5</cstring>
                     </property>
@@ -257,112 +582,15 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="KComboBox" row="4" column="1">
-                    <property name="name">
-                        <cstring>characterCodingBox</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Specifies which character encoding is used for passing the text.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0">
-                    <property name="name">
-                        <cstring>characterCodingLabel</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Character &amp;encoding:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>characterCodingBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>layout5</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>eposClientOptionsLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Epos client options:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignLeft</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>festivalVoicesPath</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>eposClientOptions</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
             </grid>
         </widget>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>spacer2_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>41</height>
-                </size>
-            </property>
-        </spacer>
     </grid>
 </widget>
 <customwidgets>
 </customwidgets>
 <tabstops>
     <tabstop>eposServerPath</tabstop>
-    <tabstop>eposServerOptions</tabstop>
     <tabstop>eposClientPath</tabstop>
-    <tabstop>eposClientOptions</tabstop>
     <tabstop>characterCodingBox</tabstop>
     <tabstop>eposTest</tabstop>
 </tabstops>
@@ -372,12 +600,14 @@
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kcombobox.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

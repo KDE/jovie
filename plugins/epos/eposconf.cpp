@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  eposconf.cpp
   Configuration widget and functions for Epos plug in
   -------------------
   Copyright : (C) 2004 Gary Cramblitt
@@ -16,11 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
+// C++ includes.
+#include <math.h>
+
 // Qt includes.
 #include <qfile.h>
 #include <qapplication.h>
 #include <qtextcodec.h>
 #include <qlayout.h>
+#include <qslider.h>
 
 // KDE includes.
 #include <kdialog.h>
@@ -32,6 +35,7 @@
 #include <kstandarddirs.h>
 #include <kcombobox.h>
 #include <klocale.h>
+#include <knuminput.h>
 
 // Epos Plugin includes.
 #include "eposproc.h"
@@ -59,13 +63,25 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
     connect(m_widget->eposServerPath, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
     connect(m_widget->eposClientPath, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
-    connect(m_widget->eposServerOptions, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
-    connect(m_widget->eposClientOptions, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
+            this, SLOT(configChanged()));
+    connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
+            this, SLOT(timeBox_valueChanged(int)));
+    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)),
+            this, SLOT(frequencyBox_valueChanged(int)));
+    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(timeSlider_valueChanged(int)));
+    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)),
+            this, SLOT(frequencySlider_valueChanged(int)));
+    connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->characterCodingBox, SIGNAL(activated(const QString&)),
         this, SLOT(configChanged()));
+    connect(m_widget->eposServerOptions, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
+    connect(m_widget->eposClientOptions, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
     connect(m_widget->eposTest, SIGNAL(clicked()),
         this, SLOT(slotEposTest_clicked()));
 }
@@ -103,7 +119,20 @@ void EposConf::load(KConfig *config, const QString &configGroup){
             if (codecString == m_widget->characterCodingBox->text(i))
                 codec = i;
     }
+    m_widget->timeBox->setValue(config->readNumEntry("time", 100));
+    m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
     m_widget->characterCodingBox->setCurrentItem(codec);
+}
+
+/**
+* Converts a language code into the language setting passed to Epos synth.
+*/
+QString EposConf::languageCodeToEposLanguage(const QString &languageCode)
+{
+    QString eposLanguage;
+    if (languageCode.left(2) == "cs") eposLanguage = "czech";
+    if (languageCode.left(2) == "sk") eposLanguage = "slovak";
+    return eposLanguage;
 }
 
 void EposConf::save(KConfig *config, const QString &configGroup){
@@ -112,12 +141,14 @@ void EposConf::save(KConfig *config, const QString &configGroup){
     config->setGroup("Epos");
     config->writePathEntry("EposServerExePath", m_widget->eposServerPath->url());
     config->writePathEntry("EposClientExePath", m_widget->eposClientPath->url());
-
+    config->writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
     config->setGroup(configGroup);
     config->writePathEntry("EposServerExePath", m_widget->eposServerPath->url());
     config->writePathEntry("EposClientExePath", m_widget->eposClientPath->url());
     config->writeEntry("EposServerOptions", m_widget->eposServerOptions->text());
     config->writeEntry("EposClientOptions", m_widget->eposClientOptions->text());
+    config->writeEntry("time", m_widget->timeBox->value());
+    config->writeEntry("pitch", m_widget->frequencyBox->value());
     int codec = m_widget->characterCodingBox->currentItem();
     if (codec == EposProc::Local)
         config->writeEntry("Codec", "Local");
@@ -135,6 +166,10 @@ void EposConf::defaults(){
     m_widget->eposClientPath->setURL("say");
     m_widget->eposServerOptions->setText("");
     m_widget->eposClientOptions->setText("");
+    m_widget->timeBox->setValue(100);
+    timeBox_valueChanged(100);
+    m_widget->frequencyBox->setValue(100);
+    frequencyBox_valueChanged(100);
     buildCodecList();
     m_widget->characterCodingBox->setCurrentItem(0);
 }
@@ -152,6 +187,9 @@ QString EposConf::getTalkerCode()
     {
         if (!getLocation(eposServerExe).isEmpty() && !getLocation(eposClientExe).isEmpty())
         {
+            QString rate = "medium";
+            if (m_widget->timeBox->value() < 75) rate = "slow";
+            if (m_widget->timeBox->value() > 125) rate = "fast";
             return QString(
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
@@ -160,7 +198,7 @@ QString EposConf::getTalkerCode()
                     .arg("fixed")
                     .arg("neutral")
                     .arg("medium")
-                    .arg("medium")
+                    .arg(rate)
                     .arg("Epos TTS Synthesis System");
         }
     }
@@ -216,7 +254,11 @@ void EposConf::slotEposTest_clicked()
         m_widget->eposServerOptions->text(),
         m_widget->eposClientOptions->text(),
         m_widget->characterCodingBox->currentItem(),
-        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())));
+        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())),
+        languageCodeToEposLanguage(m_languageCode),
+        m_widget->timeBox->value(),
+        m_widget->frequencyBox->value()
+        );
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
@@ -277,4 +319,36 @@ void EposConf::slotSynthStopped()
     // Clean up after canceling test.
     QString filename = m_eposProc->getFilename();
     if (!filename.isNull()) QFile::remove(filename);
+}
+
+// Basically the slider values are logarithmic (0,...,1000) whereas percent
+// values are linear (50%,...,200%).
+//
+// slider = alpha * (log(percent)-log(50))
+// with alpha = 1000/(log(200)-log(50))
+
+int EposConf::percentToSlider(int percentValue) {
+    double alpha = 1000 / (log(200) - log(50));
+    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
+}
+
+int EposConf::sliderToPercent(int sliderValue) {
+    double alpha = 1000 / (log(200) - log(50));
+    return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
+}
+
+void EposConf::timeBox_valueChanged(int percentValue) {
+    m_widget->timeSlider->setValue (percentToSlider (percentValue));
+}
+
+void EposConf::frequencyBox_valueChanged(int percentValue) {
+    m_widget->frequencySlider->setValue(percentToSlider(percentValue));
+}
+
+void EposConf::timeSlider_valueChanged(int sliderValue) {
+    m_widget->timeBox->setValue (sliderToPercent (sliderValue));
+}
+
+void EposConf::frequencySlider_valueChanged(int sliderValue) {
+    m_widget->frequencyBox->setValue(sliderToPercent(sliderValue));
 }

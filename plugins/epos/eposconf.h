@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  eposconf.h
   Configuration widget and functions for Epos plug in
   -------------------
   Copyright : (C) 2004 by Gary Cramblitt
@@ -108,8 +107,20 @@ class EposConf : public PlugInConf {
         void slotEposTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();
+        void timeBox_valueChanged(int percentValue);
+        void frequencyBox_valueChanged(int percentValue);
+        void timeSlider_valueChanged(int sliderValue);
+        void frequencySlider_valueChanged(int sliderValue);
 
     private:
+        /**
+        * Converts a language code into the language setting passed to Epos synth.
+        */
+        QString languageCodeToEposLanguage(const QString &languageCode);
+
+        int percentToSlider(int percentValue);
+        int sliderToPercent(int sliderValue);
+
         // Language code.
         QString m_languageCode;
 

@@ -149,6 +149,10 @@ class EposProc : public PlugInProc{
         * @param eposClientOptions       Options passed to Epos client executable (don't include -o).
         * @param encoding                Codec index.
         * @param codec                   Codec if encoding not Local, Latin1, or Unicode.
+        * @param eposLanguage            Epos language setting.  "czech", "slovak",
+        *                                or null (default language).
+        * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
+        * @param pitch                   Pitch persentage.  50 to 200.
         */
         void synth(
             const QString &text,
@@ -158,7 +162,10 @@ class EposProc : public PlugInProc{
             const QString& eposServerOptions,
             const QString& eposClientOptions,
             int encoding,
-            QTextCodec *codec);
+            QTextCodec *codec,
+            const QString& eposLanguage,
+            const int time,
+            const int pitch);
     
     private slots:
         void slotProcessExited(KProcess* proc);
@@ -189,6 +196,21 @@ class EposProc : public PlugInProc{
          * Epos Client process
          */
         KProcess* m_eposProc;
+        
+        /**
+        * Epos language setting.  "czech", "slovak", or Null (use default language).
+        */
+        QString m_eposLanguage;
+        
+        /**
+        * Rate (speed) from config file.
+        */
+        int m_time;
+        
+        /**
+        * Pitch from the config file.
+        */
+        int m_pitch;
         
         /**
         * Codec.

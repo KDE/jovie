@@ -16,6 +16,9 @@
  *                                                                         *
  ***************************************************************************/
 
+// C++ includes.
+#include <math.h>
+
 // Qt includes.
 #include <qstring.h>
 #include <qstringlist.h>
@@ -63,6 +66,9 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     config->setGroup(configGroup);
     m_eposServerExePath = config->readPathEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readPathEntry("EposClientExePath", "say");
+    m_eposLanguage = config->readEntry("Language", QString::null);
+    m_time = config->readNumEntry("time", 100);
+    m_pitch = config->readNumEntry("pitch", 100);
     m_eposServerOptions = config->readEntry("EposServerOptions", QString::null);
     m_eposClientOptions = config->readEntry("EposClientOptions", QString::null);
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
@@ -117,7 +123,8 @@ void EposProc::sayText(const QString &text)
 {
     synth(text, QString::null, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
-        m_codec, QTextCodec::codecForIndex(m_codec));
+        m_codec, QTextCodec::codecForIndex(m_codec),
+        m_eposLanguage, m_time, m_pitch);
 }
 
 /**
@@ -134,7 +141,8 @@ void EposProc::synthText(const QString& text, const QString& suggestedFilename)
 {
     synth(text, suggestedFilename, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
-        m_codec, QTextCodec::codecForIndex(m_codec));
+        m_codec, QTextCodec::codecForIndex(m_codec),
+        m_eposLanguage, m_time, m_pitch);
 };
 
 /**
@@ -148,6 +156,10 @@ void EposProc::synthText(const QString& text, const QString& suggestedFilename)
 * @param eposClientOptions       Options passed to Epos client executable (don't include -o).
 * @param encoding                Codec index.
 * @param codec                   Codec if encoding not Local, Latin1, or Unicode.
+* @param eposLanguage            Epos language setting.  "czech", "slovak",
+*                                or null (default language).
+* @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
+* @param pitch                   Pitch persentage.  50 to 200.
 */
 void EposProc::synth(
     const QString &text,
@@ -157,7 +169,10 @@ void EposProc::synth(
     const QString& eposServerOptions,
     const QString& eposClientOptions,
     int encoding,
-    QTextCodec *codec)
+    QTextCodec *codec,
+    const QString& eposLanguage,
+    const int time,
+    const int pitch)
 {
     // kdDebug() << "Running: EposProc::synth(const QString &text)" << endl;
 
@@ -194,19 +209,37 @@ void EposProc::synth(
         ts.setCodec (codec);
     ts << text;
     ts << endl; // Some synths need this, eg. flite.
-    
+
     // Quote the text as one parameter.
     QString escText = KShellProcess::quote(encText);
-    
+
     // kdDebug()<< "EposProc::synth: Creating Epos object" << endl;
     m_eposProc = new KProcess;
     m_eposProc->setUseShell(true);
     *m_eposProc << eposClientExePath;
+    // Language.
+    if (!eposLanguage.isEmpty())
+        *m_eposProc << QString("--language=%1").arg(eposLanguage);
+    // Rate (speed).
+    // Map 50% to 200% onto 0 to 1000.
+    // slider = alpha * (log(percent)-log(50))
+    // with alpha = 1000/(log(200)-log(50))
+    double alpha = 1000 / (log(200) - log(50));
+    int slider = (int)floor (0.5 + alpha * (log(time)-log(50)));
+    // Center at 0.
+    slider = slider - 500;
+    // Map -500 to 500 onto 45 to -45 then shift to 130 to 40 (85 midpoint).
+    float stretchValue = (-float(slider) * 45.0 / 500.0) + 85.0;
+    QString timeMsg = QString("--init_t=%1").arg(stretchValue, 0, 'f', 3);
+    *m_eposProc << timeMsg;
+    // Pitch.  Map 50% to 200% onto 50 to 200.  easy.
+    QString pitchMsg = QString("--init_f=%1").arg(pitch);
+    *m_eposProc << pitchMsg;
+    // Output file.
     if (!suggestedFilename.isEmpty()) 
         *m_eposProc << "-o";
     if (!eposClientOptions.isEmpty())
         *m_eposProc << eposClientOptions;
-    // TODO: Set language (-l option) based on KTTSD language group.
     *m_eposProc << escText;
     if (!suggestedFilename.isEmpty()) 
         *m_eposProc << " >" + suggestedFilename;

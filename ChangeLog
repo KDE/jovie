@@ -1,8 +1,11 @@
+2004-11-24  Gary Cramblitt (PhantomsDad)
+        * Add Speed and Pitch controls to Epos plugin.  Also set language.
+        * Better Speed adjustment for HTS voices.
+
 2004-11-23  Gary Cramblitt (PhantomsDad)
         * Add support for OGI English and Spanish voices.
         * Update Handbook.
         * Better Spanish translations for voice names.
-        * Better Speed adjustment for HTS voices.
 
 2004-11-22  Gary Cramblitt (PhantomsDad)
         * Add support for IMS German Festival.

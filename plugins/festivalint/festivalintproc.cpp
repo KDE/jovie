@@ -221,16 +221,17 @@ void FestivalIntProc::synth(
     // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
         QString timeMsg;
-        // HTS voices don't work under Debian.  Why?  ..grc
         if (voiceCode.contains("_hts") > 0)
         {
-            // Map 50% to 100% onto 0.15 to 0.
-            // Map 100% to 200% onto 0 to -0.15.
-            float stretchValue;
-            if (time <= 100)
-                stretchValue = ((100.0 - float(time)) *  0.30)/100.0;
-            else
-                stretchValue = ((float(time) - 100.0) * -0.15)/100.0;
+            // Map 50% to 200% onto 0 to 1000.
+            // slider = alpha * (log(percent)-log(50))
+            // with alpha = 1000/(log(200)-log(50))
+            double alpha = 1000 / (log(200) - log(50));
+            int slider = (int)floor (0.5 + alpha * (log(time)-log(50)));
+            // Center at 0.
+            slider = slider - 500;
+            // Map -500 to 500 onto 0.15 to -0.15.
+            float stretchValue = -float(slider) * 0.15 / 500.0;
             timeMsg = QString("(set! hts_duration_stretch %1)").arg(
                     stretchValue, 0, 'f', 3);
         }
