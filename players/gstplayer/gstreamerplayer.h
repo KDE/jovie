@@ -22,7 +22,6 @@ extern "C" {
 #include <gst/gstversion.h>
 }
 #include <gst/gst.h>
-#include <gst/gstversion.h>
 #include <qstring.h>
 #include "player.h"
 
