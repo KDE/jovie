@@ -8,7 +8,7 @@ bin_PROGRAMS = kttsd
 
 kttsd_SOURCES = main.cpp kttsd.cpp kttsd.skel speaker.cpp speechdata.cpp
 kttsd_LDFLAGS = $(all_libraries) -module -avoid-version
-kttsd_LDADD = $(LIB_KDECORE)  $(top_builddir)/kttsd/libkttsd/libkttsd.la
+kttsd_LDADD = $(LIB_KDECORE) $(LIB_KIO) $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 messages:
 	$(XGETTEXT) -nki18n $(kttsd_SOURCES) -o $(podir)/kttsd.pot

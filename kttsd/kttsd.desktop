@@ -1,13 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-
-ServiceTypes=KDEDModule
-X-KDE-ModuleType=Library
-X-KDE-Library=kttsd
-X-KDE-FactoryName=kttsd
-X-KDE-Kded-autoload=false
-X-KDE-Kded-load-on-demand=true
+Exec=kttsd
+X-DCOP:-ServiceType=Unique
+X-KDE-StartupNotify=false
 
 Name=KTTSD
 Comment=KDE Text To Speech Daemon
+Comment[es]=KDE Texto Daemon de ortografía.
+Comment[fr]=Démon texte vers parole de KDE
+Comment[sv]=KDE:s text till tal demon
+
