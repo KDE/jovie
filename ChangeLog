@@ -1,5 +1,6 @@
 2004-11-25  Gary Cramblitt (PhantomsDad)
         * Add Finnish Male voice (http://www.ling.helsinki.fi/suopuhe/download/)
+        * Improve throughput slightly by emitting Text Started signal after playback has begun.
 
 2004-11-24  Gary Cramblitt (PhantomsDad)
         * Add overall Speed control to KTTSMgr Audio tab.  This permits to speed up speech

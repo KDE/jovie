@@ -456,6 +456,11 @@ void Speaker::doUtterances()
                                 {
                                     if (it->plugin->getState() == psIdle)
                                     {
+                                        // Set job to speaking state and set sequence number.
+                                        mlText* sentence = it->sentence;
+                                        m_currentJobNum = sentence->jobNum;
+                                        m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
+                                        m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
                                         prePlaySignals(it);
                                         kdDebug() << "Async synthesis and audibilizing." << endl;
                                         it->state = usSaying;
@@ -1529,8 +1534,13 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 {
 
                     it->audioPlayer = createPlayerObject();
-                    prePlaySignals(it);
                     it->audioPlayer->startPlay(it->audioUrl);
+                    // Set job to speaking state and set sequence number.
+                    mlText* sentence = it->sentence;
+                    m_currentJobNum = sentence->jobNum;
+                    m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
+                    m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
+                    prePlaySignals(it);
                     it->state = usPlaying;
                     if (!m_timer->start(timerInterval, FALSE)) kdDebug() << 
                         "Speaker::startPlayingUtterance: timer.start failed" << endl;
@@ -1590,9 +1600,6 @@ void Speaker::prePlaySignals(uttIterator it)
         }
         // Set job to speaking state and set sequence number.
         mlText* sentence = it->sentence;
-        m_currentJobNum = sentence->jobNum;
-        m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
-        m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
         // Emit sentence started signal.
         emit sentenceStarted(sentence->text, 
             sentence->talker, sentence->appId,
