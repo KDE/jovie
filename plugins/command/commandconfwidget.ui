@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CommandConfWidget</class>
 <widget class="PlugInConf">
     <property name="name">
@@ -9,13 +9,13 @@
             <x>0</x>
             <y>0</y>
             <width>582</width>
-            <height>287</height>
+            <height>322</height>
         </rect>
     </property>
     <property name="caption">
         <string>CommandConfWidget</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -25,7 +25,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>confiurationBox</cstring>
             </property>
@@ -183,7 +183,24 @@
                 </widget>
             </grid>
         </widget>
-    </vbox>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>30</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <customwidgets>
     <customwidget>
