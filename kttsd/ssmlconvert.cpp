@@ -27,6 +27,7 @@
 #include <qtextstream.h>
 
 // KDE includes.
+#include <kdeversion.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <ktempfile.h>
@@ -219,7 +220,9 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     // not wrap it in such.  But maybe this should be handled by SpeechData::setText()?
     *wstream << text;
     inFile.close();
+#if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)
     inFile.sync();
+#endif
 
     // Get a temporary output file name.
     KTempFile outFile(locateLocal("tmp", "kttsd-"), ".output");
@@ -232,8 +235,9 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     *m_xsltProc << "xsltproc";
     *m_xsltProc << "-o" << m_outFilename  << "--novalid"
         << m_xsltFilename << m_inFilename;
-    kdDebug() << "SSMLConvert::transform: executing command: " <<
-        m_xsltProc->args() << endl;
+    // Warning: This won't compile under KDE 3.2.  See FreeTTS::argsToStringList().
+    // kdDebug() << "SSMLConvert::transform: executing command: " <<
+    //     m_xsltProc->args() << endl;
 
     connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
         this, SLOT(slotProcessExited(KProcess*)));
