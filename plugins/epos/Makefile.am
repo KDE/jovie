@@ -2,10 +2,7 @@ INCLUDES = \
         -I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
         -I$(kde_includes)/arts \
         $(all_includes)
-AM_CPPFLAGS = \
-        -I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-        -I$(kde_includes)/arts \
-        $(all_includes)
+
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_eposplugin.la
@@ -22,7 +19,3 @@ services_DATA = kttsd_eposplugin.desktop
 servicesdir = $(kde_servicesdir)
 
 noinst_HEADERS =  eposproc.h eposconf.h eposconfwidget.h
-
-# Get translators to translate library
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_eposplugin.pot

@@ -22,4 +22,4 @@
 
 typedef K_TYPELIST_2( XmlTransformerProc, XmlTransformerConf ) XmlTransformerPlugin;
 K_EXPORT_COMPONENT_FACTORY( libkttsd_xmltransformerplugin,
-    KGenericFactory<XmlTransformerPlugin>("kttsd_xmltransformerplugin") );
+    KGenericFactory<XmlTransformerPlugin>("kttsd") );

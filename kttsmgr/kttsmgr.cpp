@@ -33,6 +33,8 @@
 
 int main (int argc, char *argv[])
 {
+    KGlobal::locale()->setMainCatalogue("kttsd");
+
     KAboutData aboutdata("kttsmgr", I18N_NOOP("KTTSMgr"),
         "0.3.0", I18N_NOOP("Text-to-Speech Manager"),
         KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");

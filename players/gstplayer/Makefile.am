@@ -4,10 +4,6 @@ INCLUDES = \
 	$(CFLAGS_GST) \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
-AM_CPPFLAGS = \
-	$(CFLAGS_GST) \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO

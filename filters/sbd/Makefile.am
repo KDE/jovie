@@ -25,7 +25,3 @@ sbddata_DATA = \
 	polish_festival_sbdrc
 
 noinst_HEADERS = sbdproc.h
-
-# Get translators to translate library.
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_sbdplugin.pot

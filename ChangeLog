@@ -1,3 +1,6 @@
+2005-03-06  Gary Cramblitt (PhantomsDad)
+        * Consolidated all the translation catalogues into single catalog called "kttsd".
+
 2005-03-05  Gary Cramblitt (PhantomsDad)
         * Add support for Kiswahili, Zulu, and Ibibio Festival languages.  Get them at
           http://www.llsti.org/index.htm.  Note that Ibibio does not have an assigned two-letter

@@ -101,9 +101,12 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 {
     // Initialize some variables.
     selectOnTextSet = false;
-    
+
     setInstance(KttsJobMgrFactory::instance());
-    
+
+    // All the ktts components use the same catalogue.
+    KGlobal::locale()->insertCatalogue("kttsd");
+
     // Create a QVBox to host everything.
     QVBox* vBox = new QVBox(parent);
 
@@ -238,6 +241,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
 KttsJobMgrPart::~KttsJobMgrPart()
 {
+    KGlobal::locale()->removeCatalogue("kttsd");
     closeURL();
 }
 

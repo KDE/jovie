@@ -12,3 +12,8 @@ SUBDIRS = \
         kttsmgr \
 		app-plugins
 
+messages: rc.cpp
+	$(EXTRACTRC) */*.rc */*/*.rc >> rc.cpp
+	$(EXTRACTRC) */*.ui */*/*.ui >> rc.cpp
+	$(EXTRACTRC) --tag=name --context=FestivalVoiceName plugins/festivalint/voices >> rc.cpp
+	$(XGETTEXT) rc.cpp */*.cpp */*.h */*/*.cpp */*/*.h -o $(podir)/kttsd.pot

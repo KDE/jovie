@@ -36,7 +36,7 @@
 #include "katekttsd.h"
 #include "katekttsd.moc"
 
-K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
+K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "kttsd" ) )
 
 KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const char* name, const QStringList& )
     : KTextEditor::Plugin ( (KTextEditor::Document*) parent, name )

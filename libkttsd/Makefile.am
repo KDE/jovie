@@ -1,7 +1,6 @@
 # Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
 # so keep them synchronized.
 INCLUDES = $(all_includes)
-AM_CPPFLAGS = $(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO

@@ -1,9 +1,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
-AM_CPPFLAGS = \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	$(all_includes)
+
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_stringreplacerplugin.la
@@ -31,7 +29,3 @@ stringreplacerdata_DATA = \
 	kmail.xml
 
 noinst_HEADERS =  stringreplacerconfwidget.h editreplacementwidget.h
-
-# Get translators to translate library.
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_stringreplacerplugin.pot

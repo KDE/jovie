@@ -2,10 +2,7 @@ INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	-I$(kde_includes)/arts \
 	$(all_includes)
-AM_CPPFLAGS = \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	-I$(kde_includes)/arts \
-	$(all_includes)
+
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_festivalintplugin.la
@@ -29,8 +26,3 @@ festivalintxsltdatadir = $(kde_datadir)/kttsd/festivalint/xslt/
 festivalintxsltdata_DATA = SSMLtoSable.xsl
 
 noinst_HEADERS =  festivalintconfwidget.h
-
-# Get translators to translate library and voice names.
-messages: rc.cpp
-	$(EXTRACTRC) --tag=name --context=FestivalVoiceName voices >> rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_festivalintplugin.pot

@@ -44,8 +44,3 @@ xdg_apps_DATA = kcmkttsd.desktop
 # Install data files.
 kcmkttsddatadir = $(kde_datadir)/kttsd/
 kcmkttsddata_DATA = kcmkttsd_testmessage.desktop
-
-# Translation message files.
-messages: rc.cpp
-	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kcmkttsd.pot
-

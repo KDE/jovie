@@ -23,5 +23,5 @@
 
 typedef K_TYPELIST_2( SbdProc, SbdConf ) SbdPlugin;
 K_EXPORT_COMPONENT_FACTORY( libkttsd_sbdplugin,
-    KGenericFactory<SbdPlugin>("kttsd_sbdplugin") );
+    KGenericFactory<SbdPlugin>("kttsd") );
 

@@ -4,11 +4,6 @@ INCLUDES = \
 	-I$(kde_includes)/arts \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
-	
-AM_CPPFLAGS = \
-	-I$(kde_includes)/arts \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
@@ -33,4 +28,3 @@ noinst_HEADERS = \
 # This library is installed as a plugin.
 services_DATA = kttsd_artsplugin.desktop
 servicesdir = $(kde_servicesdir)
-

@@ -17,6 +17,3 @@ kttsddatadir = $(kde_datadir)/ktexteditor_kttsd
 kttsddata_DATA = ktexteditor_kttsdui.rc
 
 kde_services_DATA = ktexteditor_kttsd.desktop
-
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/ktexteditor_kttsd.pot

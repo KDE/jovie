@@ -30,8 +30,3 @@ noinst_HEADERS = kttsmgr.h
 
 # K Menu entry.
 xdg_apps_DATA = kttsmgr.desktop
-
-# Translation message files.
-messages:
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsmgr.pot
-

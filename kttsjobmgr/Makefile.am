@@ -4,10 +4,6 @@ INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
-AM_CPPFLAGS = \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	$(KTTS_KSPEECH_INCLUDE) \
-	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
@@ -41,7 +37,3 @@ kde_services_DATA =  kttsjobmgr.desktop
 # KPart data.
 rcdir = $(kde_datadir)/kttsjobmgr
 rc_DATA = kttsjobmgrui.rc
-
-# Translation message files.
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsjobmgr.pot

@@ -47,9 +47,5 @@ kde_services_DATA = kttsd.desktop
 kttsddatadir = $(kde_datadir)/kttsd/xslt/
 kttsddata_DATA = SSMLtoPlainText.xsl
 
-# Translation message files.
-messages: rc.cpp
-	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
-
 noinst_HEADERS = threadedplugin.h ssmlconvert.h
 

@@ -1,9 +1,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
-AM_CPPFLAGS = \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	$(all_includes)
+
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_talkerchooserplugin.la
@@ -25,7 +23,3 @@ talkerchooserdata_DATA = \
 	female_notifications_rc
 
 noinst_HEADERS =  talkerchooserconfwidget.h
-
-# Get translators to translate library.
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_talkerchooserplugin.pot

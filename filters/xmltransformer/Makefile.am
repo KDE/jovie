@@ -1,6 +1,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
+
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_xmltransformerplugin.la
@@ -21,7 +22,3 @@ xmltransformerdatadir = $(kde_datadir)/kttsd/xmltransformer/
 xmltransformerdata_DATA = xhtml2ssml.xsl
 
 noinst_HEADERS =  xmltransformerconfwidget.h
-
-# Get translators to translate library.
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_xmltransformerplugin.pot
