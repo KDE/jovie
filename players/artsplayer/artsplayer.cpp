@@ -240,8 +240,8 @@ void ArtsPlayer::setupArtsObjects()
         qApp->exit(1);
     }
 
-    m_amanPlay->setTitle(i18n("JuK"));
-    m_amanPlay->setAutoRestoreID("JuKAmanPlay");
+    m_amanPlay->setTitle(i18n("kttsd"));
+    m_amanPlay->setAutoRestoreID("kttsdAmanPlay");
 
     m_factory->setAudioManagerPlay(m_amanPlay);
 }
