@@ -61,12 +61,14 @@ StringReplacerProc::StringReplacerProc( QObject *parent, const char *name, const
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
+bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     // kdDebug() << "StringReplacerProc::init: Running" << endl;
     QString wordsFilename =
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false );
     if ( wordsFilename.isEmpty() ) return false;
     wordsFilename += configGroup;
+    config->setGroup( configGroup );
+    wordsFilename = config->readEntry( "WordListFile", wordsFilename );
 
     // Open existing word list.
     QFile file( wordsFilename );
