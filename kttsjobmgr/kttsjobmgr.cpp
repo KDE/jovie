@@ -135,10 +135,10 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
             "<p>These are all the text jobs.  The <b>State</b> column "
             "may be:"
             "<ul>"
-            "<li><b>Queued</b> - the job is waiting and will not be spoken until it's state "
+            "<li><b>Queued</b> - the job is waiting and will not be spoken until its state "
             "is changed to <b>Waiting</b> by clicking the <b>Resume</b> or <b>Restart</b> buttons.</li>"
             "<li><b>Waiting</b> - the job is ready to be spoken.  It will be spoken when the jobs "
-            "preceeding it in the list have finished.</li>"
+            "preceding it in the list have finished.</li>"
             "<li><b>Speaking</b> - the job is speaking.  The <b>Position</b> column shows the current "
             "sentence of the job being spoken.  You may pause a speaking job by clicking the "
             "<b>Hold</b> button.</li>"
@@ -214,7 +214,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
                           i18n("&Later"), hbox1, "job_later");
     wt = i18n(
             "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
-            "is currently speaking, it's state changes to Paused.</p>");
+            "is currently speaking, its state changes to Paused.</p>");
     QWhatsThis::add(btn, wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
@@ -246,7 +246,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("klipper", KIcon::Small, 0, true),
                           i18n("&Speak Clipboard"), hbox3, "speak_clipboard");
     wt = i18n(
-            "<p>Queues the current contents of the clipboard for speaking and sets it's state "
+            "<p>Queues the current contents of the clipboard for speaking and sets its state "
             "to Waiting.  If the job is the topmost in the list, it begins speaking.  "
             "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
     QWhatsThis::add(btn, wt);

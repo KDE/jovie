@@ -301,7 +301,7 @@
                                     <cstring>filtersList</cstring>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.  Filters modify text before it is spoken.  They can be used to substitute for mispoken words, transform XML from one form to another, or change the default Talker to be used for speech output.</string>
+                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.  Filters modify text before it is spoken.  They can be used to substitute for mispronounced words, transform XML from one form to another, or change the default Talker to be used for speech output.</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
