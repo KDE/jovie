@@ -164,12 +164,12 @@ Then do the following commands.
   cd kdenonbeta
   make -f Makefile.cvs
   ./configure
-  cd kttsd/libktts
+  cd kttsd
   make apidox
   
-You should now have the docs in kdenonbeta/apidocs/kttsd/libktts.
+You should now have the docs in kdenonbeta/apidocs/kttsd.
 The KDE Speech API (API used by KDE applications to speak text) is in file
-apidocs/kttsd/libktts/html/classkspeech.html.
+apidocs/kttsd/html/classkspeech.html.
 
 Directories
 -----------
