@@ -16,20 +16,20 @@
  ***************************************************************************/
 
 // QT includes.
-#include <qdockarea.h>
 #include <qvbox.h>
-#include <qgrid.h>
+#include <qhbox.h>
 #include <qlabel.h>
 #include <qsplitter.h>
 #include <qclipboard.h>
+#include <qpushbutton.h>
+#include <qobjectlist.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 #include <kinstance.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <klistview.h>
-#include <kaction.h>
-#include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kencodingfiledialog.h>
@@ -100,7 +100,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     KParts::ReadOnlyPart(parent, name)
 {
     // Initialize some variables.
-    selectOnTextSet = false;
+    m_selectOnTextSet = false;
+    m_buttonBox = 0;
 
     setInstance(KttsJobMgrFactory::instance());
 
@@ -109,35 +110,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
     // Create a QVBox to host everything.
     QVBox* vBox = new QVBox(parent);
-
-    // Create a QDockArea to host the toolbar.
-    QDockArea* toolBarDockArea = new QDockArea(Qt::Horizontal, QDockArea::Normal, vBox, "jobmgr_toolbar_dockarea");
-
-    // Create three KToolBars.
-    m_toolBar1 = new KToolBar(vBox, "jobmgr_toolbar1");
-    m_toolBar1->setIconText(KToolBar::IconTextRight);
-    m_toolBar1->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
-    m_toolBar1->setMovingEnabled(true);
-    // This is a temporary workaround until these toolbars size correctly when floated.
-    m_toolBar1->setResizeEnabled(true);
-    m_toolBar2 = new KToolBar(vBox, "jobmgr_toolbar2");
-    m_toolBar2->setIconText(KToolBar::IconTextRight);
-    m_toolBar2->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
-    m_toolBar2->setMovingEnabled(true);
-    m_toolBar2->setResizeEnabled(true);
-    m_toolBar3 = new KToolBar(vBox, "jobmgr_toolbar3");
-    m_toolBar3->setIconText(KToolBar::IconTextRight);
-    m_toolBar3->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
-    m_toolBar3->setMovingEnabled(true);
-    m_toolBar3->setResizeEnabled(true);
-
-    // Add the toolbars to the QDockArea.
-    toolBarDockArea->setAcceptDockWindow(m_toolBar1, true);
-    toolBarDockArea->moveDockWindow(m_toolBar1);
-    toolBarDockArea->setAcceptDockWindow(m_toolBar2, true);
-    toolBarDockArea->moveDockWindow(m_toolBar2);
-    toolBarDockArea->setAcceptDockWindow(m_toolBar3, true);
-    toolBarDockArea->moveDockWindow(m_toolBar3);
+    vBox->setMargin(6);
 
     // Create a splitter to contain the Job List View and the current sentence.
     QSplitter* splitter = new QSplitter(vBox);
@@ -158,11 +131,154 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     // Do not sort the list.
     m_jobListView->setSorting(-1);
 
-    // Splitter to resize Job ListView to minimum height.
-    splitter->setResizeMode(m_jobListView, QSplitter::Stretch);
+    QString jobListViewWT = i18n(
+            "<p>These are all the text jobs.  The <b>State</b> column "
+            "may be:"
+            "<ul>"
+            "<li><b>Queued</b> - the job is waiting and will not be spoken until it's state "
+            "is changed to <b>Waiting</b> by clicking the <b>Resume</b> or <b>Restart</b> buttons.</li>"
+            "<li><b>Waiting</b> - the job is ready to be spoken.  It will be spoken when the jobs "
+            "preceeding it in the list have finished.</li>"
+            "<li><b>Speaking</b> - the job is speaking.  The <b>Position</b> column shows the current "
+            "sentence of the job being spoken.  You may pause a speaking job by clicking the "
+            "<b>Hold</b> button.</li>"
+            "<li><b>Paused</b> - the job is currently paused.  Paused jobs prevent jobs below them "
+            "from speaking.  Use the <b>Resume</b> or <b>Restart</b> buttons to resume speaking the "
+            "job, or click <b>Later</b> to move the job down in the list.</li>"
+            "<li><b>Finished</b> - the job has finished speaking.  When a second job finishes, "
+            "this one will be deleted.  You may click <b>Restart</b> to repeat the job.</li>"
+            "</ul>"
+            "<em>Note</em>: Messages, Warnings, and Screen Reader Output do not appear in this list.  "
+            "See the Handbook for more information."
+            "</p>");
+    QWhatsThis::add(m_jobListView, jobListViewWT);
+
+    // splitter->setResizeMode(m_jobListView, QSplitter::Stretch);
+
+    // Create a VBox to hold buttons and current sentence.
+    QVBox* bottomBox = new QVBox(splitter);
+
+    // Create a box to hold buttons.
+    m_buttonBox = new QVBox(bottomBox);
+    m_buttonBox->setSpacing(6);
+
+    // Create 3 HBoxes to host buttons.
+    QHBox* hbox1 = new QHBox(m_buttonBox);
+    hbox1->setSpacing(6);
+    QHBox* hbox2 = new QHBox(m_buttonBox);
+    hbox2->setSpacing(6);
+    QHBox* hbox3 = new QHBox(m_buttonBox);
+    hbox3->setSpacing(6);
+
+    // Do not let button box stretch vertically.
+    m_buttonBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+    // All the buttons with "job_" at start of their names will be enabled/disabled when a job is
+    // selected in the Job List View.
+    // All the buttons with "part_" at the start of their names will be enabled/disabled when a
+    // job is selected in the Job List View that has multiple parts.
+
+    QPushButton* btn;
+    QString wt;
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("stop", KIcon::Small, 0, true),
+                          i18n("Hold"), hbox1, "job_hold");
+    wt = i18n(
+            "<p>Changes a job to Paused state.  If currently speaking, the job stops speaking.  "
+            "Paused jobs prevent jobs that follow them from speaking, so either click "
+            "<b>Resume</b> to make the job speakable, or click <b>Later</b> to move it "
+            "down in the list.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_hold()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("exec", KIcon::Small, 0, true),
+                          i18n("Resume"), hbox1, "job_resume");
+    wt = i18n(
+            "<p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the "
+            "top speakable job in the list, it begins speaking.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("redo", KIcon::Small, 0, true),
+                          i18n("R&estart"), hbox1, "job_restart");
+    wt = i18n(
+            "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "
+            "is the top speakable job in the list, it begins speaking.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small, 0, true),
+                          i18n("Re&move"), hbox1, "job_remove");
+    wt = i18n(
+            "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "
+            "speakable job in the list begins speaking.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("down", KIcon::Small, 0, true),
+                          i18n("&Later"), hbox1, "job_later");
+    wt = i18n(
+            "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
+            "is currently speaking, it's state changes to Paused.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_move()));
+
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2leftarrow", KIcon::Small, 0, true),
+                          i18n("Pre&vious Part"), hbox2, "part_prevpart");
+    wt = i18n(
+            "<p>Rewinds a multi-part job to the previous part.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_par()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1leftarrow", KIcon::Small, 0, true),
+                          i18n("&Previous Sentence"), hbox2, "job_prevsentence");
+    wt = i18n(
+            "<p>Rewinds a job to the previous sentence.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_sen()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1rightarrow", KIcon::Small, 0, true),
+                          i18n("&Next Sentence"), hbox2, "job_nextsentence");
+    wt = i18n(
+            "<p>Advances a job to the next sentence.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_sen()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2rightarrow", KIcon::Small, 0, true),
+                          i18n("Ne&xt Part"), hbox2, "part_nextpart");
+    wt = i18n(
+            "<p>Advances a multi-part job to the next part.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_par()));
+
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("klipper", KIcon::Small, 0, true),
+                          i18n("&Speak Clipboard"), hbox3, "speak_clipboard");
+    wt = i18n(
+            "<p>Queues the current contents of the clipboard for speaking and sets it's state "
+            "to Waiting.  If the job is the topmost in the list, it begins speaking.  "
+            "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("fileopen", KIcon::Small, 0, true),
+                          i18n("Spea&k File"), hbox3, "speak_file");
+    wt = i18n(
+            "<p>Prompts you for a file name and queues the contents of the file for speaking.  "
+            "You must click the <b>Resume</b> button before the job will be speakable.  "
+            "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("translate", KIcon::Small, 0, true),
+                          i18n("Change Talker"), hbox3, "job_changetalker");
+    wt = i18n(
+            "<p>Prompts you with a list of your configured Talkers from the <b>Talkers</b> tab.  "
+            "The job will be spoken using the selected Talker.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("reload_page", KIcon::Small, 0, true),
+                          i18n("&Refresh"), hbox3, "refresh");
+    wt = i18n(
+            "<p>Refresh the list of jobs.</p>");
+    QWhatsThis::add(btn, wt);
+    connect (btn, SIGNAL(clicked()), this, SLOT(slot_refresh()));
+
+    // Disable job buttons until a job is selected.
+    enableJobActions(false);
+    enableJobPartActions(false);
 
     // Create a VBox for the current sentence and sentence label.
-    QVBox* sentenceVBox = new QVBox(splitter);
+    QVBox* sentenceVBox = new QVBox(bottomBox);
 
     // Create a label for current sentence.
     QLabel* currentSentenceLabel = new QLabel(sentenceVBox);
@@ -172,13 +288,13 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     // Create a box to contain the current sentence.
     m_currentSentence = new QLabel(sentenceVBox);
     m_currentSentence->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_currentSentence->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::WordBreak);
+    m_currentSentence->setAlignment(Qt::AlignAuto | Qt::AlignTop | Qt::WordBreak);
+    wt = i18n(
+            "<p>The text of the sentence currently speaking.</p>");
+    QWhatsThis::add(m_currentSentence, wt);
 
     // Set the main widget for the part.
     setWidget(vBox);
-
-    // Set up toolbar buttons.
-    setupActions();
 
     connect(m_jobListView, SIGNAL(selectionChanged(QListViewItem* )),
         this, SLOT(slot_selectionChanged(QListViewItem* )));
@@ -237,6 +353,13 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     m_extension = new KttsJobMgrBrowserExtension(this);
 
     m_jobListView->show();
+
+    // Divide splitter in half.  ListView gets half.  Buttons and Current Sentence get half.
+    int halfSplitterSize = splitter->height()/2;
+    QValueList<int> splitterSizes;
+    splitterSizes.append(halfSplitterSize);
+    splitterSizes.append(halfSplitterSize);
+    splitter->setSizes(splitterSizes);
 }
 
 KttsJobMgrPart::~KttsJobMgrPart()
@@ -256,93 +379,17 @@ bool KttsJobMgrPart::closeURL()
 }
 
 /**
-* Set up toolbar.
-*/
-void KttsJobMgrPart::setupActions()
-{
-//    setXMLFile("kttsjobmgrui.rc");
-
-    KAction* act;
-
-    // All the buttons with "job_" at start of their names will be enabled/disabled when a job is
-    // selected in the Job List View.
-    // All the buttons with "part_" at the start of their names will be enabled/disabled when a
-    // job is selected in the Job List View that has multiple parts.
-
-    act = new KAction(i18n("&Hold"),
-        KGlobal::iconLoader()->loadIconSet("stop", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_hold()), actionCollection(), "job_hold");
-    act->plug(m_toolBar1);
-    act = new KAction(i18n("&Resume"),
-        KGlobal::iconLoader()->loadIconSet("exec", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_resume()), actionCollection(), "job_resume");
-    act->plug(m_toolBar1);
-    act = new KAction(i18n("R&estart"),
-        KGlobal::iconLoader()->loadIconSet("redo", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_restart()), actionCollection(), "job_restart");
-    act->plug(m_toolBar1);
-    act = new KAction(i18n("Remove"),
-        KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_remove()), actionCollection(), "job_remove");
-    act->plug(m_toolBar1);
-    act = new KAction(i18n("Later"),
-        KGlobal::iconLoader()->loadIconSet("down", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_move()), actionCollection(), "job_move");
-    act->plug(m_toolBar1);
-    act = new KAction(i18n("Change Talker"),
-        KGlobal::iconLoader()->loadIconSet("translate", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_change_talker()), actionCollection(), "job_change_talker");
-    act->plug(m_toolBar1);
-
-    act = new KAction(i18n("Previous Part"),
-        KGlobal::iconLoader()->loadIconSet("2leftarrow", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_prev_par()), actionCollection(), "part_prev_par");
-    act->plug(m_toolBar2);
-    act = new KAction(i18n("Previous Sentence"),
-        KGlobal::iconLoader()->loadIconSet("1leftarrow", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_prev_sen()), actionCollection(), "job_prev_sen");
-    act->plug(m_toolBar2);
-    act = new KAction(i18n("Next Sentence"),
-        KGlobal::iconLoader()->loadIconSet("1rightarrow", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_next_sen()), actionCollection(), "job_next_sen");
-    act->plug(m_toolBar2);
-    act = new KAction(i18n("Next Part"),
-        KGlobal::iconLoader()->loadIconSet("2rightarrow", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_next_par()), actionCollection(), "part_next_par");
-    act->plug(m_toolBar2);
-
-    act = new KAction(i18n("Speak Clipboard"),
-        KGlobal::iconLoader()->loadIconSet("klipper", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_speak_clipboard()), actionCollection(), "speak_clipboard");
-    act->plug(m_toolBar3);
-    act = new KAction(i18n("Speak File"),
-        KGlobal::iconLoader()->loadIconSet("fileopen", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_speak_file()), actionCollection(), "speak_file");
-    act->plug(m_toolBar3);
-    act = new KAction(i18n("Refresh"),
-        KGlobal::iconLoader()->loadIconSet("reload_page", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_refresh()), actionCollection(), "refresh");
-    act->plug(m_toolBar3);
-
-    // Disable job buttons until a job is selected.
-//    stateChanged("no_job_selected");
-    enableJobActions(false);
-    enableJobPartActions(false);
-}
-
-/**
 * This slot is connected to the Job List View selectionChanged signal.
 */
 void KttsJobMgrPart::slot_selectionChanged(QListViewItem*)
 {
     // Enable job buttons.
-//    stateChanged("job_selected");
     enableJobActions(true);
     enableJobPartActions((getCurrentJobPartCount() > 1));
 }
 
 /**
-* Slots connected to toolbar buttons.
+* Slots connected to buttons.
 */
 void KttsJobMgrPart::slot_job_hold()
 {
@@ -621,7 +668,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
         kdDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
         startText(jobNum);
         // Set flag so that the job we just created will be selected when textSet signal is received.
-        selectOnTextSet = true;        
+        m_selectOnTextSet = true;
     }
 }
 
@@ -800,13 +847,13 @@ void KttsJobMgrPart::refreshJobListView()
 
 /**
 * If nothing selected in Job List View and list not empty, select top item.
-* If nothing selected and list is empty, disable job buttons on toolbar.
+* If nothing selected and list is empty, disable job buttons.
 */
 void KttsJobMgrPart::autoSelectInJobListView()
 {
     // If something selected, nothing to do.
     if (m_jobListView->selectedItem()) return;
-    // If empty, disable job buttons on toolbar.
+    // If empty, disable job buttons.
     QListViewItem* item = m_jobListView->firstChild();
     if (!item)
     {
@@ -814,7 +861,7 @@ void KttsJobMgrPart::autoSelectInJobListView()
         enableJobPartActions(false);
     }
     else
-        // Select first item.  Should fire itemSelected event which will enable job buttons on toolbar.
+        // Select first item.  Should fire itemSelected event which will enable job buttons.
         m_jobListView->setSelected(item, true);
 }
 
@@ -868,37 +915,59 @@ void KttsJobMgrPart::updateTalkerItem(QListViewItem* talkerItem, const QString &
 }
 
 /**
-* Enables or disables all the job-related buttons on the toolbar.
+* Enables or disables all the job-related buttons.
 * @param enable        True to enable the job-related butons.  False to disable.
 */
 void KttsJobMgrPart::enableJobActions(bool enable)
 {
-    for (uint index = 0; index < actionCollection()->count(); ++index)
+    if (!m_buttonBox) return;
+    QObjectList *l = m_buttonBox->queryList( "QPushButton", "job_*", true, true );
+    QObjectListIt it( *l ); // iterate over the buttons
+    QObject *obj;
+
+    while ( (obj = it.current()) != 0 ) {
+        // for each found object...
+        ++it;
+        ((QPushButton*)obj)->setEnabled( enable );
+    }
+    delete l; // delete the list, not the objects
+
+    if (enable)
     {
-        KAction* act = actionCollection()->action(index);
-        if (act)
+        // Later button only enables if currently selected list item is not bottom of list.
+        QListViewItem* item = m_jobListView->selectedItem();
+        if (item)
         {
-            QString actionName = act->name();
-            if (actionName.left(4) == "job_") act->setEnabled(enable);
+            bool enableLater = item->nextSibling();
+
+            l = m_buttonBox->queryList( "QPushButton", "job_later", false, true );
+            it = QObjectListIt( *l ); // iterate over the buttons
+            if ( (obj = it.current()) != 0 ) {
+                // for each found object...
+                ((QPushButton*)obj)->setEnabled( enableLater );
+            }
+            delete l; // delete the list, not the objects
         }
     }
 }
 
 /**
-* Enables or disables all the job part-related buttons on the toolbar.
+* Enables or disables all the job part-related buttons.
 * @param enable        True to enable the job par-related butons.  False to disable.
 */
 void KttsJobMgrPart::enableJobPartActions(bool enable)
 {
-    for (uint index = 0; index < actionCollection()->count(); ++index)
-    {
-        KAction* act = actionCollection()->action(index);
-        if (act)
-        {
-            QString actionName = act->name();
-            if (actionName.left(5) == "part_") act->setEnabled(enable);
-        }
+    if (!m_buttonBox) return;
+    QObjectList *l = m_buttonBox->queryList( "QPushButton", "part_*", true, true );
+    QObjectListIt it( *l ); // iterate over the buttons
+    QObject *obj;
+
+    while ( (obj = it.current()) != 0 ) {
+        // for each found object...
+        ++it;
+        ((QPushButton*)obj)->setEnabled( enable );
     }
+    delete l; // delete the list, not the objects
 }
 
 /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
@@ -985,10 +1054,10 @@ ASYNC KttsJobMgrPart::textSet(const QCString&, const uint jobNum)
         stateToStr(state), QString::number(seq), QString::number(sentenceCount),
         QString::number(partNum), QString::number(partCount));
     // Should we select this job?
-    if (selectOnTextSet)
+    if (m_selectOnTextSet)
     {
         m_jobListView->setSelected(item, true);
-        selectOnTextSet = false;
+        m_selectOnTextSet = false;
     }
     // If a job not already selected, select this one.
     autoSelectInJobListView();

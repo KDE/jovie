@@ -31,7 +31,7 @@ class KInstance;
 class KttsJobMgrBrowserExtension;
 class KListView;
 class QListViewItem;
-class KToolBar;
+class QVBox;
 class QLabel;
 
 class KttsJobMgrFactory : public KLibFactory
@@ -65,21 +65,8 @@ public:
 protected:
     virtual bool openFile();
     virtual bool closeURL();
-    /**
-    * Set up toolbar and menu.
-    */
-    void setupActions();
 
     /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
-
-    /**
-    * This signal is emitted when KTTSD starts or restarts after a call to reinit.
-    */
-    // ASYNC kttsdStarted(bool) { };
-    /**
-    * This signal is emitted just before KTTSD exits.
-    */
-    // ASYNC kttsdExiting(bool) { };
 
     /**
     * This signal is emitted when KTTSD starts or restarts after a call to reinit.
@@ -173,7 +160,7 @@ private slots:
     */
     void slot_selectionChanged(QListViewItem* item);
     /**
-    * Slots connected to toolbar buttons.
+    * Slots connected to buttons.
     */
     void slot_job_hold();
     void slot_job_resume();
@@ -283,13 +270,13 @@ private:
     QListViewItem* findItemByJobNum(const uint jobNum);
 
     /**
-    * Enables or disables all the job-related buttons on the toolbar.
+    * Enables or disables all the job-related buttons.
     * @param enable        True to enable the job-related butons.  False to disable.
     */
     void enableJobActions(bool enable);
 
     /**
-    * Enables or disables all the job part-related buttons on the toolbar.
+    * Enables or disables all the job part-related buttons.
     * @param enable        True to enable the job par-related butons.  False to disable.
     */
     void KttsJobMgrPart::enableJobPartActions(bool enable);
@@ -307,7 +294,7 @@ private:
 
     /**
     * If nothing selected in Job List View and list not empty, select top item.
-    * If nothing selected and list is empty, disable job buttons on toolbar.
+    * If nothing selected and list is empty, disable job buttons.
     */
     void autoSelectInJobListView();
 
@@ -337,17 +324,15 @@ private:
     QLabel* m_currentSentence;
 
     /**
-    * Toolbars.
-    */    
-    KToolBar* m_toolBar1;
-    KToolBar* m_toolBar2;
-    KToolBar* m_toolBar3;
+    * Box containing buttons.
+    */
+    QVBox* m_buttonBox;
 
     /**
     * This flag is set to True whenever we want to select the next job that
     * is announced in a textSet signal.
     */
-    bool selectOnTextSet;
+    bool m_selectOnTextSet;
 
     /**
     * Cache mapping Talker Codes to Talker IDs.
