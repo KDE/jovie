@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KTTSD
+Name[xx]=xxKTTSDxx
+Type=ServiceType
+X-KDE-ServiceType=KTTSD/SynthPlugin
+
+[PropertyDef::X-KDE-Languages]
+Type=QStringList

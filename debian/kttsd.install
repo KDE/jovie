@@ -28,7 +28,7 @@ debian/tmp/usr/lib/kde3/kcm_kttsmgr.so
 debian/tmp/usr/lib/kde3/kcm_kttsmgr.la
 debian/tmp/usr/lib/kde3/kcm_kttsd.so
 debian/tmp/usr/lib/kde3/kcm_kttsd.la
-debian/tmp/usr/share/servicetypes/kttsd.desktop
+debian/tmp/usr/share/servicetypes/kttsd_synthplugin.desktop
 debian/tmp/usr/share/servicetypes/kttsd_audioplugin.desktop
 debian/tmp/usr/share/apps/kttsd/xslt/SSMLtoPlainText.xsl
 debian/tmp/usr/share/apps/kttsd/festivalint/voices

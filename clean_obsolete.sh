@@ -29,6 +29,12 @@ fi
 
 set -x
 
+# ServiceType kttsd.desktop renamed to kttsd_synthplugin.desktop,
+# which distinquishes it from kttsd.desktop in the services dir
+# and more accurately reflects its purpose
+# on or about 8 Dec 2004.
+rm -f $PREFIX/share/share/servicetypes/kttsd.desktop
+
 # kcm_kttsmgr and kcm_kttsd are now identical.  Apps should use
 # kcm_kttsd.  Once all apps no longer use kcm_kttsmgr, remove it.
 # Change made on or about 20 Oct 2004.

@@ -32,5 +32,5 @@ noinst_HEADERS = \
 	talkercode.h
 
 # This library is installed as a service.
-servicetypes_DATA = kttsd.desktop
+servicetypes_DATA = kttsd_synthplugin.desktop
 servicetypesdir = $(kde_servicetypesdir)
