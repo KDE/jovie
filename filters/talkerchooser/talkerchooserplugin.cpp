@@ -22,5 +22,5 @@
 
 typedef K_TYPELIST_2( TalkerChooserProc, TalkerChooserConf ) TalkerChooserPlugin;
 K_EXPORT_COMPONENT_FACTORY( libkttsd_talkerchooserplugin,
-    KGenericFactory<TalkerChooserPlugin>("plugin_TalkerChooser") );
+    KGenericFactory<TalkerChooserPlugin>("kttsd_talkerchooserplugin") );
 

@@ -34,6 +34,9 @@ libkttsjobmgrpart_la_LIBADD = \
 kpartsincludedir = $(includedir)/kparts
 kpartsinclude_HEADERS = kttsjobmgr.h
 
+# Header files not to be installed.
+noinst_HEADERS = selecttalkerwidget.h
+
 # Install desktop file to standard services directory.
 kde_services_DATA =  kttsjobmgr.desktop
 
@@ -44,4 +47,3 @@ rc_DATA = kttsjobmgrui.rc
 # Translation message files.
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsjobmgr.pot
-noinst_HEADERS = selecttalkerwidget.h

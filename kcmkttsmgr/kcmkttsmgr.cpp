@@ -1644,7 +1644,7 @@ void KCMKttsMgr::kttsdStarted()
         if (factory)
         {
             // Create the Job Manager part
-            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( m_kttsmgrw->mainTab, "kttsjobmgrpart",
+            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( m_kttsmgrw->mainTab, "kttsjobmgr",
                 "KParts::ReadOnlyPart" );
             if (m_jobMgrPart)
             {
