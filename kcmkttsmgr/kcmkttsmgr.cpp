@@ -471,6 +471,8 @@ void KCMKttsMgr::addLanguage(){
             m_kttsmgrw->languagesList->setSelected(listItem, true);
             updateDefaultButton();
             updateRemoveButton();
+            // Tell plugin to load default configuration.
+            m_loadedLanguages.find(languageCode)->plugIn->load(m_config, "Lang_" + languageCode);
         }
     
     } else {

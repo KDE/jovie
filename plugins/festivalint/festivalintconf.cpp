@@ -56,7 +56,7 @@
 FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
+    // kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
     m_festProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
@@ -86,7 +86,7 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
 
 /** Destructor */
 FestivalIntConf::~FestivalIntConf(){
-    kdDebug() << "FestivalIntConf::~FestivalIntConf: Running" << endl;
+    // kdDebug() << "FestivalIntConf::~FestivalIntConf: Running" << endl;
     if (m_playObj) m_playObj->halt();
     delete m_playObj;
     delete m_artsServer;
@@ -95,17 +95,19 @@ FestivalIntConf::~FestivalIntConf(){
 }
 
 void FestivalIntConf::load(KConfig *config, const QString &langGroup){
-    kdDebug() << "FestivalIntConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
+    // kdDebug() << "FestivalIntConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
     m_langGroup = langGroup;
     config->setGroup(langGroup);
-    m_widget->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
+    m_widget->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath",
+        getDefaultVoicesPath()));
     scanVoices();
+    setDefaultVoice();
     QString voiceSelected(config->readEntry("Voice"));
     for(uint index = 0 ; index < voiceList.count(); ++index){
-        kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
+        // kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
         if(voiceSelected == voiceList[index].code){
-            kdDebug() << "Match!" << endl;
+            // kdDebug() << "FestivalIntConf::load: setting voice to " << voiceSelected << endl;
             m_widget->selectVoiceCombo->setCurrentItem(index);  
             break;
         }
@@ -114,7 +116,7 @@ void FestivalIntConf::load(KConfig *config, const QString &langGroup){
 }
 
 void FestivalIntConf::save(KConfig *config, const QString &langGroup){
-    kdDebug() << "FestivalIntConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
+    // kdDebug() << "FestivalIntConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
     m_langGroup = langGroup;
     config->setGroup(langGroup);
@@ -124,14 +126,55 @@ void FestivalIntConf::save(KConfig *config, const QString &langGroup){
 }
 
 void FestivalIntConf::defaults(){
-    kdDebug() << "FestivalIntConf::defaults: Running" << endl;
-    m_widget->festivalVoicesPath->setURL("/usr/share/festival/voices/");
+    // kdDebug() << "FestivalIntConf::defaults: Running" << endl;
+    m_widget->festivalVoicesPath->setURL(getDefaultVoicesPath());
     m_widget->timeBox->setValue(100);
     timeBox_valueChanged(100);
+    scanVoices();
+}
+
+QString FestivalIntConf::getDefaultVoicesPath()
+{
+    // Get default path to voice files.
+    // TODO: Ask Festival where they are:
+    //    $ festival
+    //    Festival Speech Synthesis System 1.4.3:release Jan 2003
+    //    Copyright (C) University of Edinburgh, 1996-2003. All rights reserved.
+    //    For details type `(festival_warranty)'
+    //    festival> datadir
+    //    "/usr/share/festival"
+    //    festival> (quit)
+    QDir voicesPath;
+    voicesPath = voicesPath.homeDirPath() + "/festival/voices/";
+    if (!voicesPath.exists()) voicesPath = "/usr/local/share/festival/voices/";
+    if (!voicesPath.exists()) voicesPath = "/usr/share/festival/voices/";
+    return voicesPath.path() + voicesPath.separator();
+}
+
+void FestivalIntConf::setDefaultVoice()
+{
+    // If language code is known, auto pick first voice that matches the language code.
+    if (!m_langGroup.isNull())
+    {
+        // Skip over "Lang_".
+        QString languageCode = m_langGroup.mid(5);
+        // kdDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
+        for(uint index = 0 ; index < voiceList.count(); ++index)
+        {
+            QString vlCode = voiceList[index].languageCode.left(languageCode.length());
+            // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
+            if(languageCode == vlCode)
+            {
+                // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << voiceList[index].code << endl;
+                m_widget->selectVoiceCombo->setCurrentItem(index);  
+                break;
+            }
+        }
+    }
 }
 
 void FestivalIntConf::scanVoices(){
-    kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
+    // kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
     voiceList.clear();
     m_widget->selectVoiceCombo->clear();
     KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices", true, false);
@@ -143,22 +186,24 @@ void FestivalIntConf::scanVoices(){
         voiceTemp.path = voices.readEntry("Path");
         mainPath.setPath(m_widget->festivalVoicesPath->url() + voiceTemp.path);
         if(!mainPath.exists()){
-            kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
+            // kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
             continue;
         } else {
-            kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " exists" << endl;
+            // kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " exists" << endl;
         }
         voiceTemp.code = *it;
         voiceTemp.name = voices.readEntry("Name");
         voiceTemp.comment = voices.readEntry("Comment");
+        voiceTemp.languageCode = voices.readEntry("Language");
         voiceList.append(voiceTemp);
         m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
     }
+    setDefaultVoice();
 }
 
 void FestivalIntConf::slotTest_clicked()
 {
-    kdDebug() << "FestivalIntConf::slotTest_clicked: Running " << endl;
+    // kdDebug() << "FestivalIntConf::slotTest_clicked: Running " << endl;
     // If currently synthesizing, stop it.
     if (m_festProc)
         m_festProc->stopText();
@@ -183,7 +228,7 @@ void FestivalIntConf::slotTest_clicked()
     if (testMsg.isNull()) testMsg = voices.readEntry("Comment");
     // Fall back if none.
     if (testMsg.isNull()) testMsg = "KDE is a modern graphical desktop for UNIX computers.";
-    kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
+    // kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
     m_festProc->synth(
         testMsg,
         tmpWaveFile,

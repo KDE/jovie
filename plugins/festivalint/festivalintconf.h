@@ -46,6 +46,7 @@ typedef struct voiceStruct{
     QString name;
     QString comment;
     QString path;
+    QString languageCode;
 } voice;
 
 class FestivalIntConf : public PlugInConf {
@@ -95,6 +96,8 @@ class FestivalIntConf : public PlugInConf {
    private:
         int percentToSlider(int percentValue);
         int sliderToPercent(int sliderValue);
+        void setDefaultVoice();
+        QString getDefaultVoicesPath();
         
         // Configuration Widget.
         FestivalIntConfWidget* m_widget;
