@@ -131,7 +131,6 @@ int main (int argc, char *argv[])
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
     DCOPStub("kttsd", "KSpeech"),
-    DCOPObject("kttsmgr_kspeechsink"),
     KSystemTray(parent, "kttsmgrsystemtray")
 {
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
@@ -158,7 +157,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
     // If --autoexit option given, exit when speaking stops.
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("autoexit"))
+/*    if (args->isSet("autoexit"))
     {
         connectDCOPSignal("kttsd", "KSpeech",
             "textFinished(QCString,uint)",
@@ -166,7 +165,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
             false);
         // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
         parent->installEventFilter(this);
-    }
+    }*/
 }
 
 KttsMgrTray::~KttsMgrTray() { }
