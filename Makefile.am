@@ -3,6 +3,7 @@ SUBDIRS = \
         libkttsd \
         players \
         plugins \
+        filters \
         kttsd \
         icons \
         kttsjobmgr \
@@ -13,6 +14,7 @@ SUBDIRS = \
 DOXYGEN_EXCLUDE = \
         players \
         plugins \
+        filters \
         kttsd \
         icons \
         kttsjobmgr \

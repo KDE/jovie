@@ -1,3 +1,5 @@
+_ Add option to kill plugin process when no longer needed so that memory can be recovered.
+  Or maybe some sort of "nice" setting so that process will be swapped out when no longer needed.
 _ The Speak File function does not handle text files encoded differently from the desktop
   setting.  For example, if desktop is UTF-8 or ISO 8859-1, an ISO 8859-2 file (polish for example)
   is mangled and does not speak properly.  The best solution is to change KFileOpenDialog
