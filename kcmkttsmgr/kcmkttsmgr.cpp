@@ -139,8 +139,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // About Dialog.
     m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text-to-Speech Manager", false);
 
-    // Start KTTSD if check box is checked.
-    enableKttsdToggled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
+    // See if KTTSD is already running, and if so, create jobs tab.
+    if (client->isApplicationRegistered("kttsd"))
+        kttsdStarted();
+    else
+        // Start KTTSD if check box is checked.
+        enableKttsdToggled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
     // Switch to Talkers tab if none configured.
     if (m_kttsmgrw->talkersList->childCount() == 0)
