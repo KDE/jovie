@@ -1,5 +1,3 @@
-_ Although String Replacer filters can be loaded and saved, there is no way to do so for
-  Talker Chooser and SBD filters.  Allow "load" and "save" of these filters.
 _ Although one can configure Canadian English voice in Festival, there is no way to choose
   Canadian English in the Talker Chooser.
 _ Provide a way for those apps with KTTSD plugins to disable KNotifies, otherwise, users
