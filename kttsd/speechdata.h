@@ -9,7 +9,7 @@
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
-  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
@@ -25,14 +25,24 @@
 #ifndef _SPEECHDATA_H_
 #define _SPEECHDATA_H_
 
+// Qt includes.
 #include <qptrqueue.h>
 #include <qptrlist.h>
+#include <qintdict.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qevent.h>
 
+// KDE includes.
 #include <kconfig.h>
+
+// KTTS includes.
 #include <kspeech.h>
+#include <talkercode.h>
+#include <filtermgr.h>
+
+class TalkerMgr;
 
 /**
 * Struct containing a text cell, for messages, warnings, and texts.
@@ -58,6 +68,16 @@ struct mlJob {
     int seq;                     /* Current sentence being spoken. */
     QValueList<int> partSeqNums; /* List containing last sequence number for each part of a job. */
     QStringList sentences;       /* List of sentences in the job. */
+};
+
+/**
+ * Struct used to keep a pool of FilterMgr objects.
+ */
+struct PooledFilterMgr {
+    FilterMgr* filterMgr;       /* The FilterMgr object. */
+    bool busy;                  /* True if the FilterMgr is busy. */
+    mlJob* job;                 /* The job the FilterMgr is filtering. */
+    TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 };
 
 /**
@@ -413,6 +433,11 @@ class SpeechData : public QObject {
         */
         QCString getAppIdByJobNum(const uint jobNum);
 
+        /**
+        * Sets pointer to the TalkerMgr object.
+        */
+        void setTalkerMgr(TalkerMgr* talkerMgr);
+
         /* The following properties come from the configuration. */
 
         /**
@@ -535,6 +560,12 @@ class SpeechData : public QObject {
         */
         void textRemoved(const QCString& appId, const uint jobNum);
 
+    protected:
+        /**
+        * Processes events posted by Filters.
+        */
+        virtual bool event ( QEvent * e );
+
     private:
         /**
         * Screen Reader Output.
@@ -555,6 +586,16 @@ class SpeechData : public QObject {
         * Queue of text jobs.
         */
         QPtrList<mlJob> textJobs;
+
+        /**
+        * TalkerMgr object local pointer.
+        */
+        TalkerMgr* m_talkerMgr;
+
+        /**
+        * Pool of FilterMgrs.
+        */
+        QIntDict<PooledFilterMgr> m_pooledFilterMgrs;
 
         /**
         * Job counter.  Each new job increments this counter.
@@ -624,6 +665,28 @@ class SpeechData : public QObject {
         * Does not change the textJobs.current() pointer.
         */
         void deleteExpiredJobs(const uint finishedJobNum);
+
+        /**
+        * Assigns a FilterMgr to a job and starts filtering on it.
+        */
+        void startJobFiltering(mlJob* job, const QString& text);
+
+        /**
+        * Waits for filtering to be completed on a job.
+        * This is typically called because an app has requested job info that requires
+        * filtering to be completed, such as getJobInfo.
+        */
+        void waitJobFiltering(const mlJob* job);
+
+        /**
+        * Processes filters by looping across the pool of FilterMgrs.
+        * As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
+        */
+        void doFiltering();
+
+    private slots:
+        void slotFilterMgrFinished();
+        void slotFilterMgrStopped();
 };
 
 #endif // _SPEECHDATA_H_

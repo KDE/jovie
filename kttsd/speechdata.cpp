@@ -9,7 +9,7 @@
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
-  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
@@ -35,6 +35,9 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kapplication.h>
+
+// KTTS includes.
+#include "talkermgr.h"
 
 // SpeechData includes.
 #include "speechdata.h"
@@ -86,6 +89,18 @@ bool SpeechData::readConfig(){
     notify = config->readBoolEntry("Notify", false);
     notifyPassivePopupsOnly = config->readBoolEntry("NotifyPassivePopupsOnly", false);
 
+    // Create an initial FilterMgr for the pool to save time later.
+    PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
+    FilterMgr* filterMgr = new FilterMgr();
+    filterMgr->init(config, "General");
+    pooledFilterMgr->filterMgr = filterMgr;
+    pooledFilterMgr->busy = false;
+    pooledFilterMgr->job = 0;
+    // Connect signals from FilterMgr.
+    connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
+    connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
+    m_pooledFilterMgrs.insert(0, pooledFilterMgr);
+
     return true;
 }
 /**
@@ -98,6 +113,15 @@ SpeechData::~SpeechData(){
     {
         emit textRemoved(job->appId, job->jobNum);
     }
+
+    QIntDictIterator<PooledFilterMgr> it( m_pooledFilterMgrs );
+    for( ; it.current(); ++it )
+    {
+        PooledFilterMgr* pooledFilterMgr = it.current();
+        delete pooledFilterMgr->filterMgr;
+        delete pooledFilterMgr;
+    }
+
     delete config;
 }
 
@@ -306,7 +330,7 @@ QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=
 uint SpeechData::setText( const QString &text, const QString &talker, const QCString &appId)
 {
     // kdDebug() << "Running: SpeechData::setText" << endl;
-    QStringList tempList = parseText(text, appId);
+    // QStringList tempList = parseText(text, appId);
     mlJob* job = new mlJob;
     uint jobNum = ++jobCounter;
     job->jobNum = jobNum;
@@ -314,10 +338,14 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
     job->talker = talker;
     job->state = kspeech::jsQueued;
     job->seq = 0;
-    job->sentences = tempList;
-    job->partSeqNums.append(tempList.count());
+    job->sentences = QStringList();
+    job->partSeqNums = QValueList<int>();
     textJobs.append(job);
-    emit textSet(appId, jobNum);
+    startJobFiltering(job, text);
+    // job->sentences = tempList;
+    // job->partSeqNums.append(tempList.count());
+    // textJobs.append(job);
+    // emit textSet(appId, jobNum);
     return jobNum;
 }
 
@@ -337,19 +365,20 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
 * @see setText.
 * @see startText.
 */
-int SpeechData::appendText(const QString &text, const uint jobNum, const QCString& appId)
+int SpeechData::appendText(const QString &text, const uint jobNum, const QCString& /*appId*/)
 {
     // kdDebug() << "Running: SpeechData::appendText" << endl;
-    QStringList tempList = parseText(text, appId);
+    // QStringList tempList = parseText(text, appId);
     int newPartNum = 0;
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
-        int sentenceCount = job->sentences.count();
-        job->sentences += tempList;
-        job->partSeqNums.append(sentenceCount + tempList.count());
-        newPartNum = job->partSeqNums.count();
-        emit textAppended(job->appId, jobNum, newPartNum);
+        // int sentenceCount = job->sentences.count();
+        // job->sentences += tempList;
+        // job->partSeqNums.append(sentenceCount + tempList.count());
+        newPartNum = job->partSeqNums.count() + 1;
+        startJobFiltering(job, text);
+        // emit textAppended(job->appId, jobNum, newPartNum);
     }
     return newPartNum;
 }
@@ -449,6 +478,11 @@ QCString SpeechData::getAppIdByJobNum(const uint jobNum)
 }
 
 /**
+* Sets pointer to the TalkerMgr object.
+*/
+void SpeechData::setTalkerMgr(TalkerMgr* talkerMgr) { m_talkerMgr = talkerMgr; }
+
+/**
 * Remove a text job from the queue.
 * (thread safe)
 * @param jobNum         Job number of the text job.
@@ -465,6 +499,14 @@ void SpeechData::removeText(const uint jobNum)
     {
         removeAppId = removeJob->appId;
         removeJobNum = removeJob->jobNum;
+        // If filtering on the job, cancel it.
+        if (m_pooledFilterMgrs[removeJobNum])
+        {
+            PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[removeJobNum];
+            pooledFilterMgr->busy = false;
+            pooledFilterMgr->job = 0;
+            pooledFilterMgr->filterMgr->stopFiltering();
+        }
         // Delete the job.
         textJobs.removeRef(removeJob);
     }
@@ -485,6 +527,8 @@ int SpeechData::getJobPartNumFromSeq(const mlJob& job, const int seq)
     int foundPartNum = 0;
     int desiredSeq = seq;
     uint partNum = 0;
+    // Wait until all filtering has stopped for the job.
+    waitJobFiltering(&job);
     while (partNum < job.partSeqNums.count())
     {
         if (desiredSeq <= job.partSeqNums[partNum])
@@ -501,7 +545,6 @@ int SpeechData::getJobPartNumFromSeq(const mlJob& job, const int seq)
 
 /**
 * Delete expired jobs.  At most, one finished job is kept on the queue.
-* (thread safe)
 * @param finishedJobNum Job number of a job that just finished.
 * The just finished job is not deleted, but any other finished jobs are.
 * Does not change the textJobs.current() pointer.
@@ -544,7 +587,11 @@ mlJob* SpeechData::getNextSpeakableJob(const uint prevJobNum)
 {
     for (mlJob* job = textJobs.first(); (job); job = textJobs.next())
         if (job->jobNum != prevJobNum)
-            if (job->state == kspeech::jsSpeakable) return job;
+            if (job->state == kspeech::jsSpeakable)
+            {
+                waitJobFiltering(job);
+                return job;
+            }
     return 0;
 }
 
@@ -561,7 +608,7 @@ mlJob* SpeechData::getNextSpeakableJob(const uint prevJobNum)
 */
 mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSeq)
 {
-    kdDebug() << "SpeechData::getNextSentenceText running with prevJobNum " << prevJobNum << " prevSeq " << prevSeq << endl;
+    // kdDebug() << "SpeechData::getNextSentenceText running with prevJobNum " << prevJobNum << " prevSeq " << prevSeq << endl;
     mlText* temp = 0;
     uint jobNum = prevJobNum;
     mlJob* job = 0;
@@ -605,7 +652,7 @@ mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSe
         temp->talker = job->talker;
         temp->jobNum = job->jobNum;
         temp->seq = seq;
-        kdDebug() << "SpeechData::getNextSentenceText: return job number " << temp->jobNum << " seq " << temp->seq << endl;
+        // kdDebug() << "SpeechData::getNextSentenceText: return job number " << temp->jobNum << " seq " << temp->seq << endl;
     } else kdDebug() << "SpeechData::getNextSentenceText: no more sentences in queue" << endl;
     return temp;
 }
@@ -670,8 +717,10 @@ int SpeechData::getTextCount(const uint jobNum)
     mlJob* job = findJobByJobNum(jobNum);
     int temp;
     if (job)
+    {
+        waitJobFiltering(job);
         temp = job->sentences.count();
-    else
+    } else
         temp = -1;
     return temp;
 }
@@ -781,6 +830,7 @@ QByteArray SpeechData::getTextJobInfo(const uint jobNum)
     QByteArray temp;
     if (job)
     {
+        waitJobFiltering(job);
         QDataStream stream(temp, IO_WriteOnly);
         stream << job->state;
         stream << job->appId;
@@ -806,6 +856,7 @@ QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
     QString temp;
     if (job)
     {
+        waitJobFiltering(job);
         temp = job->sentences[seq - 1];
     }
     return temp;
@@ -863,6 +914,7 @@ int SpeechData::jumpToTextPart(const int partNum, const uint jobNum)
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
+        waitJobFiltering(job);
         if (partNum > 0)
         {
             newPartNum = partNum;
@@ -898,6 +950,7 @@ uint SpeechData::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
+        waitJobFiltering(job);
         int oldSeqNum = job->seq;
         newSeqNum = oldSeqNum + n;
         if (n != 0)
@@ -911,3 +964,150 @@ uint SpeechData::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
     return newSeqNum;
 }
 
+/**
+* Assigns a FilterMgr to a job and starts filtering on it.
+*/
+void SpeechData::startJobFiltering(mlJob* job, const QString& text)
+{
+    // If filtering is already in progress for this job, do nothing.
+    uint jobNum = job->jobNum;
+    PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[jobNum];
+    if (pooledFilterMgr) return;
+    // Find an idle FilterMgr, if any.
+    QIntDictIterator<PooledFilterMgr> it( m_pooledFilterMgrs );
+    for( ; it.current(); ++it )
+    {
+        if (!it.current()->busy)
+        {
+            // Reindex the pooled FilterMgr on the new job number.
+            int oldJobNum = it.currentKey();
+            pooledFilterMgr = m_pooledFilterMgrs.take(oldJobNum);
+            m_pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
+            break;
+        }
+    }
+    // Create a new FilterMgr if needed and add to pool.
+    if (!pooledFilterMgr)
+    {
+        pooledFilterMgr = new PooledFilterMgr();
+        FilterMgr* filterMgr = new FilterMgr();
+        filterMgr->init(config, "General");
+        pooledFilterMgr->filterMgr = filterMgr;
+        // Connect signals from FilterMgr.
+        connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
+        connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
+        m_pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
+    }
+    // Flag the FilterMgr as busy and set it going.
+    pooledFilterMgr->busy = true;
+    pooledFilterMgr->job = job;
+    // Get TalkerCode structure of closest matching Talker.
+    pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
+    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode);
+}
+
+/**
+* Waits for filtering to be completed on a job.
+* This is typically called because an app has requested job info that requires
+* filtering to be completed, such as getJobInfo.
+*/
+void SpeechData::waitJobFiltering(const mlJob* job)
+{
+    PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[job->jobNum];
+    if (!pooledFilterMgr) return;
+    if (pooledFilterMgr->busy)
+    {
+        kdDebug() << "SpeechData::waitJobFiltering: Waiting for filter to finish.  Not optimium.  " <<
+            "Try waiting for textSet signal before querying for job information." << endl;
+        pooledFilterMgr->filterMgr->waitForFinished();
+        doFiltering();
+    }
+}
+
+/**
+* Processes filters by looping across the pool of FilterMgrs.
+* As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
+*/
+void SpeechData::doFiltering()
+{
+    // kdDebug() << "SpeechData::doFiltering: Running." << endl;
+    bool again = true;
+    while (again)
+    {
+        again = false;
+        QIntDictIterator<PooledFilterMgr> it( m_pooledFilterMgrs );
+        for( ; it.current(); ++it )
+        {
+            PooledFilterMgr* pooledFilterMgr = it.current();
+            // If FilterMgr is busy, see if it is now finished.
+            if (pooledFilterMgr->busy)
+            {
+                FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
+                if (filterMgr->getState() == FilterMgr::fsFinished)
+                {
+                    pooledFilterMgr->busy = false;
+                    mlJob* job = pooledFilterMgr->job;
+                    // Retrieve text from FilterMgr.
+                    QString text = filterMgr->getOutput();
+                    // kdDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
+                    // kdDebug() << "SpeechData::doFiltering: filtered text: " << text << endl;
+                    filterMgr->ackFinished();
+                    // Convert the TalkerCode back into string.
+                    job->talker = pooledFilterMgr->talkerCode->getTalkerCode();
+                    // TalkerCode object no longer needed.
+                    delete pooledFilterMgr->talkerCode;
+                    pooledFilterMgr->talkerCode = 0;
+                    // Split the text into sentences and store in the job.
+                    // TODO: Eventually, SBD will be a filter and all we will need to do here
+                    // is split the string on tab delimiter.
+                    QStringList sentences = parseText(text, job->appId);
+                    int sentenceCount = job->sentences.count();
+                    job->sentences += sentences;
+                    job->partSeqNums.append(sentenceCount + sentences.count());
+                    int partNum = job->partSeqNums.count();
+                    // Clean up.
+                    pooledFilterMgr->job = 0;
+                    // Emit signal.
+                    if (partNum == 1)
+                        emit textSet(job->appId, job->jobNum);
+                    else
+                        emit textAppended(job->appId, job->jobNum, partNum);
+                }
+            }
+        }
+    }
+}
+
+void SpeechData::slotFilterMgrFinished()
+{
+    // Since this signal handler may be running from a plugin's thread,
+    // convert to postEvent and return immediately.
+    // kdDebug() << "SpeechData::slotFilterMgrFinished: received signal and converting to event 201." << endl;
+    QCustomEvent* ev = new QCustomEvent(QEvent::User + 201);
+    QApplication::postEvent(this, ev);
+}
+
+void SpeechData::slotFilterMgrStopped()
+{
+    // Since this signal handler may be running from a plugin's thread,
+    // convert to postEvent and return immediately.
+    QCustomEvent* ev = new QCustomEvent(QEvent::User + 202);
+    QApplication::postEvent(this, ev);
+}
+
+/**
+ * Processes events posted by filters.  When asynchronous plugins emit signals
+ * they are converted into these events.
+ */
+bool SpeechData::event ( QEvent * e )
+{
+    // TODO: Do something with event numbers 106 (error; keepGoing=True)
+    // and 107 (error; keepGoing=False).
+    if ((e->type() >= (QEvent::User + 201)) and (e->type() <= (QEvent::User + 202)))
+    {
+        // kdDebug() << "SpeechData::event: received event." << endl;
+        doFiltering();
+        return TRUE;
+    }
+    else return FALSE;
+}

@@ -39,6 +39,7 @@
 XmlTransformerProc::XmlTransformerProc( QObject *parent, const char *name, const QStringList& ) :
     KttsFilterProc(parent, name)
 {
+    m_xsltProc = 0;
 }
 
 /**
@@ -46,6 +47,9 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const char *name, const
  */
 /*virtual*/ XmlTransformerProc::~XmlTransformerProc()
 {
+    delete m_xsltProc;
+    if (!m_inFilename.isEmpty()) QFile::remove(m_inFilename);
+    if (!m_outFilename.isEmpty()) QFile::remove(m_outFilename);
 }
 
 /**
@@ -67,25 +71,64 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 }
 
 /**
+ * Returns True if the plugin supports asynchronous processing,
+ * i.e., supports asyncConvert method.
+ * @return                        True if this plugin supports asynchronous processing.
+ *
+ * If the plugin returns True, it must also implement @ref getState .
+ * It must also emit @ref filteringFinished when filtering is completed.
+ * If the plugin returns True, it must also implement @ref stopFiltering .
+ * It must also emit @ref filteringStopped when filtering has been stopped.
+ */
+/*virtual*/ bool XmlTransformerProc::supportsAsync() { return true; }
+
+/**
  * Convert input, returning output.
  * @param inputText         Input text.
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
  */
-/*virtual*/ QString XmlTransformerProc::convert(QString& inputText, TalkerCode* /*talkerCode*/)
+/*virtual*/ QString XmlTransformerProc::convert(QString& inputText, TalkerCode* talkerCode)
 {
-    // If not propertly configured, do nothing.
+    // If not properly configured, do nothing.
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return inputText;
+    // Asynchronously convert and wait for completion.
+    if (asyncConvert(inputText, talkerCode))
+    {
+        waitForFinished();
+        m_state = fsIdle;
+        return m_text;
+    } else
+        return inputText;
+}
+
+/**
+ * Convert input.  Runs asynchronously.
+ * @param inputText         Input text.
+ * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
+ *                          use for synthing the text.  Useful for extracting hints about
+ *                          how to filter the text.  For example, languageCode.
+ * @return                  False if the filter cannot perform the conversion.
+ *
+ * When conversion is completed, emits signal @ref filteringFinished.  Calling
+ * program may then call @ref getOutput to retrieve converted text.  Calling
+ * program must call @ref ackFinished to acknowledge the conversion.
+ */
+/*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/)
+{
+    m_text = inputText;
+    // If not properly configured, do nothing.
+    if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return false;
 
     /// Write @param text to a temporary file.
     KTempFile inFile(locateLocal("tmp", "kttsd-"), ".xml");
-    QString inFilename = inFile.file()->name();
+    m_inFilename = inFile.file()->name();
     QTextStream* wstream = inFile.textStream();
     if (wstream == 0) {
         /// wtf...
-        kdDebug() << "XmlTransformerProc::convert: Can't write to " << inFilename << endl;;
-        return inputText;
+        kdDebug() << "XmlTransformerProc::convert: Can't write to " << m_inFilename << endl;;
+        return false;
     }
     // TODO: Is encoding an issue here?
     // TODO: It would be nice if we detected whether the XML is properly formed
@@ -99,43 +142,124 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 
     // Get a temporary output file name.
     KTempFile outFile(locateLocal("tmp", "kttsd-"), ".output");
-    QString outFilename = outFile.file()->name();
+    m_outFilename = outFile.file()->name();
     outFile.close();
     // outFile.unlink();    // only activate this if necessary.
 
     /// Spawn an xsltproc process to apply our stylesheet to input file.
-    KProcess* xsltProc = new KProcess;
-    *xsltProc << m_xsltprocPath;
-    *xsltProc << "-o" << outFilename  << "--novalid"
-            << m_xsltFilePath << inFilename;
+    m_xsltProc = new KProcess;
+    *m_xsltProc << m_xsltprocPath;
+    *m_xsltProc << "-o" << m_outFilename  << "--novalid"
+            << m_xsltFilePath << m_inFilename;
     // Warning: This won't compile under KDE 3.2.  See FreeTTS::argsToStringList().
     // kdDebug() << "SSMLConvert::transform: executing command: " <<
-    //     m_xsltProc->args() << endl;
+    //     m_m_xsltProc->args() << endl;
 
-    // connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
-    //         this, SLOT(slotProcessExited(KProcess*)));
-    if (!xsltProc->start(KProcess::Block, KProcess::NoCommunication))
+    m_state = fsFiltering;
+    connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
+            this, SLOT(slotProcessExited(KProcess*)));
+    connect(m_xsltProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(m_xsltProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    if (!m_xsltProc->start(KProcess::NotifyOnExit,
+         static_cast<KProcess::Communication>(KProcess::Stdout | KProcess::Stderr)))
     {
         kdDebug() << "XmlTransformerProc::convert: Error starting xsltproc" << endl;
-        return inputText;
+        m_state = fsIdle;
+        return false;
     }
+    return true;
+}
+
+// Process output when xsltproc exits.
+void XmlTransformerProc::processOutput()
+{
+    QFile::remove(m_inFilename);
+
+    int exitStatus = 11;
+    if (m_xsltProc->normalExit())
+        exitStatus = m_xsltProc->exitStatus();
+    if (exitStatus != 0)
+    {
+        // kdDebug() << "XmlTransformerProc::convert: xsltproc abnormal exit.  Status = " << exitStatus << endl;
+        m_state = fsFinished;
+        emit filteringFinished();
+    }
+
+    delete m_xsltProc;
+    m_xsltProc = 0;
 
     /// Read back the data that was written to /tmp/fileName.output.
-    QFile readfile(outFilename);
+    QFile readfile(m_outFilename);
     if(!readfile.open(IO_ReadOnly)) {
         /// uhh yeah... Issues writing to the output file.
-        kdDebug() << "XmlTransformerProc::convert: Could not read file " << outFilename << endl;
-        return QString::null;
+        kdDebug() << "XmlTransformerProc::convert: Could not read file " << m_outFilename << endl;
+        m_state = fsFinished;
+        emit filteringFinished();
     }
     QTextStream rstream(&readfile);
-    QString convertedData = rstream.read();
+    m_text = rstream.read();
     readfile.close();
 
-    kdDebug() << "XmlTransformerProc::convert: Read file at " + inFilename + " and created " + outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
+    kdDebug() << "XmlTransformerProc::convert: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
 
     // Clean up.
-    QFile::remove(inFilename);
-    QFile::remove(outFilename);
+    QFile::remove(m_outFilename);
 
-    return convertedData;
+    m_state = fsFinished;
+    emit filteringFinished();
 }
+
+/**
+ * Waits for a previous call to asyncConvert to finish.
+ */
+/*virtual*/ void XmlTransformerProc::waitForFinished()
+{
+    if (m_xsltProc)
+        if (m_xsltProc->isRunning()) m_xsltProc->wait();
+}
+
+/**
+ * Returns the state of the Filter.
+ */
+/*virtual*/ int XmlTransformerProc::getState() { return m_state; }
+
+/**
+ * Returns the filtered output.
+ */
+/*virtual*/ QString XmlTransformerProc::getOutput() { return m_text; }
+
+/**
+ * Acknowledges the finished filtering.
+ */
+/*virtual*/ void XmlTransformerProc::ackFinished() { m_state = fsIdle; }
+
+/**
+ * Stops filtering.  The filteringStopped signal will emit when filtering
+ * has in fact stopped and state returns to fsIdle;
+ */
+/*virtual*/ void XmlTransformerProc::stopFiltering()
+{
+    m_state = fsStopping;
+    m_xsltProc->kill();
+}
+
+void XmlTransformerProc::slotProcessExited(KProcess*)
+{
+    // kdDebug() << "XmlTransformerProc::slotProcessExited: xsltproc has exited." << endl;
+    processOutput();
+}
+
+void XmlTransformerProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+{
+    QString buf = QString::fromLatin1(buffer, buflen);
+    // kdDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf << endl;
+}
+
+void XmlTransformerProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
+{
+    QString buf = QString::fromLatin1(buffer, buflen);
+    kdDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf << endl;
+}
+

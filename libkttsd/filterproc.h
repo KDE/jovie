@@ -31,6 +31,13 @@ class KttsFilterProc : virtual public QObject
     Q_OBJECT
 
 public:
+    enum FilterState {
+        fsIdle = 0,              // Not doing anything.  Ready to filter.
+        fsFiltering = 1,         // Filtering.
+        fsStopping = 2,          // Stop of filtering is in progress.
+        fsFinished = 3           // Filtering finished.
+    };
+
     /**
      * Constructor.
      */
@@ -52,16 +59,78 @@ public:
      */
     virtual bool init(KConfig *config, const QString &configGroup);
 
+     /**
+      * Returns True if the plugin supports asynchronous processing,
+      * i.e., supports asyncConvert method.
+      * @return                        True if this plugin supports asynchronous processing.
+      *
+      * If the plugin returns True, it must also implement @ref getState .
+      * It must also emit @ref filteringFinished when filtering is completed.
+      * If the plugin returns True, it must also implement @ref stopFiltering .
+      * It must also emit @ref filteringStopped when filtering has been stopped.
+      */
+    virtual bool supportsAsync();
+
     /**
-     * Convert input, returning output.
+     * Convert input, returning output.  Runs synchronously.
      * @param inputText         Input text.
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
      */
-    virtual QString convert(QString& inputText, TalkerCode* talkerCode);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode);
+
+    /**
+     * Convert input.  Runs asynchronously.
+     * @param inputText         Input text.
+     * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
+     *                          use for synthing the text.  Useful for extracting hints about
+     *                          how to filter the text.  For example, languageCode.
+     * @return                  False if the filter cannot perform the conversion.
+     *
+     * When conversion is completed, emits signal @ref filteringFinished.  Calling
+     * program may then call @ref getOutput to retrieve converted text.  Calling
+     * program must call @ref ackFinished to acknowledge the conversion.
+     */
+    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode);
+
+    /**
+     * Waits for a previous call to asyncConvert to finish.
+     */
+    virtual void waitForFinished();
+
+    /**
+     * Returns the state of the Filter.
+     */
+    virtual int getState();
+
+    /**
+     * Returns the filtered output.
+     */
+    virtual QString getOutput();
+
+    /**
+     * Acknowledges the finished filtering.
+     */
+    virtual void ackFinished();
+
+    /**
+     * Stops filtering.  The filteringStopped signal will emit when filtering
+     * has in fact stopped and state returns to fsIdle;
+     */
+    virtual void stopFiltering();
 
 signals:
+    /**
+     * Emitted when asynchronous filtering has completed.
+     */
+    void filteringFinished();
+
+    /**
+     * Emitted when stopFiltering has been called and filtering has in fact stopped.
+     */
+    void filteringStopped();
+
     /**
      * If an error occurs, Filter should signal the error and return input as output in
      * convert method.  If Filter should not be called in the future, perhaps because

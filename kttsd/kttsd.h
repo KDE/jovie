@@ -21,6 +21,7 @@
 #define _KTTSD_H_
 
 #include "speechdata.h"
+#include "talkermgr.h"
 #include "speaker.h"
 #include "kspeech.h"
 
@@ -542,14 +543,19 @@ class KTTSD : public QObject, virtual public kspeech
         bool initializeSpeechData();
 
         /*
-         * Create and initialize the speaker.
-         */
+        * Create and initialize the TalkerMgr object.
+        */
+        bool initializeTalkerMgr();
+
+        /*
+        * Create and initialize the speaker.
+        */
         bool initializeSpeaker();
 
         /*
-         * Returns the senderId (appId) of the DCOP application that called us.
-         * @return appId         The DCOP sendId of calling application.  NULL if called internally by kttsd itself.
-         */
+        * Returns the senderId (appId) of the DCOP application that called us.
+        * @return appId         The DCOP sendId of calling application.  NULL if called internally by kttsd itself.
+        */
         const QCString getAppId();
 
         /*
@@ -569,12 +575,17 @@ class KTTSD : public QObject, virtual public kspeech
         /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD
          */
-        SpeechData *m_speechData;
+        SpeechData* m_speechData;
 
         /*
-         * Speaker that will be run as another thread, actually saying the messages, warnings, and texts
-         */
-        Speaker *m_speaker;
+        * TalkerMgr keeps a list of all the Talkers (synth plugins).
+        */
+        TalkerMgr* m_talkerMgr;
+
+        /*
+        * Speaker that will be run as another thread, actually saying the messages, warnings, and texts
+        */
+        Speaker* m_speaker;
 };
 
 #endif // _KTTSD_H_

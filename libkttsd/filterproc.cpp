@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 // KDE includes.
-#include <kdebug.h>
+// #include <kdebug.h>
 
 // FilterProc includes.
 #include "filterproc.h"
@@ -28,7 +28,7 @@
 KttsFilterProc::KttsFilterProc( QObject *parent, const char *name) :
         QObject(parent, name) 
 {
-    kdDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
+    // kdDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
 }
 
 /**
@@ -36,7 +36,7 @@ KttsFilterProc::KttsFilterProc( QObject *parent, const char *name) :
  */
 KttsFilterProc::~KttsFilterProc()
 {
-    kdDebug() << "KttsFilterProc::~KttsFilterProc: Running" << endl;
+    // kdDebug() << "KttsFilterProc::~KttsFilterProc: Running" << endl;
 }
 
 /**
@@ -54,13 +54,66 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
 }
 
 /**
- * Convert input, returning output.
+ * Returns True if the plugin supports asynchronous processing,
+ * i.e., supports asyncConvert method.
+ * @return                        True if this plugin supports asynchronous processing.
+ *
+ * If the plugin returns True, it must also implement @ref getState .
+ * It must also emit @ref filteringFinished when filtering is completed.
+ * If the plugin returns True, it must also implement @ref stopFiltering .
+ * It must also emit @ref filteringStopped when filtering has been stopped.
+ */
+/*virtual*/ bool KttsFilterProc::supportsAsync() { return false; }
+
+/**
+ * Convert input, returning output.  Runs synchronously.
  * @param inputText         Input text.
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
  */
-/*virtual*/ QString KttsFilterProc::convert(QString& inputText, TalkerCode* /*talkerCode*/)
+/*virtual*/ QString KttsFilterProc::convert(const QString& inputText, TalkerCode* /*talkerCode*/)
 {
     return inputText;
 }
+
+/**
+ * Convert input.  Runs asynchronously.
+ * @param inputText         Input text.
+ * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
+ *                          use for synthing the text.  Useful for extracting hints about
+ *                          how to filter the text.  For example, languageCode.
+ * @return                  False if the filter cannot perform the conversion.
+ *
+ * When conversion is completed, emits signal @ref filteringFinished.  Calling
+ * program may then call @ref getOutput to retrieve converted text.  Calling
+ * program must call @ref ackFinished to acknowledge the conversion.
+ */
+/*virtual*/ bool KttsFilterProc::asyncConvert(const QString& /*inputText*/,
+    TalkerCode* /*talkerCode*/) { return false; }
+
+/**
+ * Waits for a previous call to asyncConvert to finish.
+ */
+/*virtual*/ void KttsFilterProc::waitForFinished() { }
+
+/**
+ * Returns the state of the Filter.
+ */
+/*virtual*/ int KttsFilterProc::getState() { return fsIdle; }
+
+/**
+ * Returns the filtered output.
+ */
+/*virtual*/ QString KttsFilterProc::getOutput() { return QString::null; }
+
+/**
+ * Acknowledges the finished filtering.
+ */
+/*virtual*/ void KttsFilterProc::ackFinished() { }
+
+/**
+ * Stops filtering.  The filteringStopped signal will emit when filtering
+ * has in fact stopped and state returns to fsIdle;
+ */
+/*virtual*/ void KttsFilterProc::stopFiltering() { }

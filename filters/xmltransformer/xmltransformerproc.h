@@ -24,6 +24,8 @@
 // KTTS includes.
 #include "filterproc.h"
 
+class KProcess;
+
 class XmlTransformerProc : virtual public KttsFilterProc
 {
     Q_OBJECT
@@ -51,6 +53,18 @@ public:
     virtual bool init(KConfig *config, const QString &configGroup);
 
     /**
+     * Returns True if the plugin supports asynchronous processing,
+     * i.e., supports asyncConvert method.
+     * @return                        True if this plugin supports asynchronous processing.
+     *
+     * If the plugin returns True, it must also implement @ref getState .
+     * It must also emit @ref filteringFinished when filtering is completed.
+     * If the plugin returns True, it must also implement @ref stopFiltering .
+     * It must also emit @ref filteringStopped when filtering has been stopped.
+     */
+    virtual bool supportsAsync();
+
+    /**
      * Convert input, returning output.
      * @param inputText         Input text.
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
@@ -59,8 +73,64 @@ public:
      */
     virtual QString convert(QString& inputText, TalkerCode* talkerCode);
 
-private:
+    /**
+     * Convert input.  Runs asynchronously.
+     * @param inputText         Input text.
+     * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
+     *                          use for synthing the text.  Useful for extracting hints about
+     *                          how to filter the text.  For example, languageCode.
+     * @return                  False if the filter cannot perform the conversion.
+     *
+     * When conversion is completed, emits signal @ref filteringFinished.  Calling
+     * program may then call @ref getOutput to retrieve converted text.  Calling
+     * program must call @ref ackFinished to acknowledge the conversion.
+     */
+    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode);
 
+    /**
+     * Waits for a previous call to asyncConvert to finish.
+     */
+    virtual void waitForFinished();
+
+    /**
+     * Returns the state of the Filter.
+     */
+    virtual int getState();
+
+    /**
+     * Returns the filtered output.
+     */
+    virtual QString getOutput();
+
+    /**
+     * Acknowledges the finished filtering.
+     */
+    virtual void ackFinished();
+
+    /**
+     * Stops filtering.  The filteringStopped signal will emit when filtering
+     * has in fact stopped and state returns to fsIdle;
+     */
+    virtual void stopFiltering();
+
+private slots:
+    void slotProcessExited(KProcess*);
+    void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
+    void slotReceivedStderr(KProcess* proc, char* buffer, int buflen);
+
+private:
+    // Process output when xsltproc exits.
+    void processOutput();
+
+    // The text that is being filtered.
+    QString m_text;
+    // Processing state.
+    int m_state;
+    // xsltproc process.
+    KProcess* m_xsltProc;
+    // Input and Output filenames.
+    QString m_inFilename;
+    QString m_outFilename;
     // User's name for the filter.
     QString m_UserFilterName;
     // XSLT file.

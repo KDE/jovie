@@ -29,7 +29,9 @@ kttsd_SOURCES = \
 	speechdata.cpp \
 	kttsd.skel \
 	threadedplugin.cpp \
-	ssmlconvert.cpp
+	ssmlconvert.cpp \
+	filtermgr.cpp \
+	talkermgr.cpp
 
 kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries) $(KDE_RPATH)
 kttsd_LDADD = \

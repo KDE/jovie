@@ -513,7 +513,7 @@ void StringReplacerConf::slotMatchButton_clicked()
         {
             QString re = reEditor->regExp();
             m_editWidget->matchLineEdit->setText( re );
-            m_editDlg->enableButton( KDialogBase::Ok, re.isEmpty() );
+            m_editDlg->enableButton( KDialogBase::Ok, !re.isEmpty() );
         }
         delete editorDialog;
     } else return;

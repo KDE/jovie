@@ -21,6 +21,7 @@
 #include <qlistview.h>
 
 // KDE includes.
+// #include <kdebug.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -139,9 +140,11 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
  */
-/*virtual*/ QString StringReplacerProc::convert(QString& inputText, TalkerCode* talkerCode)
+/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode)
 {
     // If language doesn't match, return input unmolested.
+    // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if language code "
+    //    << talkerCode->languageCode() << " matches " << m_languageCode << endl;
     if (m_languageCode != talkerCode->languageCode()) return inputText;
     QString newText = inputText;
     const int listCount = m_matchList.count();

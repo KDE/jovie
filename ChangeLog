@@ -1,3 +1,9 @@
+2005-01-13  Gary Cramblitt (PhantomsDad)
+        * FilterMgr class now implemented in kttsd, which means that filters now work.  Well
+          almost.  See TODO file for some nasty problems.  (Hint: avoid large HTML/SSML pages!)
+        * Moved the TalkerCode matching and Talker plugins to TalkerMgr class so both
+          Speaker and SpeechData classes can access them.
+
 2005-01-09  Gary Cramblitt (PhantomsDad)
         * Epos plugin defaults to ISO 8859-2 encoding.  Pass encoded text to Epos client
           via Stdin rather than command line to avoid encoding problem.

@@ -1,4 +1,11 @@
-_ Should kttsmgr and kttsd Makefile.am's have $(KDE_RPATH)?
+_ Large HTML/SSML pages take forever to synthesize.  kttsd appears to be hung, but it is
+  generating the individual wave files and merging them.  The way to fix this is to write
+  the Sentence Boundary Detection plugin that can handle SSML.
+_ Crashes when fed a large XHTML/SSML page.  Crashes when it starts to speak the first utterance.
+  Takes KDE and X with it.  nasty!
+_ More problems with KCMultiDialog.  In addition to not being able to size horizontally less than
+  640, you cannot size vertically, once it has been minimized to systray, to less than the
+  vertical size when it was minimized to the systray.
 _ Add option to kill plugin process when no longer needed so that memory can be recovered.
   Or maybe some sort of "nice" setting so that process will be swapped out when no longer needed.
 _ Command plugin encodes text on command line using %t in user's chosen encoding, but
@@ -6,7 +13,6 @@ _ Command plugin encodes text on command line using %t in user's chosen encoding
   encodes command line stuff using user's default encoding.  There is no point, therefore,
   in attempting to encode it differently, just mangles the text even more.  Short of modifying
   KProcess, I see no way around this.  But perhaps a warning to user advising to use %f instead?
-_ Clean up kspeech/kspeechsink api documentation for kdelibs.
 _ Audio Plugins:
     _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.
       Since the desktop files are translated, is this a problem??  Works when I do

@@ -61,7 +61,7 @@ public:
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
      */
-    virtual QString convert(QString& inputText, TalkerCode* talkerCode);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode);
 
 private:
     // Language supported by the filter.

@@ -52,6 +52,7 @@ KTTSD::KTTSD(QObject *parent, const char *name) :
 {
     // kdDebug() << "KTTSD::KTTSD Running" << endl;
     m_speaker = 0;
+    m_talkerMgr = 0;
     m_speechData = 0;
     ready();
 }
@@ -61,7 +62,7 @@ KTTSD::KTTSD(QObject *parent, const char *name) :
 */
 bool KTTSD::initializeSpeechData()
 {
-    // Create speechData object, and load configuration.
+    // Create speechData object.
     if (!m_speechData)
     {
         m_speechData = new SpeechData();
@@ -85,40 +86,58 @@ bool KTTSD::initializeSpeechData()
 }
 
 /*
+* Create and initialize the TalkerMgr object.
+*/
+bool KTTSD::initializeTalkerMgr()
+{
+    if (!m_talkerMgr)
+    {
+        if (!m_speechData) initializeSpeechData();
+
+        m_talkerMgr = new TalkerMgr(this, "kttsdtalkermgr");
+        int load = m_talkerMgr->loadPlugIns(m_speechData->config);
+        if(load < 0)
+        {
+            delete m_speaker;
+            m_speaker = 0;
+            delete m_talkerMgr;
+            m_talkerMgr = 0;
+            delete m_speechData;
+            m_speechData = 0;
+            kdDebug() << "KTTSD::initializeTalkerMgr: no Talkers have been configured." << endl;
+           // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
+            QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
+            KMessageBox::ButtonCode msgResult;
+            if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
+            {
+                if (KMessageBox::questionYesNo(
+                    0,
+                i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
+                        "Would you like to configure it now?"),
+                i18n("KTTS Not Configured"),
+                i18n("&Yes"),
+                i18n("&No"),
+                dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
+            }
+            if (msgResult == KMessageBox::Yes) showDialog();
+            return false;
+        }
+    }
+    m_speechData->setTalkerMgr(m_talkerMgr);
+    return true;
+}
+
+/*
 * Create and initialize the Speaker object.
 */
 bool KTTSD::initializeSpeaker()
 {
     // kdDebug() << "KTTSD::initializeSpeaker: Instantiating Speaker" << endl;
 
-    // Create speaker object and load plug ins, checking for the return
-    m_speaker = new Speaker(m_speechData);
-    int load = m_speaker->loadPlugIns();
-    if(load < 0)
-    {
-        delete m_speaker;
-        m_speaker = 0;
-        delete m_speechData;
-        m_speechData = 0;
-        kdDebug() << "KTTSD::initializeSpeaker: no Talkers have been configured." << endl;
-        // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
-        QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
-        KMessageBox::ButtonCode msgResult;
-        if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
-        {
-            if (KMessageBox::questionYesNo(
-                0,
-                i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
-                    "Would you like to configure it now?"),
-                i18n("KTTS Not Configured"),
-                i18n("&Yes"),
-                i18n("&No"),
-                dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
-        }
-        if (msgResult == KMessageBox::Yes) showDialog();
-        return false;
-    }
+    if (!m_talkerMgr) initializeTalkerMgr();
 
+    // Create speaker object and load plug ins, checking for the return
+    m_speaker = new Speaker(m_speechData, m_talkerMgr);
     connect (m_speaker, SIGNAL(textStarted(const QCString&, const uint)), 
         this, SLOT(slotTextStarted(const QCString&, const uint)));
     connect (m_speaker, SIGNAL(textFinished(const QCString&, const uint)), 
@@ -145,6 +164,7 @@ KTTSD::~KTTSD(){
     kdDebug() << "KTTSD::~KTTSD:: Stopping KTTSD service" << endl;
     if (m_speaker) m_speaker->requestExit();
     delete m_speaker;
+    delete m_talkerMgr;
     delete m_speechData;
     kdDebug() << "KTTSD::~KTTSD: Emitting DCOP signal kttsdExiting()" << endl;
     kttsdExiting();
@@ -164,8 +184,8 @@ KTTSD::~KTTSD(){
 bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/)
 {
     if (markupType != kspeech::mtSsml) return false;
-    if (!m_speaker) return false;
-    return m_speaker->supportsMarkup(fixNullString(talker), markupType);
+    if (!m_talkerMgr) return false;
+    return m_talkerMgr->supportsMarkup(fixNullString(talker), markupType);
 }
 
 /**
@@ -283,7 +303,7 @@ uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
 {
     // kdDebug() << "KTTSD::setText: Running" << endl;
     if (!m_speaker) return 0;
-    kdDebug() << "KTTSD::setText: Setting text: '" << text << "'" << endl;
+    // kdDebug() << "KTTSD::setText: Setting text: '" << text << "'" << endl;
     uint jobNum = m_speechData->setText(text, fixNullString(talker), getAppId());
     return jobNum;
 }
@@ -462,8 +482,8 @@ QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 */
 QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
 {
-    if (!m_speaker) return QString::null;
-    return m_speaker->talkerCodeToTalkerId(fixNullString(talkerCode));
+    if (!m_talkerMgr) return QString::null;
+    return m_talkerMgr->talkerCodeToTalkerId(fixNullString(talkerCode));
 }
 
 /**
@@ -601,8 +621,8 @@ void KTTSD::resumeText(const uint jobNum /*=0*/)
 */
 QStringList KTTSD::getTalkers()
 {
-    if (!m_speaker) return QStringList();
-    return m_speaker->getTalkers();
+    if (!m_talkerMgr) return QStringList();
+    return m_talkerMgr->getTalkers();
 }
 
 /**
@@ -628,8 +648,8 @@ void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=
 */
 QString KTTSD::userDefaultTalker()
 {
-    if (!m_speaker) return QString::null;
-    return m_speaker->userDefaultTalker();
+    if (!m_talkerMgr) return QString::null;
+    return m_talkerMgr->userDefaultTalker();
 }
 
 /**
@@ -739,6 +759,8 @@ void KTTSD::reinit()
     }
     delete m_speaker;
     m_speaker = 0;
+    delete m_talkerMgr;
+    m_talkerMgr = 0;
     ready();
 }
 
@@ -751,6 +773,7 @@ bool KTTSD::ready()
     if (m_speaker) return true;
     kdDebug() << "KTTSD::ready: Starting KTTSD service" << endl;
     if (!initializeSpeechData()) return false;
+    if (!initializeTalkerMgr()) return false;
     if (!initializeSpeaker()) return false;
     m_speaker->doUtterances();
     kdDebug() << "KTTSD::ready: Emitting DCOP signal kttsdStarted()" << endl;

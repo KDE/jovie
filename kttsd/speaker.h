@@ -37,6 +37,7 @@
 
 class Player;
 class QTimer;
+class TalkerMgr;
 
 /**
 * Type of utterance.
@@ -97,16 +98,6 @@ struct Utt{
 };
 
 /**
- * Structure containing information for a talker (plugin).
- */
-struct TalkerInfo{
-    PlugInProc* plugIn;                  /* Instance of the plugin, i.e., the Talker. */
-    QString talkerID;                    /* ID of the talker. */
-    QString talkerCode;                  /* The Talker's Talker Code in XML format. */
-    TalkerCode parsedTalkerCode;         /* The Talker's Talker Code parsed into individual attributes. */
-};
-
-/**
 * Iterator for queue of utterances.
 */
 typedef QValueVector<Utt>::iterator uttIterator;
@@ -117,7 +108,6 @@ const int timerInterval = 500;
 /**
  * This class is in charge of getting the messages, warnings and text from
  * the queue and call the plug ins function to actually speak the texts.
- * This class runs as another thread, using QThreads
  */
 class Speaker : public QObject{
     Q_OBJECT
@@ -127,17 +117,13 @@ class Speaker : public QObject{
          * Constructor
          * Calls load plug ins
          */
-        Speaker(SpeechData *speechData, QObject *parent = 0, const char *name = 0);
+        Speaker(SpeechData* speechData, TalkerMgr* talkerMgr,
+                QObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor
          */
         ~Speaker();
-
-        /**
-         * Load all the configured plug ins populating loadedPlugIns
-         */
-        int loadPlugIns();
 
         /**
          * Tells the thread to exit
@@ -275,41 +261,6 @@ class Speaker : public QObject{
         */
         uint moveRelTextSentence(const int n, const uint jobNum);
 
-        /**
-        * Get a list of the talkers configured in KTTS.
-        * @return               A QStringList of fully-specified talker codes, one
-        *                       for each talker user has configured.
-        */
-        QStringList Speaker::getTalkers();
-
-        /**
-        * Given a Talker Code, returns the Talker ID of the talker that would speak
-        * a text job with that Talker Code.
-        * @param talkerCode     Talker Code.
-        * @return               Talker ID of the talker that would speak the text job.
-        */
-        QString talkerCodeToTalkerId(const QString& talkerCode);
-
-        /**
-        * Get the user's default talker.
-        * @return               A fully-specified talker code.
-        *
-        * @see talkers
-        * @see getTalkers
-        */
-        QString userDefaultTalker();
-
-        /**
-        * Determine whether the currently-configured speech plugin supports a speech markup language.
-        * @param talker         Code for the talker to do the speaking.  Example "en".
-        *                       If NULL, defaults to the user's default talker.
-        * @param markupType     The kttsd code for the desired speech markup language.
-        * @return               True if the plugin currently configured for the indicated
-        *                       talker supports the indicated speech markup language.
-        * @see kttsdMarkupType
-        */
-        bool supportsMarkup(const QString& talker, const uint markupType);
-
     signals:
         /**
          * Emitted whenever reading a text was started or resumed
@@ -439,28 +390,9 @@ class Speaker : public QObject{
         void slotTimeout();
 
     private:
-        /**
-        * Given a talker code, returns pointer to the closest matching plugin.
-        * @param talker          The talker (language) code.
-        * @return                Index to m_loadedPlugins array of Talkers.
-        *
-        * If a plugin has not been loaded to match the talker, returns the default
-        * plugin.
-        */
-        int talkerToPluginIndex(const QString& talker);
 
         /**
-        * Given a talker code, returns pointer to the closest matching plugin.
-        * @param talker          The talker (language) code.
-        * @return                Pointer to closest matching plugin.
-        *
-        * If a plugin has not been loaded to match the talker, returns the default
-        * plugin.
-        */
-        PlugInProc* talkerToPlugin(QString& talker);
-
-        /**
-         * Converts an utterance state enumerator to a displayable string.
+        * Converts an utterance state enumerator to a displayable string.
         * @param state           Utterance state.
         * @return                Displayable string for utterance state.
         */
@@ -582,18 +514,18 @@ class Speaker : public QObject{
         Player* createPlayerObject();
 
         /**
-         * Array of the loaded plug ins for different Talkers.
-         */
-        QValueVector<TalkerInfo> m_loadedPlugIns;
-
-        /**
          * SpeechData local pointer
          */
         SpeechData* m_speechData;
 
         /**
-         * True if the speaker was requested to exit.
-         */
+        * TalkerMgr local pointer.
+        */
+        TalkerMgr* m_talkerMgr;
+
+        /**
+        * True if the speaker was requested to exit.
+        */
         volatile bool m_exitRequested;
 
         /**
@@ -645,10 +577,6 @@ class Speaker : public QObject{
         QCString m_lastAppId;
         uint m_lastSeq;
 
-        /**
-         * Cache of talker codes and index of closest matching Talker.
-         */
-        QMap<QString,int> m_talkerToPlugInCache;
 };
 
 #endif // _SPEAKER_H_
