@@ -795,8 +795,8 @@ void KTTSD::notificationSignal( const QString&, const QString&,
     if (!m_speaker) return;
     if (!text.isNull())
         if ( m_speechData->notify )
-            if ( m_speechData->notifyPassivePopupsOnly 
-                or (present & KNotifyClient::PassivePopup) )
+            if ( ( present & KNotifyClient::PassivePopup )
+                 || !m_speechData->notifyPassivePopupsOnly )
                 {
                     m_speechData->enqueueMessage(text, NULL, getAppId());
                     m_speaker->doUtterances();
