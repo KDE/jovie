@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Filter by David Power achiestdragon@gmail.com -->
+<wordlist>
+ <name>kmail notify</name>
+ <appid>knotify</appid>
+ <appid>kmail</appid>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[<br>]]></match>
+  <subst><![CDATA[,]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[</b>]]></match>
+  <subst><![CDATA[,]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[in /local/inbox]]></match>
+  <subst><![CDATA[,]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[<b>]]></match>
+  <subst><![CDATA[,]]></subst>
+ </word>
+</wordlist>

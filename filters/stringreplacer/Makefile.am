@@ -27,7 +27,8 @@ stringreplacerdata_DATA = \
 	chat.xml \
 	emoticons.xml \
 	polish_festival_fixes.xml \
-	polish_festival_unspeakables.xml
+	polish_festival_unspeakables.xml \
+	kmail.xml
 
 noinst_HEADERS =  stringreplacerconfwidget.h editreplacementwidget.h
 
