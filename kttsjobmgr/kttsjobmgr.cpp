@@ -727,7 +727,7 @@ ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcState, stateToStr(kspeech::jsSpeakable));
+        item->setText(jlvcState, stateToStr(kspeech::jsQueued));
         item->setText(jlvcPosition, "0");
     }
 }

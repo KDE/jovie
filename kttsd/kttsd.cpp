@@ -596,7 +596,7 @@ void KTTSD::reinit()
     // Restart ourself.
     kdDebug() << "Running: KTTSD::reinit()" << endl;
     kdDebug() << "Stopping KTTSD service" << endl;
-    stopText();
+    if (speechData->isSpeakingText()) pauseText();
     if (speaker)
     {
         // Create a separate thread to terminate and wait for the speaker to exit.
