@@ -160,6 +160,7 @@ void FestivalIntProc::stopText(){
     {
       festProc->writeStdin(QString("(audio_mode 'shutup)"), true);
       festProc->writeStdin(QString("(quit)"), true);
+      festProc->kill();
     }
     kdDebug() << "Festival stopped." << endl;
 }

@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kapplication.h>
+#include <qregexp.h>
 
 #include "speechdata.h"
 #include "speechdata.moc"
@@ -202,12 +203,16 @@ void SpeechData::setText( const QString &text, const QString &language ){
     // There has to be a better way
     kdDebug() << "I'm getting: " << endl << text  << endl;
     QString temp = text;
+    QStringList tempList = QStringList::split(QRegExp("([\\.\\?\\:\\;]\\s)|(\\n\\n)"), temp, false);
+/*    
     // This should be something better, like "[a-zA-Z]\. " (a regexp of course) The dot (.) is used for more than ending a sentence.
     temp.replace('.', '\n');
-    QStringList tempList = QStringList::split('\n', temp, true);
+    QStringList tempList = QStringList::split('\n', temp, true);*/
+    
     for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
         kdDebug() << "'" << *it << "'" << endl;
     }
+    
 
     textMutex.lock();
     bool wasReading = reading;
