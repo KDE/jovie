@@ -95,6 +95,12 @@ if test "$PKGCONFIGFOUND" = "yes" ; then
 		CFLAGS_GST=$GST_CFLAGS
 		LDADD_GST=`$PKG_CONFIG --libs-only-l gstreamer-$GST_MAJORMINOR`
 		LDFLAGS_GST=`$PKG_CONFIG --libs-only-other gstreamer-$GST_MAJORMINOR`
+		
+        # Append -L entries, since they are masked by --libs-only-l and
+        # --libs-only-other
+        LIBDIRS_GST=`$PKG_CONFIG --libs-only-L gstreamer-$GST_MAJORMINOR`
+        LDADD_GST="$LDADD_GST $LIBDIRS_GST"
+		
 		AC_SUBST(CFLAGS_GST)
 		AC_SUBST(LDADD_GST)
 		AC_SUBST(LDFLAGS_GST)
