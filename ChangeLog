@@ -1,3 +1,13 @@
+2005-01-21  Gary Cramblitt (PhantomsDad)
+        * Sentence Boundary Detector plugin now active.  This means that SSML is parsed into
+          sentences and therefore can be rewound/advanced by sentence.  It also means that
+          KTTS no longer crashes (taking KDE and X11 with it) on large HTML/SSML files.
+        * Filters can be applied based on the DCOP Application ID of app that queued the text
+          job.
+        * Filters can be applied based on language of Talker.
+        * StringReplacer filter can now load and save word lists to/from external file.
+        * Several other bug fixes.
+
 2005-01-13  Gary Cramblitt (PhantomsDad)
         * FilterMgr class now implemented in kttsd, which means that filters now work.  Well
           almost.  See TODO file for some nasty problems.  (Hint: avoid large HTML/SSML pages!)

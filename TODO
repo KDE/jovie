@@ -2,11 +2,6 @@ _ Notifications aren't currently filtered because they use sayMessage().  Allow 
   notifications.  (only setText and appendText are currently filtered.)
   There should be a default filter with the following settings:
      "<//kmail//.new mail" -> "new mail"
-_ Large HTML/SSML pages take forever to synthesize.  kttsd appears to be hung, but it is
-  generating the individual wave files and merging them.  The way to fix this is to write
-  the Sentence Boundary Detection plugin that can handle SSML.
-_ Crashes when fed a large XHTML/SSML page.  Crashes when it starts to speak the first utterance.
-  Takes KDE and X with it.  nasty!
 _ More problems with KCMultiDialog.  In addition to not being able to size horizontally less than
   640, you cannot size vertically, once it has been minimized to systray, to less than the
   vertical size when it was minimized to the systray.
