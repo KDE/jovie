@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>StringReplacerConfWidget</class>
 <comment>Widget for configuring String Replacer Filter for KTTSD.</comment>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
@@ -310,9 +310,6 @@
                             <property name="text">
                                 <string>&amp;Add...</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Click to add another word or regular expression to the list.</string>
                                 <comment>What's this text</comment>
@@ -333,9 +330,6 @@
                             <property name="text">
                                 <string>&amp;Up</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+U</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Click to move selected word up in the list.  Words higher in the list are applied first.</string>
                             </property>
@@ -354,9 +348,6 @@
                             </property>
                             <property name="text">
                                 <string>Do&amp;wn</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+W</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Click to move a word down in the list.  Words lower in the list are applied last.</string>
@@ -379,9 +370,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Edit...</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+E</string>
                             </property>
                             <property name="toggleButton">
                                 <bool>false</bool>
@@ -407,9 +395,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Remove</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+R</string>
                             </property>
                             <property name="toggleButton">
                                 <bool>false</bool>
