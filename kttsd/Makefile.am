@@ -4,8 +4,8 @@ METASOURCES = AUTO
 bin_PROGRAMS = kttsd
 
 kttsd_SOURCES = main.cpp kttsdui.ui kttsd.cpp kttsd.skel speaker.cpp speechdata.cpp
-kttsd_LDFLAGS = $(all_libraries) -module -avoid-version
-kttsd_LDADD = $(LIB_KDECORE) $(LIB_KIO) $(top_builddir)/kttsd/libkttsd/libkttsd.la
+kttsd_LDFLAGS = -avoid-version -module $(all_libraries)
+kttsd_LDADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_KDECORE) $(LIB_KIO) -lkutils
 
 messages:
 	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot

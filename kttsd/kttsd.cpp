@@ -33,6 +33,7 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <kfiledialog.h>
+#include <kcmultidialog.h>
 
 #include "kttsd.h"
 #include "speaker.h"
@@ -45,49 +46,15 @@ KTTSD::KTTSD(QWidget *parent, const char *name) : kttsdUI(parent, name), DCOPObj
     kdDebug() << "Running: KTTSD::KTTSD( QObject *parent, const char *name)" << endl;
     // Do stuff here
     //setIdleTimeout(15); // 15 seconds idle timeout.
-    kdDebug() << "Instantiating Speaker and running it as another thread" << endl;
-
-    // By default, everything is ok, don't worry, be happy
-    ok = true;
-
-
-    // Create speechData object, and load configuration checking for the return
-    speechData = new SpeechData();
-    if(!speechData->readConfig()){
-        KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
-        ok = false;
-        return;
-    }
-
-    connect (speechData, SIGNAL(textStarted()), this, SLOT(textStarted()));
-    connect (speechData, SIGNAL(textFinished()), this, SLOT(textFinished()));
-    connect (speechData, SIGNAL(textStopped()), this, SLOT(textStopped()));
-    connect (speechData, SIGNAL(textPaused()), this, SLOT(textPaused()));
-    connect (speechData, SIGNAL(textResumed()), this, SLOT(textResumed()));
-    connect (speechData, SIGNAL(textSet()), this, SLOT(textSet()));
-    connect (speechData, SIGNAL(textRemoved()), this, SLOT(textRemoved()));
-
-
-    // Create speaker object and load plug ins, checking for the return
-    speaker = new Speaker(speechData);
-    int load = speaker->loadPlugIns();
-    if(load == -1){
-        KMessageBox::error(0, i18n("No speech synthesizer plugin found. This program cannot run without a speech synthesizer. Text to speech service exiting."), i18n("Text To Speech Error"));
-        ok = false;
-        return;
-    } else if(load == 0){
-        KMessageBox::error(0, i18n("A speech synthesizer plugin was not found or is corrupt"), i18n("Text To Speech Error"));
-    }
-
-    connect (speaker, SIGNAL(sentenceStarted(QString,QString)), this, SLOT(sentenceStarted(QString,QString)));
-    connect (speaker, SIGNAL(sentenceFinished()), this, SLOT(sentenceFinished()));
-
+    
+    if (!initializeSpeaker()) return;
 
     // Create system tray object
     tray = new KTTSDTray (this, "systemTrayIcon");
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     tray->setPixmap (icon);
     connect(tray, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
+    connect(tray, SIGNAL(configureSelected()), this, SLOT(configureSelected()));
     connect(tray, SIGNAL(speakClipboardSelected()), this, SLOT(speakClipboardSelected()));
     connect(tray, SIGNAL(aboutSelected()), this, SLOT(aboutSelected()));
     connect(tray, SIGNAL(helpSelected()), this, SLOT(helpSelected()));
@@ -130,13 +97,55 @@ KTTSD::KTTSD(QWidget *parent, const char *name) : kttsdUI(parent, name), DCOPObj
     tray->show();
 }
 
+bool KTTSD::initializeSpeaker()
+{
+    kdDebug() << "Instantiating Speaker and running it as another thread" << endl;
+
+    // By default, everything is ok, don't worry, be happy
+    ok = true;
+
+    // Create speechData object, and load configuration checking for the return
+    speechData = new SpeechData();
+    if(!speechData->readConfig()){
+        KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
+        ok = false;
+        return false;
+    }
+
+    connect (speechData, SIGNAL(textStarted()), this, SLOT(textStarted()));
+    connect (speechData, SIGNAL(textFinished()), this, SLOT(textFinished()));
+    connect (speechData, SIGNAL(textStopped()), this, SLOT(textStopped()));
+    connect (speechData, SIGNAL(textPaused()), this, SLOT(textPaused()));
+    connect (speechData, SIGNAL(textResumed()), this, SLOT(textResumed()));
+    connect (speechData, SIGNAL(textSet()), this, SLOT(textSet()));
+    connect (speechData, SIGNAL(textRemoved()), this, SLOT(textRemoved()));
+
+    // Create speaker object and load plug ins, checking for the return
+    speaker = new Speaker(speechData);
+    int load = speaker->loadPlugIns();
+    if(load == -1){
+        KMessageBox::error(0, i18n("No speech synthesizer plugin found. This program cannot run without a speech synthesizer. Text to speech service exiting."), i18n("Text To Speech Error"));
+        ok = false;
+        return false;
+    } else if(load == 0){
+        KMessageBox::error(0, i18n("A speech synthesizer plugin was not found or is corrupt"), i18n("Text To Speech Error"));
+        ok = false;
+        return false;
+    }
+
+    connect (speaker, SIGNAL(sentenceStarted(QString,QString)), this, SLOT(sentenceStarted(QString,QString)));
+    connect (speaker, SIGNAL(sentenceFinished()), this, SLOT(sentenceFinished()));
+
+    return true;
+}
+
 /**
  * Destructor
  * Terminate speaker thread
  */
 KTTSD::~KTTSD(){
     kdDebug() << "Running: KTTSD::~KTTSD()" << endl;
-    kdDebug() << "Stoping KTTSD service" << endl;
+    kdDebug() << "Stopping KTTSD service" << endl;
     speaker->requestExit();
     speaker->wait();
     delete speaker;
@@ -322,6 +331,23 @@ void KTTSD::prevParagraphSelected(){
     prevParText();
 }
 
+void KTTSD::reinit()
+{
+    // Attempt to restart ourself.
+    // Sometimes causes crashes.  Not sure why..grc.
+    kdDebug() << "Running: KTTSD::reinit()" << endl;
+    kdDebug() << "Stopping KTTSD service" << endl;
+    speaker->requestExit();
+    speaker->wait();
+    delete speaker;
+    speaker = 0;
+    delete speechData;
+    speechData = 0;
+
+    kdDebug() << "Starting KTTSD service" << endl;
+    if (!initializeSpeaker()) return;
+    speaker->start();
+}
 
 // Buttons at the bottom of the dialog
 void KTTSD::helpSelected(){
@@ -330,6 +356,10 @@ void KTTSD::helpSelected(){
 
 void KTTSD::speakClipboardSelected(){
     speakClipboard();
+}
+
+void KTTSD::configCommitted() {
+    reinit();
 }
 
 void KTTSD::closeSelected(){
@@ -342,7 +372,10 @@ void KTTSD::quitSelected(){
 
 // System tray context menu entries
 void KTTSD::configureSelected(){
-
+    KCMultiDialog* cfgDlg = new KCMultiDialog(KCMultiDialog::Plain, "Configure", this, "configKTTSD", true);
+    cfgDlg->addModule("kcmkttsd", true);
+    connect(cfgDlg, SIGNAL(configCommitted()), this, SLOT(configCommitted()));
+    cfgDlg->exec();
 }
 
 void KTTSD::aboutSelected(){
@@ -420,13 +453,17 @@ void KTTSD::textRemoved(){
 
 KTTSDTray::KTTSDTray (QWidget *parent, const char *name) : KSystemTray (parent, name)
 {
-    contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("configure", KIcon::Small),
+    int id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("configure", KIcon::Small),
         i18n("&Configure kttsd..."), this, SIGNAL(configureSelected()));
+    // Configure not currently working.
+    contextMenu()->setItemEnabled(id, false);
     contextMenu()->insertSeparator();
     contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak clipboard contents"), this, SIGNAL(speakClipboardSelected()));
-    contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
         i18n("kttsd &Handbook"), this, SIGNAL(helpSelected()));
+    // Handbook not available yet.
+    contextMenu()->setItemEnabled(id, false);
     contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
         i18n("&About kttsd"), this, SIGNAL(aboutSelected()));
 }

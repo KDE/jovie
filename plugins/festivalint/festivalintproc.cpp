@@ -46,6 +46,7 @@ FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStri
 /** Destructor */
 FestivalIntProc::~FestivalIntProc(){
     kdDebug() << "Running: FestivalIntProc::~FestivalIntProc()" << endl;
+    if (initialized) delete festProc;
 }
 
 /** Initializate the speech */

@@ -108,6 +108,11 @@ class KTTSD : public kttsdUI, public DCOPObject {
 
         KTTSDTray *tray;
         KAboutApplication *aboutDlg;
+        
+        /**
+         * Initialize the speaker.
+         */
+        bool initializeSpeaker();
 
     k_dcop:
         /**
@@ -188,8 +193,11 @@ class KTTSD : public kttsdUI, public DCOPObject {
         /**
          * This function is to re-start KTTSD
          */
-        //void reinit();
-
+        void reinit();
+        
+    private slots:
+        void configCommitted();
+    
 };
 
 class KTTSDTray : public KSystemTray {
