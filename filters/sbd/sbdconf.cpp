@@ -70,6 +70,8 @@ SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/
 
     connect( m_widget->reLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
+    connect( m_widget->sbLineEdit, SIGNAL(textChanged(const QString&)),
+         this, SLOT(configChanged()) );
     connect( m_widget->nameLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
     connect( m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
@@ -105,9 +107,11 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
     // kdDebug() << "SbdConf::load: Running" << endl;
     config->setGroup( configGroup );
     m_widget->nameLineEdit->setText( 
-            config->readEntry("UserFilterName", m_widget->nameLineEdit->text()) );
+        config->readEntry("UserFilterName", m_widget->nameLineEdit->text()) );
     m_widget->reLineEdit->setText(
-            config->readEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text()) );
+        config->readEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text()) );
+    m_widget->sbLineEdit->setText(
+        config->readEntry("SentenceBoundary", m_widget->sbLineEdit->text()) );
     m_languageCodeList = config->readListEntry("LanguageCodes", m_languageCodeList );
     QString language = "";
     for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
@@ -135,6 +139,7 @@ void SbdConf::save(KConfig* config, const QString& configGroup){
     config->setGroup( configGroup );
     config->writeEntry("UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text() );
+    config->writeEntry("SentenceBoundary", m_widget->sbLineEdit->text() );
     config->writeEntry("LanguageCodes", m_languageCodeList );
     config->writeEntry("AppID", m_widget->appIdLineEdit->text() );
 }
@@ -150,6 +155,7 @@ void SbdConf::defaults(){
     // kdDebug() << "SbdConf::defaults: Running" << endl;
     m_widget->nameLineEdit->setText( i18n("Standard Sentence Boundary Detector") );
     m_widget->reLineEdit->setText( "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
+    m_widget->sbLineEdit->setText( "\\1\\t" );
     m_languageCodeList.clear();
     m_widget->languageLineEdit->setText( "" );
     m_widget->appIdLineEdit->setText( "" );

@@ -76,6 +76,14 @@ void SbdThread::setSbRegExp( const QString& re ) { m_re = re; }
 void SbdThread::setConfiguredSbRegExp( const QString& re ) { m_configuredRe = re; }
 
 /**
+ * The configured Sentence Boundary that replaces SB regular expression.
+ *
+ * @param sb            The sentence boundary replacement.
+ *
+ */
+void SbdThread::setConfiguredSentenceBoundary( const QString& sb ) { m_configuredSentenceBoundary = sb; }
+
+/**
  * Did this filter do anything?  If the filter returns the input as output
  * unmolested, it should return False when this method is called.
  */
@@ -456,7 +464,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     QRegExp sentenceDelimiter = QRegExp( re );
     QString temp = inputText;
     // Replace sentence delimiters with tab.
-    temp.replace(sentenceDelimiter, "\\1\t");
+    temp.replace(sentenceDelimiter, m_configuredSentenceBoundary);
     // Replace remaining newlines with spaces.
     temp.replace("\n"," ");
     temp.replace("\r"," ");
@@ -584,6 +592,9 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 //    m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
     m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
+    QString sb = config->readEntry( "SentenceBoundary", "\\1\t" );
+    sb.replace( "\\t", "\t" );
+    m_sbdThread->setConfiguredSentenceBoundary( sb );
     m_appIdList = config->readListEntry( "AppID" );
     m_languageCodeList = config->readListEntry( "LanguageCodes" );
     return true;

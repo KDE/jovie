@@ -94,6 +94,14 @@ class SbdThread: public QObject, public QThread
         void setConfiguredSbRegExp( const QString& re );
 
         /**
+         * The configured Sentence Boundary that replaces SB regular expression.
+         *
+         * @param sb            The sentence boundary replacement.
+         *
+         */
+        void setConfiguredSentenceBoundary( const QString& sb );
+
+        /**
          * Did this filter do anything?  If the filter returns the input as output
          * unmolested, it should return False when this method is called.
          */
@@ -210,6 +218,8 @@ class SbdThread: public QObject, public QThread
         TalkerCode* m_talkerCode;
         // Configured default Sentence Delimiter regular expression.
         QString m_configuredRe;
+        // Configured Sentence Boundary replacement expression.
+        QString m_configuredSentenceBoundary;
         // Application-specified Sentence Delimiter regular expression (if any).
         QString m_re;
         // False if input was not modified.

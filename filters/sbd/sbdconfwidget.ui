@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>544</width>
-            <height>239</height>
+            <height>277</height>
         </rect>
     </property>
     <grid>
@@ -25,7 +25,126 @@
                 <string>&lt;b&gt;WARNING: This filter is a key component of the KTTS system. Please read the KTTS Handbook before modifying these settings.&lt;/b&gt;</string>
             </property>
         </widget>
-        <widget class="QGroupBox" row="3" column="0">
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>nameLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Name:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>nameLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The name of this filter.  Enter any descriptive name you like.</string>
+                        <comment>What's this text</comment>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>nameLineEdit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Standard Sentence Boundary Detector</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The name of this filter.  Enter any descriptive name you like.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout17</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>reLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Sentence boundary regular expression:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>nameLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The regular expression that detects boundaries between sentences in text jobs.</string>
+                        <comment>What's this text</comment>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>reLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The regular expression that detects boundaries between sentences in text jobs.</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>reButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>...</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="3" column="0">
+            <property name="name">
+                <cstring>layout17_2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>sbLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replacement sentence boundary:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>nameLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This string replaces the matched regular expression.  &lt;b&gt;Important&lt;/b&gt;: must end with tab (\t).</string>
+                        <comment>What's this text</comment>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>sbLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This string replaces the matched regular expression.  &lt;b&gt;Important&lt;/b&gt;: must end with tab (\t).</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="4" column="0">
             <property name="name">
                 <cstring>applyGroupBox</cstring>
             </property>
@@ -136,86 +255,6 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>nameLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Name:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>nameLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>The name of this filter.  Enter any descriptive name you like.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>nameLineEdit</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Standard Sentence Boundary Detector</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>The name of this filter.  Enter any descriptive name you like.</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
-            <property name="name">
-                <cstring>layout17</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>reLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Sentence boundary regular expression:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>nameLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>The regular expression that detects boundaries between sentences in text jobs.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>reLineEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>reButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>...</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -224,6 +263,7 @@
     <tabstop>nameLineEdit</tabstop>
     <tabstop>reLineEdit</tabstop>
     <tabstop>reButton</tabstop>
+    <tabstop>sbLineEdit</tabstop>
     <tabstop>languageLineEdit</tabstop>
     <tabstop>languageBrowseButton</tabstop>
     <tabstop>appIdLineEdit</tabstop>
@@ -231,10 +271,11 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>
