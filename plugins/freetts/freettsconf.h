@@ -69,7 +69,7 @@ class FreeTTSConf : public PlugInConf {
 		 * @param name          The name of the file to search for.
 		 * @returns                   The full path to the file or an empty QString.
 		 */
-		QString getLocation(const QString &name);
+// 		QString getLocation(const QString &name);
 	
 	public slots:
 		void configChanged(bool t = true) { 
@@ -95,8 +95,5 @@ class FreeTTSConf : public PlugInConf {
 		
 		/// Synthesized wave file name.
 		QString m_waveFile;
-		
-		/// The system path in a QStringList
-		QStringList m_path;		
 };
 #endif

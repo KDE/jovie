@@ -16,6 +16,9 @@
  *																					 *
  ***************************************************************************/
 
+#include <cstdlib>
+// getenv  
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
@@ -40,7 +43,7 @@
 
 /** Constructor */
 FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/*args*/) : 
-	PlugInConf( parent, name ){
+	PlugInConf( parent, name ) {
 	
 	kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
 	m_freettsProc = 0;
@@ -59,13 +62,13 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/
 		this, SLOT(configChanged()));
 	connect(m_widget->freettsTest, SIGNAL(clicked()), this, SLOT(slotFreeTTSTest_clicked()));
 	
-	QString systemPath(getenv("PATH"));
-// 	kdDebug() << "Path is " << systemPath << endl;
-	m_path = QStringList::split(":", systemPath);
+// 	QString systemPath(getenv("PATH"));
+// // 	kdDebug() << "Path is " << systemPath << endl;
+// 	m_path = QStringList::split(":", systemPath);
 }
 
 /** Destructor */
-FreeTTSConf::~FreeTTSConf(){
+FreeTTSConf::~FreeTTSConf() {
 	kdDebug() << "Running: FreeTTSConf::~FreeTTSConf()" << endl;
 	if (m_playObj) m_playObj->halt();
 	delete m_playObj;
@@ -75,61 +78,53 @@ FreeTTSConf::~FreeTTSConf(){
 }
 
 void FreeTTSConf::load(KConfig *config, const QString &langGroup) {
-	static bool shown = false;
 	kdDebug() << "FreeTTSConf::load: Loading configuration for language " << langGroup << " with plug in " << "FreeTTS" << endl;
 
 	config->setGroup(langGroup);
 	m_widget->freettsPath->setURL(config->readPathEntry("FreeTTSJarPath", ""));
 	
-	/// Changed:
-	/// Doesn't set the url default to freetts.jar, but checks for the entry in the path. If it doesn't exist, it
-	/// tells the user to specify it.
-	
 	if(m_widget->freettsPath->url().isEmpty())
 		m_widget->freettsPath->setURL(getLocation("freetts.jar"));
 	/// If freettsPath is still empty, then we couldn't find the file in the path.
-	if(m_widget->freettsPath->url().isEmpty()) {
-		if(!shown) 
-			KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
-		shown = true;
-	}	
 }
 
 void FreeTTSConf::save(KConfig *config, const QString &langGroup){
 	kdDebug() << "FreeTTSConf::save: Saving configuration for language " << langGroup << " with plug in " << "FreeTTS" << endl;
 
 	config->setGroup(langGroup);
+    if(m_widget->freettsPath->url().isEmpty())
+		KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
 	config->writePathEntry("FreeTTSJarPath", m_widget->freettsPath->url());
 }
 
 void FreeTTSConf::defaults(){
 	kdDebug() << "Running: FreeTTSConf::defaults()" << endl;
-	m_widget->freettsPath->setURL("freetts.jar");
+	m_widget->freettsPath->setURL("");
 }
 
 
-QString FreeTTSConf::getLocation(const QString &name) {
-	/// Iterate over the path and see if 'name' exists in it. Return the
-	/// full path to it if it does. Else return an empty QString.
-	kdDebug() << "FreeTTSConf::getLocation: Searching for " << name << " in the path... " << endl;
-	kdDebug() << m_path << endl;
-	for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
-		QString fullName = *it;
-		fullName += "/";
-		fullName += name;
-		/// The user either has the directory of the file in the path...
-		if(QFile::exists(fullName)) {
-			return fullName;
-			kdDebug() << fullName << endl;
-		}
-		/// ....Or the file itself
-		else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
-			return fullName;
-			kdDebug() << fullName << endl;
-		}
-	}
-	return "";
-}
+// QString FreeTTSConf::getLocation(const QString &name) {
+// 	/// Iterate over the path and see if 'name' exists in it. Return the
+// 	/// full path to it if it does. Else return an empty QString.
+// 	kdDebug() << "FreeTTSConf::getLocation: Searching for " << name << " in the path... " << endl;
+// 	kdDebug() << m_path << endl;
+// 	for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
+// 		QString fullName = *it;
+// 		fullName += "/";
+// 		fullName += name;
+// 		/// The user either has the directory of the file in the path...
+// 		if(QFile::exists(fullName)) {
+// 			return fullName;
+// 			kdDebug() << fullName << endl;
+// 		}
+// 		/// ....Or the file itself
+// 		else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+// 			return fullName;
+// 			kdDebug() << fullName << endl;
+// 		}
+// 	}
+// 	return "";
+// }
 
 
 void FreeTTSConf::slotFreeTTSTest_clicked()
