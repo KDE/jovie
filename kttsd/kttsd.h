@@ -69,6 +69,7 @@ class KTTSD : public kttsdUI, public DCOPObject {
         void prevParagraphSelected();
 
         void helpSelected();
+        void speakClipboardSelected();
         void closeSelected();
         void quitSelected();
 
@@ -193,6 +194,7 @@ class KTTSDTray : public KSystemTray {
          * These functions are called whenever an entry in system tray contect menu is selected
          */
         void configureSelected();
+        void speakClipboardSelected();
         void aboutSelected();
         void helpSelected();
 };

@@ -29,6 +29,7 @@
 #include <kpopupmenu.h>
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
+#include <qclipboard.h>
 
 #include "kttsd.h"
 #include "speaker.h"
@@ -84,6 +85,7 @@ KTTSD::KTTSD(QWidget *parent, const char *name) : kttsdUI(parent, name), DCOPObj
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     tray->setPixmap (icon);
     connect(tray, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
+    connect(tray, SIGNAL(speakClipboardSelected()), this, SLOT(speakClipboardSelected()));
     connect(tray, SIGNAL(aboutSelected()), this, SLOT(aboutSelected()));
     connect(tray, SIGNAL(helpSelected()), this, SLOT(helpSelected()));
 
@@ -297,6 +299,23 @@ void KTTSD::configureSelected(){
 
 }
 
+// Speak contents of the clipboard.
+void KTTSD::speakClipboardSelected()
+{
+    // Get the clipboard object.
+    QClipboard *cb = kapp->clipboard();
+
+    // Copy text from the clipboard.
+    QString text = cb->text();
+    
+    // Speak it.
+    if ( !text.isNull() ) 
+    {
+        setText(text);
+        startText();
+    }
+}
+
 void KTTSD::aboutSelected(){
     aboutDlg->show();
 }
@@ -373,12 +392,14 @@ void KTTSD::textRemoved(){
 KTTSDTray::KTTSDTray (QWidget *parent, const char *name) : KSystemTray (parent, name)
 {
     contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("configure", KIcon::Small),
-	                           i18n("&Configure kttsd..."), this, SIGNAL(configureSelected()));
-	contextMenu()->insertSeparator();
-	contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
-	                           i18n("kttsd &Handbook"), this, SIGNAL(helpSelected()));
+        i18n("&Configure kttsd..."), this, SIGNAL(configureSelected()));
+    contextMenu()->insertSeparator();
+    contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
+        i18n("&Speak clipboard contents"), this, SIGNAL(speakClipboardSelected()));
+    contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
+        i18n("kttsd &Handbook"), this, SIGNAL(helpSelected()));
     contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
-	                           i18n("&About kttsd"), this, SIGNAL(aboutSelected()));
+        i18n("&About kttsd"), this, SIGNAL(aboutSelected()));
 }
 
 KTTSDTray::~KTTSDTray() {
