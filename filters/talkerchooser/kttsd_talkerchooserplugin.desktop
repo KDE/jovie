@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Talker Chooser
+Comment=Generic Talker Chooser Filter Plugin for KTTS
+Type=Service
+ServiceTypes=KTTSD/FilterPlugin
+X-KDE-Library=libkttsd_talkerchooserplugin
+X-KDE-Languages=en,en_US,en_GB,en_CA,es,es_mx,cy,de,fi,cs,pl

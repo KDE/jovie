@@ -520,6 +520,12 @@ class SpeechData : public QObject {
         bool parPostSndEnabled;
 
         /**
+        * Keep audio files.  Do not delete generated tmp wav files.
+        */
+        bool keepAudio;
+        QString keepAudioPath;
+
+        /**
         * Notify.
         */
         bool notify;

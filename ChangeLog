@@ -1,3 +1,8 @@
+2005-01-24  Gary Cramblitt (PhantomsDad)
+        * Add Talker Chooser Filter.
+        * Add option on Audio tab to preserve generated audio files by copying to user-specified
+          directory.
+
 2005-01-22  Gary Cramblitt (PhantomsDad)
         * Allow filtering of notifications.  (only setText and appendText are currently filtered.)
         * Fix bug.  Synchronous filters not being run.

@@ -34,6 +34,7 @@
 // KDE includes.
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kapplication.h>
 
 // KTTS includes.
@@ -63,6 +64,7 @@ SpeechData::SpeechData(){
     // Messages queue to be autodelete (thread safe)
     messages.setAutoDelete(true);
 
+    screenReaderOutput.jobNum = 0;
     screenReaderOutput.text = "";
 }
 
@@ -87,6 +89,8 @@ bool SpeechData::readConfig(){
 
     textPostSndEnabled = config->readBoolEntry("TextPostSndEnabled", false);
     textPostSnd = config->readPathEntry("TextPostSnd");
+    keepAudio = config->readBoolEntry("KeepAudio", false);
+    keepAudioPath = config->readPathEntry("KeepAudioPath", locateLocal("data", "kttsd/audio/"));
 
     // Notification (KNotify).
     notify = config->readBoolEntry("Notify", false);
@@ -179,6 +183,7 @@ bool SpeechData::screenReaderOutputReady()
 void SpeechData::enqueueWarning( const QString &warning, const QString &talker, const QCString &appId){
     // kdDebug() << "Running: SpeechData::enqueueWarning( const QString &warning )" << endl;
     mlText *temp = new mlText();
+    temp->jobNum = 0;
     temp->text = warning;
     temp->talker = talker;
     temp->appId = appId;

@@ -1,0 +1,26 @@
+INCLUDES = \
+	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	$(all_includes)
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	$(all_includes)
+METASOURCES = AUTO
+
+kde_module_LTLIBRARIES = libkttsd_talkerchooserplugin.la
+
+libkttsd_talkerchooserplugin_la_SOURCES = \
+	talkerchooserconfwidget.ui \
+	talkerchooserconf.cpp \
+	talkerchooserproc.cpp \
+	talkerchooserplugin.cpp
+libkttsd_talkerchooserplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
+libkttsd_talkerchooserplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la
+
+services_DATA = kttsd_talkerchooserplugin.desktop
+servicesdir = $(kde_servicesdir)
+
+noinst_HEADERS =  talkerchooserconfwidget.h
+
+# Get translators to translate library.
+messages: rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_talkerchooserplugin.pot

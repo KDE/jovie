@@ -124,6 +124,9 @@ class TalkerCode
         static QString translatedGender(const QString &gender);
         static QString translatedVolume(const QString &volume);
         static QString translatedRate(const QString &rate);
+        static QString untranslatedGender(const QString &gender);
+        static QString untranslatedVolume(const QString &volume);
+        static QString untranslatedRate(const QString &rate);
 
     private:
         /**

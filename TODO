@@ -1,3 +1,5 @@
+_ .desktop files must have a Type keyword, but what to use for kcmkttsd_testmessage.desktop?
+_ Add ability to quickly pick default Talker to systray menu.
 _ More problems with KCMultiDialog.  In addition to not being able to size horizontally less than
   640, you cannot size vertically, once it has been minimized to systray, to less than the
   vertical size when it was minimized to the systray.
@@ -48,6 +50,10 @@ _ KTTSMgr:
     _ In the job manager tab, one can drag the toolbars elsewhere, but the buttons
       disappear.  Why?
 _ KTTSD:
+    _ Strange msg being produced by KIO::move, but it works fine. ??
+        kio (KIOJob): stat file:///home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
+        kio (KIOJob): error 11 /home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
+        kio (KIOJob): This seems to be a suitable case for trying to rename before stat+[list+]copy+del
     _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
       language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
       desktop language.  Must somehow let kttsmgr know about the newly configured Talker.

@@ -412,6 +412,11 @@ class KCMKttsMgr :
         void timeSlider_valueChanged(int sliderValue);
 
         /**
+        * Keep Audio CheckBox slot.
+        */
+        void keepAudioCheckBox_toggled(bool checked);
+
+        /**
         * Other slots.
         */
         void slotTabChanged();

@@ -84,6 +84,8 @@ const QString textPostSndValue = "";
 
 const int timeBoxValue = 100;
 
+const bool keepAudioCheckBoxValue = false;
+
 // Make this a plug in.
 typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kcm_kttsd") );
@@ -157,6 +159,10 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     delete player;
     delete testPlayer;
 
+    // Set up Keep Audio Path KURLRequestor.
+    m_kttsmgrw->keepAudioPath->setMode(KFile::Directory);
+    m_kttsmgrw->keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
+
     // Register DCOP client.
     DCOPClient *client = kapp->dcopClient();
     if (!client->isRegistered())
@@ -214,6 +220,10 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(timeSlider_valueChanged(int)));
     connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_kttsmgrw->keepAudioCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(keepAudioCheckBox_toggled(bool)));
+    connect(m_kttsmgrw->keepAudioPath, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
 
     // General tab.
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
@@ -320,6 +330,12 @@ void KCMKttsMgr::load()
     }
     m_kttsmgrw->timeBox->setValue(m_config->readNumEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(m_kttsmgrw->timeBox->value());
+    m_kttsmgrw->keepAudioCheckBox->setChecked(
+        m_config->readBoolEntry("KeepAudio",                                             m_kttsmgrw->keepAudioCheckBox->isChecked()));
+    m_kttsmgrw->keepAudioPath->setURL(
+        m_config->readPathEntry("KeepAudioPath",
+        m_kttsmgrw->keepAudioPath->url()));
+    m_kttsmgrw->keepAudioPath->setEnabled(m_kttsmgrw->keepAudioCheckBox->isChecked());
 
     // Last plugin ID.  Used to generate a new ID for an added talker.
     m_lastTalkerID = 0;
@@ -596,6 +612,8 @@ void KCMKttsMgr::save()
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
     m_config->writeEntry("AudioStretchFactor", m_kttsmgrw->timeBox->value());
+    m_config->writeEntry("KeepAudio", m_kttsmgrw->keepAudioCheckBox->isChecked());
+    m_config->writePathEntry("KeepAudioPath", m_kttsmgrw->keepAudioPath->url());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
@@ -786,6 +804,18 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 m_kttsmgrw->timeBox->setValue(timeBoxValue);
             }
+            if (m_kttsmgrw->keepAudioCheckBox->isChecked() !=
+                 keepAudioCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->keepAudioCheckBox->setChecked(keepAudioCheckBoxValue);
+            }
+            if (m_kttsmgrw->keepAudioPath->url() != locateLocal("data", "kttsd/audio/"))
+            {
+                changed = true;
+                m_kttsmgrw->keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
+            }
+            m_kttsmgrw->keepAudioPath->setEnabled(m_kttsmgrw->keepAudioCheckBox->isEnabled());
     }
     if (changed) configChanged();
 }
@@ -1850,6 +1880,11 @@ int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
     return cnt;
 }
 
+void KCMKttsMgr::keepAudioCheckBox_toggled(bool checked)
+{
+    m_kttsmgrw->keepAudioPath->setEnabled(checked);
+    configChanged();
+}
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent
 // values are linear (50%,...,200%).
