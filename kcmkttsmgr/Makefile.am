@@ -9,8 +9,6 @@ kcm_kttsmgr_la_SOURCES = kcmkttsmgr.cpp kcmkttsmgrwidget.ui
 noinst_HEADERS = kcmkttsmgr.h kcmkttsmgrwidget.h kcmkttsmgrwidget.ui.h
 kcm_kttsmgr_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_QT) $(LIB_KIO) $(LIB_KDECORE)
 
-kde_services_DATA =  kcmkttsmgr.desktop
-
 apps_DATA = kcmkttsmgr.desktop
 appsdir = $(kde_appsdir)/Settings/Accessibility
 
