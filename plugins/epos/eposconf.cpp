@@ -104,7 +104,7 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     m_widget->eposClientPath->setURL(config->readPathEntry("EposClientExePath", "say"));
     m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
     m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
-    QString codecString = config->readEntry("Codec", "Local");
+    QString codecString = config->readEntry("Codec", "ISO 8859-2");
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
     m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
@@ -154,7 +154,8 @@ void EposConf::defaults(){
     timeBox_valueChanged(100);
     m_widget->frequencyBox->setValue(100);
     frequencyBox_valueChanged(100);
-    m_widget->characterCodingBox->setCurrentItem(0);
+    int codec = PlugInProc::codecNameToListIndex("ISO 8859-2", m_codecList);
+    m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
 void EposConf::setDesiredLanguage(const QString &lang)

@@ -177,14 +177,14 @@ void EposProc::synth(
 
     // Encode the text.
     // 1.a) encode the text
-    QByteArray encText;
-    QTextStream ts (encText, IO_WriteOnly);
+    m_encText = QCString();
+    QTextStream ts (m_encText, IO_WriteOnly);
     ts.setCodec(codec);
     ts << text;
     ts << endl; // Some synths need this, eg. flite.
 
     // Quote the text as one parameter.
-    QString escText = KShellProcess::quote(encText);
+    // QString escText = KShellProcess::quote(encText);
 
     // kdDebug()<< "EposProc::synth: Creating Epos object" << endl;
     m_eposProc = new KProcess;
@@ -223,7 +223,7 @@ void EposProc::synth(
         *m_eposProc << "-o";
     if (!eposClientOptions.isEmpty())
         *m_eposProc << eposClientOptions;
-    *m_eposProc << escText;
+    *m_eposProc << "-";   // Read from StdIn.
     if (!suggestedFilename.isEmpty()) 
         *m_eposProc << " >" + suggestedFilename;
     connect(m_eposProc, SIGNAL(processExited(KProcess*)),
@@ -232,8 +232,8 @@ void EposProc::synth(
         this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
     connect(m_eposProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
         this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-//    connect(m_eposProc, SIGNAL(wroteStdin(KProcess*)),
-//        this, SLOT(slotWroteStdin(KProcess* )));
+    connect(m_eposProc, SIGNAL(wroteStdin(KProcess*)),
+        this, SLOT(slotWroteStdin(KProcess* )));
     if (suggestedFilename.isEmpty())
         m_state = psSaying;
     else
@@ -242,13 +242,15 @@ void EposProc::synth(
     // Ok, let's rock.
     m_synthFilename = suggestedFilename;
     kdDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
-    if (!m_eposProc->start(KProcess::NotifyOnExit, KProcess::AllOutput))
+    if (!m_eposProc->start(KProcess::NotifyOnExit, KProcess::All))
     {
         kdDebug() << "EposProc::synth: Error starting Epos process.  Is epos in the PATH?" << endl;
         m_state = psIdle;
         return;
     }
     kdDebug()<< "EposProc:synth: Epos initialized" << endl;
+    if (!m_eposProc->writeStdin(m_encText, m_encText.length()))
+        kdDebug() << "EposProc::synth: Error writing to Epos client StdIn." << endl;
 }
 
 /**
@@ -289,7 +291,7 @@ void EposProc::stopText(){
             m_waitingStop = true;
             m_eposProc->kill();
         } else m_state = psIdle;
-    }else m_state = psIdle;
+    } else m_state = psIdle;
     kdDebug() << "EposProc::stopText: Epos stopped." << endl;
 }
 
@@ -328,6 +330,7 @@ void EposProc::slotWroteStdin(KProcess*)
 {
     kdDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
     m_eposProc->closeStdin();
+    m_encText = QCString();
 }
 
 /**

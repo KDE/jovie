@@ -210,6 +210,11 @@ class EposProc : public PlugInProc{
         QTextCodec* m_codec;
         
         /**
+        * Encoded buffer to be sent to Epos client.
+         */
+        QCString m_encText;
+        
+        /**
         * Synthesis filename.
         */
         QString m_synthFilename;
