@@ -38,7 +38,7 @@
 #include <kapplication.h>
 #include <kprocess.h>
 #include <kgenericfactory.h>
-#include <ksimpleconfig.h>
+// #include <ksimpleconfig.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
@@ -525,24 +525,28 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
 
 /**
 * Initializes the language with the given language code by determining
-* its name.
+* its name (in the language of user's current desktop setting).
 */
 void KCMKttsMgr::initLanguageCode (const QString &code) {
     if(!m_languagesMap.contains(code)) {
-        QString name = QString::null;
+        // QString name = QString::null;
         
-        QString file = locate("locale", QString::fromLatin1("%1/entry.desktop").arg(code));
+        QString name = KGlobal::locale()->twoAlphaToLanguageName(code);
+        
+        /*
+        QString file = locate("locale", QString::fromLatin1("l10n/%1/entry.desktop").arg(code));
         if (!file.isNull() && !file.isEmpty()) {
             KSimpleConfig entry(file);
             entry.setGroup("KCM Locale");
             name = entry.readEntry("Name", QString::null);
-        }
+        }*/
     
         if (name.isNull() || name.isEmpty())
             name = code;
         else
             name = name + QString::fromLatin1(" (%1)").arg(code);
     
+        kdDebug() << "KCMKttsMgr::initLanguageCode: adding code " << code << " name " << name << endl;
         m_languagesMap[code] = name;
         m_reverseLanguagesMap[name] = code;
     }
