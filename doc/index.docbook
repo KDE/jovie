@@ -163,7 +163,7 @@ nice capabilities for end users as well.</para>
 including instances where Kate is embedded in another KDE application.</para></listitem>
 <listitem><para>Long text is parsed into sentences.  User may backup by sentence
 or paragraph, replay, pause, and stop playing.</para></listitem>
-<listitem><para>Audio output via aRts or GStreamer (version 0.8)</para></listitem>
+<listitem><para>Audio output via aRts or GStreamer (version 0.8.7 or later)</para></listitem>
 </itemizedlist>
 
 <para>Programmer features:</para>
@@ -601,8 +601,9 @@ the <guilabel>Audio</guilabel> screen appears.</para>
 <para>
 <calloutlist>
 <callout arearefs="pt-audio-1"><para>Select the method of audio output here.
-If <guilabel>GStreamer</guilabel> is grayed, &kmyapplication; was compiled
-without GStreamer support.
+If <guilabel>GStreamer</guilabel> is grayed, either &kmyapplication; was compiled
+without GStreamer support, or &kmyapplication; was unable to load the
+necessary GStreamer libraries.
 </para></callout>
 <callout arearefs="pt-audio-2"><para>If GStreamer is selected for audio output,
 choose the GStreamer audio sink method here.  If no sinks are listed, you need
@@ -805,7 +806,7 @@ which is also a W3C standard.</para>
 SSML.  It currently has the following restrictions.</para>
 
 <itemizedlist>
-<listitem><para>Works only with the Festival Interactive Talker.</para></listitem>
+<listitem><para>Works only with the Festival Interactive and Hadifix Talkers.</para></listitem>
 <listitem><para>You must install the <command>rab_diphone</command>
 (British male) voice, as this is the default voice Festival uses when speaking
 SSML.</para></listitem>
@@ -1161,49 +1162,22 @@ ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2</ulink></para>
 <sect1 id="requirements">
 <title>Requirements</title>
 
-<para>
-&kmyapplication; requires KDE version 3.2 or later.</para>
-
-<para>Binary packages also
-require GStreamer 0.8.  If you build &kmyapplication; from source,
-it will automatically configure itself not to use GStreamer if it is
-not installed.  You can obtain GStreamer from
-</para>
-
-<para><ulink url="http://gstreamer.freedesktop.org/">
-http://gstreamer.freedesktop.org/</ulink></para>
-
-<para>As of December 2004, Debian Testing users can install 
-GStreamer for use with &kmyapplication; using the following commands,
-but check the GStreamer website for the latest information.</para>
-
-<programlisting>
-apt-get install libgstreamer0.8-0
-apt-get install gstreamer0.8-misc
-apt-get install gstreamer0.8-tools
-apt-get install gstreamer0.8-oss
-apt-get install gstreamer0.8-alsa
-apt-get install libgstreamer-plugins0.8-0
-apt-get install libgstreamer-plugins0.8-0-dev
-apt-get install libgstreamer0.8-dev
-</programlisting>
-
-<para>The <command>sox</command> audio utility is needed for
-adjusting speech speed, but not required.  Debian users can install
-sox with the command <command>apt-get install sox</command>.</para>
+<para>Mandatory requirements:</para>
 
 <para>
-In order to use &kmyapplication;, you must install a speech synthesis engine.
-The following engines and spoken languages are currently supported.
-</para>
+<itemizedlist>
+<listitem><para>KDE version 3.2 or later.</para></listitem>
+<listitem><para>A speech synthesis engine.  The following engines
+and spoken languages are currently supported.</para>
 
+<para>
 <informaltable id="synth-engines">
 <tgroup cols="2">
 <tbody>
 
 <row>
 <entry>Festival</entry>
-<entry>American English, British, Spanish, German, Finnish</entry>
+<entry>American English, British, Spanish, German, Finnish, Czech</entry>
 </row>
 
 <row>
@@ -1229,6 +1203,7 @@ The following engines and spoken languages are currently supported.
 </tbody>
 </tgroup>
 </informaltable>
+</para>
 
 <para>It also works with any synthesis engine that can be run from a command in
 a Konsole.</para>
@@ -1250,6 +1225,50 @@ development team.
 <para>
 See <xref linkend="configuration" /> for specific instructions for each
 of these engines.
+</para>
+
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Optional components:</para>
+
+<para>
+<itemizedlist>
+
+<listitem>
+<para>The <command>sox</command> audio utility is needed for
+adjusting overall speech speed, but not required.  Debian users can install
+sox with the command <command>apt-get install sox</command>.</para>
+</listitem>
+
+<listitem>
+<para>GStreamer version 0.8.7 or later.  By default,
+&kmyapplication; uses aRts for audio output, but if you install
+GStreamer, you can use it instead.  You can obtain GStreamer from
+</para>
+
+<para><ulink url="http://gstreamer.freedesktop.org/">
+http://gstreamer.freedesktop.org/</ulink></para>
+
+<para>As of December 2004, Debian Testing users can install 
+GStreamer for use with &kmyapplication; using the following commands,
+but check the GStreamer website for the latest information.</para>
+
+<programlisting>
+apt-get install libgstreamer0.8-0
+apt-get install gstreamer0.8-misc
+apt-get install gstreamer0.8-tools
+apt-get install gstreamer0.8-oss
+apt-get install gstreamer0.8-alsa
+apt-get install libgstreamer-plugins0.8-0
+apt-get install libgstreamer-plugins0.8-0-dev
+apt-get install libgstreamer0.8-dev
+</programlisting>
+
+</listitem>
+
+</itemizedlist>
 </para>
 
 </sect1>
@@ -1432,19 +1451,19 @@ the diphones.  When combined with Festival, Festival produces the diphones neede
 by MBROLA.  <command>txt2pho</command> can also be used to produce diphones
 from German text.  See <link linkend="using-with-hadifix">Using with Hadifix</link> for more information.</para>
 
-<para>There are two methods of combining Festival with MBROLA.</para>
+<para>There are three methods of combining Festival with MBROLA.</para>
 
 <para>
 <itemizedlist>
-<listitem><para><link linkend="mbrola-wrappers">Festival MBROLA Wrappers</link>.
-At the time of writing this Handbook, this method is limited to
-English voices.</para></listitem>
+<listitem><para><link linkend="mbrola-wrappers">MBROLA Wrappers</link>.
+At the time of writing this Handbook,
+this method is limited to English voices.</para></listitem>
 <listitem><para><link linkend="ims-german-festival">IMS German Festival</link>.</para></listitem>
+<listitem><para><link linkend="festival-czech">Festival-Czech</link>.</para></listitem>
 </itemizedlist>
 </para>
 
 <!-- ...................................................................... -->
-
 
 <sect4 id="mbrola-wrappers">
 <title>Using Festival with MBROLA Wrappers</title>
@@ -1462,17 +1481,19 @@ http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</ulink></para>
 
 <!-- ...................................................................... -->
 
-
 <sect4 id="ims-german-festival">
 <title>Using IMS German Festival</title>
 
 <para>IMS German Festival is a modified version of Festival that uses German MBROLA
 voices.  It works with either Festival version 1.4.1 or Festival 2.0 (1.95beta).
 First install Festival and MBROLA, if you have not already done so.
-Next, download IMS German Festival, from 
+Next, download IMS German Festival, from</para>
+
+<para>
 <ulink url="http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html">
-http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html</ulink>.
-Follow the instructions in the <command>README</command> that comes with the
+http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html</ulink>.</para>
+
+<para>Follow the instructions in the <command>README</command> that comes with the
 download.  (Note, if using in combination with Festival 2.0, it is <emphasis>not</emphasis>
 necessary to apply the <command>fixes</command> tarball, but you must still
 rebuild festival.)  Finally, add the following
@@ -1505,12 +1526,79 @@ IMS German Festival does not work with the de4, de5, or de6 German voices.</para
 
 </sect4>
 
+<!-- ...................................................................... -->
+
+<sect4 id="festival-czech">
+<title>Using Festival-Czech</title>
+
+<para>This method uses some special code to enable speech synthesis
+using Festival with an MBROLA Czech voice.  To install, first download and
+install Festival and MBROLA and make sure both are working.  Next, download
+Festival-Czech from</para>
+
+<para><ulink url="http://www.freebsoft.org/festival-czech">
+http://www.freebsoft.org/festival-czech</ulink></para>
+
+<note><para>In the following procedures substitute the correct directory
+paths as needed.</para></note>
+
+<para>Untar the download to a suitable directory and make
+the lexicon.  The Festival executable must be in your PATH.
+</para>
+
+<para>
+<programlisting>
+cd /usr/local
+tar xvfz festival-czech.tar.gz
+cd festival-czech
+make
+</programlisting>
+</para>
+
+<para>Download the <command>cz2</command> voice file from the MBROLA
+website, and unzip it in the MBROLA directory.</para>
+
+<para>
+<programlisting>
+cd /usr/local/mbrola
+mkdir cz2
+cd cz2
+unzip cz2-001009.zip
+</programlisting>
+</para>
+
+<para>Add the following lines to the <command>festival/lib/siteinit.scm</command> file.</para>
+
+<para>
+<programlisting>
+(set! czech-lexicon-file "/usr/local/festival-czech/czech-lexicon.out")
+(set! load-path (cons "/usr/local/festival-czech" load-path))
+(require 'czech)
+(set! czech-mbrola_database "/usr/local/mbrola/cz2/cz2")
+(set! mbrola_progname "/usr/local/mbrola/mbrola")
+(voice-location "czech_mbrola_cz2" "/usr/local/mbrola/cz2"
+    "Czech Male, MBROLA")
+(require 'czech-mbrola)
+</programlisting>
+</para>
+
+<para>just above the line that reads</para>
+
+<para>
+<programlisting>
+(provide 'siteinit)
+</programlisting>
+</para>
+
+<para>(On some systems, the file you edit is <command>/etc/festival.scm</command>).</para>
+
+</sect4>
+
 </sect3>
 
 </sect2>
 
 <!-- ...................................................................... -->
-
 
 <sect2 id="using-with-flite">
 <title>Using with Festival Lite (flite)</title>
@@ -1564,10 +1652,11 @@ You can control the voice, pitch, speed, and volume from <command>kttsmgr</comma
 <step><para>Install MBROLA to <command>/usr/local/mbrola</command> directory.</para></step>
 <step><para>Download at least one german language file from the MBROLA site.
 Unzip to the <command>/usr/local/mbrola</command> directory.</para></step>
-<step><para>Download txt2pho from
+<step><para>Download txt2pho from</para>
+<para>
 <ulink url="http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html">
-http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</ulink>.
-</para></step>
+http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</ulink>.</para>
+</step>
 <step><para>Unzip txt2pho to <command>/usr/local/txt2pho</command>.</para></step>
 <step><para>Edit <command>txt2phorc</command> file, putting correct data paths in.</para></step>
 <step><para>Either copy <command>txt2phorc</command> to <command>~/.txt2phorc</command> or to <command>/etc/txt2pho</command>.
