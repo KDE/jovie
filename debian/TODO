@@ -50,4 +50,4 @@
 
 * Should rc files be installed to etc/ tree?
 
-* Remove kcm_kttsd library once KMouth stops using it.
+* Remove kcm_kttsmgr library once KMouth stops using it.
