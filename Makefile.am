@@ -1,6 +1,5 @@
 # The build order must be libktts, then libkttsd, then the rest.
 SUBDIRS = \
-        libktts \
         libkttsd \
         players \
         plugins \
@@ -8,8 +7,7 @@ SUBDIRS = \
         icons \
         kttsjobmgr \
         kcmkttsmgr \
-        kttsmgr \
-        app-plugins
+        kttsmgr 
 
 # Generate API documentation.
 DOXYGEN_EXCLUDE = \
@@ -20,8 +18,7 @@ DOXYGEN_EXCLUDE = \
         kttsjobmgr \
         kcmkttsmgr \
         kttsmgr \
-        kcmkttsd \
-        app-plugins
+        kcmkttsd 
 
 include $(top_srcdir)/admin/Doxyfile.am
 
