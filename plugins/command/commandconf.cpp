@@ -194,6 +194,7 @@ void CommandConf::slotCommandTest_clicked()
 
     // Play an English test.
     // TODO: Need a way to generate language-specific text.
+    // TODO: Do codec names contain non-ASCII characters?
     connect (m_commandProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_commandProc->synth(
         "K D E is a modern graphical desktop for Unix computers.",
@@ -201,7 +202,7 @@ void CommandConf::slotCommandTest_clicked()
         m_widget->urlReq->url(),
         m_widget->stdInButton->isChecked(),
         m_widget->characterCodingBox->currentItem(),
-        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())),
+        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem()).latin1()),
         m_languageCode);
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,

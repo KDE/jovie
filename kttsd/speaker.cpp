@@ -194,11 +194,11 @@ int Speaker::loadPlugIns(){
                 kdDebug() << "Less than 1 plug in, nothing can be done" << endl;
             } else {
                 kdDebug() << "Loading " << offers[0]->library() << endl;
-                factory = KLibLoader::self()->factory(offers[0]->library());
+                factory = KLibLoader::self()->factory(offers[0]->library().latin1());
                 if(factory){
                     PlugInProc *speech = 
                         KParts::ComponentFactory::createInstanceFromLibrary<PlugInProc>(
-                            offers[0]->library(), this, offers[0]->library());
+                            offers[0]->library().latin1(), this, offers[0]->library().latin1());
                     if(!speech){
                         kdDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
                         bad++;
@@ -224,8 +224,9 @@ int Speaker::loadPlugIns(){
                         } else {
                             // Synchronous plugins are run in a separate thread.
                             // Init will start the thread and it will immediately go to sleep.
+                            QString threadedPlugInName = QString::fromLatin1("threaded") + plugInName;
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
-                                this, "threaded" + plugInName);
+                                this, threadedPlugInName.latin1());
                             speechThread->init(m_speechData->config, "Talker_" + talkerCode);
                             // kdDebug() << "Threaded Plug in " << plugInName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
                             talkerInfo.plugIn = speechThread;
@@ -1735,11 +1736,11 @@ Player* Speaker::createPlayerObject()
     if(offers.count() == 1)
     {
         kdDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
                 KParts::ComponentFactory::createInstanceFromLibrary<Player>(
-                    offers[0]->library(), this, offers[0]->library());
+                    offers[0]->library().latin1(), this, offers[0]->library().latin1());
     }
     if (player == 0)
     {

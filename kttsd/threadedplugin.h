@@ -18,6 +18,7 @@
 
 #include <qthread.h>
 #include <qmutex.h>
+#include <qwaitcondition.h>
 
 #include "pluginproc.h"
 

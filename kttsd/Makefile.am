@@ -1,14 +1,12 @@
 # Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
 # so keep them synchronized.
 INCLUDES = \
-	-I$(top_srcdir)/kttsd/libktts \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(kde_includes)/arts \
 	$(CFLAGS_GST) \
 	$(all_includes)
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/kttsd/libkttsd \
-	-I$(top_srcdir)/kttsd/libktts \
 	-I$(kde_includes)/arts \
 	$(CFLAGS_GST) \
 	$(all_includes)
@@ -36,7 +34,7 @@ kttsd_SOURCES = \
 
 kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
 kttsd_LDADD = \
-	$(top_builddir)/kttsd/libktts/libktts.la \
+	-lktts \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
 	$(LIB_KDECORE) \
 	$(LDADD_GST) \

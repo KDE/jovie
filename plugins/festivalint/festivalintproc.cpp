@@ -57,7 +57,7 @@ FestivalIntProc::~FestivalIntProc(){
                 // kdDebug() << "FestivalIntProc::~FestivalIntProc: telling Festival to quit." << endl;
                 m_ready = false;
                 m_waitingStop = true;
-                m_festProc->writeStdin(QString("(quit)"), true);
+                m_festProc->writeStdin("(quit)", true);
             }
             else
             {

@@ -243,6 +243,7 @@ void EposConf::slotEposTest_clicked()
     // Play an English test.
     // TODO: Need czeck or slavak test message.
     // TODO: Whenever server options change, the server must be restarted.
+    // TODO: Do codec names contain non-ASCII characters?
     connect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_eposProc->synth(
         "K D E is a modern graphical desktop for Unix computers.",
@@ -252,7 +253,7 @@ void EposConf::slotEposTest_clicked()
         m_widget->eposServerOptions->text(),
         m_widget->eposClientOptions->text(),
         m_widget->characterCodingBox->currentItem(),
-        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())),
+        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem()).latin1()),
         languageCodeToEposLanguage(m_languageCode),
         m_widget->timeBox->value(),
         m_widget->frequencyBox->value()

@@ -226,7 +226,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
         if (currentVoiceIndex >= 0)
         {
             QString vlCode = m_voiceList[currentVoiceIndex].languageCode.left(languageCode.length());
-            if (languageCode = vlCode)
+            if (languageCode == vlCode)
             {
                 found = true;
                 index = currentVoiceIndex;
@@ -253,7 +253,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
             if (currentVoiceIndex >= 0)
             {
                 QString vlCode = m_voiceList[currentVoiceIndex].languageCode.left(languageCode.length());
-                if (languageCode = vlCode)
+                if (languageCode == vlCode)
                 {
                     found = true;
                     index = currentVoiceIndex;

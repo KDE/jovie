@@ -652,11 +652,12 @@ PlugInConf *KCMKttsMgr::loadPlugin(const QString &synthName)
         {
             // When the entry is found, load the plug in
             // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(m_offers[i]->library());
+            KLibFactory *factory = KLibLoader::self()->factory(m_offers[i]->library().latin1());
             if(factory){
                 // If the factory is created successfully, instantiate the PlugInConf class for the
                 // specific plug in to get the plug in configuration object.
-                PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(m_offers[i]->library(), NULL, m_offers[i]->library());
+                PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
+                        m_offers[i]->library().latin1(), NULL, m_offers[i]->library().latin1());
                 if(plugIn){
                     // If everything went ok, return the plug in pointer.
                     return plugIn;

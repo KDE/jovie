@@ -1,12 +1,10 @@
 # Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
 # so keep them synchronized.
 INCLUDES = \
-	-I$(top_srcdir)/kttsd/libktts -I$(top_builddir)/kttsd/libktts \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(CFLAGS_GST) \
 	$(all_includes)
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/kttsd/libktts -I$(top_builddir)/kttsd/libktts \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(CFLAGS_GST) \
 	$(all_includes)
@@ -29,7 +27,12 @@ kcm_kttsd_la_SOURCES = \
 	addtalker.cpp \
 	addtalkerwidget.ui
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined 
-kcm_kttsd_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_QT) $(LIB_KIO) $(LIB_KDECORE)
+kcm_kttsd_la_LIBADD = \
+	-lktts \
+	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
+	$(LIB_QT) \
+	$(LIB_KIO) \
+	$(LIB_KDECORE)
 
 # Header files that should not be installed.
 noinst_HEADERS = \

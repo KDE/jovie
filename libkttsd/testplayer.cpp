@@ -149,11 +149,11 @@ Player* TestPlayer::createPlayerObject(int playerOption)
     if(offers.count() == 1)
     {
         kdDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
                 KParts::ComponentFactory::createInstanceFromLibrary<Player>(
-                    offers[0]->library(), this, offers[0]->library());
+                    offers[0]->library().latin1(), this, offers[0]->library().latin1());
         else
             kdDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
     }

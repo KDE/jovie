@@ -88,15 +88,15 @@ class HadifixConfPrivate {
             QString name = QFileInfo(*it).fileName();
             gender = HadifixProc::determineGender(defaultMbrolaExec, *it);
             if (gender == HadifixProc::MaleGender)
-               configWidget->addVoice(*it, true, i18n("Male voice \""+name+"\""));
+                configWidget->addVoice(*it, true, i18n("Male voice \"%1\"").arg(name));
             else if (gender == HadifixProc::FemaleGender)
-               configWidget->addVoice(*it, false, i18n("Female voice \""+name+"\""));
+                configWidget->addVoice(*it, false, i18n("Female voice \"%1\"").arg(name));
             else {
                if (name == "de1")
-                  configWidget->addVoice(*it, false, i18n("Female voice \""+name+"\""));
+                   configWidget->addVoice(*it, false, i18n("Female voice \"%1\"").arg(name));
                else {
-                  configWidget->addVoice(*it, true,  i18n("Unknown voice \""+name+"\""));
-                  configWidget->addVoice(*it, false, i18n("Unknown voice \""+name+"\""));
+                   configWidget->addVoice(*it, true,  i18n("Unknown voice \"%1\"").arg(name));
+                   configWidget->addVoice(*it, false, i18n("Unknown voice \"%1\"").arg(name));
                }
             }
          }
