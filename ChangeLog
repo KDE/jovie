@@ -7,6 +7,8 @@
             cd kdelibs/interfaces/kspeech
             cvs up
             make install
+        * When starting or restoring KTTSMgr, defaults to Jobs tab if visible.
+        * When clicking on Jobs tab, warn user if there are config changes not yet saved.
 
 2005-03-09  Gary Cramblitt (PhantomsDad)
         * Add Hold and Resume items to systray menu.

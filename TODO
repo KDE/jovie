@@ -48,14 +48,8 @@ _ KTTSMgr:
     _ Disable Audio Speed control if sox not installed (configure.in.in but runtime check would be better).
     _ Add drag N drop for the Talkers so it is easier to change the ordering.
     _ It is possible to configure multiple instances of Talkers with the exact same configuration.
-    _ Add WhatsThis help.  The Jobs tab needs them.
-    _ In kttsmgr jobs tab, if user has made changes but not applied them, and then clicks
-      Speak Clipboard, Speak File, or Change Talker buttons, warn user to apply the changes first.
-      Or maybe disable Jobs tab if changes are pending?
     _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
     _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
-    _ In the job manager tab, one can drag the toolbars elsewhere, but the buttons
-      disappear.  Why?
 _ KTTSD:
     _ Strange msg being produced by KIO::move, but it works fine. ??
         kio (KIOJob): stat file:///home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
