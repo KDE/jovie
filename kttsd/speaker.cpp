@@ -8,6 +8,7 @@
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
+  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
@@ -74,10 +75,10 @@ void Speaker::checkSayWarning(){
     kdDebug() << "Running: Speaker::checkSayWarning()" << endl;
     while(speechData->warningInQueue()){
         mlText temp = speechData->dequeueWarning();
-        if(loadedPlugIns[temp.language]){
-            loadedPlugIns[temp.language]->sayText(temp.text);
+        if(loadedPlugIns[temp.talker]){
+            loadedPlugIns[temp.talker]->sayText(temp.text);
         } else {
-            loadedPlugIns[speechData->defaultLanguage]->sayText(temp.text);
+            loadedPlugIns[speechData->defaultTalker]->sayText(temp.text);
         }
     }
 }
@@ -89,10 +90,10 @@ void Speaker::checkSayMessage(){
     while(speechData->messageInQueue() or speechData->warningInQueue()){
         checkSayWarning();
         mlText temp = speechData->dequeueMessage();
-        if(loadedPlugIns[temp.language]){
-            loadedPlugIns[temp.language]->sayText(temp.text);
+        if(loadedPlugIns[temp.talker]){
+            loadedPlugIns[temp.talker]->sayText(temp.text);
         } else {
-            loadedPlugIns[speechData->defaultLanguage]->sayText(temp.text);
+            loadedPlugIns[speechData->defaultTalker]->sayText(temp.text);
         }
     }
 }
@@ -109,38 +110,38 @@ void Speaker::checkSayText(){
         if(speechData->warningInQueue()){
             emit readingInterrupted();
             if(speechData->parPreMsgEnabled){
-                loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->parPreMsg);
+                loadedPlugIns[speechData->defaultTalker]->sayText(speechData->parPreMsg);
             }
             checkSayWarning();
             if(speechData->parPostMsgEnabled){
-                loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->parPostMsg);
+                loadedPlugIns[speechData->defaultTalker]->sayText(speechData->parPostMsg);
             }
             emit readingResumed();
         }
         mlText temp = speechData->getSentenceText();
         if (temp.text == "") {
-            emit paragraphFinished();
+            if (speechData->currentlyReading()) emit paragraphFinished();
             if(speechData->messageInQueue()){
                 emit readingInterrupted();
                 if(speechData->textPreMsgEnabled){
-                    loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->textPreMsg);
+                    loadedPlugIns[speechData->defaultTalker]->sayText(speechData->textPreMsg);
                 }
                 checkSayMessage();
                 if(speechData->textPostMsgEnabled){
-                    loadedPlugIns[speechData->defaultLanguage]->sayText(speechData->textPostMsg);
+                    loadedPlugIns[speechData->defaultTalker]->sayText(speechData->textPostMsg);
                 }
                 emit readingResumed();
             }
-            emit paragraphStarted();
+            if (speechData->currentlyReading()) emit paragraphStarted();
         } else {
             kdDebug() << "REALLY SAYING " << temp.text << endl;
-            emit sentenceStarted(temp.text, temp.language, temp.appId, temp.seq);
-            if(loadedPlugIns[temp.language]){
-                loadedPlugIns[temp.language]->sayText(temp.text);
+            emit sentenceStarted(temp.text, temp.talker, temp.appId, temp.jobNum, temp.seq);
+            if(loadedPlugIns[temp.talker]){
+                loadedPlugIns[temp.talker]->sayText(temp.text);
             } else {
-                loadedPlugIns[speechData->defaultLanguage]->sayText(temp.text);
+                loadedPlugIns[speechData->defaultTalker]->sayText(temp.text);
             }
-            emit sentenceFinished(temp.appId, temp.seq);
+            emit sentenceFinished(temp.appId, temp.jobNum, temp.seq);
         }
     }
     if (speechData->currentlyReading()) {

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>FestivalIntConfWidget</class>
 <author>José Pablo Ezequiel Fernández</author>
 <widget class="PlugInConf">
@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>559</width>
-            <height>193</height>
+            <height>233</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -24,190 +24,185 @@
     <property name="caption">
         <string>Festival Config UI</string>
     </property>
-    <spacer>
+    <vbox>
         <property name="name">
-            <cstring>spacer18</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="orientation">
-            <enum>Vertical</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>1</width>
-                <height>131</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1</width>
-                <height>131</height>
-            </rect>
-        </property>
-    </spacer>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>festivalConfigurationBox</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>550</width>
-                <height>140</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="title">
-            <string>Festival Configuration</string>
-        </property>
-        <vbox>
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>festivalConfigurationBox</cstring>
             </property>
-            <property name="margin">
-                <number>11</number>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
-            <property name="spacing">
-                <number>6</number>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
             </property>
-            <widget class="QLayoutWidget">
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="title">
+                <string>Festival Interactive Configuration</string>
+            </property>
+            <vbox>
                 <property name="name">
-                    <cstring>voicesPathBox</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <hbox>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>voicesPathBox</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QLabel">
+                    <hbox>
                         <property name="name">
-                            <cstring>festivalPathLabel</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>1</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
+                        <property name="margin">
+                            <number>0</number>
                         </property>
-                        <property name="text">
-                            <string>&amp;Festival voices directory:</string>
+                        <property name="spacing">
+                            <number>6</number>
                         </property>
-                        <property name="alignment">
-                            <set>AlignVCenter|AlignRight</set>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>festivalVoicesPath</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KURLRequester">
-                        <property name="name">
-                            <cstring>festivalVoicesPath</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>1</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>selectVoiceBox</cstring>
-                </property>
-                <hbox>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>festivalPathLabel</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Festival voices directory:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>festivalVoicesPath</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester">
+                            <property name="name">
+                                <cstring>festivalVoicesPath</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>selectVoiceBox</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>selectVoiceLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Select voice:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>selectVoiceCombo</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox">
+                            <property name="name">
+                                <cstring>selectVoiceCombo</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton">
+                            <property name="name">
+                                <cstring>rescan</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Rescan</string>
+                                <comment>Rescan for voices</comment>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>forceArts</cstring>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
+                    <property name="text">
+                        <string>F&amp;orce output through Arts</string>
                     </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>selectVoiceLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Select voice:</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignVCenter|AlignRight</set>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>selectVoiceCombo</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KComboBox">
-                        <property name="name">
-                            <cstring>selectVoiceCombo</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                    </widget>
-                    <widget class="KPushButton">
-                        <property name="name">
-                            <cstring>rescan</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Rescan</string>
-                            <comment>Rescan for voices</comment>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>forceArts</cstring>
-                </property>
-                <property name="text">
-                    <string>F&amp;orce output through Arts</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+O</string>
-                </property>
-            </widget>
-        </vbox>
-    </widget>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>80</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>
         <class>PlugInConf</class>
-        <header location="local">pluginconf.h</header>
+        <header location="global">/home/share/scratch/pluginconf.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>
         </sizehint>
-        <container>0</container>
+        <container>1</container>
         <sizepolicy>
             <hordata>5</hordata>
             <verdata>5</verdata>
@@ -219,7 +214,7 @@
 </customwidgets>
 <images>
     <image name="image0">
-        <data format="PNG" length="826">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000030149444154789cb59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a0901e2257b0000000049454e44ae426082</data>
+        <data format="XPM.GZ" length="3342">789c9d955b5332471086effd15947d67a5fa63cfbb95ca85a0e20114c40392cac5ec72564411544ce5bfa777ba7b520556e54b1c0a78e8b78f33b3fe38a8f4daadcac18fbdb795594d8b4a3131cbcac1603d9f6f7effe3b73ff7f67dbf422f2fac56fcfd5ff6f63bab4a51b95c3c0f4b402080aafdb3dc769c5a9e08876c07706ced50b59c3aee08a7e27f2f5c78ecbf28d9ab96cbf2b5b0faaf95d96e66c2a9e47f5416ff48b810ff86b2d84f2da7aac7beb0dacf987dad271496fc7059b25f55c68eb0e61f58ce7c8967840399a7993ae6fa56cae2ffea98e7d5130e85af4a0e3cd5e38370ca7633640e35fea1e54ced38560e326bbf102ec4fec1acfe68e7197aa1dacf2d9b28137b5559f28f4a8efc6820f93f95c53f608e3db69b89b2f4ff0fb3ff91b2cff6b97024f1ef95c56ef733322edf483932966f98d5df8c85a51fd828cb7cef1cb31d9525df83b0f6db52967ede4a8e7db51b5416ff2e7322f3806365f19f29b31e8f8423e94ff5d23fdafd8f297f6cfb059f99f41ccf284bfe2f61e9072f85a53eb4e73f09122f092cd79953edbfe9d89e27b4f1933cc992dcdadf99556f4039f0acfd5958f3d9fb9206499672be0be10133b4999d3eb69c67ca2d6623f3c32fc73caf8db2d47fa7ccf5604d58e60be7ca622f4acec2cccb42cb4d66a3f3ac39e679bc2bf37d33e26f8652cf2973eecbfd31cae26fef6f56909efb3971ccf5bd284bfed831e7cb9565de43668acf7acf31e7fb540eb9df86702cf566caac87b1b091fa52c7acbf5696fdb1cf5713ba7889b2d4f3e498e367ca52ff4858f3751d733c4f59e2697c9dd795b2eca79d8f298c670acb53e148d86776fe5365a92f652e749e4bc76c97f885f67323acf57d08cbfea1bd0f39d517db7fce78cb5cf8c273c7fc3c7b5296fbf9221c8b7e256c98c19ebf7ce0ec0bc71cef5199cf3704c2469e9f6b65f17f75cccf1bae773090fd80bab2f4679f6745940f0ddf9f25b3abef4458fb7f73ccf17bcc43997767552e847f5f9d95ead1608e050e70f8cd1ae11827ecc17afa36c5193ee213cef11917f882afb8c437fbb9c235bee3c796be20f5276ef00b0fb186753cc2637a3fc106ad533cc3f32dfd05c56e628b149778856d6b6d6387e81abbe473b3a51fe2ad55df91aa8df7d8c307ecdbef55f4d0c7604b1f52dd8714ad8c1c618c09a69891a07c19c877e343813518946a18c208c6d884094c61866d78842798efc47f8167b22d302ed5f002af942b82a58d5187b79dfad73413205562d52bf25dc33b7cc02759ef60b3137f095fa43fa4ba9b3636601f6a508723dbc4f14efd2734ef3634a8cba3b22e3825dd199cc3057d36a1b55b3f9e00cd877ebca2badb14fb8c940be8c0357ad0fda6fe0618d2031e539737700b77f0489609dc430f1ebe89dfa05efbe5bec20afa34cd0ba8d2399bc02578e06fe94710d039e952e619f6f5fcc235c50e218278677fc77406e96c410229645837f49301f2ee1963727a960db6f41333a43318981106303763d840cbae073836133335b32dfd4faeffa7ff798fff7cdffffa75ef6f93c6ba85</data>
     </image>
 </images>
 <connections>
@@ -267,6 +262,10 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>pluginconf.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

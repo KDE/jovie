@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=kttsmgr
+Exec=kttsmgr -caption "%c" %i %m %u
+Comment=KDE Text-to-speech Manager
+MimeTypes=
+Terminal=false

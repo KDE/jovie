@@ -1,9 +1,22 @@
 - Standarize the .desktop files
 - Improve language selection and management in the KTTSD's configuration. Languages added shouldn't be shown in the list of languages to add. Default languages should show only the current languages. Languages should be shown as names and not codes. Languages should be erased from the default language combo box.
-- Add async mode with a stop function at plug in level.
-- Add support for XML::Sable.
+- Add ability to configure more than one plugin for a language, but with different voices. Call them "talkers".
+- After changing configuration, re-initialize KTTSD without clearing all jobs.
+- Add async mode with a stop function at plugin level, i.e., develop improved KTTSD plugin API.
+- Add support for XML::Sable and other Speech Markup languages.
+- Continue revision of KDE Speech API (kspeech.h).
+- Add support for speech markers.
+- Add support for moving a text job to a different talker (language/plugin).
+- Gunnar says Hadifax not working (can't load libhadifaxplugin, or something like that)
+- Finish Festival Client/Server plugin.
+- Festival plugin (static library) crashes on first call to library.
+- Integrate with KNotify.  Perhaps this can be done by hooking passive popups?
+- Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
+_ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the system tray.)
+  Probably requires some sort of hack to KCMultiDialog.
+- Command plugin crashes when using command 'flite -t "%t"' and festival can't get write access to /dev/dsp*.
 
 Widgets needed usefull for the whole KDE
-- Language selection widgets, configurable and versatil.
+- Language selection widgets, configurable and versatile.
 - A good password line edit which will allow to set the password.
-- A Tab Widget with buttons on the tab to close (remove) the tabs.
+- A Tab Widget with buttons on the tab to close (remove) the tabs (see Konversation).

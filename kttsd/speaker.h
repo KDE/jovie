@@ -8,6 +8,7 @@
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
+  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
@@ -91,8 +92,8 @@ class Speaker : public QObject, public QThread{
         /**
          * Emitted whenever reading a sentence was started or finished
          */
-        void sentenceStarted(QString text, QString language, const QCString& appId, const uint seq);
-        void sentenceFinished(const QCString& appId, const uint seq);
+        void sentenceStarted(QString text, QString language, const QCString& appId, const uint jobNum, const uint seq);
+        void sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
 
     protected:
         /**
