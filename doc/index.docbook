@@ -1120,10 +1120,20 @@ http://www.cstr.ed.ac.uk/projects/festival/</ulink>
 
 <para>
 You will need to install at least one language.  Follow the instructions
-that come with Festival.  
-Additional festival voices are available from</para>
+that come with Festival.
+</para>
+
+<para>Additional English festival voices are available from</para>
 
 <para><ulink url="http://hts.ics.nitech.ac.jp/">http://hts.ics.nitech.ac.jp/</ulink>.
+</para>
+
+<para>Additional Spanish, English, and German voices are available from</para>
+
+<para><ulink url="http://cslu.cse.ogi.edu/tts/download/">
+http://cslu.cse.ogi.edu/tts/download/</ulink>.  You must compile an additional module
+for these voices, therefore, you must have the Festival source code.
+The German voices have limited distribution.
 </para>
 
 <para>Festival is typically included with Linux distributions.  Check your
