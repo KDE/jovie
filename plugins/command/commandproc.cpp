@@ -30,7 +30,7 @@ bool CommandProc::init(const QString &lang, KConfig *config){
   tts = new TextToSpeechSystem ();
   // KConfig *config = new KConfig("kttsdrc");
   tts->readOptions(config, QString("Lang_")+lang);
-  delete config;
+  // delete config;
 
   return true;
 }

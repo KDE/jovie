@@ -118,6 +118,8 @@ bool KTTSD::initializeSpeaker()
         if (!speechData->readConfig())
         {
             KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
+            delete speechData;
+            speechData = 0;
             ok = false;
             return false;
         }
@@ -136,10 +138,18 @@ bool KTTSD::initializeSpeaker()
     int load = speaker->loadPlugIns();
     if(load == -1){
         KMessageBox::error(0, i18n("No speech synthesizer plugin found. This program cannot run without a speech synthesizer. Text to speech service exiting."), i18n("Text To Speech Error"));
+        delete speaker;
+        speaker = 0;
+        delete speechData;
+        speechData = 0;
         ok = false;
         return false;
     } else if(load == 0){
         KMessageBox::error(0, i18n("A speech synthesizer plugin was not found or is corrupt"), i18n("Text To Speech Error"));
+        delete speaker;
+        speaker = 0;
+        delete speechData;
+        speechData = 0;
         ok = false;
         return false;
     }
@@ -157,10 +167,13 @@ bool KTTSD::initializeSpeaker()
 KTTSD::~KTTSD(){
     kdDebug() << "Running: KTTSD::~KTTSD()" << endl;
     kdDebug() << "Stopping KTTSD service" << endl;
-    speaker->requestExit();
-    speaker->wait();
-    delete speaker;
-    delete speechData;
+    if (speaker)
+    {
+        speaker->requestExit();
+        speaker->wait();
+        delete speaker;
+    }
+    if (speechData) delete speechData;
 }
 
 /***** DCOP exported functions *****/
@@ -347,11 +360,14 @@ void KTTSD::reinit()
     // Restart ourself.
     kdDebug() << "Running: KTTSD::reinit()" << endl;
     kdDebug() << "Stopping KTTSD service" << endl;
-    speaker->requestExit();
-    speaker->wait();
-    delete speaker;
-    speaker = 0;
-    delete speechData;
+    if (speaker)
+    {
+        speaker->requestExit();
+        speaker->wait();
+        delete speaker;
+        speaker = 0;
+    }
+    if (speechData) delete speechData;
     speechData = 0;
     textStopped();
     textRemoved();

@@ -4,5 +4,5 @@
 #include "commandproc.h"
 
 typedef K_TYPELIST_2( CommandProc, CommandConf ) Command;
-K_EXPORT_COMPONENT_FACTORY( libcommandplugin, KGenericFactory<Command> );
+K_EXPORT_COMPONENT_FACTORY( libcommandplugin, KGenericFactory<Command>("plugin_Command") );
 

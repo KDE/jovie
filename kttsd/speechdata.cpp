@@ -103,7 +103,7 @@ bool SpeechData::readConfig(){
  */
 SpeechData::~SpeechData(){
     kdDebug() << "Running: SpeechData::~SpeechData()" << endl;
-    delete config;
+    if (config) delete config;
 }
 
 /**
