@@ -22,15 +22,21 @@
  *                                                                            *
  ******************************************************************************/
 
+// C++ includes.
 #include <stdlib.h>
 
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kapplication.h>
+// Qt includes.
 #include <qregexp.h>
 #include <qpair.h>
 #include <qvaluelist.h>
+#include <qdom.h>
 
+// KDE includes.
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kapplication.h>
+
+// SpeechData includes.
 #include "speechdata.h"
 #include "speechdata.moc"
 
@@ -231,9 +237,12 @@ bool SpeechData::messageInQueue(){
 */
 bool SpeechData::isSsml(const QString &text)
 {
-    // TODO: This is really simple and braindead right now.  A better method might be
-    // to use a SAX parser and look for any SSML tags.  Return true on the first found.
-    return (text.contains("<speak") > 0);
+    /// This checks to see if the root tag of the text is a <speak> tag. 
+    QDomDocument ssml;
+    ssml.setContent(text, false);  // No namespace processing.
+    /// Check to see if this is SSML
+    QDomElement root = ssml.documentElement();
+    return (root.tagName() == "speak");
 }
 
 /**
