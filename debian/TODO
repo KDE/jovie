@@ -11,23 +11,23 @@
     dpkg-shlibdeps: warning: could not find path for libktts.so.1
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
   
-* How do I do API doc symlinks?  This was in the initial package I built using
-  dh_make:
-    debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common
-  Currently, I get the following directory tree
-    debian/tmp/usr/share/doc/kde/HTML/en/kttsd-0.2.0-apidocs/common -> /usr/share/doc/kde/HTML/en/common
-    debian/tmp/usr/share/doc/kde/HTML/en/kttsd-0.2.0-apidocs/kttsd/html/kttsd
-  but the latter is empty, probably because I've turned off arch-indep in the rules
-  file, and that appears to do the make apidox.  However, with that turned on,
-  I get errors.
+* Problems including the API docs.
+    1.  Must add the line
+          include $(top_srcdir)/admin/Doxyfile.am
+        to root-level Makefile.am.
+    2.  The debuild-generated Makefile defines target apidox as apidox-no.
+        I'm not clear why this is.  If I do
+          cd kttsd-0.2.0
+          ./configure
+          cd kttsd
+          make apidox
+        it generates the API docs.
+  For now I have the "indep" targets commented out in debian/rules,
+  so debuild will run to completion.
 
 * lintian is reporting the following:
-    W: kttsd source: changelog-should-mention-nmu
-    W: kttsd source: source-nmu-has-incorrect-version-number 0.2.0
     W: kttsd-appplugins: missing-depends-line
 
 * Should rc files be installed to etc/ tree?
-
-* Add Handbook to kttsd.install file (symlinks?)
 
 * Remove kcm_kttsd library once KMouth stops using it.

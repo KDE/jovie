@@ -26,8 +26,8 @@ Description: KDE Text-to-Speech system
   * Speak KDE notification events (KNotify).
  .
  You must also install a speech synthesis engine, such as festival, flite,
- epos, freetts, or hadifix (MBROLA and txt2pho).  "man kttsd" for
- links and suggestions for obtaining and installing synthesizers. 
+ epos, freetts, or hadifix (MBROLA and txt2pho).  khelpcenter help:/kttsd/
+ for links and suggestions for obtaining and installing synthesizers. 
 
 Package: kttsd-dev
 Architecture: any

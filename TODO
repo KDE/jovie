@@ -1,10 +1,27 @@
 _ Rename libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention.
+_ The following installed files should be renamed to avoid possible conflicts with
+  other apps, make their purpose more explicit, standardsize naming convention,
+  and bring them together in directory listings.
+  In $KDEDIR/share/services/:
+    festivalint.desktop      -> kttsd_festivalintplugin.desktop
+    command.desktop          -> kttsd_commandplugin.desktop
+    hadifix.desktop          -> kttsd_hadifixplugin.desktop
+    flite.desktop            -> kttsd_fliteplugin.desktop
+    epos-kttsdplugin.desktop -> kttsd_eposplugin.desktop
+    freetts.desktop          -> kttsd_freettsplugin.desktop
+  In $KDEDIR/lib/kde3/:    
+    libfestivalintplugin     -> libkttsd_festivalintplugin
+    libcommandplugin         -> libkttsd_commandplugin
+    libhadifixplugin         -> libkttsd_hadifixplugin
+    libfliteplugin           -> libkttsd_fliteplugin
+    libeposkttsdplugin.so    -> libkttsd_eposplugin
+    libfreettsplugin         -> libkttsd_freettsplugin
 _ Crash when adding a plugin with "Other" language, and not entering a language code
   in response to prompt.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
   English (at the moment) and is alpha, don't think it is worth it now.
 _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/
-  Looks like it requires Java VM.
+  Currently written in c, but it looks like future versions will require Java VM.
 - Standarize the .desktop files
 - Improve language selection and management in the KTTSD's configuration. Languages added shouldn't be shown in the list of languages to add. Default languages should show only the current languages. Languages should be shown as names and not codes. Languages should be erased from the default language combo box.  If a plugin does not support a language, it should not be choosable.
 - Add ability to configure more than one plugin for a language, but with different voices. Call them "talkers".
@@ -15,15 +32,13 @@ _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourcef
 - Finish Festival Client/Server plugin.
 - Festival plugin (static library) crashes on first call to library.
 - Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
-_ Figure out how to keep kttsmgr from appearing in taskbar. (Its already in the system tray.)
-  Probably requires some sort of hack to KCMultiDialog.  Kopete has same behaviour, so maybe this
-  isn't really a problem?
 - Command plugin crashes when using command 'flite -t "%t"' and festival can't get write access to /dev/dsp*.
 - In the job manager tab of kttsmgr, one can drag the toolbars elsewhere, but the buttons
   disappear.  Why?
 _ IBM ViaVoice plugin?
 _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ Implement error signal handling in KTTSD.
+_ Add option not to have system tray icon in kttsmgr.
 
 Widgets needed; useful for whole KDE:
 - Language selection widgets, configurable and versatile.

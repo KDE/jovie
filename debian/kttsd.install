@@ -16,6 +16,8 @@ debian/tmp/usr/lib/kde3/libfliteplugin.so
 debian/tmp/usr/lib/kde3/libfliteplugin.la
 debian/tmp/usr/lib/kde3/libeposkttsdplugin.so
 debian/tmp/usr/lib/kde3/libeposkttsdplugin.la
+debian/tmp/usr/lib/kde3/libfreettsplugin.so
+debian/tmp/usr/lib/kde3/libfreettsplugin.la
 debian/tmp/usr/lib/kde3/libkttsjobmgr.so
 debian/tmp/usr/lib/kde3/libkttsjobmgr.la
 debian/tmp/usr/lib/kde3/kcm_kttsmgr.so
@@ -42,6 +44,7 @@ debian/tmp/usr/share/services/command.desktop
 debian/tmp/usr/share/services/hadifix.desktop
 debian/tmp/usr/share/services/flite.desktop
 debian/tmp/usr/share/services/epos-kttsdplugin.desktop
+debian/tmp/usr/share/services/freetts.desktop
 debian/tmp/usr/share/services/kttsd.desktop
 debian/tmp/usr/share/services/kttsjobmgr.desktop
 debian/tmp/usr/share/icons/hicolor/16x16/actions/male.png
