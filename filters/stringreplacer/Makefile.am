@@ -22,7 +22,7 @@ servicesdir = $(kde_servicesdir)
 
 # Install data files.
 stringreplacerdatadir = $(kde_datadir)/kttsd/stringreplacer/
-stringreplacerdata_DATA = abbreviations.xml chat.xml
+stringreplacerdata_DATA = abbreviations.xml chat.xml emoticons.xml
 
 noinst_HEADERS =  stringreplacerconfwidget.h editreplacementwidget.h
 
