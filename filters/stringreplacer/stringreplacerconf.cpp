@@ -604,6 +604,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
             item = new KListViewItem( m_widget->substLView, item, substType, match, subst );
         else
             item = new KListViewItem( m_widget->substLView, substType, match, subst );
+        m_widget->substLView->setSelected( item, true );
     }
     else
     {
@@ -611,6 +612,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         item->setText( 1, match );
         item->setText( 2, subst );
     }
+    m_widget->substLView->ensureItemVisible( item );
     enableDisableButtons();
     configChanged();
 }
