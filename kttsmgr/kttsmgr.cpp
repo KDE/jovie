@@ -12,6 +12,7 @@
 
 // Qt includes.
 #include <qimage.h>
+#include <qtooltip.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -96,6 +97,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 {
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
+
+    QToolTip::add(this, i18n("Text-to-Speech Manager"));
 
     int id;
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
