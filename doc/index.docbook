@@ -332,7 +332,7 @@ synthesizer plugin here.</para></callout>
 most synthesizer plugins will automatically configure themselves,
 choosing a default setup.  A new <guilabel>Talker</guilabel>
 will appear in the list on the <guilabel>Talkers</guilabel> tab.
-Click the <guilabel>Configure</guilabel>
+Click the <guibutton>Edit</guibutton>
 button to display or edit the <guilabel>Talker</guilabel>'s 
 configuration.  See <xref linkend="configure-plugin" /></para></callout>
 </calloutlist>
@@ -354,8 +354,8 @@ see <xref linkend="general" />.
 <title>Configuring Synthesis Plugins (Talkers)</title>
 
 <para>When you click the <guilabel>Add</guilabel> button on the
-<guilabel>Talkers</guilabel>tab and add a Talker, or click the
-<guilabel>Configure</guilabel> button,
+<guilabel>Talkers</guilabel> tab and add a Talker, or click the
+<guilabel>Edit</guilabel> button,
 the <guilabel>Talker Configuration</guilabel> screen appears.
 Each speech synthesis plugin has a different
 <guilabel>Talker Configuration</guilabel> screen.  The following is an example for
@@ -364,7 +364,7 @@ kind of plugin, see <xref linkend="configuration" /></para>
 
 <para>
 <screenshot>
-<screeninfo>The KDE Text-to-Speech Manager (Properties tab).</screeninfo>
+<screeninfo>Talker Configuration</screeninfo>
 	<mediaobjectco>
 		<imageobjectco>
 			<areaspec units="calspair">
@@ -373,13 +373,14 @@ kind of plugin, see <xref linkend="configuration" /></para>
 				<area id="pt-prop-3" coords="1 1"/>
 				<area id="pt-prop-4" coords="1 1"/>
 				<area id="pt-prop-5" coords="1 1"/>
+				<area id="pt-prop-6" coords="1 1"/>
 			</areaspec>
 			<imageobject>
-				<imagedata fileref="properties.png" format="PNG"/>
+				<imagedata fileref="festivalintconf.png" format="PNG"/>
 			</imageobject>
 		</imageobjectco>
 		<textobject>
-			<phrase>The KDE Text-to-Speech Manager (Properties tab)</phrase>
+			<phrase>Talker Configuration</phrase>
 		</textobject>
 	</mediaobjectco>
 </screenshot>
@@ -387,13 +388,22 @@ kind of plugin, see <xref linkend="configuration" /></para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-prop-1"><para>Specify the path to the Festival Interactive voice files.</para></callout>
-<callout arearefs="pt-prop-2"><para>Click to scan the path for available voices.</para></callout>
+<callout arearefs="pt-prop-1"><para>Specify the path to the Festival executable program.
+If Festival is in your PATH environment variable, just enter
+<userinput><replaceable>festival</replaceable></userinput>.</para></callout>
+<callout arearefs="pt-prop-2"><para>Click to scan for available voices.</para></callout>
 <callout arearefs="pt-prop-3"><para>Select a voice.</para></callout>
 <callout arearefs="pt-prop-4"><para>Click to test.  You should hear a test sentence spoken.</para></callout>
-<callout arearefs="pt-prop-5"><para>Click to save your settings.</para></callout>
+<callout arearefs="pt-prop-5"><para>Use these controls to set the volume, talking speed, and
+pitch (tone) of the synthesized speech.</para></callout>
+<callout arearefs="pt-prop-6"><para>Some voices, such as the MultiSyn voices, are so large
+that they require several seconds to load.  Checking this box will cause them to be loaded
+when KTTSD is started, thereby saving time (at the expense of using more memory)
+before the first sentence is synthesized.</para></callout>
 </calloutlist>
 </para>
+
+<para>Click the <guibutton>OK</guibutton> button to save the Talker configuration settings.</para>
 
 <warning><para>
 Be sure to click the <guibutton>Apply</guibutton> button, otherwise your
@@ -1095,9 +1105,10 @@ make apidox
 <title>Using with Festival (Interactive)</title>
 
 <para>Festival is one of the better free and open source TTS
-engines available.  Voice quality is generally good, there are quite
-a few languages and voices supported, and you can control the voice and
-speed of the generated speech from &kmyapplication;.</para>
+engines available.  Voice quality is generally good and there are quite
+a few languages and voices supported.
+For many voices, you can control the volume, 
+speed of the generated speech, and pitch (tone) from &kmyapplication;.</para>
 
 <para>Synthesizer Name: <guilabel>Festival Interactive</guilabel></para>
 
@@ -1109,22 +1120,109 @@ http://www.cstr.ed.ac.uk/projects/festival/</ulink>
 
 <para>
 You will need to install at least one language.  Follow the instructions
-that come with Festival.  (Festival in combination with MBROLA does work.)
+that come with Festival.  
 Additional festival voices are available from</para>
 
 <para><ulink url="http://hts.ics.nitech.ac.jp/">http://hts.ics.nitech.ac.jp/</ulink>.
 </para>
 
-<para>festival is typically included with Linux distributions.  Check your
+<para>Festival is typically included with Linux distributions.  Check your
 distro CDs to see if it is included.</para>
 
 <para>Start <userinput>kttsmgr</userinput>.  On the <guilabel>Talkers</guilabel> screen,
 click the <guilabel>Add</guilabel> button.  Choose <guilabel>Festival Interactive</guilabel> and a <guilabel>Language</guilabel>.
 If the <guilabel>Configure Talker</guilabel> screen does not appear, 
-click the <guibutton>Configure</guibutton> button.  If the Festival voice files are not in the default location,
-(<filename>/usr/share/festival/voices/</filename>), try <filename>/usr/local/share/festival/voices/</filename>.
+click the <guibutton>Edit</guibutton> button.  If the Festival executable program
+is not in your PATH, enter the full path to the executable.
 Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
 <guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
+
+<sect3 id="festival-with-mbrola">
+<title>Using Festival with MBROLA</title>
+
+<para>Festival can be used in combination with the MBROLA synthesizer.
+In this mode, Festival does the lexical analysis and MBROLA produces the
+audio.  The MBROLA binary and MBROLA voice files can be downloaded from</para>
+
+<para><ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para>
+
+<para>Follow the instructions in the <filename>readme.txt</filename> that comes with
+the download.</para>
+
+<para>Note that MBROLA is not a complete Text-to-Speech system.  MBROLA synthesizes
+speech from diphone files.  You must have additional software that can produce
+the diphones.  When combined with Festival, Festival produces the diphones needed
+by MBROLA.  <command>txt2pho</command> can also be used to produce diphones
+from German text.  See <link linkend="using-with-hadifix">Using with Hadifix</link> for more information.</para>
+
+<para>There are two methods of combining Festival with MBROLA.</para>
+
+<para>
+<itemizedlist>
+<listitem><para><link linkend="mbrola-wrappers">Festival MBROLA Wrappers</link>.
+At the time of writing this Handbook, this method is limited to
+English voices.</para></listitem>
+<listitem><para><link linkend="ims-german-festival">IMS German Festival</link>.</para></listitem>
+</itemizedlist>
+</para>
+
+<sect4 id="mbrola-wrappers">
+<title>Using Festival with MBROLA Wrappers</title>
+
+<para>In this method, additional
+wrapper code is added to Festival to enable speech synthesis using
+MBROLA voice files.  Note that the MBROLA voice files are <emphasis>not</emphasis>
+installed in the MBROLA directory tree.  Instead, they are installed
+in the <filename>festival/lib/</filename> directory tree.  For instructions, see</para>
+
+<para><ulink url="http://www.cstr.ed.ac.uk/projects/festival/mbrola.html">
+http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</ulink></para>
+
+</sect4>
+
+<sect4 id="ims-german-festival">
+<title>Using IMS German Festival</title>
+
+<para>IMS German Festival is a modified version of Festival that uses German MBROLA
+voices.  It works with either Festival version 1.4.1 or Festival 2.0 (1.95beta).
+First install Festival and MBROLA, if you have not already done so.
+Next, download IMS German Festival, from 
+<ulink url="http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html">
+http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html</ulink>.
+Follow the instructions in the <filename>README</filename> that comes with the
+download.  (Note, if using in combination with Festival 2.0, it is <emphasis>not</emphasis>
+necessary to apply the <command>fixes</command> tarball, but you must still
+rebuild festival.)  Finally, add the following
+lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
+
+<para>
+<programlisting>
+(voice-location "german_de1_os" "/usr/local/mbrola/de1"
+  "German Female, IMS Festival de1")
+(voice-location "german_de2_os" "/usr/local/mbrola/de2"
+  "German Male, IMS Festival de2")
+(voice-location "german_de3_os" "/usr/local/mbrola/de3"
+  "German Female, IMS Festival de3")
+</programlisting>
+</para>
+
+<para>just above the line that reads</para>
+
+<para>
+<programlisting>
+(provide 'siteinit)
+</programlisting>
+</para>
+
+<para>(On some systems, the file you edit is <filename>/etc/festival.scm</filename>).  
+Only add the lines that correspond to the German voices you have installed.
+Substitute the correct path for <userinput><replaceable>/usr/local/mbrola/</replaceable></userinput>
+.  Also note that (at the time of this writing) 
+IMS German Festival does not work with the de4, de5, or de6 German voices.</para>
+
+</sect4>
+
+</sect3>
 
 </sect2>
 
@@ -1177,8 +1275,7 @@ You can control the voice, pitch, speed, and volume from <command>kttsmgr</comma
 
 <procedure>
 <step><para>Download MBROLA binary from
-<ulink url="http://tcts.fpms.ac.be/synthesis/mbrola.html">
-http://tcts.fpms.ac.be/synthesis/mbrola.html</ulink>.</para></step>
+<ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para></step>
 <step><para>Install MBROLA to <filename>/usr/local/mbrola</filename> directory.</para></step>
 <step><para>Download at least one german language file from the MBROLA site.
 Unzip to the <filename>/usr/local/mbrola</filename> directory.</para></step>
