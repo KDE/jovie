@@ -9,11 +9,6 @@ _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
     _ Add option to automatically turn down music player volume while speaking (via dcop).
-_ There are several issues with i18n:
-    _ kttsd has no .pot file but does have one message screen.  "At least one Talker must be configured.
-      "Would you like to configure KTTS now?".
-    _ Need to consolidate numerous .pot files into just one or two.  There is a lot of overlap
-      and duplication, which is more work for translators.
 _ Festival Interactive plugin:
     _ Festival crashes on really long sentences.  Even if it doesn't crash, it drones on lower and
       lower in tone.  Need to detect really long sentences and try to break at comma.
@@ -31,6 +26,8 @@ _ Hadifix plugin:
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
 _ KTTSMgr:
+    _ The Current Sentence panel shows the currently-speaking sentence, but when a job is finished,
+      it does not clear.
     _ The "Passive popups only" checkbox on General tab is sometimes enabled when
       "Speak notifications" is not checked.
     _ Add ability to quickly pick default Talker to systray menu.
