@@ -98,17 +98,27 @@ void FestivalIntProc::sayText(const QString &text){
         initialized = true;
 
         // Setting output thru arts if necessary.
+        // Note: Force Arts does not currently work correctly because the artsplay command returns
+        // immediately, causing Festival to send prompt, whereupon we send another sentence...etc.
+        // As a result, the sentences get spoken on top of each other.
         if(forceArts){
             kdDebug() << "Forcing Arts output" << endl;
             waitTilReady();
             ready = false;
-            festProc->writeStdin(QString("(Parameter.set 'Audio_Command \"artsplay $FILE\")"), true);
+            // On my system, artsplay won't play a file unless the file extension is set.
+            // Problem with this solution is it leaves files in /tmp directory.  audio_xxxx.snd
+            // Need a better solution.
+            festProc->writeStdin(QString("(Parameter.set 'Audio_Command \"mv $FILE $FILE.snd && artsplay $FILE.snd\")"), true);
             waitTilReady();
             ready = false;
             festProc->writeStdin(QString("(Parameter.set 'Audio_Method 'Audio_Command)"), true);
             waitTilReady();
             ready = false;
             festProc->writeStdin(QString("(Parameter.set 'Audio_Required_Format 'snd)"), true);
+            // Make Festival wait until sentence is spoken before sending prompt.
+            waitTilReady();
+            ready = false;
+            festProc->writeStdin(QString("(audio_mode 'sync)"), true);
         }
         // Selecting the voice
         waitTilReady();
