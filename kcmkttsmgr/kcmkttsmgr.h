@@ -23,6 +23,7 @@
 
 // Qt includes.
 #include <qmap.h>
+#include <qlistview.h>
 
 // KDE includes.
 #include <kcmodule.h>
@@ -111,6 +112,15 @@ class KCMKttsMgr :
         * Return the about information for this module
         */
         const KAboutData* aboutData() const;
+
+    public slots:
+        /**
+        * This slot is used to emit the signal changed when any widget changes the configuration 
+        */
+        void configChanged(){
+            // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
+            emit changed(true);
+        };
 
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
@@ -310,14 +320,6 @@ class KCMKttsMgr :
         void updateFilterButtons();
 
         /**
-        * This slot is used to emit the signal changed when any widget changes the configuration 
-        */
-        void configChanged(){
-            // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
-            emit changed(true);
-        };
-
-        /**
         * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
         */
         void enableKttsdToggled(bool checked);
@@ -358,6 +360,25 @@ class KCMKttsMgr :
         * Other slots.
         */
         void slotTabChanged();
+};
+
+/// This is a small helper class to detect when user checks/unchecks a Filter in Filters tab
+/// and emit changed() signal.
+class KttsCheckListItem : public QCheckListItem
+{
+    public:
+        KttsCheckListItem( QListView *parent,
+            const QString &text, Type tt = RadioButtonController,
+            KCMKttsMgr* kcmkttsmgr = 0);
+        KttsCheckListItem( QListView *parent, QListViewItem *after,
+            const QString &text, Type tt = RadioButtonController,
+            KCMKttsMgr* kcmkttsmgr = 0);
+
+    protected:
+        virtual void stateChange(bool);
+
+    private:
+        KCMKttsMgr* m_kcmkttsmgr;
 };
 
 #endif

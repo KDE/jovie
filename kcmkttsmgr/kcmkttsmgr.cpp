@@ -179,6 +179,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slot_configureFilter()));
     connect(m_kttsmgrw->filtersList, SIGNAL(selectionChanged()),
             this, SLOT(updateFilterButtons()));
+    connect(m_kttsmgrw->filtersList, SIGNAL(stateChanged()),
+            this, SLOT(configChanged()));
 
     // Audio tab.
     connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
@@ -384,11 +386,11 @@ void KCMKttsMgr::load()
             bool multiInstance = m_config->readBoolEntry("MultiInstance", false);
             bool checked = m_config->readBoolEntry("Enabled", false);
             if (!filterItem)
-                filterItem = new QCheckListItem(m_kttsmgrw->filtersList,
-                    userFilterName, QCheckListItem::CheckBox);
+                filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
+                    userFilterName, QCheckListItem::CheckBox, this);
             else
-                filterItem = new QCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                    userFilterName, QCheckListItem::CheckBox);
+                filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                    userFilterName, QCheckListItem::CheckBox, this);
             filterItem->setText(flvcFilterID, filterID);
             filterItem->setText(flvcPlugInName, filterPlugInName);
             if (multiInstance)
@@ -409,11 +411,11 @@ void KCMKttsMgr::load()
         if (countFilterPlugins(filterPlugInName) == 0)
         {
             if (!filterItem)
-                filterItem = new QCheckListItem(m_kttsmgrw->filtersList,
-                    filterPlugInName, QCheckListItem::CheckBox);
+                filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
+                    filterPlugInName, QCheckListItem::CheckBox, this);
             else
-                filterItem = new QCheckListItem(filterItem,
-                    filterPlugInName, QCheckListItem::CheckBox);
+                filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                    filterPlugInName, QCheckListItem::CheckBox, this);
             m_lastFilterID++;
             filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
             filterItem->setText(flvcPlugInName, filterPlugInName);
@@ -1145,12 +1147,12 @@ void KCMKttsMgr::addFilter()
     QListViewItem* filterItem = m_kttsmgrw->filtersList->lastChild();
     if (filterItem)
         filterItem =
-            new QCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                userFilterName, QCheckListItem::CheckBox);
+            new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
+                userFilterName, QCheckListItem::CheckBox, this);
     else
         filterItem =
-            new QCheckListItem(m_kttsmgrw->filtersList,
-                userFilterName, QCheckListItem::CheckBox);
+            new KttsCheckListItem(m_kttsmgrw->filtersList,
+                userFilterName, QCheckListItem::CheckBox, this);
     filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
     filterItem->setText(flvcPlugInName, filterPlugInName);
     if (multiInstance)
@@ -1691,6 +1693,25 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 // System tray context menu entries.
 void KCMKttsMgr::aboutSelected(){
     m_aboutDlg->show();
+}
+
+// ----------------------------------------------------------------------------
+
+KttsCheckListItem::KttsCheckListItem( QListView *parent, QListViewItem *after,
+    const QString &text, Type tt,
+    KCMKttsMgr* kcmkttsmgr ) :
+        QCheckListItem(parent, after, text, tt),
+        m_kcmkttsmgr(kcmkttsmgr) { }
+
+KttsCheckListItem::KttsCheckListItem( QListView *parent,
+    const QString &text, Type tt,
+    KCMKttsMgr* kcmkttsmgr ) :
+        QCheckListItem(parent, text, tt),
+        m_kcmkttsmgr(kcmkttsmgr) { }
+
+/*virtual*/ void KttsCheckListItem::stateChange(bool)
+{
+    if (m_kcmkttsmgr) m_kcmkttsmgr->configChanged();
 }
 
 /*virtual*/ /*void resizeEvent( QResizeEvent ev )
