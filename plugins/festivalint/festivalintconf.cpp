@@ -548,7 +548,7 @@ void FestivalIntConf::slotTest_clicked()
 
     // Fall back if none.
     if (testMsg.isEmpty())
-        testMsg = i18n("KDE is a modern graphical desktop for Unix computers.");
+        testMsg = i18n("KDE is a modern graphical desktop for UNIX computers.");
 
     // Get codec.
     QTextCodec* codec = PlugInProc::codecIndexToCodec(

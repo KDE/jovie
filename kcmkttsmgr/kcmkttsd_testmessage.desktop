@@ -1,5 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 NoDisplay=true
-Name=KDE is a modern graphical desktop for Unix computers.
-Name[de]=KDE ist eine moderne grafische Arbeitsumgebung für Unix-Computer.
+Name=KDE is a modern graphical desktop for UNIX computers.
+Name[de]=KDE ist eine moderne graphische Arbeitsoberfläche für Unix-Rechner
+Name[it]=KDE è un Desktop grafico moderno per macchine Unix.
+Name[pt]=O KDE é um moderno ambiente de trabalho para computadores Unix.
+Name[pt_BR]=O KDE é um ambiente gráfico moderno para sistemas Unix.
+Name[sv]=KDE är ett modernt grafiskt skrivbord för Unix-datorer.
+Name[uk]=KDE -- це сучасна графічна стільниця для комп'ютерів Unix.
