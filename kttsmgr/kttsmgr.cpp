@@ -84,8 +84,11 @@ int main (int argc, char *argv[])
     }
     else app.setMainWidget(&dlg);
 
-//    if (showMainWindowOnStartup) dlg.show();
+#if KDE_VERSION < KDE_MAKE_VERSION (3,3,0)
+    if (showMainWindowOnStartup) dlg.show();
+#else
     if (showMainWindowOnStartup) tray->setActive();
+#endif
     return app.exec();
     delete tray;
 }
