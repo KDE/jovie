@@ -193,13 +193,18 @@ bool SpeechData::screenReaderOutputReady()
 */
 void SpeechData::enqueueWarning( const QString &warning, const QString &talker, const QCString &appId){
     // kdDebug() << "Running: SpeechData::enqueueWarning( const QString &warning )" << endl;
-    mlText *temp = new mlText();
-    temp->jobNum = 0;
-    temp->text = warning;
-    temp->talker = talker;
-    temp->appId = appId;
-    temp->seq = 1;
-    warnings.enqueue( temp );
+    mlJob* job = new mlJob();
+    ++jobCounter;
+    if (jobCounter == 0) ++jobCounter;  // Overflow is OK, but don't want any 0 jobNums.
+    uint jobNum = jobCounter;
+    job->jobNum = jobNum;
+    job->talker = talker;
+    job->appId = appId;
+    job->seq = 1;
+    warnings.enqueue( job );
+    job->sentences = QStringList();
+    // Do not apply Sentence Boundary Detection filters to warnings.
+    startJobFiltering( job, warning, true );
     // uint count = warnings.count();
     // kdDebug() << "Adding '" << temp->text << "' with talker '" << temp->talker << "' from application " << appId << " to the warnings queue leaving a total of " << count << " items." << endl;
 }
@@ -212,7 +217,15 @@ void SpeechData::enqueueWarning( const QString &warning, const QString &talker, 
 */
 mlText* SpeechData::dequeueWarning(){
     // kdDebug() << "Running: SpeechData::dequeueWarning()" << endl;
-    mlText *temp = warnings.dequeue();
+    mlJob* job = warnings.dequeue();
+    waitJobFiltering(job);
+    mlText* temp = new mlText();
+    temp->jobNum = job->jobNum;
+    temp->text = job->sentences.join("");
+    temp->talker = job->talker;
+    temp->appId = job->appId;
+    temp->seq = 1;
+    delete job;
     // uint count = warnings.count();
     // kdDebug() << "Removing '" << temp->text << "' with talker '" << temp->talker << "' from the warnings queue leaving a total of " << count << " items." << endl;
     return temp;
@@ -246,24 +259,11 @@ void SpeechData::enqueueMessage( const QString &message, const QString &talker, 
     job->appId = appId;
     job->seq = 1;
     messages.enqueue( job );
-    // If message came from knotify, filter it, otherwise, do not filter.
-    if (appId.left(7) == "knotify")
-    {
-        job->sentences = QStringList();
-        // Do not apply Sentence Boundary Detection filters to messages.
-        startJobFiltering( job, message, true );
-    } else
-        job->sentences = message;
-    /*
-    mlText *temp = new mlText();
-    temp->text = message;
-    temp->talker = talker;
-    temp->appId = appId;
-    temp->seq = 1;
-    messages.enqueue( temp );
+    job->sentences = QStringList();
+    // Do not apply Sentence Boundary Detection filters to messages.
+    startJobFiltering( job, message, true );
     // uint count = messages.count();
     // kdDebug() << "Adding '" << temp->text << "' with talker '" << temp->talker << "' from application " << appId << " to the messages queue leaving a total of " << count << " items." << endl;
-    */
 }
 
 /**

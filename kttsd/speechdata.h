@@ -579,7 +579,7 @@ class SpeechData : public QObject {
         /**
         * Queue of warnings
         */
-        QPtrQueue<mlText> warnings;
+        QPtrQueue<mlJob> warnings;
 
         /**
         * Queue of messages
