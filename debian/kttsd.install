@@ -18,8 +18,6 @@ debian/tmp/usr/lib/kde3/libkttsd_eposplugin.so
 debian/tmp/usr/lib/kde3/libkttsd_eposplugin.la
 debian/tmp/usr/lib/kde3/libkttsd_freettsplugin.so
 debian/tmp/usr/lib/kde3/libkttsd_freettsplugin.la
-debian/tmp/usr/lib/kde3/libkttsd_gstplugin.so
-debian/tmp/usr/lib/kde3/libkttsd_gstplugin.la
 debian/tmp/usr/lib/kde3/libkttsd_artsplugin.so
 debian/tmp/usr/lib/kde3/libkttsd_artsplugin.la
 debian/tmp/usr/lib/kde3/libkttsjobmgrpart.so
@@ -59,7 +57,6 @@ debian/tmp/usr/share/services/kttsd_eposplugin.desktop
 debian/tmp/usr/share/services/kttsd_freettsplugin.desktop
 debian/tmp/usr/share/services/kttsd.desktop
 debian/tmp/usr/share/services/kttsjobmgr.desktop
-debian/tmp/usr/share/services/kttsd_gstplugin.desktop
 debian/tmp/usr/share/services/kttsd_artsplugin.desktop
 debian/tmp/usr/share/icons/hicolor/16x16/actions/male.png
 debian/tmp/usr/share/icons/hicolor/16x16/actions/female.png

@@ -21,9 +21,12 @@
       (Note underscore)
     - unpack tarball
     - cd kttsd-0.2.0
+    - rm -fR autom4te.cache
+    - rm INDEX
     - cp -R kttsd/debian debian
     - Add the following line to end of Makefile.am
         include $(top_srcdir)/admin/Doxyfile.am
+    - Add --enable-debug=full to configure line in rules
     - debuild -uc -us
     
 * dpkg-shlibdeps is reporting:

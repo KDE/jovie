@@ -9,7 +9,7 @@ Package: kttsd
 Architecture: any
 Depends: ${shlibs:Depends}
 Suggests: kttsd-appplugins, festival, festival-doc, festvox-kallpc, flite, epos,
- xsltproc, sox, gstreamer (>= 0.8.7)
+ xsltproc, sox, kttsd-gstreamer
 Description: KDE Text-to-Speech system
  KTTS, the KDE Text-to-Speech (TTS) system, is a plug-in based dcop service
  that allows any KDE (or non-KDE) application to speak using the DCOP
@@ -28,7 +28,16 @@ Description: KDE Text-to-Speech system
  .
  You must also install a speech synthesis engine, such as festival, flite,
  epos, freetts, or hadifix (MBROLA and txt2pho).  khelpcenter help:/kttsd/
- for links and suggestions for obtaining and installing synthesizers. 
+ for links and suggestions for obtaining and installing synthesizers.
+
+Package: kttsd-gstreamer
+Architecture: any
+Depends: kttsd, libgstreamer0.8-0 (>= 0.8.7)
+Description: KTTSD GStreamer plugin
+ A plugin for the KDE Text-to-Speech system for producing
+ audio output via GStreamer.  You will also need the
+ GStreamer wav file plugin and at least one GStreamer
+ output plugin (aRts, oss, or nas).
 
 Package: kttsd-dev
 Architecture: any
