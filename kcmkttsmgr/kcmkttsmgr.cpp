@@ -620,7 +620,8 @@ void KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage){
         if(it.currentKey() == defaultLanguage){
             kdDebug() << "Setting " << it.currentKey() << " as the default language" << endl;
             it.current()->listItem->setPixmap(2, DesktopIcon("ok", 16));
-            it.current()->listItem->setSelected(true);
+            m_kttsmgrw->languagesList->setSelected(it.current()->listItem, true);
+//            it.current()->listItem->setSelected(true);
         } else {
             kdDebug() << "UN-Setting " << it.currentKey() << " as the default language" << endl;
             it.current()->listItem->setPixmap(2, NULL);
