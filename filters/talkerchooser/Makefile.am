@@ -20,7 +20,7 @@ services_DATA = kttsd_talkerchooserplugin.desktop
 servicesdir = $(kde_servicesdir)
 
 # Install data files.
-talkerchooserdatadir = $(kde_datadir)/kttsd/sbd/
+talkerchooserdatadir = $(kde_datadir)/kttsd/talkerchooser/
 talkerchooserdata_DATA = \
 	female_notifications_rc
 
