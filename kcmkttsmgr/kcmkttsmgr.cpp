@@ -927,18 +927,7 @@ void KCMKttsMgr::init(){
 */
 int KCMKttsMgr::buttons() {
     // kdDebug() << "KCMKttsMgr::buttons: Running"<< endl;
-    if (!m_kttsmgrw)
-        return KCModule::Ok|KCModule::Apply|KCModule::Help;
-    else
-    {
-        // TODO: This isn't working.  We prefer to hide (or disable) Defaults button
-        // on all except Interruption tab.
-        int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
-        if (currentPageIndex == wpInterruption)
-            return KCModule::Ok|KCModule::Apply|KCModule::Help|KCModule::Default;
-        else
-            return KCModule::Ok|KCModule::Apply|KCModule::Help;
-    }
+    return KCModule::Ok|KCModule::Apply|KCModule::Help|KCModule::Default;
 }
 
 /**
