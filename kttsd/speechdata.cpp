@@ -109,6 +109,13 @@ bool SpeechData::readConfig(){
 */
 SpeechData::~SpeechData(){
     kdDebug() << "Running: SpeechData::~SpeechData()" << endl;
+    // Walk through jobs and emit a textRemoved signal for each job.
+    textMutex.lock();
+    for (mlJob* job = textJobs.first(); (job); job = textJobs.next())
+    {
+        emit textRemoved(job->appId, job->jobNum);
+    }
+    textMutex.unlock();
     delete config;
     delete textIterator;
 }

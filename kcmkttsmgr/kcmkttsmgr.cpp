@@ -25,6 +25,7 @@
 #include <qwidgetstack.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+#include <qwaitcondition.h>
 
 #include <klistview.h>
 #include <kcombobox.h>
@@ -334,27 +335,20 @@ void KCMKttsMgr::save()
     
     m_config->sync();
     
-    /*
-    // To be reviewed, to use KSpeech when ready
-    if(KMessageBox::questionYesNo(this, i18n("Do you want to reload the Text To Speech configuration ?"), i18n("Reload configuration ?")) == KMessageBox::Yes){
-        kdDebug() << "Restarting KTTSD" << endl;
-        DCOPClient *client = kapp->dcopClient();
-        if(client->attach()){
-            if(client->send("kttsd", "kspeech", "void exit()", "")){
-                kdDebug() << "Killing KTTSD worked!" << endl;
-            } else {
-                kdDebug() << "KTTSD not running or some other kind of error" << endl;
-            }
+    // If KTTSD is running, ask user whether to restart KTTSD, and if yes, do so.
+    DCOPClient *client = kapp->dcopClient();
+    bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
+    if (kttsdRunning)
+    {
+        if(KMessageBox::questionYesNo(this, i18n("Do you want to restart the Text-to-Speech system?  (Existing speech jobs will be lost.)"), i18n("Reload configuration ?")) == KMessageBox::Yes)
+        {
+            kdDebug() << "Restarting KTTSD" << endl;
+            QByteArray data;
+            client->send("kttsd", "kspeech", "reinit()", data);
         } else {
-            kdDebug() << "Couldn't attach" << endl;
+            kdDebug() << "NOT restarting KTTSD by user option" << endl;
         }
-        kdDebug() << "Starting KTTSD" << endl;
-        KProcess *proc = new KProcess;
-        *proc << "kttsd";
-        proc->start(KProcess::DontCare);      
-    } else {
-        kdDebug() << "NOT restarting KTTSD by user option" << endl;
-    }*/
+    }
 } 
 
 /**
