@@ -93,7 +93,7 @@
                                 <cstring>languageLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank, the filter applies to all text jobs of any language.</string>
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
@@ -137,7 +137,7 @@
                                         <cstring>reLineEdit</cstring>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+                                        <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank, the filter applies to all text jobs of any language.</string>
                                     </property>
                                 </widget>
                                 <widget class="KPushButton">
@@ -203,7 +203,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank, the filter applies to all text jobs of any language.</string>
                             </property>
                         </widget>
                         <widget class="KPushButton">
