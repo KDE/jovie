@@ -32,7 +32,7 @@
 
 int main (int argc, char *argv[])
 {
-    KAboutData aboutdata("kttsmgr", I18N_NOOP("kttsmgr"),
+    KAboutData aboutdata("kttsmgr", I18N_NOOP("KTTSMgr"),
         "0.2.0", I18N_NOOP("Text-to-Speech Manager"),
         KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
     aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
@@ -98,11 +98,11 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     int id;
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
-        i18n("&Speak clipboard contents"), this, SLOT(speakClipboardSelected()));
+        i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
-        i18n("&About kttsmgr"), this, SLOT(aboutSelected()));
+        i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
 }
