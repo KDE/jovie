@@ -143,7 +143,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     ts << endl; // Some synths need this, eg. flite.
 
     // 1.b) quote the text as one parameter
-    QString escText = KShellProcess::quote(encText);
+    QString escText = KShellProcess::quote(text);
 
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
