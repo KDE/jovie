@@ -352,9 +352,8 @@ void KttsJobMgrPart::slot_job_resume()
 
 void KttsJobMgrPart::slot_job_restart()
 {
-    kdDebug() << "Running KttsJobMgr::slot_job_restart" << endl;
     uint jobNum = getCurrentJobNum();
-    kdDebug() << "jobNum: " << jobNum << endl;
+    kdDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum << endl;
     if (jobNum)
     {
         startText(jobNum);
@@ -462,7 +461,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
     if ( !text.isNull() ) 
     {
         uint jobNum = setText(text, NULL);
-        kdDebug() << "In KttsJobMgrPart::slot_speak_clipboard, started jobNum " << jobNum << endl;
+        kdDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
         startText(jobNum);
         // Set flag so that the job we just created will be selected when textSet signal is received.
         selectOnTextSet = true;        
@@ -593,7 +592,7 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
 */
 void KttsJobMgrPart::refreshJobListView()
 {
-    kdDebug() << "Running KttsJobMgrPart::refreshJobListView" << endl;
+    kdDebug() << "KttsJobMgrPart::refreshJobListView: Running" << endl;
     m_jobListView->clear();
     enableJobActions(false);
     enableJobPartActions(false);
@@ -735,7 +734,7 @@ ASYNC KttsJobMgrPart::markerSeen(const QCString&, const QString&)
  */
 ASYNC KttsJobMgrPart::sentenceStarted(const QCString&, const uint jobNum, const uint seq)
 {
-    kdDebug() << "Running KttsJobMgrPart::sentencedStarted with jobNum " << jobNum << endl;
+    kdDebug() << "KttsJobMgrPart::sentencedStarted: jobNum = " << jobNum << " seq = " << seq << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -754,7 +753,7 @@ ASYNC KttsJobMgrPart::sentenceStarted(const QCString&, const uint jobNum, const 
 */        
 ASYNC KttsJobMgrPart::sentenceFinished(const QCString&, const uint jobNum, const uint)
 {
-    kdDebug() << "Running KttsJobMgrPart::sentencedFinished with jobNum " << jobNum << endl;
+    kdDebug() << "KttsJobMgrPart::sentencedFinished: jobNum = " << jobNum << endl;
 /*
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
@@ -840,6 +839,7 @@ ASYNC KttsJobMgrPart::textStarted(const QCString&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
 {
+    kdDebug() << "KttsJobMgrPart::textFinished: jobNum = " << jobNum << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -856,7 +856,7 @@ ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
 {
-    kdDebug() << "KttsJobMgrPart::textStopped: Running" << endl;
+    kdDebug() << "KttsJobMgrPart::textStopped: jobNum = " << jobNum << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -872,7 +872,7 @@ ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textPaused(const QCString&, const uint jobNum)
 {
-    kdDebug() << "KttsJobMgrPart::textPaused: Running" << endl;
+    kdDebug() << "KttsJobMgrPart::textPaused: jobNum = " << jobNum << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
