@@ -343,6 +343,8 @@ void FestivalIntConf::scanVoices()
 
     if (!m_supportedVoiceCodes.isEmpty())
     {
+        // User's desktop language setting.
+        QString desktopLanguageCode = KGlobal::locale()->language();
         // Festival known voices list.
         KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices",
             true, false);
@@ -356,7 +358,7 @@ void FestivalIntConf::scanVoices()
             voiceTemp.name = voices.readEntry("Name", i18n("Unknown"));
             voiceTemp.languageCode = voices.readEntry("Language", m_languageCode);
             // Get translated comment, fall back to English comment, fall back to code.
-            voiceTemp.comment = voices.readEntry("Comment["+voiceTemp.languageCode+"]",
+            voiceTemp.comment = voices.readEntry("Comment["+desktopLanguageCode+"]",
                 voices.readEntry("Comment", code));
             voiceTemp.gender = voices.readEntry("Gender", "neutral");
             voiceTemp.preload = voices.readBoolEntry("Preload", false);

@@ -92,7 +92,7 @@ VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
 Comment=Castilian Spanish Male
-Comment[es]=Español masculino
+Comment[es]=Español de España, masculino
 
 [cmu_us_bdl_arctic_hts]
 Name=Bdl ARCTIC
