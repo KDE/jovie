@@ -224,11 +224,11 @@ void FestivalIntProc::synth(
         // HTS voices don't work under Debian.  Why?  ..grc
         if (voiceCode.contains("_hts") > 0)
         {
-            // Map 50% to 100% onto 0.5 to 0.
+            // Map 50% to 100% onto 0.15 to 0.
             // Map 100% to 200% onto 0 to -0.15.
             float stretchValue;
             if (time <= 100)
-                stretchValue = (1.0/(float(time)/100.0)) - 1.0;
+                stretchValue = ((100.0 - float(time)) *  0.30)/100.0;
             else
                 stretchValue = ((float(time) - 100.0) * -0.15)/100.0;
             timeMsg = QString("(set! hts_duration_stretch %1)").arg(
