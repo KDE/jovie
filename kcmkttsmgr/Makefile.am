@@ -1,10 +1,5 @@
-# Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
-# so keep them synchronized.
+# Include paths.
 INCLUDES = \
-	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	$(CFLAGS_GST) \
-	$(all_includes)
-AM_CPPFLAGS = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(CFLAGS_GST) \
 	$(all_includes)
@@ -33,9 +28,7 @@ kcm_kttsd_la_SOURCES = \
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined 
 kcm_kttsd_la_LIBADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
-	$(LIB_QT) \
-	$(LIB_KIO) \
-	$(LIB_KDECORE)
+	$(LIB_KIO) 
 
 # Header files that should not be installed.
 noinst_HEADERS = \
@@ -43,10 +36,6 @@ noinst_HEADERS = \
 	kcmkttsmgrwidget.h \
 	kcmkttsmgrwidget.ui.h \
 	addtalker.h
-
-# Install desktop file to application directory.
-apps_DATA = kcmkttsd.desktop
-appsdir = $(kde_appsdir)/Settings/Accessibility
 
 # K Menu entry.
 xdg_apps_DATA = kcmkttsd.desktop
