@@ -1,3 +1,6 @@
+_ kttsmgr needs a window icon.
+_ In kttsmgr jobs tab, if user has made changes but not applied them, and then clicks
+  Speak Clipboard, Speak File, or Change Talker buttons, warn user to apply the changes first.
 _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
 _ How to set Help anchor and app name within jobmgr part?
 _ Remove kcm_kttsmgr once all apps (KSayIt) have stopped using it.

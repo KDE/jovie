@@ -261,6 +261,14 @@ void KCMKttsMgr::load()
     // Add "Other" language.
     m_languagesToCodes[i18n("Other")] = "other";
 
+    // Uncheck and disable KTTSD checkbox if no Talkers are configured.
+    if (m_kttsmgrw->talkersList->childCount() == 0)
+    {
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
+        enableKttsdToggled(false);
+    }
+
     updateTalkerButtons();
 }
 
@@ -335,6 +343,17 @@ void KCMKttsMgr::save()
     m_config->writeEntry("LastTalkerID", m_lastTalkerID);
 
     m_config->sync();
+
+    // Uncheck and disable KTTSD checkbox if no Talkers are configured.
+    // Enable checkbox if at least one Talker is configured.
+    if (m_kttsmgrw->talkersList->childCount() == 0)
+    {
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
+        enableKttsdToggled(false);
+    }
+    else
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
 
     // If KTTSD is running, reinitialize it.
     DCOPClient *client = kapp->dcopClient();
@@ -772,6 +791,9 @@ void KCMKttsMgr::addTalker(){
 
         // Make sure visible.
         m_kttsmgrw->talkersList->ensureItemVisible(talkerItem);
+
+        // Enable Start KTTS checkbox.
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
 
         // Select the new item, update buttons.
         m_kttsmgrw->talkersList->setSelected(talkerItem, true);
