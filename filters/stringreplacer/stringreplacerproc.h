@@ -66,6 +66,12 @@ public:
      */
     virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
+    /**
+     * Did this filter do anything?  If the filter returns the input as output
+     * unmolested, it should return False when this method is called.
+     */
+    virtual bool wasModified();
+
 private:
     // Language codes supported by the filter.
     QStringList m_languageCodeList;
@@ -76,6 +82,8 @@ private:
     QValueList<QRegExp> m_matchList;
     // List of substitutions to replace matches.
     QValueList<QString> m_substList;
+    // True if this filter did anything to the text.
+    bool m_wasModified;
 };
 
 #endif      // _STRINGREPLACERPROC_H_

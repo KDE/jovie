@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ***********************************************************************
-  Stylesheet for transforming XHTML into SSSML markup.
+  Stylesheet for transforming XHTML into SSML markup.
   ============
   Copyright : (C) 2005 by Gary Cramblitt
   ============

@@ -6,7 +6,7 @@ INCLUDES = \
 	$(CFLAGS_GST) \
 	$(all_includes)
 
-SUBDIRS = stringreplacer xmltransformer
+SUBDIRS = stringreplacer xmltransformer sbd
 
 #########################################################################
 # APPLICATION SECTION

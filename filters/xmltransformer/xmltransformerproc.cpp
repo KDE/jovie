@@ -64,13 +64,16 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const char *name, const
  */
 bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 {
+    // kdDebug() << "XmlTransformerProc::init: Running." << endl;
     config->setGroup( configGroup );
     m_UserFilterName = config->readEntry( "UserFilterName" );
     m_xsltFilePath = config->readEntry( "XsltFilePath" );
     m_xsltprocPath = config->readEntry( "XsltprocPath" );
-    m_rootElementList = config->readListEntry( "Root Element", "," );
-    m_doctypeList = config->readListEntry( "DocType", "," );
-    m_appIdList = config->readListEntry( "AppID", "," );
+    m_rootElementList = config->readListEntry( "RootElement", ',' );
+    m_doctypeList = config->readListEntry( "DocType", ',' );
+    m_appIdList = config->readListEntry( "AppID", ',' );
+    // kdDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath << endl;
+    // kdDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath << endl;
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );
 }
 
@@ -95,11 +98,16 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString XmlTransformerProc::convert(QString& inputText, TalkerCode* talkerCode,
+/*virtual*/ QString XmlTransformerProc::convert(const QString& inputText, TalkerCode* talkerCode,
     const QCString& appId)
 {
+    // kdDebug() << "XmlTransformerProc::convert: Running." << endl;
     // If not properly configured, do nothing.
-    if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return inputText;
+    if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() )
+    {
+        kdDebug() << "XmlTransformerProc::convert: not properly configured" << endl;
+        return inputText;
+    }
     // Asynchronously convert and wait for completion.
     if (asyncConvert(inputText, talkerCode, appId))
     {
@@ -127,14 +135,22 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 /*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
     const QCString& appId)
 {
+    m_wasModified = false;
+
+    // kdDebug() << "XmlTransformerProc::asyncConvert: Running." << endl;
     m_text = inputText;
     // If not properly configured, do nothing.
-    if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return false;
+    if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() )
+    {
+        kdDebug() << "XmlTransformerProc::asyncConvert: not properly configured." << endl;
+        return false;
+    }
 
     // If not correct XML type, do nothing.
     if ( !m_rootElementList.isEmpty() )
     {
         bool found = false;
+        // kdDebug() << "XmlTransformerProc::asyncConvert:: searching for root elements " << m_rootElementList << endl;
         for ( uint ndx=0; ndx < m_rootElementList.count(); ++ndx )
         {
             if ( KttsUtils::hasRootElement( inputText, m_rootElementList[ndx] ) )
@@ -143,7 +159,11 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
                 break;
             }
         }
-        if ( !found ) return false;
+        if ( !found )
+        {
+            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList << endl;
+            return false;
+        }
     }
     if ( !m_doctypeList.isEmpty() )
     {
@@ -156,7 +176,11 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
                 break;
             }
         }
-        if ( !found ) return false;
+        if ( !found )
+        {
+            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find doctype(s)" << m_doctypeList << endl;
+            return false;
+        }
     }
 
     // If appId doesn't match, return input unmolested.
@@ -168,13 +192,17 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         bool found = false;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( !appIdStr.contains(m_appIdList[ndx]) )
+            if ( appIdStr.contains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;
             }
         }
-        if ( !found ) return false;
+        if ( !found )
+        {
+            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find appId(s)" << m_appIdList << endl;
+            return false;
+        }
     }
 
     /// Write @param text to a temporary file.
@@ -209,7 +237,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
             << m_xsltFilePath << m_inFilename;
     // Warning: This won't compile under KDE 3.2.  See FreeTTS::argsToStringList().
     // kdDebug() << "SSMLConvert::transform: executing command: " <<
-    //     m_m_xsltProc->args() << endl;
+    //     m_xsltProc->args() << endl;
 
     m_state = fsFiltering;
     connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
@@ -236,21 +264,26 @@ void XmlTransformerProc::processOutput()
     int exitStatus = 11;
     if (m_xsltProc->normalExit())
         exitStatus = m_xsltProc->exitStatus();
-    if (exitStatus != 0)
-    {
-        // kdDebug() << "XmlTransformerProc::convert: xsltproc abnormal exit.  Status = " << exitStatus << endl;
-        m_state = fsFinished;
-        emit filteringFinished();
-    }
+    else
+        kdDebug() << "XmlTransformerProc::processOutput: xsltproc was killed." << endl;
 
     delete m_xsltProc;
     m_xsltProc = 0;
+
+    if (exitStatus != 0)
+    {
+        kdDebug() << "XmlTransformerProc::processOutput: xsltproc abnormal exit.  Status = " << exitStatus << endl;
+        m_state = fsFinished;
+        QFile::remove(m_outFilename);
+        emit filteringFinished();
+        return;
+    }
 
     /// Read back the data that was written to /tmp/fileName.output.
     QFile readfile(m_outFilename);
     if(!readfile.open(IO_ReadOnly)) {
         /// uhh yeah... Issues writing to the output file.
-        kdDebug() << "XmlTransformerProc::convert: Could not read file " << m_outFilename << endl;
+        kdDebug() << "XmlTransformerProc::processOutput: Could not read file " << m_outFilename << endl;
         m_state = fsFinished;
         emit filteringFinished();
     }
@@ -258,12 +291,13 @@ void XmlTransformerProc::processOutput()
     m_text = rstream.read();
     readfile.close();
 
-    kdDebug() << "XmlTransformerProc::convert: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
+    // kdDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
 
     // Clean up.
     QFile::remove(m_outFilename);
 
     m_state = fsFinished;
+    m_wasModified = true;
     emit filteringFinished();
 }
 
@@ -273,7 +307,17 @@ void XmlTransformerProc::processOutput()
 /*virtual*/ void XmlTransformerProc::waitForFinished()
 {
     if (m_xsltProc)
-        if (m_xsltProc->isRunning()) m_xsltProc->wait();
+    {
+        if (m_xsltProc->isRunning())
+        {
+            if ( !m_xsltProc->wait( 15 ) )
+            {
+                m_xsltProc->kill();
+                kdDebug() << "XmlTransformerProc::waitForFinished: After waiting 15 seconds, xsltproc process seems to hung.  Killing it." << endl;
+                processOutput();
+            }
+        }
+    }
 }
 
 /**
@@ -300,6 +344,12 @@ void XmlTransformerProc::processOutput()
     m_state = fsStopping;
     m_xsltProc->kill();
 }
+
+/**
+ * Did this filter do anything?  If the filter returns the input as output
+ * unmolested, it should return False when this method is called.
+ */
+/*virtual*/ bool XmlTransformerProc::wasModified() { return m_wasModified; }
 
 void XmlTransformerProc::slotProcessExited(KProcess*)
 {

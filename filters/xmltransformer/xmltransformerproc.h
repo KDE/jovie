@@ -74,7 +74,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -118,6 +118,12 @@ public:
      */
     virtual void stopFiltering();
 
+    /**
+     * Did this filter do anything?  If the filter returns the input as output
+     * unmolested, it should return False when this method is called.
+     */
+    virtual bool wasModified();
+
 private slots:
     void slotProcessExited(KProcess*);
     void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
@@ -148,6 +154,8 @@ private:
     QString m_xsltFilePath;
     // Path to xsltproc processor.
     QString m_xsltprocPath;
+    // Did this filter modify the text?
+    bool m_wasModified;
 };
 
 #endif      // _XMLTRANSFORMERPROC_H_

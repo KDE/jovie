@@ -21,7 +21,7 @@
 #include <qlistview.h>
 
 // KDE includes.
-// #include <kdebug.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -160,6 +160,7 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
  */
 /*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
 {
+    m_wasModified = false;
     // If language doesn't match, return input unmolested.
     if ( !m_languageCodeList.isEmpty() )
     {
@@ -178,7 +179,7 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
         QString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( !appIdStr.contains(m_appIdList[ndx]) )
+            if ( appIdStr.contains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;
@@ -192,6 +193,13 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
     {
         newText.replace( m_matchList[index], m_substList[index] );
     }
+    m_wasModified = true;
     return newText;
 }
+
+/**
+ * Did this filter do anything?  If the filter returns the input as output
+ * unmolested, it should return False when this method is called.
+ */
+/*virtual*/ bool StringReplacerProc::wasModified() { return m_wasModified; }
 

@@ -57,15 +57,16 @@
    <EM TYPE="{@level}"><xsl:apply-templates/></EM>
 </xsl:template>
 
-<!--  This is turned off because if Festival lacks an installed voice to match a gender
-      or voice name, it bombs out.  argh!
 <xsl:template match="//voice">
-    <xsl:call-template name="voice"><xsl:with-param name="a" select="@*" /></xsl:call-template>
+    <!--  This is turned off because if Festival lacks an installed voice to match a gender
+          or voice name, it bombs out.  argh!
+    <xsl:call-template name="voice"><xsl:with-param name="a" select="@*" /></xsl:call-template> -->
+    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template name="voice">
     <xsl:param name="a" />
-    <!- - Get the name of the tag we're creating and convert to a SABLE tag. - ->
+    <!-- Get the name of the tag we're creating and convert to a SABLE tag. -->
     <xsl:variable name="tag">
         <xsl:choose>
             <xsl:when test="name($a[1])='gender'">SPEAKER</xsl:when>
@@ -76,26 +77,26 @@
     </xsl:variable>
 
     <xsl:element name="{$tag}">
-        <!- - Create the right attribute to go with element $tag. - ->
-        
+        <!-- Create the right attribute to go with element $tag. -->
+
         <xsl:choose>
-            <!- - gender:
+            <!-- gender:
                  The gender of the voice.
-                 Values such as male, female, and neutral are supported.  - ->
+                 Values such as male, female, and neutral are supported.  -->
             <xsl:when test="name($a[1])='gender' and $a[1]='male'">
                 <xsl:attribute name="GENDER">male1</xsl:attribute>
             </xsl:when>
             <xsl:when test="name($a[1])='gender' and $a[1]='female'">
                 <xsl:attribute name="GENDER">female1</xsl:attribute>
             </xsl:when>
-            <!- - If none of the above match, take the users selected value. - ->
+            <!-- If none of the above match, take the users selected value. -->
             <xsl:when test="name($a[1])='gender'">
                 <xsl:attribute name="GENDER"><xsl:value-of select=" $a[1]"/></xsl:attribute>
             </xsl:when>
-        
-            <!- - age:
+
+            <!-- age:
                 The age of the voice.
-                Positive integer values are supported. - ->
+                Positive integer values are supported. -->
             <xsl:when test="name($a[1])='age' and number($a[1]) &lt; 10">
                 <xsl:attribute name="AGE">child</xsl:attribute>
             </xsl:when>
@@ -111,15 +112,15 @@
             <xsl:when test="name($a[1])='age'">
                 <xsl:attribute name="AGE">older</xsl:attribute>
             </xsl:when>
-            
-            <!- - name:
-                Voice name.  Synth dependent. - ->
+
+            <!-- name:
+                Voice name.  Synth dependent. -->
             <xsl:when test="name($a[1])='name'">
                 <xsl:attribute name="NAME"><xsl:value-of select=" $a[1]"/></xsl:attribute>
             </xsl:when>
         </xsl:choose>
 
-        <!- - Recursively call ourself. - ->
+        <!-- Recursively call ourself. -->
         <xsl:choose>
             <xsl:when test="$a[2]">
                 <xsl:call-template name="voice"><xsl:with-param name="a" select="$a[position()>1]" /></xsl:call-template>
@@ -131,10 +132,12 @@
 
     </xsl:element>
 </xsl:template>
--->
 
 <xsl:template match="prosody">
-    <xsl:call-template name="prosody"><xsl:with-param name="a" select="@*" /></xsl:call-template>
+    <!-- contour and duration not supported. -->
+    <xsl:call-template name="prosody"><xsl:with-param name="a"
+        select="@pitch|@rate|@volume|@range" />
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="prosody">
@@ -149,10 +152,10 @@
             <xsl:otherwise><xsl:value-of select="$a[1]"/></xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    
+
     <xsl:element name="{$tag}">
         <!-- Create the right attribute to go with element $tag. -->
-        
+
         <xsl:choose>
             <!-- pitch:
             The pitch with which the text is spoken.
@@ -177,7 +180,7 @@
             <xsl:when test="name($a[1])='pitch'">
                 <xsl:attribute name="BASE"><xsl:value-of select=" $a[1]"/></xsl:attribute>
             </xsl:when>
-        
+
             <!-- rate:
             The speed at which the text is spoken.
             Values such as x-fast, fast, slow, etc. and percentages (+ or -) 
@@ -200,7 +203,7 @@
             <xsl:when test="name($a[1])='rate'">
                 <xsl:attribute name="SPEED"><xsl:value-of select=" $a[1]"/></xsl:attribute>
             </xsl:when>       
-            
+
             <!-- volume:
             The volume at which the text is spoken.
             Values such as x-loud, loud, quiet, etc. and percentages (+ or -) 

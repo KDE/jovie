@@ -382,7 +382,7 @@ class Speaker : public QObject{
         *                                the speech engine could not be started.
         * @param msg                     Error message.
         */
-        void slotError(const bool keepGoing, const QString &msg);
+        void slotError(bool keepGoing, const QString &msg);
         /**
         * Received from Timer when it fires.
         * Check audio player to see if it is finished.

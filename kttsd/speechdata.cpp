@@ -43,6 +43,9 @@
 #include "speechdata.h"
 #include "speechdata.moc"
 
+// Set this to 1 to turn off filter support, including SBD as a plugin.
+#define NO_FILTERS 0
+
 /**
 * Constructor
 * Sets text to be stopped and warnings and messages queues to be autodelete.
@@ -312,12 +315,7 @@ QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=
     temp.replace(QRegExp("\t\t+"),"\t");
     // Split into sentences.
     QStringList tempList = QStringList::split("\t", temp, false);
-/*
-    // This should be something better, like "[a-zA-Z]\. " (a regexp of course) The dot (.) is used for more than ending a sentence.
-    temp.replace('.', '\n');
-    QStringList tempList = QStringList::split('\n', temp, true);
-*/
-    
+
 //    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
 //        kdDebug() << "'" << *it << "'" << endl;
 //    }
@@ -330,7 +328,6 @@ QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=
 uint SpeechData::setText( const QString &text, const QString &talker, const QCString &appId)
 {
     // kdDebug() << "Running: SpeechData::setText" << endl;
-    // QStringList tempList = parseText(text, appId);
     mlJob* job = new mlJob;
     uint jobNum = ++jobCounter;
     job->jobNum = jobNum;
@@ -338,14 +335,18 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
     job->talker = talker;
     job->state = KSpeech::jsQueued;
     job->seq = 0;
+#if NO_FILTERS
+    QStringList tempList = parseText(text, appId);
+    job->sentences = tempList;
+    job->partSeqNums.append(tempList.count());
+    textJobs.append(job);
+    emit textSet(appId, jobNum);
+#else
     job->sentences = QStringList();
     job->partSeqNums = QValueList<int>();
     textJobs.append(job);
     startJobFiltering(job, text);
-    // job->sentences = tempList;
-    // job->partSeqNums.append(tempList.count());
-    // textJobs.append(job);
-    // emit textSet(appId, jobNum);
+#endif
     return jobNum;
 }
 
@@ -368,17 +369,21 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
 int SpeechData::appendText(const QString &text, const uint jobNum, const QCString& /*appId*/)
 {
     // kdDebug() << "Running: SpeechData::appendText" << endl;
-    // QStringList tempList = parseText(text, appId);
     int newPartNum = 0;
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
-        // int sentenceCount = job->sentences.count();
-        // job->sentences += tempList;
-        // job->partSeqNums.append(sentenceCount + tempList.count());
+#if NO_FILTERS
+        QStringList tempList = parseText(text, appId);
+        int sentenceCount = job->sentences.count();
+        job->sentences += tempList;
+        job->partSeqNums.append(sentenceCount + tempList.count());
+        newPartNum = job->partSeqNums.count() + 1;
+        emit textAppended(job->appId, jobNum, newPartNum);
+#else
         newPartNum = job->partSeqNums.count() + 1;
         startJobFiltering(job, text);
-        // emit textAppended(job->appId, jobNum, newPartNum);
+#endif
     }
     return newPartNum;
 }
@@ -1016,6 +1021,9 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text)
 */
 void SpeechData::waitJobFiltering(const mlJob* job)
 {
+#if NO_FILTERS
+    return;
+#endif
     PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[job->jobNum];
     if (!pooledFilterMgr) return;
     if (pooledFilterMgr->busy)
@@ -1061,9 +1069,9 @@ void SpeechData::doFiltering()
                     delete pooledFilterMgr->talkerCode;
                     pooledFilterMgr->talkerCode = 0;
                     // Split the text into sentences and store in the job.
-                    // TODO: Eventually, SBD will be a filter and all we will need to do here
-                    // is split the string on tab delimiter.
-                    QStringList sentences = parseText(text, job->appId);
+                    // The SBD plugin does all the real sentence parsing, inserting tabs at each
+                    // sentence boundary.
+                    QStringList sentences = QStringList::split("\t", text, false);
                     int sentenceCount = job->sentences.count();
                     job->sentences += sentences;
                     job->partSeqNums.append(sentenceCount + sentences.count());
@@ -1083,34 +1091,12 @@ void SpeechData::doFiltering()
 
 void SpeechData::slotFilterMgrFinished()
 {
-    // Since this signal handler may be running from a plugin's thread,
-    // convert to postEvent and return immediately.
-    // kdDebug() << "SpeechData::slotFilterMgrFinished: received signal and converting to event 201." << endl;
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 201);
-    QApplication::postEvent(this, ev);
+    // kdDebug() << "SpeechData::slotFilterMgrFinished: received signal FilterMgr finished signal." << endl;
+    doFiltering();
 }
 
 void SpeechData::slotFilterMgrStopped()
 {
-    // Since this signal handler may be running from a plugin's thread,
-    // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 202);
-    QApplication::postEvent(this, ev);
+    doFiltering();
 }
 
-/**
- * Processes events posted by filters.  When asynchronous plugins emit signals
- * they are converted into these events.
- */
-bool SpeechData::event ( QEvent * e )
-{
-    // TODO: Do something with event numbers 106 (error; keepGoing=True)
-    // and 107 (error; keepGoing=False).
-    if ((e->type() >= (QEvent::User + 201)) and (e->type() <= (QEvent::User + 202)))
-    {
-        // kdDebug() << "SpeechData::event: received event." << endl;
-        doFiltering();
-        return TRUE;
-    }
-    else return FALSE;
-}

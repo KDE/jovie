@@ -32,7 +32,6 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
-#include <qevent.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -559,12 +558,6 @@ class SpeechData : public QObject {
         * @param jobNum         Job number of the text job.
         */
         void textRemoved(const QCString& appId, const uint jobNum);
-
-    protected:
-        /**
-        * Processes events posted by Filters.
-        */
-        virtual bool event ( QEvent * e );
 
     private:
         /**

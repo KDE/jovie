@@ -41,6 +41,7 @@
 #include <qstringlist.h>
 #include <qthread.h>
 #include <qvaluestack.h>
+#include <qevent.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -68,7 +69,7 @@ class SbdThread: public QObject, public QThread
         /**
          * Get/Set text being processed.
          */
-        void setText( const QString text );
+        void setText( const QString& text );
         QString text();
 
         /**
@@ -103,6 +104,7 @@ class SbdThread: public QObject, public QThread
 
     protected:
         virtual void run();
+        virtual bool event ( QEvent * e );
 
     private:
         enum TextType {
@@ -174,8 +176,15 @@ class SbdThread: public QObject, public QThread
         // Pops element from the indicated context stack.
         void popSsmlElem( SsmlElemType et );
         QString makeBreakElem( const QDomElement& e );
-        // Creates a complete sentence node consisting of
+        // Converts a text fragment into a CDATA section.
+        QString makeCDATA( const QString& text );
+        // Returns an XML representation of an utterance node consisting of voice,
+        // prosody, and emphasis elements.
         QString makeSentence( const QString& text );
+        // Starts a sentence by returning a speak tag.
+        QString startSentence();
+        // Ends a sentence and appends a Tab.
+        QString endSentence();
         // Parses a node of the SSML tree and recursively parses its children.
         // Returns the filtered text with each sentence a complete ssml tree.
         QString parseSsmlNode( QDomNode& n, const QString& re );
@@ -204,6 +213,8 @@ class SbdThread: public QObject, public QThread
         QString m_re;
         // False if input was not modified.
         bool m_wasModified;
+        // True when a sentence has been started.
+        bool m_sentenceStarted;
 };
 
 class SbdProc : virtual public KttsFilterProc

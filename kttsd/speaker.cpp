@@ -137,8 +137,8 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
             this, SLOT(slotSayFinished()));
         connect(speech, SIGNAL(stopped()),
             this, SLOT(slotStopped()));
-        connect(speech, SIGNAL(error(const bool, const QString&)),
-            this, SLOT(slotError(const bool, const QString&)));
+        connect(speech, SIGNAL(error(bool, const QString&)),
+            this, SLOT(slotError(bool, const QString&)));
     }
 }
 
@@ -224,6 +224,7 @@ void Speaker::doUtterances()
             }
             // Loop through utterance queue.
             int waitingCnt = 0;
+            int transformingCnt = 0;
             bool playing = false;
             int synthingCnt = 0;
             itEnd = m_uttQueue.end();
@@ -247,7 +248,10 @@ void Speaker::doUtterances()
                             this, SLOT(slotTransformFinished()));
                         if (it->transformer->transform(it->sentence->text,
                             it->plugin->getSsmlXsltFilename()))
+                        {
                             it->state = usTransforming;
+                            ++transformingCnt;
+                        }
                         else
                         {
                             // If an error occurs transforming, skip it.
@@ -267,6 +271,7 @@ void Speaker::doUtterances()
                             // Set next state (usWaitingSynth or usWaitingSay)
                             setInitialUtteranceState(*it);
                             m_again = true;
+                            --transformingCnt;
                         }
                         break;
                     }
@@ -451,8 +456,9 @@ void Speaker::doUtterances()
                     case usFinished: break;
                 }
             }
-            // Try to keep at least two utterances in the queue waiting.
-            if (waitingCnt < 2)
+            // Try to keep at least two utterances in the queue waiting to be played,
+            // and no more than 3 transforming at one time.
+            if ((waitingCnt < 2) and (transformingCnt < 3))
                 if (getNextUtterance()) m_again = true;
         } else {
             // See if another utterance is ready to be worked on.
@@ -1519,7 +1525,7 @@ void Speaker::slotTransformFinished()
 *                                the speech engine could not be started.
 * @param msg                     Error message.
 */
-void Speaker::slotError(const bool /*keepGoing*/, const QString& /*msg*/)
+void Speaker::slotError(bool /*keepGoing*/, const QString& /*msg*/)
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.

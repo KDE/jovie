@@ -279,7 +279,7 @@ QString SSMLConvert::getOutput()
     QString convertedData = rstream.read();
     readfile.close();
 
-    kdDebug() << "SSMLConvert::slotProcessExited: Read SSML file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilename << endl;
+    // kdDebug() << "SSMLConvert::slotProcessExited: Read SSML file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilename << endl;
 
     // Clean up.
     QFile::remove(m_inFilename);
