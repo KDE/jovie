@@ -10,5 +10,4 @@ X-KDE-Kded-autoload=false
 X-KDE-Kded-load-on-demand=true
 
 Name=KTTSD
-Name[es]=KTTSD
 Comment=KDE Text To Speech Daemon

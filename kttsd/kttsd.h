@@ -29,11 +29,11 @@ class KTTSD : public KDEDModule{
 
     public:
         KTTSD(const QCString &obj);
-        void idle();
+//        void idle();
 
     k_dcop:
         QString world();
-        void registerMe(const QCString &app);
+//        void registerMe(const QCString &app);
 };
 
 #endif // _KTTSD_H_

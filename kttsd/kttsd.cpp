@@ -19,6 +19,7 @@
  // $Id$
 
 #include <qcstring.h>
+#include <kdebug.h>
 
 #include "kttsd.moc"
 
@@ -29,36 +30,44 @@ extern "C" {
         return new KTTSD(obj);
     }
 };
-
+/*
 class TestObject : public KShared{
     public:
         TestObject(const QCString &_app) : app(_app){
+            kdDebug() << "Running: TestObject::TestObject(const QCString &_app)" << endl;
             qWarning("Creating TestObject belonging to '%s'", app.data());
         }
         ~TestObject(){
+            kdDebug() << "Running: TestObject::~TestObject()" << endl;
             qWarning("Destructing TestObject belonging to '%s'", app.data());
         }
 
     protected:
         QCString app;
 };
+*/
 
 KTTSD::KTTSD(const QCString &obj) : KDEDModule(obj){
+    kdDebug() << "Running: KTTSD::KTTSD(const QCString &obj)" << endl;
     // Do stuff here
-    setIdleTimeout(15); // 15 seconds idle timeout.
+    //setIdleTimeout(15); // 15 seconds idle timeout.
 }
 
 QString KTTSD::world(){
-  return "Hello World!";
+    kdDebug() << "Running: KTTSD::world()" << endl;
+    return "Hello World!";
 }
-
+/*
 void KTTSD::idle(){
-   qWarning("TestModule is idle.");
+    kdDebug() << "Running: KTTSD::idle()" << endl;
+    qWarning("TestModule is idle.");
 }
-
+*/
+/*
 void KTTSD::registerMe(const QCString &app){
-   insert(app, "kttsd", new TestObject(app));
-   // When 'app' unregisters with DCOP, the TestObject will get deleted.
+    kdDebug() << "Running: KTTSD::registerMe(const QCString &app)" << endl;
+    insert(app, "kttsd", new TestObject(app));
+    // When 'app' unregisters with DCOP, the TestObject will get deleted.
 }
-
+*/
 
