@@ -747,6 +747,17 @@
     <tabstop>makeDefaultLanguage</tabstop>
     <tabstop>removeLanguageButton</tabstop>
     <tabstop>mainTab</tabstop>
+    <tabstop>enableKttsdCheckBox</tabstop>
+    <tabstop>enableNotifyCheckBox</tabstop>
+    <tabstop>enablePassiveOnlyCheckBox</tabstop>
+    <tabstop>textPreMsgCheck</tabstop>
+    <tabstop>textPreMsg</tabstop>
+    <tabstop>textPreSndCheck</tabstop>
+    <tabstop>textPreSnd</tabstop>
+    <tabstop>textPostMsgCheck</tabstop>
+    <tabstop>textPostMsg</tabstop>
+    <tabstop>textPostSndCheck</tabstop>
+    <tabstop>textPostSnd</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">klocale.h</include>
