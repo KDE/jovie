@@ -578,7 +578,8 @@ void KttsJobMgrPart::refreshJobListView()
     kdDebug() << "jobNumbers: " << jobNumbers << endl;
     QStringList jobNums = QStringList::split(",", jobNumbers);
     QListViewItem* lastItem = 0;
-    for( QStringList::Iterator it = jobNums.begin(); it != jobNums.end(); ++it)
+    QStringList::ConstIterator endJobNums(jobNums.constEnd());
+    for( QStringList::ConstIterator it = jobNums.constBegin(); it != endJobNums; ++it)
     {
         QString jobNumStr = *it;
         kdDebug() << "jobNumStr: " << jobNumStr << endl;
@@ -844,7 +845,7 @@ ASYNC KttsJobMgrPart::textResumed(const QCString&, const uint jobNum)
 ASYNC KttsJobMgrPart::textRemoved(const QCString&, const uint jobNum)
 {
     QListViewItem* item = findItemByJobNum(jobNum);
-    if (item) delete item;
+    delete item;
     autoSelectInJobListView();
 }
 

@@ -107,7 +107,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 
     // Initializate the list of codes
     m_languagesMap["other"] = i18n("Other");
-    for( QMap<QString, QString>::Iterator it = m_languagesMap.begin(); it != m_languagesMap.end(); ++it ){
+    QMap<QString, QString>::ConstIterator endLanguagesMap(m_languagesMap.constEnd());
+    for( QMap<QString, QString>::ConstIterator it = m_languagesMap.constBegin(); it != endLanguagesMap; ++it ){
         m_reverseLanguagesMap[it.data()] = it.key();
         languagesToBeAdded[it.key()] = false;
     }
@@ -129,14 +130,16 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         // Add the plug in to the combo box
         QStringList languages = m_offers[i]->property("X-KDE-Languages").toStringList();
 
-        for( QStringList::Iterator it = languages.begin(); it != languages.end(); ++it ) {
+        QStringList::ConstIterator endLanguages(languages.constEnd());
+        for( QStringList::ConstIterator it = languages.constBegin(); it != endLanguages; ++it ) {
             languagesToBeAdded[*it] = true;
             initLanguageCode (*it);
         }
     }
 
     // Insert the list of languages into the comobo box for language selection
-    for( QMap<QString, bool>::Iterator it = languagesToBeAdded.begin(); it != languagesToBeAdded.end(); ++it ) {
+    QMap<QString, bool>::ConstIterator endLanguagesToBeAdded(languagesToBeAdded.constEnd());
+    for( QMap<QString, bool>::ConstIterator it = languagesToBeAdded.constBegin(); it != endLanguagesToBeAdded; ++it ) {
         if(it.data()){
             m_kttsmgrw->languageSelection->insertItem(m_languagesMap[it.key()]);
         }
@@ -238,7 +241,8 @@ void KCMKttsMgr::load()
 
     // Iterate thru loaded languages and load them and their configuration
     QStringList langs = m_config->groupList().grep("Lang_");
-    for( QStringList::Iterator it = langs.begin(); it != langs.end(); ++it ) {
+    QStringList::ConstIterator endLangs(langs.constEnd());
+    for( QStringList::ConstIterator it = langs.constBegin(); it != endLangs; ++it ) {
         QString langcode = (*it).right((*it).length()-5);
         kdDebug() << "Loading: " << *it << " Langcode: " << langcode << endl;
         m_config->setGroup(*it);

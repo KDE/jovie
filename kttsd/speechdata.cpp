@@ -66,7 +66,7 @@ SpeechData::SpeechData(){
 
 bool SpeechData::readConfig(){
     // Load configuration
-    if (config) delete config;
+    delete config;
     //config = KGlobal::config();
     config = new KConfig("kttsdrc");
     
@@ -109,8 +109,8 @@ SpeechData::~SpeechData(){
         emit textRemoved(job->appId, job->jobNum);
     }
     textMutex.unlock();
-    if (config) delete config;
-    if (textIterator) delete textIterator;
+    delete config;
+    delete textIterator;
 }
 
 /**
@@ -161,7 +161,7 @@ mlText SpeechData::getScreenReaderOutput()
 bool SpeechData::screenReaderOutputReady()
 {
     screenReaderMutex.lock();
-    bool isReady = screenReaderOutput.text != "";
+    bool isReady = !screenReaderOutput.text.isEmpty();
     screenReaderMutex.unlock();
     return isReady;
 }
@@ -623,8 +623,9 @@ void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
     if (currentJob) textJobs.findRef(currentJob);
     textMutex.unlock();
     // Emit signals for removed jobs.
-    removedJobsList::iterator it;
-    for (it = removedJobs.begin(); it != removedJobs.end() ; ++it)
+    removedJobsList::const_iterator it;
+    removedJobsList::const_iterator endRemovedJobsList(removedJobs.constEnd());
+    for (it = removedJobs.constBegin(); it != endRemovedJobsList ; ++it)
     {
         QCString appId = (*it).first;
         uint jobNum = (*it).second;

@@ -190,7 +190,8 @@ int Speaker::loadPlugIns(){
 
     QStringList langs = speechData->config->groupList().grep("Lang_");
     KLibFactory *factory;
-    for( QStringList::Iterator it = langs.begin(); it != langs.end(); ++it ) {
+    QStringList::ConstIterator endLangs(langs.constEnd());
+    for( QStringList::ConstIterator it = langs.constBegin(); it != endLangs; ++it ) {
         kdDebug() << "Loading plugInProc for: " << *it << endl;
 
         // Set the group for the language we're loading
