@@ -21,9 +21,6 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
-    <property name="caption">
-        <string>KCMKttsMgrWidget</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -80,9 +77,6 @@
                                         <property name="text">
                                             <string>&amp;Speak notifications (KNotify)</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+S</string>
-                                        </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Check to enable speaking of messages routed from applications through KNotify, the KDE Notification system.</string>
                                         </property>
@@ -121,9 +115,6 @@
                                         <property name="text">
                                             <string>&amp;Passive popups only</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+P</string>
-                                        </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
                                         </property>
@@ -155,9 +146,6 @@
                         </property>
                         <property name="text">
                             <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+E</string>
                         </property>
                         <property name="whatsThis" stdset="0">
                             <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
@@ -212,9 +200,6 @@
                                 <property name="text">
                                     <string>Show &amp;main window on startup</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+M</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -230,9 +215,6 @@
                         </property>
                         <property name="text">
                             <string>Em&amp;bed Text-to-Speech Manager in system tray</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+B</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>
@@ -362,9 +344,6 @@
                                 <property name="text">
                                     <string>&amp;Add...</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>Click to add and configure a new Talker (speech synthesizer).</string>
                                     <comment>What's this text</comment>
@@ -385,9 +364,6 @@
                                 <property name="text">
                                     <string>&amp;Up</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
                             </widget>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -403,9 +379,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Do&amp;wn</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+W</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -425,9 +398,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Edit...</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
                                 </property>
                                 <property name="toggleButton">
                                     <bool>false</bool>
@@ -453,9 +423,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Remove</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+R</string>
                                 </property>
                                 <property name="toggleButton">
                                     <bool>false</bool>
@@ -552,9 +519,6 @@
                                         <property name="text">
                                             <string>&amp;Pre-message:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+P</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>false</bool>
                                         </property>
@@ -606,9 +570,6 @@
                                         <property name="text">
                                             <string>Post-s&amp;ound:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+O</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>false</bool>
                                         </property>
@@ -631,9 +592,6 @@
                                         <property name="text">
                                             <string>Pre-sou&amp;nd:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+N</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>false</bool>
                                         </property>
@@ -647,9 +605,6 @@
                                         </property>
                                         <property name="text">
                                             <string>Post-&amp;message:</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+M</string>
                                         </property>
                                         <property name="checked">
                                             <bool>false</bool>
@@ -839,9 +794,6 @@
                                 <property name="text">
                                     <string>a&amp;Rts</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+R</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -858,9 +810,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;GStreamer</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget" row="2" column="0">

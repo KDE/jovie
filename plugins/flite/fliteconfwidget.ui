@@ -149,9 +149,6 @@
                     <property name="text">
                         <string>&amp;Test</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
-                    </property>
                 </widget>
                 <spacer row="1" column="0">
                     <property name="name">

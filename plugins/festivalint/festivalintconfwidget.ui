@@ -195,9 +195,6 @@
                             <property name="text">
                                 <string>&amp;Load this voice when starting KTTSD</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+L</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>If checked, Festival will be started and this voice will be loaded when the Text-to-Speech Deamon (KTTSD) is started.  Check when a voice requires a long time to load in Festival (for example, multisyn voices), otherwise, leave unchecked.</string>
                             </property>
@@ -225,9 +222,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Test</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+T</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Click to test the configuration.  Festival will be started and a test sentence will be spoken.</string>

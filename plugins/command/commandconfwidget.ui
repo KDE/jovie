@@ -12,9 +12,6 @@
             <height>322</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>CommandConfWidget</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -90,9 +87,6 @@
                             <property name="text">
                                 <string>&amp;Send the data as standard input</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+S</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>This check box specifies whether the text is sent as standard input (stdin) to the speech synthesizer.</string>
                             </property>
@@ -120,9 +114,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Test</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+T</string>
                             </property>
                         </widget>
                     </hbox>
