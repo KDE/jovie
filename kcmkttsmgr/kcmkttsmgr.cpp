@@ -96,7 +96,10 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     connect( m_kttsmgrw, SIGNAL( setDefaultLanguage() ), this, SLOT( setDefaultLanguage() ) );
     connect( m_kttsmgrw, SIGNAL( updateRemoveButton() ), this, SLOT( updateRemoveButton() ) );
     connect( m_kttsmgrw, SIGNAL( updateDefaultButton() ), this, SLOT( updateDefaultButton() ) );
-    connect( m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)), SLOT( enableKttsdToggled(bool) ) );
+    connect( m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
+        SLOT( enableKttsdToggled(bool) ) );
+    connect( m_kttsmgrw->configureLanguageButton, SIGNAL(clicked()),
+        this, SLOT(configurePlugin()));
 
     // List of languages to be added, true add, false, leave.
     QMap<QString, bool> languagesToBeAdded;
@@ -610,6 +613,7 @@ void KCMKttsMgr::updateRemoveButton(){
     // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton()"<< endl;
     if(m_kttsmgrw->languagesList->selectedItem()){
         m_kttsmgrw->removeLanguageButton->setEnabled(true);
+        m_kttsmgrw->configureLanguageButton->setEnabled(true);
         QString language = m_kttsmgrw->languagesList->selectedItem()->text(0);
         // Remove Properties tab for old selected plugin.
         int currentTab = m_kttsmgrw->mainTab->currentPageIndex();
@@ -617,10 +621,11 @@ void KCMKttsMgr::updateRemoveButton(){
             m_kttsmgrw->mainTab->removePage(m_pluginWidget);
         // Set up Properties tab for newly selected plugin.
         m_pluginWidget = m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn;
-        m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", 1);
+        m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", 2);
         if (currentTab) m_kttsmgrw->mainTab->setCurrentPage(currentTab);
     } else {
         m_kttsmgrw->removeLanguageButton->setEnabled(false);
+        m_kttsmgrw->configureLanguageButton->setEnabled(false);
         if (m_pluginWidget) m_kttsmgrw->mainTab->setTabEnabled(m_pluginWidget, false);
     }
 }
@@ -726,6 +731,14 @@ void KCMKttsMgr::kttsdExiting()
         m_jobMgrPart = 0;
     }
     m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+}
+
+/**
+* Switch to the Properties tab.
+*/
+void KCMKttsMgr::configurePlugin()
+{
+    if (m_pluginWidget) m_kttsmgrw->mainTab->setCurrentPage(2);
 }
 
 // System tray context menu entries

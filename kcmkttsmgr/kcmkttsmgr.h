@@ -248,6 +248,11 @@ class KCMKttsMgr :
         * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
         */
         void enableKttsdToggled(bool checked);
+        
+        /**
+        * Switch to the Properties tab.
+        */
+        void configurePlugin();
 
         /**
         * Displays about dialog.

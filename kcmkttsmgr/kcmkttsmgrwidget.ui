@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KCMKttsMgrWidget</class>
 <author>Gary Cramblitt</author>
 <widget class="KCModule">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>548</width>
-            <height>574</height>
+            <width>572</width>
+            <height>448</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -34,235 +34,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>languagesBox</cstring>
-            </property>
-            <property name="backgroundOrigin">
-                <enum>WidgetOrigin</enum>
-            </property>
-            <property name="frameShape">
-                <enum>GroupBoxPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="title">
-                <string>Languages</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget" row="0" column="0">
-                    <property name="name">
-                        <cstring>layout4</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>languageLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Add &amp;language:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>languageSelection</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Select the language for which you want to use the speech synthesizer.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>languageSelection</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="duplicatesEnabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Select the language for which you want to use the speech synthesizer.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>plugInLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;spoken by:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>plugInSelection</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Select the speech synthesizer that you want to use with a language.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>plugInSelection</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="duplicatesEnabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Select the speech synthesizer that you want to use with a language.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>addLanguageButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Add</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Add the selected speech synthesizer for the selected language.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="KListView" row="1" column="0">
-                    <column>
-                        <property name="text">
-                            <string>Language</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Speech Synthesizer</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Default</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>languagesList</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="2" column="0">
-                    <property name="name">
-                        <cstring>layout16</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>makeDefaultLanguage</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Default</string>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>removeLanguageButton</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Remove</string>
-                            </property>
-                            <property name="toggleButton">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QTabWidget" row="1" column="0">
+        <widget class="QTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>mainTab</cstring>
             </property>
@@ -401,6 +173,275 @@
                                 </hbox>
                             </widget>
                         </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Languages</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>languagesBox</cstring>
+                        </property>
+                        <property name="backgroundOrigin">
+                            <enum>WidgetOrigin</enum>
+                        </property>
+                        <property name="frameShape">
+                            <enum>GroupBoxPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
+                        <property name="title">
+                            <string>Languages</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KListView" row="1" column="0">
+                                <column>
+                                    <property name="text">
+                                        <string>Language</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Speech Synthesizer</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Default</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>languagesList</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="0" column="0">
+                                <property name="name">
+                                    <cstring>layout8</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>languageLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Add &amp;language:</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>AlignVCenter|AlignRight</set>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>languageSelection</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the language for which you want to use the speech synthesizer.</string>
+                                            <comment>What's this text</comment>
+                                        </property>
+                                    </widget>
+                                    <widget class="KComboBox">
+                                        <property name="name">
+                                            <cstring>languageSelection</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>3</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="duplicatesEnabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the language for which you want to use the speech synthesizer.</string>
+                                            <comment>What's this text</comment>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>plugInLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;spoken by:</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>AlignVCenter|AlignRight</set>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>plugInSelection</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the speech synthesizer that you want to use with a language.</string>
+                                            <comment>What's this text</comment>
+                                        </property>
+                                    </widget>
+                                    <widget class="KComboBox">
+                                        <property name="name">
+                                            <cstring>plugInSelection</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>3</hsizetype>
+                                                <vsizetype>1</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="duplicatesEnabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the speech synthesizer that you want to use with a language.</string>
+                                            <comment>What's this text</comment>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>addLanguageButton</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>3</hsizetype>
+                                                <vsizetype>1</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Add the selected speech synthesizer for the selected language.</string>
+                                            <comment>What's this text</comment>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget" row="2" column="0">
+                                <property name="name">
+                                    <cstring>layout11</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>makeDefaultLanguage</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Default</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>removeLanguageButton</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                        <property name="toggleButton">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>configureLanguageButton</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Configure</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+C</string>
+                                        </property>
+                                        <property name="toggleButton">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </grid>
                     </widget>
                 </grid>
             </widget>
@@ -589,54 +630,6 @@
 </customwidgets>
 <connections>
     <connection>
-        <sender>addLanguageButton</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>makeDefaultLanguage</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>removeLanguageButton</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>addLanguageButton</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotAddLanguage()</slot>
-    </connection>
-    <connection>
-        <sender>removeLanguageButton</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotRemoveLanguage()</slot>
-    </connection>
-    <connection>
-        <sender>makeDefaultLanguage</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotSetDefaultLanguage()</slot>
-    </connection>
-    <connection>
-        <sender>languagesList</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotUpdateDefaultButton()</slot>
-    </connection>
-    <connection>
-        <sender>languagesList</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotUpdateRemoveButton()</slot>
-    </connection>
-    <connection>
         <sender>enableKttsdCheckBox</sender>
         <signal>clicked()</signal>
         <receiver>KCMKttsMgrWidget</receiver>
@@ -738,14 +731,56 @@
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
+    <connection>
+        <sender>languagesList</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotUpdateRemoveButton()</slot>
+    </connection>
+    <connection>
+        <sender>languagesList</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotUpdateDefaultButton()</slot>
+    </connection>
+    <connection>
+        <sender>addLanguageButton</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotAddLanguage()</slot>
+    </connection>
+    <connection>
+        <sender>removeLanguageButton</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotRemoveLanguage()</slot>
+    </connection>
+    <connection>
+        <sender>makeDefaultLanguage</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotSetDefaultLanguage()</slot>
+    </connection>
+    <connection>
+        <sender>addLanguageButton</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>removeLanguageButton</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>makeDefaultLanguage</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
-    <tabstop>languageSelection</tabstop>
-    <tabstop>plugInSelection</tabstop>
-    <tabstop>addLanguageButton</tabstop>
-    <tabstop>languagesList</tabstop>
-    <tabstop>makeDefaultLanguage</tabstop>
-    <tabstop>removeLanguageButton</tabstop>
     <tabstop>mainTab</tabstop>
     <tabstop>enableKttsdCheckBox</tabstop>
     <tabstop>enableNotifyCheckBox</tabstop>
@@ -784,10 +819,11 @@
 <layoutdefaults spacing="6" margin="6"/>
 <includehints>
     <includehint>kcmodule.h</includehint>
+    <includehint>klistview.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klistview.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
