@@ -32,10 +32,16 @@
                     <property name="name">
                         <cstring>nameLineEdit</cstring>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter any descriptive name you like for this filter.</string>
+                    </property>
                 </widget>
                 <widget class="KURLRequester">
                     <property name="name">
                         <cstring>xsltPath</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
                     </property>
                 </widget>
                 <widget class="KURLRequester">
@@ -106,6 +112,9 @@
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>xsltprocPath</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter the path to the xsltproc executable program.  If it is in the PATH environment variable, just enter "xsltproc".</string>
                     </property>
                 </widget>
             </vbox>

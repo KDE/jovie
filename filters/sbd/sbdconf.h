@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Generic String Replacement Filter Configuration class.
+  Standard Sentence Boundary Detection Filter Configuration class.
   -------------------
   Copyright:
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
@@ -28,8 +28,8 @@
 // KTTS includes.
 #include "filterconf.h"
 
-// StringReplacer includes.
-// #include "sbdconfwidget.h"
+// SBD includes.
+#include "sbdconfwidget.h"
 
 class KDialogBase;
 class EditReplacementWidget;
@@ -107,16 +107,24 @@ class SbdConf : public KttsFilterConf
          */
         virtual QString userPlugInName();
 
+        /**
+         * Returns True if this filter is a Sentence Boundary Detector.
+         * @return          True if this filter is a SBD.
+         */
+        virtual bool isSBD();
+
     private slots:
+        void slotReButton_clicked();
+        void slotLanguageBrowseButton_clicked();
 
     private:
 
         // Configuration Widget.
-        // SbdConfWidget* m_widget;
+        SbdConfWidget* m_widget;
         // True if kdeutils Regular Expression Editor is installed.
         bool m_reEditorInstalled;
         // Language Code.
-        QString m_languageCode;
+        QStringList m_languageCodeList;
 };
 
 #endif  //_SBDCONF_H_

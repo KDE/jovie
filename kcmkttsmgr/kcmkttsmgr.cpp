@@ -1157,7 +1157,10 @@ void KCMKttsMgr::addFilter()
     while (item)
     {
         if (item->text(flvcMultiInstance) == "T")
-            filterPlugInNames.append(item->text(flvcPlugInName));
+        {
+            if (!filterPlugInNames.contains(item->text(flvcPlugInName)))
+                filterPlugInNames.append(item->text(flvcPlugInName));
+        }
         item = item->nextSibling();
     }
     // Append those available plugins not yet in the list at all.
@@ -1813,7 +1816,7 @@ void KCMKttsMgr::configureFilter()
         "configureFilter_dlg",
         true,
         true);
-    m_configDlg->setInitialSize(QSize(500, 300), false);
+    m_configDlg->setInitialSize(QSize(600, 400), false);
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);
     m_configDlg->setHelp("configure-filter", "kttsd");
     m_configDlg->enableButtonOK(false);

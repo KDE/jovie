@@ -43,13 +43,16 @@
                         <cstring>nameLineEdit</cstring>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>This filter only applies to text spoken in the specified language.</string>
+                        <string>Enter any name you like for this filter.</string>
                         <comment>What's this text</comment>
                     </property>
                 </widget>
                 <widget class="KLineEdit">
                     <property name="name">
                         <cstring>nameLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter any name you like for this filter.</string>
                     </property>
                 </widget>
             </hbox>

@@ -97,6 +97,7 @@ class SbdThread: public QObject, public QThread
          * Did this filter do anything?  If the filter returns the input as output
          * unmolested, it should return False when this method is called.
          */
+        void setWasModified(bool wasModified);
         bool wasModified();
 
     signals:
@@ -331,8 +332,10 @@ class SbdProc : virtual public KttsFilterProc
         void slotSbdThreadFilteringFinished();
 
     private:
+        // If not empty, apply filters only to apps using talkers speaking these language codes.
+        QStringList m_languageCodeList;
         // If not empty, apply filter only to apps containing this string.
-        QCString m_appId;
+        QStringList m_appIdList;
         // SBD Thread Object.
         SbdThread* m_sbdThread;
         // State.

@@ -9,6 +9,7 @@ kde_module_LTLIBRARIES = libkttsd_sbdplugin.la
 libkttsd_sbdplugin_la_SOURCES = \
 	sbdproc.cpp \
 	sbdconf.cpp \
+	sbdconfwidget.ui \
 	sbdplugin.cpp
 
 libkttsd_sbdplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)

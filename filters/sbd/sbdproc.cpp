@@ -27,6 +27,7 @@
 
 // KTTS includes.
 #include "utils.h"
+#include "talkercode.h"
 
 // SdbProc includes.
 #include "sbdproc.h"
@@ -78,6 +79,7 @@ void SbdThread::setConfiguredSbRegExp( const QString& re ) { m_configuredRe = re
  * Did this filter do anything?  If the filter returns the input as output
  * unmolested, it should return False when this method is called.
  */
+void SbdThread::setWasModified(bool wasModified) { m_wasModified = wasModified; }
 bool SbdThread::wasModified() { return m_wasModified; }
 
 // Given a tag name, returns SsmlElemType.
@@ -582,7 +584,8 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 //    m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
     m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
-    m_appId = config->readEntry( "AppID" ).latin1();
+    m_appIdList = config->readListEntry( "AppID" );
+    m_languageCodeList = config->readListEntry( "LanguageCodes" );
     return true;
 }
 
@@ -641,9 +644,33 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 /*virtual*/ bool SbdProc::asyncConvert(const QString& inputText, TalkerCode* talkerCode,
     const QCString& appId)
 {
+    m_sbdThread->setWasModified( false );
+    // If language doesn't match, return input unmolested.
+    if ( !m_languageCodeList.isEmpty() )
+    {
+        QString languageCode = talkerCode->languageCode();
+        if ( !talkerCode->countryCode().isEmpty() ) languageCode += '_' + talkerCode->countryCode();
+        // kdDebug() << "SbdProc::convert: converting " << inputText << " if language code "
+        //     << languageCode << " matches " << m_languageCodeList << endl;
+        if ( !m_languageCodeList.contains( languageCode ) ) return false;
+    }
     // If appId doesn't match, return input unmolested.
-    if ( !m_appId.isEmpty() )
-        if ( !appId.contains(m_appId) ) return false;
+    if ( !m_appIdList.isEmpty() )
+    {
+        // kdDebug() << "SbdProc::convert: converting " << inputText << " if appId "
+        //     << appId << " matches " << m_appIdList << endl;
+        bool found = false;
+        QString appIdStr = appId;
+        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        {
+            if ( appIdStr.contains(m_appIdList[ndx]) )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) return false;
+    }
     m_sbdThread->setText( inputText );
     m_sbdThread->setTalkerCode( talkerCode );
     m_state = fsFiltering;
