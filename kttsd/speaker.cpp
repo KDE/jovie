@@ -527,6 +527,7 @@ void Speaker::startText(const uint jobNum)
     m_speechData->setTextJobState(jobNum, KSpeech::jsSpeakable);
     if (m_lastJobNum == jobNum)
     {
+        // kdDebug() << "Speaker::startText: startText called on speaking job " << jobNum << endl;
         m_lastJobNum = 0;
         m_lastAppId = 0;
         m_lastSeq = 0;
@@ -867,6 +868,22 @@ void Speaker::setInitialUtteranceState(Utt &utt)
 }
 
 /**
+ * Returns true if the given job and sequence number are already in the utterance queue.
+ */
+bool Speaker::isInUtteranceQueue(uint jobNum, uint seqNum)
+{
+    uttIterator itEnd = m_uttQueue.end();
+    for (uttIterator it = m_uttQueue.begin(); it != itEnd; ++it)
+    {
+        if (it->sentence)
+        {
+            if (it->sentence->jobNum == jobNum && it->sentence->seq == seqNum) return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Gets the next utterance to be spoken from speechdata and adds it to the queue.
  * @return                True if one or more utterances were added to the queue.
  *
@@ -905,7 +922,9 @@ bool Speaker::getNextUtterance()
                     seq = sentence->seq;
                     sentence = m_speechData->getNextSentenceText(jobNum, seq);
                 }
-                if (sentence)
+                // If this utterance is already in the queue, it means we have run out of
+                // stuff to say and are trying to requeue already queued (and waiting stuff).
+                if (sentence && !isInUtteranceQueue(sentence->jobNum, sentence->seq))
                 {
                     utt = new Utt;
                     utt->utType = utText;

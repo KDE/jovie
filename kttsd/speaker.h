@@ -435,6 +435,11 @@ class Speaker : public QObject{
         void setInitialUtteranceState(Utt &utt);
 
         /**
+        * Returns true if the given job and sequence number is already in the utterance queue.
+        */
+        bool isInUtteranceQueue(uint jobNum, uint seqNum);
+
+        /**
         * Gets the next utterance to be spoken from speechdata and adds it to the queue.
         * @return                True if one or more utterances were added to the queue.
         *
