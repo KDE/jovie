@@ -121,14 +121,16 @@ StringReplacerConf::~StringReplacerConf(){
 */
 void StringReplacerConf::load(KConfig* config, const QString& configGroup){
     // kdDebug() << "StringReplacerConf::load: Running" << endl;
-    QString wordsFilename =
-       KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false );
-    if ( wordsFilename.isEmpty() ) return;
-    wordsFilename += configGroup;
+    // See if this filter previously save its word list.
     config->setGroup( configGroup );
-    wordsFilename = config->readEntry( "WordListFile", wordsFilename );
-    QString errMsg = loadFromFile( wordsFilename, true );
-    if ( !errMsg.isEmpty() ) kdDebug() << "StringReplacerConf::load: " << errMsg << endl;
+    QString wordsFilename = config->readEntry( "WordListFile" );
+    if ( !wordsFilename.isEmpty() )
+    {
+        QString errMsg = loadFromFile( wordsFilename, true );
+        if ( !errMsg.isEmpty() )
+            kdDebug() << "StringReplacerConf::load: " << errMsg << endl;
+        enableDisableButtons();
+    }
 }
 
 // Loads word list and settings from a file.  Clearing configuration if clear is True.
@@ -686,6 +688,8 @@ void StringReplacerConf::slotLoadButton_clicked()
     enableDisableButtons();
     if ( !errMsg.isEmpty() )
         KMessageBox::sorry( m_widget, errMsg, i18n("Error Opening File") );
+    else
+        configChanged();
 }
 
 void StringReplacerConf::slotSaveButton_clicked()
