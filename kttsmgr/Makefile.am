@@ -2,8 +2,6 @@
 # so keep them synchronized.
 INCLUDES = \
 	$(all_includes)
-AM_CPPFLAGS = \
-	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO
@@ -24,15 +22,11 @@ kttsmgr_SOURCES =  \
 
 kttsmgr_LDFLAGS = $(all_libraries)
 kttsmgr_LDADD = \
-	$(LIB_KDECORE) $(LIB_KUTILS) \
+	$(LIB_KUTILS) \
 	$(LIB_KDEUI)
 
 # Header files that should not be installed.
 noinst_HEADERS = kttsmgr.h
-
-# Install desktop file to application directory.
-applnkApplicationdir = $(kde_appsdir)/Application
-applnkApplication_DATA = kttsmgr.desktop
 
 # K Menu entry.
 xdg_apps_DATA = kttsmgr.desktop
