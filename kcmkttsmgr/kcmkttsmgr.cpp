@@ -158,7 +158,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         m_kttsmgrw->sinkLabel->setEnabled(true);
         m_kttsmgrw->sinkComboBox->setEnabled(true);
         QStringList sinkList = player->getPluginList("Sink/Audio");
-        kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
+        // kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
         m_kttsmgrw->sinkComboBox->clear();
         m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
     }
@@ -2051,7 +2051,7 @@ void KCMKttsMgr::slotEnableNotifyCheckBoxToggled(bool checked)
 */
 void KCMKttsMgr::slotFiltersList_stateChanged()
 {
-    kdDebug() << "KCMKttsMgr::slotFiltersList_stateChanged: calling configChanged" << endl;
+    // kdDebug() << "KCMKttsMgr::slotFiltersList_stateChanged: calling configChanged" << endl;
     configChanged();
 }
 

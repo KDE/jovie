@@ -148,7 +148,7 @@ Player* TestPlayer::createPlayerObject(int playerOption)
 
     if(offers.count() == 1)
     {
-        kdDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
+        // kdDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
@@ -186,7 +186,7 @@ QString TestPlayer::makeSuggestedFilename()
     QString waveFile = tempFile.file()->name();
     tempFile.close();
     QFile::remove(waveFile);
-    kdDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
+    // kdDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return PlugInConf::realFilePath(waveFile);
 }
 
