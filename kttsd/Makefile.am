@@ -7,7 +7,7 @@ kttsd_SOURCES = main.cpp kttsdui.ui kttsd.cpp kspeech.skel speaker.cpp speechdat
 kttsd_LDFLAGS = -avoid-version -module $(all_libraries)
 kttsd_LDADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_KDECORE) $(LIB_KIO) $(LIB_KUTILS)
 
-messages:
+messages: rc.cpp
 	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
 
 services_DATA = kttsd.desktop
