@@ -75,7 +75,9 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const char *name, const
     connect(m_widget->removeButton, SIGNAL(clicked()),
         this, SLOT(slotRemoveButton_clicked()));
     connect(m_widget->substLView, SIGNAL(selectionChanged()),
-            this, SLOT(enableDisableButtons()));
+        this, SLOT(enableDisableButtons()));
+    connect(m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
 
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
@@ -143,6 +145,15 @@ void StringReplacerConf::load(KConfig* /*config*/, const QString& configGroup){
     m_languageCode = languageNode.toElement().text();
     QString language = KGlobal::locale()->twoAlphaToLanguageName(m_languageCode);
     m_widget->languageLineEdit->setText( language );
+
+    // AppId.  Apply this filter only if DCOP appId of application that queued
+    // the text contains this string.
+    QDomNodeList appIdList = doc.elementsByTagName( "appid" );
+    if (appIdList.count() > 0)
+    {
+        QDomNode appIdNode = appIdList.item( 0 );
+        m_widget->appIdLineEdit->setText( appIdNode.toElement().text().latin1() );
+    }
 
     // Word list.
     QListViewItem* item = 0;
@@ -220,6 +231,16 @@ void StringReplacerConf::save(KConfig* /*config*/, const QString& configGroup){
     t = doc.createTextNode( m_languageCode );
     languageCode.appendChild( t );
 
+    // Application ID
+    QString appId = m_widget->appIdLineEdit->text();
+    if ( !appId.isEmpty() )
+    {
+        QDomElement appIdElem = doc.createElement( "appid" );
+        root.appendChild( appIdElem );
+        t = doc.createTextNode( appId );
+        appIdElem.appendChild( t );
+    }
+
     // Words.
     QListView* lView = m_widget->substLView;
     QListViewItem* item = lView->firstChild();
@@ -277,6 +298,8 @@ void StringReplacerConf::defaults(){
     item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "KTTS", "K T T S");
     item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "KTTSD", "K T T S D");
     item = new KListViewItem(lView, item, substitutionTypeToString(stWord), "kttsd", "K T T S D");
+    // Default App ID is blank.
+    m_widget->appIdLineEdit->setText( " " );
     enableDisableButtons();
     // kdDebug() << "StringReplacerConf::defaults: Exiting" << endl;
 }

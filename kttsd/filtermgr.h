@@ -58,6 +58,13 @@ class FilterMgr : public KttsFilterProc
         virtual bool init(KConfig *config, const QString &configGroup);
 
         /**
+         * Returns True if this filter is a Sentence Boundary Detector.
+         * If so, the filter should implement @ref setSbRegExp() .
+         * @return          True if this filter is a SBD.
+         */
+        virtual bool isSBD();
+
+        /**
          * Returns True if the plugin supports asynchronous processing,
          * i.e., supports asyncConvert method.
          * @return                        True if this plugin supports asynchronous processing.
@@ -75,9 +82,11 @@ class FilterMgr : public KttsFilterProc
          * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
          *                          use for synthing the text.  Useful for extracting hints about
          *                          how to filter the text.  For example, languageCode.
+         * @param appId             The DCOP appId of the application that queued the text.
+         *                          Also useful for hints about how to do the filtering.
          * @return                  Converted text.
          */
-        virtual QString convert(const QString& inputText, TalkerCode* talkerCode);
+        virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
         /**
          * Asynchronously convert input.
@@ -85,11 +94,13 @@ class FilterMgr : public KttsFilterProc
          * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
          *                          use for synthing the text.  Useful for extracting hints about
          *                          how to filter the text.  For example, languageCode.
+         * @param appId             The DCOP appId of the application that queued the text.
+         *                          Also useful for hints about how to do the filtering.
          *
          * When the input text has been converted, filteringFinished signal will be emitted
          * and caller can retrieve using getOutput();
          */
-        virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode);
+        virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
         /**
          * Waits for filtering to finish.
@@ -117,6 +128,14 @@ class FilterMgr : public KttsFilterProc
          */
         virtual void stopFiltering();
 
+        /**
+         * Set Sentence Boundary Regular Expression.
+         * This method will only be called if the application overrode the default.
+         *
+         * @param re            The sentence delimiter regular expression.
+         */
+        virtual void setSbRegExp(const QString& re);
+
     signals:
 
     private slots:
@@ -141,6 +160,10 @@ class FilterMgr : public KttsFilterProc
         QString m_text;
         // Talker Code.
         TalkerCode* m_talkerCode;
+        // AppId.
+        QCString m_appId;
+        // Sentence Boundary regular expression (if app overrode the default).
+        QString m_re;
 };
 
 #endif      // _FILTERMGR_H_

@@ -70,8 +70,10 @@ public:
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
+     * @param appId             The DCOP appId of the application that queued the text.
+     *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(QString& inputText, TalkerCode* talkerCode);
+    virtual QString convert(QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -79,13 +81,15 @@ public:
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
+     * @param appId             The DCOP appId of the application that queued the text.
+     *                          Also useful for hints about how to do the filtering.
      * @return                  False if the filter cannot perform the conversion.
      *
      * When conversion is completed, emits signal @ref filteringFinished.  Calling
      * program may then call @ref getOutput to retrieve converted text.  Calling
      * program must call @ref ackFinished to acknowledge the conversion.
      */
-    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode);
+    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
     /**
      * Waits for a previous call to asyncConvert to finish.
@@ -122,6 +126,12 @@ private:
     // Process output when xsltproc exits.
     void processOutput();
 
+    // If not empty, only apply to text queued by an application containing this string.
+    QCString m_appId;
+    // If not empty, only apply to XML that has the specified root element.
+    QString m_rootElement;
+    // If not empty, only apply to XML that has the specified DOCTYPE spec.
+    QString m_doctype;
     // The text that is being filtered.
     QString m_text;
     // Processing state.

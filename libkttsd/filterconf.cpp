@@ -110,6 +110,12 @@ bool KttsFilterConf::supportsMultiInstance() { return false; }
 QString KttsFilterConf::userPlugInName() { return QString::null; }
 
 /**
+ * Returns True if this filter is a Sentence Boundary Detector.
+ * @return          True if this filter is a SBD.
+ */
+bool KttsFilterConf::isSBD() { return false; }
+
+/**
 * Return the full path to any program in the $PATH environmental variable
 * @param name        The name of the file to search for.
 * @returns           The path to the file on success, a blank QString

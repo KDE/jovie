@@ -28,6 +28,7 @@
 
 // KTTS includes.
 #include "filterproc.h"
+#include "utils.h"
 
 // XmlTransformer includes.
 #include "xmltransformerproc.h"
@@ -67,6 +68,9 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     m_UserFilterName = config->readEntry( "UserFilterName" );
     m_xsltFilePath = config->readEntry( "XsltFilePath" );
     m_xsltprocPath = config->readEntry( "XsltprocPath" );
+    m_rootElement = config->readEntry( "Root Element" );
+    m_doctype = config->readEntry( "DocType" );
+    m_appId = config->readEntry( "AppID" ).latin1();
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );
 }
 
@@ -88,13 +92,16 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
+ * @param appId             The DCOP appId of the application that queued the text.
+ *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString XmlTransformerProc::convert(QString& inputText, TalkerCode* talkerCode)
+/*virtual*/ QString XmlTransformerProc::convert(QString& inputText, TalkerCode* talkerCode,
+    const QCString& appId)
 {
     // If not properly configured, do nothing.
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return inputText;
     // Asynchronously convert and wait for completion.
-    if (asyncConvert(inputText, talkerCode))
+    if (asyncConvert(inputText, talkerCode, appId))
     {
         waitForFinished();
         m_state = fsIdle;
@@ -109,17 +116,30 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
+ * @param appId             The DCOP appId of the application that queued the text.
+ *                          Also useful for hints about how to do the filtering.
  * @return                  False if the filter cannot perform the conversion.
  *
  * When conversion is completed, emits signal @ref filteringFinished.  Calling
  * program may then call @ref getOutput to retrieve converted text.  Calling
  * program must call @ref ackFinished to acknowledge the conversion.
  */
-/*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/)
+/*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
+    const QCString& appId)
 {
     m_text = inputText;
     // If not properly configured, do nothing.
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() ) return false;
+
+    // If not correct XML type, do nothing.
+    if ( !m_rootElement.isEmpty() )
+        if ( !KttsUtils::hasRootElement( inputText, m_rootElement ) ) return false;
+    if ( !m_doctype.isEmpty() )
+        if ( !KttsUtils::hasDoctype( inputText, m_doctype ) ) return false;
+
+    // If appId doesn't match, return input unmolested.
+    if ( !m_appId.isEmpty() )
+        if ( !appId.contains(m_appId) ) return false;
 
     /// Write @param text to a temporary file.
     KTempFile inFile(locateLocal("tmp", "kttsd-"), ".xml");

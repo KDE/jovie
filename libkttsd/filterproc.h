@@ -59,6 +59,13 @@ public:
      */
     virtual bool init(KConfig *config, const QString &configGroup);
 
+    /**
+     * Returns True if this filter is a Sentence Boundary Detector.
+     * If so, the filter should implement @ref setSbRegExp() .
+     * @return          True if this filter is a SBD.
+     */
+    virtual bool isSBD();
+
      /**
       * Returns True if the plugin supports asynchronous processing,
       * i.e., supports asyncConvert method.
@@ -77,8 +84,10 @@ public:
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
+     * @param appId             The DCOP appId of the application that queued the text.
+     *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -86,13 +95,15 @@ public:
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
+     * @param appId             The DCOP appId of the application that queued the text.
+     *                          Also useful for hints about how to do the filtering.
      * @return                  False if the filter cannot perform the conversion.
      *
      * When conversion is completed, emits signal @ref filteringFinished.  Calling
      * program may then call @ref getOutput to retrieve converted text.  Calling
      * program must call @ref ackFinished to acknowledge the conversion.
      */
-    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode);
+    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
     /**
      * Waits for a previous call to asyncConvert to finish.
@@ -125,6 +136,14 @@ public:
      * unmolested, it should return False when this method is called.
      */
     virtual bool wasModified();
+
+    /**
+     * Set Sentence Boundary Regular Expression.
+     * This method will only be called if the application overrode the default.
+     *
+     * @param re            The sentence delimiter regular expression.
+     */
+    virtual void setSbRegExp(const QString& re);
 
 signals:
     /**

@@ -60,12 +60,16 @@ public:
      * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
      *                          use for synthing the text.  Useful for extracting hints about
      *                          how to filter the text.  For example, languageCode.
+     * @param appId             The DCOP appId of the application that queued the text.
+     *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
 
 private:
     // Language supported by the filter.
     QString m_languageCode;
+    // If not empty, apply filter only to apps containing this string.
+    QCString m_appId;
 
     // List of regular expressions to match.
     QValueList<QRegExp> m_matchList;

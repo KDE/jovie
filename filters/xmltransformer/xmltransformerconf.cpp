@@ -59,6 +59,12 @@ XmlTransformerConf::XmlTransformerConf( QWidget *parent, const char *name, const
          this, SLOT(configChanged()) );
     connect( m_widget->xsltprocPath, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
+    connect( m_widget->rootElementLineEdit, SIGNAL(textChanged(const QString&)),
+         this, SLOT(configChanged()) );
+    connect( m_widget->doctypeLineEdit, SIGNAL(textChanged(const QString&)),
+         this, SLOT(configChanged()) );
+    connect( m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
+         this, SLOT(configChanged()) );
 }
 
 /**
@@ -87,6 +93,12 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
     m_widget->nameLineEdit->setText( config->readEntry( "UserFilterName", m_widget->nameLineEdit->text() ) );
     m_widget->xsltPath->setURL( config->readEntry( "XsltFilePath", m_widget->xsltPath->url() ) );
     m_widget->xsltprocPath->setURL( config->readEntry( "XsltprocPath", m_widget->xsltprocPath->url() ) );
+    m_widget->rootElementLineEdit->setText(
+            config->readEntry( "Root Element", m_widget->rootElementLineEdit->text() ) );
+    m_widget->doctypeLineEdit->setText(
+            config->readEntry( "DocType", m_widget->doctypeLineEdit->text() ) );
+    m_widget->appIdLineEdit->setText(
+            config->readEntry( "AppID", m_widget->appIdLineEdit->text() ) );
 }
 
 /**
@@ -105,6 +117,9 @@ void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
     config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry( "XsltFilePath", realFilePath( m_widget->xsltPath->url() ) );
     config->writeEntry( "XsltprocPath", realFilePath( m_widget->xsltprocPath->url() ) );
+    config->writeEntry( "RootElement", m_widget->rootElementLineEdit->text() );
+    config->writeEntry( "DocType", m_widget->doctypeLineEdit->text() );
+    config->writeEntry( "AppID", m_widget->appIdLineEdit->text() );
 }
 
 /** 
@@ -117,11 +132,17 @@ void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
 void XmlTransformerConf::defaults(){
     // kdDebug() << "XmlTransformerConf::defaults: Running" << endl;
     // Default name.
-    m_widget->nameLineEdit->setText(i18n("XML Transformer"));
+    m_widget->nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
     m_widget->xsltPath->setURL( locate("data", "kttsd/xmltransformer/") );
     // Default path to xsltproc.
-    m_widget->xsltprocPath->setURL("xsltproc");
+    m_widget->xsltprocPath->setURL( "xsltproc" );
+    // Default root element to "html".
+    m_widget->rootElementLineEdit->setText( "html" );
+    // Default doctype to blank.
+    m_widget->doctypeLineEdit->setText( "" );
+    // Default App ID to blank.
+    m_widget->appIdLineEdit->setText(" ");
     // kdDebug() << "XmlTransformerConf::defaults: Exiting" << endl;
 }
 

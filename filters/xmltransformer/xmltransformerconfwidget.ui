@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>470</width>
-            <height>116</height>
+            <width>548</width>
+            <height>235</height>
         </rect>
     </property>
     <property name="caption">
@@ -45,6 +45,9 @@
                     <property name="url" stdset="0">
                         <string>xsltproc</string>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter the path to the xsltproc executable program.  If it is in the PATH environment variable, just enter "xsltproc".</string>
+                    </property>
                 </widget>
             </vbox>
         </widget>
@@ -70,7 +73,7 @@
                         <cstring>nameLineEdit</cstring>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>This filter only applies to text spoken in the specified language.</string>
+                        <string>Enter any descriptive name you like for this filter.</string>
                         <comment>What's this text</comment>
                     </property>
                 </widget>
@@ -86,6 +89,9 @@
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>xsltPath</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -104,6 +110,112 @@
                 </widget>
             </vbox>
         </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>applyGroupBox</cstring>
+            </property>
+            <property name="title">
+                <string>Apply This Filter When</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>These settings determines when the filter is applied to text.  Fill in one, two or all of them.  If Root element is specified, the text must have that XML root element.  If DOCTYPE is specified, the text must contain that DOCTYPE.  If an Application ID is specified, the DCOP Application ID of the application that queued the text must contain the entered string.  Use kdcop utility to determine the Application ID of running applications.  If all are specified, the text must meet all three requirements.   For example, a Root element of "html" and a DOCTYPE of "xhtml" requires the text to be in XHTML format.  If you leave all blank, the filter will apply to any XML.</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>rootElementLineEdit</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>These settings determines when the filter is applied to text.  Fill in one, two or all of them.  If Root element is specified, the text must have that XML root element.  If DOCTYPE is specified, the text must contain that DOCTYPE.  If an Application ID is specified, the DCOP Application ID of the application that queued the text must contain the entered string.  Use kdcop utility to determine the Application ID of running applications.  If all are specified, the text must meet all three requirements.   For example, a Root element of "html" and a DOCTYPE of "xhtml" requires the text to be in XHTML format.  If you leave all blank, the filter will apply to any XML.</string>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>doctypeLineEdit</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>These settings determines when the filter is applied to text.  Fill in one, two or all of them.  If Root element is specified, the text must have that XML root element.  If DOCTYPE is specified, the text must contain that DOCTYPE.  If an Application ID is specified, the DCOP Application ID of the application that queued the text must contain the entered string.  Use kdcop utility to determine the Application ID of running applications.  If all are specified, the text must meet all three requirements.   For example, a Root element of "html" and a DOCTYPE of "xhtml" requires the text to be in XHTML format.  If you leave all blank, the filter will apply to any XML.</string>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>appIdLineEdit</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>These settings determines when the filter is applied to text.  Fill in one, two or all of them.  If Root element is specified, the text must have that XML root element.  If DOCTYPE is specified, the text must contain that DOCTYPE.  If an Application ID is specified, the DCOP Application ID of the application that queued the text must contain the entered string.  Use kdcop utility to determine the Application ID of running applications.  If all are specified, the text must meet all three requirements.   For example, a Root element of "html" and a DOCTYPE of "xhtml" requires the text to be in XHTML format.  If you leave all blank, the filter will apply to any XML.</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>rootElementLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Root element is:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>rootElementLineEdit</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This filter only applies to text spoken in the specified language.</string>
+                                <comment>What's this text</comment>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>doctypeLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>DOC&amp;TYPE is:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>doctypeLineEdit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>appIdLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Application &amp;ID contains:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>appIdLineEdit</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -117,5 +229,8 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

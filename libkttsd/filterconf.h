@@ -98,6 +98,12 @@ class KttsFilterConf : public QWidget{
          */
         virtual QString userPlugInName();
 
+        /**
+         * Returns True if this filter is a Sentence Boundary Detector.
+         * @return          True if this filter is a SBD.
+         */
+        virtual bool isSBD();
+
         static QString realFilePath(const QString &filename);
 
     public slots:

@@ -861,7 +861,7 @@ QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
     }
     return temp;
 }
-       
+
 /**
 * Change the talker for a text job.
 * @param jobNum         Job number of the text job.
@@ -1003,7 +1003,10 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text)
     pooledFilterMgr->job = job;
     // Get TalkerCode structure of closest matching Talker.
     pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
-    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode);
+    // Pass Sentence Boundary regular expression (if app overrode default);
+    if (sentenceDelimiters.find(job->appId) != sentenceDelimiters.end())
+        pooledFilterMgr->filterMgr->setSbRegExp(sentenceDelimiters[job->appId]);
+    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, job->appId);
 }
 
 /**

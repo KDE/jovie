@@ -171,6 +171,13 @@ class KCMKttsMgr :
             flvcMultiInstance       // True if multiple instances of this plugin are possible. (hidden)
         };
 
+        enum SbdListViewColumn
+        {
+            slvcUserName,           // Name of filter as set by user and displayed.
+            slvcFilterID,           // Internal ID assigned to the filter (hidden).
+            slvcPlugInName,         // Name of the filter plugin (from .desktop file, hidden).
+        };
+
         /**
         * These functions return translated Talker Code attributes.
         */
@@ -279,6 +286,11 @@ class KCMKttsMgr :
         int m_lastFilterID;
 
         /**
+        * Last SBD filter ID.  Used to generate to new ID.
+         */
+        int m_lastSbdID;
+
+        /**
         * Dictionary mapping language names to codes.
         */
         QMap<QString, QString> m_languagesToCodes;
@@ -310,18 +322,21 @@ class KCMKttsMgr :
         */
         void higherTalkerPriority();
         void higherFilterPriority();
+        void higherSbdPriority();
 
         /**
         * This slot is called whenever user clicks the lower*Priority button (down).
         */
         void lowerTalkerPriority();
         void lowerFilterPriority();
+        void lowerSbdPriority();
 
         /**
         * Update the status of the Talker/Filter buttons.
         */
         void updateTalkerButtons();
         void updateFilterButtons();
+        void updateSbdButtons();
 
         /**
         * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
@@ -338,6 +353,7 @@ class KCMKttsMgr :
         */
         void slot_configureTalker();
         void slot_configureFilter();
+        void slot_configureSbd();
 
         /**
         * Displays about dialog.

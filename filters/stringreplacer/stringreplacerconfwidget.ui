@@ -11,7 +11,7 @@
             <x>0</x>
             <y>0</y>
             <width>548</width>
-            <height>269</height>
+            <height>339</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,50 +21,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="1" column="0">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>languageLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Language:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>languageLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This filter only applies to text spoken in the specified language.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>languageLineEdit</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>languageBrowseButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>...</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout3</cstring>
@@ -98,7 +54,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
+        <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
                 <cstring>layout4</cstring>
             </property>
@@ -253,27 +209,131 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>applyGroupBox</cstring>
+            </property>
+            <property name="title">
+                <string>Apply This Filter &amp;When</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>These settings determines when the filter is applied to text.  Fill in one, two or all of them.  If Root element is specified, the text must have that XML root element.  If DOCTYPE is specified, the text must contain that DOCTYPE.  If an Application ID is specified, the DCOP Application ID of the application that queued the text must contain the entered string.  Use kdcop utility to determine the Application ID of running applications.  If all are specified, the text must meet all three requirements.   For example, a Root element of "html" and a DOCTYPE of "xhtml" requires the text to be in XHTML format.  If you leave all blank, the filter will apply to any XML.</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout11</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>languageLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Language is:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>languageLineEdit</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This filter only applies to text spoken in the specified language.</string>
+                                <comment>What's this text</comment>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>appIdLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Application &amp;ID contains:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>appIdLineEdit</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout13</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout12</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="KLineEdit">
+                                    <property name="name">
+                                        <cstring>languageLineEdit</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                                <widget class="KPushButton">
+                                    <property name="name">
+                                        <cstring>languageBrowseButton</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>...</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>appIdLineEdit</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>These settings determines when the filter is applied to text.  Fill in one, two or all of them.  If Root element is specified, the text must have that XML root element.  If DOCTYPE is specified, the text must contain that DOCTYPE.  If an Application ID is specified, the DCOP Application ID of the application that queued the text must contain the entered string.  Use kdcop utility to determine the Application ID of running applications.  If all are specified, the text must meet all three requirements.   For example, a Root element of "html" and a DOCTYPE of "xhtml" requires the text to be in XHTML format.  If you leave all blank, the filter will apply to any XML.</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
 </customwidgets>
 <tabstops>
     <tabstop>nameLineEdit</tabstop>
-    <tabstop>languageLineEdit</tabstop>
-    <tabstop>languageBrowseButton</tabstop>
     <tabstop>substLView</tabstop>
     <tabstop>addButton</tabstop>
     <tabstop>editButton</tabstop>
     <tabstop>removeButton</tabstop>
+    <tabstop>languageLineEdit</tabstop>
+    <tabstop>languageBrowseButton</tabstop>
+    <tabstop>appIdLineEdit</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

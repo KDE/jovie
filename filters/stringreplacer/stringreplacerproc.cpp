@@ -93,6 +93,15 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
     QDomNode languageNode = languageList.item( 0 );
     m_languageCode = languageNode.toElement().text();
 
+    // AppId.  Apply this filter only if DCOP appId of application that queued
+    // the text contains this string.
+    QDomNodeList appIdList = doc.elementsByTagName( "appid" );
+    if (appIdList.count() > 0)
+    {
+        QDomNode appIdNode = appIdList.item( 0 );
+        m_appId = appIdNode.toElement().text().latin1();
+    }
+
     // Word list.
     QDomNodeList wordList = doc.elementsByTagName("word");
     int wordListCount = wordList.count();
@@ -139,13 +148,18 @@ bool StringReplacerProc::init(KConfig* /*config*/, const QString& configGroup){
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
+ * @param appId             The DCOP appId of the application that queued the text.
+ *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode)
+/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
 {
     // If language doesn't match, return input unmolested.
     // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if language code "
     //    << talkerCode->languageCode() << " matches " << m_languageCode << endl;
     if (m_languageCode != talkerCode->languageCode()) return inputText;
+    // If appId doesn't match, return input unmolested.
+    if ( !m_appId.isEmpty() )
+        if ( !appId.contains(m_appId) ) return inputText;
     QString newText = inputText;
     const int listCount = m_matchList.count();
     for ( int index = 0; index < listCount; index++ )

@@ -90,6 +90,13 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
 }
 
 /**
+ * Returns True if this filter is a Sentence Boundary Detector.
+ * If so, the filter should implement @ref setSbRegExp() .
+ * @return          True if this filter is a SBD.
+ */
+/*virtual*/ bool FilterMgr::isSBD() { return true; }
+
+/**
  * Returns True if the plugin supports asynchronous processing,
  * i.e., supports asyncConvert method.
  * @return                        True if this plugin supports asynchronous processing.
@@ -107,11 +114,13 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
+ * @param appId             The DCOP appId of the application that queued the text.
+ *                          Also useful for hints about how to do the filtering.
  * @return                  Converted text.
  */
-QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode)
+QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
 {
-    if (asyncConvert(inputText, talkerCode))
+    if (asyncConvert(inputText, talkerCode, appId))
     {
         waitForFinished();
         return m_text;
@@ -124,15 +133,18 @@ QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode)
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
+ * @param appId             The DCOP appId of the application that queued the text.
+ *                          Also useful for hints about how to do the filtering.
  *
  * When the input text has been converted, filteringFinished signal will be emitted
  * and caller can retrieve using getOutput();
 */
-bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode)
+bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
 {
     m_filterIndex = -1;
     m_text = inputText;
     m_talkerCode = talkerCode;
+    m_appId = appId;
     m_state = fsFiltering;
     nextFilter();
     return true;
@@ -184,6 +196,17 @@ void FilterMgr::stopFiltering()
     }
 }
 
+/**
+ * Set Sentence Boundary Regular Expression.
+ * This method will only be called if the application overrode the default.
+ *
+ * @param re            The sentence delimiter regular expression.
+ */
+/*virtual*/ void FilterMgr::setSbRegExp(const QString& re)
+{
+    m_re = re;
+}
+
 void FilterMgr::nextFilter()
 {
     // kdDebug() << "FilterMgr::nextFilter: m_filterIndex = " << m_filterIndex << endl;
@@ -192,6 +215,8 @@ void FilterMgr::nextFilter()
         KttsFilterProc* filterProc = m_filterList.at(m_filterIndex);
         filterProc->waitForFinished();
         filterProc->ackFinished();
+        // Stop if the filter was a SBD and it modified the text.
+        if ( filterProc->isSBD() && filterProc->wasModified() ) return;
     }
     ++m_filterIndex;
     if (m_filterIndex < static_cast<int>(m_filterList.count()))
@@ -199,13 +224,17 @@ void FilterMgr::nextFilter()
         KttsFilterProc* filterProc = m_filterList.at(m_filterIndex);
         if (m_waitingForFinish || !filterProc->supportsAsync())
         {
-            m_text = filterProc->convert(m_text, m_talkerCode);
-            nextFilter();
+            if ( filterProc->isSBD() ) filterProc->setSbRegExp( m_re );
+            m_text = filterProc->convert(m_text, m_talkerCode, m_appId);
+            // Stop if the filter was a SBD and it modified the text.
+            if ( !filterProc->isSBD() || !filterProc->wasModified() )
+                nextFilter();
             return;
         } else {
             connect(filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilterFinished()));
             connect(filterProc, SIGNAL(filteringStopped()),  this, SLOT(slotFilterStopped()));
-            if (!filterProc->asyncConvert(m_text, m_talkerCode))
+            if ( filterProc->isSBD() ) filterProc->setSbRegExp( m_re );
+            if (!filterProc->asyncConvert(m_text, m_talkerCode, m_appId))
             {
                 disconnect(filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilterFinished()));
                 disconnect(filterProc, SIGNAL(filteringStopped()),  this, SLOT(slotFilterStopped()));
