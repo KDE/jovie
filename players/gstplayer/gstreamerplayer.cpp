@@ -31,6 +31,7 @@
 
 GStreamerPlayer::GStreamerPlayer(QObject* parent, const char* name, const QStringList& args) :
     Player(parent, name, args),
+    m_initialized(false),
     m_pipeline(0),
     m_source(0),
     m_decoder(0),
@@ -135,9 +136,12 @@ QStringList GStreamerPlayer::getPluginList( const QCString& classname )
     QString name;
     QStringList results;
 
-    int argc = kapp->argc();
-    char **argv = kapp->argv();
-    gst_init(&argc, &argv);
+    if(!m_initialized) {
+        int argc = kapp->argc();
+        char **argv = kapp->argv();
+        gst_init(&argc, &argv);
+        m_initialized = true;
+    }
 
     pool_registries = gst_registry_pool_list ();
     registries = pool_registries;
@@ -173,6 +177,27 @@ QStringList GStreamerPlayer::getPluginList( const QCString& classname )
     return results;
 }
 
+bool GStreamerPlayer::requireVersion(const uint major, const uint minor, const uint micro)
+{
+    guint gmajor, gminor, gmicro;
+
+    if(!m_initialized) {
+        int argc = kapp->argc();
+        char **argv = kapp->argv();
+        gst_init(&argc, &argv);
+        m_initialized = true;
+    }
+
+    gst_version(&gmajor, &gminor, &gmicro);
+    // kdDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    if (gmajor > major) return true;
+    if (gminor > minor) return true;
+    if (gmicro >= micro) return true;
+    kdDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    kdDebug() << QString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").arg(major).arg(minor).arg(micro) << endl;
+    return false;
+}
+
 void GStreamerPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkName; }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -187,12 +212,11 @@ void GStreamerPlayer::readConfig()
 
 void GStreamerPlayer::setupPipeline()
 {
-    static bool initialized = false;
-    if(!initialized) {
+    if(!m_initialized) {
         int argc = kapp->argc();
         char **argv = kapp->argv();
         gst_init(&argc, &argv);
-        initialized = true;
+        m_initialized = true;
     }
 
     m_pipeline = gst_thread_new("pipeline");

@@ -17,7 +17,12 @@
 
 #include "config.h"
 
+#include <glib.h>
+extern "C" {
+#include <gst/gstversion.h>
+}
 #include <gst/gst.h>
+#include <gst/gstversion.h>
 #include <qstring.h>
 #include "player.h"
 
@@ -48,6 +53,8 @@ public:
     virtual QStringList getPluginList( const QCString& classname );
     virtual void setSinkName(const QString &sinkName);
 
+    virtual bool requireVersion(const uint major, const uint minor, const uint micro);
+
     void pause();
     void stop();
 
@@ -57,6 +64,8 @@ private:
     long long time(GstQueryType type) const;
 
     QString m_sinkName;
+    // True once gst_init() has been called.
+    bool m_initialized;
 
     GstElement *m_pipeline;
     GstElement *m_source;

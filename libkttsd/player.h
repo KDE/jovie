@@ -49,6 +49,8 @@ public:
     virtual QStringList getPluginList( const QCString& classname ) = 0;
     virtual void setSinkName(const QString &sinkName) = 0;
 
+    virtual bool requireVersion(const uint major, const uint minor, const uint micro) = 0;
+
 protected:
     Player(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList() ) :
         QObject(parent, name) { if (args.isEmpty()); } // TODO: Avoid compiler WARNING.  Better way?

@@ -1754,8 +1754,18 @@ Player* Speaker::createPlayerObject()
         else
             kdDebug() << "Speaker::createPlayerObject: Could not load aRts plugin.  Is KDEDIRS set  correctly?" << endl;
     } else
-        // aRts player just ignores this.
-        player->setSinkName(m_gstreamerSinkName);
+        // Must have GStreamer >= 0.8.7.  If not, use aRts.
+        if (m_playerOption == 1)
+        {
+            if (!player->requireVersion(0, 8, 7))
+            {
+                delete player;
+                m_playerOption = 0;
+                return createPlayerObject();
+            }
+        }
+        else
+            player->setSinkName(m_gstreamerSinkName);
     return player;
 }
 

@@ -27,6 +27,7 @@ libkttsd_la_LIBADD = $(LIB_KIO)
 noinst_HEADERS = \
 	pluginproc.h \
 	pluginconf.h \
+	player.h \
 	testplayer.h \
 	stretcher.h \
 	talkercode.h

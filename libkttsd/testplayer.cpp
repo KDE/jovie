@@ -161,8 +161,17 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         kdDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
             ".  Is KDEDIRS set correctly?" << endl;
     else
-        // aRts player just ignores this.
-        player->setSinkName(m_sinkName);
+        // Must have GStreamer >= 0.8.7.
+        if (playerOption == 1)
+        {
+            if (!player->requireVersion(0, 8, 7))
+            {
+                delete player;
+                player = 0;
+            }
+            else
+                player->setSinkName(m_sinkName);
+        }
     return player;
 }
 

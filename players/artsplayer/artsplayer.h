@@ -66,6 +66,7 @@ public:
 
     virtual QStringList getPluginList( const QCString& classname );
     virtual void setSinkName(const QString &sinkName);
+    virtual bool requireVersion(const uint major, const uint minor, const uint micro);
 
 private slots:
     void setupArtsObjects();
