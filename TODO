@@ -28,9 +28,7 @@ _ Festival Interactive plugin:
 _ KTTSMgr:
     _ A user had $HOME/festival directory and FestivalInt plugin used this path.  Need to
       check that auto found path is an actual executable file somehow.
-    _ GUI problems with latest kdelibs (HEAD 12/2004).  Can't size screen smaller than total
-      of headers in Talker KListView.  When restoring from system tray icon, tab widget
-      doesn't resize to full screen.  Size screen and it resizes.
+    _ KCMultiDialog has a bug that won't allow sizing the screen narrower than 640.
     _ When speaking SSML, the window expands to maximum height to accomodate displaying the
       "Current Sentence", which is all of the SSML.  Annoying.  Better to not expand and display
       vertical scrollbar.
