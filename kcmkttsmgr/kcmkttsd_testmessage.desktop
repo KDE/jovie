@@ -2,3 +2,14 @@
 Encoding=UTF-8
 NoDisplay=true
 Name=The text-to-speech system seems to be functioning properly.
+Name[bg]=Системата за синтез на глас изглежда, че функционира нормално.
+Name[da]=Tekst-til-tale systemet synes at virke rigtigt.
+Name[et]=Teksti kõneks muutmise süsteem paistab korralikult töötavat.
+Name[is]=Texti-í-tal kerfið virðist virka eðlilega.
+Name[it]=Il sistema di pronuncia pare funzionare correttamente.
+Name[pt]=O sistema de texto-para-voz parece estar a funcionar correctamente.
+Name[pt_BR]=O sistema de texto-para-voz parece estar a funcionar correctamente.
+Name[ru]=Система синтеза речи работает нормально.
+Name[sv]=Text till tal-systemet verkar fungera som det ska.
+Name[ta]=உரையில் இருந்து பேச்சு அமைப்பு சரியாக இயங்குகிறது.
+Name[uk]=Система синтезу мовлення з тексту функціонує правильно.
