@@ -6,7 +6,6 @@ SUBDIRS = \
         plugins \
         filters \
         kttsd \
-        icons \
         kttsjobmgr \
         kcmkttsmgr \
         kttsmgr \
