@@ -42,7 +42,7 @@ KTTSD::KTTSD( QObject *parent, const char *name) : QObject(parent, name), DCOPOb
     // Create speechData object, and load configuration checking for the return
     speechData = new SpeechData();
     if(!speechData->readConfig()){
-        KMessageBox::error(0, i18n("No default language defined. Without a default language the text to speech service cannot work. Text to speech service exiting"), i18n("Text To Speech error"));
+        KMessageBox::error(0, i18n("No default language defined. Without a default language the text to speech service cannot work. Text to speech service exiting."), i18n("Text To Speech Error"));
         ok = false;
         return;
     }
@@ -51,11 +51,11 @@ KTTSD::KTTSD( QObject *parent, const char *name) : QObject(parent, name), DCOPOb
     speaker = new Speaker(speechData);
     int load = speaker->loadPlugIns();
     if(load == -1){
-        KMessageBox::error(0, i18n("No speech syntheziser plug in found. With no speech syntheziser is not posible to run. Text to speech service exiting."), i18n("Text To Speech error"));
+        KMessageBox::error(0, i18n("No speech synthesizer plugin found. This program cannot run without a speech synthesizer. Text to speech service exiting."), i18n("Text To Speech Error"));
         ok = false;
         return;
     } else if(load == 0){
-        KMessageBox::error(0, i18n("Some speech syntheziser plug in was not found or corrupt"), i18n("Text To Speech error"));
+        KMessageBox::error(0, i18n("A speech synthesizer plugin was not found or is corrupt"), i18n("Text To Speech Error"));
     }
 
     // Let's rock!
