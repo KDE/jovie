@@ -131,3 +131,5 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
     return inputText;
 }
 
+
+#include "talkerchooserproc.moc"
