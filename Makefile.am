@@ -2,6 +2,7 @@
 SUBDIRS = \
         libktts \
         libkttsd \
+        players \
         plugins \
         kttsd \
         icons \
@@ -12,6 +13,7 @@ SUBDIRS = \
 
 # Generate API documentation.
 DOXYGEN_EXCLUDE = \
+        players \
         plugins \
         kttsd \
         icons \

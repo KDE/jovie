@@ -43,6 +43,9 @@ public:
     virtual void seek(int seekTime) = 0;
     virtual void seekPosition(int position) = 0;
 
+    virtual QStringList getPluginList( const QCString& classname ) = 0;
+    virtual void setSinkName(const QString &sinkName) = 0;
+
 protected:
     Player() : QObject() {}
 

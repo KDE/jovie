@@ -10,6 +10,10 @@
 //
 //
 
+// Qt includes.
+#include <qimage.h>
+
+// KDE includes.
 #include <kconfig.h>
 #include <kuniqueapplication.h>
 #include <kcmultidialog.h>
@@ -23,8 +27,7 @@
 #include <dcopclient.h>
 #include <kdeversion.h>
 
-#include <qimage.h>
-
+// KTTSMgr includes.
 #include "kttsmgr.h"
 
 int main (int argc, char *argv[])

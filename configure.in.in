@@ -106,3 +106,4 @@ else
 	AC_DEFINE(HAVE_GSTREAMER, 0, [have GStreamer])
 	AC_MSG_WARN([No pkg-config found, required for GStreamer])
 fi
+AM_CONDITIONAL(include_kttsd_gstplayer, [test "x$have_gst" = "xyes"])

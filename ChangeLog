@@ -1,3 +1,7 @@
+2004-12-03  Gary Cramblitt (PhantomsDad)
+        * Audio players are now plugins.  This permits distribution of binary packages
+          without GStreamer being a mandatory dependency.
+
 2004-12-02  Gary Cramblitt (PhantomsDad)
         * Bypass stretching (overall Speed setting) when utterance contains SSML.  sox
           mangles SSML pitch settings.

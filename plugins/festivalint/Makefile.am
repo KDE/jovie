@@ -16,7 +16,7 @@ libkttsd_festivalintplugin_la_SOURCES = \
 	festivalintproc.cpp \
 	festivalintplugin.cpp
 libkttsd_festivalintplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libkttsd_festivalintplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
+libkttsd_festivalintplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 services_DATA = kttsd_festivalintplugin.desktop
 servicesdir = $(kde_servicesdir)

@@ -52,7 +52,7 @@
 #include "talkercode.h"
 #include "pluginconf.h"
 #include "testplayer.h"
-#include "gstreamerplayer.h"
+#include "player.h"
 
 // KCMKttsMgr includes.
 #include "kcmkttsmgr.h"
@@ -120,14 +120,20 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->sinkComboBox->setEditable(false);
 
     // If GStreamer is available, enable its radio button.
-#if HAVE_GSTREAMER
-    m_kttsmgrw->gstreamerRadioButton->setEnabled(true);
-    m_kttsmgrw->sinkLabel->setEnabled(true);
-    m_kttsmgrw->sinkComboBox->setEnabled(true);
-    QStringList sinkList = GStreamerPlayer::getPluginList("Sink/Audio");
-    kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
-    m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
-#endif
+    // Determine if available by loading its plugin.  If it fails, not available.
+    TestPlayer* testPlayer = new TestPlayer();
+    Player* player = testPlayer->createPlayerObject(1);
+    if (player)
+    {
+        m_kttsmgrw->gstreamerRadioButton->setEnabled(true);
+        m_kttsmgrw->sinkLabel->setEnabled(true);
+        m_kttsmgrw->sinkComboBox->setEnabled(true);
+        QStringList sinkList = player->getPluginList("Sink/Audio");
+        kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
+        m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
+    }
+    delete player;
+    delete testPlayer;
 
     // Register DCOP client.
     DCOPClient *client = kapp->dcopClient();

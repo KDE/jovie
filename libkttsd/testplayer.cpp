@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  festivalintconf.cpp
-  Configuration widget and functions for Festival (Interactive) plug in
+  Player Object for playing synthesized audio files.  Plays them
+  synchronously.
   -------------------
   Copyright : (C) 2004 Gary Cramblitt
   -------------------
@@ -23,12 +23,12 @@
 #include <kapplication.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
+#include <kparts/componentfactory.h>
+#include <ktrader.h>
 #include <kdebug.h>
 
 // KTTS includes.
 #include "player.h"
-#include "gstreamerplayer.h"
-#include "artsplayer.h"
 #include "stretcher.h"
 #include "pluginconf.h"
 
@@ -104,7 +104,7 @@ void TestPlayer::play(const QString &waveFile)
 
     // Create player object based on player option.
     // kdDebug() << "TestPlayer::play: creating Player object with playerOption " << m_playerOption << endl;
-    m_player = createPlayerObject();
+    m_player = createPlayerObject(m_playerOption);
     // kdDebug() << "TestPlayer::play: starting playback." << endl;
     m_player->startPlay(playFile);
 
@@ -122,24 +122,44 @@ void TestPlayer::play(const QString &waveFile)
 }
 
 /**
- * Creates and returns a player object based on player option.
+ * Creates and returns a player object based on user option.
  */
-Player* TestPlayer::createPlayerObject()
+Player* TestPlayer::createPlayerObject(int playerOption)
 {
-    Player* p = 0;
-    switch(m_playerOption)
+    Player* player = 0;
+    QString plugInName;
+    switch(playerOption)
     {
-#if HAVE_GSTREAMER
         case 1 :
-            {
-                p = new GStreamerPlayer;
-                dynamic_cast<GStreamerPlayer*>(p)->setSinkName(m_sinkName);
-                break;
-            }
-#endif
-        default: p = new ArtsPlayer; break;
+        {
+            plugInName = "kttsd_gstplugin";
+            break;
+        }
+        default:
+        {
+            plugInName = "kttsd_artsplugin";
+            break;
+        }
     }
-    return p;
+    KTrader::OfferList offers = KTrader::self()->query(
+            "KTTSD/AudioPlugin", QString("Name == '%1'").arg(plugInName));
+
+    if(offers.count() == 1)
+    {
+        kdDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library());
+        if (factory)
+            player = 
+                KParts::ComponentFactory::createInstanceFromLibrary<Player>(
+                    offers[0]->library(), this, offers[0]->library());
+    }
+    if (player == 0)
+        kdDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
+            " plugin.  Is KDEDIRS set correctly?" << endl;
+    else
+        // aRts player just ignores this.
+        player->setSinkName(m_sinkName);
+    return player;
 }
 
 /**

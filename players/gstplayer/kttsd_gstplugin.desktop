@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KTTSD GStreamer Plugin
+Comment=KTTSD GStreamer audio plugin
+Type=Service
+ServiceTypes=KTTSD/AudioPlugin
+X-KDE-Library=libkttsd_gstplugin

@@ -67,11 +67,12 @@ class TestPlayer : public QObject{
         */
         void setSinkName(const QString &sinkName);
 
-    private:
         /**
          * Creates and returns a player object based on user option.
          */
-        Player* createPlayerObject();
+        Player* createPlayerObject(int playerOption);
+
+    private:
 
         /**
          * Constructs a temporary filename for plugins to use as a suggested filename
