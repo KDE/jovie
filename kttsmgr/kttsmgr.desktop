@@ -20,5 +20,4 @@ Comment[ta]=KDE உரையிலிருந்து பேச்சு ம�
 Comment[xx]=xxKDE Text-to-speech Managerxx
 MimeTypes=
 Terminal=false
-Categories=Qt;KDE;System;
-
+Categories=Qt;KDE;Utility;
