@@ -92,7 +92,7 @@ VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
 Comment=Castilian Spanish Male
-Comment[es]=Español masculino
+Comment[es]=EspaÃ±ol masculino
 
 [cmu_us_bdl_arctic_hts]
 Name=Bdl ARCTIC
@@ -128,7 +128,7 @@ VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
 Comment=Canadian English Male, HTS
-Comment[es]=Inglés canadiense(masculino)
+Comment[es]=InglÃ©s canadiense(masculino)
 
 [cmu_us_awb_arctic_hts]
 Name=Awb ARCTIC
@@ -140,7 +140,7 @@ VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
 Comment=Scottish Male, HTS
-Comment[es]=Escocés masculino, HTS
+Comment[es]=EscocÃ©s masculino, HTS
 
 [cmu_us_kal_com_hts]
 Name=Kal ARCTIC
@@ -176,7 +176,7 @@ VolumeAdjustable=true
 RateAdjustable=false
 PitchAdjustable=false
 Comment=Canadian English Male, MultiSyn
-Comment[es]=Inglés canadiense(masculino)
+Comment[es]=InglÃ©s canadiense(masculino)
 
 [cstr_us_awb_arctic_multisyn]
 Name=Awb MultiSyn
@@ -188,7 +188,7 @@ VolumeAdjustable=true
 RateAdjustable=false
 PitchAdjustable=false
 Comment=Scottish Male, MultiSyn
-Comment[es]=Escocés masculino, MultiSyn
+Comment[es]=EscocÃ©s masculino, MultiSyn
 
 [german_de1_os]
 Name=IMS German de1
