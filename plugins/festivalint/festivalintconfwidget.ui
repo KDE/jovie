@@ -41,7 +41,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>60</height>
+                    <height>30</height>
                 </size>
             </property>
         </spacer>
@@ -76,7 +76,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="0" column="0">
                     <property name="name">
                         <cstring>voicesPathBox</cstring>
                     </property>
@@ -127,7 +127,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="1" column="0">
                     <property name="name">
                         <cstring>selectVoiceBox</cstring>
                     </property>
@@ -179,31 +179,127 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QPushButton" row="2" column="1">
+                <widget class="QLayoutWidget" row="2" column="0">
                     <property name="name">
-                        <cstring>testButton</cstring>
+                        <cstring>layout9</cstring>
                     </property>
-                    <property name="text">
-                        <string>Test</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>timeLabel</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Speed:</string>
+                            </property>
+                        </widget>
+                        <widget class="KIntSpinBox">
+                            <property name="name">
+                                <cstring>timeBox</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="suffix">
+                                <string> %</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>200</number>
+                            </property>
+                            <property name="minValue">
+                                <number>50</number>
+                            </property>
+                            <property name="value">
+                                <number>100</number>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Sets the speed of the speech.</string>
+                            </property>
+                        </widget>
+                        <widget class="QSlider">
+                            <property name="name">
+                                <cstring>timeSlider</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="maxValue">
+                                <number>1000</number>
+                            </property>
+                            <property name="lineStep">
+                                <number>10</number>
+                            </property>
+                            <property name="pageStep">
+                                <number>100</number>
+                            </property>
+                            <property name="value">
+                                <number>500</number>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Sets the speed of the speech.</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-                <spacer row="2" column="0">
+                <widget class="QLayoutWidget" row="3" column="0">
                     <property name="name">
-                        <cstring>spacer2</cstring>
+                        <cstring>layout10</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>410</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>410</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>testButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Test</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </grid>
         </widget>
     </grid>
@@ -221,5 +317,6 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

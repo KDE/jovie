@@ -18,13 +18,17 @@
 
 // $Id$
 
+// C++ includes.
+#include <math.h>
+
 // Qt includes.
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qcheckbox.h>
-#include <qdir.h> 
+#include <qdir.h>
+#include <qslider.h>
 
 // KDE includes.
 #include <kdialog.h>
@@ -38,6 +42,7 @@
 #include <kartsdispatcher.h>
 #include <kplayobject.h>
 #include <kplayobjectfactory.h>
+#include <knuminput.h>
 
 // KTTS includes.
 #include <pluginconf.h>
@@ -71,6 +76,12 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
         this, SLOT(configChanged()));
     connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
     connect(m_widget->rescan, SIGNAL(clicked()), this, SLOT(scanVoices()));
+    connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
+        this, SLOT(timeBox_valueChanged(int)));
+    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)),
+        this, SLOT(timeSlider_valueChanged(int)));
+    connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
 }
 
 /** Destructor */
@@ -99,6 +110,7 @@ void FestivalIntConf::load(KConfig *config, const QString &langGroup){
             break;
         }
     }
+    m_widget->timeBox->setValue(config->readNumEntry("time",    100));
 }
 
 void FestivalIntConf::save(KConfig *config, const QString &langGroup){
@@ -108,11 +120,14 @@ void FestivalIntConf::save(KConfig *config, const QString &langGroup){
     config->setGroup(langGroup);
     config->writePathEntry("VoicesPath", m_widget->festivalVoicesPath->url());
     config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
+    config->writeEntry ("time", m_widget->timeBox->value());
 }
 
 void FestivalIntConf::defaults(){
     kdDebug() << "FestivalIntConf::defaults: Running" << endl;
     m_widget->festivalVoicesPath->setURL("/usr/share/festival/voices/");
+    m_widget->timeBox->setValue(100);
+    timeBox_valueChanged(100);
 }
 
 void FestivalIntConf::scanVoices(){
@@ -168,11 +183,12 @@ void FestivalIntConf::slotTest_clicked()
     if (testMsg.isNull()) testMsg = voices.readEntry("Comment");
     // Fall back if none.
     if (testMsg.isNull()) testMsg = "KDE is a modern graphical desktop for UNIX computers.";
-    kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << endl;
+    kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
     m_festProc->synth(
         testMsg,
         tmpWaveFile,
-        voiceCode);
+        voiceCode,
+        m_widget->timeBox->value());
 }
 
 void FestivalIntConf::slotSynthFinished()
@@ -210,3 +226,28 @@ void FestivalIntConf::slotSynthFinished()
     QFile::remove(m_waveFile);
     m_waveFile = QString::null;
 }
+
+// Basically the slider values are logarithmic (0,...,1000) whereas percent
+// values are linear (50%,...,200%).
+//
+// slider = alpha * (log(percent)-log(50))
+// with alpha = 1000/(log(200)-log(50))
+
+int FestivalIntConf::percentToSlider(int percentValue) {
+   double alpha = 1000 / (log(200) - log(50));
+   return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
+}
+
+int FestivalIntConf::sliderToPercent(int sliderValue) {
+   double alpha = 1000 / (log(200) - log(50));
+   return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
+}
+
+void FestivalIntConf::timeBox_valueChanged(int percentValue) {
+   m_widget->timeSlider->setValue (percentToSlider (percentValue));
+}
+
+void FestivalIntConf::timeSlider_valueChanged(int sliderValue) {
+   m_widget->timeBox->setValue (sliderToPercent (sliderValue));
+}
+

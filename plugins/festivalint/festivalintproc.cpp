@@ -82,6 +82,7 @@ bool FestivalIntProc::init(const QString &lang, KConfig *config){
     m_voiceCode = "("+voices.readEntry("Code")+")";
     // kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
     
+    m_time = config->readNumEntry("time",    100);
     return true;
 }
 
@@ -93,7 +94,7 @@ bool FestivalIntProc::init(const QString &lang, KConfig *config){
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    synth(text, QString::null, m_voiceCode);
+    synth(text, QString::null, m_voiceCode, m_time);
 }
 
 /**
@@ -108,7 +109,7 @@ void FestivalIntProc::sayText(const QString &text)
 */
 void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
 {
-    synth(text, suggestedFilename, m_voiceCode);
+    synth(text, suggestedFilename, m_voiceCode, m_time);
 };
 
 /**
@@ -117,11 +118,13 @@ void FestivalIntProc::synthText(const QString& text, const QString& suggestedFil
 * @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
 *                                synthesize and audibilize the text.
 * @param voiceCode               Voice code in which to speak text.
+* @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
 */
 void FestivalIntProc::synth(
     const QString &text,
     const QString &synthFilename,
-    const QString& voiceCode)
+    const QString& voiceCode,
+    const int time)
 {
     // kdDebug() << "FestivalIntProc::synth: Running" << endl;
 
@@ -154,6 +157,7 @@ void FestivalIntProc::synth(
     {
         // kdDebug() << "FestivalIntProc::synth: Starting Festival process" << endl;
         m_runningVoiceCode = QString::null;
+        m_runningTime = 100;
         m_ready = false;
         if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
         {
@@ -168,7 +172,16 @@ void FestivalIntProc::synth(
         }
     }
     // If we just started Festival, or voiceCode has changed, send code to Festival.
-    if (m_runningVoiceCode != voiceCode) sendToFestival(voiceCode);
+    if (m_runningVoiceCode != voiceCode) {
+        sendToFestival(voiceCode);
+        m_runningVoiceCode = voiceCode;
+    }
+    if (m_runningTime != time) {
+        QString timeMsg = QString("(Parameter.set 'Duration_Stretch %1)").arg(
+            1.0/(float(time)/100.0), 0, 'f', 1);
+        sendToFestival(timeMsg);
+        m_runningTime = time;
+    }
 
     // Encode quotation characters.
     QString saidText = text;

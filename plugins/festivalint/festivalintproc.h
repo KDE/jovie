@@ -154,8 +154,10 @@ class FestivalIntProc : public PlugInProc{
         * @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
         *                                synthesize and audibilize the text.
         * @param voiceCode               Voice code.
+        * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
         */
-        void synth(const QString &text, const QString &synthFilename, const QString& voiceCode);
+        void synth(const QString &text, const QString &synthFilename, 
+            const QString& voiceCode, const int time);
         
     private slots:
         void slotProcessExited(KProcess* proc);
@@ -182,14 +184,24 @@ class FestivalIntProc : public PlugInProc{
         bool sendIfReady();
         
         /**
-         * Selected voice (from config).
-         */
+        * Selected voice (from config).
+        */
         QString m_voiceCode;
+        
+        /**
+        * Selected speed (from config).
+        */
+        int m_time;
         
         /**
         * Running voice.
         */
         QString m_runningVoiceCode;
+        
+        /**
+        * Running time (speed).
+        */
+        int m_runningTime;
 
         /**
          * Festival process
