@@ -556,7 +556,7 @@ void KttsJobMgrPart::slot_job_change_talker()
         stw->talkersList->setSelectionMode(QListView::Single);
         // A list of the items in the listview.
         QValueList<QListViewItem*> talkersListItems;
-        QListViewItem* talkerItem;
+        QListViewItem* talkerItem = 0;
         // Fill rows and columns.
         uint talkerCodesListCount = talkerCodesList.count();
         for (uint index = 0; index < talkerCodesListCount; index++)
