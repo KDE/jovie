@@ -35,7 +35,8 @@ noinst_HEADERS = \
 	testplayer.h \
 	stretcher.h \
 	talkercode.h \
-	utils.h
+	utils.h \
+	kdeexportfix.h
 
 # This library is installed as a service.
 servicetypes_DATA = kttsd_synthplugin.desktop
