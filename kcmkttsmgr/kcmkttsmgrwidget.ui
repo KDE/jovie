@@ -51,7 +51,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>General</string>
+                    <string>&amp;General</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -65,7 +65,7 @@
                             <bool>false</bool>
                         </property>
                         <property name="title">
-                            <string>Notifications</string>
+                            <string>&amp;Notifications</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -84,7 +84,10 @@
                                             <cstring>enableNotifyCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Speak notifications (KNotify)</string>
+                                            <string>&amp;Speak notifications (KNotify)</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+S</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Check to enable speaking of messages routed from applications through KNotify, the KDE Notification system.</string>
@@ -122,7 +125,10 @@
                                             <cstring>enablePassiveOnlyCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Passive popups only</string>
+                                            <string>&amp;Passive popups only</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+P</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
@@ -154,7 +160,10 @@
                             <cstring>enableKttsdCheckBox</cstring>
                         </property>
                         <property name="text">
-                            <string>Enable Text-to-Speech System (KTTSD)</string>
+                            <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+E</string>
                         </property>
                         <property name="whatsThis" stdset="0">
                             <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
@@ -207,7 +216,10 @@
                                     <cstring>showMainWindowOnStartupCheckBox</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show main window on startup</string>
+                                    <string>Show &amp;main window on startup</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+M</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -223,7 +235,10 @@
                             <cstring>embedInSysTrayCheckBox</cstring>
                         </property>
                         <property name="text">
-                            <string>Embed Text-to-Speech Manager in system tray</string>
+                            <string>Em&amp;bed Text-to-Speech Manager in system tray</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+B</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>
@@ -239,7 +254,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Talkers</string>
+                    <string>&amp;Talkers</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -459,7 +474,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Interruption</string>
+                    <string>&amp;Interruption</string>
                 </attribute>
                 <grid>
                     <property name="name">

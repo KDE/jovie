@@ -958,7 +958,7 @@ void KCMKttsMgr::kttsdStarted()
             if (m_jobMgrPart)
             {
                 // Add the Job Manager part as a new tab.
-                m_kttsmgrw->mainTab->addTab(m_jobMgrPart->widget(), i18n("Jobs"));
+                m_kttsmgrw->mainTab->addTab(m_jobMgrPart->widget(), i18n("&Jobs"));
                 kttsdLoaded = true;
             }
             else
