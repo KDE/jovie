@@ -29,7 +29,7 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GStreamerPlayer::GStreamerPlayer(QObject* parent, const char* name, const QStringList &args) :
+GStreamerPlayer::GStreamerPlayer(QObject* parent, const char* name, const QStringList& args) :
     Player(parent, name, args),
     m_pipeline(0),
     m_source(0),

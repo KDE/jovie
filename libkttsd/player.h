@@ -21,8 +21,10 @@
 
 // #include "filehandle.h"
 
-class Player : public QObject
+class Player : virtual public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~Player() {}
 
@@ -48,7 +50,7 @@ public:
     virtual void setSinkName(const QString &sinkName) = 0;
 
 protected:
-    Player(QObject* parent = 0, const char* name = 0, const QStringList& args = QStringList()) :
+    Player(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList()) :
         QObject(parent, name) {}
 
 };

@@ -26,7 +26,7 @@ class GStreamerPlayer : public Player
     Q_OBJECT
 
 public:
-    GStreamerPlayer(QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+    GStreamerPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
     virtual ~GStreamerPlayer();
 
     // virtual void play(const FileHandle &file = FileHandle::null());

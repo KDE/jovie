@@ -40,7 +40,7 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-ArtsPlayer::ArtsPlayer(QObject* parent, const char* name, const QStringList &args) : 
+ArtsPlayer::ArtsPlayer(QObject* parent, const char* name, const QStringList& args) : 
     Player(parent, name, args),
     m_dispatcher(0),
     m_server(0),

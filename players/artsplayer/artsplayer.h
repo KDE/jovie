@@ -43,7 +43,7 @@ class ArtsPlayer : public Player
     Q_OBJECT
 
 public:
-    ArtsPlayer(QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+    ArtsPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
     ~ArtsPlayer();
 
 //    virtual void play(const FileHandle &file = FileHandle::null());
