@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  festivalintproc.h
   Main speaking functions for the Festival (Interactive) Plug in
   -------------------
   Copyright : (C) 2004 by Gary Cramblitt
@@ -154,9 +153,10 @@ class FestivalIntProc : public PlugInProc{
         *                                synthesize and audibilize the text.
         * @param voiceCode               Voice code.
         * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
+        * @param pitch                   Pitch persentage.  50 to 200.
         */
         void synth(const QString &festivalExePath, const QString &text,
-            const QString &synthFilename, const QString& voiceCode, const int time);
+            const QString &synthFilename, const QString& voiceCode, const int time, const int pitch);
 
         /**
         * Sends commands to Festival to query for a list of supported voice codes.
@@ -226,6 +226,11 @@ class FestivalIntProc : public PlugInProc{
         int m_time;
 
         /**
+        * Selected pitch (frequency) (from config).
+        */
+        int m_pitch;
+
+        /**
         * Running voice.
         */
         QString m_runningVoiceCode;
@@ -234,6 +239,11 @@ class FestivalIntProc : public PlugInProc{
         * Running time (speed).
         */
         int m_runningTime;
+
+        /**
+        * Running pitch (frequency).
+        */
+        int m_runningPitch;
 
         /**
          * Festival process

@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  festivalintproc.cpp
   Main speaking functions for the Festival (Interactive) Plug in
   -------------------
   Copyright : (C) 2004 Gary Cramblitt
@@ -16,14 +15,20 @@
  *                                                                         *
  ***************************************************************************/
 
+// C++ includes.
+#include <math.h>
+
+// Qt includes.
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qthread.h>
 
+// KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
+// FestivalInt includes.
 #include "festivalintproc.h"
 #include "festivalintproc.moc"
 
@@ -75,6 +80,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_festivalExePath = config->readEntry("FestivalExecutablePath", "festival");
     // kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
     m_time = config->readNumEntry("time",    100);
+    m_pitch = config->readNumEntry("pitch",    100);
     // If voice should be pre-loaded, start Festival and load the voice.
     m_preload = config->readBoolEntry("Preload", false);
     if (m_preload) startEngine(m_festivalExePath, m_voiceCode);
@@ -89,7 +95,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time);
+    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch);
 }
 
 /**
@@ -104,7 +110,7 @@ void FestivalIntProc::sayText(const QString &text)
 */
 void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
 {
-    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time);
+    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch);
 };
 
 /**
@@ -163,6 +169,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         // kdDebug() << "FestivalIntProc::startEngine: Starting Festival process" << endl;
         m_runningVoiceCode = QString::null;
         m_runningTime = 100;
+        m_runningPitch = 100;
         m_ready = false;
         m_outputQueue.clear();
         if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
@@ -193,13 +200,15 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
 *                                synthesize and audibilize the text.
 * @param voiceCode               Voice code in which to speak text.
 * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
+* @param pitch                   Pitch persentage.  50 to 200.
 */
 void FestivalIntProc::synth(
     const QString & festivalExePath,
     const QString &text,
     const QString &synthFilename,
     const QString& voiceCode,
-    const int time)
+    const int time,
+    const int pitch)
 {
     // kdDebug() << "FestivalIntProc::synth: festivalExePath = " << festivalExePath
     //         << " voiceCode = " << voiceCode << endl;
@@ -212,6 +221,25 @@ void FestivalIntProc::synth(
             1.0/(float(time)/100.0), 0, 'f', 1);
         sendToFestival(timeMsg);
         m_runningTime = time;
+    }
+    // If we just started Festival, or pitch changed, tell festival.
+    if (m_runningPitch != pitch) {
+        // Pitch values range from 50 to 200 %, with 100% as the midpoint,
+        // while frequency values range from 41 to 500 with 105 as the "midpoint".
+        int pitchValue;
+        if (pitch <= 100)
+        {
+            pitchValue = (((pitch - 50) * 64) / 50) + 41;
+        }
+        else
+        {
+            pitchValue = (((pitch - 100) * 395) / 100) + 105;
+        }
+        QString pitchMsg = QString(
+            "(set! int_lr_params '((target_f0_mean %1) (target_f0_std 14)"
+            "(model_f0_mean 170) (model_f0_std 34)))").arg(pitchValue, 0, 10);
+        sendToFestival(pitchMsg);
+        m_runningPitch = pitch;
     }
 
     // Encode quotation characters.

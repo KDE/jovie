@@ -79,11 +79,17 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
     connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
     connect(m_widget->rescan, SIGNAL(clicked()), this, SLOT(scanVoices()));
     connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
-        this, SLOT(timeBox_valueChanged(int)));
+            this, SLOT(timeBox_valueChanged(int)));
+    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)),
+            this, SLOT(frequencyBox_valueChanged(int)));
     connect(m_widget->timeSlider, SIGNAL(valueChanged(int)),
-        this, SLOT(timeSlider_valueChanged(int)));
+            this, SLOT(timeSlider_valueChanged(int)));
+    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)),
+            this, SLOT(frequencySlider_valueChanged(int)));
     connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->preloadCheckBox, SIGNAL(clicked()), this, SLOT(configChanged()));
 }
 
@@ -119,7 +125,8 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
             break;
         }
     }
-    m_widget->timeBox->setValue(config->readNumEntry("time",    100));
+    m_widget->timeBox->setValue(config->readNumEntry("time", 100));
+    m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
     m_widget->preloadCheckBox->setChecked(config->readBoolEntry(
          "Preload", m_widget->preloadCheckBox->isChecked()));
 }
@@ -133,6 +140,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     config->writePathEntry("FestivalExecutablePath", m_widget->festivalPath->url());
     config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     config->writeEntry("time", m_widget->timeBox->value());
+    config->writeEntry("pitch", m_widget->frequencyBox->value());
     config->writeEntry("Preload", m_widget->preloadCheckBox->isChecked());
 }
 
@@ -141,6 +149,8 @@ void FestivalIntConf::defaults(){
     m_widget->festivalPath->setURL("festival");
     m_widget->timeBox->setValue(100);
     timeBox_valueChanged(100);
+    m_widget->frequencyBox->setValue(100);
+    frequencyBox_valueChanged(100);
     m_widget->preloadCheckBox->setChecked(false);
     scanVoices();
 }
@@ -239,6 +249,18 @@ void FestivalIntConf::setDefaultVoice()
                 m_widget->timeBox->setEnabled(false);
                 m_widget->timeSlider->setEnabled(false);
             }
+            if (voiceList[index].pitchAdjustable)
+            {
+                m_widget->frequencyBox->setEnabled(true);
+                m_widget->frequencySlider->setEnabled(true);
+            }
+            else
+            {
+                m_widget->frequencyBox->setValue(100);
+                frequencyBox_valueChanged(100);
+                m_widget->frequencyBox->setEnabled(false);
+                m_widget->frequencySlider->setEnabled(false);
+            }
         }
     }
 }
@@ -313,6 +335,7 @@ void FestivalIntConf::scanVoices()
             voiceTemp.gender = voices.readEntry("Gender", "neutral");
             voiceTemp.preload = voices.readBoolEntry("Preload", false);
             voiceTemp.rateAdjustable = voices.readBoolEntry("RateAdjustable", true);
+            voiceTemp.pitchAdjustable = voices.readBoolEntry("PitchAdjustable", true);
             voiceList.append(voiceTemp);
             m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
         }
@@ -367,7 +390,8 @@ void FestivalIntConf::slotTest_clicked()
         testMsg,
         tmpWaveFile,
         voiceCode,
-        m_widget->timeBox->value());
+        m_widget->timeBox->value(),
+        m_widget->frequencyBox->value());
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
@@ -449,6 +473,18 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
         m_widget->timeBox->setEnabled(false);
         m_widget->timeSlider->setEnabled(false);
     }
+    if (voiceList[index].pitchAdjustable)
+    {
+        m_widget->frequencyBox->setEnabled(true);
+        m_widget->frequencySlider->setEnabled(true);
+    }
+    else
+    {
+        m_widget->frequencyBox->setValue(100);
+        frequencyBox_valueChanged(100);
+        m_widget->frequencyBox->setEnabled(false);
+        m_widget->frequencySlider->setEnabled(false);
+    }
     configChanged();
 }
 
@@ -459,20 +495,27 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
 // with alpha = 1000/(log(200)-log(50))
 
 int FestivalIntConf::percentToSlider(int percentValue) {
-   double alpha = 1000 / (log(200) - log(50));
-   return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
+    double alpha = 1000 / (log(200) - log(50));
+    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
 }
 
 int FestivalIntConf::sliderToPercent(int sliderValue) {
-   double alpha = 1000 / (log(200) - log(50));
-   return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
+    double alpha = 1000 / (log(200) - log(50));
+    return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
 }
 
 void FestivalIntConf::timeBox_valueChanged(int percentValue) {
-   m_widget->timeSlider->setValue (percentToSlider (percentValue));
+    m_widget->timeSlider->setValue (percentToSlider (percentValue));
+}
+
+void FestivalIntConf::frequencyBox_valueChanged(int percentValue) {
+    m_widget->frequencySlider->setValue(percentToSlider(percentValue));
 }
 
 void FestivalIntConf::timeSlider_valueChanged(int sliderValue) {
-   m_widget->timeBox->setValue (sliderToPercent (sliderValue));
+    m_widget->timeBox->setValue (sliderToPercent (sliderValue));
 }
 
+void FestivalIntConf::frequencySlider_valueChanged(int sliderValue) {
+    m_widget->frequencyBox->setValue(sliderToPercent(sliderValue));
+}

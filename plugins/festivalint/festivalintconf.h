@@ -48,6 +48,7 @@ typedef struct voiceStruct{
     QString gender;             // male, female, or neutral
     bool preload;               // Start Festival and load this language when KTTSD is started.
     bool rateAdjustable;        // True if the voice supports rate adjustments.
+    bool pitchAdjustable;       // True if the voice supports pitch adjustments.
 } voice;
 
 class FestivalIntConf : public PlugInConf {
@@ -120,7 +121,9 @@ class FestivalIntConf : public PlugInConf {
         void slotSynthFinished();
         void slotSynthStopped();
         void timeBox_valueChanged(int percentValue);
+        void frequencyBox_valueChanged(int percentValue);
         void timeSlider_valueChanged(int sliderValue);
+        void frequencySlider_valueChanged(int sliderValue);
         void slotSelectVoiceCombo_activated();
         void slotQueryVoicesFinished(const QStringList &voiceCodes);
 

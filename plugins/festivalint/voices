@@ -5,6 +5,7 @@ Language=en_US
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Male
 Comment[es]=Americano masculino
 
@@ -15,6 +16,7 @@ Language=en_US
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Male
 Comment[es]=Americano masculino
 
@@ -25,6 +27,7 @@ Language=en_US
 Gender=female
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Female, MBROLA
 Comment[es]=Americana femenina, MBROLA
 
@@ -35,6 +38,7 @@ Language=en_US
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Male, MBROLA
 Comment[es]=Americano masculino, MBROLA
 
@@ -45,6 +49,7 @@ Language=en_US
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Male, MBROLA
 Comment[es]=Americano masculino, MBROLA
 
@@ -55,6 +60,7 @@ Language=en_GB
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=British Male
 Comment[es]=Britanico masculino
 
@@ -65,6 +71,7 @@ Language=en_GB
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=British Male
 Comment[es]=Britanico masculino
 
@@ -75,6 +82,7 @@ Language=es
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=Castilian Spanish Male
 Comment[es]=Español masculino
 
@@ -85,6 +93,7 @@ Language=en_US
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Male, HTS
 Comment[es]=Americano masculino, HTS
 
@@ -95,6 +104,7 @@ Language=en_US
 Gender=female
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Female, HTS
 Comment[es]=Americana femenina, HTS
 
@@ -105,6 +115,7 @@ Language=en_CA
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=Canadian English Male, HTS
 
 [cmu_us_awb_arctic_hts]
@@ -114,6 +125,7 @@ Language=en_GB
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=Scottish Male, HTS
 Comment[es]=Americano masculino, HTS
 
@@ -124,6 +136,7 @@ Language=en_US
 Gender=male
 Preload=false
 RateAdjustable=true
+PitchAdjustable=true
 Comment=American Male, HTS
 Comment[es]=Americano masculino, HTS
 
@@ -134,6 +147,7 @@ Language=en_CA
 Gender=male
 Preload=true
 RateAdjustable=false
+PitchAdjustable=false
 Comment=Canadian English Male, MultiSyn
 
 [cstr_us_awb_arctic_multisyn]
@@ -143,4 +157,5 @@ Language=en_GB
 Gender=male
 Preload=true
 RateAdjustable=false
+PitchAdjustable=false
 Comment=Scottish Male, MultiSyn
