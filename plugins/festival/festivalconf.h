@@ -80,8 +80,5 @@ class FestivalConf : public FestivalConfWidget {
          kdDebug() << "Running: FestivalConf::configChanged()"<< endl;
          emit changed(true);
       };
-
-   signals:
-      void changed(bool);  
 };
 #endif // _FESTIVALCONF_H_

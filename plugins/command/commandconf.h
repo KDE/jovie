@@ -44,9 +44,5 @@ class CommandConf : public PlugInConf {
     
   private:
     TextToSpeechConfigurationWidget *configWidget; 
-     
-  signals:
-    void changed(bool);
-
 };
 #endif
