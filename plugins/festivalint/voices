@@ -183,7 +183,7 @@ Preload=false
 VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
-Comment=Deutsch Frauenstimme Festival
+Comment=Deutsche weibliche, Festival
 
 [german_de2_os]
 Name=IMS German de2
@@ -193,7 +193,7 @@ Preload=false
 VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
-Comment=Deutsch Männerstimme Festival
+Comment=Deutsche männliche, Festival
 
 [german_de3_os]
 Name=IMS German de3
@@ -203,4 +203,4 @@ Preload=false
 VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
-Comment=Deutsch Frauenstimme Festival
+Comment=Deutsche weibliche, Festival
