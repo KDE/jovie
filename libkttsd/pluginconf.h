@@ -142,7 +142,7 @@
 * - @e synthesizer.  The name of your plugin.  Keep short, but long enough to
 *                    distinquish different implementations.  For example,
 *                    Festival Int, Flite, Hadifix.  Use only letters, numbers
-*                    spaces, and underscores (_) in your synthesizer name.
+*                    spaces, and underscores (_) in your plugin name.
 * - @e gender.       May be "male", "female", or "neutral".
 * - @e name.         The voice code.  If your plugin does not support voices,
 *                    return "fixed".
@@ -156,6 +156,8 @@
 *
 *   lang="en" name="Kal" gender="male" volume="soft" rate="fast"
 *   synthesizer="Festival Interactive"
+*
+* Do not return translated values for the Talker Code attributes.  All English.
 *
 * Each time your plugin emits the @ref changed signal, @ref getTalkerCode will be called.
 * The configuration dialog OK button will be disabled until you return a non-null

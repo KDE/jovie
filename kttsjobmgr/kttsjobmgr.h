@@ -61,9 +61,9 @@ protected:
     * Set up toolbar and menu.
     */
     void setupActions();
-    
+
     /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
-    
+
     /**
     * This signal is emitted when KTTSD starts or restarts after a call to reinit.
     */
@@ -72,7 +72,7 @@ protected:
     * This signal is emitted just before KTTSD exits.
     */
     // ASYNC kttsdExiting(bool) { };
-    
+
     /**
     * This signal is emitted when KTTSD starts or restarts after a call to reinit.
     */
@@ -100,7 +100,7 @@ protected:
     * @see getTextCount
     */        
     ASYNC sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
-    
+
     /**
     * This signal is emitted whenever a new text job is added to the queue.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
@@ -116,7 +116,7 @@ protected:
     *                       at 1.
     */
     ASYNC textAppended(const QCString& appId, const uint jobNum, const int partNum);
-    
+
     /**
     * This signal is emitted whenever speaking of a text job begins.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
@@ -197,77 +197,112 @@ private:
         jlvcPartNum = 6,              /**< Current part of the job. */
         jlvcPartCount = 7             /**< Number of parts in job. */
     };
-    
+
     /**
     * Convert a KTTSD job state integer into a display string.
     * @param state          KTTSD job state
     * @return               Display string for the state.
     */
     QString stateToStr(int state);
-    
+
+    /**
+    * Translates Talker Code attributes to displayable translated strings.
+    */
+    QString translatedGender(const QString &gender);
+    QString translatedVolume(const QString &volume);
+    QString translatedRate(const QString &rate);
+
+    /**
+     * Given a talker code, parses out the attributes.
+     * @param talkerCode       The talker code.
+     * @return languageCode    Language Code.
+     * @return voice           Voice name.
+     * @return gender          Gender.
+     * @return volume          Volume.
+     * @return rate            Rate.
+     * @return plugInName      Name of Synthesizer.
+     */
+    void parseTalkerCode(const QString &talkerCode,
+        QString &languageCode,
+        QString &voice,
+        QString &gender,
+        QString &volume,
+        QString &rate,
+        QString &plugInName);
+
+    /**
+    * Converts a language code plus optional country code to language description.
+    */
+    QString languageCodeToLanguage(const QString &languageCode);
+
+    /**
+    * Convert a Talker Code to a translated, displayable name.
+    */
+    QString talkerCodeToDisplayName(const QString &talkerCode);
+
     /**
     * Get the Job Number of the currently-selected job in the Job List View.
     * @return               Job Number of currently-selected job.
     *                       0 if no currently-selected job.
     */
     uint getCurrentJobNum();
-    
+
     /**
     * Get the number of parts in the currently-selected job in the Job List View.
     * @return               Number of parts in currently-selected job.
     *                       0 if no currently-selected job.
     */
     int getCurrentJobPartCount();
-    
+
     /**
     * Given a Job Number, returns the Job List View item containing the job.
     * @param jobNum         Job Number.
     * @return               QListViewItem containing the job or 0 if not found.
     */
     QListViewItem* findItemByJobNum(const uint jobNum);
-    
+
     /**
     * Enables or disables all the job-related buttons on the toolbar.
     * @param enable        True to enable the job-related butons.  False to disable.
     */
     void enableJobActions(bool enable);
-    
+
     /**
     * Enables or disables all the job part-related buttons on the toolbar.
     * @param enable        True to enable the job par-related butons.  False to disable.
     */
     void KttsJobMgrPart::enableJobPartActions(bool enable);
-    
+
     /**
     * Refresh display of a single job in the JobListView.
     * @param jobNum         Job Number.
     */
     void refreshJob(uint jobNum);
-    
+
     /**
     * Fill the Job List View.
     */
     void refreshJobListView();
-    
+
     /**
     * If nothing selected in Job List View and list not empty, select top item.
     * If nothing selected and list is empty, disable job buttons on toolbar.
     */
     void autoSelectInJobListView();
-    
+
     /**
     * Return the Talker ID corresponding to a Talker Code, retrieving from cached list if present.
     * @param talkerCode    Talker Code.
     * @return              Talker ID.
     */
     QString cachedTalkerCodeToTalkerID(const QString& talkerCode);
-    
+
     /**
     * Job List View
     */
     KListView* m_jobListView;
     KttsJobMgrBrowserExtension *m_extension;
-    
+
     /**
     * Current sentence box.
     */
@@ -279,13 +314,13 @@ private:
     KToolBar* m_toolBar1;
     KToolBar* m_toolBar2;
     KToolBar* m_toolBar3;
-    
+
     /**
     * This flag is set to True whenever we want to select the next job that
     * is announced in a textSet signal.
     */
     bool selectOnTextSet;
-    
+
     /**
     * Cache mapping Talker Codes to Talker IDs.
     */

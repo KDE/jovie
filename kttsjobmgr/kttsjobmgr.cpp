@@ -430,23 +430,140 @@ void KttsJobMgrPart::slot_job_move()
     }
 }
 
+QString KttsJobMgrPart::translatedGender(const QString &gender)
+{
+    if (gender == "male")
+        return i18n("male");
+    else if (gender == "female")
+        return i18n("female");
+    else if (gender == "neutral")
+        return i18n("neutral gender", "neutral");
+    else return gender;
+}
+
+QString KttsJobMgrPart::translatedVolume(const QString &volume)
+{
+    if (volume == "medium")
+        return i18n("medium sound", "medium");
+    else if (volume == "loud")
+        return i18n("loud sound", "loud");
+    else if (volume == "soft")
+        return i18n("soft sound", "soft");
+    else return volume;
+}
+
+QString KttsJobMgrPart::translatedRate(const QString &rate)
+{
+    if (rate == "medium")
+        return i18n("medium speed", "medium");
+    else if (rate == "fast")
+        return i18n("fast speed", "fast");
+    else if (rate == "slow")
+        return i18n("slow speed", "slow");
+    else return rate;
+}
+
+/**
+ * Given a talker code, parses out the attributes.
+ * @param talkerCode       The talker code.
+ * @return languageCode    Language Code.
+ * @return voice           Voice name.
+ * @return gender          Gender.
+ * @return volume          Volume.
+ * @return rate            Rate.
+ * @return plugInName      Name of Synthesizer plugin.
+ */
+void KttsJobMgrPart::parseTalkerCode(const QString &talkerCode,
+    QString &languageCode,
+    QString &voice,
+    QString &gender,
+    QString &volume,
+    QString &rate,
+    QString &plugInName)
+{
+    languageCode = talkerCode.section("lang=", 1, 1);
+    languageCode = languageCode.section('"', 1, 1);
+    voice = talkerCode.section("name=", 1, 1);
+    voice = voice.section('"', 1, 1);
+    gender = talkerCode.section("gender=", 1, 1);
+    gender = gender.section('"', 1, 1);
+    volume = talkerCode.section("volume=", 1, 1);
+    volume = volume.section('"', 1, 1);
+    rate = talkerCode.section("rate=", 1, 1);
+    rate = rate.section('"', 1, 1);
+    plugInName = talkerCode.section("synthesizer=", 1, 1);
+    plugInName = plugInName.section('"', 1, 1);
+}
+
+/**
+ * Converts a language code plus optional country code to language description.
+ */
+QString KttsJobMgrPart::languageCodeToLanguage(const QString &languageCode)
+{
+    QString twoAlpha;
+    QString countryCode;
+    QString charSet;
+    QString language;
+    if (languageCode == "other")
+        language = i18n("Other");
+    else
+    {
+        KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
+        language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
+    }
+    if (!countryCode.isEmpty())
+        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ")";
+    return language;
+}
+
+/**
+* Convert a Talker Code to a translated, displayable name.
+*/
+QString KttsJobMgrPart::talkerCodeToDisplayName(const QString &talkerCode)
+{
+    QString languageCode;
+    QString voice;
+    QString gender;
+    QString volume;
+    QString rate;
+    QString plugInName;
+    parseTalkerCode(talkerCode, languageCode, voice, gender, volume, rate, plugInName);
+    QString display;
+    if (!languageCode.isEmpty()) display = languageCodeToLanguage(languageCode);
+    if (!plugInName.isEmpty()) display += "," + plugInName;
+    if (!voice.isEmpty()) display += "," + voice;
+    if (!gender.isEmpty()) display += "," + translatedGender(gender);
+    if (!volume.isEmpty()) display += "," + translatedVolume(volume);
+    if (!rate.isEmpty()) display += "," + translatedRate(rate);
+    return display;
+}
+
 void KttsJobMgrPart::slot_job_change_talker()
 {
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
         QStringList talkerCodesList = getTalkers();
+        QStringList displayNameList;
+        QMap<QString,QString> displayNamesToTalkerCodes;
+        unsigned int talkerCodesListCount = talkerCodesList.count();
+        for (unsigned int index = 0; index < talkerCodesListCount; ++index)
+        {
+            QString displayName = talkerCodeToDisplayName(talkerCodesList[index]);
+            displayNameList.append(displayName);
+            displayNamesToTalkerCodes[displayName] = talkerCodesList[index];
+        }
         bool okClicked = false;
         QString newTalker = KInputDialog::getItem(
             i18n("Select Talker"),
             i18n("Talker"),
-            talkerCodesList,
+            displayNameList,
             0,
             false,
             &okClicked);
         if (okClicked)
         {
-            changeTextTalker(jobNum, newTalker);
+            changeTextTalker(jobNum, displayNamesToTalkerCodes[newTalker]);
             refreshJob(jobNum);
         }
     }

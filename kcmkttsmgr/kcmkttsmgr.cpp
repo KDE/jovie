@@ -17,6 +17,10 @@
  *                                                                         *
  ***************************************************************************/
 
+// Note to programmers.  There is a subtle difference between a plugIn name and a 
+// synthesizer name.  The latter is a translated name, for example, "Festival Interactivo",
+// while the former is alway an English name, example "Festival Interactive".
+
 // Qt includes.
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -233,14 +237,14 @@ void KCMKttsMgr::load()
             QString languageCode;
             talkerCode = normalizeTalkerCode(talkerCode, languageCode);
             QString language = languageCodeToLanguage(languageCode);
-            QString plugInName = m_config->readEntry("PlugIn", "");
+            QString synthName = m_config->readEntry("PlugIn", "");
             // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
             if (talkerItem)
                 talkerItem =
-                    new KListViewItem(m_kttsmgrw->talkersList, talkerItem, talkerID, language, plugInName);
+                    new KListViewItem(m_kttsmgrw->talkersList, talkerItem, talkerID, language, synthName);
             else
                 talkerItem =
-                    new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, plugInName);
+                    new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, synthName);
             updateTalkerItem(talkerItem, talkerCode);
             m_languagesToCodes[language] = languageCode;
         }
@@ -252,7 +256,7 @@ void KCMKttsMgr::load()
     // Iterate thru the posible plug ins getting their language support codes.
     for(unsigned int i=0; i < m_offers.count() ; ++i)
     {
-        QString plugInName = m_offers[i]->name();
+        QString synthName = m_offers[i]->name();
         QStringList languageCodes = m_offers[i]->property("X-KDE-Languages").toStringList();
         // Add language codes to the language-to-language code map.
         QStringList::ConstIterator endLanguages(languageCodes.constEnd());
@@ -268,7 +272,7 @@ void KCMKttsMgr::load()
         if (!languageCodes.contains("other")) languageCodes.append("other");
 
         // Add supported language codes to synthesizer-to-language map.
-        m_synthToLangMap[plugInName] = languageCodes;
+        m_synthToLangMap[synthName] = languageCodes;
     }
 
     // Add "Other" language.
@@ -619,7 +623,7 @@ void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
 /**
 * Given a language code and plugin name, returns a normalized default talker code.
 * @param languageCode     Language code.
-* @param plugInName       Name of the plugin.
+* @param plugInName       Name of the Synthesizer plugin.
 * @return                 Full normalized talker code.
 *
 * Example returned from defaultTalkerCode("en", "Festival")
@@ -641,18 +645,15 @@ QString KCMKttsMgr::defaultTalkerCode(const QString &languageCode, const QString
 /**
 * Loads the configuration plug in for a named plug in.
 */
-PlugInConf *KCMKttsMgr::loadPlugin(const QString &plugInName)
+PlugInConf *KCMKttsMgr::loadPlugin(const QString &synthName)
 {
-    kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
+    // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
-    // Force reload of KTrader offers.  Fixes bug for Jorge, but I'm not sure why.
-    m_offers = KTrader::self()->query("KTTSD/SynthPlugin");
-
-    // Iterate thru the plug in m_offers to find the plug in that matches the plugInName.
+    // Iterate thru the plug in m_offers to find the plug in that matches the synthName.
     for(unsigned int i=0; i < m_offers.count() ; ++i){
         // Compare the plug in to be loaded with the entry in m_offers[i]
-        kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
-        if(m_offers[i]->name() == plugInName)
+        // kdDebug() << "Comparing " << m_offers[i]->name() << " to " << synthName << endl;
+        if(m_offers[i]->name() == synthName)
         {
             // When the entry is found, load the plug in
             // First create a factory for the library
@@ -667,19 +668,52 @@ PlugInConf *KCMKttsMgr::loadPlugin(const QString &plugInName)
                 } else {
                     // Something went wrong, returning null.
                     return NULL;
-                    kdDebug() << "KCMKttsMgr::loadPlugin: Unable to instantiate PlugInConf class for plugin " << plugInName << endl;
+                    kdDebug() << "KCMKttsMgr::loadPlugin: Unable to instantiate PlugInConf class for plugin " << synthName << endl;
                 }
             } else {
                 // Something went wrong, returning null.
-                kdDebug() << "KCMKttsMgr::loadPlugin: Unable to create Factory object for plugin " << plugInName << endl;
+                kdDebug() << "KCMKttsMgr::loadPlugin: Unable to create Factory object for plugin " << synthName << endl;
                 return NULL;
             }
             break;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
-    kdDebug() << "KCMKttsMgr::loadPlugin: KTrader did not return an offer for plugin " << plugInName << endl;
+    kdDebug() << "KCMKttsMgr::loadPlugin: KTrader did not return an offer for plugin " << synthName << endl;
     return NULL;
+}
+
+QString KCMKttsMgr::translatedGender(const QString &gender)
+{
+    if (gender == "male")
+        return i18n("male");
+    else if (gender == "female")
+        return i18n("female");
+    else if (gender == "neutral")
+        return i18n("neutral gender", "neutral");
+    else return gender;
+}
+
+QString KCMKttsMgr::translatedVolume(const QString &volume)
+{
+    if (volume == "medium")
+        return i18n("medium sound", "medium");
+    else if (volume == "loud")
+        return i18n("loud sound", "loud");
+    else if (volume == "soft")
+        return i18n("soft sound", "soft");
+    else return volume;
+}
+
+QString KCMKttsMgr::translatedRate(const QString &rate)
+{
+    if (rate == "medium")
+        return i18n("medium speed", "medium");
+    else if (rate == "fast")
+        return i18n("fast speed", "fast");
+    else if (rate == "slow")
+        return i18n("slow speed", "slow");
+    else return rate;
 }
 
 /**
@@ -705,11 +739,13 @@ void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talk
             talkerItem->setText(tlvcLanguage, language);
         }
     }
-    if (!plugInName.isEmpty()) talkerItem->setText(tlvcPlugInName, plugInName);
+    // Don't update the Synthesizer name with plugInName.  The former is a translated
+    // name; the latter an English name.
+    // if (!plugInName.isEmpty()) talkerItem->setText(tlvcSynthName, plugInName);
     if (!voice.isEmpty()) talkerItem->setText(tlvcVoice, voice);
-    if (!gender.isEmpty()) talkerItem->setText(tlvcGender, gender);
-    if (!volume.isEmpty()) talkerItem->setText(tlvcVolume, volume);
-    if (!rate.isEmpty()) talkerItem->setText(tlvcRate, rate);
+    if (!gender.isEmpty()) talkerItem->setText(tlvcGender, translatedGender(gender));
+    if (!volume.isEmpty()) talkerItem->setText(tlvcVolume, translatedVolume(volume));
+    if (!rate.isEmpty()) talkerItem->setText(tlvcRate, translatedRate(rate));
 }
 
 /**
@@ -730,7 +766,7 @@ void KCMKttsMgr::addTalker(){
     dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
     QString languageCode = addTalkerWidget->getLanguageCode();
-    QString plugInName = addTalkerWidget->getSynthesizer();
+    QString synthName = addTalkerWidget->getSynthesizer();
     delete dlg;
     // TODO: Also delete addTalkerWidget?
     if (dlgResult != QDialog::Accepted) return;
@@ -797,7 +833,7 @@ void KCMKttsMgr::addTalker(){
     m_config->sync();
 
     // Load the plugin.
-    m_loadedPlugIn = loadPlugin(plugInName);
+    m_loadedPlugIn = loadPlugin(synthName);
     if (!m_loadedPlugIn) return;
 
     // Give plugin the user's language code and permit plugin to autoconfigure itself.
@@ -828,7 +864,7 @@ void KCMKttsMgr::addTalker(){
 
         // Record configuration data.  Note, might as well do this now.
         m_config->setGroup(QString("Talker_")+talkerID);
-        m_config->writeEntry("PlugIn", plugInName);
+        m_config->writeEntry("PlugIn", synthName);
         talkerCode = normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
         m_config->sync();
@@ -837,10 +873,10 @@ void KCMKttsMgr::addTalker(){
         QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
             talkerItem =
-                new KListViewItem(m_kttsmgrw->talkersList, talkerItem, m_lastTalkerID, language, plugInName);
+                new KListViewItem(m_kttsmgrw->talkersList, talkerItem, m_lastTalkerID, language, synthName);
         else
             talkerItem =
-                new KListViewItem(m_kttsmgrw->talkersList, m_lastTalkerID, language, plugInName);
+                new KListViewItem(m_kttsmgrw->talkersList, m_lastTalkerID, language, synthName);
 
         // Set additional columns of the listview item.
         updateTalkerItem(talkerItem, talkerCode);
@@ -1017,23 +1053,21 @@ void KCMKttsMgr::slot_configureTalker()
     QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
     if (!talkerItem) return;
     QString talkerID = talkerItem->text(tlvcTalkerID);
-    QString plugInName = talkerItem->text(tlvcPlugInName);
+    QString synthName = talkerItem->text(tlvcSynthName);
     QString language = talkerItem->text(tlvcLanguage);
     QString languageCode = m_languagesToCodes[language];
-    m_loadedPlugIn = loadPlugin(plugInName);
+    m_loadedPlugIn = loadPlugin(synthName);
     if (!m_loadedPlugIn) return;
-    kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << plugInName << " loaded successfully." << endl;
+    // kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << synthName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
     m_config->setGroup(QString("Talker_")+talkerID);
     m_loadedPlugIn->setDesiredLanguage(languageCode);
-    kdDebug() << "KCMKttsMgr::slot_configureTalker: about to call plugin load() method with Talker ID = " << talkerID << endl;
+    // kdDebug() << "KCMKttsMgr::slot_configureTalker: about to call plugin load() method with Talker ID = " << talkerID << endl;
     m_loadedPlugIn->load(m_config, QString("Talker_")+talkerID);
 
     // Display configuration dialog.
-    kdDebug() << "KCMKttsMgr::slot_configureTalker: about to display configuration dialog." << endl;
     configureTalker();
-    kdDebug() << "KCMKttsMgr::slot_configureTalker: back from configuration dialog." << endl;
 
     // Did user Cancel?
     if (!m_loadedPlugIn) return;
@@ -1101,7 +1135,7 @@ void KCMKttsMgr::slotConfigDlg_DefaultClicked()
 
 void KCMKttsMgr::slotConfigDlg_OkClicked()
 {
-    kdDebug() << "KCMKttsMgr::slotConfigDlg_OkClicked: Running" << endl;
+    // kdDebug() << "KCMKttsMgr::slotConfigDlg_OkClicked: Running" << endl;
 }
 
 void KCMKttsMgr::slotConfigDlg_CancelClicked()

@@ -136,12 +136,19 @@ class KCMKttsMgr :
         {
             tlvcTalkerID,
             tlvcLanguage,
-            tlvcPlugInName,
+            tlvcSynthName,
             tlvcVoice,
             tlvcGender,
             tlvcVolume,
             tlvcRate,
         };
+
+        /**
+        * These functions return translated Talker Code attributes.
+        */
+        QString translatedGender(const QString &gender);
+        QString translatedVolume(const QString &volume);
+        QString translatedRate(const QString &rate);
 
         /**
         * Given a talker code, normalizes it into a standard form and returns language code.
@@ -159,7 +166,7 @@ class KCMKttsMgr :
         * @return gender          Gender.
         * @return volume          Volume.
         * @return rate            Rate.
-        * @return plugInName      Name of Synthesizer.
+        * @return plugInName      Name of Synthesizer plugin.
         */
         void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
             QString &languageCode,
@@ -190,9 +197,12 @@ class KCMKttsMgr :
         void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
 
         /**
-        * Loads the configuration plugin for a named plugin.
+        * Loads the configuration plugin for a named synthesizer.
+        * @param synthName        Name of the Synthesizer.  This is a translated name, and not
+        *                         necessarily the same as the plugIn name.
+        *                         Example, "Festival Interactivo".
         */
-        PlugInConf *loadPlugin(const QString &plugInName);
+        PlugInConf *loadPlugin(const QString &synthName);
 
         /**
         * Converts a language code plus optional country code to language description.

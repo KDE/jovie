@@ -881,6 +881,8 @@ void Speaker::pauseUtteranceByJobNum(const uint jobNum)
 QString Speaker::normalizeTalkerCode(const QString &talkerCode)
 {
     ParsedTalkerCode parsedTalkerCode = parseTalkerCode(talkerCode);
+    QString languageCode = parsedTalkerCode.languageCode;
+    if (!parsedTalkerCode.countryCode.isEmpty()) languageCode += "_" + parsedTalkerCode.countryCode;
     if (parsedTalkerCode.voice.isEmpty()) parsedTalkerCode.voice = "fixed";
     if (parsedTalkerCode.gender.isEmpty()) parsedTalkerCode.gender = "neutral";
     if (parsedTalkerCode.volume.isEmpty()) parsedTalkerCode.volume = "medium";
@@ -889,7 +891,7 @@ QString Speaker::normalizeTalkerCode(const QString &talkerCode)
         "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
         "<prosody volume=\"%4\" rate=\"%5\" />"
         "<kttsd synthesizer=\"%6\" />")
-            .arg(parsedTalkerCode.languageCode)
+            .arg(languageCode)
             .arg(parsedTalkerCode.voice)
             .arg(parsedTalkerCode.gender)
             .arg(parsedTalkerCode.volume)

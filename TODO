@@ -1,3 +1,6 @@
+_ Add "Higher Priority" button to KTTSMgr Talkers tab.  Also add drag N drop for the Talkers
+  so it is easier to change the ordering.
+_ It is possible to configure multiple instances of Talkers with the exact same configuration.
 _ Add WhatsThis help.  The Jobs tab needs them.
 _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
   language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
