@@ -1,31 +1,54 @@
-2004-10-14  Cramblitt <garycramblitt@comcast.net>
+2004-10-19  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
+        * The following installed files were renamed
+          on or about 19 Oct 2004:
+            In $KDEDIR/share/services/:
+              festival.desktop         -> kttsd_festivalplugin.desktop
+              festivalint.desktop      -> kttsd_festivalintplugin.desktop
+              command.desktop          -> kttsd_commandplugin.desktop
+              hadifix.desktop          -> kttsd_hadifixplugin.desktop
+              flite.desktop            -> kttsd_fliteplugin.desktop
+              epos-kttsdplugin.desktop -> kttsd_eposplugin.desktop
+              freetts.desktop          -> kttsd_freettsplugin.desktop
+            In $KDEDIR/lib/kde3/:
+              libfestivalplugin        -> libkttsd_festivalplugin
+              libfestivalintplugin     -> libkttsd_festivalintplugin
+              libcommandplugin         -> libkttsd_commandplugin
+              libhadifixplugin         -> libkttsd_hadifixplugin
+              libfliteplugin           -> libkttsd_fliteplugin
+              libeposkttsdplugin       -> libkttsd_eposplugin
+              libfreettsplugin         -> libkttsd_freettsplugin
+              
+          There is a new shell script, clean_obsolete.sh that will remove these
+          obsolete files from your system.
+        
+2004-10-14  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Fix crash when clicking Cancel to prompt for Other language code, or user
           enters an invalid language code.
         
-2004-10-13  Cramblitt <garycramblitt@comcast.net>
+2004-10-13  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * libktts is now a versioned shared library.  You may need to remove the
           unversioned library, ie.
              rm $KDEDIR/lib/libktts.*
              
-2004-10-13  Cramblitt <garycramblitt@comcast.net>
+2004-10-13  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Revert previous change.  Sorry.
 
-2004-10-13  Cramblitt <garycramblitt@comcast.net>
+2004-10-13  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Remove versioning from libkttsd.
           NOTE: After rebuilding and installing, you will want to delete
                 the following file:
                   $KDEDIR/lib/libkttsd.so.1.0.0
 
-2004-10-12  Cramblitt <garycramblitt@comcast.net>
+2004-10-12  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Added Handbook.
         * Help button and system tray content menu display Handbook.
         
-2004-09-07  Cramblitt <garycramblitt@comcast.net>
+2004-09-07  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Added 6 new HTS voices for Festival and FestivalInt plugins.
           Courtesy of "N.Cat" Triskelios.
           Download the voices from http://hts.ics.nitech.ac.jp/
           
-2004-09-04  Cramblitt <garycramblitt@comcast.net>
+2004-09-04  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Rename Hadifax to Hadifix.
           NOTE: After rebuilding and installing, you will want to delete the
                 following files:
@@ -36,7 +59,7 @@
 2004-09-02  Paul Giannaros
         * FreeTTS plugin.
         
-2004-08-28  Cramblitt <garycramblitt@comcast.net>
+2004-08-28  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * GStreamer player added.  Doesn't work right now because gstreamer 0.6
           has issues with wav files.  Try again when KDE bindings (gst) have been
           updated to gstreamer 0.8.
@@ -50,7 +73,7 @@
         * Better sentence parsing.
         * Minor fixes to kttsjobmgrpart.
         
-2004-08-09  Cramblitt <garycramblitt@comcast.net>
+2004-08-09  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Remove requirement to copy pluginconf.h to $KDEDIR/include when running designer
           against plugin configuration widgets.
         * Epos plugin not listing codecs.
@@ -58,10 +81,10 @@
         * Select and ensure default language visible when first displaying kttsmgr.
         * Auto select and prepare Properties tab when adding a new language in kttsmgr.
         
-2004-08-08  Cramblitt <garycramblitt@comcast.net>
+2004-08-08  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Add plugin for Epos TTS Synthesis System (czech and slovak).
         
-2004-08-07  Cramblitt <garycramblitt@comcast.net>
+2004-08-07  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Existing release marked with tag ktts-0-1.
         * New version of KTTS is 0.2.
         * Many changes to KTTSD and the KTTSD plugins.
@@ -90,12 +113,12 @@
           configuration dialog.
         * The option to play a sound on text interruption now works.
           
-2004-07-10  Cramblitt <garycramblitt@comcast.net>
+2004-07-10  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Warn user if festival not installed.
         * Install voices data file for festival interactive plugin even if
           festival plugin not installed.
 
-2004-06-05  Cramblitt <garycramblitt@comcast.net>
+2004-06-05  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Draft KDE Text-to-Speech API Draft 3.
         * Removed concept of paragraphs.
         * Added concept of text job parts.
@@ -104,34 +127,34 @@
         * Added jumpToTextPart.
         * Removed paragraph settings from configuration dialog.
         
-2004-05-31  Cramblitt <garycramblitt@comcast.net>
+2004-05-31  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Move speaking of notifications to KTTSD and persist notify settings.
         * Clean up kcmkttsmgr.desktop and install to correct place.
         
-2004-05-23  Cramblitt <garycramblitt@comcast.net>
+2004-05-23  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Add option to speak KNotify notifications.
         
-2004-05-22  Cramblitt <garycramblitt@comcast.net>
+2004-05-22  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Change menu item to "Speak Text" on the Tools menu in app-plugins.  Also start KTTSD if it is
           not running.
 
-2004-05-21  Cramblitt <garycramblitt@comcast.net>
+2004-05-21  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Bug fix.  Upon startup of kttsmgr, Remove button and Properties tab not enabled despite
           default language selected.
           
-2004-05-19  Cramblitt <garycramblitt@comcast.net>
+2004-05-19  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Allow kttsmgr screen to be resized as narrow as possible.
         * Correct some mispellings.
         * When calling reinit() pauseText only if isSpeakingText().
         
-2004-05-18  Cramblitt <garycramblitt@comcast.net>
+2004-05-18  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Reinit() without losing existing queued text jobs, messages, or warnings.
         * When kttsd restarts because of reinit(), job manager part refreshes list.
 
-2004-05-17  Cramblitt <garycramblitt@comcast.net>
+2004-05-17  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Fix hang when calling reinit() while speaking.
                         
-2004-05-15  Cramblitt <garycramblitt@comcast.net>
+2004-05-15  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Lots of changes:
         *   Defined the KDE Text-to-speech API.  See /libktts/kspeech.h.
         *   Moved all the GUI stuff out of KTTSD into kttsmgr.  KTTSD is a pure non-GUI deamon now.

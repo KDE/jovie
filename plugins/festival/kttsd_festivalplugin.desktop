@@ -1,0 +1,27 @@
+[Desktop Entry]
+Name=Festival
+Name[ja]=フェスティバル
+Name[xx]=xxFestivalxx
+Name[zu]=Ifestivali
+Comment=Festival speech synthetizer
+Comment[ca]=Sintetitzador de la parla Festival
+Comment[da]=Festival tale-synthetizer
+Comment[es]=Sintetizador del habla Festival
+Comment[et]=Kõnesüntesaator Festival
+Comment[fr]=Synthétiseur de paroles Festival
+Comment[ja]=フェスティバルスピーチシンセサイザ
+Comment[nl]=Festival spraaksynthetizer
+Comment[pt]=O sintetizador de fala Festival
+Comment[pt_BR]=Sintetizador de Fala Festival
+Comment[ru]=Синтезатор речи Festival
+Comment[sr]=Синтетизатор говора Festival
+Comment[sr@Latn]=Синтетизатор говора Festival
+Comment[sv]=Festival talsyntes
+Comment[xx]=xxFestival speech synthetizerxx
+Comment[zh_CN]=Festival 语音合成器
+Comment[zh_TW]=Festival 語音合成器
+Comment[zu]=Umakhi wenkulumo yefestivali
+Type=Service
+ServiceTypes=KTTSD/SynthPlugin
+X-KDE-Library=libkttsd_festivalplugin
+X-KDE-Languages=en,en_GB,es,cy

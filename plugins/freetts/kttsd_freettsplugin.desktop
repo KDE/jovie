@@ -1,0 +1,25 @@
+[Desktop Entry]
+Name=FreeTTS
+Name[xx]=xxFreeTTSxx
+Comment=FreeTTS speech synthesizer
+Comment[ca]=Sintetitzador de la parla FreeTTS
+Comment[da]=FreeTTS tale-synthesizer
+Comment[en_GB]=FreeTTS speech synthesiser
+Comment[es]=Sintetizador del habla FreeTTS
+Comment[et]=Kõnesüntesaator FreeTTS
+Comment[fr]=Synthétiseur de paroles FreeTTS
+Comment[ja]=FreeTTS スピーチシンセサイザ
+Comment[nl]=FreeTTS spraaksynthesizer
+Comment[pt]=O sintetizador de fala FreeTTS
+Comment[pt_BR]=Sintetizador de voz FreeTTS
+Comment[ru]=Синтезатор речи FreeTTS
+Comment[sr]=Синтетизатор говора FreeTTS
+Comment[sr@Latn]=Синтетизатор говора FreeTTS
+Comment[sv]=FreeTTS talsyntes
+Comment[xx]=xxFreeTTS speech synthesizerxx
+Comment[zh_CN]=FreeTTS 语音合成器
+Comment[zh_TW]=FreeTTS 語音合成器
+Comment[zu]=Umakhi wenkulumo ye-FreetTTS
+Type=Service
+ServiceTypes=KTTSD/SynthPlugin
+X-KDE-Library=libkttsd_freettsplugin

@@ -8,17 +8,17 @@ AM_CPPFLAGS = \
         $(all_includes)
 METASOURCES = AUTO
 
-kde_module_LTLIBRARIES = libfliteplugin.la
+kde_module_LTLIBRARIES = libkttsd_fliteplugin.la
 
-libfliteplugin_la_SOURCES = \
+libkttsd_fliteplugin_la_SOURCES = \
         fliteconfwidget.ui \
         fliteconf.cpp \
         fliteproc.cpp \
         fliteplugin.cpp 
-libfliteplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libfliteplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
+libkttsd_fliteplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
+libkttsd_fliteplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
 
-services_DATA = flite.desktop
+services_DATA = kttsd_fliteplugin.desktop
 servicesdir = $(kde_servicesdir)
 
 noinst_HEADERS =  fliteproc.h fliteconf.h fliteconfwidget.h

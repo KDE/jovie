@@ -1,0 +1,82 @@
+#! /bin/sh
+
+# This script cleans obsolete KTTS files from your system.
+# You should run this if you have been downloading KTTS and installing
+# prior to the indicated dates.
+
+# You would normally run this after running configure and before
+# make install, i.e.,
+#   cd kdenonbeta
+#   echo kttsd>inst-apps
+#   make -f Makefile.cvs
+#   ./configure
+#   cd kttsd
+#   ./clean_obsolete.sh
+#   make install
+
+PREFIX=$(kde-config --prefix)
+LIBTOOL="../libtool"
+
+if [ -z "$PREFIX" ]; then
+    echo "KDE prefix not found.  Do you have kde-config installed?"
+    exit
+fi
+
+if [ ! -x $LIBTOOL ]; then
+    echo "libtool was not found.  Did you run configure?"
+    exit
+fi
+
+set -x
+
+# The following installed files were renamed
+# on or about 19 Oct 2004:
+#  In $KDEDIR/share/services/:
+#    festival.desktop         -> kttsd_festivalplugin.desktop
+#    festivalint.desktop      -> kttsd_festivalintplugin.desktop
+#    command.desktop          -> kttsd_commandplugin.desktop
+#    hadifix.desktop          -> kttsd_hadifixplugin.desktop
+#    flite.desktop            -> kttsd_fliteplugin.desktop
+#    epos-kttsdplugin.desktop -> kttsd_eposplugin.desktop
+#    freetts.desktop          -> kttsd_freettsplugin.desktop
+#  In $KDEDIR/lib/kde3/:
+#    libfestivalplugin        -> libkttsd_festivalplugin
+#    libfestivalintplugin     -> libkttsd_festivalintplugin
+#    libcommandplugin         -> libkttsd_commandplugin
+#    libhadifixplugin         -> libkttsd_hadifixplugin
+#    libfliteplugin           -> libkttsd_fliteplugin
+#    libeposkttsdplugin       -> libkttsd_eposplugin
+#    libfreettsplugin         -> libkttsd_freettsplugin
+
+rm -f $PREFIX/share/services/festival.desktop
+rm -f $PREFIX/share/services/festivalint.desktop
+rm -f $PREFIX/share/services/command.desktop
+rm -f $PREFIX/share/services/hadifix.desktop
+rm -f $PREFIX/share/services/flite.desktop
+rm -f $PREFIX/share/services/epos-kttsdplugin.desktop
+rm -f $PREFIX/share/services/freetts.desktop
+
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfestivalplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfestivalintplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libcommandplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libhadifixplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfliteplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libeposkttsdplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfreettsplugin
+
+# The following library was changed from unversioned to versioned
+# on or about 13 Oct 2004, 
+
+$LIBTOOL --mode=uninstall $PREFIX/lib/libktts
+
+# The hadifax plugin was renamed to hadifix
+# on or about 4 Sep 2004.
+
+rm -f $PREFIX/share/services/hadifax.desktop
+$LIBTOOL --mode=uninstall /lib/kde3/libhadifaxplugin
+
+# Clean up the library cache.
+
+$LIBTOOL --mode=finish -n $PREFIX/lib
+$LIBTOOL --mode=finish -n $PREFIX/lib/kde3/
+

@@ -1,23 +1,4 @@
 _ Rename libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention.
-_ The following installed files should be renamed to avoid possible conflicts with
-  other apps, make their purpose more explicit, standardsize naming convention,
-  and bring them together in directory listings.
-  In $KDEDIR/share/services/:
-    festivalint.desktop      -> kttsd_festivalintplugin.desktop
-    command.desktop          -> kttsd_commandplugin.desktop
-    hadifix.desktop          -> kttsd_hadifixplugin.desktop
-    flite.desktop            -> kttsd_fliteplugin.desktop
-    epos-kttsdplugin.desktop -> kttsd_eposplugin.desktop
-    freetts.desktop          -> kttsd_freettsplugin.desktop
-  In $KDEDIR/lib/kde3/:    
-    libfestivalintplugin     -> libkttsd_festivalintplugin
-    libcommandplugin         -> libkttsd_commandplugin
-    libhadifixplugin         -> libkttsd_hadifixplugin
-    libfliteplugin           -> libkttsd_fliteplugin
-    libeposkttsdplugin.so    -> libkttsd_eposplugin
-    libfreettsplugin         -> libkttsd_freettsplugin
-_ Crash when adding a plugin with "Other" language, and not entering a language code
-  in response to prompt.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
   English (at the moment) and is alpha, don't think it is worth it now.
 _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/

@@ -24,5 +24,5 @@
 #include "festivalintproc.h"
 
 typedef K_TYPELIST_2( FestivalIntProc, FestivalIntConf ) Festival;
-K_EXPORT_COMPONENT_FACTORY( libfestivalintplugin, KGenericFactory<Festival>("plugin_FestivalInt") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_festivalintplugin, KGenericFactory<Festival>("plugin_FestivalInt") );
 

@@ -8,20 +8,20 @@ AM_CPPFLAGS = \
 	$(all_includes)
 METASOURCES = AUTO
 
-kde_module_LTLIBRARIES = libhadifixplugin.la
+kde_module_LTLIBRARIES = libkttsd_hadifixplugin.la
 
-libhadifixplugin_la_SOURCES = \
+libkttsd_hadifixplugin_la_SOURCES = \
 	hadifixconf.cpp \
 	hadifixproc.cpp \
 	hadifixplugin.cpp \
 	hadifixconfigui.ui \
 	voicefileui.ui
-libhadifixplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libhadifixplugin_la_LIBADD = $(LIB_KDECORE) $(LIB_KFILE) -lartskde $(top_builddir)/kttsd/libkttsd/libkttsd.la
+libkttsd_hadifixplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
+libkttsd_hadifixplugin_la_LIBADD = $(LIB_KDECORE) $(LIB_KFILE) -lartskde $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 EXTRA_DIST = male.png female.png 
 
-services_DATA = hadifix.desktop
+services_DATA = kttsd_hadifixplugin.desktop
 servicesdir = $(kde_servicesdir)
 
 install-data-local:

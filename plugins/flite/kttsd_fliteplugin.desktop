@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Festival Lite (flite)
+Comment=Festival Lite (flite) speech synthesizer
+Comment[pt]=O sintetizador de fala Festival Lite (flite)
+Comment[pt_BR]=O sintetizador de fala Festival Lite (flite)
+Comment[sr]=Синтетизатор говора Festival Lite (flite)
+Comment[sr@Latn]=Синтетизатор говора Festival Lite (flite)
+Comment[sv]=Festival Lite (flite) talsyntes
+Type=Service
+ServiceTypes=KTTSD/SynthPlugin
+X-KDE-Library=libkttsd_fliteplugin
+X-KDE-Languages=en,en_GB

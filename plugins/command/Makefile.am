@@ -8,16 +8,16 @@ AM_CPPFLAGS = \
         $(all_includes)
 METASOURCES = AUTO
 
-kde_module_LTLIBRARIES = libcommandplugin.la
+kde_module_LTLIBRARIES = libkttsd_commandplugin.la
 
-libcommandplugin_la_SOURCES = \
+libkttsd_commandplugin_la_SOURCES = \
         commandconfwidget.ui \
         commandconf.cpp \
         commandproc.cpp \
         commandplugin.cpp
-libcommandplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libcommandplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
+libkttsd_commandplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
+libkttsd_commandplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
 
-services_DATA = command.desktop
+services_DATA = kttsd_commandplugin.desktop
 servicesdir = $(kde_servicesdir)
 

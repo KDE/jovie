@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Hadifix
+Comment=German hadifix text-to-speech system
+Comment[pt]=Sistema alemão de texto-para-voz hadifix
+Comment[pt_BR]=Sistema alemão de texto-para-voz hadifix
+Comment[sr]=Немачки систем за претварање текста у говор Hadifix
+Comment[sr@Latn]=Немачки систем за претварање текста у говор Hadifix
+Comment[sv]=Tyskt hadifix text-till-tal system
+Type=Service
+ServiceTypes=KTTSD/SynthPlugin
+X-KDE-Library=libkttsd_hadifixplugin
+X-KDE-Languages=de

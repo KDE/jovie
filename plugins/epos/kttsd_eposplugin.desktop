@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Epos TTS Synthesis System
+Name[pt]=Sistema de Síntese Epos TTS
+Name[pt_BR]=Sistema de Síntese Epos TTS
+Name[sr]=Систем за синтезу Epos TTS
+Name[sr@Latn]=Систем за синтезу Epos TTS
+Name[sv]=Epos TTS talsyntessystem
+Comment=Epos TTS speech synthesizer
+Comment[pt]=O sintetizador de fala Epos TTS
+Comment[pt_BR]=O sintetizador de fala Epos TTS
+Comment[sr]=Синтетизатор говора Epos TTS
+Comment[sr@Latn]=Синтетизатор говора Epos TTS
+Comment[sv]=Epos TTS talsyntes
+Type=Service
+ServiceTypes=KTTSD/SynthPlugin
+X-KDE-Library=libkttsd_eposplugin
+X-KDE-Languages=cs,sk

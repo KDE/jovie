@@ -8,17 +8,17 @@ AM_CPPFLAGS = \
         $(all_includes)
 METASOURCES = AUTO
 
-kde_module_LTLIBRARIES = libfestivalintplugin.la
+kde_module_LTLIBRARIES = libkttsd_festivalintplugin.la
 
-libfestivalintplugin_la_SOURCES = \
+libkttsd_festivalintplugin_la_SOURCES = \
         festivalintconfwidget.ui \
         festivalintconf.cpp \
         festivalintproc.cpp \
         festivalintplugin.cpp
-libfestivalintplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libfestivalintplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
+libkttsd_festivalintplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
+libkttsd_festivalintplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
 
-services_DATA = festivalint.desktop
+services_DATA = kttsd_festivalintplugin.desktop
 servicesdir = $(kde_servicesdir)
 
 festivalintdatadir = $(kde_datadir)/kttsd/festivalint/
