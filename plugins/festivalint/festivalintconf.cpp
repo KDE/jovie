@@ -78,14 +78,20 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
             this, SLOT(slotSelectVoiceCombo_activated()));
     connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
     connect(m_widget->rescan, SIGNAL(clicked()), this, SLOT(scanVoices()));
+    connect(m_widget->volumeBox, SIGNAL(valueChanged(int)),
+            this, SLOT(volumeBox_valueChanged(int)));
     connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
     connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)),
             this, SLOT(frequencyBox_valueChanged(int)));
+    connect(m_widget->volumeSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(volumeSlider_valueChanged(int)));
     connect(m_widget->timeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(timeSlider_valueChanged(int)));
     connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)),
             this, SLOT(frequencySlider_valueChanged(int)));
+    connect(m_widget->volumeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_widget->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
     connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
@@ -125,6 +131,7 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
             break;
         }
     }
+    m_widget->volumeBox->setValue(config->readNumEntry("volume", 100));
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
     m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
     m_widget->preloadCheckBox->setChecked(config->readBoolEntry(
@@ -139,6 +146,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     config->setGroup(configGroup);
     config->writePathEntry("FestivalExecutablePath", m_widget->festivalPath->url());
     config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
+    config->writeEntry("volume", m_widget->volumeBox->value());
     config->writeEntry("time", m_widget->timeBox->value());
     config->writeEntry("pitch", m_widget->frequencyBox->value());
     config->writeEntry("Preload", m_widget->preloadCheckBox->isChecked());
@@ -149,6 +157,8 @@ void FestivalIntConf::defaults(){
     m_widget->festivalPath->setURL("festival");
     m_widget->timeBox->setValue(100);
     timeBox_valueChanged(100);
+    m_widget->volumeBox->setValue(100);
+    volumeBox_valueChanged(100);
     m_widget->frequencyBox->setValue(100);
     frequencyBox_valueChanged(100);
     m_widget->preloadCheckBox->setChecked(false);
@@ -391,7 +401,8 @@ void FestivalIntConf::slotTest_clicked()
         tmpWaveFile,
         voiceCode,
         m_widget->timeBox->value(),
-        m_widget->frequencyBox->value());
+        m_widget->frequencyBox->value(),
+        m_widget->volumeBox->value());
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
@@ -504,12 +515,20 @@ int FestivalIntConf::sliderToPercent(int sliderValue) {
     return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
 }
 
+void FestivalIntConf::volumeBox_valueChanged(int percentValue) {
+    m_widget->volumeSlider->setValue(percentToSlider(percentValue));
+}
+
 void FestivalIntConf::timeBox_valueChanged(int percentValue) {
     m_widget->timeSlider->setValue (percentToSlider (percentValue));
 }
 
 void FestivalIntConf::frequencyBox_valueChanged(int percentValue) {
     m_widget->frequencySlider->setValue(percentToSlider(percentValue));
+}
+
+void FestivalIntConf::volumeSlider_valueChanged(int sliderValue) {
+    m_widget->volumeBox->setValue(sliderToPercent(sliderValue));
 }
 
 void FestivalIntConf::timeSlider_valueChanged(int sliderValue) {

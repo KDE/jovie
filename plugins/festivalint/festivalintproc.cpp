@@ -79,8 +79,9 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_voiceCode = config->readEntry("Voice");
     m_festivalExePath = config->readEntry("FestivalExecutablePath", "festival");
     // kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
-    m_time = config->readNumEntry("time",    100);
-    m_pitch = config->readNumEntry("pitch",    100);
+    m_time = config->readNumEntry("time", 100);
+    m_pitch = config->readNumEntry("pitch", 100);
+    m_volume = config->readNumEntry("volume", 100);
     // If voice should be pre-loaded, start Festival and load the voice.
     m_preload = config->readBoolEntry("Preload", false);
     if (m_preload) startEngine(m_festivalExePath, m_voiceCode);
@@ -95,7 +96,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch);
+    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch, m_volume);
 }
 
 /**
@@ -110,7 +111,7 @@ void FestivalIntProc::sayText(const QString &text)
 */
 void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
 {
-    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch);
+    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch, m_volume);
 };
 
 /**
@@ -201,6 +202,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
 * @param voiceCode               Voice code in which to speak text.
 * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
 * @param pitch                   Pitch persentage.  50 to 200.
+* @param volume                  Volume percentage.  50 to 200.
 */
 void FestivalIntProc::synth(
     const QString & festivalExePath,
@@ -208,7 +210,8 @@ void FestivalIntProc::synth(
     const QString &synthFilename,
     const QString& voiceCode,
     const int time,
-    const int pitch)
+    const int pitch,
+    const int volume)
 {
     // kdDebug() << "FestivalIntProc::synth: festivalExePath = " << festivalExePath
     //         << " voiceCode = " << voiceCode << endl;
@@ -262,11 +265,19 @@ void FestivalIntProc::synth(
     } else {
         m_state = psSynthing;
         m_synthFilename = synthFilename;
+        // Volume must be given for each utterance.
+        // Volume values range from 50 to 200%, with 100% = normal.
+        // Map onto rescale range of .5 to 2.
+        float volumeValue = float(volume) / 100;
+        // Expand to range .25 to 4.
+        // float volumeValue = exp(log(volumeValue) * 2);
         // kdDebug() << "FestivalIntProc::synth: Synthing text: '" << saidText << "' using Festival plug in with voice "
         //    << voiceCode << endl;
         saidText = "(set! utt1 (Utterance Text \"" + 
             saidText + 
-            "\"))(utt.synth utt1)(utt.save.wave utt1 \"" + synthFilename + "\")";
+                "\"))(utt.synth utt1)" +
+                "(utt.wave.rescale utt1 " + QString::number(volumeValue) + " t)" +
+                "(utt.save.wave utt1 \"" + synthFilename + "\")";
         sendToFestival(saidText);
     }
 }

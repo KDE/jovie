@@ -120,8 +120,10 @@ class FestivalIntConf : public PlugInConf {
         void slotTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();
+        void volumeBox_valueChanged(int percentValue);
         void timeBox_valueChanged(int percentValue);
         void frequencyBox_valueChanged(int percentValue);
+        void volumeSlider_valueChanged(int sliderValue);
         void timeSlider_valueChanged(int sliderValue);
         void frequencySlider_valueChanged(int sliderValue);
         void slotSelectVoiceCombo_activated();

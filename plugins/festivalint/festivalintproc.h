@@ -154,9 +154,11 @@ class FestivalIntProc : public PlugInProc{
         * @param voiceCode               Voice code.
         * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
         * @param pitch                   Pitch persentage.  50 to 200.
+        * @param volume                  Volume percentage.  50 to 200.
         */
         void synth(const QString &festivalExePath, const QString &text,
-            const QString &synthFilename, const QString& voiceCode, const int time, const int pitch);
+            const QString &synthFilename, const QString& voiceCode,
+            const int time, const int pitch, const int volume);
 
         /**
         * Sends commands to Festival to query for a list of supported voice codes.
@@ -229,6 +231,11 @@ class FestivalIntProc : public PlugInProc{
         * Selected pitch (frequency) (from config).
         */
         int m_pitch;
+        
+        /**
+         * Selected volume (from config).
+         */
+        int m_volume;
 
         /**
         * Running voice.
