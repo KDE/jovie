@@ -34,6 +34,7 @@
 #include <qfile.h>
 #include <kfiledialog.h>
 #include <kcmultidialog.h>
+#include <dcopclient.h>
 
 #include "kttsd.h"
 //#include "speaker.h"
@@ -203,7 +204,10 @@ void KTTSD::sayMessage(const QString &message, const QString &language=NULL){
 void KTTSD::setText(const QString &text, const QString &language){
     kdDebug() << "Running: setText(const QString &text, const QString &language=NULL)" << endl;
     kdDebug() << "Setting text: '" << text << "'" << endl;
-    speechData->setText(text, language);
+    DCOPClient* client = callingDcopClient();
+    QCString appId;
+    if (client) appId = client->senderId();
+    speechData->setText(text, language, appId);
     if (checkBoxShow->isChecked())
         show();
 }

@@ -27,6 +27,7 @@
 #define _SPEECHDATA_H_
 
 #include <qptrqueue.h>
+#include <qptrlist.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
 #include <qstring.h>
@@ -35,12 +36,13 @@
 #include <kconfig.h>
 
 /**
- * Struct containing a text cell, for messages and warnings
- * Contains the text itself and the language asosiated
+ * Struct containing a text cell, for messages, warnings, and texts.
+ * Contains the text itself, the associated language, and the ID of the application that requested it be spoken.
  */
 struct mlText{
    QString language;
    QString text;
+   QCString appId;
 };
 
 /**
@@ -104,7 +106,7 @@ class SpeechData : public QObject {
       /**
        * Sets a text to say it and navigate it (thread safe) (see also resumeText, stopText, etc)
        */
-      void setText( const QString &, const QString &language=NULL  );
+      void setText( const QString &, const QString &language=NULL, const QCString &appId=NULL);
 
       /**
        * Remove the text (thread safe)
@@ -319,10 +321,15 @@ class SpeechData : public QObject {
       QMutex messagesMutex;
 
       /**
-       * List of sentenses of the text
+       * List of sentences of the text
        */
-      QStringList textSents;
+      QPtrList<mlText> textSents;
 
+      /**
+       * Iterator of the sentences of the text
+       */
+      QPtrListIterator<mlText>* textIterator;
+      
       /**
        * Language of the text
        */
@@ -337,11 +344,6 @@ class SpeechData : public QObject {
        * holds true if the text is stoped
        */
       bool reading;
-
-      /**
-       * Iterator of the sentenses of the text
-       */
-      QStringList::Iterator textIterator;
 };
 
 #endif // _SPEECHDATA_H_

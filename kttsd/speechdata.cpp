@@ -43,6 +43,8 @@ SpeechData::SpeechData(){
     // The text should be stoped at the beggining (thread safe)
     textMutex.lock();
     reading = false;
+    textSents.setAutoDelete(true);
+    textIterator = new QPtrListIterator<mlText>(textSents);
     textMutex.unlock();
 
     // Warnings queue to be autodelete  (thread safe)
@@ -104,6 +106,7 @@ bool SpeechData::readConfig(){
 SpeechData::~SpeechData(){
     kdDebug() << "Running: SpeechData::~SpeechData()" << endl;
     if (config) delete config;
+    delete textIterator;
 }
 
 /**
@@ -199,10 +202,10 @@ bool SpeechData::messageInQueue(){
 /**
  * Sets a text to say it and navigate it (thread safe) (see also resumeText, stopText, etc)
  */
-void SpeechData::setText( const QString &text, const QString &language ){
+void SpeechData::setText( const QString &text, const QString &language, const QCString &appId ){
     kdDebug() << "Running: SpeechData::setText" << endl;
     // There has to be a better way
-    kdDebug() << "I'm getting: " << endl << text  << endl;
+    kdDebug() << "I'm getting: " << endl << text << " from application " << appId << endl;
     QString temp = text;
     QStringList tempList = QStringList::split(QRegExp("([\\.\\?\\:\\;]\\s)|(\\n\\n)"), temp, false);
 /*    
@@ -213,7 +216,6 @@ void SpeechData::setText( const QString &text, const QString &language ){
     for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
         kdDebug() << "'" << *it << "'" << endl;
     }
-    
 
     textMutex.lock();
     bool wasReading = reading;
@@ -222,8 +224,17 @@ void SpeechData::setText( const QString &text, const QString &language ){
         textLanguage = language;
     else
         textLanguage = defaultLanguage;
-    textSents = tempList;
-    textIterator = textSents.begin();
+    textSents.clear();
+    mlText* sent;
+    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it )
+    {
+        sent = new mlText();
+        sent->text = *it;
+        sent->language = textLanguage;
+        sent->appId = appId;
+        textSents.append(sent);
+    }
+    textIterator->toFirst();
     textMutex.unlock();
     if (wasReading)
         emit textStopped();
@@ -238,7 +249,7 @@ void SpeechData::removeText(){
     textMutex.lock();
     bool wasReading = reading;
     reading = false;
-    textIterator = textSents.begin();
+    textIterator->toFirst();
     textSents.clear();
     textMutex.unlock();
     if (wasReading)
@@ -251,14 +262,12 @@ void SpeechData::removeText(){
   */
 mlText SpeechData::getSentenceText(){
     kdDebug() << "Running: QString getSentenceText()" << endl;
-    mlText *temp = new mlText();
     textMutex.lock();
-    temp->text = *textIterator;
-    temp->language = textLanguage;
-    textIterator++;
-    if(textIterator == textSents.end()){
+    mlText* temp = textIterator->current();
+    if (++*textIterator == 0)
+    {
         reading = false;
-        textIterator = textSents.begin();
+        textIterator->toFirst();
     }
     textMutex.unlock();
     if (!reading)
@@ -283,8 +292,8 @@ bool SpeechData::currentlyReading(){
 void SpeechData::prevParText(){
     kdDebug() << "Running: SpeechData::prevParText()" << endl;
     textMutex.lock();
-    while(*textIterator != "" and textIterator != textSents.begin()){
-        textIterator--;
+    while(textIterator->current()->text != "" and !textIterator->atFirst()){
+        --*textIterator;
     }
     textMutex.unlock();
 }
@@ -295,8 +304,8 @@ void SpeechData::prevParText(){
 void SpeechData::prevSenText(){
     kdDebug() << "Running: SpeechData::prevSenText()" << endl;
     textMutex.lock();
-    if (textIterator != textSents.begin())
-        textIterator--;
+    if (!textIterator->atFirst())
+        --*textIterator;
     textMutex.unlock();
 }
 
@@ -318,7 +327,7 @@ void SpeechData::stopText(){
     kdDebug() << "Running: SpeechData::stopText()" << endl;
     textMutex.lock();
     reading = false;
-    textIterator = textSents.begin();
+    textIterator->toFirst();
     textMutex.unlock();
     emit textStopped();
 }
@@ -331,7 +340,7 @@ void SpeechData::startText(){
     textMutex.lock();
     bool wasReading = reading;
     reading = true;
-    textIterator = textSents.begin();
+    textIterator->toFirst();
     textMutex.unlock();
     newTMW.wakeOne();
     if (wasReading)
@@ -346,7 +355,7 @@ void SpeechData::resumeText(){
     kdDebug() << "Running: SpeechData::resumeText()" << endl;
     textMutex.lock();
     bool wasReading = reading;
-    bool wasStarted = (textIterator == textSents.begin());
+    bool wasStarted = textIterator->atFirst();
     reading = true;
     textMutex.unlock();
     newTMW.wakeOne();
@@ -365,8 +374,8 @@ void SpeechData::resumeText(){
 void SpeechData::nextSenText(){
     kdDebug() << "Running: SpeechData::nextSenText()" << endl;
     textMutex.lock();
-    if (textIterator != textSents.end())
-        textIterator++;
+    if (textIterator->current() != 0)
+        ++*textIterator;
     textMutex.unlock();
 }
 
@@ -376,8 +385,8 @@ void SpeechData::nextSenText(){
 void SpeechData::nextParText(){
     kdDebug() << "Running: SpeechData::nextParText()" << endl;
     textMutex.lock();
-    while(*textIterator != "" and textIterator != textSents.end()){
-        textIterator++;
+    while(textIterator->current()->text != "" and !textIterator->atLast()){
+        ++*textIterator;
     }
     textMutex.unlock();
 }
