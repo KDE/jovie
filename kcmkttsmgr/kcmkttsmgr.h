@@ -57,10 +57,9 @@ class KCMKttsMgr :
     public KCModule,
     virtual public KSpeechSink
 {
-   Q_OBJECT
-   K_DCOP
+    Q_OBJECT
 
-   public:
+    public:
         KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);
 
         ~KCMKttsMgr();
@@ -120,14 +119,6 @@ class KCMKttsMgr :
         */
         const KAboutData* aboutData() const;
         
-    k_dcop:
-        /**
-        * This signal is emitted by KNotify when a notification event occurs.
-        */
-        void notificationSignal(const QString &event, const QString &fromApp,
-                                const QString &text, const QString &sound, const QString &file,
-                                const int present, const int level, const int winId, const int eventId );
-    
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
         /** Most of these are not used */

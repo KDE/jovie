@@ -509,6 +509,16 @@ class SpeechData : public QObject {
         * Paragraph post sound enabled ?
         */
         bool parPostSndEnabled;
+        
+        /**
+        * Notify.
+        */
+        bool notify;
+        
+        /**
+        * Notify passive popups only.
+        */
+        bool notifyPassivePopupsOnly;
 
         /**
         * Default talker.

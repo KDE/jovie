@@ -29,6 +29,7 @@
 #include <qfile.h>
 #include <kfiledialog.h>
 #include <dcopclient.h>
+#include <knotifyclient.h>
 
 #include "kttsd.h"
 
@@ -90,6 +91,12 @@ bool KTTSD::initializeSpeechData()
             this, SLOT(slotTextSet(const QCString&, const uint)));
         connect (speechData, SIGNAL(textRemoved(const QCString&, const uint)), 
             this, SLOT(slotTextRemoved(const QCString&, const uint)));
+    
+        // Hook KNotify signal.
+        if (!connectDCOPSignal(0, 0, 
+            "notifySignal(QString,QString,QString,QString,QString,int,int,int,int)",
+            "notificationSignal(QString,QString,QString,QString,QString,int,int,int,int)",
+            false)) kdDebug() << "connectDCOPSignal for knotify failed" << endl;
     }
 
     return true;
@@ -627,6 +634,20 @@ void KTTSD::speakerFinished()
 
 void KTTSD::configCommitted() {
     if (speaker) reinit();
+}
+
+/**
+* This signal is emitted by KNotify when a notification event occurs.
+*/
+void KTTSD::notificationSignal( const QString&, const QString&,
+                                     const QString &text, const QString&, const QString&,
+                                     const int present, const int, const int, const int )
+{
+    if (!text.isNull())
+        if ( speechData->notify )
+            if ( speechData->notifyPassivePopupsOnly 
+                or (present & KNotifyClient::PassivePopup) )
+                    speechData->enqueueMessage(text, NULL, getAppId());
 }
 
 // Slots for the speaker object

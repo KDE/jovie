@@ -97,7 +97,11 @@ bool SpeechData::readConfig(){
 
     parPostSndEnabled = config->readBoolEntry("ParPostSndEnabled", false);
     parPostSnd = config->readPathEntry("ParPostSnd");
-
+    
+    // Notification (KNotify).
+    notify = config->readBoolEntry("Notify", false);
+    notifyPassivePopupsOnly = config->readBoolEntry("NotifyPassivePopupsOnly", false);
+    
     if(config->hasKey("DefaultLanguage")){
         defaultTalker = config->readEntry("DefaultLanguage");
         return true;

@@ -39,6 +39,7 @@
 class KTTSD : public QObject, virtual public kspeech
 {
     Q_OBJECT
+    K_DCOP
 
     public:
         /**
@@ -412,7 +413,17 @@ class KTTSD : public QObject, virtual public kspeech
         * Re-start %KTTSD.
         */
         virtual void reinit();
-        
+
+    protected:
+            
+    k_dcop:
+        /**
+        * This signal is emitted by KNotify when a notification event occurs.
+        */
+        void notificationSignal(const QString &event, const QString &fromApp,
+                                const QString &text, const QString &sound, const QString &file,
+                                const int present, const int level, const int winId, const int eventId );
+    
     private slots:
         /*
          * These functions are called whenever

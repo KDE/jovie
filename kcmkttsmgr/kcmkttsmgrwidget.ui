@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>545</width>
-            <height>566</height>
+            <width>523</width>
+            <height>570</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -345,6 +345,9 @@
                     <widget class="QGroupBox" row="1" column="1">
                         <property name="name">
                             <cstring>notifyGroupBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
                         </property>
                         <property name="title">
                             <string>Notifications</string>

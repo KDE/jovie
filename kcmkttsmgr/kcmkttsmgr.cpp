@@ -45,7 +45,6 @@
 #include <kconfig.h>
 #include <kaboutapplication.h>
 #include <kpopupmenu.h>
-#include <knotifyclient.h>
 
 #include "kcmkttsmgr.moc"
 #include "kcmkttsmgr.h"
@@ -177,12 +176,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         "kttsdExiting()",
         false);
         
-    // Hook KNotify signal.
-    if (!connectDCOPSignal(0, 0, 
-        "notifySignal(QString,QString,QString,QString,QString,int,int,int,int)",
-        "notificationSignal(QString,QString,QString,QString,QString,int,int,int,int)",
-        false)) kdDebug() << "connectDCOPSignal for knotify failed" << endl;
-    
     // See if KTTSD is already running.
     if (client->isApplicationRegistered("kttsd"))
         kttsdStarted();
@@ -261,6 +254,16 @@ void KCMKttsMgr::load()
     m_kttsmgrw->parPostSnd->setURL(m_config->readPathEntry("ParPostSnd", parPostSndValue));
     m_kttsmgrw->parPostSnd->setEnabled(m_kttsmgrw->parPostSndCheck->isChecked());
 
+    // Overall settings.
+    m_kttsmgrw->enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
+        m_kttsmgrw->enableKttsdCheckBox->isChecked()));
+    
+    // Notification settings.
+    m_kttsmgrw->enableNotifyCheckBox->setChecked(m_config->readBoolEntry("Notify",
+        m_kttsmgrw->enableNotifyCheckBox->isChecked()));
+    m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPassivePopupsOnly",
+        m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()));
+    
     QString defaultLanguage = m_config->readEntry("DefaultLanguage");
 
     // Iterate thru loaded languages and load them and their configuration
@@ -325,6 +328,13 @@ void KCMKttsMgr::save()
     
     m_config->writeEntry("ParPostSndEnabled", m_kttsmgrw->parPostSndCheck->isChecked());
     m_config->writePathEntry("ParPostSnd", m_kttsmgrw->parPostSnd->url());
+
+    // Overall settings.
+    m_config->writeEntry("EnableKttsd", m_kttsmgrw->enableKttsdCheckBox->isChecked());
+    
+    // Notification settings.
+    m_config->writeEntry("Notify", m_kttsmgrw->enableNotifyCheckBox->isChecked());
+    m_config->writeEntry("NotifyPassivePopupsOnly", m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked());
     
     // Iterate thru loaded languages and store their configuration
     for(QDictIterator<languageRelatedObjects> it(m_loadedLanguages); it.current() ; ++it){
@@ -756,28 +766,6 @@ void KCMKttsMgr::kttsdExiting()
         m_jobMgrPart = 0;
     }
     m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
-}
-
-/**
-* This signal is emitted by KNotify when a notification event occurs.
-*/
-void KCMKttsMgr::notificationSignal( const QString&, const QString&,
-                                     const QString &text, const QString&, const QString&,
-                                     const int present, const int, const int, const int )
-{
-    if (!text.isNull())
-        if ( m_kttsmgrw->enableKttsdCheckBox->isChecked() )
-            if ( m_kttsmgrw->enableNotifyCheckBox->isChecked() )
-                if ( !m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()
-                    or (present & KNotifyClient::PassivePopup) )
-                    {
-                        kdDebug() << "KCMKttsMgr::notifySignal speaking " << text << endl;
-                        DCOPClient *client = kapp->dcopClient();
-                        QByteArray data;
-                        QDataStream arg(data, IO_WriteOnly);
-                        arg << text << "en";
-                        client->send("kttsd", "kspeech", "sayMessage(QString,QString)", data);
-                    }
 }
 
 // System tray context menu entries
