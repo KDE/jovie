@@ -634,6 +634,7 @@ void KCMKttsMgr::updateRemoveButton(){
         // Set up Properties tab for newly selected plugin.
         m_pluginWidget = m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn;
         m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", wpPluginProperties);
+        m_pluginWidget->setEnabled(true);
         if (currentTab) m_kttsmgrw->mainTab->setCurrentPage(currentTab);
     } else {
         m_kttsmgrw->removeLanguageButton->setEnabled(false);
