@@ -1,3 +1,8 @@
+_ Audio Plugins:
+    _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.
+      Since the desktop files are translated, is this a problem??
+    _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
+      does not.  They are essentially the same. ??
 _ There are several issues with i18n:
     _ Since kcmkttsmgr can be invoked from kttsmgr, kcmshell kcmkttsd, or KControl, do I
       need to call KLocale::setMainCatalogue?  Also, what about kttsjobmgr, which is kpart
@@ -13,7 +18,6 @@ _ There are several issues with i18n:
     _ The plugin Makefile.am's lack message targets, or should they just use kttsmgr catalog?
     _ I'm confused about this i18n stuff and could REALLY use some expert help..grc.
 _ Festival Interactive plugin:
-    _ Need someone to test the Finnish TTS to see if that is working correctly.
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
 _ KTTSMgr:
