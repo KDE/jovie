@@ -9,9 +9,10 @@ METASOURCES = AUTO
 ##################################################
 # check to see if GStreamer is available
 ##################################################
-if link_lib_GST
-gstlibs = -lkdegst -lkdegstplay
-endif
+# gstreamer turned off.  Doesn't work with wave files anyway.
+# if link_lib_GST
+# gstlibs = -lkdegst -lkdegstplay
+# endif
 ##################################################
 
 #########################################################################
