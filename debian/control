@@ -1,0 +1,30 @@
+Source: kttsd
+Section: kde
+Priority: extra
+Maintainer: Gary Cramblitt (PhantomsDad) <garycramblit@comcast.net>
+Build-Depends: debhelper (>= 4.0.0), kdelibs4-dev (>= 4:3.2)
+Standards-Version: 3.6.1.1
+
+Package: kttsd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: festival, festival-doc, festvox-kallpc, flite, epos
+Description: KDE Text-to-Speech system
+ KTTS, the KDE Text-to-Speech system, is a plug-in based dcop service that
+ allows any KDE (or non-KDE) application to speak using the DCOP
+ interface.
+ .
+ KTTS intends to be the implementation for the KDE Text-to-Speech API.
+ .
+ Features
+ --------
+  * Priority system for warnings and messages, while still playing
+    regular text.
+  * Long text is parsed into sentences.  User may backup by sentence or
+    paragraph, replay, pause, and stop playing.
+  * Speak contents of clipboard.
+  * Speak KDE notification events (KNotify).
+ .
+ You must also install a speech synthesis engine, such as festival, flite,
+ epos, freetts, or hadifix (mbrola and txt2pho).  The README file contains
+ links and suggestions for obtaining and installing synthesizers. 
