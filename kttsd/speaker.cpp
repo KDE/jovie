@@ -1268,7 +1268,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
         {
             if (m_speechData->keepAudio)
             {
-                QString dest = m_speechData->keepAudioPath + "kttsd-" +
+                QString dest = m_speechData->keepAudioPath + "/kttsd-" +
                     QString("%1-%2").arg(it->sentence->jobNum).arg(it->sentence->seq) + ".wav";
                 QFile::remove(dest);
                 QDir d;
