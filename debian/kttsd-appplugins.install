@@ -1,0 +1,10 @@
+debian/tmp/usr/lib/kde3/libkhtmlkttsdplugin.so
+debian/tmp/usr/lib/kde3/libkhtmlkttsdplugin.la
+debian/tmp/usr/lib/kde3/libkatepartkttsdplugin.so
+debian/tmp/usr/lib/kde3/libkatepartkttsdplugin.la
+debian/tmp/usr/lib/kde3/katekttsdplugin.so
+debian/tmp/usr/lib/kde3/katekttsdplugin.la
+debian/tmp/usr/share/apps/khtml/kpartplugins/khtmlkttsd.rc
+debian/tmp/usr/share/apps/katepart/kpartplugins/katepartkttsd.rc
+debian/tmp/usr/share/apps/kate/plugins/katekttsd/ui.rc
+debian/tmp/usr/share/services/katekttsd.desktop

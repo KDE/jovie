@@ -8,7 +8,7 @@ Standards-Version: 3.6.1.1
 Package: kttsd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Suggests: festival, festival-doc, festvox-kallpc, flite, epos
+Suggests: kttsd-appplugins, festival, festival-doc, festvox-kallpc, flite, epos
 Description: KDE Text-to-Speech system
  KTTS, the KDE Text-to-Speech system, is a plug-in based dcop service that
  allows any KDE (or non-KDE) application to speak using the DCOP
@@ -26,5 +26,28 @@ Description: KDE Text-to-Speech system
   * Speak KDE notification events (KNotify).
  .
  You must also install a speech synthesis engine, such as festival, flite,
- epos, freetts, or hadifix (mbrola and txt2pho).  The README file contains
+ epos, freetts, or hadifix (mbrola and txt2pho).  "man kttsd" for
  links and suggestions for obtaining and installing synthesizers. 
+
+Package: kttsd-dev
+Architecture: any
+Depends: kttsd, ${shlibs:Depends)
+Description: KDE Text-to-Speech system API developer files
+ These are files needed to develop KDE applications that use
+ the KDE Text-to-Speech system.
+
+Package: kttsd-appplugins
+Architecture: any
+Depends: kttsd, ${shlibs:Depends)
+Description: KDE Text-to-Speech system application plugins
+ These are plugins for various KDE applications to enable them to
+ speak text via the KDE Text-to-Speech system.
+ .
+ Includes
+ --------
+  * A plugin for Konqueror web browser to enable speaking all or part
+    of a web page.
+  * A plugin for Kate text editor to enable speaking all or part of
+    plain text.
+  * A plugin for Kate embedded text editor to enable speaking all or
+    part of plain text when running Kate embedded in Konqueror.

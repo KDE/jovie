@@ -1,0 +1,12 @@
+debian/tmp/usr/lib/libktts.so
+debian/tmp/usr/lib/libktts.la
+debian/tmp/usr/lib/libkttsd.so.1.0.0
+debian/tmp/usr/lib/libkttsd.la
+debian/tmp/usr/include/kspeech.h
+debian/tmp/usr/include/kspeech_stub.h
+debian/tmp/usr/include/kspeechsink.h
+debian/tmp/usr/include/kparts/kttsjobmgr.h
+debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/kttsd/html/*
+debian/tmp/usr/lib/libkttsd.so.1 -> libkttsd.so.1.0.0
+debian/tmp/usr/lib/libkttsd.so -> libkttsd.so.1.0.0
+debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common

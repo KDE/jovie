@@ -1,0 +1,6 @@
+?package(kttsd):\
+	needs="x11"\
+	section="Apps/Tools"\
+	hints="KDE"\
+	title="KTTSMgr"\
+	command="/usr/bin/kttsmgr"

@@ -1,0 +1,16 @@
+* Remove kcm_kttsd library once KMouth stops using it.
+* Should rc files be installed to etc/ tree?
+* I keep getting
+    dpkg-gencontrol: warning: unknown substitution variable ${misc:Depends}
+  should I just remove that from the control file?  (It was put there by
+  dh_make.)
+* Despite having moved libkttsd and libktts from kttsd.install to kttsd-dev.install,
+  debuild still includes them in the package, and the kttsd-dev and kttsd-appplugins
+  packages are essentially empty. ??
+* lintian is reporting the following:
+    W: kttsd source: native-package-with-dash-version
+    W: kttsd source: changelog-should-mention-nmu
+    W: kttsd source: source-nmu-has-incorrect-version-number 0.2.0-1
+    W: kttsd: non-dev-pkg-with-shlib-symlink usr/lib/libkttsd.so.1.0.0 usr/lib/libkttsd.so
+    E: kttsd: no-shlibs-control-file usr/lib/libkttsd.so.1.0.0
+    E: kttsd: no-shlibs-control-file usr/lib/libktts.so
