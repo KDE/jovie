@@ -1,19 +1,14 @@
 * Here's my build procedure:
     - cvs2dist kdenonbeta kttsd --version 0.2.0
     - unpack tarball in another location
-    - cd kttsd-0.2.0
-    - cp -R kttsd/debian debian
-    - ./configure --enable-final
-    - make
     - debuild -uc -us
-  Why must I do the ./configure and make?  If I don't, I get error
-  "no rule to make target kspeech_skel.cpp"
-* Should rc files be installed to etc/ tree?
+    
 * I keep getting
     dpkg-gencontrol: warning: unknown substitution variable ${misc:Depends}
   should I just remove that from the control file?  (It was put there by
   dh_make.)
-* How do I do the library symlinks, i.e.,
+  
+* How do I do the library and doc symlinks, i.e.,
     debian/tmp/usr/lib/libkttsd.so.1 -> libkttsd.so.1.0.0
     debian/tmp/usr/lib/libkttsd.so -> libkttsd.so.1.0.0
     debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common
@@ -22,7 +17,11 @@
     W: kttsd source: native-package-with-dash-version
     W: kttsd source: changelog-should-mention-nmu
     W: kttsd source: source-nmu-has-incorrect-version-number 0.2.0-1
-    W: kttsd: non-dev-pkg-with-shlib-symlink usr/lib/libkttsd.so.1.0.0 usr/lib/libkttsd.so
-    E: kttsd: no-shlibs-control-file usr/lib/libkttsd.so.1.0.0
-    E: kttsd: no-shlibs-control-file usr/lib/libktts.so
+    E: kttsd-dev: no-shlibs-control-file usr/lib/libktts.so
+    W: kttsd-dev: missing-depends-line
+    W: kttsd-appplugins: missing-depends-line
+    E: kttsd: ldconfig-symlink-missing-for-shlib usr/lib/libkttsd.so.1 usr/lib/libkttsd.so.1.0.0 libkttsd.so.1
+
+* Should rc files be installed to etc/ tree?
+
 * Remove kcm_kttsd library once KMouth stops using it.
