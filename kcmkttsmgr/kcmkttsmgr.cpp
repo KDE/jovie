@@ -71,6 +71,9 @@ const bool enablePassiveOnlyCheckBoxValue = false;
 const bool embedInSysTrayCheckBoxValue = true;
 const bool showMainWindowOnStartupCheckBoxValue = true;
 
+const bool autostartMgrCheckBoxValue = true;
+const bool autoexitMgrCheckBoxValue = true;
+
 const bool textPreMsgCheckValue = true;
 const QString textPreMsgValue = i18n("Text interrupted. Message.");
 
@@ -97,7 +100,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kttsd") );
 * And the languages acording to the plug ins.
 */
 KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
-    DCOPObject("kttsmgr_kspeechsink"),
+    DCOPObject("kcmkttsmgr_kspeechsink"),
     KCModule(KCMKttsMgrFactory::instance(), parent, name)
 {
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
@@ -314,6 +317,9 @@ void KCMKttsMgr::load()
 
     m_kttsmgrw->enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
         m_kttsmgrw->enableKttsdCheckBox->isChecked()));
+
+    m_kttsmgrw->autostartMgrCheckBox->setChecked(m_config->readBoolEntry("AutoStartManager", true));
+    m_kttsmgrw->autoexitMgrCheckBox->setChecked(m_config->readBoolEntry("AutoExitManager", true));
 
     // Notification settings.
     m_kttsmgrw->enableNotifyCheckBox->setChecked(m_config->readBoolEntry("Notify",
@@ -637,6 +643,8 @@ void KCMKttsMgr::save()
     m_config->writeEntry("EmbedInSysTray", m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
     m_config->writeEntry("ShowMainWindowOnStartup",
         m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked());
+    m_config->writeEntry("AutoStartManager", m_kttsmgrw->autostartMgrCheckBox->isChecked());
+    m_config->writeEntry("AutoExitManager", m_kttsmgrw->autoexitMgrCheckBox->isChecked());
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     // Enable checkbox if at least one Talker is configured.
@@ -814,6 +822,18 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 m_kttsmgrw->showMainWindowOnStartupCheckBox->setChecked(
                     showMainWindowOnStartupCheckBoxValue);
+            }
+            if (m_kttsmgrw->autostartMgrCheckBox->isChecked() != autostartMgrCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->autostartMgrCheckBox->setChecked(
+                    autostartMgrCheckBoxValue);
+            }
+            if (m_kttsmgrw->autoexitMgrCheckBox->isChecked() != autoexitMgrCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->autoexitMgrCheckBox->setChecked(
+                    autoexitMgrCheckBoxValue);
             }
             break;
 

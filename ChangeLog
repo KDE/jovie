@@ -1,23 +1,17 @@
-2005-03-16  Gary Cramblitt (PhantomsDad)
-        * Bug fix.  Interruption messages are spoken using the Talker of the interrupting message.
-          So if default Talker is en, and you do sayMessage "Guten Tag" "de", the "Text Interrupted.
-          Message" is spoken using German Talker.  Interruption messages should speak using the
-          default Talker.
+2005-03-18  Gary Cramblitt (PhantomsDad)
         * Added --systray cmdline option to KTTSMgr, which causes it to start minimized in system
           tray.
         * Added --autoexit cmdline option to KTTSMgr, which causes it to exit when no longer
           speaking any text jobs.
         * Added AutoStartManager and AutoExitManager options to config.  These cause kttsd
           to automatically start KTTSMgr when a text job starts, and automatically exit
-          KTTSMgr when all text jobs have finished speaking.  These options are not active
-          yet because they aren't in the KTTSMgr GUI yet.  There is a problem with the
-          AutoExitManager option having to do with dcop signals.  Not sure what is going on,
-          but seems that if I have an app with two objects sinking dcop signals from the same
-          sender, and one of those objects is destroyed, the other stops receiving signals.
-          Probably some logic error in my code, tho.  The goal is that if user starts speech
-          from Konqueror, embedded Kate, or other app, the KTTSMgr will automatically appear
-          in the systray, and disappear when speech is finished.  This is similar to the
-          Print Manager appearing in systray whenever printing.
+          KTTSMgr when all text jobs have finished speaking.
+
+2005-03-16  Gary Cramblitt (PhantomsDad)
+        * Bug fix.  Interruption messages are spoken using the Talker of the interrupting message.
+          So if default Talker is en, and you do sayMessage "Guten Tag" "de", the "Text Interrupted.
+          Message" is spoken using German Talker.  Interruption messages should speak using the
+          default Talker.
 
 2005-03-13  Gary Cramblitt (PhantomsDad)
         * Bug.  SBD Filter turned off by default.  Not good!

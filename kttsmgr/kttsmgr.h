@@ -23,8 +23,7 @@
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
-// class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
- class KttsMgrTray: public KSystemTray, public KSpeech_stub
+class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
 {
     Q_OBJECT
 

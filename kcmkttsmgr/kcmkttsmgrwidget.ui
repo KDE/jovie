@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>490</width>
+            <width>527</width>
             <height>394</height>
         </rect>
     </property>
@@ -197,7 +197,7 @@
                             <cstring>embedInSysTrayCheckBox</cstring>
                         </property>
                         <property name="text">
-                            <string>Em&amp;bed Text-to-Speech Manager in system tray</string>
+                            <string>Always em&amp;bed Text-to-Speech Manager in system tray</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>
@@ -206,7 +206,7 @@
                             <string>When checked, KTTSMgr displays an icon in the system tray, and clicking OK or Cancel buttons does not stop KTTSMgr.  Use system tray context menu to quit KTTSMgr.  This setting takes effect when KTTSMgr is next started.  This setting has no effect when running in the KDE Control Center.</string>
                         </property>
                     </widget>
-                    <spacer row="4" column="1">
+                    <spacer row="6" column="1">
                         <property name="name">
                             <cstring>spacer6</cstring>
                         </property>
@@ -219,7 +219,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>120</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
@@ -263,6 +263,61 @@
                                 </property>
                             </widget>
                         </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>layout5_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer5_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Fixed</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>autoexitMgrCheckBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;xit when speaking is finished</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>When checked, and KTTSMgr was automatically started when speech began, automatically exits when speech has finished.  Does not automatically exit if KTTSMgr was started manually or started from the Control Center.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>autostartMgrCheckBox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Sta&amp;rt minimized in system tray when speaking</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em&gt;Note&lt;em&gt;: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
+                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -1297,6 +1352,24 @@
     </connection>
     <connection>
         <sender>enablePassiveOnlyCheckBox</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>autostartMgrCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>autoexitMgrCheckBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>autostartMgrCheckBox</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>autoexitMgrCheckBox</sender>
         <signal>clicked()</signal>
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
