@@ -1,4 +1,7 @@
 2004-10-13  Cramblitt <garycramblitt@comcast.net>
+        * Revert previous change.  Sorry.
+
+2004-10-13  Cramblitt <garycramblitt@comcast.net>
         * Remove versioning from libkttsd.
           NOTE: After rebuilding and installing, you will want to delete
                 the following file:
