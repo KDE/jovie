@@ -16,8 +16,8 @@
  *																					 *
  ***************************************************************************/
 
-#ifndef _FRETTSCONF_H_
-#define _FRETTSCONF_H_
+#ifndef _FREETTSCONF_H_
+#define _FREETTSCONF_H_
 
 #include <qstringlist.h>
 
