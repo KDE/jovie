@@ -21,7 +21,9 @@
           ./configure
           cd kttsd
           make apidox
-        it generates the API docs.
+        it generates the API docs.  This has to be done as user kde-devel
+        who has KDEDIR=/home/share/kde-unstable and won't work for user gary
+        who has KDEDIR=/usr.
   For now I have the "indep" targets commented out in debian/rules,
   so debuild will run to completion.
 
