@@ -222,10 +222,12 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
         }
         file.close();
     }
-    if (!result.isEmpty())
-        return result;
-    else
-        return def;
+    if (result.isEmpty())
+    {
+        result = def;
+        if (result.isEmpty()) result = "The text-to-speech system seems to be functioning properly.";
+    }
+    return result;
 }
 
 /**

@@ -136,6 +136,9 @@ void FliteConf::slotFliteTest_clicked()
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
 
+    // Get test message in the language of the voice.
+    QString testMsg = testMessage(m_languageCode);
+
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_flite_testdlg",
         i18n("Testing"),
@@ -147,7 +150,7 @@ void FliteConf::slotFliteTest_clicked()
     // Play an English test.  Flite only supports English.
     connect (m_fliteProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_fliteProc->synth(
-        "K D E is a modern graphical desktop for Unix computers.",
+        testMsg,
         tmpWaveFile,
         realFilePath(m_widget->flitePath->url()));
 

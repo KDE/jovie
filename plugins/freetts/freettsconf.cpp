@@ -170,6 +170,9 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
 	QString tmpWaveFile = tempFile.file()->name();
 	tempFile.close();
 
+    // Get test message in the language of the voice.
+    QString testMsg = testMessage(m_languageCode);
+
         // Tell user to wait.
         m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_freetts_testdlg",
             i18n("Testing"),
@@ -178,13 +181,13 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
         m_progressDlg->progressBar()->hide();
         m_progressDlg->setAllowCancel(true);
 
-	// Play an English test.  I think FreeTTS only officialy supports English, but if anyone knows of someone
+	// I think FreeTTS only officialy supports English, but if anyone knows of someone
 	// whos built up a different language lexicon and has it working with FreeTTS gimme an email at ceruleanblaze@gmail.com
         connect (m_freettsProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
         m_freettsProc->synth(
-			"K D E is a modern graphical desktop for Unix computers.",
-	tmpWaveFile,
-    realFilePath(m_widget->freettsPath->url()));
+            testMsg,
+            tmpWaveFile,
+            realFilePath(m_widget->freettsPath->url()));
 
         // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
         // or if user clicks Cancel button.

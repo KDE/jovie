@@ -205,6 +205,9 @@ void EposConf::slotEposTest_clicked()
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
 
+    // Get test message in the language of the voice.
+    QString testMsg = testMessage(m_languageCode);
+
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_epos_testdlg",
         i18n("Testing"),
@@ -213,13 +216,11 @@ void EposConf::slotEposTest_clicked()
     m_progressDlg->progressBar()->hide();
     m_progressDlg->setAllowCancel(true);
 
-    // Play an English test.
-    // TODO: Need czeck or slavak test message.
     // TODO: Whenever server options change, the server must be restarted.
     // TODO: Do codec names contain non-ASCII characters?
     connect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_eposProc->synth(
-        "K D E is a modern graphical desktop for Unix computers.",
+        testMsg,
         tmpWaveFile,
         realFilePath(m_widget->eposServerPath->url()),
         realFilePath(m_widget->eposClientPath->url()),

@@ -546,10 +546,6 @@ void FestivalIntConf::slotTest_clicked()
     // Get test message in the language of the voice.
     QString testMsg = testMessage(languageCode);
 
-    // Fall back if none.
-    if (testMsg.isEmpty())
-        testMsg = i18n("KDE is a modern graphical desktop for UNIX computers.");
-
     // Get codec.
     QTextCodec* codec = PlugInProc::codecIndexToCodec(
         m_widget->characterCodingBox->currentItem(), m_codecList);

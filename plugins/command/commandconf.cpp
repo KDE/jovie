@@ -155,6 +155,9 @@ void CommandConf::slotCommandTest_clicked()
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
 
+    // Get test message in the language of the voice.
+    QString testMsg = testMessage(m_languageCode);
+
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_command_testdlg",
         i18n("Testing"),
@@ -163,12 +166,10 @@ void CommandConf::slotCommandTest_clicked()
     m_progressDlg->progressBar()->hide();
     m_progressDlg->setAllowCancel(true);
 
-    // Play an English test.
-    // TODO: Need a way to generate language-specific text.
     // TODO: Do codec names contain non-ASCII characters?
     connect (m_commandProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_commandProc->synth(
-        "K D E is a modern graphical desktop for Unix computers.",
+        testMsg,
         tmpWaveFile,
         m_widget->urlReq->url(),
         m_widget->stdInButton->isChecked(),
