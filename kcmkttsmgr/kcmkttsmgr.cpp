@@ -72,13 +72,13 @@ const bool embedInSysTrayCheckBoxValue = true;
 const bool showMainWindowOnStartupCheckBoxValue = true;
 
 const bool textPreMsgCheckValue = true;
-const QString textPreMsgValue = i18n("Text interrupted. Message.");
+QString textPreMsgValue = i18n("Text interrupted. Message.");
 
 const bool textPreSndCheckValue = false;
 const QString textPreSndValue = "";
 
 const bool textPostMsgCheckValue = true;
-const QString textPostMsgValue = i18n("Resuming text.");
+QString textPostMsgValue = i18n("Resuming text.");
 
 const bool textPostSndCheckValue = false;
 const QString textPostSndValue = "";
