@@ -69,3 +69,48 @@ Code=voice_el_diphone
 Comment=Spanish Male
 Comment[es]=Español masculino
 Path=spanish/el_diphone/
+
+[bdl]
+Name=Bdl ARCTIC
+Name[es]=Bdl ARCTIC
+Language=en_US
+Code=voice_cmu_us_bdl_arctic_hts
+Comment=American Male, HTS
+Comment[es]=Americano masculino, HTS
+Path=english/cmu_us_bdl_arctic_hts/
+
+[slt]
+Name=Slt ARCTIC
+Name[es]=Slt ARCTIC
+Language=en_US
+Code=voice_cmu_us_slt_arctic_hts
+Comment=American Female, HTS
+Comment[es]=Americana femenina, HTS
+Path=english/cmu_us_slt_arctic_hts/
+
+[jmk]
+Name=Jmk ARCTIC
+Name[es]=Jmk ARCTIC
+Language=en_US
+Code=voice_cmu_us_jmk_arctic_hts
+Comment=American Male, HTS
+Comment[es]=Americano masculino, HTS
+Path=english/cmu_us_jmk_arctic_hts/
+
+[awb]
+Name=Awb ARCTIC
+Name[es]=Awb ARCTIC
+Language=en_US
+Code=voice_cmu_us_awb_arctic_hts
+Comment=American Male, HTS
+Comment[es]=Americano masculino, HTS
+Path=english/cmu_us_awb_arctic_hts/
+
+[ked_hts]
+Name=Ked Timit
+Name[es]=Ked Timit
+Language=en_US
+Code=voice_cstr_us_ked_timit_hts
+Comment=American Male, HTS
+Comment[es]=Americano masculino, HTS
+Path=english/cstr_us_ked_timit_hts/

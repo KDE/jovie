@@ -7,12 +7,13 @@ Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 Contributors:
   Olaf Schmidt <ojschmidt@kde.org>
   Gunnar Schmi Dt <gunnar@schmi-dt.de>
+  Paul Giannaros <ceruleanblaze@gmail.com>
 
-KTTSD, KDE Text To Speech Daemon is a plug-in based dcop service that
-allows any KDE (or non-KDE) application to send messages using the
-dcop interface that later will be spoken.
+KTTSD, KDE Text-to-Speech Daemon is a plug-in based dcop service that
+allows any KDE (or non-KDE) application to speak using the DCOP
+interface.
 
-KTTSD intends to be the implementation for the KDE Speech API.
+KTTSD intends to be the implementation for the KDE Text-to-Speech API.
 
 Features
 --------
@@ -20,14 +21,15 @@ Features
 * Long text is parsed into sentences.  User may backup by sentence or paragraph,
   replay, pause, and stop playing.
 * Speak contents of clipboard.
+* Speak KDE notification events (KNotify).
 
 Requirements
 ------------
 KDE 3.2.x and a speech synthesis engine, such as Festival.  Festival can be
 obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival is
 distributed with most Linux distros.  Check your distro CDs.  Also works
-with Hadifix, Epos, Festival Lite (flite),  or any command that can speak text,
-such as FreeTTS.
+with Hadifix, Epos, Festival Lite (flite), FreeTTS, or any command that can
+speak text.
 
 Support
 -------
@@ -44,6 +46,7 @@ If you are building from CVS kdenonbeta module, the usual commands
   echo kttsd > inst-apps
   make -f Makefile.cvs
   ./configure
+  cd kttsd
   make
   make install  // as root
 
@@ -81,6 +84,11 @@ To run KTTSD, check the "Enable Text-to-speech System (KTTSD)" box or in a termi
 Click the "Jobs" tab in kttsmgr.  Click "Speak File" button.
 Pick a plain text file, then click "Resume" or "Restart" buttons.
 
+For additional information on configuring individual speech plugins,
+see below.
+
+DCOP Commands
+-------------
 To set the text to be spoken
 
  dcop kttsd kspeech setText <text> <language>
@@ -102,6 +110,9 @@ To stop speaking
 
 Depending upon the speech plugin used, speaking may not immediately stop.
 
+Known Problems
+--------------
+
 17 Mar 2004: The Festival plugin does not work for me.  Crashes as soon
 as call to festival_initialize is made.  I suspect that the problem is
 incompatible gcc compilers used to compile kttsd and the libfestival.a
@@ -111,6 +122,27 @@ via pipes ("festival --interactive").  If someone can confirm or deny
 this, I'd be appreciative.. Gary Cramblitt <garycramblitt@comcast.net>.
 
 Festival (Client/Server), festivalcs, is not currently working.
+
+Also see the TODO file.
+
+Using with Festival
+-------------------
+Festival can be obtained from http://www.cstr.ed.ac.uk/projects/festival.
+Festival is distributed with most Linux distros.  Check your distro CDs.
+Debian users can simply do
+
+  apt-get install festival
+
+You will need to install at least one language.  Follow the instructions
+that come with Festival.  (Festival in combination with mbrola does work.)
+Additional festival voices are available from
+
+  http://hts.ics.nitech.ac.jp/</a>.
+
+Start kttsmgr, choose the appropriate language code and add Festival Interactive.
+Click the Configure button.  If the Festival voice files are not in the default
+location (/usr/share/festival/voices/), try /usr/local/share/festival/voices/.
+Click the Rescan button, pick a voice, and click the Test button.
 
 Using with Festival Lite (flite)
 --------------------------------
@@ -148,6 +180,18 @@ If you do not already have Hadifix installed, do this:
  - In kttsmgr, choose the German language (de), and add Hadifix.  On the properties page configure
    a voice and the paths to mbrola and txt2pho.
  
+Using with Epos
+---------------
+Download epos from http://epos.ure.cas.cz/.
+
+Debian users: apt-get install epos.
+
+Start kttsmgr, choose Czeck or Slovak language code (cz or sk) and add Epos.
+Click Configure button.  If the epos server executable and client are not
+in your PATH, specify the paths to these executables.  The options boxes
+permit you to pass additional options to the server and client.  In a konsole,
+type "epos -h" or "say -h" for information.
+
 Compiling the API docs
 ----------------------
 If you are working from the CVS kdenonbeta module, to build the KTTS API

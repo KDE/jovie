@@ -1,3 +1,8 @@
+2004-09-07  Cramblitt <garycramblitt@comcast.net>
+        * Added 6 new HTS voices for Festival and FestivalInt plugins.
+          Courtesy of "N.Cat" Triskelios.
+          Download the voices from http://hts.ics.nitech.ac.jp/
+          
 2004-09-04  Cramblitt <garycramblitt@comcast.net>
         * Rename Hadifax to Hadifix.
           NOTE: After rebuilding and installing, you will want to delete the
