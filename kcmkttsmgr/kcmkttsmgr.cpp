@@ -123,10 +123,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT( configChanged() ) );
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(enableKttsdToggled(bool)));
-    connect(m_kttsmgrw->embedInSysTrayCheckBox, SIGNAL(toggled(bool)),
-            SLOT(slotEmbedInSysTrayCheckBox_Toggled(bool)));
-    connect(m_kttsmgrw->showMainWindowOnStartupCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
     connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
 
@@ -283,6 +279,14 @@ void KCMKttsMgr::load()
         enableKttsdToggled(false);
     }
 
+    // Enable/disable Notifications box based on Enable KTTSD checkbox.
+    m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(m_kttsmgrw->enableNotifyCheckBox->isChecked());
+    m_kttsmgrw->notifyGroupBox->setEnabled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
+
+    // Enable ShowMainWindowOnStartup checkbox based on EmbedInSysTray checkbox.
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(
+        m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
+
     updateTalkerButtons();
 }
 
@@ -378,7 +382,10 @@ void KCMKttsMgr::save()
 
     // If we automatically unchecked the Enable KTTSD checkbox, stop KTTSD.
     if (enableKttsdWasToggled)
+    {
         enableKttsdToggled(false);
+        m_kttsmgrw->notifyGroupBox->setEnabled(false);
+    }
     else
     {
         // If KTTSD is running, reinitialize it.
@@ -888,15 +895,6 @@ void KCMKttsMgr::updateTalkerButtons(){
         m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(false);
     }
     // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting"<< endl;
-}
-
-/**
-* This slot is called when user changes embedding in system tray option.
-*/
-void KCMKttsMgr::slotEmbedInSysTrayCheckBox_Toggled(bool checked)
-{
-    m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(checked);
-    configChanged();
 }
 
 /**

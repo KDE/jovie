@@ -785,6 +785,24 @@
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
+    <connection>
+        <sender>embedInSysTrayCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>showMainWindowOnStartupCheckBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>embedInSysTrayCheckBox</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>showMainWindowOnStartupCheckBox</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainTab</tabstop>
