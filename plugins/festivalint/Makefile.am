@@ -32,5 +32,5 @@ noinst_HEADERS =  festivalintconfwidget.h
 
 # Get translators to translate library and voice names.
 messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_festivalintplugin.pot
 	$(EXTRACTRC) --tag=name --context=FestivalVoiceName voices >> rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_festivalintplugin.pot
