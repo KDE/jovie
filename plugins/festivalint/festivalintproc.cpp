@@ -34,6 +34,7 @@ FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStri
     PlugInProc( parent, name ){
     // kdDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
     m_ready = true;
+    m_writingStdin = false;
     m_festProc = 0;
     m_state = psIdle;
 }
@@ -145,6 +146,8 @@ void FestivalIntProc::synth(
             this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
         connect(m_festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
             this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        connect(m_festProc, SIGNAL(wroteStdin(KProcess*)),
+            this, SLOT(slotWroteStdin(KProcess*)));
     }
     m_outputQueue.clear();
     if (!m_festProc->isRunning())
@@ -211,11 +214,16 @@ void FestivalIntProc::sendToFestival(const QString& text)
 
 /**
 * If Festival is ready for more input and there is more output to send, send it.
-* @return                        True if something was sent to Festival.
+* To be ready for more input, the Stdin buffer must be empty and the "festival>"
+* prompt must have been received (m_ready = true).
+* @return                        False when Festival is ready for more input
+*                                but there is nothing to be sent, or if Festival
+*                                has exited.
 */
 bool FestivalIntProc::sendIfReady()
 {
-    if (!m_ready) return false;
+    if (!m_ready) return true;
+    if (m_writingStdin) return true;
     if (m_outputQueue.isEmpty()) return false;
     if (!m_festProc->isRunning()) return false;
     QString text = m_outputQueue[0];
@@ -223,6 +231,7 @@ bool FestivalIntProc::sendIfReady()
     m_outputQueue.pop_front();
     m_ready = false;
     // kdDebug() << "FestivalIntProc::sendIfReady: sending to Festival: " << text << endl;
+    m_writingStdin = true;
     m_festProc->writeStdin(text.latin1(), text.length());
     return true;
 }
@@ -305,6 +314,23 @@ void FestivalIntProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
     QString buf = QString::fromLatin1(buffer, buflen);
     kdDebug() << "FestivalIntProc::slotReceivedStderr: Received error from Festival: " << buf << endl;
 }
+
+void FestivalIntProc::slotWroteStdin(KProcess* /*proc*/)
+{
+    // kdDebug() << "FestivalIntProc::slotWroteStdin" << endl;
+    m_writingStdin = false;
+    if (!sendIfReady())
+    {
+        pluginState prevState = m_state;
+        m_state = psFinished;
+        if (prevState == psSaying)
+            emit sayFinished();
+        else
+            if (prevState == psSynthing)
+                emit synthFinished();
+    }
+}
+
 
 bool FestivalIntProc::isReady() { return m_ready; }
 

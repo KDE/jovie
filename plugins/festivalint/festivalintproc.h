@@ -161,6 +161,7 @@ class FestivalIntProc : public PlugInProc{
         void slotProcessExited(KProcess* proc);
         void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
         void slotReceivedStderr(KProcess* proc, char* buffer, int buflen);
+        void slotWroteStdin(KProcess* proc);
 
     private:
         /**
@@ -172,7 +173,11 @@ class FestivalIntProc : public PlugInProc{
         
         /**
         * If Festival is ready for more input and there is more output to send, send it.
-        * @return                        True if something was sent to Festival.
+        * To be ready for more input, the Stdin buffer must be empty and the "festival>"
+        * prompt must have been received (m_ready = true).
+        * @return                        False when Festival is ready for more input
+        *                                but there is nothing to be sent, or if Festival
+        *                                has exited.
         */
         bool sendIfReady();
         
@@ -219,6 +224,8 @@ class FestivalIntProc : public PlugInProc{
         * commands and send each one when the ReceivedStdOut signal fires.
         */
         QStringList m_outputQueue;
+        
+        bool m_writingStdin;
 };
 
 #endif // _FESTIVALINTPROC_H_
