@@ -22,7 +22,6 @@
 
 // Qt includes.
 #include <qptrlist.h>
-#include <qthread.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -31,86 +30,6 @@ class KConfig;
 class TalkerCode;
 
 typedef QPtrList<KttsFilterProc> FilterList;
-
-class FilterMgrThread: public QObject, public QThread
-{
-    Q_OBJECT
-
-    public:
-        /**
-         * Constructor.
-         */
-        FilterMgrThread( QObject *parent = 0, const char *name = 0);
-
-        /**
-         * Destructor.
-         */
-        virtual ~FilterMgrThread();
-
-        /**
-         * Initialize the filters.
-         * @param config          Settings object.
-         * @return                False if filter is not ready to filter.
-         */
-        bool init(KConfig *config);
-
-        /**
-         * Get/Set text being processed.
-         */
-        void setText( const QString& text );
-        QString text();
-
-        /**
-         * Set/Get TalkerCode.
-         */
-        void setTalkerCode( TalkerCode* talkerCode );
-        TalkerCode* talkerCode();
-
-        /**
-         * Set/Get AppId.
-         */
-        void setAppId( const QCString& appId );
-        QCString appId();
-
-        /**
-         * Set Sentence Boundary Regular Expression.
-         * This method will only be called if the application overrode the default.
-         *
-         * @param re            The sentence delimiter regular expression.
-         */
-        void setSbRegExp( const QString& re );
-
-        /**
-         * Did this filter do anything?  If the filter returns the input as output
-         * unmolested, it should return False when this method is called.
-         */
-        bool wasModified();
-
-    signals:
-        void filteringFinished();
-
-    protected:
-        virtual void run();
-        virtual bool event ( QEvent * e );
-
-    private:
-        // Loads the processing plug in for a named filter plug in.
-        KttsFilterProc* loadFilterPlugin(const QString& plugInName);
-
-        // List of filters.
-        FilterList m_filterList;
-        // Text being filtered.
-        QString m_text;
-        // Talker Code.
-        TalkerCode* m_talkerCode;
-        // AppId.
-        QCString m_appId;
-        // Sentence Boundary regular expression (if app overrode the default).
-        QString m_re;
-        // True if any of the filters modified the text.
-        bool m_wasModified;
-};
-
 
 class FilterMgr : public KttsFilterProc
 {
@@ -217,18 +136,38 @@ class FilterMgr : public KttsFilterProc
          */
         virtual void setSbRegExp(const QString& re);
 
+    protected:
+        bool event ( QEvent * e );
+
     private slots:
-        void slotThreadFilteringFinished();
+        void slotFilteringFinished();
 
     private:
-        // FilterMgr Thread.
-        FilterMgrThread* m_filterMgrThread;
+        // Loads the processing plug in for a named filter plug in.
+        KttsFilterProc* loadFilterPlugin(const QString& plugInName);
+        // Finishes up with current filter (if any) and goes on to the next filter.
+        void nextFilter();
+
+        // List of filters.
+        FilterList m_filterList;
+        // Text being filtered.
+        QString m_text;
+        // Index to list of filters.
+        int m_filterIndex;
+        // Current filter.
+        KttsFilterProc* m_filterProc;
+        // True if calling filters asynchronously.
+        bool m_async;
+        // Talker Code.
+        TalkerCode* m_talkerCode;
+        // AppId.
+        QCString m_appId;
+        // Sentence Boundary regular expression (if app overrode the default).
+        QString m_re;
+        // True if any of the filters modified the text.
+        bool m_wasModified;
         // FilterMgr state.
         int m_state;
-        // KConfig object.
-        KConfig* m_config;
-        // Sentence Boundary regular expression.
-        QString m_re;
 };
 
 #endif      // _FILTERMGR_H_

@@ -661,6 +661,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
         // kdDebug() << "SbdProc::waitForFinished: waiting" << endl;
         m_sbdThread->wait();
         // kdDebug() << "SbdProc::waitForFinished: finished waiting" << endl;
+        m_state = fsFinished;
     }
 }
 
