@@ -101,10 +101,20 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     // Create three KToolBars.
     m_toolBar1 = new KToolBar(vBox, "jobmgr_toolbar1");
     m_toolBar1->setIconText(KToolBar::IconTextRight);
+    m_toolBar1->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
+    m_toolBar1->setMovingEnabled(true);
+    // This is a temporary workaround until these toolbars size correctly when floated.
+    m_toolBar1->setResizeEnabled(true);
     m_toolBar2 = new KToolBar(vBox, "jobmgr_toolbar2");
     m_toolBar2->setIconText(KToolBar::IconTextRight);
+    m_toolBar2->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
+    m_toolBar2->setMovingEnabled(true);
+    m_toolBar2->setResizeEnabled(true);
     m_toolBar3 = new KToolBar(vBox, "jobmgr_toolbar3");
     m_toolBar3->setIconText(KToolBar::IconTextRight);
+    m_toolBar3->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
+    m_toolBar3->setMovingEnabled(true);
+    m_toolBar3->setResizeEnabled(true);
     
     // Add the toolbars to the QDockArea.
     toolBarDockArea->setAcceptDockWindow(m_toolBar1, true);

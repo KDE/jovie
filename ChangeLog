@@ -1,3 +1,7 @@
+2004-05-31  Cramblitt <garycramblitt@comcast.net>
+        * Move speaking of notifications to KTTSD and persist notify settings.
+        * Clean up kcmkttsmgr.desktop and install to correct place.
+        
 2004-05-23  Cramblitt <garycramblitt@comcast.net>
         * Add option to speak KNotify notifications.
         
