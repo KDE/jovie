@@ -31,10 +31,10 @@ static const KCmdLineOptions options[] =
     { "appid <appID>", I18N_NOOP("DCOP application ID passed to filter"), "testfilter" },
     { "g", 0, 0 },
     { "group <filterID>",
-        I18N_NOOP("Config file group name passed to filter."), "testfilter" },
-    { "list", I18N_NOOP("Display list of available Filter PlugIns and exit."), 0 },
+        I18N_NOOP("Config file group name passed to filter"), "testfilter" },
+    { "list", I18N_NOOP("Display list of available Filter PlugIns and exit"), 0 },
     { "b", 0, 0 },
-    { "break", I18N_NOOP("Display tabs as \\t, otherwise they are removed."), 0 },
+    { "break", I18N_NOOP("Display tabs as \\t, otherwise they are removed"), 0 },
     { "list", I18N_NOOP("Display list of available filter plugins and exit"), 0 }
 };
 
