@@ -252,15 +252,15 @@ QStringList SpeechData::parseText(const QString &text, const QCString &appId /*=
     else
         sentenceDelimiter = QRegExp("([\\.\\?\\!\\:\\;])\\s");
     QString temp = text;
-    // Append sentence delimiters with newline.
-    temp.replace(sentenceDelimiter, "\\1\n");
+    // Replace sentence delimiters with double newline.
+    temp.replace(sentenceDelimiter, "\\1\n\n");
     // Remove leading spaces.
     temp.replace(QRegExp("\\n[ \\t]+"), "\n");
     // Remove trailing spaces.
     temp.replace(QRegExp("[ \\t]+\\n"), "\n");
     // Remove blank lines.
-    temp.replace(QRegExp("\n\n+"),"\n");
-    QStringList tempList = QStringList::split('\n', temp, false);
+    temp.replace(QRegExp("\n\n\n+"),"\n\n");
+    QStringList tempList = QStringList::split("\n\n", temp, false);
 /*
     // This should be something better, like "[a-zA-Z]\. " (a regexp of course) The dot (.) is used for more than ending a sentence.
     temp.replace('.', '\n');

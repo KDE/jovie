@@ -385,6 +385,10 @@ void Speaker::doUtterances()
                         }
                     case usWaitingSynth:
                         {
+                            // TODO: If the synth is busy and the waiting text is screen
+                            // reader output, it would be nice to call the synth's
+                            // stopText() method.  However, some of the current plugins
+                            // have horrible startup times, so we won't do that for now.
                             if (it->plugin->getState() == psIdle)
                             {
                                 kdDebug() << "Async synthesis." << endl;
