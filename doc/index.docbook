@@ -1,0 +1,1190 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!-- Define an entity for your application if it is not part of KDE
+       CVS -->
+  <!ENTITY kmyapplication "<application>KTTS</application>">
+  <!ENTITY kappname "&kmyapplication;"><!-- replace kmyapplication here
+                                            do *not* replace kappname-->
+  <!ENTITY package "kdeaccessibility"><!-- kdebase, kdeadmin, etc.  Leave
+                                     this unchanged if your
+                                     application is not maintained in KDE CVS -->
+  <!ENTITY % imageobjectco.module "INCLUDE">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE"> <!-- ONLY If you are writing non-English 
+                                     original documentation, change 
+                                     the language here -->
+    
+  <!-- Do not define any other entities; instead, use the entities
+       from entities/general.entities and $LANG/user.entities. -->
+]>
+<!-- kdoctemplate v0.9 January 10 2003
+     Changes to comments to clarify entity usage January 10 2003
+     Minor update to "Credits and Licenses" section on August 24, 2000
+     Removed "Revision history" section on 22 January 2001
+     Changed to Installation/Help menu entities 18 October 2001
+     Other minor cleanup and changes 18 October 2001 
+     FPI change and minor changes November 2002 -->
+
+<!--
+This template was designed by: David Rugge davidrugge@mindspring.com
+with lots of help from: Eric Bischoff ebisch@cybercable.tm.fr
+and Frederik Fouvry fouvry@sfs.nphil.uni-tuebingen.de
+of the KDE DocBook team.
+
+You may freely use this template for writing any sort of KDE documentation.
+If you have any changes or improvements, please let us know.
+
+Remember:
+- in XML, the case of the <tags> and attributes is relevant ;
+- also, quote all attributes.
+
+Please don't forget to remove all these comments in your final documentation,
+thanks ;-).
+-->
+
+<!-- ................................................................ -->
+
+<!-- The language must NOT be changed here. -->
+<!-- If you are writing original documentation in a language other -->
+<!-- than English, change the language above ONLY, not here -->
+<book lang="&language;">
+
+<!-- This header contains all of the meta-information for the document such
+as Authors, publish date, the abstract, and Keywords -->
+
+<bookinfo>
+<title>The &kmyapplication; Handbook</title>
+
+<authorgroup>
+<author>
+<!-- This is just put in as an example.  For real documentation, please 
+     define a general entity in entities/contributor.entities, e.g.
+<!ENTITY George.N.Ugnacious "<personname><firstname>George</firstname><othername>N.</othername><surname>Ugnacious</surname></personname>">
+<!ENTITY George.N.Ugnacious.mail "<email>gnu@kde.org</email>">
+and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
+ -->
+<personname>
+<firstname>Gary</firstname>
+<othername>R.</othername>
+<surname>Cramblitt</surname>
+</personname>
+<email>garycramblitt@comcast.net</email>
+</author>
+</authorgroup>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+<copyright>
+<year>2004</year>
+<holder>Gary R. Cramblitt</holder>
+</copyright>
+<!-- Translators: put here the copyright notice of the translation -->
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
+     and in the FDL itself on how to use it. -->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (YYYY-MM-DD) and of the version
+(V.MM.LL), it could be used by automation scripts.
+Do NOT change these in the translation. -->
+
+<date>2004-10-11</date>
+<releaseinfo>1.01.00</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&kmyapplication; - the KDE Text-to-Speech system - is
+a plugin based service that
+allows any KDE (or non-KDE) application to speak using the DCOP interface.
+</para>
+
+<para>&kmyapplication; intends to be the implementation for the KDE Text-to-Speech API (KSAPI).</para>
+
+</abstract>
+
+<!-- This is a set of Keywords for indexing by search engines.
+Please at least include KDE, the KDE package it is in, the name
+ of your application, and a few relevant keywords. -->
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>accessibility</keyword>
+<keyword>kdeaccessibility</keyword>
+<keyword>TTS</keyword>
+<keyword>Text-to-Speech</keyword>
+<keyword>KTTSD</keyword>
+<keyword>kttsmgr</keyword>
+<keyword>festival</keyword>
+<keyword>flite</keyword>
+<keyword>hadifix</keyword>
+<keyword>MBROLA</keyword>
+<keyword>freetts</keyword>
+<keyword>epos</keyword>
+</keywordset>
+
+</bookinfo>
+
+<!-- The contents of the documentation begin here.  Label
+each chapter so with the id attribute. This is necessary for two reasons: it
+allows you to easily reference the chapter from other chapters of your
+document, and if there is no ID, the name of the generated HTML files will vary
+from time to time making it hard to manage for maintainers and for the CVS
+system. Any chapter labelled (OPTIONAL) may be left out at the author's
+discretion. Other chapters should not be left out in order to maintain a
+consistent documentation style across all KDE apps. -->
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<!-- The introduction chapter contains a brief introduction for the
+application that explains what it does and where to report
+problems. Basically a long version of the abstract.  Don't include a
+revision history. (see installation appendix comment) -->
+
+<para>&kmyapplication; is a subsysem within KDE for producing
+Text-to-Speech (TTS).  It provides a common API for KDE programmers to give
+TTS capabilities to their applications.  It provides some
+nice capabilities for end users as well.</para>
+
+<para>User features:</para>
+
+<itemizedlist>
+<listitem><para>Speak contents of clipboard.</para></listitem>
+<listitem><para>Speak contents of a text file.</para></listitem>
+<listitem><para>Speak KDE notification events (KNotify).</para></listitem>
+<listitem><para>Speak all or part of the text of a web page in Konqueror.</para></listitem>
+<listitem><para>Speak all or part of the text in Kate text editor,
+including instances where Kate is embedded in another KDE application.</para></listitem>
+<listitem><para>Long text is parsed into sentences.  User may backup by sentence
+or paragraph, replay, pause, and stop playing.</para></listitem>
+</itemizedlist>
+
+<para>Programmer features:</para>
+
+<itemizedlist>
+<listitem><para>Priority system for screen reader outputs, warnings and messages, while still playing regular texts.</para></listitem>
+<listitem><para>Plugin-based architecture for support of a wide variety of speech synthesis engines and drivers.</para></listitem>
+<listitem><para>Permit generation of speech from the command line (or via shell scripts) using the KDE DCOP utilities.</para></listitem>
+<listitem><para>Provide a lightweight and easily usable interface for applications to generate speech output.</para></listitem>
+<listitem><para>Applications need not be concerned about contention over the speech device.</para></listitem>
+<listitem><para>FUTURE: Provide support for speech markup languages, such as VoiceXML, Sable, Java Speech Markup Language (JSML), and Speech Markup Meta-language (SMML).</para></listitem>
+<listitem><para>FUTURE: Provide limited support for embedded speech markers.</para></listitem>
+<listitem><para>Asynchronous to prevent system blocking.</para></listitem>
+<listitem><para>Plugin-based audio architecture. Currently supports aRts but will support additional audio engines in the future, such as gstreamer.</para></listitem>
+</itemizedlist>
+
+<para>&kmyapplication; actually consists of several programs:
+<variablelist>
+
+<varlistentry>
+<term><command>kttsd</command></term>
+<listitem><para>the KDE Text-to-Speech Deamon, which is a non-GUI
+application that provides TTS services to applications via DCOP.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><command>kttsmgr</command></term>
+<listitem><para>a GUI application for configuring and controlling
+kttsd.  kttsmgr sits in the system tray.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><command>libkhtmlkttsdplugin</command></term>
+<listitem><para>A plugin for the Konqueror web browser that permits you
+to speak all or a portion of the text on a web page.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><command>katekttsdplugin</command></term>
+<listitem><para>A plugin for the Kate text editor that permits you to speak
+all or a portion of a text file.
+</para></listitem></varlistentry>
+
+</variablelist>
+</para>
+
+<sect1 id="support">
+<title>Support</title>
+<para>
+In addition to the KDE Bugzilla database (
+<ulink url="http://bugs.kde.org/">http://bugs.kde.org/</ulink>
+), discussions for &kmyapplication;
+currently take place in the kde-accessibility mailing list.  Subscribe at
+<ulink url="https://mail.kde.org/mailman/listinfo/kde-accessibility">
+https://mail.kde.org/mailman/listinfo/kde-accessibility</ulink>.  Developers
+also hang out in IRC (irc.kde.org, channel #kde-accessibility).
+</para>
+</sect1>
+
+</chapter>
+
+<chapter id="using-kapp">
+<title>Using &kmyapplication;</title>
+
+<para>
+<warning><para>Before you can use &kmyapplication;, you must install at least one speech
+synthesis engine and make sure it is working.  See <xref linkend="installation" />.
+</para></warning></para>
+
+<sect1 id="starting-kttsmgr">
+<title>Starting <command>kttsmgr</command></title>
+
+<para>
+To start the &kmyapplication; system, type the following command in a Konsole
+</para>
+
+<para><userinput>kttsmgr</userinput></para>
+
+<para>or click on &kmyapplication; in the KDE Menu.</para>
+
+<para>
+<screenshot>
+<screeninfo>The KDE Text-to-Speech Manager (General tab).</screeninfo>
+	<mediaobjectco>
+		<imageobjectco>
+			<areaspec units="calspair">
+				<area id="pt-gen-1" coords="1 1"/>
+				<area id="pt-gen-2" coords="1 1"/>
+			</areaspec>
+			<imageobject>
+				<imagedata fileref="general.png" format="PNG"/>
+			</imageobject>
+		</imageobjectco>
+		<textobject>
+			<phrase>The KDE Text-to-Speech Manager (General tab)</phrase>
+		</textobject>
+	</mediaobjectco>
+</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-gen-1"><para>Click here to select and configure a speech
+synthesis plugin.</para></callout>
+<callout arearefs="pt-gen-2"><para>Check this box to activate the KDE Text-to-Speech system.  This starts the KDE TTS Deamon (KTTSD).  Unchecking will stop KTTSD and deactivate the KDE TTS system.</para></callout>
+</calloutlist>
+</para>
+
+<para>If this is the first time running <command>kttsmgr</command>, do not
+check the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  Instead,
+first click on the <guilabel>Languages</guilabel> tab and see the next section
+(<xref linkend="select-plugin" />).
+When you have selected a default speech synthesis plugin, come
+back to the <guilabel>General</guilabel> tab and check the box to
+activate the speech system.</para>
+
+</sect1>
+
+<sect1 id="select-plugin">
+<title>Selecting Synthesis Plugins</title>
+
+<para>When you click the <guilabel>Languages</guilabel> tab in <command>kttsmgr</command>,
+the Languages screen appears.</para>
+
+<para>
+<screenshot>
+<screeninfo>The KDE Text-to-Speech Manager (Languages tab).</screeninfo>
+	<mediaobjectco>
+		<imageobjectco>
+			<areaspec units="calspair">
+				<area id="pt-lang-1" coords="1 1"/>
+				<area id="pt-lang-2" coords="1 1"/>
+				<area id="pt-lang-3" coords="1 1"/>
+				<area id="pt-lang-4" coords="1 1"/>
+				<area id="pt-lang-5" coords="1 1"/>
+			</areaspec>
+			<imageobject>
+				<imagedata fileref="languages.png" format="PNG"/>
+			</imageobject>
+		</imageobjectco>
+		<textobject>
+			<phrase>The KDE Text-to-Speech Manager (Languages tab)</phrase>
+		</textobject>
+	</mediaobjectco>
+</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-lang-1"><para>Select the language to be spoken.</para></callout>
+<callout arearefs="pt-lang-2"><para>Select the speech synthesis plugin.</para></callout>
+<callout arearefs="pt-lang-3"><para>Click to add the plugin to the list.</para></callout>
+<callout arearefs="pt-lang-4"><para>Click to make this the default language and plugin.</para></callout>
+<callout arearefs="pt-lang-5"><para>Click to configure the plugin.</para></callout>
+</calloutlist>
+</para>
+
+<warning>
+<para>Be sure to select a speech synthesis plugin in the list and click the
+<guibutton>Default</guibutton> button.  A green checkmark will appear next to the
+plugin in the list to indicate that it is the default.
+</para>
+</warning>
+
+</sect1>
+
+<sect1 id="configure-plugin">
+<title>Configuring Synthesis Plugins</title>
+
+<para>When you click the <guilabel>Properties</guilabel> tab in <command>kttsmgr</command>,
+or click the <guibutton>Configure</guibutton> button on the <guilabel>Languages screen,</guilabel>
+the <guilabel>Properties</guilabel> screen appears.  Each speech synthesis plugin has a different
+<guilabel>Properties</guilabel> screen.  The following is an example for
+configuring the Festival Interactive plugin.  For specifics for each
+kind of plugin, see <xref linkend="configuration" /></para>
+
+<para>
+<screenshot>
+<screeninfo>The KDE Text-to-Speech Manager (Properties tab).</screeninfo>
+	<mediaobjectco>
+		<imageobjectco>
+			<areaspec units="calspair">
+				<area id="pt-prop-1" coords="1 1"/>
+				<area id="pt-prop-2" coords="1 1"/>
+				<area id="pt-prop-3" coords="1 1"/>
+				<area id="pt-prop-4" coords="1 1"/>
+				<area id="pt-prop-5" coords="1 1"/>
+			</areaspec>
+			<imageobject>
+				<imagedata fileref="properties.png" format="PNG"/>
+			</imageobject>
+		</imageobjectco>
+		<textobject>
+			<phrase>The KDE Text-to-Speech Manager (Properties tab)</phrase>
+		</textobject>
+	</mediaobjectco>
+</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-prop-1"><para>Specify the path to the Festival Interactive voice files.</para></callout>
+<callout arearefs="pt-prop-2"><para>Click to scan the path for available voices.</para></callout>
+<callout arearefs="pt-prop-3"><para>Select a voice.</para></callout>
+<callout arearefs="pt-prop-4"><para>Click to test.  You should hear a test sentence spoken.</para></callout>
+<callout arearefs="pt-prop-5"><para>Click to save your settings.</para></callout>
+</calloutlist>
+</para>
+
+<warning><para>
+Be sure to click the <guibutton>Apply</guibutton> button, otherwise your
+changes will not take effect.
+</para></warning>
+
+<para>Assuming the test worked, you are almost ready to begin using &kmyapplication;.
+Now go back to the <guilabel>General</guilabel> tab and check the
+<guilabel>Enable Text-to-Speech System (KTTSD) box.</guilabel>  This
+will start the KDE TTS Deamon.  You may now begin using &kmyapplication; to
+speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
+</para>
+
+</sect1>
+
+<sect1 id="jobmgr">
+<title>Managing Text Jobs</title>
+
+<para>When you click the <guilabel>Jobs</guilabel> tab in <command>kttsmgr</command>,
+the <guilabel>Jobs</guilabel> screen appears.</para>
+
+<para>
+<screenshot>
+<screeninfo>The KDE Text-to-Speech Manager (Jobs tab).</screeninfo>
+	<mediaobjectco>
+		<imageobjectco>
+			<areaspec units="calspair">
+				<area id="pt-jobmgr-1" coords="1 1"/>
+				<area id="pt-jobmgr-2" coords="1 1"/>
+				<area id="pt-jobmgr-3" coords="1 1"/>
+				<area id="pt-jobmgr-4" coords="1 1"/>
+				<area id="pt-jobmgr-5" coords="1 1"/>
+			</areaspec>
+			<imageobject>
+				<imagedata fileref="jobs.png" format="PNG"/>
+			</imageobject>
+		</imageobjectco>
+		<textobject>
+			<phrase>The KDE Text-to-Speech Manager (Jobs tab)</phrase>
+		</textobject>
+	</mediaobjectco>
+</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-jobmgr-1"><para>The buttons on this toolbar permit you to start,
+delete, and pause text jobs.  Select a job in the list below, then click
+one of these buttons.</para></callout>
+<callout arearefs="pt-jobmgr-2"><para>The buttons on this toolbar permit
+you to advance or rewind by sentence within the job selected in the list
+below.  (Not all jobs have multiple parts.)</para></callout>
+<callout arearefs="pt-jobmgr-3"><para>The buttons on this toolbar permit
+you to speak the text currently in the KDE clipboard, or open a text file
+for speaking.  You can also refresh the list of text jobs.</para></callout>
+<callout arearefs="pt-jobmgr-4"><para>The currently-speaking sentence
+appears here.  If you need to, you can resize this panel by dragging the
+divider up or down.</para></callout>
+<callout arearefs="pt-jobmgr-5"><para>When you click <guibutton>OK</guibutton>,
+all changes to settings on other screens are applied (if any) and
+<command>kttsmgr</command> minimizes to the system tray.  Click on the icon
+in the system tray to restore the screen.</para></callout>
+</calloutlist>
+</para>
+
+<note><para>The <guilabel>Jobs</guilabel> tab only appears when KTTSD is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
+<guilabel>General</guilabel> tab and check the
+ <guilabel>Enable Text-to-Speech (KTTSD) box.</guilabel></para></note>
+
+</sect1>
+
+<sect1 id="interruption">
+<title>Text Interruption Settings</title>
+
+<para>When you click the <guilabel>Interruption</guilabel> tab in <command>kttsmgr</command>,
+the <guilabel>Interruption</guilabel> screen appears.</para>
+
+<para>
+<screenshot>
+<screeninfo>The KDE Text-to-Speech Manager (Interruption tab).</screeninfo>
+	<mediaobjectco>
+		<imageobjectco>
+			<areaspec units="calspair">
+				<area id="pt-interruption-1" coords="1 1"/>
+				<area id="pt-interruption-2" coords="1 1"/>
+				<area id="pt-interruption-3" coords="1 1"/>
+				<area id="pt-interruption-4" coords="1 1"/>
+			</areaspec>
+			<imageobject>
+				<imagedata fileref="interruption.png" format="PNG"/>
+			</imageobject>
+		</imageobjectco>
+		<textobject>
+			<phrase>The KDE Text-to-Speech Manager (Interruption tab)</phrase>
+		</textobject>
+	</mediaobjectco>
+</screenshot>
+</para>
+
+<para>This screen permits you to specify special actions to be taken whenever
+a text job is interrupted by another, higher priority, message.  There are
+four kinds of speech jobs that &kmyapplication; handles:
+<itemizedlist>
+<listitem><para>Regular text.</para></listitem>
+<listitem><para>Messages.</para></listitem>
+<listitem><para>Warnings.</para></listitem>
+<listitem><para>Screen Reader Output.</para></listitem>
+</itemizedlist>
+</para>
+
+<para>Screen Reader Output has the highest priority.  It is reserved for use
+by Screen Reader applications.  Screen Reader Output preempts all other
+messages, causing those jobs to pause.  Once the Screen Reader Output has
+been spoken, the preempted jobs will automatically resume.
+</para>
+
+<para>Warnings are the next highest priority.  It is reserved for high-priority
+messages, such as "CPU is over-heating."  A Warning will preempt Messages
+and regular text, causing those jobs to pause.  Once the Warning has been
+spoken, the preempted jobs will automatically resume.</para>
+
+<para>Messages are the next highest priority.  A Message will preempt regular
+text jobs.  KMouth is an example of an application that uses Messages.
+For example, while reading out long text from a web page,
+KMouth can be used to greet someone who walks into the room.</para>
+
+<para>All four kinds of jobs are queues, except for Screen Reader Output.
+If a Screen Reader Output is sent from an application while
+&kmyapplication; is speaking another Screen Reader Output, the speaking message 
+is stopped and discarded.</para>
+
+<para>When a text job is interrupted by a Message, Warning, or Screen Reader Output,
+&kmyapplication; will add the audio outputs on this screen to the stream.</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-interruption-1"><para>This message is spoken whenever a regular text job is interrupted.</para></callout>
+<callout arearefs="pt-interruption-2"><para>This audio file is sounded whenever a regular text job is interrupted.  If both a <guilabel>Pre-sound</guilabel>
+and a <guilabel>Pre-message</guilabel> are specified, the 
+<guilabel>Pre-sound</guilabel> is sounded before the <guilabel>Pre-message</guilabel>.</para></callout>
+<callout arearefs="pt-interruption-3"><para>This message is spoken whenever an
+interrupted text job resumes.</para></callout>
+<callout arearefs="pt-interruption-4"><para>This audio file is sounded whenever an
+interrupted text job resumes.  It is sounded last.</para></callout>
+</calloutlist>
+</para>
+
+<note><para>The settings on this screen apply only to regular text jobs.
+Messages, Warnings, and Screen Reader Outputs have no special actions when
+they are preempted by a higher-priority message.</para></note>
+
+</sect1>
+
+<sect1 id="web">
+<title>Speaking Text from Web Pages</title>
+
+<para>While running the KDE Konqueror web browser, you can speak the text
+of the web page displayed.  First ensure that &kmyapplication; is running.
+Highlight the text you want spoken and choose
+<menuchoice>
+  <guisubmenu>Tools</guisubmenu>
+  <guisubmenu>Speak Text</guisubmenu>
+</menuchoice> on the main menu.
+<action>After a moment, the highlighted text should begin speaking.</action>
+</para>
+
+<tip><para>It is almost always a good idea to highlight the text on the
+web page you want spoken.  You can skip this step, but you will
+hear a lot of HTML headers and other invisible tags spoken.</para></tip>
+
+</sect1>
+
+<sect1 id="kate">
+<title>Speaking Text from Kate Text Editor</title>
+
+<para>While running the KDE Advanced Text Editor (Kate), you can speak the text
+displayed.  First ensure that &kmyapplication; is running.
+Highlight the text you want spoken and choose
+<menuchoice>
+  <guisubmenu>Tools</guisubmenu>
+  <guisubmenu>Speak Text</guisubmenu>
+</menuchoice> on the main menu.
+<action>After a moment, the highlighted text should begin speaking.</action>
+</para>
+
+<tip><para>You do not have to first highlight text.  In this case, the entire
+file will be spoken.</para></tip>
+
+<tip><para>This also works when Kate is running embedded in another application,
+such as Konqueror or Quanta.</para></tip>
+
+</sect1>
+
+<sect1 id="knotify">
+<title>Speaking Notifications (KNotify)</title>
+
+<para>KNotify is the notification subsystem within KDE, which alerts you
+to events you configure within the KDE system.  You can configure
+&kmyapplication; to speak text notifications.</para>
+
+<para>For example, Konversation, a KDE IRC application, permits you
+to configure a wide variety of notifications.  For instance, you can tell
+Konversation to notify you whenever a message appears in an IRC channel
+with your nickname in it.  Together with &kmyapplication; you can
+have KDE speak the text of the IRC message to you.</para>
+
+<para>In general, if a KDE application supports KNotify, a
+<guilabel>Notifications</guilabel> menu item will appear under the
+<guilabel>Settings</guilabel> menu.  The specifics for configuring
+each application with KNotify vary from application to application.</para>
+
+<para>To enable &kmyapplication; to speak KNofify text notifications,
+start <command>kttsmgr</command>, click the <guilabel>General</guilabel> tab,
+and check the <guilabel>Speak notifications (KNotify)</guilabel> box.
+Then click the <guibutton>Apply</guibutton> button.</para>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of the
+application windows and their menubar and toolbar commands for easy reference.
+Also include any keys that have a special function but have no equivalent in the
+menus or toolbars. This may not be necessary for small apps or apps with no tool
+or menu bars. -->
+
+<para>TODO</para>
+
+</chapter>
+
+<!--
+
+<sect1 id="kapp-mainwindow">
+<title>The main &kmyapplication; window</title>
+
+<sect2>
+<title>The File Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits</action> &kmyapplication;</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect2>
+
+-->
+
+<chapter id="developers">
+<title>Developer's Guide to &kmyapplication;</title>
+
+<para>&kmyapplication; has two Application Programmer Interfaces (APIs):
+</para>
+
+<itemizedlist>
+<listitem><para>The KDE Text-to-Speech API, which is used by application
+programmers to give their applications TTS capabilities.  Applications
+communicate with KTTSD via DCOP.</para></listitem>
+<listitem><para>The KTTSD Plugin API, which is used to add speech
+synthesis plugins to KTTSD so that &kmyapplication; will work with
+a new speech synthesis engine.</para></listitem>
+</itemizedlist>
+
+<para>The following section gives a short description of the KDE Text-to-Speech API
+DCOP Interface.
+Full documentation for both APIs is available online at the
+<ulink url="http://accessibility.kde.org/developer/kttsd/">
+KDE Accessibility web site.</ulink>
+</para>
+
+
+<sect1 id="dcop-interface">
+<title>The &kmyapplication; DCOP Interface</title>
+
+<para>Applications communicate requests for Text-to-Speech services via the
+KDE DCOP interface to program <command>kttsd</command> object <command>kspeech</command>.
+</para>
+
+<para>Enter the following commands in a Konsole.</para>
+
+<para>If KTTSD is not already running</para>
+
+<para><userinput>kttsd</userinput></para>
+
+<para>To queue a text job to be spoken</para>
+
+<para><userinput>dcop kttsd kspeech setText "<replaceable>text</replaceable>"  "<replaceable>language</replaceable>"</userinput></para>
+
+<para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>language</replaceable></userinput> is a language code
+such as <userinput><replaceable>en</replaceable></userinput>, <userinput><replaceable>cy</replaceable></userinput>, etc.  This command does
+not speak the text; instead it queues a text job for speaking.</para>
+
+<para>Example.</para>
+
+<para><userinput>dcop kttsd kspeech setText "This is a test." "en"</userinput></para>
+
+<para>To speak the last queued text job</para>
+
+<para><userinput>dcop kttsd kspeech startText <replaceable>0</replaceable></userinput></para>
+
+<para>In this case, <userinput>0</userinput> refers to the last text job queued.  
+You may also specify a specific job number.  (If no job number is given, a <userinput>0</userinput> is required.)</para>
+
+<para>To stop the currently speaking text job</para>
+
+<para><userinput>dcop kttsd kspeech stopText 0</userinput></para>
+
+<para>Depending upon the speech plugin used, speaking may not immediately stop.</para>
+
+<para>There are many more commands that can be sent.  To see a list of possible
+commands,</para>
+
+<para><userinput>dcop kttsd kspeech</userinput></para>
+
+<para>or read the 
+<ulink url="http://accessibility.kde.org/developer/kttsd/">
+KDE Text-to-Speech API</ulink> online.</para>
+
+</sect1>
+
+</chapter>
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<!-- (OPTIONAL but recommended) This chapter should include all of the silly
+(and not-so-silly) newbie questions that fill up your mailbox. This chapter
+should be reserved for BRIEF questions and answers! If one question uses more
+than a page or so then it should probably be part of the
+"Using this Application" chapter instead. You should use links to
+cross-reference questions to the parts of your documentation that answer them.
+This is also a great place to provide pointers to other FAQ's if your users
+must do some complicated configuration on other programs in order for your
+application work. -->
+
+&reporting.bugs;
+&updating.documentation;
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para>I need to start over.  How do I get &kmyapplication; completely terminated?</para>
+</question>
+<answer>
+<para>Enter the following commands in a Konsole:
+<programlisting>
+killall kttsd
+killall kttsmgr
+</programlisting>
+</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>How can I see debugging output from <command>kttsd</command>?</para>
+</question>
+<answer>
+<para>Open two Konsole windows.  First start <command>kttsd</command> in one
+window, then start <command>kttsmgr</command> in the second.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>I have an additional Festival voice I downloaded from the Internet.
+I installed it, and I can use it in Festival, but it does not show up in <command>kttsmgr</command>.</para>
+</question>
+<answer>
+<para>Edit file <filename>$KDEHOME/share/apps/kttsd/festivalint/voices</filename> to
+add the new voice.  The other entries can be used as a guide.  If you
+successfully add a voice, please send a patch to the developers along
+with the URL from which you obtained the voice file.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>None of the supported speech synthesizers support the language I need.
+Where can I get a synth for my language?</para>
+</question>
+<answer>
+<para>Google(tm) is your friend.  This 
+<ulink url="http://tcts.fpms.ac.be/synthesis/mbrola/mbrtts.html">link</ulink>
+might also help.  If you find a free synthesis engine that supports your
+desired language, and want to add support for it to &kmyapplication;, please
+contact the development team.  Open source engines are especially welcome.
+If you know of a commercial synth, perhaps you can pursuade the vendor
+to donate a free copy to the &kmyapplication; development team.
+In the meantime, you may be able to get
+the synth working using the <guilabel>Command</guilabel> plugin.
+See <xref linkend="using-with-command" /></para>
+</answer>
+</qandaentry>
+</qandaset>
+</chapter>
+
+
+
+<chapter id="credits">
+
+<!-- Include credits for the programmers, documentation writers, and
+contributors here. The license for your software should then be included below
+the credits with a reference to the appropriate license file included in the KDE
+distribution. -->
+
+<title>Credits and License</title>
+
+<para>
+&kmyapplication;
+</para>
+<para>
+Program Copyright &copy; 2002 Jos&#233; Pablo Ezequiel "Pupeno" Fern&#225;ndez <email>pupeno@kde.org</email> 
+</para>
+<para>
+Current Maintainer: Gary Cramblitt <email>garycramblitt@comcast.net</email>
+</para>
+<para>
+Contributors:
+<itemizedlist>
+<listitem><para>Olaf Schmidt <email>ojschmidt@kde.org</email></para>
+</listitem>
+<listitem><para>Gunnar Schmi Dt <email>gunnar@schmi-dt.de</email></para>
+</listitem>
+<listitem><para>Paul Giannaros <email>ceruleanblaze@gmail.com</email></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation Copyright &copy; 2004 Gary R. Cramblitt <email>garycramblitt@comcast.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove -->
+
+<!-- Determine which license your application is licensed under, 
+     and delete all the remaining licenses below:
+
+     (NOTE:  All documentation are licensed under the FDL, 
+     regardless of what license the application uses) -->
+
+&underGPL;        	 <!-- GPL License -->
+
+<note><para>Speech synthesis engines used by &kmyapplication; have their own
+licenses.  See each engine's documentation or website for details.</para></note>
+
+</chapter>
+
+<!-- ====================================================================== -->
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kapp">
+<title>How to obtain &kmyapplication;</title>
+
+<!-- This first entity contains boiler plate for applications that are
+part of KDE CVS.  You should remove it if you are releasing your
+application --> 
+
+<para>FUTURE
+&install.intro.documentation;
+</para>
+
+<para>(FUTURE) Debian Install Command: <command>apt-get install kdeaccessibility</command></para>
+
+<note>
+<para>As of 11 Oct 2004, &kmyapplication; has not yet been moved into the
+kdeaccessibility package.  We expect to do this very soon.
+In the meantime, if you have access to KDE CVS, you can download &kmyapplication;
+by checking out the <command>kdenonbeta</command> module.  &kmyapplication;
+will be found in the <command>kttsd</command> directory.  You can also
+download a nightly tarball from
+<ulink url="ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2">
+ftp://ftp.kde.org/pub/kde/unstable/latest/kdenonbeta.tar.bz2</ulink></para>
+</note>
+
+</sect1>
+
+<!-- ====================================================================== -->
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+&kmyapplication; requires KDE version 3.2 or later.
+</para>
+
+<para>
+In order to use &kmyapplication;, you must install a speech synthesis engine.
+The following engines and spoken languages are currently supported.
+</para>
+
+<informaltable id="synth-engines">
+<tgroup cols="2">
+<tbody>
+
+<row>
+<entry>Festival</entry>
+<entry>American English, British, Spanish, German</entry>
+</row>
+
+<row>
+<entry>Festival Lite (flite)</entry>
+<entry>English</entry>
+</row>
+
+<row>
+<entry>Hadifix (MBROLA and txt2pho)</entry>
+<entry>German</entry>
+</row>
+
+<row>
+<entry>Epos</entry>
+<entry>Czech, Slovak</entry>
+</row>
+
+<row>
+<entry>FreeTTS</entry>
+<entry>English</entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>It also works with any synthesis engine that can be run from a command in
+a Konsole.</para>
+
+<note><para>
+The languages listed above may not be comprehensive or up-to-date.
+Check the specifications for each engine for a complete list of supported
+languages.
+</para></note>
+
+<note>
+<para>&kmyapplication; uses a flexible plugin architecture for
+speech synthesis engines.  If you
+want to enhance &kmyapplication; to support another engine, contact the
+development team.
+</para>
+</note>
+
+<para>
+See <xref linkend="configuration" /> for specific instructions for each
+of these engines.
+</para>
+
+</sect1>
+
+<!-- ====================================================================== -->
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<!-- This entity contains the boilerplate text for standard -->
+<!-- compilation instructions.  If your application requires any -->
+<!-- special handling, remove it, and replace with your own text. -->
+
+&install.compile.documentation;
+
+<note><para>If you downloaded the &kmyapplication; source from the
+<command>kdenonbeta</command> CVS module, use the following commands to
+compile and install.
+</para>
+
+<programlisting>
+cd kdenonbeta
+echo kttsd>inst-apps
+make -f Makefile.cvs
+./configure
+cd kttsd
+make
+make install
+# If you have Doxygen installed
+make apidox
+</programlisting>
+
+</note>
+
+</sect1>
+
+<sect1 id="configuration">
+<title>Configuration</title>
+
+<para>Make sure your speech synthesis engine is working before using
+&kmyapplication;.  Follow the instructions that came with the engine.</para>
+
+<tip>
+<para>In some cases, you may need to grant write access to the audio device.</para>
+<para><userinput>chmod a+rw <replaceable>/dev/dsp*</replaceable></userinput></para>
+</tip>
+
+<!-- ====================================================================== -->
+
+<sect2 id="using-with-festival">
+<title>Using with Festival (Interactive)</title>
+
+<para>Festival is one of the better free and open source TTS
+engines available.  Voice quality is generally good, there are quite
+a few languages and voices supported, and you can control the voice and
+speed of the generated speech from &kmyapplication;.</para>
+
+<para>Plugin Name: <guilabel>Festival Interactive</guilabel></para>
+
+<para>URL: <ulink url="http://www.cstr.ed.ac.uk/projects/festival/">
+http://www.cstr.ed.ac.uk/projects/festival/</ulink>
+</para>
+
+<para>Debian Install Command: <userinput>apt-get install festival</userinput></para>
+
+<para>
+You will need to install at least one language.  Follow the instructions
+that come with Festival.  (Festival in combination with MBROLA does work.)
+Additional festival voices are available from</para>
+
+<para><ulink url="http://hts.ics.nitech.ac.jp/">http://hts.ics.nitech.ac.jp/</ulink>.
+</para>
+
+<para>festival is typically included with Linux distributions.  Check your
+distro CDs to see if it is included.</para>
+
+<para>Start <userinput>kttsmgr</userinput>, choose the appropriate language code and add <guilabel>Festival Interactive</guilabel>.
+Click the <guibutton>Configure</guibutton> button.  If the Festival voice files are not in the default location,
+(<filename>/usr/share/festival/voices/</filename>), try <filename>/usr/local/share/festival/voices/</filename>.
+Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
+<guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
+
+</sect2>
+
+<!-- ====================================================================== -->
+
+<sect2 id="using-with-flite">
+<title>Using with Festival Lite (flite)</title>
+
+<para>Festival Lite is a free open source engine that currently supports
+a limited number of voices and languages.  It is light weight, but
+sacrifices voice quality somewhat.
+You cannot control the pitch, volume, or speed of this engine
+from &kmyapplication;.</para>
+
+<para>Plugin Name: <guilabel>Festival Lite (flite)</guilabel></para>
+
+<para>URL: <ulink url="http://www.speech.cs.cmu.edu/flite/index.html">
+http://www.speech.cs.cmu.edu/flite/index.html</ulink>
+</para>
+
+<para>Debian Install Command: <userinput>apt-get install flite</userinput></para>
+
+<para>flite is typically included with Linux distributions.  Check your
+distro CDs to see if it is included.</para>
+
+<para>Build and install flite following the instructions in the
+<filename>README</filename> that comes with it.</para>
+
+</sect2>
+
+<!-- ====================================================================== -->
+
+<sect2 id="using-with-hadifix">
+<title>Using with Hadifix (MBROLA and txt2pho)</title>
+
+<para>Hadifix is a two-stage synthesis engine based on diphones.
+The <command>txt2pho</command> utility converts text into diphones
+and the <command>MBROLA</command> engine synthesizes the diphones to sound.
+Voice quality is good, but language support is currently somewhat limited.
+You can control the voice, pitch, speed, and volume from <command>kttsmgr</command>.
+</para>
+
+<para>Plugin Name: <guilabel>Hadifix</guilabel></para>
+
+<para>URL: see below</para>
+
+<para>Debian Install Command: none</para>
+
+<para>If you do not already have Hadifix installed, do this:</para>
+
+<procedure>
+<step><para>Download MBROLA binary from
+<ulink url="http://tcts.fpms.ac.be/synthesis/mbrola.html">
+http://tcts.fpms.ac.be/synthesis/mbrola.html</ulink>.</para></step>
+<step><para>Install MBROLA to <filename>/usr/local/mbrola</filename> directory.</para></step>
+<step><para>Download at least one german language file from the MBROLA site.
+Unzip to the <filename>/usr/local/mbrola</filename> directory.</para></step>
+<step><para>Download txt2pho from
+<ulink url="http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html">
+http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</ulink>.
+</para></step>
+<step><para>Unzip txt2pho to <filename>/usr/local/txt2pho</filename>.</para></step>
+<step><para>Edit <filename>txt2phorc</filename> file, putting correct data paths in.</para></step>
+<step><para>Either copy <filename>txt2phorc</filename> to <filename>~/.txt2phorc</filename> or to <filename>/etc/txt2pho</filename>.
+Note that you drop the "rc" in file name.</para></step>
+<step><para>In <userinput>kttsmgr</userinput>, choose the German language (<guilabel>de</guilabel>), and add <guilabel>Hadifix</guilabel>.</para></step>
+<step><para>On the properties page, configure a voice and the paths to MBROLA and txt2pho.</para></step>
+<step><para>Click the <guibutton>Test</guibutton> button to test.</para></step>
+</procedure>
+
+</sect2>
+
+<!-- ====================================================================== -->
+
+<sect2 id="using-with-epos">
+<title>Using with Epos</title>
+
+<para>Epos is a free Czeck and Slovak open source engine.
+It is light weight, but sacrifices voice quality somewhat.
+You cannot control the pitch, volume, or speed of this engine
+from &kmyapplication;.</para>
+
+<para>Plugin Name: <guilabel>Epos TTS Synthesis System</guilabel></para>
+
+<para>URL: <ulink url="http://epos.ure.cas.cz/">
+http://epos.ure.cas.cz/</ulink>
+</para>
+
+<para>Debian Install Command: <userinput>apt-get install epos</userinput></para>
+
+<para>Start <command>kttsmgr</command>, choose Czeck or Slovak
+language code (<guilabel>cz</guilabel> or <guilabel>sk</guilabel>) and add 
+<guilabel>Epos TTS Synthesis System</guilabel>.
+Click <guibutton>Configure</guibutton> button.
+If the epos server executable and client are not
+in your PATH, specify the paths to these executables.  The options boxes
+permit you to pass additional options to the server and client.  In a konsole,
+type <userinput>epos -h</userinput> or <userinput>say -h</userinput>
+for information.</para>
+
+</sect2>
+
+<!-- ====================================================================== -->
+
+<sect2 id="using-with-freetts">
+<title>Using with FreeTTS</title>
+
+<para>FreeTTS is a free open source speech engine written in Java(tm), which means
+that you must have the Java Virtual Machine software installed on your
+system to use it.  It currently has limited voice and language support.
+You cannot control the pitch, volume, or speed of this engine
+from &kmyapplication;.</para>
+
+<para>Plugin Name: <guilabel>FreeTTS</guilabel></para>
+
+<para>URL: <ulink url="http://sourceforge.net/projects/freetts/">
+http://sourceforge.net/projects/freetts/</ulink>
+</para>
+
+<para>Debian Install Command: none</para>
+
+</sect2>
+
+<!-- ====================================================================== -->
+
+<sect2 id="using-with-command">
+<title>Using the Command Plugin</title>
+
+<para>The command plugin permits you to use &kmyapplication; with any
+speech synthesis engine that can be run as a command in a Konsole.</para>
+
+<para>Plugin Name: <guilabel>Command</guilabel></para>
+
+<para>URL: none</para>
+
+<para>Debian Install Command: none</para>
+
+<para>Ideally, you should use a command that synthesizes to a temporary audio
+(wav) file, rather than send the speech directly to the audio device.</para>
+
+</sect2>
+
+<!-- ====================================================================== -->
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: xml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab 
+-->
