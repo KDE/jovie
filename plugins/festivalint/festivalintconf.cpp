@@ -121,9 +121,11 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     // kdDebug() << "FestivalIntConf::load: Running" << endl;
 
     config->setGroup("FestivalInt");
-    m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", "festival"));
+    QString exePath = config->readPathEntry("FestivalExecutablePath", "festival");
+    QString exeLocation = getLocation(exePath);
+    if (!exeLocation.isEmpty()) exePath = exeLocation;
+    exePath = realFilePath(exePath);
     config->setGroup(configGroup);
-    QString exePath = realFilePath(m_widget->festivalPath->url());
     m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", exePath));
     m_widget->preloadCheckBox->setChecked(false);
     scanVoices();

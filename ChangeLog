@@ -1,3 +1,9 @@
+2004-12-14  Gary Cramblitt (PhantomsDad)
+        * Under KDE 3.2, FestivalInt plugin automatically finding /usr/share/festival, rather
+          than /usr/bin/festival.
+
+2004-12-12  Release 0.2.0.  First public release.
+
 2004-12-09  Gary Cramblitt (PhantomsDad)
         * Require GStreamer >= 0.8.7.
         * Bug.  Always using default GStreamer sink in KTTSD.  Honor user's choice now.

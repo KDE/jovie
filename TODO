@@ -5,6 +5,7 @@ _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
 _ There are several issues with i18n:
+    _ Voices file encoding is hosed (again).  dang Kate/Kdevelop!
     _ Since kcmkttsmgr can be invoked from kttsmgr, kcmshell kcmkttsd, or KControl, do I
       need to call KLocale::setMainCatalogue?  Also, what about kttsjobmgr, which is kpart
       used in kcmkttsmr?
