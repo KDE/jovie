@@ -1,5 +1,4 @@
-_ SuSE 9.2 users have GStreamer 0.8.0, which causes KTTSMgr to immediately crash on startup.
-  Need to prevent/detect this at runtime.
+_ Epos plugin should default to ISO 8859-2 encoding, rather than Local (whatever)?
 _ The khmtlktts plugin should automatically sense if KTTSD is installed and if not,
   hide menu item.  If installed, but not configured, prompt user to run kttsmgr.
 _ Clean up kspeech/kspeechsink api documentation for kdelibs.

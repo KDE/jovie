@@ -25,10 +25,19 @@
 
 #include <pluginproc.h>
 
+class QTextCodec;
+
 class FestivalIntProc : public PlugInProc{
     Q_OBJECT 
 
     public:
+        enum CharacterCodec {
+            Local    = 0,
+            Latin1   = 1,
+            Unicode  = 2,
+            UseCodec = 3
+        };
+
         /**
          * Constructor
          */
@@ -155,10 +164,12 @@ class FestivalIntProc : public PlugInProc{
         * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
         * @param pitch                   Pitch persentage.  50 to 200.
         * @param volume                  Volume percentage.  50 to 200.
+        * @param languageCode            Language code, for example, "en".
         */
         void synth(const QString &festivalExePath, const QString &text,
             const QString &synthFilename, const QString& voiceCode,
-            const int time, const int pitch, const int volume);
+            const int time, const int pitch, const int volume, const QString &languageCode,
+            QTextCodec* codec);
 
         /**
         * Sends commands to Festival to query for a list of supported voice codes.
@@ -197,8 +208,10 @@ class FestivalIntProc : public PlugInProc{
         * Start Festival engine.
         * @param festivalExePath         Path to the Festival executable, or just "festival".
         * @param voiceCode               Voice code in which to speak text.
+        * @param languageCode            Language code, for example, "en".
         */
-        void startEngine(const QString &festivalExePath, const QString &voiceCode);
+        void startEngine(const QString &festivalExePath, const QString &voiceCode,
+            const QString &languageCode, QTextCodec* codec);
 
         /**
         * If ready for more output, sends the given text to Festival process, otherwise,
@@ -309,6 +322,16 @@ class FestivalIntProc : public PlugInProc{
         QStringList m_outputQueue;
 
         bool m_writingStdin;
+
+        /**
+        * Language code.
+         */
+        QString m_languageCode;
+
+        /**
+        * Codec.
+        */
+        QTextCodec* m_codec;
 };
 
 #endif // _FESTIVALINTPROC_H_

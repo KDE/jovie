@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>559</width>
-            <height>272</height>
+            <height>318</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -176,55 +176,6 @@
                             <property name="text">
                                 <string>&amp;Rescan</string>
                                 <comment>Rescan for voices</comment>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="3" column="0">
-                    <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>preloadCheckBox</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Load this voice when starting KTTSD</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If checked, Festival will be started and this voice will be loaded when the Text-to-Speech Deamon (KTTSD) is started.  Check when a voice requires a long time to load in Festival (for example, multisyn voices), otherwise, leave unchecked.</string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer3</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>101</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>testButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Test</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to test the configuration.  Festival will be started and a test sentence will be spoken.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -518,6 +469,100 @@
                         </widget>
                     </hbox>
                 </widget>
+                <widget class="QLayoutWidget" row="4" column="0">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>preloadCheckBox</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Load this voice when starting KTTSD</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If checked, Festival will be started and this voice will be loaded when the Text-to-Speech Deamon (KTTSD) is started.  Check when a voice requires a long time to load in Festival (for example, multisyn voices), otherwise, leave unchecked.</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>101</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>testButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Test</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Click to test the configuration.  Festival will be started and a test sentence will be spoken.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="3" column="0">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>characterCodingLabel</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Character e&amp;ncoding:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>characterCodingBox</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox">
+                            <property name="name">
+                                <cstring>characterCodingBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This combo box specifies which character encoding is used for passing the text.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </grid>
         </widget>
     </grid>
@@ -548,5 +593,6 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

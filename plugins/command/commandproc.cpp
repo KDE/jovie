@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  commandproc.cpp
   Main speaking functions for the Command Plug in
   -------------------
   Copyright : (C) 2002 by Gunnar Schmi Dt and 2004 by Gary Cramblitt

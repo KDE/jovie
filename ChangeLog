@@ -1,3 +1,8 @@
+2004-12-27  Gary Cramblitt (PhantomsDad)
+        * Add encoding option to Festival Interactive Plugin.  When choosing a voice, default the
+          encoding option based on voices file.
+        * Add support for Polish Festival.
+
 2004-12-21  Gary Cramblitt (PhantomsDad)
         * Require GStreamer 0.8.5 or above in configure.in.in.  SuSE 9.2 users have
           GStreamer 0.8.0, which causes KTTSMgr to immediately crash on startup.

@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qthread.h>
+#include <qtextcodec.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -42,6 +43,8 @@ FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStri
     m_waitingStop = false;
     m_festProc = 0;
     m_state = psIdle;
+    m_languageCode = "en";
+    m_codec = QTextCodec::codecForName("ISO8859-1");
 }
 
 /** Destructor */
@@ -68,6 +71,8 @@ FestivalIntProc::~FestivalIntProc(){
         }
         delete m_festProc;
     }
+    // TODO: Should m_codec be deleted?
+    // delete m_codec;
 }
 
 /** Initialize the speech */
@@ -84,7 +89,23 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_volume = config->readNumEntry("volume", 100);
     // If voice should be pre-loaded, start Festival and load the voice.
     m_preload = config->readBoolEntry("Preload", false);
-    if (m_preload) startEngine(m_festivalExePath, m_voiceCode);
+    m_languageCode = config->readEntry("LanguageCode", "en");
+    QString codecName = config->readEntry("Codec", "Latin1");
+    if (codecName == "Local")
+        m_codec = QTextCodec::codecForLocale();
+    else if (codecName == "Latin1")
+        m_codec = QTextCodec::codecForName("ISO8859-1");
+    else if (codecName == "Unicode")
+        m_codec = QTextCodec::codecForName("utf16");
+    else
+        m_codec = QTextCodec::codecForName(codecName.latin1());
+    if (!m_codec)
+    {
+        kdDebug() << "FestivalIntProc::init: Invalid codec name " << codecName << endl;
+        kdDebug() << "FestivalIntProc::init: Defaulting to ISO 8859-1" << endl;
+        m_codec = QTextCodec::codecForName("ISO8859-1");
+    }
+    if (m_preload) startEngine(m_festivalExePath, m_voiceCode, m_languageCode, m_codec);
     return true;
 }
 
@@ -96,7 +117,8 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch, m_volume);
+    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch, m_volume,
+        m_languageCode, m_codec);
 }
 
 /**
@@ -111,7 +133,8 @@ void FestivalIntProc::sayText(const QString &text)
 */
 void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
 {
-    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch, m_volume);
+    synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch, m_volume,
+        m_languageCode, m_codec);
 };
 
 /**
@@ -122,9 +145,10 @@ void FestivalIntProc::synthText(const QString& text, const QString& suggestedFil
 */
 bool FestivalIntProc::queryVoices(const QString &festivalExePath)
 {
+    // kdDebug() << "FestivalIntProc::queryVoices: Running" << endl;
     if (m_state != psIdle && m_waitingQueryVoices && m_waitingStop) return false;
     // Start Festival if not already running.
-    startEngine(festivalExePath, QString::null);
+    startEngine(festivalExePath, QString::null, m_languageCode, m_codec);
     // Set state, waiting for voice codes list from Festival.
     m_waitingQueryVoices = true;
     // Send command to query the voice codes.
@@ -136,15 +160,18 @@ bool FestivalIntProc::queryVoices(const QString &festivalExePath)
 * Start Festival engine.
 * @param festivalExePath         Path to the Festival executable, or just "festival".
 * @param voiceCode               Voice code in which to speak text.
+* @param languageCode            Language code, for example, "en".
 */
-void FestivalIntProc::startEngine(const QString &festivalExePath, const QString &voiceCode)
+void FestivalIntProc::startEngine(const QString &festivalExePath, const QString &voiceCode,
+    const QString &languageCode, QTextCodec* codec)
 {
-    // Initialize Festival only if it's not initialized
+    // Initialize Festival only if it's not initialized.
     if (m_festProc)
     {
-        // Stop Festival if a different EXE is requested.
+        // Stop Festival if a different EXE is requested or different language code.
         // If festProc exists but is not running, it is because it was stopped.
-        if ((festivalExePath != m_festivalExePath) || !m_festProc->isRunning())
+        if ((festivalExePath != m_festivalExePath) || !m_festProc->isRunning() ||
+             (m_languageCode != languageCode) || (codec->name() != m_codec->name()))
         {
             delete m_festProc;
             m_festProc = 0;
@@ -156,6 +183,9 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         m_festProc = new KProcess;
         *m_festProc << festivalExePath;
         *m_festProc << "--interactive";
+        m_festProc->setEnvironment("LANG", languageCode + "." + codec->mimeName());
+        m_festProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->mimeName());
+        kdDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
         connect(m_festProc, SIGNAL(processExited(KProcess*)),
                 this, SLOT(slotProcessExited(KProcess*)));
         connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
@@ -177,6 +207,8 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         {
             // kdDebug()<< "FestivalIntProc:startEngine: Festival initialized" << endl;
             m_festivalExePath = festivalExePath;
+            m_languageCode = languageCode;
+            m_codec = codec;
             // Load the SABLE to Wave module.
             sendToFestival("(load \"" +
                 KGlobal::dirs()->resourceDirs("data").last() + "kttsd/festivalint/sabletowave.scm\")");
@@ -206,21 +238,24 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
 * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
 * @param pitch                   Pitch persentage.  50 to 200.
 * @param volume                  Volume percentage.  50 to 200.
+* @param languageCode            Language code, for example, "en".
 */
 void FestivalIntProc::synth(
-    const QString & festivalExePath,
+    const QString &festivalExePath,
     const QString &text,
     const QString &synthFilename,
-    const QString& voiceCode,
+    const QString &voiceCode,
     const int time,
     const int pitch,
-    const int volume)
+    const int volume,
+    const QString &languageCode,
+    QTextCodec* codec)
 {
     // kdDebug() << "FestivalIntProc::synth: festivalExePath = " << festivalExePath
     //         << " voiceCode = " << voiceCode << endl;
 
     // Initialize Festival only if it's not initialized
-    startEngine(festivalExePath, voiceCode);
+    startEngine(festivalExePath, voiceCode, languageCode, codec);
     // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
         QString timeMsg;
@@ -344,11 +379,16 @@ bool FestivalIntProc::sendIfReady()
     if (!m_festProc->isRunning()) return false;
     QString text = m_outputQueue[0];
     text += "\n";
+    QCString encodedText;
+    if (m_codec)
+        encodedText = m_codec->fromUnicode(text);
+    else
+        encodedText = text.latin1();
     m_outputQueue.pop_front();
     m_ready = false;
     // kdDebug() << "FestivalIntProc::sendIfReady: sending to Festival: " << text << endl;
     m_writingStdin = true;
-    m_festProc->writeStdin(text.latin1(), text.length());
+    m_festProc->writeStdin(encodedText, encodedText.length());
     return true;
 }
 

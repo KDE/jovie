@@ -40,6 +40,7 @@ typedef struct voiceStruct{
     QString code;               // Code as sent to Festival
     QString name;               // Name as displayed and returned in Talker Code.
     QString languageCode;       // Language code (en, es, etc)
+    QString codecName;          // Character encoding codec name (eg. ISO 8859-1)
     QString gender;             // male, female, or neutral
     bool preload;               // Start Festival and load this language when KTTSD is started.
     bool volumeAdjustable;      // True if the voice supports volume adjustments.
@@ -129,6 +130,7 @@ class FestivalIntConf : public PlugInConf {
    private:
         int percentToSlider(int percentValue);
         int sliderToPercent(int sliderValue);
+        void buildCodecList ();
 
         /**
         * Given an XML node and child element name, returns the string value from the child element.
@@ -147,6 +149,16 @@ class FestivalIntConf : public PlugInConf {
         * -1 if not found.
         */
         int voiceCodeToListIndex(const QString voiceCode);
+
+        /**
+        * Given the name of a codec, returns index into the codec combobox list.
+        */
+        int codecToListIndex(const QString codecName);
+
+        /**
+        * Given index into codec combobox list, returns the codec object.
+        */
+        QTextCodec* codecNdxToCodec(const int codecNum);
 
         /**
         * Chooses a default voice given scanned list of voices in m_voiceList and current
