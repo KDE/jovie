@@ -1,3 +1,8 @@
+2004-12-30  Gary Cramblitt (PhantomsDad)
+        * Set LANG and LC_CTYPE environment variables before starting subprocess in Epos and
+          and Command plugins.  Fix encoding bug in Epos plugin.  Move common encoding routines
+          to PluginProc.
+
 2004-12-27  Gary Cramblitt (PhantomsDad)
         * Add encoding option to Festival Interactive Plugin.  When choosing a voice, default the
           encoding option based on voices file.

@@ -183,7 +183,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
     return langCode;
 }
 
-QString PlugInConf::realFilePath(const QString &filename)
+/*static*/ QString PlugInConf::realFilePath(const QString &filename)
 {
     char realpath_buffer[MAXPATHLEN + 1];
     memset(realpath_buffer, 0, MAXPATHLEN + 1);
@@ -201,3 +201,4 @@ QString PlugInConf::realFilePath(const QString &filename)
 */
 void PlugInConf::setPlayer(TestPlayer* player) { m_player = player; }
 TestPlayer* PlugInConf::getPlayer() { return m_player; }
+

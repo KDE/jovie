@@ -106,9 +106,6 @@ class CommandConf : public PlugInConf {
     private:
         QString m_languageCode;
 
-        // Fill the Codec combobox.
-        void buildCodecList();
-
         // Configuration Widget.
         CommandConfWidget* m_widget;
 
@@ -118,5 +115,7 @@ class CommandConf : public PlugInConf {
         QString m_waveFile;
         // Progress dialog.
         KProgressDialog* m_progressDlg;
+        // Codec list.
+        QStringList m_codecList;
 };
 #endif      // _COMMANDCONF_H_

@@ -31,13 +31,6 @@ class FestivalIntProc : public PlugInProc{
     Q_OBJECT 
 
     public:
-        enum CharacterCodec {
-            Local    = 0,
-            Latin1   = 1,
-            Unicode  = 2,
-            UseCodec = 3
-        };
-
         /**
          * Constructor
          */
@@ -325,7 +318,7 @@ class FestivalIntProc : public PlugInProc{
 
         /**
         * Language code.
-         */
+        */
         QString m_languageCode;
 
         /**

@@ -130,7 +130,6 @@ class FestivalIntConf : public PlugInConf {
    private:
         int percentToSlider(int percentValue);
         int sliderToPercent(int sliderValue);
-        void buildCodecList ();
 
         /**
         * Given an XML node and child element name, returns the string value from the child element.
@@ -149,16 +148,6 @@ class FestivalIntConf : public PlugInConf {
         * -1 if not found.
         */
         int voiceCodeToListIndex(const QString voiceCode);
-
-        /**
-        * Given the name of a codec, returns index into the codec combobox list.
-        */
-        int codecToListIndex(const QString codecName);
-
-        /**
-        * Given index into codec combobox list, returns the codec object.
-        */
-        QTextCodec* codecNdxToCodec(const int codecNum);
 
         /**
         * Chooses a default voice given scanned list of voices in m_voiceList and current
@@ -184,6 +173,7 @@ class FestivalIntConf : public PlugInConf {
         KProgressDialog* m_progressDlg;
         // List of voice codes supported by Festival.
         QStringList m_supportedVoiceCodes;
-
+        // List of displayed codec names.
+        QStringList m_codecList;
 };
 #endif // _FESTIVALINTCONF_H_

@@ -27,18 +27,12 @@
 #include <pluginproc.h>
 
 class KProcess;
+class QTextCodec;
 
 class EposProc : public PlugInProc{
     Q_OBJECT 
 
     public:
-        enum CharacterCodec {
-            Local    = 0,
-            Latin1   = 1,
-            Unicode  = 2,
-            UseCodec = 3
-        };
-        
         /**
          * Constructor
          */
@@ -147,8 +141,7 @@ class EposProc : public PlugInProc{
         * @param eposClientExePath       Path to the Epos client executable.
         * @param eposServerOptions       Options passed to Epos server executable.
         * @param eposClientOptions       Options passed to Epos client executable (don't include -o).
-        * @param encoding                Codec index.
-        * @param codec                   Codec if encoding not Local, Latin1, or Unicode.
+        * @param codec                   Codec for encoding of text.
         * @param eposLanguage            Epos language setting.  "czech", "slovak",
         *                                or null (default language).
         * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
@@ -161,7 +154,6 @@ class EposProc : public PlugInProc{
             const QString& eposClientExePath,
             const QString& eposServerOptions,
             const QString& eposClientOptions,
-            int encoding,
             QTextCodec *codec,
             const QString& eposLanguage,
             const int time,
@@ -215,7 +207,7 @@ class EposProc : public PlugInProc{
         /**
         * Codec.
         */
-        int m_codec;
+        QTextCodec* m_codec;
         
         /**
         * Synthesis filename.

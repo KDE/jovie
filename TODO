@@ -1,4 +1,6 @@
 _ Epos plugin should default to ISO 8859-2 encoding, rather than Local (whatever)?
+  It seems to work with UTF-8, Latin1, and ISO 8859-2.  Why, it shouldn't work if
+  encoding is Latin1 (ISO 8859-1), but it does?
 _ The khmtlktts plugin should automatically sense if KTTSD is installed and if not,
   hide menu item.  If installed, but not configured, prompt user to run kttsmgr.
 _ Clean up kspeech/kspeechsink api documentation for kdelibs.

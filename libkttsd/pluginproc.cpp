@@ -18,10 +18,12 @@
 
 // Qt includes. 
 #include <qstring.h>
+#include <qtextcodec.h>
 
 // KDE includes.
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 // PlugInProc includes.
 #include "pluginproc.h"
@@ -135,4 +137,156 @@ bool PlugInProc::supportsSynth() { return false; }
 QString PlugInProc::getSsmlXsltFilename()
 {
     return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl";
+}
+
+/**
+* Given the name of a codec, returns the QTextCodec for the name.
+* Handles the following "special" codec names:
+*   Local               The user's current Locale codec.
+*   Latin1              Latin1 (ISO 8859-1)
+*   Unicode             UTF-16
+* @param codecName      Name of desired codec.
+* @return               The codec object.  Calling program must not delete this object
+*                       as it is a reference to an existing QTextCodec object.
+*
+* Caution: Do not pass translated codec names to this routine.
+*/
+/*static*/ QTextCodec* PlugInProc::codecNameToCodec(const QString &codecName)
+{
+    QTextCodec* codec = 0;
+    if (codecName == "Local")
+        codec = QTextCodec::codecForLocale();
+    else if (codecName == "Latin1")
+        codec = QTextCodec::codecForName("ISO8859-1");
+    else if (codecName == "Unicode")
+        codec = QTextCodec::codecForName("utf16");
+    else
+        codec = QTextCodec::codecForName(codecName.latin1());
+    if (!codec)
+    {
+        kdDebug() << "PluginProc::codecNameToCodec: Invalid codec name " << codecName << endl;
+        kdDebug() << "PluginProc::codecNameToCodec: Defaulting to ISO 8859-1" << endl;
+        codec = QTextCodec::codecForName("ISO8859-1");
+    }
+    return codec;
+}
+
+/**
+* Builds a list of codec names, suitable for display in a QComboBox.
+* The list includes the 3 special codec names (translated) at the top:
+*   Local               The user's current Locale codec.
+*   Latin1              Latin1 (ISO 8859-1)
+*   Unicode             UTF-16
+*/
+/*static*/ QStringList PlugInProc::buildCodecList()
+{
+    // kdDebug() << "PlugInConf::buildCodecList: Running" << endl;
+    QStringList codecList;
+    QString local = i18n("Local")+" (";
+    local += QTextCodec::codecForLocale()->name();
+    local += ")";
+    codecList.append(local);
+    codecList.append(i18n("Latin1"));
+    codecList.append(i18n("Unicode"));
+    for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
+        codecList.append(QTextCodec::codecForIndex(i)->name());
+    return codecList;
+}
+
+/**
+* Given the name of a codec, returns index into the codec list.
+* Handles the following "special" codec names:
+*   Local               The user's current Locale codec.
+*   Latin1              Latin1 (ISO 8859-1)
+*   Unicode             UTF-16
+* @param codecName      Name of the codec.
+* @param codecList      List of codec names. The first 3 entries may be translated names.
+* @return               QTextCodec object.  Caller must not delete this object.
+*
+* Caution: Do not pass translated codec names to this routine in codecName parameter.
+*/
+/*static*/ int PlugInProc::codecNameToListIndex(const QString &codecName, const QStringList &codecList)
+{
+    int codec;
+    if (codecName == "Local")
+        codec = PlugInProc::Local;
+    else if (codecName == "Latin1")
+        codec = PlugInProc::Latin1;
+    else if (codecName == "Unicode")
+        codec = PlugInProc::Unicode;
+    else {
+        codec = PlugInProc::Local;
+        for (uint i = PlugInProc::UseCodec; i < codecList.count(); i++ )
+            if (codecName == codecList[i])
+                codec = i;
+    }
+    return codec;
+}
+
+/**
+* Given index into codec list, returns the codec object.
+* @param codecNum       Index of the codec.
+* @param codecList      List of codec names. The first 3 entries may be translated names.
+* @return               QTextCodec object.  Caller must not delete this object.
+*/
+/*static*/ QTextCodec* PlugInProc::codecIndexToCodec(const int codecNum, const QStringList &codecList)
+{
+    QTextCodec* codec = 0;
+    switch (codecNum) {
+        case PlugInProc::Local:
+            codec = QTextCodec::codecForLocale();
+            break;
+        case PlugInProc::Latin1:
+            codec = QTextCodec::codecForName("ISO8859-1");
+            break;
+        case PlugInProc::Unicode:
+            codec = QTextCodec::codecForName("utf16");
+            break;
+        default:
+            codec = QTextCodec::codecForName(codecList[codecNum].latin1());
+            break;
+    }
+    if (!codec)
+    {
+        kdDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
+        kdDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
+        codec = QTextCodec::codecForName("ISO8859-1");
+    }
+    return codec;
+}
+
+/**
+* Given index into codec list, returns the codec Name.
+* Handles the following "special" codec names:
+*   Local               The user's current Locale codec.
+*   Latin1              Latin1 (ISO 8859-1)
+*   Unicode             UTF-16
+* @param codecNum       Index of the codec.
+* @param codecList      List of codec names. The first 3 entries may be translated names.
+* @return               Untranslated name of the codec.
+*/
+/*static*/ QString PlugInProc::codecIndexToCodecName(const int codecNum, const QStringList &codecList)
+{
+    QString codecName;
+    switch (codecNum) {
+        case PlugInProc::Local:
+            codecName = "Local";
+            break;
+        case PlugInProc::Latin1:
+            codecName = "Latin1";
+            break;
+        case PlugInProc::Unicode:
+            codecName = "Unicode";
+            break;
+        default:
+            if ((uint)codecNum < codecList.count())
+                codecName = codecList[codecNum];
+            else
+            {
+                kdDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
+                kdDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
+                codecName = "ISO8859-1";
+            }
+    }
+    return codecName;
 }

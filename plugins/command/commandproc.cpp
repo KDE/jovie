@@ -46,7 +46,6 @@ CommandProc::CommandProc( QObject* parent, const char* name, const QStringList& 
     m_commandProc = 0;
     m_state = psIdle;
     m_stdin = true;
-    m_codec = 0;
     m_supportsSynth = false;
     m_waitingStop = false;
 }
@@ -72,30 +71,12 @@ bool CommandProc::init(KConfig *config, const QString &configGroup){
     m_ttsCommand = config->readEntry("Command", "cat -");
     m_stdin = config->readBoolEntry("StdIn", true);
     m_language = config->readEntry("LanguageCode", "en");
-    
+
     // Support separate synthesis if the TTS command contains %w macro.
     m_supportsSynth = (m_ttsCommand.contains("%w"));
 
-    // Build codec list.
-    QPtrList<QTextCodec>* codecList = new QPtrList<QTextCodec>;
-    QTextCodec *codec;
-    int i;
-    for (i = 0; (codec = QTextCodec::codecForIndex(i)); i++)
-        codecList->append (codec);
-    
     QString codecString = config->readEntry("Codec", "Local");
-    if (codecString == "Local")
-        m_codec = Local;
-    else if (codecString == "Latin1")
-        m_codec = Latin1;
-    else if (codecString == "Unicode")
-        m_codec = Unicode;
-    else {
-        m_codec = Local;
-        for (unsigned int i = 0; i < codecList->count(); i++ )
-            if (codecString == codecList->at(i)->name())
-                m_codec = UseCodec + i;
-    }
+    m_codec = codecNameToCodec(codecString);
     kdDebug() << "CommandProc::init: Initialized with command: " << m_ttsCommand << " codec: " << codecString << endl;
     return true;
 }
@@ -109,7 +90,7 @@ bool CommandProc::init(KConfig *config, const QString &configGroup){
 void CommandProc::sayText(const QString &text)
 {
     synth(text, QString::null,
-        m_ttsCommand, m_stdin, m_codec, QTextCodec::codecForIndex(m_codec), m_language);
+        m_ttsCommand, m_stdin, m_codec, m_language);
 }
 
 /**
@@ -125,7 +106,7 @@ void CommandProc::sayText(const QString &text)
 void CommandProc::synthText(const QString& text, const QString& suggestedFilename)
 {
     synth(text, suggestedFilename,
-        m_ttsCommand, m_stdin, m_codec, QTextCodec::codecForIndex(m_codec), m_language);
+        m_ttsCommand, m_stdin, m_codec, m_language);
 };
 
 /**
@@ -135,12 +116,11 @@ void CommandProc::synthText(const QString& text, const QString& suggestedFilenam
 *                                synthesize and audibilize the text.
 * @param userCmd                 The program that shall be executed for speaking
 * @param stdIn                   True if the program shall recieve its data via standard input
-* @param encoding                The number of the encoding that shall be used
 * @param codec                   The QTextCodec if encoding==UseCodec
 * @param language                The language code (used for the %l macro)
 */
 void CommandProc::synth(const QString& inputText, const QString& suggestedFilename,
-    const QString& userCmd, bool stdIn, int encoding, QTextCodec *codec, QString& language)
+    const QString& userCmd, bool stdIn, QTextCodec *codec, QString& language)
 {
     if (m_commandProc)
     {
@@ -158,39 +138,25 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     // 1.a) encode the text
     QByteArray encText;
     QTextStream ts (encText, IO_WriteOnly);
-    if (encoding == Local)
-        ts.setEncoding (QTextStream::Locale);
-    else if (encoding == Latin1)
-        ts.setEncoding (QTextStream::Latin1);
-    else if (encoding == Unicode)
-        ts.setEncoding (QTextStream::Unicode);
-    else
-        ts.setCodec (codec);
+    ts.setCodec(codec);
     ts << text;
     ts << endl; // Some synths need this, eg. flite.
-    
+
     // 1.b) quote the text as one parameter
     QString escText = KShellProcess::quote(encText);
-    
+
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
     {
         KTempFile tempFile(locateLocal("tmp", "commandplugin-"), ".txt");
         QTextStream* fs = tempFile.textStream();
-        if (encoding == Local)
-            fs->setEncoding (QTextStream::Locale);
-        else if (encoding == Latin1)
-            fs->setEncoding (QTextStream::Latin1);
-        else if (encoding == Unicode)
-            fs->setEncoding (QTextStream::Unicode);
-        else
-            fs->setCodec (codec);
+        fs->setCodec(codec);
         *fs << text;
         *fs << endl;
         m_textFilename = tempFile.file()->name();
         tempFile.close();
     } else m_textFilename = QString::null;
-    
+
     // 2. replace variables with values
     QValueStack<bool> stack;
     bool issinglequote=false;
@@ -275,7 +241,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         else if (noreplace == 0) // do not replace macros within ${...}
         {
             QString match, v;
-    
+
             // get match
             if (issinglequote)
                 match=re_singlequote.cap();
@@ -283,7 +249,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
                 match=re_doublequote.cap();
             else
                 match=re_noquote.cap();
-    
+
             // substitue %variables
             if (match=="%%")
                 v="%";
@@ -295,13 +261,13 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
                 v=language;
             else if (match=="%w")
                 v = suggestedFilename;
-    
+
             // %variable inside of a quote?
             if (isdoublequote)
                 v='"'+v+'"';
             else if (issinglequote)
                 v="'"+v+"'";
-    
+
             command.replace (i, match.length(), v);
             i+=v.length();
         }
@@ -320,6 +286,8 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     kdDebug() << "CommandProc::synth: running command: " << command << endl;
     m_commandProc = new KProcess;
     m_commandProc->setUseShell(true);
+    m_commandProc->setEnvironment("LANG", language + "." + codec->mimeName());
+    m_commandProc->setEnvironment("LC_CTYPE", language + "." + codec->mimeName());
     *m_commandProc << command;
     connect(m_commandProc, SIGNAL(processExited(KProcess*)),
         this, SLOT(slotProcessExited(KProcess*)));
@@ -329,9 +297,9 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
     connect(m_commandProc, SIGNAL(wroteStdin(KProcess*)),
         this, SLOT(slotWroteStdin(KProcess* )));
-    
+
     // 4. start the process
-    
+
     if (suggestedFilename.isNull())
         m_state = psSaying;
     else
@@ -475,4 +443,3 @@ bool CommandProc::supportsAsync() { return true; }
 * @return                        True if this plugin supports synthText method.
 */
 bool CommandProc::supportsSynth() { return m_supportsSynth; }
-    

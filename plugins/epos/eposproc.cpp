@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 #include <qtextcodec.h>
 #include <qfile.h>
+#include <qtextcodec.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -73,27 +74,9 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     m_eposClientOptions = config->readEntry("EposClientOptions", QString::null);
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
     kdDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
-    
-    // Build codec list.
-    QPtrList<QTextCodec>* codecList = new QPtrList<QTextCodec>;
-    QTextCodec *codec;
-    int i;
-    for (i = 0; (codec = QTextCodec::codecForIndex(i)); i++)
-        codecList->append (codec);
-    
+
     QString codecString = config->readEntry("Codec", "Local");
-    if (codecString == "Local")
-        m_codec = Local;
-    else if (codecString == "Latin1")
-        m_codec = Latin1;
-    else if (codecString == "Unicode")
-        m_codec = Unicode;
-    else {
-        m_codec = Local;
-        for (unsigned int i = 0; i < codecList->count(); i++ )
-            if (codecString == codecList->at(i)->name())
-                m_codec = UseCodec + i;
-    }
+    m_codec = codecNameToCodec(codecString);
     // Start the Epos server if not already started.
     if (!m_eposServerProc)
     {
@@ -107,9 +90,9 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
             this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
         m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
     }
-    
+
     kdDebug() << "EposProc::init: Initialized with codec: " << codecString << endl;
-    
+
     return true;
 }
 
@@ -123,8 +106,7 @@ void EposProc::sayText(const QString &text)
 {
     synth(text, QString::null, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
-        m_codec, QTextCodec::codecForIndex(m_codec),
-        m_eposLanguage, m_time, m_pitch);
+        m_codec, m_eposLanguage, m_time, m_pitch);
 }
 
 /**
@@ -141,8 +123,7 @@ void EposProc::synthText(const QString& text, const QString& suggestedFilename)
 {
     synth(text, suggestedFilename, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
-        m_codec, QTextCodec::codecForIndex(m_codec),
-        m_eposLanguage, m_time, m_pitch);
+        m_codec, m_eposLanguage, m_time, m_pitch);
 };
 
 /**
@@ -154,8 +135,7 @@ void EposProc::synthText(const QString& text, const QString& suggestedFilename)
 * @param eposClientExePath       Path to the Epos client executable.
 * @param eposServerOptions       Options passed to Epos server executable.
 * @param eposClientOptions       Options passed to Epos client executable (don't include -o).
-* @param encoding                Codec index.
-* @param codec                   Codec if encoding not Local, Latin1, or Unicode.
+* @param codec                   Codec for encoding of text.
 * @param eposLanguage            Epos language setting.  "czech", "slovak",
 *                                or null (default language).
 * @param time                    Speed percentage. 50 to 200. 200% = 2x normal.
@@ -168,7 +148,6 @@ void EposProc::synth(
     const QString& eposClientExePath,
     const QString& eposServerOptions,
     const QString& eposClientOptions,
-    int encoding,
     QTextCodec *codec,
     const QString& eposLanguage,
     const int time,
@@ -195,18 +174,12 @@ void EposProc::synth(
             this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
         m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
     }
-    
+
     // Encode the text.
+    // 1.a) encode the text
     QByteArray encText;
     QTextStream ts (encText, IO_WriteOnly);
-    if (encoding == Local)
-        ts.setEncoding (QTextStream::Locale);
-    else if (encoding == Latin1)
-        ts.setEncoding (QTextStream::Latin1);
-    else if (encoding == Unicode)
-        ts.setEncoding (QTextStream::Unicode);
-    else
-        ts.setCodec (codec);
+    ts.setCodec(codec);
     ts << text;
     ts << endl; // Some synths need this, eg. flite.
 
@@ -216,6 +189,16 @@ void EposProc::synth(
     // kdDebug()<< "EposProc::synth: Creating Epos object" << endl;
     m_eposProc = new KProcess;
     m_eposProc->setUseShell(true);
+    QString languageCode;
+    if (eposLanguage == "czech")
+        languageCode == "cz";
+    else if (eposLanguage == "slovak")
+        languageCode == "sk";
+    if (!languageCode.isEmpty())
+    {
+        m_eposProc->setEnvironment("LANG", languageCode + "." + codec->mimeName());
+        m_eposProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->mimeName());
+    }
     *m_eposProc << eposClientExePath;
     // Language.
     if (!eposLanguage.isEmpty())
@@ -255,7 +238,7 @@ void EposProc::synth(
         m_state = psSaying;
     else
         m_state = psSynthing;
-    
+
     // Ok, let's rock.
     m_synthFilename = suggestedFilename;
     kdDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
@@ -267,7 +250,7 @@ void EposProc::synth(
     }
     kdDebug()<< "EposProc:synth: Epos initialized" << endl;
 }
-        
+
 /**
 * Get the generated audio filename from synthText.
 * @return                        Name of the audio file the plugin generated.
@@ -391,4 +374,3 @@ bool EposProc::supportsAsync() { return true; }
 * @return                        True if this plugin supports synthText method.
 */
 bool EposProc::supportsSynth() { return true; }
-    

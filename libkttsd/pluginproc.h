@@ -216,7 +216,9 @@
 * If the user changes any of the settings while the plugin is created,
 * the plugin will be destroyed and re-created.
 */
- 
+
+class QTextCodec;
+
 enum pluginState
 {
     psIdle = 0,                  /**< Plugin is not doing anything. */
@@ -229,6 +231,13 @@ class PlugInProc : virtual public QObject{
     Q_OBJECT
 
     public:
+        enum CharacterCodec {
+            Local    = 0,
+            Latin1   = 1,
+            Unicode  = 2,
+            UseCodec = 3
+        };
+
         /**
         * Constructor.
         */
@@ -365,6 +374,63 @@ class PlugInProc : virtual public QObject{
         * @return            Name of the XSLT file.
         */
         virtual QString getSsmlXsltFilename();
+
+        /**
+        * Given the name of a codec, returns the QTextCodec for the name.
+        * Handles the following "special" codec names:
+        *   Local               The user's current Locale codec.
+        *   Latin1              Latin1 (ISO 8859-1)
+        *   Unicode             UTF-16
+        * @param codecName      Name of desired codec.
+        * @return               The codec object.  Calling program must not delete this object
+        *                       as it is a reference to an existing QTextCodec object.
+        *
+        * Caution: Do not pass translated codec names to this routine.
+        */
+        static QTextCodec* codecNameToCodec(const QString &codecName);
+
+        /**
+        * Builds a list of codec names, suitable for display in a QComboBox.
+        * The list includes the 3 special codec names (translated) at the top:
+        *   Local               The user's current Locale codec.
+        *   Latin1              Latin1 (ISO 8859-1)
+        *   Unicode             UTF-16
+        */
+        static QStringList buildCodecList();
+
+        /**
+        * Given the name of a codec, returns index into the codec list.
+        * Handles the following "special" codec names:
+        *   Local               The user's current Locale codec.
+        *   Latin1              Latin1 (ISO 8859-1)
+        *   Unicode             UTF-16
+        * @param codecName      Name of the codec.
+        * @param codecList      List of codec names. The first 3 entries may be translated names.
+        * @return               QTextCodec object.  Caller must not delete this object.
+        *
+        * Caution: Do not pass translated codec names to this routine in codecName parameter.
+        */
+        static int codecNameToListIndex(const QString &codecName, const QStringList &codecList);
+
+        /**
+        * Given index into codec list, returns the codec object.
+        * @param codecNum       Index of the codec.
+        * @param codecList      List of codec names. The first 3 entries may be translated names.
+        * @return               QTextCodec object.  Caller must not delete this object.
+        */
+        static QTextCodec* codecIndexToCodec(const int codecNum, const QStringList &codecList);
+
+        /**
+        * Given index into codec list, returns the codec Name.
+        * Handles the following "special" codec names:
+        *   Local               The user's current Locale codec.
+        *   Latin1              Latin1 (ISO 8859-1)
+        *   Unicode             UTF-16
+        * @param codecNum       Index of the codec.
+        * @param codecList      List of codec names. The first 3 entries may be translated names.
+        * @return               Untranslated name of the codec.
+        */
+        static QString codecIndexToCodecName(const int codecNum, const QStringList &codecList);
 
     signals:
         /**

@@ -66,7 +66,13 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
 
     m_widget->festivalPath->setMode(KFile::File | KFile::ExistingOnly);
     m_widget->festivalPath->setFilter("*");
-//    defaults();
+
+    // Build codec list and fill combobox.
+    m_codecList = PlugInProc::buildCodecList();
+    m_widget->characterCodingBox->clear();
+    m_widget->characterCodingBox->insertStringList(m_codecList);
+
+    //    defaults();
 
     connect(m_widget->festivalPath, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotFestivalPath_textChanged()));
@@ -123,59 +129,8 @@ int FestivalIntConf::voiceCodeToListIndex(const QString voiceCode)
     return -1;
 }
 
-/**
-* Given the name of a codec, returns index into the codec combobox list.
-*/
-int FestivalIntConf::codecToListIndex(const QString codecName)
-{
-    int codec;
-    if (codecName == "Local")
-        codec = FestivalIntProc::Local;
-    else if (codecName == "Latin1")
-        codec = FestivalIntProc::Latin1;
-    else if (codecName == "Unicode")
-        codec = FestivalIntProc::Unicode;
-    else {
-        codec = FestivalIntProc::Local;
-        for (int i = FestivalIntProc::UseCodec; i < m_widget->characterCodingBox->count(); i++ )
-            if (codecName == m_widget->characterCodingBox->text(i))
-                codec = i;
-    }
-    return codec;
-}
-
-/**
-* Given index into codec combobox list, returns the codec object.
-*/
-QTextCodec* FestivalIntConf::codecNdxToCodec(const int codecNum)
-{
-    QTextCodec* codec = 0;
-    switch (codecNum) {
-        case FestivalIntProc::Local:
-            codec = QTextCodec::codecForLocale();
-            break;
-        case FestivalIntProc::Latin1:
-            codec = QTextCodec::codecForName("ISO8859-1");
-            break;
-        case FestivalIntProc::Unicode:
-            codec = QTextCodec::codecForName("utf16");
-            break;
-        default:
-            codec = QTextCodec::codecForName(m_widget->characterCodingBox->text(codecNum).latin1());
-            break;
-    }
-    if (!codec)
-    {
-        kdDebug() << "FestivalIntConf::codecNdxToCodec: Invalid codec index " << codecNum << endl;
-        kdDebug() << "FestivalIntConf::codecNdxToCodec: Defaulting to ISO 8859-1" << endl;
-        codec = QTextCodec::codecForName("ISO8859-1");
-    }
-    return codec;
-}
-
 void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     //kdDebug() << "FestivalIntConf::load: Running" << endl;
-    buildCodecList();
     config->setGroup("FestivalInt");
     QString exePath = config->readPathEntry("FestivalExecutablePath", "festival");
     QString exeLocation = getLocation(exePath);
@@ -196,11 +151,12 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
     m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
     m_widget->preloadCheckBox->setChecked(config->readBoolEntry(
-         "Preload", m_widget->preloadCheckBox->isChecked()));
+        "Preload", m_widget->preloadCheckBox->isChecked()));
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
-    QString codecName = m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem());
+    QString codecName = PlugInProc::codecIndexToCodecName(
+        m_widget->characterCodingBox->currentItem(), m_codecList);
     codecName = config->readEntry("Codec", codecName);
-    int codecNdx = codecToListIndex(codecName);
+    int codecNdx = PlugInProc::codecNameToListIndex(codecName, m_codecList);
     m_widget->characterCodingBox->setCurrentItem(codecNdx);
 }
 
@@ -217,14 +173,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     config->writeEntry("Preload", m_widget->preloadCheckBox->isChecked());
     config->writeEntry("LanguageCode", m_voiceList[m_widget->selectVoiceCombo->currentItem()].languageCode);
     int codec = m_widget->characterCodingBox->currentItem();
-    if (codec == FestivalIntProc::Local)
-        config->writeEntry("Codec", "Local");
-    else if (codec == FestivalIntProc::Latin1)
-        config->writeEntry("Codec", "Latin1");
-    else if (codec == FestivalIntProc::Unicode)
-        config->writeEntry("Codec", "Unicode");
-    else
-        config->writeEntry("Codec", m_widget->characterCodingBox->text(codec));
+    config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void FestivalIntConf::defaults(){
@@ -237,8 +186,8 @@ void FestivalIntConf::defaults(){
     m_widget->frequencyBox->setValue(100);
     frequencyBox_valueChanged(100);
     m_widget->preloadCheckBox->setChecked(false);
-    buildCodecList();
-    m_widget->characterCodingBox->setCurrentItem(codecToListIndex("ISO 8859-1"));
+    m_widget->characterCodingBox->setCurrentItem(
+        PlugInProc::codecNameToListIndex("ISO 8859-1", m_codecList));
     scanVoices();
 }
 
@@ -276,20 +225,6 @@ QString FestivalIntConf::getTalkerCode()
             .arg(rate)
             .arg("Festival Interactive");
     return normalTalkerCode;
-}
-
-void FestivalIntConf::buildCodecList () {
-    // kdDebug() << "FestivalIntConf::buildCodecList: Running" << endl;
-    QString local = i18n("Local")+" (";
-    local += QTextCodec::codecForLocale()->name();
-    local += ")";
-    m_widget->characterCodingBox->clear();
-    m_widget->characterCodingBox->insertItem (local, FestivalIntProc::Local);
-    m_widget->characterCodingBox->insertItem (i18n("Latin1"), FestivalIntProc::Latin1);
-    m_widget->characterCodingBox->insertItem (i18n("Unicode"), FestivalIntProc::Unicode);
-    for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
-        m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
-            FestivalIntProc::UseCodec + i);
 }
 
 /**
@@ -378,7 +313,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
             m_widget->selectVoiceCombo->setCurrentItem(index);
             m_widget->preloadCheckBox->setChecked(m_voiceList[index].preload);
             QString codecName = m_voiceList[index].codecName;
-            int codecNdx = codecToListIndex(codecName);
+            int codecNdx = PlugInProc::codecNameToListIndex(codecName, m_codecList);
             m_widget->characterCodingBox->setCurrentItem(codecNdx);
             if (m_voiceList[index].volumeAdjustable)
             {
@@ -616,7 +551,8 @@ void FestivalIntConf::slotTest_clicked()
         i18n("K D E is a modern graphical desktop for UNIX computers.");
 
     // Get codec.
-    QTextCodec* codec = codecNdxToCodec(m_widget->characterCodingBox->currentItem());
+    QTextCodec* codec = PlugInProc::codecIndexToCodec(
+        m_widget->characterCodingBox->currentItem(), m_codecList);
 
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "ktts_festivalint_testdlg",
@@ -693,7 +629,7 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
 {
     int index = m_widget->selectVoiceCombo->currentItem();
     QString codecName = m_voiceList[index].codecName;
-    int codecNdx = codecToListIndex(codecName);
+    int codecNdx = PlugInProc::codecNameToListIndex(codecName, m_codecList);
     m_widget->characterCodingBox->setCurrentItem(codecNdx);
     m_widget->preloadCheckBox->setChecked(
         m_voiceList[index].preload);

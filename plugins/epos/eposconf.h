@@ -120,8 +120,6 @@ class EposConf : public PlugInConf {
         // Language code.
         QString m_languageCode;
 
-        void buildCodecList ();
-
         // Configuration widget.
         EposConfWidget* m_widget;
 
@@ -131,5 +129,7 @@ class EposConf : public PlugInConf {
         QString m_waveFile;
         // Progress dialog.
         KProgressDialog* m_progressDlg;
+        // List of displayed codec names.
+        QStringList m_codecList;
 };
 #endif // _EPOSCONF_H_

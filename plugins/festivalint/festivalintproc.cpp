@@ -71,8 +71,6 @@ FestivalIntProc::~FestivalIntProc(){
         }
         delete m_festProc;
     }
-    // TODO: Should m_codec be deleted?
-    // delete m_codec;
 }
 
 /** Initialize the speech */
@@ -91,20 +89,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_preload = config->readBoolEntry("Preload", false);
     m_languageCode = config->readEntry("LanguageCode", "en");
     QString codecName = config->readEntry("Codec", "Latin1");
-    if (codecName == "Local")
-        m_codec = QTextCodec::codecForLocale();
-    else if (codecName == "Latin1")
-        m_codec = QTextCodec::codecForName("ISO8859-1");
-    else if (codecName == "Unicode")
-        m_codec = QTextCodec::codecForName("utf16");
-    else
-        m_codec = QTextCodec::codecForName(codecName.latin1());
-    if (!m_codec)
-    {
-        kdDebug() << "FestivalIntProc::init: Invalid codec name " << codecName << endl;
-        kdDebug() << "FestivalIntProc::init: Defaulting to ISO 8859-1" << endl;
-        m_codec = QTextCodec::codecForName("ISO8859-1");
-    }
+    m_codec = codecNameToCodec(codecName);
     if (m_preload) startEngine(m_festivalExePath, m_voiceCode, m_languageCode, m_codec);
     return true;
 }
@@ -383,7 +368,7 @@ bool FestivalIntProc::sendIfReady()
     if (m_codec)
         encodedText = m_codec->fromUnicode(text);
     else
-        encodedText = text.latin1();
+        encodedText = text.latin1();  // Should not happen, but just in case.
     m_outputQueue.pop_front();
     m_ready = false;
     // kdDebug() << "FestivalIntProc::sendIfReady: sending to Festival: " << text << endl;

@@ -55,6 +55,11 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
     m_widget = new EposConfWidget(this, "EposConfigWidget");
     layout->addWidget(m_widget);
 
+    // Build codec list and fill combobox.
+    m_codecList = PlugInProc::buildCodecList();
+    m_widget->characterCodingBox->clear();
+    m_widget->characterCodingBox->insertStringList(m_codecList);
+
     defaults();
 
     connect(m_widget->eposServerPath, SIGNAL(textChanged(const QString&)),
@@ -100,19 +105,7 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
     m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "Local");
-    int codec;
-    if (codecString == "Local")
-        codec = EposProc::Local;
-    else if (codecString == "Latin1")
-        codec = EposProc::Latin1;
-    else if (codecString == "Unicode")
-        codec = EposProc::Unicode;
-    else {
-        codec = EposProc::Local;
-        for (int i = EposProc::UseCodec; i < m_widget->characterCodingBox->count(); i++ )
-            if (codecString == m_widget->characterCodingBox->text(i))
-                codec = i;
-    }
+    int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
     m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
     m_widget->characterCodingBox->setCurrentItem(codec);
@@ -148,14 +141,7 @@ void EposConf::save(KConfig *config, const QString &configGroup){
     config->writeEntry("time", m_widget->timeBox->value());
     config->writeEntry("pitch", m_widget->frequencyBox->value());
     int codec = m_widget->characterCodingBox->currentItem();
-    if (codec == EposProc::Local)
-        config->writeEntry("Codec", "Local");
-    else if (codec == EposProc::Latin1)
-        config->writeEntry("Codec", "Latin1");
-    else if (codec == EposProc::Unicode)
-        config->writeEntry("Codec", "Unicode");
-    else config->writeEntry("Codec",
-        m_widget->characterCodingBox->text(codec));
+    config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void EposConf::defaults(){
@@ -168,7 +154,6 @@ void EposConf::defaults(){
     timeBox_valueChanged(100);
     m_widget->frequencyBox->setValue(100);
     frequencyBox_valueChanged(100);
-    buildCodecList();
     m_widget->characterCodingBox->setCurrentItem(0);
 }
 
@@ -201,19 +186,6 @@ QString EposConf::getTalkerCode()
         }
     }
     return QString::null;
-}
-
-void EposConf::buildCodecList () {
-   QString local = i18n("Local")+" (";
-   local += QTextCodec::codecForLocale()->name();
-   local += ")";
-   m_widget->characterCodingBox->clear();
-   m_widget->characterCodingBox->insertItem (local, EposProc::Local);
-   m_widget->characterCodingBox->insertItem (i18n("Latin1"), EposProc::Latin1);
-   m_widget->characterCodingBox->insertItem (i18n("Unicode"), EposProc::Unicode);
-   for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
-      m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
-        EposProc::UseCodec + i);
 }
 
 void EposConf::slotEposTest_clicked()
@@ -252,8 +224,7 @@ void EposConf::slotEposTest_clicked()
         realFilePath(m_widget->eposClientPath->url()),
         m_widget->eposServerOptions->text(),
         m_widget->eposClientOptions->text(),
-        m_widget->characterCodingBox->currentItem(),
-        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem()).latin1()),
+        PlugInProc::codecIndexToCodec(m_widget->characterCodingBox->currentItem(), m_codecList),
         languageCodeToEposLanguage(m_languageCode),
         m_widget->timeBox->value(),
         m_widget->frequencyBox->value()

@@ -54,6 +54,11 @@ CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& 
     m_widget = new CommandConfWidget(this, "CommandConfigWidget");
     layout->addWidget(m_widget);
 
+    // Build codec list and fill combobox.
+    m_codecList = PlugInProc::buildCodecList();
+    m_widget->characterCodingBox->clear();
+    m_widget->characterCodingBox->insertStringList(m_codecList);
+
     defaults();
     connect(m_widget->characterCodingBox, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
@@ -83,19 +88,7 @@ void CommandConf::load(KConfig *config, const QString &configGroup) {
     m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", false));
     QString codecString = config->readEntry("Codec", "Local");
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
-    int codec;
-    if (codecString == "Local")
-        codec = CommandProc::Local;
-    else if (codecString == "Latin1")
-        codec = CommandProc::Latin1;
-    else if (codecString == "Unicode")
-        codec = CommandProc::Unicode;
-    else {
-        codec = CommandProc::Local;
-        for (int i = CommandProc::UseCodec; i < m_widget->characterCodingBox->count(); i++ )
-            if (codecString == m_widget->characterCodingBox->text(i))
-                codec = i;
-    }
+    int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
     m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
@@ -105,23 +98,14 @@ void CommandConf::save(KConfig *config, const QString &configGroup) {
     config->writeEntry("Command", m_widget->urlReq->url());
     config->writeEntry("StdIn", m_widget->stdInButton->isChecked());
     int codec = m_widget->characterCodingBox->currentItem();
-    if (codec == CommandProc::Local)
-        config->writeEntry("Codec", "Local");
-    else if (codec == CommandProc::Latin1)
-        config->writeEntry("Codec", "Latin1");
-    else if (codec == CommandProc::Unicode)
-        config->writeEntry("Codec", "Unicode");
-    else config->writeEntry("Codec",
-        m_widget->characterCodingBox->text(codec));
+    config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void CommandConf::defaults(){
     // kdDebug() << "CommandConf::defaults: Running" << endl;
     m_widget->urlReq->setURL("cat -");
     m_widget->stdInButton->setChecked(false);
-    buildCodecList();
     m_widget->urlReq->setShowLocalProtocol (false);
-    buildCodecList();
     m_widget->characterCodingBox->setCurrentItem(0);
 }
 
@@ -152,19 +136,6 @@ QString CommandConf::getTalkerCode()
         }
     }
     return QString::null;
-}
-
-void CommandConf::buildCodecList () {
-   QString local = i18n("Local")+" (";
-   local += QTextCodec::codecForLocale()->name();
-   local += ")";
-   m_widget->characterCodingBox->clear();
-   m_widget->characterCodingBox->insertItem (local, CommandProc::Local);
-   m_widget->characterCodingBox->insertItem (i18n("Latin1"), CommandProc::Latin1);
-   m_widget->characterCodingBox->insertItem (i18n("Unicode"), CommandProc::Unicode);
-   for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
-      m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
-        CommandProc::UseCodec + i);
 }
 
 void CommandConf::slotCommandTest_clicked()
@@ -201,8 +172,7 @@ void CommandConf::slotCommandTest_clicked()
         tmpWaveFile,
         m_widget->urlReq->url(),
         m_widget->stdInButton->isChecked(),
-        m_widget->characterCodingBox->currentItem(),
-        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem()).latin1()),
+        PlugInProc::codecIndexToCodec(m_widget->characterCodingBox->currentItem(), m_codecList),
         m_languageCode);
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
