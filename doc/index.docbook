@@ -1312,7 +1312,7 @@ configure a voice and the paths to MBROLA and txt2pho.</para></step>
 
 <para>Epos is a free Czeck and Slovak open source engine.
 It is light weight, but sacrifices voice quality somewhat.
-You cannot control the pitch, volume, or speed of this engine
+You cannot control the volume of this engine
 from &kmyapplication;.</para>
 
 <para>Synthesizer Name: <guilabel>Epos TTS Synthesis System</guilabel></para>
