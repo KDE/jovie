@@ -1,6 +1,12 @@
 2005-03-12  Gary Cramblitt (PhantomsDad)
         * Change toolbar buttons on Jobs tab to push buttons so they can be used from keyboard.
           Clean up screen layout and add WhatsThis help.
+        * Added sayText convenience method to kspeech.h, which combines setText and startText
+          into a single call.  Be sure to update kdelibs/interfaces/kspeech before attempting to
+          compile kttsd:
+            cd kdelibs/interfaces/kspeech
+            cvs up
+            make install
 
 2005-03-09  Gary Cramblitt (PhantomsDad)
         * Add Hold and Resume items to systray menu.

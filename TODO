@@ -69,10 +69,6 @@ _ KTTSD:
     _ Add support for SSML, JSML, Sable and other Speech Markup languages.
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
-_ KSpeech API:
-    _ Add convenience method sayText, which does setText, startText.  Don't forget @Since.
-    _ Add instructions for determining if KTTSD is installed to docs.
-    _ Add info about filtering to docs.
 _ Other/General:
     _ In Konqi and Kate plugins consider adding additional menu items for stopping speech once
       user has initiated speech, or at least "Run KTTS Manager".

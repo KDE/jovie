@@ -309,6 +309,41 @@ uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
 }
 
 /**
+* Say a plain text job.  This is a convenience method that
+* combines @ref setText and @ref startText into a single call.
+* @param text           The message to be spoken.
+* @param talker         Code for the talker to do the speaking.  Example "en".
+*                       If NULL, defaults to the user's default plugin.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
+* @return               Job number.
+*
+* Plain text is parsed into individual sentences using the current sentence delimiter.
+* Call @ref setSentenceDelimiter to change the sentence delimiter prior to
+* calling setText.
+* Call @ref getTextCount to retrieve the sentence count after calling setText.
+*
+* The text may contain speech mark language, such as Sable, JSML, or SSML,
+* provided that the speech plugin/engine support it.  In this case,
+* sentence parsing follows the semantics of the markup language.
+*
+* The job is marked speakable.
+* If there are other speakable jobs preceeding this one in the queue,
+* those jobs continue speaking and when finished, this job will begin speaking.
+* If there are no other speakable jobs preceeding this one, it begins speaking.
+*
+* @see getTextCount
+*
+* @since KDE 3.5
+*/
+uint KTTSD::sayText(const QString &text, const QString &talker)
+{
+    uint jobNum = setText(text, talker);
+    if (jobNum) startText(jobNum);
+    return jobNum;
+}
+
+/**
 * Adds another part to a text job.  Does not start speaking the text.
 * (thread safe)
 * @param text           The message to be spoken.
@@ -943,6 +978,8 @@ kspeech::~kspeech() { };
             { m_kttsd.setSentenceDelimiter(delimiter); }
 /*virtual*/ uint kspeech::setText(const QString &text, const QString &talker)
             { return m_kttsd.setText(text, talker); }
+/*virtual*/ uint kspeech::sayText(const QString &text, const QString &talker)
+            { return m_kttsd.sayText(text, talker); }
 /*virtual*/ int kspeech::appendText(const QString &text, uint jobNum)
             { return m_kttsd.appendText(text, jobNum); }
 /*virtual*/ uint kspeech::setFile(const QString &filename, const QString &talker,
