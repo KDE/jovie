@@ -1409,20 +1409,6 @@ void KCMKttsMgr::removeFilter( bool sbd )
 //    QString filterID = itemToRemove->text(flvcFilterID);
 //    m_config->deleteGroup("Filter_"+filterID, true, false);
 
-    // If this is the only instance of a multi-instance plugin, or it is a single-instance plugin,
-    // instead of deleting it, uncheck it.
-    bool multiInstance = (itemToRemove->text(flvcMultiInstance) == "T");
-    QString filterPlugInName = itemToRemove->text(flvcPlugInName);
-    if (!sbd)
-    {
-        if (!multiInstance || countFilterPlugins(filterPlugInName) <= 1)
-        {
-            dynamic_cast<QCheckListItem*>(itemToRemove)->setOn(false);
-            configChanged();
-            return;
-        }
-    }
-
     // Delete the filter from list view.
     delete itemToRemove;
 
@@ -1529,13 +1515,7 @@ void KCMKttsMgr::updateFilterButtons(){
     // kdDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
     QListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
     if (item) {
-        // Disable Remove button if single-instance or last of multi-instance plugin.
-        bool multiInstance = (item->text(flvcMultiInstance) == "T");
-        QString filterPlugInName = item->text(flvcPlugInName);
-        if (!multiInstance || countFilterPlugins(filterPlugInName) <= 1)
-            m_kttsmgrw->removeFilterButton->setEnabled(false);
-        else
-            m_kttsmgrw->removeFilterButton->setEnabled(true);
+        m_kttsmgrw->removeFilterButton->setEnabled(true);
         m_kttsmgrw->configureFilterButton->setEnabled(true);
         m_kttsmgrw->higherFilterPriorityButton->setEnabled(
                 m_kttsmgrw->filtersList->selectedItem()->itemAbove() != 0);

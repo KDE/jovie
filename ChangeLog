@@ -1,6 +1,7 @@
 2005-03-02  Gary Cramblitt (PhantomsDad)
         * BUG:100600 Fix for messages and warnings not spoken when text job is paused.
         * Bug.  Talker Chooser claims it can autoconfigure itself, but it cannot really.
+        * Allow to remove any Filter.
 
 2005-02-17  Gary Cramblitt (PhantomsDad)
         * Remove festival/ and festivalcs/ plugins from source tree.  AFAIK, these plugins don't work
