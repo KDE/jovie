@@ -1,13 +1,13 @@
 _ Filters:
-    _ Allow filtering of Messages and Warnings.  Currently, they are not filtered, except for
-      messages due to KNotify.  Do not do SBD on them, however.
     _ Although one can configure Canadian English voice in Festival, there is no way to choose
       Canadian English in the Talker Chooser.
     _ Provide a way for those apps with KTTSD plugins to disable KNotifies, otherwise, users
       can't have both KNotify turned on and the app's plugin.  For example, Konversation or
       Kopete.
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
+    _ Add KNewStuff capability for folks to upload/download filter configs.
 _ Audio Plugins:
+    _ The aRts plugin has some remnants of "JuK" code in it, which should be removed.  Search for "Juk".
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
     _ Add option to automatically turn down music player volume while speaking (via dcop).
@@ -55,9 +55,8 @@ _ KTTSD:
         kio (KIOJob): stat file:///home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
         kio (KIOJob): error 11 /home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
         kio (KIOJob): This seems to be a suitable case for trying to rename before stat+[list+]copy+del
-    _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
-      language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
-      desktop language.  Must somehow let kttsmgr know about the newly configured Talker.
+    _ While kttsd currently configures a Talker automatically, would be nice if it could
+      autoconfigure talkers for each requested language, if one has not already been configured.
     _ Add support for speech markers.
     _ Implement error signal handling in KTTSD.
     _ Add support for SSML, JSML, Sable and other Speech Markup languages.

@@ -555,7 +555,7 @@ void KCMKttsMgr::load()
                     m_config->setGroup(groupName);
                     m_config->writeEntry("DesktopEntryName", desktopEntryName);
                     m_config->writeEntry("UserFilterName", userFilterName);
-                    m_config->writeEntry("Enabled", false);
+                    m_config->writeEntry("Enabled", isSbd);
                     m_config->writeEntry("MultiInstance", multiInstance);
                     m_config->writeEntry("IsSBD", isSbd);
                     filterIDsList.append(filterID);

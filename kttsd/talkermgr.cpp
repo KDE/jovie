@@ -24,6 +24,7 @@
 #include <kstandarddirs.h>
 
 // KTTS includes.
+#include "pluginconf.h"
 #include "talkermgr.h"
 #include "threadedplugin.h"
 
@@ -99,7 +100,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             QString fullLanguageCode;
             talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
 
-            // Query for all the KTTSD SynthPlugins and store the list in offers
+            // Find the KTTSD SynthPlugin.
             KTrader::OfferList offers = KTrader::self()->query(
                 "KTTSD/SynthPlugin", QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
@@ -425,4 +426,93 @@ QString TalkerMgr::TalkerNameToDesktopEntryName(const QString& name)
         return offers[0]->desktopEntryName();
     else
         return QString::null;
+}
+
+bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
+{
+    // Not yet implemented.
+    // return false;
+
+    QString languageCode = langCode;
+
+    // Get last TalkerID from config.
+    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    int lastTalkerID = 0;
+    for (uint talkerIdNdx = 0; talkerIdNdx < talkerIDsList.count(); ++talkerIdNdx)
+    {
+        int id = talkerIDsList[talkerIdNdx].toInt();
+        if (id > lastTalkerID) lastTalkerID = id;
+    }
+
+    // Assign a new Talker ID for the talker.  Wraps around to 1.
+    QString talkerID = QString::number(lastTalkerID + 1);
+
+    // Query for all the KTTSD SynthPlugins.
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+
+    // Iterate thru the possible plug ins.
+    for(unsigned int i=0; i < offers.count() ; ++i)
+    {
+        // See if this plugin supports the desired language.
+        QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
+        if (languageCodes.contains(languageCode))
+        {
+            QString desktopEntryName = offers[i]->desktopEntryName();
+
+            // Load the plugin.
+            KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+            if (factory)
+            {
+                // If the factory is created successfully, instantiate the PlugInConf class for the
+                // specific plug in to get the plug in configuration object.
+                PlugInConf* loadedTalkerPlugIn =
+                    KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
+                        offers[0]->library().latin1(), NULL, offers[0]->library().latin1());
+                if (loadedTalkerPlugIn)
+                {
+                    // Give plugin the language code and permit plugin to autoconfigure itself.
+                    loadedTalkerPlugIn->setDesiredLanguage(languageCode);
+                    loadedTalkerPlugIn->load(config, QString("Talker_")+talkerID);
+
+                    // If plugin was able to configure itself, it returns a full talker code.
+                    QString talkerCode = loadedTalkerPlugIn->getTalkerCode();
+
+                    if (!talkerCode.isEmpty())
+                    {
+                        // Erase extraneous Talker configuration entries that might be there.
+                        config->deleteGroup(QString("Talker_")+talkerID);
+
+                        // Let plugin save its configuration.
+                        config->setGroup(QString("Talker_")+talkerID);
+                        loadedTalkerPlugIn->save(config, QString("Talker_"+talkerID));
+
+                        // Record configuration data.
+                        config->setGroup(QString("Talker_")+talkerID);
+                        config->writeEntry("DesktopEntryName", desktopEntryName);
+                        talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
+                        config->writeEntry("TalkerCode", talkerCode);
+
+                        // Add TalkerID to configured list.
+                        talkerIDsList.append(talkerID);
+                        config->setGroup("General");
+                        config->writeEntry("TalkerIDs", talkerIDsList.join(","));
+                        config->sync();
+
+                        // TODO: Now that we have modified the config, need a way to inform
+                        // other apps, including KTTSMgr.  As this routine is likely called
+                        // when KTTSMgr is not running, is not a serious problem.
+
+                        // Success!
+                        delete loadedTalkerPlugIn;
+                        return true;
+                    }
+
+                    // Plugin no longer needed.
+                    delete loadedTalkerPlugIn;
+                }
+            }
+        }
+    }
+
+    return false;
 }

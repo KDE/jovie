@@ -1,3 +1,10 @@
+2005-03-13  Gary Cramblitt (PhantomsDad)
+        * Bug.  SBD Filter turned off by default.  Not good!
+        * When running kttsd and no Talkers or Filters have been configured, automatically
+          attempt to configure them.  Try to configure a Talker in the user's desktop language
+          and if that doesn't work, in English.  Automatically configure the Standard
+          Sentence Boundary Detector.
+
 2005-03-12  Gary Cramblitt (PhantomsDad)
         * Change toolbar buttons on Jobs tab to push buttons so they can be used from keyboard.
           Clean up screen layout and add WhatsThis help.

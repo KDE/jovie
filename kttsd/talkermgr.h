@@ -135,6 +135,16 @@ public:
      */
     bool supportsMarkup(const QString& talker, const uint markupType) const;
 
+    /**
+     * Try to automatically configure a Talker in the specified language.
+     * @param langCode      Two-letter language code.
+     * @param config        KConfig to be updated if successful.
+     * @return              True if successful.
+     *
+     * If successful, the KConfig rc file is updated but the talker has not been loaded.
+     */
+    bool autoconfigureTalker(const QString& langCode, KConfig* config);
+
 private:
 
     /**

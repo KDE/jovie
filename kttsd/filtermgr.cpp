@@ -22,6 +22,7 @@
 #include <kconfig.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
+#include <klocale.h>
 
 // FilterMgr includes.
 #include "filtermgr.h"
@@ -62,6 +63,21 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
     config->setGroup("General");
     QStringList filterIDsList = config->readListEntry("FilterIDs", ',');
     // kdDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
+    // If no filters have been configured, automatically configure the standard SBD.
+    if (filterIDsList.isEmpty())
+    {
+        config->setGroup("Filter_1");
+        config->writeEntry("DesktopEntryName", "kttsd_sbdplugin");
+        config->writeEntry("Enabled", true);
+        config->writeEntry("IsSBD", true);
+        config->writeEntry("MultiInstance", true);
+        config->writeEntry("SentenceBoundary", "\\1\\t");
+        config->writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
+        config->writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
+        config->setGroup("General");
+        config->writeEntry("FilterIDs", "1");
+        filterIDsList = config->readListEntry("FilterIDs", ',');
+    }
     if ( !filterIDsList.isEmpty() )
     {
         QStringList::ConstIterator itEnd = filterIDsList.constEnd();
@@ -84,7 +100,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
                 // Record the DesktopEntryName from now on.
                 if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
             }
-            if (config->readBoolEntry("Enabled"))
+            if (config->readBoolEntry("Enabled")  || config->readBoolEntry("IsSBD"))
             {
                 // kdDebug() << "FilterMgr::init: filterID = " << filterID << endl;
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );

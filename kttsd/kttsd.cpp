@@ -96,8 +96,23 @@ bool KTTSD::initializeTalkerMgr()
 
         m_talkerMgr = new TalkerMgr(this, "kttsdtalkermgr");
         int load = m_talkerMgr->loadPlugIns(m_speechData->config);
-        if(load < 0)
+        // If no Talkers configured, try to autoconfigure one, first in the user's
+        // desktop language, but if that fails, fallback to English.
+        if (load < 0)
         {
+            QString languageCode = KGlobal::locale()->language();
+            if (m_talkerMgr->autoconfigureTalker(languageCode, m_speechData->config))
+                load = m_talkerMgr->loadPlugIns(m_speechData->config);
+            else
+            {
+                if (m_talkerMgr->autoconfigureTalker("en", m_speechData->config))
+                    load = m_talkerMgr->loadPlugIns(m_speechData->config);
+            }
+        }
+        if (load < 0)
+        {
+            // TODO: Would really like to eliminate ALL GUI stuff from kttsd.  Find
+            // a better way to do this.
             delete m_speaker;
             m_speaker = 0;
             delete m_talkerMgr;
@@ -105,19 +120,19 @@ bool KTTSD::initializeTalkerMgr()
             delete m_speechData;
             m_speechData = 0;
             kdDebug() << "KTTSD::initializeTalkerMgr: no Talkers have been configured." << endl;
-           // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
+            // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
             QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
             KMessageBox::ButtonCode msgResult;
             if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
             {
                 if (KMessageBox::questionYesNo(
                     0,
-                i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
+                    i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
                         "Would you like to configure it now?"),
-                i18n("KTTS Not Configured"),
-		KStdGuiItem::yes(),
-		KStdGuiItem::no(),
-                dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
+                    i18n("KTTS Not Configured"),
+                    KStdGuiItem::yes(),
+                    KStdGuiItem::no(),
+                    dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
             }
             if (msgResult == KMessageBox::Yes) showDialog();
             return false;
