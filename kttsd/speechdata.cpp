@@ -97,6 +97,16 @@ bool SpeechData::readConfig(){
     notifyPopupsOnly = config->readBoolEntry("NotifyPopupsOnly", true);
     notifyPassivePopupsOnly = config->readBoolEntry("NotifyPassivePopupsOnly", false);
 
+    // Clear the pool of filter managers so that filters re-init themselves.
+    QIntDictIterator<PooledFilterMgr> it( m_pooledFilterMgrs );
+    for( ; it.current(); ++it )
+    {
+        PooledFilterMgr* pooledFilterMgr = it.current();
+        delete pooledFilterMgr->filterMgr;
+        delete pooledFilterMgr;
+    }
+    m_pooledFilterMgrs.clear();
+
     // Create an initial FilterMgr for the pool to save time later.
     PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
     FilterMgr* filterMgr = new FilterMgr();
