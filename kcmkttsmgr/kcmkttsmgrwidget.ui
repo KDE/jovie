@@ -42,7 +42,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>G&amp;eneral</string>
+                    <string>&amp;General</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -284,7 +284,10 @@
                                             </sizepolicy>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Add...</string>
+                                            <string>Add...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Click to add and configure a new Filter.</string>
@@ -304,7 +307,7 @@
                                             </sizepolicy>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Up</string>
+                                            <string>U&amp;p</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Click to move selected filter up in the list.  Filters higher in the list are applied first.</string>
@@ -594,7 +597,10 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Add...</string>
+                                    <string>Add...</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>Click to add and configure a new Talker (speech synthesizer).</string>
@@ -614,7 +620,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Up</string>
+                                    <string>U&amp;p</string>
                                 </property>
                             </widget>
                             <widget class="QPushButton">
@@ -905,7 +911,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Audio</string>
+                    <string>A&amp;udio</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1078,7 +1084,7 @@
                                     <bool>false</bool>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;GStreamer</string>
+                                    <string>GStrea&amp;mer</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget" row="2" column="0">
@@ -1156,7 +1162,7 @@
                                     <cstring>keepAudioCheckBox</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Keep audio files:</string>
+                                    <string>&amp;Keep audio files:</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>Check this if you want to keep the generated audio (wav) files.  You will find them in the indicated directory.</string>

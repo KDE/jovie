@@ -149,7 +149,7 @@
                 <cstring>applyGroupBox</cstring>
             </property>
             <property name="title">
-                <string>Apply This Filter W&amp;hen</string>
+                <string>Apply This &amp;Filter When</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>These settings determines when the filter is applied to text.</string>
