@@ -34,6 +34,7 @@ noinst_HEADERS = selecttalkerwidget.h
 # Install desktop file to standard services directory.
 kde_services_DATA =  kttsjobmgr.desktop
 
-# KPart data.
-rcdir = $(kde_datadir)/kttsjobmgr
-rc_DATA = kttsjobmgrui.rc
+# This rc file should never have been installed.
+# createGUI not supported within a KCModule.
+install-data-local:
+	rm -f $(DESTDIR)$(kde_datadir)/kttsjobmgr/kttsjobmgrui.rc
