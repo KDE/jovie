@@ -1579,17 +1579,23 @@ bool Speaker::startPlayingUtterance(uttIterator it)
             {
 
                 it->audioPlayer = createPlayerObject();
-                it->audioPlayer->startPlay(it->audioUrl);
-                    // Set job to speaking state and set sequence number.
-                mlText* sentence = it->sentence;
-                m_currentJobNum = sentence->jobNum;
-                m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
-                m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
-                prePlaySignals(it);
-                it->state = usPlaying;
-                if (!m_timer->start(timerInterval, FALSE)) kdDebug() << 
-                            "Speaker::startPlayingUtterance: timer.start failed" << endl;
-                started = true;
+                if (it->audioPlayer)
+                {
+                    it->audioPlayer->startPlay(it->audioUrl);
+                        // Set job to speaking state and set sequence number.
+                    mlText* sentence = it->sentence;
+                    m_currentJobNum = sentence->jobNum;
+                    m_speechData->setTextJobState(m_currentJobNum, kspeech::jsSpeaking);
+                    m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
+                    prePlaySignals(it);
+                    it->state = usPlaying;
+                    if (!m_timer->start(timerInterval, FALSE)) kdDebug() << 
+                                "Speaker::startPlayingUtterance: timer.start failed" << endl;
+                    started = true;
+                } else {
+                    // If could not create audio player object, best we can do is silence.
+                    it->state = usFinished;
+                }
             }
             break;
         }

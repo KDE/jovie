@@ -1,6 +1,7 @@
 _ Audio Plugins:
     _ The Audio plugins are loaded by calling KTrader with Name=<name in .desktop file>.
-      Since the desktop files are translated, is this a problem??
+      Since the desktop files are translated, is this a problem??  Works when I do
+      KDE_LANG=es kttsmgr, but I am still not sure.
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
 _ There are several issues with i18n:
@@ -21,6 +22,9 @@ _ Festival Interactive plugin:
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
 _ KTTSMgr:
+    _ When speaking SSML, the window expands to maximum height to accomodate displaying the
+      "Current Sentence", which is all of the SSML.  Annoying.  Better to not expand and display
+      vertical scrollbar.
     _ Overall Audio Speed should be a realtime setting, i.e., not necessary to click Apply.
     _ Disable Audio Speed control if sox not installed (configure.in.in but runtime check would be better).
     _ Add drag N drop for the Talkers so it is easier to change the ordering.

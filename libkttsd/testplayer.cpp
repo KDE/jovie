@@ -105,6 +105,8 @@ void TestPlayer::play(const QString &waveFile)
     // Create player object based on player option.
     // kdDebug() << "TestPlayer::play: creating Player object with playerOption " << m_playerOption << endl;
     m_player = createPlayerObject(m_playerOption);
+    // If player object could not be created, avoid crash is the best we can do!
+    if (!m_player) return;
     // kdDebug() << "TestPlayer::play: starting playback." << endl;
     m_player->startPlay(playFile);
 
