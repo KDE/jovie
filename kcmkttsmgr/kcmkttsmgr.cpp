@@ -401,8 +401,9 @@ const KAboutData* KCMKttsMgr::aboutData() const{
         I18N_NOOP("(c) 2002, Jos�Pablo Ezequiel Fern�dez"));
 
     about->addAuthor("Jos�Pablo Ezequiel Fern�dez", I18N_NOOP("Author") , "pupeno@kde.org");
-    about->addAuthor("Gary Cramblitt", I18N_NOOP("Author") , "garycramblitt@comcast.net");
-    about->addAuthor("Olaf Schmidt", I18N_NOOP("Author"), "<ojschmidt@kde.org>");
+    about->addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer") , "garycramblitt@comcast.net");
+    about->addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"), "ojschmidt@kde.org");
+    about->addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
 
     return about;
 }
