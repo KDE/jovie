@@ -792,9 +792,6 @@ void KCMKttsMgr::addTalker(){
         // Make sure visible.
         m_kttsmgrw->talkersList->ensureItemVisible(talkerItem);
 
-        // Enable Start KTTS checkbox.
-        m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
-
         // Select the new item, update buttons.
         m_kttsmgrw->talkersList->setSelected(talkerItem, true);
         updateTalkerButtons();

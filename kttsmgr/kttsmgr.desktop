@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Application
 Name=kttsmgr
 Name[xx]=xxkttsmgrxx
+Icon=kttsd
 Exec=kttsmgr -caption "%c" %i %m %u
 Comment=KDE Text-to-speech Manager
 Comment[da]=KDE Tekst-til-tale håndtering

@@ -43,15 +43,17 @@ int main (int argc, char *argv[])
     }
 
     KUniqueApplication app;
-    
-    // The real work of KTSS Manager is done in the KControl Module kcmkttsd.
+
+    // The real work of KTTS Manager is done in the KControl Module kcmkttsd.
     KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-Speech Manager", 0, "kttsmgrdlg", false);
     dlg.addModule("kcmkttsd");
 
+    dlg.setIcon(KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small));
+
     // Create system tray object
     KttsMgrTray tray(&dlg);
-    
-//    app.setMainWidget(&tray);
+
+    app.setMainWidget(&tray);
     tray.show();
     dlg.show();
     return app.exec();
@@ -65,7 +67,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 {
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
-    
+
     int id;
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak clipboard contents"), this, SLOT(speakClipboardSelected()));
@@ -73,7 +75,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
         i18n("&About kttsmgr"), this, SLOT(aboutSelected()));
-        
+
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
 }
 
