@@ -156,8 +156,8 @@ class EposProc : public PlugInProc{
             const QString& eposClientOptions,
             QTextCodec *codec,
             const QString& eposLanguage,
-            const int time,
-            const int pitch);
+            int time,
+            int pitch);
     
     private slots:
         void slotProcessExited(KProcess* proc);

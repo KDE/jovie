@@ -219,7 +219,7 @@ void ArtsPlayer::seekPosition(int position)
 // These are GStreamer functions.  aRts ignores them.
 QStringList ArtsPlayer::getPluginList( const QCString& /*classname*/ ) { return QStringList(); }
 void ArtsPlayer::setSinkName(const QString& /*sinkName*/) { }
-bool ArtsPlayer::requireVersion(const uint /*major*/, const uint /*minor*/, const uint /*micro*/) { return true; }
+bool ArtsPlayer::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
 
 /////////////////////////////////////////////////////////////////////////////////
 // private

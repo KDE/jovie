@@ -230,9 +230,9 @@ void FestivalIntProc::synth(
     const QString &text,
     const QString &synthFilename,
     const QString &voiceCode,
-    const int time,
-    const int pitch,
-    const int volume,
+    int time,
+    int pitch,
+    int volume,
     const QString &languageCode,
     QTextCodec* codec)
 {

@@ -50,7 +50,7 @@ Stretcher::~Stretcher()
  * @param stretchFactor     Amount to stretch.  2.0 is twice as slow.  0.5 is twice as fast.
  * @return                  False if an error occurs.
  */
-bool Stretcher::stretch(const QString &inFilename, const QString &outFilename, const float stretchFactor)
+bool Stretcher::stretch(const QString &inFilename, const QString &outFilename, float stretchFactor)
 {
     if (m_stretchProc) return false;
     m_outFilename = outFilename;

@@ -228,7 +228,7 @@ QString PlugInProc::getSsmlXsltFilename()
 * @param codecList      List of codec names. The first 3 entries may be translated names.
 * @return               QTextCodec object.  Caller must not delete this object.
 */
-/*static*/ QTextCodec* PlugInProc::codecIndexToCodec(const int codecNum, const QStringList &codecList)
+/*static*/ QTextCodec* PlugInProc::codecIndexToCodec(int codecNum, const QStringList &codecList)
 {
     QTextCodec* codec = 0;
     switch (codecNum) {
@@ -264,7 +264,7 @@ QString PlugInProc::getSsmlXsltFilename()
 * @param codecList      List of codec names. The first 3 entries may be translated names.
 * @return               Untranslated name of the codec.
 */
-/*static*/ QString PlugInProc::codecIndexToCodecName(const int codecNum, const QStringList &codecList)
+/*static*/ QString PlugInProc::codecIndexToCodecName(int codecNum, const QStringList &codecList)
 {
     QString codecName;
     switch (codecNum) {

@@ -48,7 +48,7 @@ class Stretcher : public QObject{
          * @param outFilename       Name of output audio file.
          * @param stretchFactor     Amount to stretch.  2.0 is twice as slow.  0.5 is twice as fast.
          */
-        bool stretch(const QString &inFilename, const QString &outFilename, const float stretchFactor);
+        bool stretch(const QString &inFilename, const QString &outFilename, float stretchFactor);
 
         /**
         * Returns the state of the Stretcher.

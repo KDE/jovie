@@ -161,7 +161,7 @@ class FestivalIntProc : public PlugInProc{
         */
         void synth(const QString &festivalExePath, const QString &text,
             const QString &synthFilename, const QString& voiceCode,
-            const int time, const int pitch, const int volume, const QString &languageCode,
+            int time, int pitch, int volume, const QString &languageCode,
             QTextCodec* codec);
 
         /**

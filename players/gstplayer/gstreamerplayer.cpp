@@ -177,7 +177,7 @@ QStringList GStreamerPlayer::getPluginList( const QCString& classname )
     return results;
 }
 
-bool GStreamerPlayer::requireVersion(const uint major, const uint minor, const uint micro)
+bool GStreamerPlayer::requireVersion(uint major, uint minor, uint micro)
 {
     guint gmajor, gminor, gmicro;
 

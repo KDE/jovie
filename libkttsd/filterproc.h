@@ -144,7 +144,7 @@ signals:
      * @param keepGoing         False if the filter should not be called in the future.
      * @param msg               Error message.
      */
-    void error(const bool keepGoing, const QString &msg);
+    void error(bool keepGoing, const QString &msg);
 };
 
 #endif      // _FILTERPROC_H_

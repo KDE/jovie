@@ -417,7 +417,7 @@ class PlugInProc : virtual public QObject{
         * @param codecList      List of codec names. The first 3 entries may be translated names.
         * @return               QTextCodec object.  Caller must not delete this object.
         */
-        static QTextCodec* codecIndexToCodec(const int codecNum, const QStringList &codecList);
+        static QTextCodec* codecIndexToCodec(int codecNum, const QStringList &codecList);
 
         /**
         * Given index into codec list, returns the codec Name.
@@ -429,7 +429,7 @@ class PlugInProc : virtual public QObject{
         * @param codecList      List of codec names. The first 3 entries may be translated names.
         * @return               Untranslated name of the codec.
         */
-        static QString codecIndexToCodecName(const int codecNum, const QStringList &codecList);
+        static QString codecIndexToCodecName(int codecNum, const QStringList &codecList);
 
     signals:
         /**
@@ -459,7 +459,7 @@ class PlugInProc : virtual public QObject{
         * @see Error-handling
         *
         */
-        void error(const bool keepGoing, const QString &msg);
+        void error(bool keepGoing, const QString &msg);
 };
 
 #endif // _PLUGINPROC_H_

@@ -150,8 +150,8 @@ void EposProc::synth(
     const QString& eposClientOptions,
     QTextCodec *codec,
     const QString& eposLanguage,
-    const int time,
-    const int pitch)
+    int time,
+    int pitch)
 {
     // kdDebug() << "Running: EposProc::synth(const QString &text)" << endl;
 
