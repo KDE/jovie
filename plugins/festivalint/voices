@@ -309,3 +309,13 @@ VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=true
 Comment=American Female, OGC
+
+[hy_fi_mv_diphone]
+Name=hy fi
+Language=fi
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=false
+Comment=Finnish Male
