@@ -95,10 +95,10 @@
 *
 * If @ref supportsAsync returns True, the plugin must implement @ref getState .
 *
-* If @ref supportsAsync returns True, and @ref supportsSynth return True, 
+* If @ref supportsAsync returns True, and @ref supportsSynth returns True, 
 * a plugin must emit @ref synthFinished signal when synthesis is completed.
 *
-* If @ref supportsAsync returns True, and @ref supportsSynth return False, 
+* If @ref supportsAsync returns True, and @ref supportsSynth returns False, 
 * a plugin must emit @ref sayFinished signal when saying is completed.
 *
 * If @ref supportsAsync returns False, do not emit signals @ref sayFinished
