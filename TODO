@@ -1,5 +1,9 @@
+_ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
+  language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
+  desktop language.  Must somehow let kttsmgr know about the newly configured Talker.
 _ In kttsmgr jobs tab, if user has made changes but not applied them, and then clicks
   Speak Clipboard, Speak File, or Change Talker buttons, warn user to apply the changes first.
+  Or maybe disable Jobs tab if changes are pending?
 _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
 _ Remove kcm_kttsmgr once all apps (KSayIt) have stopped using it.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
@@ -12,12 +16,11 @@ _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourcef
 - Finish Festival Client/Server plugin.
 - Festival plugin (static library) crashes on first call to library.
 - Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
-- Command plugin crashes when using command 'flite -t "%t"' and festival can't get write access to /dev/dsp*.
+- Command plugin crashes when using command 'flite -t "%t"' and flite can't get write access to /dev/dsp*.
 - In the job manager tab of kttsmgr, one can drag the toolbars elsewhere, but the buttons
   disappear.  Why?
 _ IBM ViaVoice plugin?
 _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ Implement error signal handling in KTTSD.
-_ Add option not to have system tray icon in kttsmgr.
 _ When GStreamer bindings become available, add as alternative to aRts.
   Note that gstreamer 0.6 has issues with .wav files.

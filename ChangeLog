@@ -5,6 +5,7 @@
           has been configured.  Once at least one Talker is added, enable the checkbox.
           If all Talkers are removed, uncheck and disable the box and stop KTTSD.
         * Give kttsmgr window an icon.
+        * Add option to embed KTTSMgr in the system tray.
 
 2004-11-03  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Add ability to configure more than one plugin for a language, but with different

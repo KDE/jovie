@@ -123,6 +123,10 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT( configChanged() ) );
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(enableKttsdToggled(bool)));
+    connect(m_kttsmgrw->embedInSysTrayCheckBox, SIGNAL(toggled(bool)),
+            SLOT(slotEmbedInSysTrayCheckBox_Toggled(bool)));
+    connect(m_kttsmgrw->showMainWindowOnStartupCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(configChanged()));
     connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
 
@@ -191,6 +195,13 @@ void KCMKttsMgr::load()
     m_kttsmgrw->textPostSnd->setEnabled(m_kttsmgrw->textPostSndCheck->isChecked());
 
     // Overall settings.
+    m_kttsmgrw->embedInSysTrayCheckBox->setChecked(m_config->readBoolEntry("EmbedInSysTray",
+        m_kttsmgrw->embedInSysTrayCheckBox->isChecked()));
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setChecked(m_config->readBoolEntry(
+        "ShowMainWindowOnStartup", m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked()));
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(
+        m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
+
     m_kttsmgrw->enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
         m_kttsmgrw->enableKttsdCheckBox->isChecked()));
 
@@ -325,6 +336,10 @@ void KCMKttsMgr::save()
     m_config->writePathEntry("TextPostSnd", m_kttsmgrw->textPostSnd->url());
 
     // Overall settings.
+    m_config->writeEntry("EmbedInSysTray", m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
+    m_config->writeEntry("ShowMainWindowOnStartup",
+        m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked());
+
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     // Enable checkbox if at least one Talker is configured.
     bool enableKttsdWasToggled = false;
@@ -876,6 +891,15 @@ void KCMKttsMgr::updateTalkerButtons(){
 }
 
 /**
+* This slot is called when user changes embedding in system tray option.
+*/
+void KCMKttsMgr::slotEmbedInSysTrayCheckBox_Toggled(bool checked)
+{
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(checked);
+    configChanged();
+}
+
+/**
 * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
 */
 void KCMKttsMgr::enableKttsdToggled(bool)
@@ -887,13 +911,13 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     // See if KTTSD is running.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
-    kdDebug() << "KCMKttsMgr::enableKttsdToggled: kttsdRunning = " << kttsdRunning << endl;
+    // kdDebug() << "KCMKttsMgr::enableKttsdToggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
     if (m_kttsmgrw->enableKttsdCheckBox->isChecked())
     {
         if (!kttsdRunning)
         {
-            kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Starting KTTSD" << endl;
+            // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Starting KTTSD" << endl;
             QString error;
             if (KApplication::startServiceByName("KTTSD", QStringList(), &error))
             {
@@ -907,7 +931,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     {
     if (kttsdRunning)
         {
-            kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Stopping KTTSD" << endl;
+            // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Stopping KTTSD" << endl;
             QByteArray data;
             client->send("kttsd", "kspeech", "kttsdExit()", data);
         }

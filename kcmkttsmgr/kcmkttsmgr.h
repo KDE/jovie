@@ -293,6 +293,11 @@ class KCMKttsMgr :
         void enableKttsdToggled(bool checked);
 
         /**
+        * This slot is called when user changes Embed In SysTray option.
+        */
+        void slotEmbedInSysTrayCheckBox_Toggled(bool checked);
+
+        /**
         * User has requested to display the Talker Configuration Dialog.
         */
         void slot_configureTalker();

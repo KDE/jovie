@@ -10,6 +10,7 @@
 //
 //
 
+#include <kconfig.h>
 #include <kuniqueapplication.h>
 #include <kcmultidialog.h>
 #include <kaboutdata.h>
@@ -50,13 +51,27 @@ int main (int argc, char *argv[])
 
     dlg.setIcon(KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small));
 
-    // Create system tray object
-    KttsMgrTray tray(&dlg);
+    // Get SysTray and ShowMainWindow options.
+    KConfig* config = new KConfig("kttsdrc");
+    config->setGroup("General");
+    bool embedInSysTray = config->readBoolEntry("EmbedInSysTray", true);
+    // Can only hide main window if we are in the system tray, otherwise, no way
+    // for user to do anything.
+    bool showMainWindowOnStartup = true;
+    if (embedInSysTray)
+        showMainWindowOnStartup = config->readBoolEntry("ShowMainWindowOnStartup", true);
 
-    //app.setMainWidget(&tray);
-    tray.show();
-    dlg.show();
+    KttsMgrTray* tray = 0;
+    if (embedInSysTray)
+    {
+        tray = new KttsMgrTray(&dlg);
+        tray->show();
+    }
+    else app.setMainWidget(&dlg);
+
+    if (showMainWindowOnStartup) dlg.show();
     return app.exec();
+    delete tray;
 }
 
 /*  KttsMgrTray class */
