@@ -1,3 +1,6 @@
+# This is necessary for "make bcheck" to work.
+INCLUDES = $(all_includes)
+
 # Header files to be installed.
 include_HEADERS = kspeech.h kspeechsink.h
 
