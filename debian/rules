@@ -77,8 +77,7 @@ configure-stamp:
 	touch configure-stamp
 
 #Architecture
-build: build-arch
-# build: build-arch build-indep
+build: build-arch build-indep
 
 build-arch: build-arch-stamp
 build-arch-stamp: configure-stamp
@@ -223,6 +222,5 @@ binary-indep: build-indep install-indep
 binary-arch: build-arch install-arch
 	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
 
-binary: binary-arch
-# binary: binary-arch binary-indep
+binary: binary-arch binary-indep
 .PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure

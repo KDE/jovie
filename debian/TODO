@@ -1,3 +1,20 @@
+* In order to successfully build apidocs, you need package qt3-doc installed.
+  FWIW, I have the following packages installed (among many others, of course):
+    libqt3-headers 3.3.3-4.1      Qt3 header files
+    libqt3-mt-dev  3.3.3-4.1      Qt development files (Threaded)
+    libqt3c102-mt  3.3.3-4.1      Qt GUI Library (Threaded runtime version), V
+    libqthreads-12 1.6.4-4        QuickThreads library for Guile
+    qt3-designer   3.3.3-4.1      Qt3 Designer
+    qt3-dev-tools  3.3.3-4.1      Qt3 development tools
+    qt3-doc        3.3.3-4.1      Qt3 API documentation
+    kde            3.1.2          The K Desktop Environment
+    kdelibs4       3.2.3-2        KDE core libraries
+    kdelibs4-dev   3.2.3-2        KDE core libraries (development files)
+    kdelibs4-doc   3.2.3-2        KDE core library documentation    
+    kde-devel      3.1.2          The K Desktop Environment (development files
+    kde-devel-extr 3.1.2-0.2      The K Desktop Environment (extra development
+    exuberant-ctag 5.5.4-1        build tag file indexes of source code defini
+    
 * Here's my build procedure:
     - cvs2dist kdenonbeta kttsd --version 0.2.0
     - copy resulting kttsd-0.2.0.tar.gz to a work folder and rename to kttsd_0.2.0.orig.tar.gz
@@ -5,6 +22,8 @@
     - unpack tarball
     - cd kttsd-0.2.0
     - cp -R kttsd/debian debian
+    - Add the following line to end of Makefile.am
+        include $(top_srcdir)/admin/Doxyfile.am
     - debuild -uc -us
     
 * dpkg-shlibdeps is reporting:
@@ -26,6 +45,16 @@
         who has KDEDIR=/usr.
   For now I have the "indep" targets commented out in debian/rules,
   so debuild will run to completion.
+  
+  Here is relevant code in acinclude.m4.in
+    KDE_HAS_DOXYGEN=no
+    if test -n "$DOXYGEN" && test -x "$DOXYGEN" && test -f $QTDOCDIR/qsql.html; then
+    KDE_HAS_DOXYGEN=yes
+    fi
+    AC_SUBST(KDE_HAS_DOXYGEN)
+
+])
+
 
 * lintian is reporting the following:
     W: kttsd-appplugins: missing-depends-line
