@@ -21,16 +21,13 @@ kcmkttsd
   A KControl module for configuring the KTTS System. kcmkttsd runs in the
 KDE Control Center or start it with the command "kcmshell kcmkttsd".
 
-kate-plugin
+ktexteditor_kttsd
   A plugin for the KDE Advanced Text Editor that permits you to speak an entire
 text file or any portion of a file.
 
-katepart-plugin
-  Similar to kate-plugin but used when Kate is running embedded in Konqueror.
-
 khmtl-plugin
   A plugin for Konqueror that permits you to speak all or any portion of an
-HTML web page.
+HTML web page.  (Note: this component is in kdebase/konqueror/kttsplugin)
 
 Original Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
 Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
@@ -39,6 +36,7 @@ Contributors:
   Gunnar Schmi Dt <gunnar@schmi-dt.de>
   Paul Giannaros <ceruleanblaze@gmail.com>
   Jorge Luis Arzola <arzolacub@hotmail.com>
+  David Powell <achiestdragon@gmail.com>
 
 User features:
   * Speak contents of a text file.
@@ -130,8 +128,6 @@ kttsjobmgr         A KPart used by kcmkttsmgr for managing text jobs in KTTSD.
 kcmkttsmgr         A KControl module for managing KTTSD.  Run using "kcmshell kcmkttsd".
 kttsmgr            Application for managing KTTSD.  Wrapper for kcmkttsmgr plus a system tray icon.
 app-plugins        Plugins for other applications to speak text.
-  kate-plugin
-  katepart-plugin
-  khtml-plugin        While viewing an HTML page in Konqueror, highlight some text and choose "Read Out Page"
-                      in Tools menu.  Or with nothing highlighted, speaks entire page.
+  kate               Embedded Kate plugin.
+compat             Copy of kdelibs/interfaces/kspeech.  Used when compiling for KDE less than 3.4.
 debian             Debian packaging files.

@@ -1,3 +1,11 @@
+2005-02-15  Gary Cramblitt (PhantomsDad)
+        * Translations now working.
+        * Include a copy of kdelibs/interfaces/kspeech in compat/ dir.  This permits distribution
+          and compilation of KTTS for KDE less than 3.4.
+        * Support for Italian voices.  Download from
+          http://www.csrf.pd.cnr.it/TTS/It-FESTIVAL-download.htm.
+          or http://mirko.lilik.it/Italian-FESTIVAL.zip
+
 2005-02-05  Gary Cramblitt (PhantomsDad)
         * Version bumped to 0.3.0.
         * Russian Festival voice added to voices file.  Download voice from
