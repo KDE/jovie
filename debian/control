@@ -10,8 +10,8 @@ Architecture: any
 Depends: ${shlibs:Depends}
 Suggests: kttsd-appplugins, festival, festival-doc, festvox-kallpc, flite, epos
 Description: KDE Text-to-Speech system
- KTTS, the KDE Text-to-Speech system, is a plug-in based dcop service that
- allows any KDE (or non-KDE) application to speak using the DCOP
+ KTTS, the KDE Text-to-Speech (TTS) system, is a plug-in based dcop service
+ that allows any KDE (or non-KDE) application to speak using the DCOP
  interface.
  .
  KTTS intends to be the implementation for the KDE Text-to-Speech API.
