@@ -1,3 +1,7 @@
+2004-12-09  Gary Cramblitt (PhantomsDad)
+        * Require GStreamer >= 0.8.7.
+        * Bug.  Always using default GStreamer sink in KTTSD.  Honor user's choice now.
+
 2004-12-07  Gary Cramblitt (PhantomsDad)
         * Add Festival Czech voice.
         * Apply some Juk patches to GStreamerPlayer.
