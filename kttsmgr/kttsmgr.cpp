@@ -21,6 +21,9 @@
 #include <kpopupmenu.h>
 #include <kaboutapplication.h>
 #include <dcopclient.h>
+#include <kdeversion.h>
+
+#include <qimage.h>
 
 #include "kttsmgr.h"
 
@@ -47,8 +50,10 @@ int main (int argc, char *argv[])
 
     KUniqueApplication app;
 
+#if KDE_VERSION >= KDE_MAKE_VERSION (3,3,90)
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Panel);
     aboutdata.setProgramLogo(icon.convertToImage());
+#endif
 
     // The real work of KTTS Manager is done in the KControl Module kcmkttsd.
     KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-Speech Manager", 0, "kttsmgrdlg", false);
