@@ -1,6 +1,6 @@
 debian/tmp/usr/lib/libktts.so
 debian/tmp/usr/lib/libktts.la
-debian/tmp/usr/lib/libkttsd.so.1.0.0
+debian/tmp/usr/lib/libkttsd.so
 debian/tmp/usr/lib/libkttsd.la
 debian/tmp/usr/include/kde/kspeech.h
 debian/tmp/usr/include/kde/kspeech_stub.h
