@@ -359,7 +359,9 @@ void KTTSD::speakClipboardSelected(){
 }
 
 void KTTSD::configCommitted() {
-    reinit();
+    // reinit routine sometimes causes crashes.  So for now, ask user to restart KTTSD.
+    KMessageBox::sorry(0, i18n("You must quit and restart KTTSD for the new settings to take effect."));
+//    reinit();
 }
 
 void KTTSD::closeSelected(){
@@ -453,14 +455,12 @@ void KTTSD::textRemoved(){
 
 KTTSDTray::KTTSDTray (QWidget *parent, const char *name) : KSystemTray (parent, name)
 {
-    int id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("configure", KIcon::Small),
+    contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("configure", KIcon::Small),
         i18n("&Configure kttsd..."), this, SIGNAL(configureSelected()));
-    // Configure not currently working.
-    contextMenu()->setItemEnabled(id, false);
     contextMenu()->insertSeparator();
     contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak clipboard contents"), this, SIGNAL(speakClipboardSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
+    int id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
         i18n("kttsd &Handbook"), this, SIGNAL(helpSelected()));
     // Handbook not available yet.
     contextMenu()->setItemEnabled(id, false);

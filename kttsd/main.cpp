@@ -30,9 +30,10 @@
 int main (int argc, char *argv[]){
    KLocale::setMainCatalogue("kdelibs");
    KAboutData aboutdata("kttsd", I18N_NOOP("kttsd"),
-         "0.1.0", I18N_NOOP("Speech synthesis"),
+         "0.1.0", I18N_NOOP("Text-to-speech synthesis deamon"),
          KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
-   aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Developer"),"pupeno@pupeno.com");
+   aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
+   aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
 
    KCmdLineArgs::init( argc, argv, &aboutdata );
    // KCmdLineArgs::addCmdLineOptions( options );
