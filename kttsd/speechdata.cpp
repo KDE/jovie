@@ -112,16 +112,17 @@ SpeechData::~SpeechData(){
 /**
  * Add a new warning to the queue (thread safe)
  */
-void SpeechData::enqueueWarning( const QString &warning, const QString &language ){
+void SpeechData::enqueueWarning( const QString &warning, const QString &language, const QCString &appId ){
     kdDebug() << "Running: SpeechData::enqueueWarning( const QString &warning )" << endl;
     mlText *temp = new mlText();
     temp->text = warning;
     temp->language = language;
+    temp->appId = appId;
     warningsMutex.lock();
     warnings.enqueue( temp );
     uint count = warnings.count();
     warningsMutex.unlock();
-    kdDebug() << "Adding '" << temp->text << "' with language '" << temp->language << "' to the warnings queue leaving a total of " << count << " items." << endl;
+    kdDebug() << "Adding '" << temp->text << "' with language '" << temp->language << "' from application " << appId << " to the warnings queue leaving a total of " << count << " items." << endl;
     newTMW.wakeOne();
 }
 
@@ -157,16 +158,17 @@ bool SpeechData::warningInQueue(){
 /**
  * Add a new message to the queue (thread safe)
  */
-void SpeechData::enqueueMessage( const QString &message, const QString &language ){
+void SpeechData::enqueueMessage( const QString &message, const QString &language, const QCString& appId ){
     kdDebug() << "Running: SpeechData::enqueueMessage( const QString &message )" << endl;
     mlText *temp = new mlText();
     temp->text = message;
     temp->language = language;
+    temp->appId = appId;
     messagesMutex.lock();
     messages.enqueue( temp );
-    uint count = warnings.count();
+    uint count = messages.count();
     messagesMutex.unlock();
-    kdDebug() << "Adding '" << temp->text << "' with language '" << temp->language << "' to the messages queue leaving a total of " << count << " items." << endl;
+    kdDebug() << "Adding '" << temp->text << "' with language '" << temp->language << "' from application " << appId << " to the messages queue leaving a total of " << count << " items." << endl;
     newTMW.wakeOne();
 }
 
@@ -202,7 +204,7 @@ bool SpeechData::messageInQueue(){
 /**
  * Sets a text to say it and navigate it (thread safe) (see also resumeText, stopText, etc)
  */
-void SpeechData::setText( const QString &text, const QString &language, const QCString &appId ){
+uint SpeechData::setText( const QString &text, const QString &language, const QCString &appId ){
     kdDebug() << "Running: SpeechData::setText" << endl;
     // There has to be a better way
     kdDebug() << "I'm getting: " << endl << text << " from application " << appId << endl;
@@ -213,13 +215,15 @@ void SpeechData::setText( const QString &text, const QString &language, const QC
     temp.replace('.', '\n');
     QStringList tempList = QStringList::split('\n', temp, true);*/
     
-    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
-        kdDebug() << "'" << *it << "'" << endl;
-    }
+//    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
+//        kdDebug() << "'" << *it << "'" << endl;
+//    }
 
     textMutex.lock();
+    appSeqMutex.lock();
     bool wasReading = reading;
     reading = false;
+    uint seq = appSeq[appId];
     if (language != NULL)
         textLanguage = language;
     else
@@ -232,13 +236,34 @@ void SpeechData::setText( const QString &text, const QString &language, const QC
         sent->text = *it;
         sent->language = textLanguage;
         sent->appId = appId;
+        sent->seq = ++seq;
         textSents.append(sent);
+        kdDebug() << "appId: " << appId << " seq: " << seq << " '" << *it << "'" << endl;
     }
     textIterator->toFirst();
+    appSeq[appId] = seq;
+    appSeqMutex.unlock();
     textMutex.unlock();
     if (wasReading)
         emit textStopped();
     emit textSet();
+    return seq;
+}
+
+/**
+ * Returns the next sequence number that will be assigned to the application when it calls
+ * setText.
+ * @param appId          DCOP senderId of the application.
+ * @return               Sequence number that will be assigned to the application on next call
+ *                       to setText.
+ */
+uint SpeechData::getNextSequenceNum(const QCString& appId)
+{
+    appSeqMutex.lock();
+    uint seq = appSeq[appId];
+    ++seq;
+    appSeqMutex.unlock();
+    return seq;
 }
 
 /**

@@ -154,10 +154,10 @@ bool KTTSD::initializeSpeaker()
         return false;
     }
 
-    connect (speaker, SIGNAL(sentenceStarted(QString,QString)), this,
-        SLOT(slotSentenceStarted(QString,QString)));
-    connect (speaker, SIGNAL(sentenceFinished()), this,
-        SLOT(slotSentenceFinished()));
+    connect (speaker, SIGNAL(sentenceStarted(QString, QString, QCString&, uint)), this,
+        SLOT(slotSentenceStarted(QString, QString, QCString&, uint)));
+    connect (speaker, SIGNAL(sentenceFinished(QCString&, uint)), this,
+        SLOT(slotSentenceFinished(QCString&, uint)));
 
     return true;
 }
@@ -186,7 +186,10 @@ KTTSD::~KTTSD(){
 void KTTSD::sayWarning(const QString &warning, const QString &language=NULL){
     kdDebug() << "Running: KTTSD::sayWarning(const QString &warning, const QString &language=NULL)" << endl;
     kdDebug() << "Adding '" << warning << "' to warning queue." << endl;
-    speechData->enqueueWarning(warning, language);
+    DCOPClient* client = callingDcopClient();
+    QCString appId;
+    if (client) appId = client->senderId();
+    speechData->enqueueWarning(warning, language, appId);
 }
 
 /**
@@ -195,36 +198,72 @@ void KTTSD::sayWarning(const QString &warning, const QString &language=NULL){
 void KTTSD::sayMessage(const QString &message, const QString &language=NULL){
     kdDebug() << "Running: KTTSD::sayMessage(const QString &message, const QString &language=NULL)" << endl;
     kdDebug() << "Adding '" << message << "' to message queue." << endl;
-    speechData->enqueueMessage(message, language);
+    DCOPClient* client = callingDcopClient();
+    QCString appId;
+    if (client) appId = client->senderId();
+    speechData->enqueueMessage(message, language, appId);
 }
 
 /**
- * DCOP exported function to set text
+ * DCOP exported function to set the text queue.  Does not start speaking the text.
+ * The text is parsed into individual sentences.
+ * @param text           The message to be spoken.
+ * @param language       Code for the language to be spoken in.  Example "en".
+ *                       If NULL, the text is spoken in the default languange.
+ * @return               Sequence number of the last sentence added to the text queue.
+ *
+ * Call getNextSequenceNum prior to calling setText to get the starting sequence number.
  */
-void KTTSD::setText(const QString &text, const QString &language){
+uint KTTSD::setText(const QString &text, const QString &language){
     kdDebug() << "Running: setText(const QString &text, const QString &language=NULL)" << endl;
     kdDebug() << "Setting text: '" << text << "'" << endl;
     DCOPClient* client = callingDcopClient();
     QCString appId;
     if (client) appId = client->senderId();
-    speechData->setText(text, language, appId);
+    uint seq = speechData->setText(text, language, appId);
     if (checkBoxShow->isChecked())
         show();
+    return seq;
 }
 
 /**
- * DCOP exported function to set text to contents of a file.
+ * DCOP exported function to set text queue to contents of a file.  Does not start speaking the text.
+ * @param filename       Full path to the file to be spoken.  May be a URL.
+ * @param language       Code for the language to be spoken in.  Example "en".
+ *                       If NULL, the text is spoken in the default languange.
+ * @return               Sequence number of the last sentence added to the text queue.
+ *                       0 if an error occurs.
+ *
+ * Call getNextSequenceNum prior to calling setFile to get the starting sequence number.
  */
-void KTTSD::setFile(const QString &filename, const QString &language=NULL)
+uint KTTSD::setFile(const QString &filename, const QString &language=NULL)
 {
     kdDebug() << "Running: setFile(const QString &filename, const QString &language=NULL)" << endl;
     QFile file(filename);
+    uint seq = 0;
     if ( file.open(IO_ReadOnly) )
     {
         QTextStream stream(&file);
-        setText(stream.read(), language);
+        seq = setText(stream.read(), language);
         file.close();
     }
+    return seq;
+}
+
+/**
+ * Returns the next sequence number that will be assigned to the application when it calls
+ * setText or setFile.
+ * @return               Sequence number that will be assigned to the application on next call
+ *                       to setText or setFile.
+ *
+ * The first sentence ever added by an application is sequence number 1.
+ */
+uint KTTSD::getNextSequenceNum()
+{
+    DCOPClient* client = callingDcopClient();
+    QCString appId;
+    if (client) appId = client->senderId();
+    return speechData->getNextSequenceNum(appId);
 }
 
 /**
@@ -418,14 +457,22 @@ void KTTSD::aboutSelected(){
 }
 
 // Slots for the speaker object
-void KTTSD::slotSentenceStarted(QString text, QString){
+void KTTSD::slotSentenceStarted(QString text, QString, const QCString& appId, const uint seq) {
     viewActiveText->setText (text);
-    emitDcopSignalNoParams("sentenceStarted()");
+    QByteArray params;
+    QDataStream stream(params, IO_WriteOnly);
+    stream << appId;
+    stream << seq;
+    emitDCOPSignal("sentenceStarted(const QCString&, const uint)", params);
 }
 
-void KTTSD::slotSentenceFinished(){
+void KTTSD::slotSentenceFinished(const QCString& appId, const uint seq){
     viewActiveText->setText ("");
-    emitDcopSignalNoParams("sentenceFinished()");
+    QByteArray params;
+    QDataStream stream(params, IO_WriteOnly);
+    stream << appId;
+    stream << seq;
+    emitDCOPSignal("sentenceFinished(const QCString&, const uint)", params);
 }
 
 // Slots for the speechData object

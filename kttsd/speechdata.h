@@ -32,6 +32,7 @@
 #include <qwaitcondition.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qmap.h>
 
 #include <kconfig.h>
 
@@ -40,9 +41,10 @@
  * Contains the text itself, the associated language, and the ID of the application that requested it be spoken.
  */
 struct mlText{
-   QString language;
-   QString text;
-   QCString appId;
+   QString language;    /* Language code for the sentence. */
+   QString text;        /* Text of sentence. */
+   QCString appId;      /* DCOP senderId of application that requested the speech. */
+   uint seq;    /* Sentence sequence number. */
 };
 
 /**
@@ -76,7 +78,7 @@ class SpeechData : public QObject {
       /**
        * Add a new warning to the queue (thread safe)
        */
-      void enqueueWarning( const QString &, const QString &language=NULL );
+      void enqueueWarning( const QString &, const QString &language=NULL, const QCString &appId=NULL );
 
       /**
        * Pop (get and erase) a warning from the queue (thread safe)
@@ -91,7 +93,7 @@ class SpeechData : public QObject {
       /**
        * Add a new message to the queue (thread safe)
        */
-      void enqueueMessage( const QString &, const QString &language=NULL );
+      void enqueueMessage( const QString &, const QString &language=NULL, const QCString &appId=NULL );
 
       /**
        * Pop (get and erase) a message from the queue (thread safe)
@@ -105,8 +107,23 @@ class SpeechData : public QObject {
 
       /**
        * Sets a text to say it and navigate it (thread safe) (see also resumeText, stopText, etc)
+       * @param text           The message to be spoken.
+       * @param language       Code for the language to be spoken in.  Example "en".
+       *                       If NULL, the text is spoken in the default languange.
+       * @param appId          DCOP senderId of the application.
+       * @return               Sequence number of the last sentence added to the text queue.
+       *                       The first sentence ever added by an application is sequence number 1.
        */
-      void setText( const QString &, const QString &language=NULL, const QCString &appId=NULL);
+      uint setText( const QString &, const QString &language=NULL, const QCString &appId=NULL);
+      
+      /**
+       * Returns the next sequence number that will be assigned to the application when it calls
+       * setText.
+       * @param appId          DCOP senderId of the application.
+       * @return               Sequence number that will be assigned to the application on next call
+       *                       to setText.
+       */
+      uint getNextSequenceNum(const QCString& appId);
 
       /**
        * Remove the text (thread safe)
@@ -326,9 +343,25 @@ class SpeechData : public QObject {
       QPtrList<mlText> textSents;
 
       /**
+       * Mutex for reading/writing text
+       */
+      QMutex textMutex;
+
+      /**
        * Iterator of the sentences of the text
        */
       QPtrListIterator<mlText>* textIterator;
+      
+      /**
+       * Dictionary of text sequence numbers indexed by appId.
+       * Contains the last sequence number assigned to each application.
+       */
+      QMap<QCString, uint> appSeq;
+      
+      /**
+       * Mutex for reading/writing of appSeq dictionary.
+       */
+      QMutex appSeqMutex;
       
       /**
        * Language of the text
@@ -336,12 +369,7 @@ class SpeechData : public QObject {
       QString textLanguage;
 
       /**
-       * Mutex for reading/writing text
-       */
-      QMutex textMutex;
-
-      /**
-       * holds true if the text is stoped
+       * True if text is being spoken.
        */
       bool reading;
 };

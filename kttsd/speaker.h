@@ -91,8 +91,8 @@ class Speaker : public QObject, public QThread{
         /**
          * Emitted whenever reading a sentence was started or finished
          */
-        void sentenceStarted(QString text, QString language);
-        void sentenceFinished();
+        void sentenceStarted(QString text, QString language, const QCString& appId, const uint seq);
+        void sentenceFinished(const QCString& appId, const uint seq);
 
     protected:
         /**

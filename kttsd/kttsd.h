@@ -70,8 +70,9 @@ class KTTSD : public kttsdUI, virtual public kspeech {
         
         ASYNC sayWarning(const QString &warning, const QString &language);
         ASYNC sayMessage(const QString &message, const QString &language);
-        ASYNC setText(const QString &text, const QString &language = NULL);
-        ASYNC setFile(const QString &filename, const QString &language);
+        uint setText(const QString &text, const QString &language = NULL);
+        uint setFile(const QString &filename, const QString &language);
+        uint getNextSequenceNum();
         ASYNC removeText();
         ASYNC prevParText();
         ASYNC prevSenText();
@@ -113,8 +114,8 @@ class KTTSD : public kttsdUI, virtual public kspeech {
          * These functions are called whenever
          * the status of the speaker object has changed
          */
-        void slotSentenceStarted(QString text, QString language);
-        void slotSentenceFinished();
+        void slotSentenceStarted(QString text, QString language, const QCString& appId, const uint seq);
+        void slotSentenceFinished(const QCString& appId, const uint seq);
 
         /*
          * These functions are called whenever

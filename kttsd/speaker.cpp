@@ -134,13 +134,13 @@ void Speaker::checkSayText(){
             emit paragraphStarted();
         } else {
             kdDebug() << "REALLY SAYING " << temp.text << endl;
-            emit sentenceStarted(temp.text, temp.language);
+            emit sentenceStarted(temp.text, temp.language, temp.appId, temp.seq);
             if(loadedPlugIns[temp.language]){
                 loadedPlugIns[temp.language]->sayText(temp.text);
             } else {
                 loadedPlugIns[speechData->defaultLanguage]->sayText(temp.text);
             }
-            emit sentenceFinished();
+            emit sentenceFinished(temp.appId, temp.seq);
         }
     }
     if (speechData->currentlyReading()) {
