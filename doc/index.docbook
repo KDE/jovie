@@ -1692,7 +1692,7 @@ and spoken languages are currently supported.</para>
 
 <row>
 <entry>Festival</entry>
-<entry>American English, British, Spanish, German, Finnish, Czech, Polish</entry>
+<entry>American English, British, Spanish, German, Finnish, Czech, Polish, Russian</entry>
 </row>
 
 <row>
@@ -1901,7 +1901,9 @@ that come with Festival.
 <para>Additional Spanish, English, and German voices are available from</para>
 
 <para><ulink url="http://cslu.cse.ogi.edu/tts/download/">
-http://cslu.cse.ogi.edu/tts/download/</ulink>.  You must compile an additional module
+http://cslu.cse.ogi.edu/tts/download/</ulink></para>
+
+<para>You must compile an additional module
 for these voices, therefore, you must have the Festival source code.
 The German voices have limited distribution.
 </para>
@@ -1918,6 +1920,18 @@ http://www.ling.helsinki.fi/suopuhe/download/</ulink>.
 http://www.artegence.com/download/voicexml/speech/festival_polish_voice.tgz</ulink>.
 </para>
 
+<para>A Russian male voice is available from </para>
+
+<para><ulink url="http://nshmyrev.narod.ru/festival/festival.html">
+http://nshmyrev.narod.ru/festival/festival.html
+</ulink></para>
+
+<para>You must have Festival 1.95 beta or later to use this voice.  The voice
+is still in early development.  Untar to
+<filename>festival/lib/voices/russian/</filename>.  When you configure the Russian
+talker, the voice code is <userinput>msu_ru_nsh_diphone</userinput>.  Be sure to
+select a single-byte cryllic encoding, such as <userinput>KOI8-R</userinput>.</para>
+
 <para>Festival is typically included with &Linux; distributions.  Check your
 distro CDs to see if it is included.</para>
 
@@ -1932,6 +1946,9 @@ Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the
 <note>
 <para>When using the Polish or Czech languages, be sure the <guilabel>Encoding</guilabel>
 option is set to <userinput>ISO 8859-2</userinput>.
+</para>
+<para>When using the Russian voice, be sure the <guilabel>Encoding</guilabel>
+option is set to a single-byte cryllic encoding, such as <userinput>KOI8-R</userinput>.
 </para>
 </note>
 
