@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wordlist>
+ <name>Internet Relay Chat and IM</name>
+ <appid>konversation</appid>
+ <appid>kvirc</appid>
+ <appid>ksirc</appid>
+ <appid>kopete</appid>
+ <appid>gaim</appid>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\;\)]]></match>
+  <subst><![CDATA[ winks]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\<]]></match>
+  <subst><![CDATA[ sad face]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\>]]></match>
+  <subst><![CDATA[ grins]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\|]]></match>
+  <subst><![CDATA[ straight faced]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\-\|]]></match>
+  <subst><![CDATA[ straight faced]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\-\)]]></match>
+  <subst><![CDATA[ smiles]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\'\(]]></match>
+  <subst><![CDATA[ cries]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\(]]></match>
+  <subst><![CDATA[ sad face]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\)]]></match>
+  <subst><![CDATA[ smiles]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\[]]></match>
+  <subst><![CDATA[ bat]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\@]]></match>
+  <subst><![CDATA[ angry look]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:\$]]></match>
+  <subst><![CDATA[ blushes]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(\@\)]]></match>
+  <subst><![CDATA[ cat face]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(\*\)]]></match>
+  <subst><![CDATA[ star]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(\&\)]]></match>
+  <subst><![CDATA[ dog face]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(\%\)]]></match>
+  <subst><![CDATA[ hand cuffs]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(6\)]]></match>
+  <subst><![CDATA[ devil]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(a\)]]></match>
+  <subst><![CDATA[ angel]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:D]]></match>
+  <subst><![CDATA[ grins]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(h\)]]></match>
+  <subst><![CDATA[ cool shades]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\so\_O]]></match>
+  <subst><![CDATA[ winks]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\:p]]></match>
+  <subst><![CDATA[ sticks out tung]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\s\(s\)]]></match>
+  <subst><![CDATA[ sleepy]]></subst>
+ </word>
+</wordlist>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wordlist>
+ <name>Abbreviations</name>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[TODO]]></match>
+  <subst><![CDATA[To Do]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[CPU]]></match>
+  <subst><![CDATA[C P U]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[DCOP]]></match>
+  <subst><![CDATA[D Cop]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[IP]]></match>
+  <subst><![CDATA[I P]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[KDE]]></match>
+  <subst><![CDATA[K D E]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[KTTS]]></match>
+  <subst><![CDATA[K T T S]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[kttsd]]></match>
+  <subst><![CDATA[K T T S D]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[KTTSD]]></match>
+  <subst><![CDATA[K T T S D]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[TTS]]></match>
+  <subst><![CDATA[T T S]]></subst>
+ </word>
+</wordlist>
