@@ -21,9 +21,6 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -153,9 +150,6 @@
                             <property name="text">
                                 <string>&amp;Add</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Add the selected speech synthesizer for the selected language.</string>
                                 <comment>What's this text</comment>
@@ -238,9 +232,6 @@
                             <property name="text">
                                 <string>&amp;Default</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
-                            </property>
                         </widget>
                         <widget class="KPushButton">
                             <property name="name">
@@ -259,9 +250,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Remove</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+R</string>
                             </property>
                             <property name="toggleButton">
                                 <bool>false</bool>
@@ -511,9 +499,6 @@
                                         <property name="text">
                                             <string>&amp;Pre-message:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+P</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>false</bool>
                                         </property>
@@ -559,9 +544,6 @@
                                         <property name="text">
                                             <string>Post-s&amp;ound:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+O</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>false</bool>
                                         </property>
@@ -581,9 +563,6 @@
                                         <property name="text">
                                             <string>Pre-sou&amp;nd:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+N</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>false</bool>
                                         </property>
@@ -594,9 +573,6 @@
                                         </property>
                                         <property name="text">
                                             <string>Post-&amp;message:</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+M</string>
                                         </property>
                                         <property name="checked">
                                             <bool>false</bool>

@@ -169,9 +169,6 @@
                     <property name="text">
                         <string>F&amp;orce output through Arts</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
                 </widget>
             </vbox>
         </widget>
