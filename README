@@ -1,224 +1,109 @@
-KTTSD is the next Proklam.
-The first difference is that KTTSD is implemented as a KDED module.
-It is based on Proklam and depricates Proklam.
+KTTS -- KDE Text-to-Speech -- is a subsystem within the KDE desktop
+for conversion of text to audible speech. KTTS is currently under
+development and aims to become the standard subsystem for all KDE
+applications to provide speech output. Currently, KTTS consists of
+the following components:
 
-Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+KTTSD
+  The KDE Text-to-Speech Deamon, a non-gui application that runs in
+the background, providing TTS support to KDE applications. Applications
+initiate TTS by making DCOP calls to kttsd.
+
+KTTSMGR
+  An application for configuring the KTTS System and for managing in-progress
+speech jobs. kttsmgr provides an icon in the system tray for performing
+these functions as needed.
+
+kttsjobmgr
+  A KPart for managing in-progress speech jobs.
+
+kcmkttsd
+  A KControl module for configuring the KTTS System. kcmkttsd runs in the
+KDE Control Center or start it with the command "kcmshell kcmkttsd".
+
+kate-plugin
+  A plugin for the KDE Advanced Text Editor that permits you to speak an entire
+text file or any portion of a file.
+
+katepart-plugin
+  Similar to kate-plugin but used when Kate is running embedded in Konqueror.
+
+khmtl-plugin
+  A plugin for Konqueror that permits you to speak all or any portion of an
+HTML web page.
+
+Original Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
 Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 Contributors:
   Olaf Schmidt <ojschmidt@kde.org>
   Gunnar Schmi Dt <gunnar@schmi-dt.de>
   Paul Giannaros <ceruleanblaze@gmail.com>
+  Jorge Luis Arzola <arzolacub@hotmail.com>
 
-KTTS, KDE Text-to-Speech system, is a plug-in based dcop service that
-allows any KDE (or non-KDE) application to speak using the DCOP
-interface.
+User features:
+  * Speak contents of a text file.
+  * Speak KDE notification events (KNotify).
+  * Speak all or part of the text of a web page in Konqueror.
+  * Speak all or part of the text in Kate text editor, including
+    instances where Kate is embedded in another KDE application.
+  * Long text is parsed into sentences. User may backup by sentence
+    or paragraph, replay, pause, and stop playing.
+  * Audio output via aRts or GStreamer (version 0.8.7 or later)
 
-KTTS intends to be the implementation for the KDE Text-to-Speech API.
-
-Features
---------
-* Priority system for warnings and messages, while still playing regular texts.
-* Long text is parsed into sentences.  User may backup by sentence or paragraph,
-  replay, pause, and stop playing.
-* Speak contents of clipboard.
-* Speak KDE notification events (KNotify).
+Programmer features:
+  * Priority system for screen reader outputs, warnings and messages,
+    while still playing regular texts.
+  * Plugin-based architecture for support of a wide variety of speech
+    synthesis engines and drivers.
+  * Permit generation of speech from the command line (or via shell scripts)
+    using the KDE DCOP utilities.
+  * Provide a lightweight and easily usable interface for applications
+    to generate speech output.
+  * Applications need not be concerned about contention over the speech device.
+  * FUTURE: Provide support for speech markup languages, such as VoiceXML, Sable,
+    Java Speech Markup Language (JSML), and Speech Markup Meta-language (SMML).
+  * FUTURE: Provide limited support for embedded speech markers.
+  * Asynchronous to prevent system blocking.
 
 Requirements
 ------------
-KDE 3.2.x and a speech synthesis engine, such as Festival.  Festival can be
-obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival is
-distributed with most Linux distros.  Check your distro CDs.  Also works
+KDE 3.2 or greater and a speech synthesis engine, such as Festival.  Festival
+can be obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival
+is distributed with most Linux distros.  Check your distro CDs.  Also works
 with Hadifix, Epos, Festival Lite (flite), FreeTTS, or any command that can
 speak text.
 
+Optional Components
+-------------------
+  * The sox utility is needed for adjusting overall speech rate.
+  * The xsltproc utility is needed for SSML support.
+  * GStreamer 0.8.7 or greater.
+
+See the KTTS Handbook
+
+  (http://accessibility.kde.org/developer/kttsd/handbook/index.html)
+
+for complete instructions on installing, compiling, configuring, and using
+KTTS.
+
 Support
 -------
+The KTTS website is
+
+  http://accessibility.kde.org/developer/kttsd
+
 In addition to the KDE Bugzilla database (bugs.kde.org), discussions for KTTSD
 currently take place in the kde-accessibility mailing list.  Subscribe at
 https://mail.kde.org/mailman/listinfo/kde-accessibility.  Developers
 also hang out in IRC (irc.kde.org channel #kde-accessibility).
 
-Building
---------
-If you are building from CVS kdenonbeta module, the usual commands
-
-  cd kdenonbeta
-  echo kttsd > inst-apps
-  make -f Makefile.cvs
-  ./configure
-  cd kttsd
-  make
-  make install  // as root
-
-Before attempting to run QT Designer against plugin .ui files, first copy
-kttsd/libkttsd/pluginconf.h to $KDEDIR/include/.
-  
-Using
------
-Make sure your speech engine is working.
-
-You may need to grant Festival write access to the audio device.
-
-  chmod a+rw /dev/dsp*
-
-To configure the speech plugin for KTTSD
-
-  kttsmgr
-  
-If using the Festival or Festival Interactive plugins, you'll need to
-specify the path to the voices.  On most systems, this will be
-
-  /usr/share/festival/voices
-  
-or
-
-  /usr/local/share/festival/voices
-
-Be sure to click the "Default" button after configuring a speech
-plugin!
-
-To run KTTSD, check the "Enable Text-to-speech System (KTTSD)" box or in a terminal
-
-  kttsd
-
-Click the "Jobs" tab in kttsmgr.  Click "Speak File" button.
-Pick a plain text file, then click "Resume" or "Restart" buttons.
-
-For additional information on configuring individual speech plugins,
-see below.
-
-DCOP Commands
--------------
-To set the text to be spoken
-
- dcop kttsd kspeech setText <text> <language>
-
-where <text> is the text to be spoken, and <language> is a language code
-such as "en", "cy", etc.
-
-Example.
-
-  dcop kttsd kspeech setText "This is a test." "en"
-
-To speak the current text
-
-  dcop kttsd kspeech startText 0
-
-To stop speaking
-
-  dcop kttsd kspeech stopText 0
-
-Depending upon the speech plugin used, speaking may not immediately stop.
-
-Known Problems
---------------
-
-17 Mar 2004: The Festival plugin does not work for me.  Crashes as soon
-as call to festival_initialize is made.  I suspect that the problem is
-incompatible gcc compilers used to compile kttsd and the libfestival.a
-static library, which on my system, is version 1.42.  So I added the
-Festival (Interactive) plugin that interfaces with Festival interactively
-via pipes ("festival --interactive").  If someone can confirm or deny
-this, I'd be appreciative.. Gary Cramblitt <garycramblitt@comcast.net>.
-
-Festival (Client/Server), festivalcs, is not currently working.
-
-Also see the TODO file.
-
-Using with Festival
--------------------
-Festival can be obtained from http://www.cstr.ed.ac.uk/projects/festival.
-Festival is distributed with most Linux distros.  Check your distro CDs.
-Debian users can simply do
-
-  apt-get install festival
-
-You will need to install at least one language.  Follow the instructions
-that come with Festival.  (Festival in combination with mbrola does work.)
-Additional festival voices are available from
-
-  http://hts.ics.nitech.ac.jp/</a>.
-
-Start kttsmgr, choose the appropriate language code and add Festival Interactive.
-Click the Configure button.  If the Festival voice files are not in the default
-location (/usr/share/festival/voices/), try /usr/local/share/festival/voices/.
-Click the Rescan button, pick a voice, and click the Test button.
-
-Using with Festival Lite (flite)
---------------------------------
-Obtain Festival Lite here:
-
-  http://www.speech.cs.cmu.edu/flite/index.html
-  
-Build and install following the instructions in the README that comes
-with flite.
-
-Start kttsmgr settings dialog
-
-  kttsmgr
-  
-Choose the Festival Lite (flite) plugin.
-
-Using with Hadifix (mbrola and txt2pho)
----------------------------------------
- 
-Hadifix consists of the mbrola diphone to speech synthesizer and txt2pho, a utility for converting
-german text to diphones.
- 
-If you do not already have Hadifix installed, do this:
- 
- - Download mbrola binary from
-   http://tcts.fpms.ac.be/synthesis/mbrola.html
- - Install mbrola to /usr/local/mbrola directory.
- - Download at least one german language file from the mbrola site.
-   Unzip to the /usr/local/mbrola directory.
- - Download txt2pho from
-   http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html
- - Unzip txt2pho to /usr/local/txt2pho.
- - Edit txt2phorc file, putting correct data paths in.
- - Either copy txt2phorc to ~/.txt2phorc or to /etc/txt2pho.  Note that you drop the "rc" in file name.
- - In kttsmgr, choose the German language (de), and add Hadifix.  On the properties page configure
-   a voice and the paths to mbrola and txt2pho.
- 
-Using with Epos
----------------
-Download epos from http://epos.ure.cas.cz/.
-
-Debian users: apt-get install epos.
-
-Start kttsmgr, choose Czeck or Slovak language code (cz or sk) and add Epos.
-Click Configure button.  If the epos server executable and client are not
-in your PATH, specify the paths to these executables.  The options boxes
-permit you to pass additional options to the server and client.  In a konsole,
-type "epos -h" or "say -h" for information.
-
-Compiling the API docs
-----------------------
-If you are working from the CVS kdenonbeta module, to build the KTTS API
-documents using Doxygen, proceed as follows:
-
-Add the following line (if not already present) to kdenonbeta/configure.in.in.
-
-  KDE_INIT_DOXYGEN([The KDE API Reference], [Version $VERSION])
-
-Then do the following commands.
-
-  cd kdenonbeta
-  make -f Makefile.cvs
-  ./configure
-  cd kttsd
-  make apidox
-  
-You should now have the docs in kdenonbeta/apidocs/kttsd.
-The KDE Speech API (API used by KDE applications to speak text) is in file
-apidocs/kttsd/html/classkspeech.html.
-The KTTSD Plugin API (API used by KTTSD to interface with its plugins) is
-in file apidocs/kttsd/html/classPlugInProc.html.
-
 Directories
 -----------
 libktts            Library for applications desiring to speak text.  This must be built first.
 libkttsd           Library for KTTSD.  Defines the interface for plugins for KTTSD.  Must be built second.
+players            Audio plugins for KTTSD.
+  artsplayer         aRts audio plugin for KTTSD.
+  gstplayer          GStreamer audio plugin for KTTSD.
 plugins            Plugins for KTTSD.  You must have at least one plugin to use KTTSD.
   festival           Plugin for Festival using statically-linked Festival library.  May not work.
   festivalint        Plugin for Festival using Festival Interactive mode (festival --interactive).
@@ -231,12 +116,11 @@ plugins            Plugins for KTTSD.  You must have at least one plugin to use 
 kttsd              KTTSD itself.  Non-interactive deamon.
 icons              Icon for kttsmgr and KTTSD.
 kttsjobmgr         A KPart used by kcmkttsmgr for managing text jobs in KTTSD.
-kcmkttsmgr         A KControl module for managing KTTSD.  Run using "kcmshell kcmkttsmgr".
+kcmkttsmgr         A KControl module for managing KTTSD.  Run using "kcmshell kcmkttsd".
 kttsmgr            Application for managing KTTSD.  Wrapper for kcmkttsmgr plus a system tray icon.
-kcmkttsd           Old version of KTTSD configuration manager.  A KControl module.  Run using "kcmshell kcmkttsd".
 app-plugins        Plugins for other applications to speak text.
   kate-plugin
   katepart-plugin
   khtml-plugin        While viewing an HTML page in Konqueror, highlight some text and choose "Read Out Page"
                       in Tools menu.  Or with nothing highlighted, speaks entire page.
-
+debian             Debian packaging files.
