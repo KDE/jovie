@@ -163,7 +163,7 @@ KTTSD::~KTTSD(){
 bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/)
 {
     if (markupType != kspeech::mtSsml) return false;
-    if (!ready()) return false;
+    if (!m_speaker) return false;
     return m_speaker->supportsMarkup(talker, markupType);
 }
 
@@ -192,7 +192,7 @@ bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) { return false; }
 */
 void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=NULL*/)
 {
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speechData->setScreenReaderOutput(msg, talker, getAppId());
     m_speaker->doUtterances();
 }
@@ -210,7 +210,7 @@ void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=N
 */
 void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
     // kdDebug() << "KTTSD::sayWarning: Running" << endl;
-    if (!ready()) return;
+    if (!m_speaker) return;
     kdDebug() << "KTTSD::sayWarning: Adding '" << warning << "' to warning queue." << endl;
     m_speechData->enqueueWarning(warning, talker, getAppId());
     m_speaker->doUtterances();
@@ -230,7 +230,7 @@ void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
 void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
 {
     // kdDebug() << "KTTSD::sayMessage: Running" << endl;
-    if (!ready()) return;
+    if (!m_speaker) return;
     kdDebug() << "KTTSD::sayMessage: Adding '" << message << "' to message queue." << endl;
     m_speechData->enqueueMessage(message, talker, getAppId());
     m_speaker->doUtterances();
@@ -252,7 +252,7 @@ void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
 */
 void KTTSD::setSentenceDelimiter(const QString &delimiter)
 {
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speechData->setSentenceDelimiter(delimiter, getAppId());
 }
 
@@ -281,7 +281,7 @@ void KTTSD::setSentenceDelimiter(const QString &delimiter)
 uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
 {
     // kdDebug() << "KTTSD::setText: Running" << endl;
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     kdDebug() << "KTTSD::setText: Setting text: '" << text << "'" << endl;
     uint jobNum = m_speechData->setText(text, talker, getAppId());
     return jobNum;
@@ -304,7 +304,7 @@ uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
 */
 int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
 {
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     return m_speechData->appendText(text, applyDefaultJobNum(jobNum), getAppId());
 }
 
@@ -333,7 +333,7 @@ int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
 uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/)
 {
     // kdDebug() << "KTTSD::setFile: Running" << endl;
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     QFile file(filename);
     uint jobNum = 0;
     if ( file.open(IO_ReadOnly) )
@@ -357,7 +357,7 @@ uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/)
 */
 int KTTSD::getTextCount(const uint jobNum /*=0*/)
 {
-    if (!ready()) return -1;
+    if (!m_speaker) return -1;
     return m_speechData->getTextCount(applyDefaultJobNum(jobNum));
 }
 
@@ -371,7 +371,7 @@ int KTTSD::getTextCount(const uint jobNum /*=0*/)
 */
 uint KTTSD::getCurrentTextJob()
 {
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     return m_speaker->getCurrentTextJob();
 }
 
@@ -381,7 +381,7 @@ uint KTTSD::getCurrentTextJob()
 */
 uint KTTSD::getTextJobCount()
 {
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     return m_speechData->getTextJobCount();
 }
 
@@ -391,7 +391,7 @@ uint KTTSD::getTextJobCount()
 */
 QString KTTSD::getTextJobNumbers()
 {
-    if (!ready()) return QString::null;
+    if (!m_speaker) return QString::null;
     return m_speechData->getTextJobNumbers();
 }
 
@@ -405,7 +405,7 @@ QString KTTSD::getTextJobNumbers()
 */
 int KTTSD::getTextJobState(const uint jobNum /*=0*/)
 {
-    if (!ready()) return -1;
+    if (!m_speaker) return -1;
     return m_speechData->getTextJobState(applyDefaultJobNum(jobNum));
 }
 
@@ -452,7 +452,7 @@ QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 */
 QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
 {
-    if (!ready()) return QString::null;
+    if (!m_speaker) return QString::null;
     return m_speaker->talkerCodeToTalkerId(talkerCode);
 }
 
@@ -475,7 +475,7 @@ QString KTTSD::getTextJobSentence(const uint jobNum /*=0*/, const uint seq /*=1*
 */
 bool KTTSD::isSpeakingText()
 {
-    if (!ready()) return false;
+    if (!m_speaker) return false;
     return m_speaker->isSpeakingText();
 }
 
@@ -492,7 +492,7 @@ bool KTTSD::isSpeakingText()
 void KTTSD::removeText(const uint jobNum /*=0*/)
 {
     kdDebug() << "KTTSD::removeText: Running" << endl;
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speaker->removeText(applyDefaultJobNum(jobNum));
 }
 
@@ -515,7 +515,7 @@ void KTTSD::removeText(const uint jobNum /*=0*/)
 void KTTSD::startText(const uint jobNum /*=0*/)
 {
     kdDebug() << "KTTSD::startText: Running" << endl;
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speaker->startText(applyDefaultJobNum(jobNum));
 }
 
@@ -556,7 +556,7 @@ void KTTSD::stopText(const uint jobNum /*=0*/)
 void KTTSD::pauseText(const uint jobNum /*=0*/)
 {
     kdDebug() << "KTTSD::pauseText: Running" << endl;
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speaker->pauseText(applyDefaultJobNum(jobNum));
 }
 
@@ -578,7 +578,7 @@ void KTTSD::pauseText(const uint jobNum /*=0*/)
 void KTTSD::resumeText(const uint jobNum /*=0*/)
 {
     kdDebug() << "KTTSD::resumeText: Running" << endl;
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speaker->resumeText(applyDefaultJobNum(jobNum));
 }
 
@@ -591,7 +591,7 @@ void KTTSD::resumeText(const uint jobNum /*=0*/)
 */
 QStringList KTTSD::getTalkers()
 {
-    if (!ready()) return QStringList();
+    if (!m_speaker) return QStringList();
     return m_speaker->getTalkers();
 }
 
@@ -618,7 +618,7 @@ void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=
 */
 QString KTTSD::userDefaultTalker()
 {
-    if (!ready()) return QString::null;
+    if (!m_speaker) return QString::null;
     return m_speaker->userDefaultTalker();
 }
 
@@ -632,7 +632,7 @@ QString KTTSD::userDefaultTalker()
 */
 void KTTSD::moveTextLater(const uint jobNum /*=0*/)
 {
-    if (!ready()) return;
+    if (!m_speaker) return;
     m_speaker->moveTextLater(applyDefaultJobNum(jobNum));
 }
 
@@ -651,7 +651,7 @@ void KTTSD::moveTextLater(const uint jobNum /*=0*/)
 */
 int KTTSD::jumpToTextPart(const int partNum, const uint jobNum /*=0*/)
 {
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     return m_speaker->jumpToTextPart(partNum, applyDefaultJobNum(jobNum));
 }
 
@@ -670,7 +670,7 @@ int KTTSD::jumpToTextPart(const int partNum, const uint jobNum /*=0*/)
 */
 uint KTTSD::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
 {
-    if (!ready()) return 0;
+    if (!m_speaker) return 0;
     return m_speaker->moveRelTextSentence(n, applyDefaultJobNum(jobNum));
 }
 
