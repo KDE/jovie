@@ -38,6 +38,7 @@ debian/tmp/usr/lib/kde3/libkhtmlkttsdplugin.so
 debian/tmp/usr/share/servicetypes/kttsd_synthplugin.desktop
 debian/tmp/usr/share/servicetypes/kttsd_audioplugin.desktop
 debian/tmp/usr/share/servicetypes/kttsd_filterplugin.desktop
+debian/tmp/usr/share/servicetypes/dcoptexttospeech.desktop
 
 debian/tmp/usr/share/apps/kttsd/xslt/SSMLtoPlainText.xsl
 debian/tmp/usr/share/apps/kttsd/festivalint/voices
@@ -87,6 +88,10 @@ debian/tmp/usr/share/services/kttsd_hadifixplugin.desktop
 debian/tmp/usr/share/services/kttsd_fliteplugin.desktop
 debian/tmp/usr/share/services/kttsd_eposplugin.desktop
 debian/tmp/usr/share/services/kttsd_freettsplugin.desktop
+debian/tmp/usr/share/services/kttsd_stringreplacerplugin.desktop
+debian/tmp/usr/share/services/kttsd_sbdplugin.desktop
+debian/tmp/usr/share/services/kttsd_xmltransformer.desktop
+debian/tmp/usr/share/services/kttsd_talkerchooser.desktop
 debian/tmp/usr/share/services/kttsd.desktop
 debian/tmp/usr/share/services/kttsjobmgr.desktop
 debian/tmp/usr/share/services/kttsd_artsplugin.desktop
