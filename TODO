@@ -26,8 +26,13 @@ _ Hadifix plugin:
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
 _ KTTSMgr:
-    _ The Current Sentence panel shows the currently-speaking sentence, but when a job is finished,
-      it does not clear.
+    _ Give Talkers a Talker Name entered by user.  Show this name in Jobs tab, Change Talker screen,
+      and in systray menu.
+    _ Change the Current Sentence panel to show the current sentence of the selected job?  If selected
+      job is not the currently speaking job, won't show currently-speaking text anymore.  However, would
+      be helpful when using advance/rewind buttons.  Perhaps to be effective, if the currently-selected
+      job IS the currently speaking job, and that job finishes, would automatically select the next
+      speaking job?  But that could become confusing for users with selection jumping around.
     _ The "Passive popups only" checkbox on General tab is sometimes enabled when
       "Speak notifications" is not checked.
     _ Add ability to quickly pick default Talker to systray menu.

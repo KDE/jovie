@@ -1040,6 +1040,7 @@ ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
         // Update sentence pointer, since signal may not be emitted for final CR.
         refreshJob(jobNum);
     }
+    m_currentSentence->setText(QString::null);
 }
 
 /**
