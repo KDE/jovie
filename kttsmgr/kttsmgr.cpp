@@ -61,7 +61,7 @@ int main (int argc, char *argv[])
 #endif
 
     // The real work of KTTS Manager is done in the KControl Module kcmkttsd.
-    KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-Speech Manager", 0, "kttsmgrdlg", false);
+    KCMultiDialog dlg(KCMultiDialog::Plain, i18n("KDE Text-to-Speech Manager"), 0, "kttsmgrdlg", false);
     dlg.addModule("kcmkttsd");
 
     dlg.setIcon(KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small));
