@@ -116,6 +116,9 @@ class SbdConf : public KttsFilterConf
     private slots:
         void slotReButton_clicked();
         void slotLanguageBrowseButton_clicked();
+        void slotLoadButton_clicked();
+        void slotSaveButton_clicked();
+        void slotClearButton_clicked();
 
     private:
 

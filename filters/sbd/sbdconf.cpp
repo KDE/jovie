@@ -38,6 +38,7 @@
 #include <kregexpeditorinterface.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
+#include <kfiledialog.h>
 
 // KTTS includes.
 #include "filterconf.h"
@@ -78,6 +79,12 @@ SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/
          this, SLOT(configChanged()) );
     connect(m_widget->languageBrowseButton, SIGNAL(clicked()),
          this, SLOT(slotLanguageBrowseButton_clicked()));
+    connect(m_widget->loadButton, SIGNAL(clicked()),
+         this, SLOT(slotLoadButton_clicked()));
+    connect(m_widget->saveButton, SIGNAL(clicked()),
+         this, SLOT(slotSaveButton_clicked()));
+    connect(m_widget->clearButton, SIGNAL(clicked()),
+         this, SLOT(slotClearButton_clicked()));
 
     // Set up defaults.
     defaults();
@@ -282,5 +289,45 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
     }
     m_widget->languageLineEdit->setText(language);
+    configChanged();
+}
+
+void SbdConf::slotLoadButton_clicked()
+{
+    // QString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
+    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/sbd/").last();
+    QString filename = KFileDialog::getOpenFileName(
+        dataDir,
+        "*rc|SBD Config (*rc)",
+        m_widget,
+        "sbd_loadfile");
+    if ( filename.isEmpty() ) return;
+    KConfig* cfg = new KConfig( filename, true, false, 0 );
+    load( cfg, "Filter" );
+    delete cfg;
+    configChanged();
+}
+
+void SbdConf::slotSaveButton_clicked()
+{
+    QString filename = KFileDialog::getSaveFileName(
+        KGlobal::dirs()->saveLocation( "data" ,"kttsd/sbd/", false ),
+        "*rc|SBD Config (*rc)",
+        m_widget,
+        "sbd_savefile");
+    if ( filename.isEmpty() ) return;
+    KConfig* cfg = new KConfig( filename, false, false, 0 );
+    save( cfg, "Filter" );
+    delete cfg;
+}
+
+void SbdConf::slotClearButton_clicked()
+{
+    m_widget->nameLineEdit->setText( QString::null );
+    m_widget->reLineEdit->setText( QString::null );
+    m_widget->sbLineEdit->setText( QString::null );
+    m_languageCodeList.clear();
+    m_widget->languageLineEdit->setText( QString::null );
+    m_widget->appIdLineEdit->setText( QString::null );
     configChanged();
 }

@@ -20,7 +20,9 @@ servicesdir = $(kde_servicesdir)
 
 # Install data files.
 sbddatadir = $(kde_datadir)/kttsd/sbd/
-sbddata_DATA = 
+sbddata_DATA = \
+	standard_sbdrc \
+	polish_festival_sbdrc
 
 noinst_HEADERS = sbdproc.h
 

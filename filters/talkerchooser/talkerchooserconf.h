@@ -116,6 +116,10 @@ class TalkerChooserConf : public KttsFilterConf
         void slotVolumeCheckBox_activated( const QString& text );
         void slotRateCheckBox_activated( const QString& text );
 
+        void slotLoadButton_clicked();
+        void slotSaveButton_clicked();
+        void slotClearButton_clicked();
+
     private:
         QString readTalkerSetting(KConfig* config, const QString& key, bool* preferred);
 

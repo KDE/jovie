@@ -120,6 +120,13 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const Q
     connect(m_widget->rateCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(configChanged()));
 
+    connect(m_widget->loadButton, SIGNAL(clicked()),
+            this, SLOT(slotLoadButton_clicked()));
+    connect(m_widget->saveButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveButton_clicked()));
+    connect(m_widget->clearButton, SIGNAL(clicked()),
+            this, SLOT(slotClearButton_clicked()));
+
     // Set up defaults.
     defaults();
 }
@@ -397,5 +404,57 @@ void TalkerChooserConf::slotRateCheckBox_activated( const QString& text )
 {
     m_widget->rateCheckBox->setEnabled( !text.isEmpty() );
     if ( text.isEmpty() ) m_widget->rateCheckBox->setChecked( false );
+    configChanged();
+}
+
+void TalkerChooserConf::slotLoadButton_clicked()
+{
+    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/talkerchooser/").last();
+    QString filename = KFileDialog::getOpenFileName(
+        dataDir,
+        "*rc|Talker Chooser Config (*rc)",
+        m_widget,
+        "talkerchooser_loadfile");
+    if ( filename.isEmpty() ) return;
+    KConfig* cfg = new KConfig( filename, true, false, 0 );
+    load( cfg, "Filter" );
+    delete cfg;
+    configChanged();
+}
+
+void TalkerChooserConf::slotSaveButton_clicked()
+{
+    QString filename = KFileDialog::getSaveFileName(
+        KGlobal::dirs()->saveLocation( "data" ,"kttsd/talkerchooser/", false ),
+       "*rc|Talker Chooser Config (*rc)",
+        m_widget,
+        "talkerchooser_savefile");
+    if ( filename.isEmpty() ) return;
+    KConfig* cfg = new KConfig( filename, false, false, 0 );
+    save( cfg, "Filter" );
+    delete cfg;
+}
+
+void TalkerChooserConf::slotClearButton_clicked()
+{
+    m_widget->nameLineEdit->setText( QString::null );
+    m_widget->reLineEdit->setText( QString::null );
+    m_widget->appIdLineEdit->setText( QString::null );
+    m_languageCode = QString::null;
+    m_widget->languageLineEdit->setText( QString::null );
+    m_widget->languageCheckBox->setChecked( false );
+    m_widget->languageCheckBox->setEnabled( false );
+    m_widget->synthComboBox->setCurrentItem( 0 );
+    m_widget->synthCheckBox->setChecked( false );
+    m_widget->synthCheckBox->setEnabled( false );
+    m_widget->genderComboBox->setCurrentItem( 0 );
+    m_widget->genderCheckBox->setChecked( false );
+    m_widget->genderCheckBox->setEnabled( false );
+    m_widget->volumeComboBox->setCurrentItem( 0 );
+    m_widget->volumeCheckBox->setChecked( false );
+    m_widget->volumeCheckBox->setEnabled( false );
+    m_widget->rateComboBox->setCurrentItem( 0 );
+    m_widget->rateCheckBox->setChecked( false );
+    m_widget->rateCheckBox->setEnabled( false );
     configChanged();
 }

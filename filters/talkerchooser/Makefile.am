@@ -19,6 +19,11 @@ libkttsd_talkerchooserplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd
 services_DATA = kttsd_talkerchooserplugin.desktop
 servicesdir = $(kde_servicesdir)
 
+# Install data files.
+talkerchooserdatadir = $(kde_datadir)/kttsd/sbd/
+talkerchooserdata_DATA = \
+	female_notifications_rc
+
 noinst_HEADERS =  talkerchooserconfwidget.h
 
 # Get translators to translate library.

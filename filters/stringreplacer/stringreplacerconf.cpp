@@ -682,7 +682,7 @@ void StringReplacerConf::slotLoadButton_clicked()
         dataDir,
         "*.xml|String Replacer Word List (*.xml)",
         m_widget,
-        "stringreplacer_savefile");
+        "stringreplacer_loadfile");
     if ( filename.isEmpty() ) return;
     QString errMsg = loadFromFile( filename, false );
     enableDisableButtons();

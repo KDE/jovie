@@ -1,0 +1,6 @@
+[Filter]
+AppID=
+LanguageCodes=pl
+SentenceBoundary=\\t
+SentenceDelimiterRegExp=([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))
+UserFilterName=Polish Sentence Boundary Detector
