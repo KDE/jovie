@@ -27,10 +27,6 @@
 #include <qfile.h>
 
 // KDE includes.
-#include <kartsserver.h>
-#include <kartsdispatcher.h>
-#include <kplayobject.h>
-#include <kplayobjectfactory.h>
 #include <ktempfile.h>
 #include <kaboutdata.h>
 #include <kaboutapplication.h>
@@ -47,6 +43,7 @@
 
 // KTTS includes.
 #include <pluginconf.h>
+#include <testplayer.h>
 
 // Hadifix includes.
 #include "hadifixproc.h"
@@ -60,8 +57,6 @@ class HadifixConfPrivate {
    private:
       HadifixConfPrivate() {
          hadifixProc = 0;
-         artsServer = 0;
-         playObj = 0;
          progressDlg = 0;
          findInitialConfig();
       };
@@ -69,13 +64,7 @@ class HadifixConfPrivate {
       ~HadifixConfPrivate() {
          if (hadifixProc) hadifixProc->stopText();
          delete hadifixProc;
-         if (playObj)
-         {
-            playObj->halt();
-            if (!waveFile.isNull()) QFile::remove(waveFile);
-         }
-         delete playObj;
-         delete artsServer;
+         if (!waveFile.isNull()) QFile::remove(waveFile);
          delete progressDlg;
       };
       
@@ -168,10 +157,6 @@ class HadifixConfPrivate {
       QString waveFile;
       // Synthesizer.
       HadifixProc* hadifixProc;
-      // aRts server object.
-      KArtsServer* artsServer;
-      // aRts play object.
-      KDE::PlayObject* playObj;
       // Progress Dialog.
       KProgressDialog* progressDlg;
 };
@@ -341,36 +326,13 @@ void HadifixConf::slotSynthFinished()
     }
     // Hide the Cancel button so user can't cancel in the middle of playback.
     d->progressDlg->showCancelButton(false);
-    // If currently playing (or finished playing), stop and delete play object.
-    if (d->playObj)
-    {
-       d->playObj->halt();
-       // Clean up.
-       QFile::remove(d->waveFile);
-    }
-    delete d->playObj;
-    delete d->artsServer;
     // Get new wavefile name.
     d->waveFile = d->hadifixProc->getFilename();
+    // Tell synth we're done.
     d->hadifixProc->ackFinished();
-    // Start playback of the wave file.
-    KArtsDispatcher dispatcher;
-    d->artsServer = new KArtsServer;
-    KDE::PlayObjectFactory factory (d->artsServer->server());
-    d->playObj = factory.createPlayObject (d->waveFile, true);
-    d->playObj->play();
-
-    // TODO: The following hunk of code would ideally be unnecessary.  We would just
-    // return at this point and let HadifixConfPrivate destructor take care of
-    // cleaning up the play object.  However, because we've been called from DCOP,
-    // this seems to be necessary.  The call to processEvents is problematic because
-    // it can cause re-entrancy.
-    while (d->playObj->state() == Arts::posPlaying) qApp->processEvents();
-    d->playObj->halt();
-    delete d->playObj;
-    d->playObj = 0;
-    delete d->artsServer;
-    d->artsServer = 0;
+    // Play the wave file (possibly adjusting its Speed).
+    // Player object deletes the wave file when done.
+    if (m_player) m_player->play(d->waveFile);
     QFile::remove(d->waveFile);
     d->waveFile = QString::null;
     if (d->progressDlg) d->progressDlg->close();

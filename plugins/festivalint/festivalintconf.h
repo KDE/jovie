@@ -1,5 +1,4 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  festivalconf.h
   Configuration widget and functions for Festival (Interactive) plug in
   -------------------
   Copyright : (C) 2004 by Gary Cramblitt
@@ -34,11 +33,7 @@
 #include "festivalintconfwidget.h"
 
 class FestivalIntProc;
-class KArtsServer;
 class KProgressDialog;
-namespace KDE {
-    class PlayObject;
-}
 
 typedef struct voiceStruct{
     QString code;               // Code as sent to Festival
@@ -155,14 +150,10 @@ class FestivalIntConf : public PlugInConf {
         QString m_languageCode;
         // Language country code (if any).
         QString m_countryCode;
-        /** List of voices */
+        // List of voices */
         QValueList<voice> m_voiceList;
         // Festival synthesizer.
         FestivalIntProc* m_festProc;
-        // aRts server.
-        KArtsServer* m_artsServer;
-        // aRts player.
-        KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
         // Progress dialog.

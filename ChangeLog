@@ -1,3 +1,7 @@
+2004-11-29  Gary Cramblitt (PhantomsDad)
+        * When clicking Test button, now honors users output method (arts or gstreamer) and
+          overall Audio Speed setting.
+
 2004-11-27  Gary Cramblitt (PhantomsDad)
         * Extremely rudimentary support for SSML/Sable using FestivalInt plugin.  If it works for
           you, it will be minor miracle.

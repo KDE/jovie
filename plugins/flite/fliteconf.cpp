@@ -24,13 +24,12 @@
 // KDE includes.
 #include <klocale.h>
 #include <kdialog.h>
-#include <kartsserver.h>
-#include <kartsdispatcher.h>
-#include <kplayobject.h>
-#include <kplayobjectfactory.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
+
+// KTTS includes.
+#include <testplayer.h>
 
 // Flite Plugin includes.
 #include "fliteproc.h"
@@ -43,8 +42,6 @@ FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*ar
 {
     // kdDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;
-    m_artsServer = 0;
-    m_playObj = 0;
     m_progressDlg = 0;
     
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
@@ -63,9 +60,6 @@ FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*ar
 /** Destructor */
 FliteConf::~FliteConf(){
     // kdDebug() << "Running: FliteConf::~FliteConf()" << endl;
-    if (m_playObj) m_playObj->halt();
-    delete m_playObj;
-    delete m_artsServer;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_fliteProc;
     delete m_progressDlg;
@@ -177,36 +171,13 @@ void FliteConf::slotSynthFinished()
     }
     // Hide the Cancel button so user can't cancel in the middle of playback.
     m_progressDlg->showCancelButton(false);
-    // If currently playing (or finished playing), stop and delete play object.
-    if (m_playObj)
-    {
-       m_playObj->halt();
-       // Clean up.
-       QFile::remove(m_waveFile);
-    }
-    delete m_playObj;
-    delete m_artsServer;
     // Get new wavefile name.
     m_waveFile = m_fliteProc->getFilename();
+    // Tell synth we're done.
     m_fliteProc->ackFinished();
-    // Start playback of the wave file.
-    KArtsDispatcher dispatcher;
-    m_artsServer = new KArtsServer;
-    KDE::PlayObjectFactory factory (m_artsServer->server());
-    m_playObj = factory.createPlayObject (m_waveFile, true);
-    m_playObj->play();
-
-    // TODO: The following hunk of code would ideally be unnecessary.  We would just
-    // return at this point and let FliteConf destructor take care of
-    // cleaning up the play object.  However, because we've been called from DCOP,
-    // this seems to be necessary.  The call to processEvents is problematic because
-    // it can cause re-entrancy.
-    while (m_playObj->state() == Arts::posPlaying) qApp->processEvents();
-    m_playObj->halt();
-    delete m_playObj;
-    m_playObj = 0;
-    delete m_artsServer;
-    m_artsServer = 0;
+    // Play the wave file (possibly adjusting its Speed).
+    // Player object deletes the wave file when done.
+    if (m_player) m_player->play(m_waveFile);
     QFile::remove(m_waveFile);
     m_waveFile = QString::null;
     if (m_progressDlg) m_progressDlg->close();

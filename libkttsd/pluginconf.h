@@ -19,10 +19,15 @@
 #ifndef _PLUGINCONF_H_
 #define _PLUGINCONF_H_
 
+// Qt includes.
 #include <qwidget.h>
 
+// KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
+
+// KTTS includes.
+#include "testplayer.h"
 
 /**
 * @interface PlugInConf
@@ -200,6 +205,7 @@
 * it is not necessary to save the language code, unless your plugin needs it in
 * order to synthesize speech.
 */
+
 class PlugInConf : public QWidget{
     Q_OBJECT
 
@@ -269,7 +275,7 @@ class PlugInConf : public QWidget{
         * @return            True if multiple instances are possible.
         */
         virtual bool supportsMultiInstance();
-      
+
         /**
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
@@ -287,7 +293,7 @@ class PlugInConf : public QWidget{
         * code were not specified, i.e., adapt to the given language.
         */
         virtual void setDesiredLanguage(const QString &lang);
-      
+
         /**
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
@@ -296,7 +302,7 @@ class PlugInConf : public QWidget{
         * @return            Fully-specified talker code.
         */
         virtual QString getTalkerCode();
-      
+
         /**
         * Return a list of all the languages possibly supported by the plugin.
         * If your plugin can support any language, return Null.
@@ -315,6 +321,12 @@ class PlugInConf : public QWidget{
         * The list you return should be as specific as practicable.
         */
         virtual QStringList getSupportedLanguages();
+
+        /**
+        * Player object that can be used by the plugin for testing playback of synthed files.
+        */
+        void setPlayer(TestPlayer* player);
+        TestPlayer* getPlayer();
 
         static QString realFilePath(const QString &filename);
 
@@ -335,7 +347,7 @@ class PlugInConf : public QWidget{
         * It should be emitted whenever user changes something in the configuration widget.
         */
         void changed(bool);
-      
+
     protected:
         /**
         * Searches the $PATH variable for any file. If that file exists in the PATH, or
@@ -345,7 +357,7 @@ class PlugInConf : public QWidget{
         *                    if its not found.
         */
         QString getLocation(const QString &name);
-        
+
         /**
         * Breaks a language code into the language code and country code (if any).
         * @param languageCode   Language code.
@@ -356,6 +368,8 @@ class PlugInConf : public QWidget{
 
         /// The system path in a QStringList.
         QStringList m_path;
+
+        TestPlayer* m_player;
 };
 
 #endif  //_PLUGINCONF_H_

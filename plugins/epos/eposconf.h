@@ -33,11 +33,7 @@
 #include "eposconfwidget.h"
 
 class EposProc;
-class KArtsServer;
 class KProgressDialog;
-namespace KDE {
-    class PlayObject;
-}
 
 class EposConf : public PlugInConf {
     Q_OBJECT 
@@ -131,10 +127,6 @@ class EposConf : public PlugInConf {
 
         // Epos synthesizer.
         EposProc* m_eposProc;
-        // aRts server.
-        KArtsServer* m_artsServer;
-        // aRts player.
-        KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
         // Progress dialog.

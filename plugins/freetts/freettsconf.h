@@ -30,7 +30,6 @@
 #include "freettsconfigwidget.h"
 #include "freettsproc.h"
 
-class KArtsServer;
 class QStringList;
 class KProgressDialog;
 
@@ -115,12 +114,6 @@ class FreeTTSConf : public PlugInConf {
 		
 		/// FreeTTS synthesizer.
 		FreeTTSProc *m_freettsProc;
-		
-		/// aRts server.
-		KArtsServer *m_artsServer;
-		
-		/// aRts player.
-		KDE::PlayObject *m_playObj;
 		
 		/// Synthesized wave file name.
 		QString m_waveFile;

@@ -41,6 +41,7 @@ PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, nam
     QString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
     m_path = QStringList::split(":", systemPath);
+    m_player = 0;
 }
 
 /**
@@ -48,6 +49,7 @@ PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, nam
 */
 PlugInConf::~PlugInConf(){
     kdDebug() << "PlugInConf::~PlugInConf: Running" << endl;
+    delete m_player;
 }
 
 /**
@@ -194,3 +196,9 @@ QString PlugInConf::realFilePath(const QString &filename)
     }
     return filename;
 }
+
+/**
+* Player object that can be used by the plugin for testing playback of synthed files.
+*/
+void PlugInConf::setPlayer(TestPlayer* player) { m_player = player; }
+TestPlayer* PlugInConf::getPlayer() { return m_player; }

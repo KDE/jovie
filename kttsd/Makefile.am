@@ -32,7 +32,6 @@ kttsd_SOURCES = \
 	speechdata.cpp \
 	kttsd.skel \
 	threadedplugin.cpp \
-	stretcher.cpp \
 	ssmlconvert.cpp
 
 kttsd_LDFLAGS = -avoid-version -module $(LDFLAGS_GST) $(all_libraries)
@@ -55,5 +54,5 @@ kttsddata_DATA = SSMLtoPlainText.xsl
 messages: rc.cpp
 	$(XGETTEXT) -nki18n *.cpp -o $(podir)/kttsd.pot
 
-noinst_HEADERS = threadedplugin.h stretcher.h ssmlconvert.h
+noinst_HEADERS = threadedplugin.h ssmlconvert.h
 

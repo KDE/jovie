@@ -50,6 +50,7 @@
 #include "kcmkttsmgr.moc"
 #include "kcmkttsmgr.h"
 #include "pluginconf.h"
+#include "testplayer.h"
 
 // Some constants.
 // Defaults set when clicking Defaults button.
@@ -1208,7 +1209,21 @@ void KCMKttsMgr::configureTalker()
     connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigDlg_DefaultClicked() ));
     connect(m_configDlg, SIGNAL( okClicked() ), this, SLOT( slotConfigDlg_OkClicked() ));
     connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigDlg_CancelClicked() ));
+    // Create a Player object for the plugin to use for testing.
+    int playerOption = 0;
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) playerOption = 1;
+    float audioStretchFactor = 1.0/(float(m_kttsmgrw->timeBox->value())/100.0);
+    kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << endl;
+    TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", playerOption, audioStretchFactor);
+    m_loadedPlugIn->setPlayer(testPlayer);
+    // Display the dialog.
     m_configDlg->exec();
+    // Done with Player object.
+    if (m_loadedPlugIn)
+    {
+        delete testPlayer;
+        m_loadedPlugIn->setPlayer(0);
+    }
 }
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent

@@ -33,11 +33,7 @@
 #include "fliteconfwidget.h"
 
 class FliteProc;
-class KArtsServer;
 class KProgressDialog;
-namespace KDE {
-    class PlayObject;
-}
 
 class FliteConf : public PlugInConf {
     Q_OBJECT 
@@ -115,10 +111,6 @@ class FliteConf : public PlugInConf {
         FliteConfWidget* m_widget;
         // Flite synthesizer.
         FliteProc* m_fliteProc;
-        // aRts server.
-        KArtsServer* m_artsServer;
-        // aRts player.
-        KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
         // Progress dialog.

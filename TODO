@@ -18,7 +18,7 @@ _ Festival Interactive plugin:
       http://www.freebsoft.org/festival-czech
 _ KTTSMgr:
     _ Overall Audio Speed should be a realtime setting, i.e., not necessary to click Apply.
-    _ Overall Audio Speed setting should be applied when using Test button in plugin Configure dialogs.
+    _ Disable Audio Speed control if sox not installed (configure.in.in but runtime check would be better).
     _ Add drag N drop for the Talkers so it is easier to change the ordering.
     _ It is possible to configure multiple instances of Talkers with the exact same configuration.
     _ Add WhatsThis help.  The Jobs tab needs them.

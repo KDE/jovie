@@ -33,11 +33,7 @@
 #include "commandconfwidget.h"
 
 class CommandProc;
-class KArtsServer;
 class KProgressDialog;
-namespace KDE {
-    class PlayObject;
-}
 
 class CommandConf : public PlugInConf {
     Q_OBJECT 
@@ -119,10 +115,6 @@ class CommandConf : public PlugInConf {
 
         // Command synthesizer.
         CommandProc* m_commandProc;
-        // aRts server.
-        KArtsServer* m_artsServer;
-        // aRts player.
-        KDE::PlayObject* m_playObj;
         // Synthesized wave file name.
         QString m_waveFile;
         // Progress dialog.

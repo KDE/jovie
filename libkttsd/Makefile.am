@@ -18,7 +18,9 @@ libkttsd_la_SOURCES = \
         pluginproc.cpp \
         pluginconf.cpp \
         artsplayer.cpp \
-        gstreamerplayer.cpp
+        gstreamerplayer.cpp \
+		testplayer.cpp \
+		stretcher.cpp
 libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) $(LDFLAGS_GST) -no-undefined
 libkttsd_la_LIBADD = $(LDADD_GST) $(LIB_KIO) -lartskde
 
