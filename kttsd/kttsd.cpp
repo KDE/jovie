@@ -333,8 +333,7 @@ void KTTSD::prevParagraphSelected(){
 
 void KTTSD::reinit()
 {
-    // Attempt to restart ourself.
-    // Sometimes causes crashes.  Not sure why..grc.
+    // Restart ourself.
     kdDebug() << "Running: KTTSD::reinit()" << endl;
     kdDebug() << "Stopping KTTSD service" << endl;
     speaker->requestExit();
@@ -343,6 +342,8 @@ void KTTSD::reinit()
     speaker = 0;
     delete speechData;
     speechData = 0;
+    textStopped();
+    textRemoved();
 
     kdDebug() << "Starting KTTSD service" << endl;
     if (!initializeSpeaker()) return;
@@ -359,9 +360,7 @@ void KTTSD::speakClipboardSelected(){
 }
 
 void KTTSD::configCommitted() {
-    // reinit routine sometimes causes crashes.  So for now, ask user to restart KTTSD.
-    KMessageBox::sorry(0, i18n("You must quit and restart KTTSD for the new settings to take effect."));
-//    reinit();
+    reinit();
 }
 
 void KTTSD::closeSelected(){
