@@ -90,7 +90,7 @@ KInstance *KttsJobMgrFactory::instance()
 
 KAboutData *KttsJobMgrFactory::aboutData()
 {
-  KAboutData *about = new KAboutData("KttsJobMgr", I18N_NOOP("KttsJobMgr"), "1.99");
+  KAboutData *about = new KAboutData("kttsjobmgr", I18N_NOOP("KttsJobMgr"), "1.99");
   return about;
 }
 
