@@ -826,7 +826,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Out&amp;put using</string>
+                            <string>Out&amp;put Using</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -837,7 +837,7 @@
                                     <cstring>artsRadioButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>a&amp;RTs</string>
+                                    <string>a&amp;Rts</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+R</string>
