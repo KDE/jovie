@@ -77,7 +77,7 @@ bool KTTSD::initializeSpeechData()
     // Load configuration.
     if (!m_speechData->readConfig())
     {
-        KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control center before use. Text to speech service exiting."), i18n("Text To Speech Error"));
+        KMessageBox::error(0, i18n("No default language defined. Please configure kttsd in the KDE Control Center before use. Text to speech service exiting."), i18n("Text-to-Speech Error"));
         delete m_speechData;
         m_speechData = 0;
         ok = false;
@@ -117,7 +117,7 @@ bool KTTSD::initializeSpeaker()
     m_speaker = new Speaker(m_speechData);
     int load = m_speaker->loadPlugIns();
     if(load == -1){
-        KMessageBox::error(0, i18n("No speech synthesizer plugin found. This program cannot run without a speech synthesizer. Text to speech service exiting."), i18n("Text To Speech Error"));
+        KMessageBox::error(0, i18n("No speech synthesizer plugin found. This program cannot run without a speech synthesizer. Text to speech service exiting."), i18n("Text-to-Speech Error"));
         delete m_speaker;
         m_speaker = 0;
         delete m_speechData;
@@ -125,7 +125,7 @@ bool KTTSD::initializeSpeaker()
         ok = false;
         return false;
     } else if(load == 0){
-        KMessageBox::error(0, i18n("A speech synthesizer plugin was not found or is corrupt"), i18n("Text To Speech Error"));
+        KMessageBox::error(0, i18n("A speech synthesizer plugin was not found or is corrupt"), i18n("Text-to-Speech Error"));
         delete m_speaker;
         m_speaker = 0;
         delete m_speechData;

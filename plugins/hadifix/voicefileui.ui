@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Selecting voice file</string>
+        <string>Selecting Voice File</string>
     </property>
     <grid>
         <property name="name">
@@ -82,7 +82,7 @@
                         <cstring>genderButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Try to determine from voice file</string>
+                        <string>Try to Determine From Voice File</string>
                     </property>
                 </widget>
             </grid>

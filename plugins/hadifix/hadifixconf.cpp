@@ -238,7 +238,7 @@ QString HadifixConf::getTalkerCode()
 
 void HadifixConf::voiceButton_clicked () {
    KDialogBase *dialog = new KDialogBase (this, 0, true,
-                                      i18n("Voice file - Hadifix plug in"),
+                                      i18n("Voice File - Hadifix Plug In"),
                                       KDialogBase::Ok|KDialogBase::Cancel,
                                       KDialogBase::Ok, true);
    VoiceFileWidget *widget = new VoiceFileWidget(dialog);

@@ -18,7 +18,7 @@ fi
 if test "x$have_gst" = "xyes" && test "x$gstreamer_plugin" = "xno"; then
 	echo "********************************************************"
 	echo "*"
-	echo "* You do seem to have GStreamer >= 0.8.7 installed."
+	echo "* You seem to have GStreamer >= 0.8.7 installed."
     echo "* but you did not choose to build the gstreamer plugin."
 	echo "* Without this aRts output will be used exclusively."
     echo "* To enable GStreamer plugin, configure with"
