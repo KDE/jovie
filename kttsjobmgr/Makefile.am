@@ -30,5 +30,5 @@ rcdir = $(kde_datadir)/kttsjobmgr
 rc_DATA = kttsjobmgrui.rc
 
 # Translation message files.
-messages:
+messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsjobmgr.pot
