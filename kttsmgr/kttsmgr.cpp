@@ -105,6 +105,12 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     QToolTip::add(this, i18n("Text-to-Speech Manager"));
 
     int id;
+    // FIXME: Set icon for tray context menu top title.
+    // I'm not sure this won't break the app at this late date in KDE 3.4 freeze, so I'll leave
+    // this disabled for now.
+    // id = contextMenu()->idAt(0);
+    // if (id != -1) contextMenu()->changeTitle(id, icon, "KTTSMgr");
+
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),

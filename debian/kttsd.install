@@ -2,6 +2,7 @@ debian/tmp/usr/bin/kttsd
 debian/tmp/usr/bin/kttsmgr
 debian/tmp/usr/lib/libkttsd.so.1.0.0
 debian/tmp/usr/lib/libkttsd.so.1
+debian/tmp/usr/lib/libkttsd.so
 debian/tmp/usr/lib/libkttsd.la
 debian/tmp/usr/lib/kde3/libkttsd_festivalintplugin.so
 debian/tmp/usr/lib/kde3/libkttsd_festivalintplugin.la
@@ -101,3 +102,5 @@ debian/tmp/usr/share/icons/crystalsvg/scalable/apps/kttsd.svgz
 
 debian/tmp/usr/share/applications/kde/kcmkttsd.desktop
 debian/tmp/usr/share/applications/kde/kttsmgr.desktop
+
+debian/tmp/usr/share/locale/*/LC_MESSAGES/

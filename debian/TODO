@@ -13,8 +13,9 @@
     kde-devel      3.1.2          The K Desktop Environment (development files
     kde-devel-extr 3.1.2-0.2      The K Desktop Environment (extra development
     exuberant-ctag 5.5.4-1        build tag file indexes of source code defini
+    cdbs           0.4.26-1.1     common build system for Debian packages
 
-* Here's my build procedure:
+* Here's my build procedure (note that I'm using CDBS):
     - cd kdeaccessibility/doc/kttsd && make distclean && cd kdeaccessibility/kttsd && make distclean
     - cvs2dist kdeaccessibility kttsd --version 0.3.0
     - Copy resulting kttsd-0.3.0.tar.gz to a work folder and rename to kttsd_0.3.0.orig.tar.gz
@@ -23,25 +24,13 @@
     - cd kttsd-0.3.0
     - rm -fR autom4te.cache
     - cp -R kttsd/debian debian
-    - Add --enable-debug=full --enable-kttsd-gstreamer to configure line in rules
     - debuild -uc -us
 
 * dpkg-shlibdeps is reporting:
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
+  Should I have libkttsd.so in the .install file?
 
 * Should rc files be installed to etc/ tree?
 
-* debuild is ending like this.  Why:
-    dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
-    dh_gencontrol
-    dh_md5sums
-    dh_builddeb
-    dpkg-deb: building package `kttsd' in `../kttsd_0.3.0-1_i386.deb'.
-    dpkg-deb: building package `kttsd-gstreamer' in `../kttsd-gstreamer_0.3.0-1_i386.deb'.
-    make[1]: Leaving directory `/home/share/src/kttsd-0.3.0/kttsd-0.3.0'
-    dh_testdir
-    dh_testroot
-    dh_clean -k -i
-    dh_clean: I have no package to build
-    make: *** [install-indep] Error 1
-
+* For unknown reason, several of the doc translations aren't being built (da, pt for example),
+  but en and de are being built. ??
