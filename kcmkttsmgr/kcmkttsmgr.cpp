@@ -164,14 +164,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->keepAudioPath->setMode(KFile::Directory);
     m_kttsmgrw->keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
 
-    // Register DCOP client.
-    DCOPClient *client = kapp->dcopClient();
-    if (!client->isRegistered())
-    {
-        client->attach();
-        client->registerAs(kapp->name());
-    }
-
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
 
@@ -252,7 +244,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text-to-Speech Manager", false);
 
     // See if KTTSD is already running, and if so, create jobs tab.
-    if (client->isApplicationRegistered("kttsd"))
+    if (kapp->dcopClient()->isApplicationRegistered("kttsd"))
         kttsdStarted();
     else
         // Start KTTSD if check box is checked.
@@ -1600,7 +1592,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
         {
             // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Starting KTTSD" << endl;
             QString error;
-            if (KApplication::startServiceByName("KTTSD", QStringList(), &error))
+            if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
             {
                 kdDebug() << "Starting KTTSD failed with message " << error << endl;
                 m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
