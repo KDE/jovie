@@ -21,7 +21,8 @@ Requirements
 KDE 3.2.x and a speech synthesis engine, such as Festival.  Festival can be
 obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival is
 distributed with most Linux distros.  Check your distro CDs.  Also works
-with Hadifax or any command that can speak text.
+with Hadifax or any command that can speak text, such as Festival Lite
+(flite).
 
 Building
 --------
@@ -48,6 +49,18 @@ You may need to grant Festival write access to the audio device.
 To configure the speech plugin for KTTSD
 
   kcmshell kcmkttsd
+  
+If using the Festival or Festival Interactive plugins, you'll need to
+specify the path to the voices.  On most systems, this will be
+
+  /usr/share/festival/voices
+  
+or
+
+  /usr/local/share/festival/voices
+
+Be sure to click the Default button after configuring a speech
+plugin!
 
 To run KTTSD
 
@@ -84,7 +97,23 @@ static library, which on my system, is version 1.42.  So I added the
 Festival (Interactive) plugin that interfaces with Festival interactively
 via pipes ("festival --interactive").  If someone can confirm or deny
 this, I'd be appreciative.. Gary Cramblitt <garycramblitt@comcast.net>.
-The Force Arts option does not currently work with Festival (Interactive)
-plugin.
 
 Festival (Client/Server), festivalcs, is not currently working.
+
+Using with Festival Lite (flite)
+--------------------------------
+Obtain Festival Lite here:
+
+  http://www.speech.cs.cmu.edu/flite/index.html
+  
+Build and install following the instructions in the README that comes
+with flite.
+
+Start KTTSD settings dialog
+
+  kcmshell kcmkttsd
+  
+Choose the Command plugin and enter the following as the command
+
+  flite -t "%t"
+
