@@ -448,7 +448,7 @@ void KCMKttsMgr::addLanguage(){
             addLanguage( m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()], m_kttsmgrw->plugInSelection->currentText());
         }
     } else {
-        KMessageBox::error(0, i18n("This language already has a plug in assigned. Please remove it before re-assigning it"), i18n("Language not valied"));
+        KMessageBox::error(0, i18n("This language already has a plugin assigned; please remove it before re-assigning it"), i18n("Language not valid"));
     }
 }
 
@@ -497,7 +497,7 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
     
         // kdDebug() << "Done" <<endl;
     } else {
-        KMessageBox::error(0, i18n("Speech syntheziser plug in library not found or corrupted"), i18n("Plug in not found"));
+        KMessageBox::error(0, i18n("Speech syntheziser plugin library not found or corrupted."), i18n("Plugin not found"));
     }
 }
 

@@ -73,7 +73,7 @@
                                 <cstring>languageSelection</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Select the language for which you want to use the speech synthetizer.</string>
+                                <string>Select the language for which you want to use the speech synthesizer.</string>
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
@@ -93,7 +93,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Select the language for which you want to use the speech synthetizer.</string>
+                                <string>Select the language for which you want to use the speech synthesizer.</string>
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
@@ -111,7 +111,7 @@
                                 <cstring>plugInSelection</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Select the speech synthetizer that you want to use with a language.</string>
+                                <string>Select the speech synthesizer that you want to use with a language.</string>
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
@@ -131,7 +131,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Select the speech synthetizer that you want to use with a language.</string>
+                                <string>Select the speech synthesizer that you want to use with a language.</string>
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
@@ -586,7 +586,7 @@
                                             <string></string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>This is the text spoken after the messages that interrupted a paragraph has been spoken.</string>
+                                            <string>This is the text spoken after the messages that interrupted a paragraph have been spoken.</string>
                                             <comment>What's this text</comment>
                                         </property>
                                     </widget>
