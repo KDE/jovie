@@ -21,6 +21,7 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = libkttsd_artsplugin.la
 
 libkttsd_artsplugin_la_SOURCES = \
+    artsplugin.cpp \
 	artsplayer.cpp
 libkttsd_artsplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) -no-undefined
 libkttsd_artsplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde

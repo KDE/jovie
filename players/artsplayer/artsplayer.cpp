@@ -40,14 +40,15 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-ArtsPlayer::ArtsPlayer() : Player(),
-                           m_dispatcher(0),
-                           m_server(0),
-                           m_factory(0),
-                           m_playobject(0),
-                           m_amanPlay(0),
-                           m_volumeControl(Arts::StereoVolumeControl::null()),
-                           m_currentVolume(1.0)
+ArtsPlayer::ArtsPlayer(QObject* parent, const char* name, const QStringList &args) : 
+    Player(parent, name, args),
+    m_dispatcher(0),
+    m_server(0),
+    m_factory(0),
+    m_playobject(0),
+    m_amanPlay(0),
+    m_volumeControl(Arts::StereoVolumeControl::null()),
+    m_currentVolume(1.0)
 {
     setupPlayer();
 }

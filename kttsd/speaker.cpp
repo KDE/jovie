@@ -1714,12 +1714,12 @@ Player* Speaker::createPlayerObject()
     {
         case 1 :
             {
-                plugInName = "kttsd_gstplugin";
+                plugInName = "KTTSD GStreamer Plugin";
                 break;
             }
         default:
             {
-                plugInName = "kttsd_artsplugin";
+                plugInName = "KTTSD Arts Plugin";
                 break;
             }
     }
@@ -1746,7 +1746,7 @@ Player* Speaker::createPlayerObject()
             return createPlayerObject();
         }
         else
-            kdDebug() << "Speaker::createPlayerObject: Could not load aRts plugin.  Is KDEDIRS set correctly?" << endl;
+            kdDebug() << "Speaker::createPlayerObject: Could not load aRts plugin.  Is KDEDIRS set  correctly?" << endl;
     } else
         // aRts player just ignores this.
         player->setSinkName(m_gstreamerSinkName);

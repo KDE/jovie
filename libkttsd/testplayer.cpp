@@ -132,12 +132,12 @@ Player* TestPlayer::createPlayerObject(int playerOption)
     {
         case 1 :
         {
-            plugInName = "kttsd_gstplugin";
+            plugInName = "KTTSD GStreamer Plugin";
             break;
         }
         default:
         {
-            plugInName = "kttsd_artsplugin";
+            plugInName = "KTTSD Arts Plugin";
             break;
         }
     }
@@ -152,10 +152,12 @@ Player* TestPlayer::createPlayerObject(int playerOption)
             player = 
                 KParts::ComponentFactory::createInstanceFromLibrary<Player>(
                     offers[0]->library(), this, offers[0]->library());
+        else
+            kdDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
     }
     if (player == 0)
         kdDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
-            " plugin.  Is KDEDIRS set correctly?" << endl;
+            ".  Is KDEDIRS set correctly?" << endl;
     else
         // aRts player just ignores this.
         player->setSinkName(m_sinkName);

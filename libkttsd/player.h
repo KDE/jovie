@@ -17,6 +17,7 @@
 #define PLAYER_H
 
 #include <qobject.h>
+#include <qstringlist.h>
 
 // #include "filehandle.h"
 
@@ -47,7 +48,8 @@ public:
     virtual void setSinkName(const QString &sinkName) = 0;
 
 protected:
-    Player() : QObject() {}
+    Player(QObject* parent = 0, const char* name = 0, const QStringList& args = QStringList()) :
+        QObject(parent, name) {}
 
 };
 

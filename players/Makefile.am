@@ -7,3 +7,4 @@ SUBDIRS = \
     artsplayer \
     $(gstplayer_DIR)
 
+kde_servicetypes_DATA = kttsd_audioplugin.desktop

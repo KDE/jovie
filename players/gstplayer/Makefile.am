@@ -20,6 +20,7 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = libkttsd_gstplugin.la
 
 libkttsd_gstplugin_la_SOURCES = \
+	gstplugin.cpp \
 	gstreamerplayer.cpp
 libkttsd_gstplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) $(LDFLAGS_GST) -no-undefined
 libkttsd_gstplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LDADD_GST)
