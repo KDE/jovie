@@ -107,14 +107,16 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     QToolTip::add(this, i18n("Text-to-Speech Manager"));
 
     int id;
-    // FIXME: Set icon for tray context menu top title.
-    // I'm not sure this won't break the app at this late date in KDE 3.4 freeze, so I'll leave
-    // this disabled for now.
-    // id = contextMenu()->idAt(0);
-    // if (id != -1) contextMenu()->changeTitle(id, icon, "KTTSMgr");
+    id = contextMenu()->idAt(0);
+    if (id != -1) contextMenu()->changeTitle(id, icon, "KTTSMgr");
 
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("stop", KIcon::Small),
+        i18n("&Hold"), this, SLOT(holdSelected()));
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("exec", KIcon::Small),
+        i18n("Resume"), this, SLOT(resumeSelected()));
+    id = contextMenu()->insertSeparator();
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
@@ -127,14 +129,13 @@ KttsMgrTray::~KttsMgrTray() { }
 
 void KttsMgrTray::speakClipboardSelected()
 {
-     DCOPClient *client = kapp->dcopClient();
-     if (!client->isApplicationRegistered("kttsd"))
-     {
-         QString error;
-         if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
-             kdError() << "Starting KTTSD failed with message " << error << endl;
-     }
-     speakClipboard();
+    if (!isKttsdRunning())
+    {
+        QString error;
+        if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
+            kdError() << "Starting KTTSD failed with message " << error << endl;
+    }
+    speakClipboard();
 }
 
 void KttsMgrTray::aboutSelected()
@@ -152,6 +153,30 @@ void KttsMgrTray::quitSelected()
 {
     kdDebug() << "Running KttsMgrTray::quitSelected" << endl;
     kapp->quit();
+}
+
+void KttsMgrTray::holdSelected()
+{
+    if (isKttsdRunning())
+    {
+        uint jobNum = getCurrentTextJob();
+        pauseText(jobNum);
+    }
+}
+
+void KttsMgrTray::resumeSelected()
+{
+    if (isKttsdRunning())
+    {
+        uint jobNum = getCurrentTextJob();
+        resumeText(jobNum);
+    }
+}
+
+bool KttsMgrTray::isKttsdRunning()
+{
+    DCOPClient *client = kapp->dcopClient();
+    return (client->isApplicationRegistered("kttsd"));
 }
 
 #include "kttsmgr.moc"

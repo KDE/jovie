@@ -18,18 +18,23 @@
 
 class KttsMgrTray: public KSystemTray, public KSpeech_stub
 {
-   Q_OBJECT
+    Q_OBJECT
 
-   public:
-       KttsMgrTray(QWidget *parent=0);
-       ~KttsMgrTray();
-       
-   private slots:
-   
-       void speakClipboardSelected();
-       void aboutSelected();
-       void helpSelected();
-       void quitSelected();
+    public:
+        KttsMgrTray(QWidget *parent=0);
+        ~KttsMgrTray();
+
+    private slots:
+
+        void speakClipboardSelected();
+        void holdSelected();
+        void resumeSelected();
+        void aboutSelected();
+        void helpSelected();
+        void quitSelected();
+
+    private:
+        bool isKttsdRunning();
 };
 
 #endif    // KTTSMGR_H
