@@ -1,3 +1,7 @@
+2004-12-01  Gary Cramblitt (PhantomsDad)
+        * Some code reorganization.  New TalkerCode object in libkttsd.
+        * Better Talker selection dialog when changing Talker in Jobs tab.
+
 2004-11-29  Gary Cramblitt (PhantomsDad)
         * When clicking Test button, now honors users output method (arts or gstreamer) and
           overall Audio Speed setting.

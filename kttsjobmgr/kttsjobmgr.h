@@ -1,20 +1,28 @@
-//
-// C++ Interface: kttsjobmgr
-//
-// Description: 
-//
-//
-// Author: Gary Cramblitt <garycramblitt@comcast.net>, (C) 2004
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/***************************************************** vim:set ts=4 sw=4 sts=4:
+  A KPart to display running jobs in KTTSD and permit user to stop, rewind,
+  advance, change Talker, etc. 
+  -------------------
+  Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  -------------------
+  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+ ******************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _KTTSJOBMGRPART_H_
 #define _KTTSJOBMGRPART_H_
 
+// KDE includes.
 #include <kparts/browserextension.h>
 #include <klibloader.h>
 
+// KTTS includes.
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
@@ -199,6 +207,19 @@ private:
     };
 
     /**
+    * Columns in the listview when selecting a talker.
+    */
+    enum TalkerListViewColumn
+    {
+        tlvcLanguage,
+        tlvcSynthName,
+        tlvcVoice,
+        tlvcGender,
+        tlvcVolume,
+        tlvcRate,
+    };
+
+    /**
     * Convert a KTTSD job state integer into a display string.
     * @param state          KTTSD job state
     * @return               Display string for the state.
@@ -296,6 +317,13 @@ private:
     * @return              Talker ID.
     */
     QString cachedTalkerCodeToTalkerID(const QString& talkerCode);
+
+    /**
+    * Given a talker listview item and a talker code, sets the columns of the item.
+    * @param talkerItem       QListViewItem.
+    * @param talkerCode       Talker Code.
+    */
+    void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
 
     /**
     * Job List View

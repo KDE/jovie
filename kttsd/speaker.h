@@ -32,6 +32,7 @@
 #include <speechdata.h>
 #include <pluginproc.h>
 #include <stretcher.h>
+#include <talkercode.h>
 
 #if SUPPORT_SSML
 #include <ssmlconvert.h>
@@ -102,26 +103,13 @@ struct Utt{
 };
 
 /**
- * Structure containing information from a Talker Code parsed into individual attributes.
- */
-struct ParsedTalkerCode{
-    QString languageCode;       /* lang="xx" */
-    QString countryCode;        /* lang="yy_xx */
-    QString voice;              /* name="xxx" */
-    QString gender;             /* gender="xxx" */
-    QString volume;             /* volume="xxx" */
-    QString rate;               /* rate="xxx" */
-    QString plugInName;         /* synthesizer="xxx" */
-};
-
-/**
  * Structure containing information for a talker (plugin).
  */
 struct TalkerInfo{
     PlugInProc* plugIn;                  /* Instance of the plugin, i.e., the Talker. */
     QString talkerID;                    /* ID of the talker. */
     QString talkerCode;                  /* The Talker's Talker Code in XML format. */
-    ParsedTalkerCode parsedTalkerCode;   /* The Talker's Talker Code parsed into individual attributes. */
+    TalkerCode parsedTalkerCode;         /* The Talker's Talker Code parsed into individual attributes. */
 };
 
 /**
@@ -446,21 +434,6 @@ class Speaker : public QObject{
         void slotTimeout();
 
     private:
-        /**
-        * Given a talker code, normalizes it into a standard form.
-        * @param talkerCode      Unnormalized talker code.
-        * @return                Normalized talker code.
-        */
-        QString normalizeTalkerCode(const QString &talkerCode);
-
-        /**
-        * Given a talker code, parses out the attributes.
-        * @param talkerCode       The talker code.
-        * @return                 The attributes of the talker code parsed into
-        *                         individual fields.
-        */
-        ParsedTalkerCode parseTalkerCode(const QString &talkerCode);
-
         /**
         * Given a talker code, returns pointer to the closest matching plugin.
         * @param talker          The talker (language) code.

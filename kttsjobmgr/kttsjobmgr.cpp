@@ -1,14 +1,19 @@
-//
-// C++ Implementation: kttsjobmgr
-//
-// Description: 
-//
-//
-// Author: Gary Cramblitt <garycramblitt@comcast.net>, (C) 2004
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/***************************************************** vim:set ts=4 sw=4 sts=4:
+  A KPart to display running jobs in KTTSD and permit user to stop, rewind,
+  advance, change Talker, etc. 
+  -------------------
+  Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  -------------------
+  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+ ******************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ ***************************************************************************/
 
 // QT includes.
 #include <qdockarea.h>
@@ -33,6 +38,8 @@
 
 // KTTS includes.
 #include "kspeech.h"
+#include "talkercode.h"
+#include "selecttalkerwidget.h"
 #include "kttsjobmgr.h"
 #include "kttsjobmgr.moc"
 
@@ -99,10 +106,10 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     
     // Create a QVBox to host everything.
     QVBox* vBox = new QVBox(parent);
-    
+
     // Create a QDockArea to host the toolbar.
     QDockArea* toolBarDockArea = new QDockArea(Qt::Horizontal, QDockArea::Normal, vBox, "jobmgr_toolbar_dockarea");
-    
+
     // Create three KToolBars.
     m_toolBar1 = new KToolBar(vBox, "jobmgr_toolbar1");
     m_toolBar1->setIconText(KToolBar::IconTextRight);
@@ -120,7 +127,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     m_toolBar3->setTitle(i18n("Text-to-Speech Job Manager Toolbar"));
     m_toolBar3->setMovingEnabled(true);
     m_toolBar3->setResizeEnabled(true);
-    
+
     // Add the toolbars to the QDockArea.
     toolBarDockArea->setAcceptDockWindow(m_toolBar1, true);
     toolBarDockArea->moveDockWindow(m_toolBar1);
@@ -128,11 +135,11 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     toolBarDockArea->moveDockWindow(m_toolBar2);
     toolBarDockArea->setAcceptDockWindow(m_toolBar3, true);
     toolBarDockArea->moveDockWindow(m_toolBar3);
-    
+
     // Create a splitter to contain the Job List View and the current sentence.
     QSplitter* splitter = new QSplitter(vBox);
     splitter->setOrientation(QSplitter::Vertical);
-    
+
     // Create Job List View widget.
     m_jobListView = new KListView(splitter, "joblistview");
     m_jobListView->setSelectionModeExt(KListView::Single);
@@ -144,32 +151,32 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     m_jobListView->addColumn(i18n("Sentences"));
     m_jobListView->addColumn(i18n("Part Num"));
     m_jobListView->addColumn(i18n("Parts"));
-    
+
     // Do not sort the list.
     m_jobListView->setSorting(-1);
-    
+
     // Splitter to resize Job ListView to minimum height.
     splitter->setResizeMode(m_jobListView, QSplitter::Stretch);
-    
+
     // Create a VBox for the current sentence and sentence label.
     QVBox* sentenceVBox = new QVBox(splitter);
-    
+
     // Create a label for current sentence.
     QLabel* currentSentenceLabel = new QLabel(sentenceVBox);
     currentSentenceLabel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
     currentSentenceLabel->setText(i18n("Current Sentence"));
-    
+
     // Create a box to contain the current sentence.
     m_currentSentence = new QLabel(sentenceVBox);
     m_currentSentence->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_currentSentence->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::WordBreak);
-    
+
     // Set the main widget for the part.
     setWidget(vBox);
-    
+
     // Set up toolbar buttons.
     setupActions();
-    
+
     connect(m_jobListView, SIGNAL(selectionChanged(QListViewItem* )),
         this, SLOT(slot_selectionChanged(QListViewItem* )));
 
@@ -177,7 +184,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     refreshJobListView();
     // Select first item (if any).
     autoSelectInJobListView();
-    
+
     // Connect DCOP Signals emitted by KTTSD to our own DCOP methods.
     connectDCOPSignal("kttsd", "kspeech",
         "kttsdStarted()",
@@ -223,7 +230,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
         "textRemoved(QCString,uint)",
         "textRemoved(QCString,uint)",
         false);
-            
+
     m_extension = new KttsJobMgrBrowserExtension(this);
 
     m_jobListView->show();
@@ -250,14 +257,14 @@ bool KttsJobMgrPart::closeURL()
 void KttsJobMgrPart::setupActions()
 {
 //    setXMLFile("kttsjobmgrui.rc");
-    
+
     KAction* act;
-    
+
     // All the buttons with "job_" at start of their names will be enabled/disabled when a job is
     // selected in the Job List View.
     // All the buttons with "part_" at the start of their names will be enabled/disabled when a
     // job is selected in the Job List View that has multiple parts.
-    
+
     act = new KAction(i18n("&Hold"),
         KGlobal::iconLoader()->loadIconSet("stop", KIcon::Toolbar, 0, true),
         0, this, SLOT(slot_job_hold()), actionCollection(), "job_hold");
@@ -299,7 +306,7 @@ void KttsJobMgrPart::setupActions()
         KGlobal::iconLoader()->loadIconSet("2rightarrow", KIcon::Toolbar, 0, true),
         0, this, SLOT(slot_job_next_par()), actionCollection(), "part_next_par");
     act->plug(m_toolBar2);
-    
+
     act = new KAction(i18n("Speak Clipboard"),
         KGlobal::iconLoader()->loadIconSet("klipper", KIcon::Toolbar, 0, true),
         0, this, SLOT(slot_speak_clipboard()), actionCollection(), "speak_clipboard");
@@ -312,7 +319,7 @@ void KttsJobMgrPart::setupActions()
         KGlobal::iconLoader()->loadIconSet("reload_page", KIcon::Toolbar, 0, true),
         0, this, SLOT(slot_refresh()), actionCollection(), "refresh");
     act->plug(m_toolBar3);
-    
+
     // Disable job buttons until a job is selected.
 //    stateChanged("no_job_selected");
     enableJobActions(false);
@@ -544,28 +551,54 @@ void KttsJobMgrPart::slot_job_change_talker()
     if (jobNum)
     {
         QStringList talkerCodesList = getTalkers();
-        QStringList displayNameList;
-        QMap<QString,QString> displayNamesToTalkerCodes;
-        unsigned int talkerCodesListCount = talkerCodesList.count();
-        for (unsigned int index = 0; index < talkerCodesListCount; ++index)
+        // Create SelectTalker widget.
+        SelectTalkerWidget* stw = new SelectTalkerWidget();
+        stw->talkersList->setSelectionMode(QListView::Single);
+        // A list of the items in the listview.
+        QValueList<QListViewItem*> talkersListItems;
+        QListViewItem* talkerItem;
+        // Fill rows and columns.
+        uint talkerCodesListCount = talkerCodesList.count();
+        for (uint index = 0; index < talkerCodesListCount; index++)
         {
-            QString displayName = talkerCodeToDisplayName(talkerCodesList[index]);
-            displayNameList.append(displayName);
-            displayNamesToTalkerCodes[displayName] = talkerCodesList[index];
+            QString code = talkerCodesList[index];
+            TalkerCode parsedTalkerCode(code);
+            QString language = parsedTalkerCode.languageCode();
+            QString synthName = parsedTalkerCode.plugInName();
+            if (talkerItem)
+                talkerItem =
+                    new KListViewItem(stw->talkersList, talkerItem, language, synthName);
+            else
+                talkerItem =
+                    new KListViewItem(stw->talkersList, language, synthName);
+            updateTalkerItem(talkerItem, code);
+            talkersListItems.append(talkerItem);
         }
-        bool okClicked = false;
-        QString newTalker = KInputDialog::getItem(
+        // Display the listview in a dialog.
+        KDialogBase* dlg = new KDialogBase(
+            KDialogBase::Swallow,
             i18n("Select Talker"),
-            i18n("Talker"),
-            displayNameList,
-            0,
-            false,
-            &okClicked);
-        if (okClicked)
+            KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
+            KDialogBase::Cancel,
+            this->widget(),
+            "selectTalker_dlg",
+            true,
+            true);
+        dlg->setInitialSize(QSize(700, 300), false);
+        dlg->setMainWidget(stw);
+        // dlg->setHelp("configure-plugin", "kttsd");
+        if (dlg->exec() == QDialog::Accepted)
         {
-            changeTextTalker(jobNum, displayNamesToTalkerCodes[newTalker]);
-            refreshJob(jobNum);
+            talkerItem = stw->talkersList->selectedItem();
+            if (talkerItem)
+            {
+                uint index = talkersListItems.findIndex(talkerItem);
+                changeTextTalker(jobNum, talkerCodesList[index]);
+                refreshJob(jobNum);
+            }
         }
+        delete stw;
+        delete dlg;
     }
 }
 
@@ -576,7 +609,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
 
     // Copy text from the clipboard.
     QString text = cb->text();
-    
+
     // Speak it.
     if ( !text.isNull() ) 
     {
@@ -661,7 +694,7 @@ int KttsJobMgrPart::getCurrentJobPartCount()
     }
     return partCount;
 }
-    
+
 /**
 * Given a Job Number, returns the Job List View item containing the job.
 * @param jobNum         Job Number.
@@ -706,7 +739,7 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
         item->setText(jlvcPartCount, QString::number(partCount));
     }
 }
-    
+
 /**
 * Fill the Job List View.
 */
@@ -754,7 +787,7 @@ void KttsJobMgrPart::refreshJobListView()
                 QString::number(partNum), QString::number(partCount));
     }
 }
-    
+
 /**
 * If nothing selected in Job List View and list not empty, select top item.
 * If nothing selected and list is empty, disable job buttons on toolbar.
@@ -792,6 +825,36 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
         m_talkerCodesToTalkerIDs[talkerCode] = talkerID;
         return talkerID;
     }
+}
+
+/**
+ * Given an item in the talker listview and a talker code, sets the columns of the item.
+ * @param talkerItem       QListViewItem.
+ * @param talkerCode       Talker Code.
+ */
+void KttsJobMgrPart::updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode)
+{
+    TalkerCode parsedTalkerCode(talkerCode);
+    QString fullLanguageCode = parsedTalkerCode.fullLanguageCode();
+    if (!fullLanguageCode.isEmpty())
+    {
+        QString language = parsedTalkerCode.languageCodeToLanguage(fullLanguageCode);
+        if (!language.isEmpty())
+        {
+            talkerItem->setText(tlvcLanguage, language);
+        }
+    }
+    // Don't update the Synthesizer name with plugInName.  The former is a translated
+    // name; the latter an English name.
+    // if (!plugInName.isEmpty()) talkerItem->setText(tlvcSynthName, plugInName);
+    if (!parsedTalkerCode.voice().isEmpty())
+        talkerItem->setText(tlvcVoice, parsedTalkerCode.voice());
+    if (!parsedTalkerCode.gender().isEmpty())
+        talkerItem->setText(tlvcGender, translatedGender(parsedTalkerCode.gender()));
+    if (!parsedTalkerCode.volume().isEmpty())
+        talkerItem->setText(tlvcVolume, translatedVolume(parsedTalkerCode.volume()));
+    if (!parsedTalkerCode.rate().isEmpty())
+        talkerItem->setText(tlvcRate, translatedRate(parsedTalkerCode.rate()));
 }
 
 /**

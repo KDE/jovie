@@ -180,7 +180,8 @@ int Speaker::loadPlugIns(){
             QString talkerCode = m_speechData->config->readEntry("TalkerCode", QString::null);
 
             // Normalize the talker code.
-            talkerCode = normalizeTalkerCode(talkerCode);
+            QString fullLanguageCode;
+            talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
 
             // Query for all the KTTSD SynthPlugins and store the list in offers
             KTrader::OfferList offers = KTrader::self()->query(
@@ -206,7 +207,7 @@ int Speaker::loadPlugIns(){
                         TalkerInfo talkerInfo;
                         talkerInfo.talkerID = talkerID;
                         talkerInfo.talkerCode = talkerCode;
-                        talkerInfo.parsedTalkerCode = parseTalkerCode(talkerCode);
+                        talkerInfo.parsedTalkerCode = TalkerCode(talkerCode);
                         if (speech->supportsAsync())
                         {
                             speech->init(m_speechData->config, "Talker_" + talkerID);
@@ -969,71 +970,6 @@ void Speaker::pauseUtteranceByJobNum(const uint jobNum)
 }
 
 /**
-* Given a talker code, normalizes it into a standard form.
-* @param talkerCode      Unnormalized talker code.
-* @return                Normalized talker code.
-*
-* Note: The unnormalized talker code is assumed to have every attribute.
-*/
-QString Speaker::normalizeTalkerCode(const QString &talkerCode)
-{
-    ParsedTalkerCode parsedTalkerCode = parseTalkerCode(talkerCode);
-    QString languageCode = parsedTalkerCode.languageCode;
-    if (!parsedTalkerCode.countryCode.isEmpty()) languageCode += "_" + parsedTalkerCode.countryCode;
-    if (parsedTalkerCode.voice.isEmpty()) parsedTalkerCode.voice = "fixed";
-    if (parsedTalkerCode.gender.isEmpty()) parsedTalkerCode.gender = "neutral";
-    if (parsedTalkerCode.volume.isEmpty()) parsedTalkerCode.volume = "medium";
-    if (parsedTalkerCode.rate.isEmpty()) parsedTalkerCode.rate = "medium";
-    QString normalTalkerCode = QString(
-        "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
-        "<prosody volume=\"%4\" rate=\"%5\" />"
-        "<kttsd synthesizer=\"%6\" />")
-            .arg(languageCode)
-            .arg(parsedTalkerCode.voice)
-            .arg(parsedTalkerCode.gender)
-            .arg(parsedTalkerCode.volume)
-            .arg(parsedTalkerCode.rate)
-            .arg(parsedTalkerCode.plugInName);
-    return normalTalkerCode;
-}
-
-/**
- * Given a talker code, parses out the attributes.
- * @param talkerCode       The talker code.
- * @return                 The attributes of the talker code parsed into
- *                         individual fields.
- */
-ParsedTalkerCode Speaker::parseTalkerCode(const QString &talkerCode)
-{
-    ParsedTalkerCode parsedTalkerCode;
-    QString language = talkerCode.section("lang=", 1, 1);
-    if (language.isEmpty())
-        language = talkerCode;
-    else
-        language = language.section('"', 1, 1);
-    QString languageCode;
-    QString countryCode;
-    QString charSet;
-    QString lang = language;
-    if (lang.left(1) == "*") lang = lang.mid(1);
-    KGlobal::locale()->splitLocale(lang, languageCode, countryCode, charSet);
-    parsedTalkerCode.languageCode = languageCode;
-    if (language.left(1) == "*") countryCode = "*" + countryCode;
-    parsedTalkerCode.countryCode = countryCode;
-    parsedTalkerCode.voice = talkerCode.section("name=", 1, 1);
-    parsedTalkerCode.voice = parsedTalkerCode.voice.section('"', 1, 1);
-    parsedTalkerCode.gender = talkerCode.section("gender=", 1, 1);
-    parsedTalkerCode.gender = parsedTalkerCode.gender.section('"', 1, 1);
-    parsedTalkerCode.volume = talkerCode.section("volume=", 1, 1);
-    parsedTalkerCode.volume = parsedTalkerCode.volume.section('"', 1, 1);
-    parsedTalkerCode.rate = talkerCode.section("rate=", 1, 1);
-    parsedTalkerCode.rate = parsedTalkerCode.rate.section('"', 1, 1);
-    parsedTalkerCode.plugInName = talkerCode.section("synthesizer=", 1, 1);
-    parsedTalkerCode.plugInName = parsedTalkerCode.plugInName.section('"', 1, 1);
-    return parsedTalkerCode;
-}
-
-/**
 * Given a talker code, returns pointer to the closest matching plugin.
 * @param talker          The talker (language) code.
 * @return                Index to m_loadedPlugins array of Talkers.
@@ -1050,10 +986,10 @@ int Speaker::talkerToPluginIndex(const QString& talker)
     else
     {
         // Parse the given talker.
-        ParsedTalkerCode parsedTalkerCode = parseTalkerCode(talker);
+        TalkerCode parsedTalkerCode(talker);
         // If no language code specified, use the language code of the default plugin.
-        if (parsedTalkerCode.languageCode.isEmpty()) parsedTalkerCode.languageCode =
-            m_loadedPlugIns[0].parsedTalkerCode.languageCode;
+        if (parsedTalkerCode.languageCode().isEmpty()) parsedTalkerCode.setLanguageCode(
+            m_loadedPlugIns[0].parsedTalkerCode.languageCode());
         // TODO: If there are no talkers configured in the language, %KTTSD will attempt
         //       to automatically configure one (see automatic configuraton discussion below)
         // The talker that matches on the most priority attributes wins.
@@ -1062,28 +998,30 @@ int Speaker::talkerToPluginIndex(const QString& talker)
         for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
         {
             priorityMatch[ndx] = 0;
-            if (parsedTalkerCode.languageCode == m_loadedPlugIns[ndx].parsedTalkerCode.languageCode)
+            if (parsedTalkerCode.languageCode() == m_loadedPlugIns[ndx].parsedTalkerCode.languageCode())
             {
                 priorityMatch[ndx]++;
                 // kdDebug() << "Speaker::talkerToPluginIndex: Match on language " << parsedTalkerCode.languageCode << endl;
             }
-            if (parsedTalkerCode.countryCode.left(1) == "*")
-                if (parsedTalkerCode.countryCode.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.countryCode)
+            if (parsedTalkerCode.countryCode().left(1) == "*")
+                if (parsedTalkerCode.countryCode().mid(1) ==
+                    m_loadedPlugIns[ndx].parsedTalkerCode.countryCode())
                     priorityMatch[ndx]++;
-            if (parsedTalkerCode.voice.left(1) == "*")
-                if (parsedTalkerCode.voice.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.voice)
+            if (parsedTalkerCode.voice().left(1) == "*")
+                if (parsedTalkerCode.voice().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.voice())
                     priorityMatch[ndx]++;
-            if (parsedTalkerCode.gender.left(1) == "*")
-                if (parsedTalkerCode.gender.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.gender)
+            if (parsedTalkerCode.gender().left(1) == "*")
+                if (parsedTalkerCode.gender().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.gender())
                     priorityMatch[ndx]++;
-            if (parsedTalkerCode.volume.left(1) == "*")
-                if (parsedTalkerCode.volume.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.volume)
+            if (parsedTalkerCode.volume().left(1) == "*")
+                if (parsedTalkerCode.volume().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.volume())
                     priorityMatch[ndx]++;
-            if (parsedTalkerCode.rate.left(1) == "*")
-                if (parsedTalkerCode.rate.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.rate)
+            if (parsedTalkerCode.rate().left(1) == "*")
+                if (parsedTalkerCode.rate().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.rate())
                     priorityMatch[ndx]++;
-            if (parsedTalkerCode.plugInName.left(1) == "*")
-                if (parsedTalkerCode.plugInName.mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.plugInName)
+            if (parsedTalkerCode.plugInName().left(1) == "*")
+                if (parsedTalkerCode.plugInName().mid(1) ==
+                    m_loadedPlugIns[ndx].parsedTalkerCode.plugInName())
                     priorityMatch[ndx]++;
         }
         int maxPriority = -1;
@@ -1113,23 +1051,24 @@ int Speaker::talkerToPluginIndex(const QString& talker)
                 preferredMatch[ndx] = 0;
                 if (priorityMatch[ndx] == maxPriority)
                 {
-                    if (parsedTalkerCode.countryCode.left(1) != "*")
-                        if (parsedTalkerCode.countryCode == m_loadedPlugIns[ndx].parsedTalkerCode.countryCode)
+                    if (parsedTalkerCode.countryCode().left(1) != "*")
+                        if (parsedTalkerCode.countryCode() == m_loadedPlugIns[ndx].parsedTalkerCode.countryCode())
                             preferredMatch[ndx]++;
-                    if (parsedTalkerCode.voice.left(1) != "*")
-                        if (parsedTalkerCode.voice == m_loadedPlugIns[ndx].parsedTalkerCode.voice)
+                    if (parsedTalkerCode.voice().left(1) != "*")
+                        if (parsedTalkerCode.voice() == m_loadedPlugIns[ndx].parsedTalkerCode.voice())
                             preferredMatch[ndx]++;
-                    if (parsedTalkerCode.gender.left(1) != "*")
-                        if (parsedTalkerCode.gender == m_loadedPlugIns[ndx].parsedTalkerCode.gender)
+                    if (parsedTalkerCode.gender().left(1) != "*")
+                        if (parsedTalkerCode.gender() == m_loadedPlugIns[ndx].parsedTalkerCode.gender())
                             preferredMatch[ndx]++;
-                    if (parsedTalkerCode.volume.left(1) != "*")
-                        if (parsedTalkerCode.volume == m_loadedPlugIns[ndx].parsedTalkerCode.volume)
+                    if (parsedTalkerCode.volume().left(1) != "*")
+                        if (parsedTalkerCode.volume() == m_loadedPlugIns[ndx].parsedTalkerCode.volume())
                             preferredMatch[ndx]++;
-                    if (parsedTalkerCode.rate.left(1) != "*")
-                        if (parsedTalkerCode.rate == m_loadedPlugIns[ndx].parsedTalkerCode.rate)
+                    if (parsedTalkerCode.rate().left(1) != "*")
+                        if (parsedTalkerCode.rate() == m_loadedPlugIns[ndx].parsedTalkerCode.rate())
                             preferredMatch[ndx]++;
-                    if (parsedTalkerCode.plugInName.left(1) != "*")
-                        if (parsedTalkerCode.plugInName == m_loadedPlugIns[ndx].parsedTalkerCode.plugInName)
+                    if (parsedTalkerCode.plugInName().left(1) != "*")
+                        if (parsedTalkerCode.plugInName() ==
+                            m_loadedPlugIns[ndx].parsedTalkerCode.plugInName())
                             preferredMatch[ndx]++;
                 }
             }

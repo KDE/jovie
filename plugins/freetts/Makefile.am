@@ -1,12 +1,12 @@
 INCLUDES = \
-				-I$(top_srcdir)/kttsd/libkttsd \
-        -I$(kde_includes)/arts \
-        $(all_includes)
+	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	-I$(kde_includes)/arts \
+	$(all_includes)
 
 AM_CPPFLAGS = \
-        -I$(top_srcdir)/kttsd/libkttsd \
-        -I$(kde_includes)/arts \
-        $(all_includes)
+	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	-I$(kde_includes)/arts \
+	$(all_includes)
 
 METASOURCES = AUTO
 

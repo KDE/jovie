@@ -1,4 +1,6 @@
-INCLUDES = -I$(top_srcdir)/kttsd/libkttsd -I$(FESTIVAL_INCDIR) -I$(SPEECH_TOOLS_INCDIR) $(all_includes)
+INCLUDES = \
+	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	-I$(FESTIVAL_INCDIR) -I$(SPEECH_TOOLS_INCDIR) $(all_includes)
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_festivalplugin.la

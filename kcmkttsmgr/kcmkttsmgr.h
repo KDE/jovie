@@ -5,7 +5,7 @@
   Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: 2004 by Gary Cramblitt <garycramblitt@comcast.net>
  ******************************************************************************/
 
 /***************************************************************************
@@ -159,32 +159,6 @@ class KCMKttsMgr :
         int sliderToPercent(int sliderValue);
 
         /**
-        * Given a talker code, normalizes it into a standard form and returns language code.
-        * @param talkerCode      Unnormalized talker code.
-        * @param languageCode    Parsed language code.
-        * @return                Normalized talker code.
-        */
-        QString normalizeTalkerCode(const QString &talkerCode, QString &languageCode);
-
-        /**
-        * Given a talker code, parses out the attributes.
-        * @param talkerCode       The talker code.
-        * @return languageCode    Language Code.
-        * @return voice           Voice name.
-        * @return gender          Gender.
-        * @return volume          Volume.
-        * @return rate            Rate.
-        * @return plugInName      Name of Synthesizer plugin.
-        */
-        void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
-            QString &languageCode,
-            QString &voice,
-            QString &gender,
-            QString &volume,
-            QString &rate,
-            QString &plugInName);
-
-        /**
         * Given a language code and plugin name, returns a normalized default talker code.
         * @param languageCode     Language code.
         * @param plugInName       Name of the plugin.
@@ -211,11 +185,6 @@ class KCMKttsMgr :
         *                         Example, "Festival Interactivo".
         */
         PlugInConf *loadPlugin(const QString &synthName);
-
-        /**
-        * Converts a language code plus optional country code to language description.
-        */
-        QString languageCodeToLanguage(const QString &languageCode);
 
         /**
          * Display the Talker Configuration Dialog.

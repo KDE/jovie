@@ -1,4 +1,6 @@
-INCLUDES = -I$(top_srcdir)/kttsd/libkttsd $(all_includes)
+INCLUDES = \
+	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	$(all_includes)
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkttsd_festivalcsplugin.la

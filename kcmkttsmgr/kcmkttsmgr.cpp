@@ -49,11 +49,14 @@
 #include <kcombobox.h>
 
 // KTTS includes.
-#include "kcmkttsmgr.moc"
-#include "kcmkttsmgr.h"
+#include "talkercode.h"
 #include "pluginconf.h"
 #include "testplayer.h"
 #include "gstreamerplayer.h"
+
+// KCMKttsMgr includes.
+#include "kcmkttsmgr.h"
+#include "kcmkttsmgr.moc"
 
 // Some constants.
 // Defaults set when clicking Defaults button.
@@ -284,9 +287,9 @@ void KCMKttsMgr::load()
             // kdDebug() << "KCMKttsMgr::load: talkerID = " << talkerID << endl;
             m_config->setGroup(QString("Talker_") + talkerID);
             QString talkerCode = m_config->readEntry("TalkerCode");
-            QString languageCode;
-            talkerCode = normalizeTalkerCode(talkerCode, languageCode);
-            QString language = languageCodeToLanguage(languageCode);
+            QString fullLanguageCode;
+            talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
+            QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
             QString synthName = m_config->readEntry("PlugIn", "");
             // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
             if (talkerItem)
@@ -296,7 +299,7 @@ void KCMKttsMgr::load()
                 talkerItem =
                     new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, synthName);
             updateTalkerItem(talkerItem, talkerCode);
-            m_languagesToCodes[language] = languageCode;
+            m_languagesToCodes[language] = fullLanguageCode;
             if (talkerID.toInt() > m_lastTalkerID) m_lastTalkerID = talkerID.toInt();
         }
     }
@@ -313,7 +316,7 @@ void KCMKttsMgr::load()
         QStringList::ConstIterator endLanguages(languageCodes.constEnd());
         for( QStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
         {
-            QString language = languageCodeToLanguage(*it);
+            QString language = TalkerCode::languageCodeToLanguage(*it);
             m_languagesToCodes[language] = *it;
         }
 
@@ -352,27 +355,6 @@ void KCMKttsMgr::load()
     // Update controls based on new states.
     updateTalkerButtons();
     slotGstreamerRadioButton_toggled(m_kttsmgrw->gstreamerRadioButton->isChecked());
-}
-
-/**
-* Converts a language code plus optional country code to language description.
-*/
-QString KCMKttsMgr::languageCodeToLanguage(const QString &languageCode)
-{
-    QString twoAlpha;
-    QString countryCode;
-    QString charSet;
-    QString language;
-    if (languageCode == "other")
-        language = i18n("Other");
-    else
-    {
-        KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
-        language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
-    }
-    if (!countryCode.isEmpty())
-        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ")";
-    return language;
 }
 
 /**
@@ -649,91 +631,6 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 }
 
 /**
-* Given a talker code, normalizes it into a standard form, and extracts language code.
-* @param talkerCode      Unnormalized talker code.
-* @param languageCode    Parsed language code.
-* @return                Normalized talker code.
-*/
-QString KCMKttsMgr::normalizeTalkerCode(const QString &talkerCode, QString& languageCode)
-{
-    QString voice;
-    QString gender;
-    QString volume;
-    QString rate;
-    QString plugInName;
-    parseTalkerCode(talkerCode, languageCode, voice, gender, volume, rate, plugInName);
-    if (voice.isEmpty()) voice = "fixed";
-    if (gender.isEmpty()) gender = "neutral";
-    if (volume.isEmpty()) volume = "medium";
-    if (rate.isEmpty()) rate = "medium";
-    QString normalTalkerCode = QString(
-        "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
-        "<prosody volume=\"%4\" rate=\"%5\" />"
-        "<kttsd synthesizer=\"%6\" />")
-        .arg(languageCode)
-        .arg(voice)
-        .arg(gender)
-        .arg(volume)
-        .arg(rate)
-        .arg(plugInName);
-    return normalTalkerCode;
-}
-
-/**
-* Given a talker code, parses out the attributes.
-* @param talkerCode       The talker code.
-* @return languageCode    Language Code.
-* @return voice           Voice name.
-* @return gender          Gender.
-* @return volume          Volume.
-* @return rate            Rate.
-* @return plugInName      Name of Synthesizer.
-*/
-void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
-    QString &languageCode,
-    QString &voice,
-    QString &gender,
-    QString &volume,
-    QString &rate,
-    QString &plugInName)
-{
-    languageCode = talkerCode.section("lang=", 1, 1);
-    languageCode = languageCode.section('"', 1, 1);
-    voice = talkerCode.section("name=", 1, 1);
-    voice = voice.section('"', 1, 1);
-    gender = talkerCode.section("gender=", 1, 1);
-    gender = gender.section('"', 1, 1);
-    volume = talkerCode.section("volume=", 1, 1);
-    volume = volume.section('"', 1, 1);
-    rate = talkerCode.section("rate=", 1, 1);
-    rate = rate.section('"', 1, 1);
-    plugInName = talkerCode.section("synthesizer=", 1, 1);
-    plugInName = plugInName.section('"', 1, 1);
-}
-
-/**
-* Given a language code and plugin name, returns a normalized default talker code.
-* @param languageCode     Language code.
-* @param plugInName       Name of the Synthesizer plugin.
-* @return                 Full normalized talker code.
-*
-* Example returned from defaultTalkerCode("en", "Festival")
-*   <voice lang="en" name="fixed" gender="neutral"/>
-*   <prosody volume="medium" rate="medium"/>
-*   <kttsd synthesizer="Festival" />
-*/
-QString KCMKttsMgr::defaultTalkerCode(const QString &languageCode, const QString &plugInName)
-{
-    QString talkerCode = QString(
-        "<voice lang=\"%1\" name=\"fixed\" gender=\"neutral\" />"
-        "<prosody volume=\"medium\" rate=\"medium\" />"
-        "<kttsd synthesizer=\"%1\" />")
-        .arg(languageCode)
-        .arg(plugInName);
-    return talkerCode;
-}
-
-/**
 * Loads the configuration plug in for a named plug in.
 */
 PlugInConf *KCMKttsMgr::loadPlugin(const QString &synthName)
@@ -814,29 +711,28 @@ QString KCMKttsMgr::translatedRate(const QString &rate)
 */
 void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode)
 {
-    QString languageCode;
-    QString voice;
-    QString gender;
-    QString volume;
-    QString rate;
-    QString plugInName;
-    parseTalkerCode(talkerCode, languageCode, voice, gender, volume, rate, plugInName);
-    if (!languageCode.isEmpty())
+    TalkerCode parsedTalkerCode(talkerCode);
+    QString fullLanguageCode = parsedTalkerCode.fullLanguageCode();
+    if (!fullLanguageCode.isEmpty())
     {
-        QString language = languageCodeToLanguage(languageCode);
+        QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
         if (!language.isEmpty())
         {
-            m_languagesToCodes[language] = languageCode;
+            m_languagesToCodes[language] = fullLanguageCode;
             talkerItem->setText(tlvcLanguage, language);
         }
     }
     // Don't update the Synthesizer name with plugInName.  The former is a translated
     // name; the latter an English name.
     // if (!plugInName.isEmpty()) talkerItem->setText(tlvcSynthName, plugInName);
-    if (!voice.isEmpty()) talkerItem->setText(tlvcVoice, voice);
-    if (!gender.isEmpty()) talkerItem->setText(tlvcGender, translatedGender(gender));
-    if (!volume.isEmpty()) talkerItem->setText(tlvcVolume, translatedVolume(volume));
-    if (!rate.isEmpty()) talkerItem->setText(tlvcRate, translatedRate(rate));
+    if (!parsedTalkerCode.voice().isEmpty())
+        talkerItem->setText(tlvcVoice, parsedTalkerCode.voice());
+    if (!parsedTalkerCode.gender().isEmpty())
+        talkerItem->setText(tlvcGender, translatedGender(parsedTalkerCode.gender()));
+    if (!parsedTalkerCode.volume().isEmpty())
+        talkerItem->setText(tlvcVolume, translatedVolume(parsedTalkerCode.volume()));
+    if (!parsedTalkerCode.rate().isEmpty())
+        talkerItem->setText(tlvcRate, translatedRate(parsedTalkerCode.rate()));
 }
 
 /**
@@ -911,7 +807,7 @@ void KCMKttsMgr::addTalker(){
     }
 
     if (languageCode.isEmpty()) return;
-    QString language = languageCodeToLanguage(languageCode);
+    QString language = TalkerCode::languageCodeToLanguage(languageCode);
     if (language.isEmpty()) return;
 
     m_languagesToCodes[language] = languageCode;
@@ -956,7 +852,7 @@ void KCMKttsMgr::addTalker(){
         // Record configuration data.  Note, might as well do this now.
         m_config->setGroup(QString("Talker_")+talkerID);
         m_config->writeEntry("PlugIn", synthName);
-        talkerCode = normalizeTalkerCode(talkerCode, languageCode);
+        talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
         m_config->sync();
 
@@ -1203,7 +1099,7 @@ void KCMKttsMgr::slot_configureTalker()
         m_config->setGroup(QString("Talker_")+talkerID);
         m_loadedPlugIn->save(m_config, QString("Talker_")+talkerID);
         m_config->setGroup(QString("Talker_")+talkerID);
-        talkerCode = normalizeTalkerCode(talkerCode, languageCode);
+        talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
         m_config->sync();
 
