@@ -84,6 +84,7 @@ and delete the intermediate ones."
 (set! tts_hooks (list utt.synth ktts_save_record_wave))
 
 (define (ktts_sabletowave text filename volume)
+  (set! ktts_wavefiles nil)
   ;; Do the synthesis, which creates multiple wave files.
   (tts_text text 'sable)
   ;; Now put the waveforms together and adjust volume.
