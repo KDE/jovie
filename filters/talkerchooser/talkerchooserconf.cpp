@@ -70,15 +70,15 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const Q
 
     cb = m_widget->volumeComboBox;
     cb->insertItem( "" );
-    cb->insertItem( TalkerCode::translatedGender("medium") );
-    cb->insertItem( TalkerCode::translatedGender("loud") );
-    cb->insertItem( TalkerCode::translatedGender("soft") );
+    cb->insertItem( TalkerCode::translatedVolume("medium") );
+    cb->insertItem( TalkerCode::translatedVolume("loud") );
+    cb->insertItem( TalkerCode::translatedVolume("soft") );
 
     cb = m_widget->rateComboBox;
     cb->insertItem( "" );
-    cb->insertItem( TalkerCode::translatedGender("medium") );
-    cb->insertItem( TalkerCode::translatedGender("fast") );
-    cb->insertItem( TalkerCode::translatedGender("slow") );
+    cb->insertItem( TalkerCode::translatedRate("medium") );
+    cb->insertItem( TalkerCode::translatedRate("fast") );
+    cb->insertItem( TalkerCode::translatedRate("slow") );
 
     cb = m_widget->synthComboBox;
     cb->insertItem( "" );
