@@ -2,7 +2,6 @@ debian/tmp/usr/bin/kttsd
 debian/tmp/usr/bin/kttsmgr
 debian/tmp/usr/lib/libkttsd.so.1.0.0
 debian/tmp/usr/lib/libkttsd.so.1
-debian/tmp/usr/lib/libkttsd.so
 debian/tmp/usr/lib/libkttsd.la
 debian/tmp/usr/lib/kde3/libkttsd_festivalintplugin.so
 debian/tmp/usr/lib/kde3/libkttsd_festivalintplugin.la
@@ -32,6 +31,9 @@ debian/tmp/usr/lib/kde3/kcm_kttsd.so
 debian/tmp/usr/lib/kde3/kcm_kttsd.la
 debian/tmp/usr/lib/kde3/ktexteditor_kttsd.la
 debian/tmp/usr/lib/kde3/ktexteditor_kttsd.so
+
+debian/tmp/usr/lib/kde3/libkhtmlkttsdplugin.la
+debian/tmp/usr/lib/kde3/libkhtmlkttsdplugin.so
 
 debian/tmp/usr/share/servicetypes/kttsd_synthplugin.desktop
 debian/tmp/usr/share/servicetypes/kttsd_audioplugin.desktop
@@ -63,21 +65,21 @@ debian/tmp/usr/share/apps/kttsd/icons/crystalsvg/128x128/apps/kttsd.png
 
 debian/tmp/usr/share/apps/kttsjobmgr/kttsjobmgrui.rc
 
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/common
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/general.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/index.cache.bz2
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/index.docbook
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/addtalker.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/audio.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/festivalintconf.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/general.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/interruption.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/jobs.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/talkers.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/filters.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/stringreplacer.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/xmltransformer.png
-debian/tmp/usr/share/doc/kde/HTML/en/kttsd/talkerchooser.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/common
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/general.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/index.cache.bz2
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/index.docbook
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/addtalker.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/audio.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/festivalintconf.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/general.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/interruption.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/jobs.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/talkers.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/filters.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/stringreplacer.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/xmltransformer.png
+debian/tmp/usr/share/doc/kde/HTML/*/kttsd/talkerchooser.png
 
 debian/tmp/usr/share/services/kttsd_festivalintplugin.desktop
 debian/tmp/usr/share/services/kttsd_commandplugin.desktop
@@ -89,6 +91,8 @@ debian/tmp/usr/share/services/kttsd.desktop
 debian/tmp/usr/share/services/kttsjobmgr.desktop
 debian/tmp/usr/share/services/kttsd_artsplugin.desktop
 debian/tmp/usr/share/services/ktexteditor_kttsd.desktop
+
+debian/tmp/usr/share/apps/khtml/kpartplugins/khtmlkttsd.desktop
 
 debian/tmp/usr/share/icons/hicolor/16x16/actions/male.png
 debian/tmp/usr/share/icons/hicolor/16x16/actions/female.png
