@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>523</width>
+            <width>548</width>
             <height>574</height>
         </rect>
     </property>
@@ -20,6 +20,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>KCMKttsMgrWidget</string>
     </property>
     <grid>
         <property name="name">
@@ -403,40 +406,6 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Properties</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QWidgetStack" row="0" column="0">
-                        <property name="name">
-                            <cstring>PluginWidgetStack</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>7</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <widget class="QWidget">
-                            <property name="name">
-                                <cstring>WStackPage</cstring>
-                            </property>
-                            <attribute name="id">
-                                <number>0</number>
-                            </attribute>
-                        </widget>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
@@ -783,7 +752,6 @@
     <include location="global" impldecl="in declaration">klocale.h</include>
     <include location="global" impldecl="in implementation">klocale.h</include>
     <include location="global" impldecl="in implementation">kdebug.h</include>
-    <include location="local" impldecl="in implementation">kcmkttsmgrwidget.ui.h</include>
 </includes>
 <signals>
     <signal>addLanguage()</signal>

@@ -40,7 +40,7 @@ namespace KDE {
     class PlayObject;
 }
 
-class FliteConf : public FliteConfWidget {
+class FliteConf : public PlugInConf {
     Q_OBJECT 
 
     public:
@@ -82,6 +82,8 @@ class FliteConf : public FliteConfWidget {
         void slotSynthFinished();
    
     private:
+        // Configuration Widget.
+        FliteConfWidget* m_widget;
         // Flite synthesizer.
         FliteProc* m_fliteProc;
         // aRts server.

@@ -1,3 +1,9 @@
+2004-08-09  Cramblitt <garycramblitt@comcast.net>
+        * Remove requirement to copy pluginconf.h to $KDEDIR/include when running designer
+          against plugin configuration widgets.
+        * Epos plugin not listing codecs.
+        * Some plugins listing codecs multiple times.
+        
 2004-08-08  Cramblitt <garycramblitt@comcast.net>
         * Add plugin for Epos TTS Synthesis System (czech and slovak).
         

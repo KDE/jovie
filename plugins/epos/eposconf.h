@@ -40,7 +40,7 @@ namespace KDE {
     class PlayObject;
 }
 
-class EposConf : public EposConfWidget {
+class EposConf : public PlugInConf {
     Q_OBJECT 
 
     public:
@@ -83,6 +83,9 @@ class EposConf : public EposConfWidget {
    
     private:
         void buildCodecList ();
+        
+        // Configuration widget.
+        EposConfWidget* m_widget;
         
         // Epos synthesizer.
         EposProc* m_eposProc;

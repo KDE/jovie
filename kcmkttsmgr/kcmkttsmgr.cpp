@@ -22,7 +22,7 @@
 #include <dcopclient.h>
 
 #include <qtabwidget.h>
-#include <qwidgetstack.h>
+//#include <qwidgetstack.h>
 #include <qcheckbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
@@ -80,18 +80,19 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     
     // Initialize some variables.
     m_jobMgrPart = 0;
+    m_pluginWidget = 0;
     
     //Defaults
     //textPreMsgValue = i18n("Paragraph interrupted. Message.");
 
-    // Add the widget
+    // Add the KTTS Manager widget
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
     layout->addWidget(m_kttsmgrw);
     
     // Start out with Properties tab disabled.  It will be enabled when user selects a language.
-    m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, false);
-    m_kttsmgrw->PluginWidgetStack->setEnabled(false);
+//    m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, false);
+//    m_kttsmgrw->PluginWidgetStack->setEnabled(false);
 
     // Connect the signals from the KCMKtssMgrWidget to this class
     connect( m_kttsmgrw, SIGNAL( addLanguage() ), this, SLOT( addLanguage() ) );
@@ -485,7 +486,7 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
     
         // Add the plugin configuration widget to the Properties tab WidgetStack.
         // kdDebug() << "Adding the tab" << endl;
-        m_kttsmgrw->PluginWidgetStack->addWidget(newLanguage->plugIn, -1);
+//        m_kttsmgrw->PluginWidgetStack->addWidget(newLanguage->plugIn, -1);
 
         // Let plug in changes be as global changed to show apply button.
         // kdDebug() << "Connecting" << endl;
@@ -604,13 +605,20 @@ void KCMKttsMgr::updateRemoveButton(){
     if(m_kttsmgrw->languagesList->selectedItem()){
         m_kttsmgrw->removeLanguageButton->setEnabled(true);
         QString language = m_kttsmgrw->languagesList->selectedItem()->text(0);
-        m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, true);
-        m_kttsmgrw->PluginWidgetStack->setEnabled(true);
-        m_kttsmgrw->PluginWidgetStack->raiseWidget(m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn);
+//        m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, true);
+//        m_kttsmgrw->PluginWidgetStack->setEnabled(true);
+//        m_kttsmgrw->PluginWidgetStack->raiseWidget(m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn);
+        int currentTab = m_kttsmgrw->mainTab->currentPageIndex();
+        if (m_pluginWidget)
+            m_kttsmgrw->mainTab->removePage(m_pluginWidget);
+        m_pluginWidget = m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn;
+        m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", 1);
+        if (currentTab) m_kttsmgrw->mainTab->setCurrentPage(currentTab);
     } else {
         m_kttsmgrw->removeLanguageButton->setEnabled(false);
-        m_kttsmgrw->PluginWidgetStack->setEnabled(false);
-        m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, false);
+//        m_kttsmgrw->PluginWidgetStack->setEnabled(false);
+//        m_kttsmgrw->mainTab->setTabEnabled(m_kttsmgrw->PluginWidgetStack, false);
+        if (m_pluginWidget) m_kttsmgrw->mainTab->setTabEnabled(m_pluginWidget, false);
     }
 }
 

@@ -40,7 +40,7 @@ namespace KDE {
     class PlayObject;
 }
 
-class CommandConf : public CommandConfWidget {
+class CommandConf : public PlugInConf {
     Q_OBJECT 
   
     public:
@@ -84,6 +84,9 @@ class CommandConf : public CommandConfWidget {
     private:
         // Fill the Codec combobox.
         void buildCodecList();
+        
+        // Configuration Widget.
+        CommandConfWidget* m_widget;
 
         // Language Group.
         QString m_language;

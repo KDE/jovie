@@ -19,10 +19,12 @@
 // $Id$
 
 // Qt includes.
+#include <qlayout.h>
 #include <qfile.h>
 #include <qapplication.h>
 
 // KDE includes.
+#include <kdialog.h>
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
 #include <kplayobject.h>
@@ -36,13 +38,23 @@
 
 /** Constructor */
 FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
-   FliteConfWidget( parent, name )
+    PlugInConf(parent, name)
 {
     kdDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
-    connect(this->fliteTest, SIGNAL(clicked()), this, SLOT(slotFliteTest_clicked()));
+    
+    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+        KDialog::spacingHint(), "FliteConfigWidgetLayout");
+    layout->setAlignment (Qt::AlignTop);
+    m_widget = new FliteConfWidget(this, "FliteConfigWidget");
+    layout->addWidget(m_widget);
+    
+    defaults();
+    
+    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->fliteTest, SIGNAL(clicked()), this, SLOT(slotFliteTest_clicked()));
 }
 
 /** Destructor */
@@ -59,19 +71,19 @@ void FliteConf::load(KConfig *config, const QString &langGroup){
     kdDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup(langGroup);
-    this->flitePath->setURL(config->readPathEntry("FliteExePath", "flite"));
+    m_widget->flitePath->setURL(config->readPathEntry("FliteExePath", "flite"));
 }
 
 void FliteConf::save(KConfig *config, const QString &langGroup){
     kdDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup(langGroup);
-    config->writePathEntry("FliteExePath", this->flitePath->url());
+    config->writePathEntry("FliteExePath", m_widget->flitePath->url());
 }
 
 void FliteConf::defaults(){
     kdDebug() << "FliteConf::defaults: Running" << endl;
-    this->flitePath->setURL("flite");
+    m_widget->flitePath->setURL("flite");
 }
 
 void FliteConf::slotFliteTest_clicked()
@@ -93,7 +105,7 @@ void FliteConf::slotFliteTest_clicked()
     m_fliteProc->synth(
         "KDE is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
-        this->flitePath->url());
+        m_widget->flitePath->url());
 }
 
 void FliteConf::slotSynthFinished()

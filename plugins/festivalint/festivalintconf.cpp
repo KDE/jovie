@@ -27,6 +27,7 @@
 #include <qdir.h> 
 
 // KDE includes.
+#include <kdialog.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcombobox.h>
@@ -48,13 +49,24 @@
 
 /** Constructor */
 FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
-    FestivalIntConfWidget( parent, name ){
+    PlugInConf(parent, name)
+{
     kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
-    festivalVoicesPath->setMode(KFile::Directory);
     m_festProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
-    connect(this->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
+    
+    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+        KDialog::spacingHint(), "FestivalIntConfigWidgetLayout");
+    layout->setAlignment (Qt::AlignTop);
+    m_widget = new FestivalIntConfWidget(this, "FestivalIntConfigWidget");
+    layout->addWidget(m_widget);
+    
+    m_widget->festivalVoicesPath->setMode(KFile::Directory);
+    defaults();
+    
+    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
 }
 
 /** Destructor */
@@ -72,14 +84,14 @@ void FestivalIntConf::load(KConfig *config, const QString &langGroup){
 
     m_langGroup = langGroup;
     config->setGroup(langGroup);
-    this->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
+    m_widget->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
     scanVoices();
     QString voiceSelected(config->readEntry("Voice"));
     for(uint index = 0 ; index < voiceList.count(); ++index){
         kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
         if(voiceSelected == voiceList[index].code){
             kdDebug() << "Match!" << endl;
-            this->selectVoiceCombo->setCurrentItem(index);  
+            m_widget->selectVoiceCombo->setCurrentItem(index);  
             break;
         }
     }
@@ -90,37 +102,38 @@ void FestivalIntConf::save(KConfig *config, const QString &langGroup){
 
     m_langGroup = langGroup;
     config->setGroup(langGroup);
-    config->writePathEntry("VoicesPath", this->festivalVoicesPath->url());
-    config->writeEntry("Voice", voiceList[this->selectVoiceCombo->currentItem()].code);
+    config->writePathEntry("VoicesPath", m_widget->festivalVoicesPath->url());
+    config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
 }
 
 void FestivalIntConf::defaults(){
     kdDebug() << "FestivalIntConf::defaults: Running" << endl;
+    m_widget->festivalVoicesPath->setURL("flite");
 }
 
 void FestivalIntConf::scanVoices(){
     kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
     voiceList.clear();
-    selectVoiceCombo->clear();
+    m_widget->selectVoiceCombo->clear();
     KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices", true, false);
     QStringList groupList = voices.groupList();
-    QDir mainPath(this->festivalVoicesPath->url());
+    QDir mainPath(m_widget->festivalVoicesPath->url());
     voice voiceTemp;
     for(QStringList::Iterator it = groupList.begin(); it != groupList.end(); ++it ){
         voices.setGroup(*it);
         voiceTemp.path = voices.readEntry("Path");
-        mainPath.setPath(this->festivalVoicesPath->url() + voiceTemp.path);
+        mainPath.setPath(m_widget->festivalVoicesPath->url() + voiceTemp.path);
         if(!mainPath.exists()){
-            kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
+            kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " doesn't exist" << endl;
             continue;
         } else {
-            kdDebug() << "For " << *it << " the path " << this->festivalVoicesPath->url() + voiceTemp.path << " exists" << endl;
+            kdDebug() << "For " << *it << " the path " << m_widget->festivalVoicesPath->url() + voiceTemp.path << " exists" << endl;
         }
         voiceTemp.code = *it;
         voiceTemp.name = voices.readEntry("Name");
         voiceTemp.comment = voices.readEntry("Comment");
         voiceList.append(voiceTemp);
-        selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
+        m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
     }
 }
 
@@ -143,7 +156,7 @@ void FestivalIntConf::slotTest_clicked()
     // Get the code for the selected voice
     KConfig voices(KGlobal::dirs()->resourceDirs("data").last() +
         "/kttsd/festivalint/voices", true, false);
-    voices.setGroup(voiceList[this->selectVoiceCombo->currentItem()].code);
+    voices.setGroup(voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     QString voiceCode = "("+voices.readEntry("Code")+")";
     // Use the translated name of the voice as the test message.
     QString testMsg = voices.readEntry("Comment[" + m_langGroup + "]");

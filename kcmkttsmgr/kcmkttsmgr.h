@@ -165,6 +165,11 @@ class KCMKttsMgr :
         KCMKttsMgrWidget *m_kttsmgrw;
         
         /**
+        * Current Plugin widget.
+        */
+        PlugInConf* m_pluginWidget;
+        
+        /**
         * List of the objects related to each loaded language
         */
         QDict<languageRelatedObjects> m_loadedLanguages;

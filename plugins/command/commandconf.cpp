@@ -19,12 +19,14 @@
 // $Id$
 
 // Qt includes.
+#include <qlayout.h>
 #include <qcheckbox.h>
 #include <qfile.h>
 #include <qapplication.h>
 #include <qtextcodec.h>
 
 // KDE includes.
+#include <kdialog.h>
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
 #include <kplayobject.h>
@@ -45,15 +47,24 @@
 #include "commandconf.moc"
 
 /** Constructor */
-CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& /*args*/) : 
-  CommandConfWidget (parent, name)
+CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
+    PlugInConf(parent, name)
 {
     kdDebug() << "CommandConf::CommandConf: Running" << endl;
     m_playObj = 0;
     m_artsServer = 0;
     m_commandProc = 0;
+    
+    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+        KDialog::spacingHint(), "CommandConfigWidgetLayout");
+    layout->setAlignment (Qt::AlignTop);
+    m_widget = new CommandConfWidget(this, "CommandConfigWidget");
+    layout->addWidget(m_widget);
+    
     defaults();
-    connect(commandTestButton, SIGNAL(clicked()), this, SLOT(slotCommandTest_clicked()));
+    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->commandTestButton, SIGNAL(clicked()),
+        this, SLOT(slotCommandTest_clicked()));
 }
 
 /** Destructor */
@@ -70,8 +81,8 @@ CommandConf::~CommandConf()
 void CommandConf::load(KConfig *config, const QString &langGroup) {
     kdDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(langGroup);
-    urlReq->setURL (config->readEntry("Command", "cat -"));
-    stdInButton->setChecked(config->readBoolEntry("StdIn", true));
+    m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
+    m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", true));
     m_language = langGroup;
     QString codecString = config->readEntry("Codec", "Local");
     int codec;
@@ -83,20 +94,20 @@ void CommandConf::load(KConfig *config, const QString &langGroup) {
         codec = CommandProc::Unicode;
     else {
         codec = CommandProc::Local;
-        for (int i = CommandProc::UseCodec; i < characterCodingBox->count(); i++ )
-            if (codecString == characterCodingBox->text(i))
+        for (int i = CommandProc::UseCodec; i < m_widget->characterCodingBox->count(); i++ )
+            if (codecString == m_widget->characterCodingBox->text(i))
                 codec = i;
     }
-    characterCodingBox->setCurrentItem(codec);
+    m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
 void CommandConf::save(KConfig *config, const QString &langGroup) {
     kdDebug() << "CommandConf::save: Running" << endl;
     config->setGroup(langGroup);
-    config->writeEntry("Command", urlReq->url());
-    config->writeEntry("StdIn", stdInButton->isChecked());
+    config->writeEntry("Command", m_widget->urlReq->url());
+    config->writeEntry("StdIn", m_widget->stdInButton->isChecked());
     m_language = langGroup;
-    int codec = characterCodingBox->currentItem();
+    int codec = m_widget->characterCodingBox->currentItem();
     if (codec == CommandProc::Local)
         config->writeEntry("Codec", "Local");
     else if (codec == CommandProc::Latin1)
@@ -104,28 +115,29 @@ void CommandConf::save(KConfig *config, const QString &langGroup) {
     else if (codec == CommandProc::Unicode)
         config->writeEntry("Codec", "Unicode");
     else config->writeEntry("Codec",
-        characterCodingBox->text(codec));
+        m_widget->characterCodingBox->text(codec));
 }
 
 void CommandConf::defaults(){
     kdDebug() << "CommandConf::defaults: Running" << endl;
-    urlReq->setURL("cat -");
-    stdInButton->setChecked(true);
+    m_widget->urlReq->setURL("cat -");
+    m_widget->stdInButton->setChecked(true);
     buildCodecList();
-    urlReq->setShowLocalProtocol (false);
+    m_widget->urlReq->setShowLocalProtocol (false);
     buildCodecList();
-    characterCodingBox->setCurrentItem(0);
+    m_widget->characterCodingBox->setCurrentItem(0);
 }
 
 void CommandConf::buildCodecList () {
    QString local = i18n("Local")+" (";
    local += QTextCodec::codecForLocale()->name();
    local += ")";
-   characterCodingBox->insertItem (local, CommandProc::Local);
-   characterCodingBox->insertItem (i18n("Latin1"), CommandProc::Latin1);
-   characterCodingBox->insertItem (i18n("Unicode"), CommandProc::Unicode);
+   m_widget->characterCodingBox->clear();
+   m_widget->characterCodingBox->insertItem (local, CommandProc::Local);
+   m_widget->characterCodingBox->insertItem (i18n("Latin1"), CommandProc::Latin1);
+   m_widget->characterCodingBox->insertItem (i18n("Unicode"), CommandProc::Unicode);
    for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
-      characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
+      m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
         CommandProc::UseCodec + i);
 }
         
@@ -149,10 +161,10 @@ void CommandConf::slotCommandTest_clicked()
     m_commandProc->synth(
         "KDE is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
-        urlReq->url(),
-        stdInButton->isChecked(),
-        characterCodingBox->currentItem(),
-        QTextCodec::codecForName(characterCodingBox->text(characterCodingBox->currentItem())),
+        m_widget->urlReq->url(),
+        m_widget->stdInButton->isChecked(),
+        m_widget->characterCodingBox->currentItem(),
+        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())),
         m_language);
 }
 

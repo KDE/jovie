@@ -22,8 +22,10 @@
 #include <qfile.h>
 #include <qapplication.h>
 #include <qtextcodec.h>
+#include <qlayout.h>
 
 // KDE includes.
+#include <kdialog.h>
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
 #include <kplayobject.h>
@@ -39,13 +41,23 @@
 
 /** Constructor */
 EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
-   EposConfWidget( parent, name )
+    PlugInConf(parent, name)
 {
     kdDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
-    connect(this->eposTest, SIGNAL(clicked()), this, SLOT(slotEposTest_clicked()));
+    
+    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+        KDialog::spacingHint(), "EposConfigWidgetLayout");
+    layout->setAlignment (Qt::AlignTop);
+    m_widget = new EposConfWidget(this, "EposConfigWidget");
+    layout->addWidget(m_widget);
+    
+    defaults();
+    
+    connect(m_widget, SIGNAL(configChanged(bool)), this, SLOT(configChanged (bool)));
+    connect(m_widget->eposTest, SIGNAL(clicked()), this, SLOT(slotEposTest_clicked()));
 }
 
 /** Destructor */
@@ -62,10 +74,10 @@ void EposConf::load(KConfig *config, const QString &langGroup){
     kdDebug() << "EposConf::load: Loading configuration for language " << langGroup << " with plug in " << "Epos" << endl;
 
     config->setGroup(langGroup);
-    this->eposServerPath->setURL(config->readPathEntry("EposServerExePath", "epos"));
-    this->eposClientPath->setURL(config->readPathEntry("EposClientExePath", "say"));
-    this->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
-    this->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
+    m_widget->eposServerPath->setURL(config->readPathEntry("EposServerExePath", "epos"));
+    m_widget->eposClientPath->setURL(config->readPathEntry("EposClientExePath", "say"));
+    m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
+    m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "Local");
     int codec;
     if (codecString == "Local")
@@ -76,22 +88,22 @@ void EposConf::load(KConfig *config, const QString &langGroup){
         codec = EposProc::Unicode;
     else {
         codec = EposProc::Local;
-        for (int i = EposProc::UseCodec; i < characterCodingBox->count(); i++ )
-            if (codecString == characterCodingBox->text(i))
+        for (int i = EposProc::UseCodec; i < m_widget->characterCodingBox->count(); i++ )
+            if (codecString == m_widget->characterCodingBox->text(i))
                 codec = i;
     }
-    characterCodingBox->setCurrentItem(codec);
+    m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
 void EposConf::save(KConfig *config, const QString &langGroup){
     kdDebug() << "EposConf::save: Saving configuration for language " << langGroup << " with plug in " << "Epos" << endl;
 
     config->setGroup(langGroup);
-    config->writePathEntry("EposServerExePath", this->eposServerPath->url());
-    config->writePathEntry("EposClientExePath", this->eposClientPath->url());
-    config->writeEntry("EposServerOptions", this->eposServerOptions->text());
-    config->writeEntry("EposClientOptions", this->eposClientOptions->text());
-    int codec = characterCodingBox->currentItem();
+    config->writePathEntry("EposServerExePath", m_widget->eposServerPath->url());
+    config->writePathEntry("EposClientExePath", m_widget->eposClientPath->url());
+    config->writeEntry("EposServerOptions", m_widget->eposServerOptions->text());
+    config->writeEntry("EposClientOptions", m_widget->eposClientOptions->text());
+    int codec = m_widget->characterCodingBox->currentItem();
     if (codec == EposProc::Local)
         config->writeEntry("Codec", "Local");
     else if (codec == EposProc::Latin1)
@@ -99,28 +111,29 @@ void EposConf::save(KConfig *config, const QString &langGroup){
     else if (codec == EposProc::Unicode)
         config->writeEntry("Codec", "Unicode");
     else config->writeEntry("Codec",
-        characterCodingBox->text(codec));
+        m_widget->characterCodingBox->text(codec));
 }
 
 void EposConf::defaults(){
     kdDebug() << "EposConf::defaults: Running" << endl;
-    this->eposServerPath->setURL("epos");
-    this->eposClientPath->setURL("say");
-    this->eposServerOptions->setText("");
-    this->eposClientOptions->setText("");
+    m_widget->eposServerPath->setURL("epos");
+    m_widget->eposClientPath->setURL("say");
+    m_widget->eposServerOptions->setText("");
+    m_widget->eposClientOptions->setText("");
     buildCodecList();
-    characterCodingBox->setCurrentItem(0);
+    m_widget->characterCodingBox->setCurrentItem(0);
 }
 
 void EposConf::buildCodecList () {
    QString local = i18n("Local")+" (";
    local += QTextCodec::codecForLocale()->name();
    local += ")";
-   characterCodingBox->insertItem (local, EposProc::Local);
-   characterCodingBox->insertItem (i18n("Latin1"), EposProc::Latin1);
-   characterCodingBox->insertItem (i18n("Unicode"), EposProc::Unicode);
+   m_widget->characterCodingBox->clear();
+   m_widget->characterCodingBox->insertItem (local, EposProc::Local);
+   m_widget->characterCodingBox->insertItem (i18n("Latin1"), EposProc::Latin1);
+   m_widget->characterCodingBox->insertItem (i18n("Unicode"), EposProc::Unicode);
    for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
-      characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
+      m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
         EposProc::UseCodec + i);
 }
         
@@ -145,12 +158,12 @@ void EposConf::slotEposTest_clicked()
     m_eposProc->synth(
         "KDE is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
-        this->eposServerPath->url(),
-        this->eposClientPath->url(),
-        this->eposServerOptions->text(),
-        this->eposClientOptions->text(),
-        characterCodingBox->currentItem(),
-        QTextCodec::codecForName(characterCodingBox->text(characterCodingBox->currentItem())));
+        m_widget->eposServerPath->url(),
+        m_widget->eposClientPath->url(),
+        m_widget->eposServerOptions->text(),
+        m_widget->eposClientOptions->text(),
+        m_widget->characterCodingBox->currentItem(),
+        QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())));
 }
 
 void EposConf::slotSynthFinished()

@@ -48,7 +48,7 @@ typedef struct voiceStruct{
   QString path;
 } voice;
 
-class FestivalIntConf : public FestivalIntConfWidget {
+class FestivalIntConf : public PlugInConf {
    Q_OBJECT 
 
    public:
@@ -91,6 +91,9 @@ class FestivalIntConf : public FestivalIntConfWidget {
        void slotSynthFinished();
       
    private:
+       // Configuration Widget.
+       FestivalIntConfWidget* m_widget;
+       
        // Language group.
        QString m_langGroup;
        /** List of voices */
