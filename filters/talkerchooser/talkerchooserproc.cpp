@@ -122,7 +122,9 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
     // kdDebug() << "TalkerChooserProc::convert: setting lang " << m_languageCode <<
     //         " gender " << m_gender << " synth " << m_synth <<
     //         " volume " << m_volume << " rate " << m_rate << endl;
-    talkerCode->setFullLanguageCode( m_languageCode );
+    // Only override the language if user specified a language code.
+    if ( !m_languageCode.isEmpty() )
+        talkerCode->setFullLanguageCode( m_languageCode );
     talkerCode->setVoice( QString::null );
     talkerCode->setGender( m_gender );
     talkerCode->setPlugInName( m_synth );
