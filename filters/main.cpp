@@ -24,15 +24,15 @@ using namespace std;
 
 static const KCmdLineOptions options[] =
 {
-    { "+pluginName", I18N_NOOP("Name of a KTTSD Filter PlugIn (required)"), 0 },
+    { "+pluginName", I18N_NOOP("Name of a KTTSD filter plugin (required)"), 0 },
     { "t", 0, 0 },
-    { "talker <talker>", I18N_NOOP("Talker Code passed to filter."), "en" }, 
+    { "talker <talker>", I18N_NOOP("Talker code passed to filter"), "en" }, 
     { "a", 0, 0 },
-    { "appid <appID>", I18N_NOOP("DCOP application ID passed to filter."), "testfilter" },
+    { "appid <appID>", I18N_NOOP("DCOP application ID passed to filter"), "testfilter" },
     { "g", 0, 0 },
     { "group <filterID>",
-        I18N_NOOP("Config file group name passed to filter."), "testfilter" },
-    { "list", I18N_NOOP("Display list of available Filter PlugIns and exit."), 0 }
+        I18N_NOOP("Config file group name passed to filter"), "testfilter" },
+    { "list", I18N_NOOP("Display list of available filter plugins and exit"), 0 }
 };
 
 int main(int argc, char *argv[])

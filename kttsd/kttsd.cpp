@@ -115,8 +115,8 @@ bool KTTSD::initializeTalkerMgr()
                 i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
                         "Would you like to configure it now?"),
                 i18n("KTTS Not Configured"),
-                i18n("&Yes"),
-                i18n("&No"),
+		KStdGuiItem::yes(),
+		KStdGuiItem::no(),
                 dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
             }
             if (msgResult == KMessageBox::Yes) showDialog();

@@ -392,7 +392,7 @@ void FestivalIntConf::scanVoices()
 
     m_voiceList.clear();
     m_widget->selectVoiceCombo->clear();
-    m_widget->selectVoiceCombo->insertItem(i18n("Scanning..please wait."));
+    m_widget->selectVoiceCombo->insertItem(i18n("Scanning... Please wait."));
 
     // Save current state of selectVoiceCombo box and disable.
     bool selectVoiceComboEnabled = m_widget->selectVoiceCombo->isEnabled();
