@@ -1,3 +1,4 @@
+_ Add WhatsThis help.  The Jobs tab and most of the plugin config dialogs need them.
 _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
   language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
   desktop language.  Must somehow let kttsmgr know about the newly configured Talker.

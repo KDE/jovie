@@ -47,6 +47,9 @@
 const bool enableNotifyCheckBoxValue = false;
 const bool enablePassiveOnlyCheckBoxValue = false;
 
+const bool embedInSysTrayCheckBoxValue = true;
+const bool showMainWindowOnStartupCheckBoxValue = true;
+
 const bool textPreMsgCheckValue = true;
 const QString textPreMsgValue = i18n("Text interrupted. Message.");
 
@@ -428,6 +431,18 @@ void KCMKttsMgr::defaults() {
             {
                 changed = true;
                 m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(enablePassiveOnlyCheckBoxValue);
+            }
+            if (m_kttsmgrw->embedInSysTrayCheckBox->isChecked() != embedInSysTrayCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->embedInSysTrayCheckBox->setChecked(embedInSysTrayCheckBoxValue);
+            }
+            if (m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked() !=
+                showMainWindowOnStartupCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->showMainWindowOnStartupCheckBox->setChecked(
+                    showMainWindowOnStartupCheckBoxValue);
             }
             break;
 
