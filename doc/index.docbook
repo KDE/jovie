@@ -8,6 +8,7 @@
   <!ENTITY package "kdeaccessibility"><!-- kdebase, kdeadmin, etc.  Leave
                                      this unchanged if your
                                      application is not maintained in KDE CVS -->
+  <!ENTITY mbrola "<application>MBROLA</application>">
   <!ENTITY % imageobjectco.module "INCLUDE">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"> <!-- ONLY If you are writing non-English 
@@ -293,11 +294,11 @@ the <guilabel>Talkers</guilabel> screen appears.</para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-talker-1"><para>Click to add a new <guilabel>Talker</guilabel>, which is a speech synthesis plugin.</para></callout>
-<callout arearefs="pt-talker-2"><para>All the configured <guilabel>Talkers</guilabel> are listed here.  Highest priority <guilabel>Talkers</guilabel> are listed at the top.  The top-most <guilabel>Talker</guilabel> will be used to do the speaking when an application does not specify a <guilabel>Talker.</guilabel></para></callout>
-<callout arearefs="pt-talker-3"><para>Click on a <guilabel>Talker</guilabel> in the list to highlight it and click this button to remove it.</para></callout>
-<callout arearefs="pt-talker-4"><para>Click on a <guilabel>Talker</guilabel> in the list to highlight it and click this button to display the synthesis plugin's configuration dialog.</para></callout>
-<callout arearefs="pt-talker-5"><para>Click on a <guilabel>Talker</guilabel> in the list to highlight it and click this button to move it down one row in the list.  The lower a <guilabel>Talker</guilabel> appears in the list, the lower its priority.</para></callout>
+<callout arearefs="pt-talker-1"><para>Click to add a new talker, which is a speech synthesis plugin.</para></callout>
+<callout arearefs="pt-talker-2"><para>All the configured <guilabel>Talkers</guilabel> are listed here.  Highest priority <guilabel>Talkers</guilabel> are listed at the top.  The top-most talker will be used to do the speaking when an application does not specify a talker.</para></callout>
+<callout arearefs="pt-talker-3"><para>Click on a talker in the list to highlight it and click this button to remove it.</para></callout>
+<callout arearefs="pt-talker-4"><para>Click on a talker in the list to highlight it and click this button to display the synthesis plugin's configuration dialog.</para></callout>
+<callout arearefs="pt-talker-5"><para>Click on a talker in the list to highlight it and click this button to move it down one row in the list.  The lower a talker appears in the list, the lower its priority.</para></callout>
 <callout arearefs="pt-talker-6"><para>Click one of these buttons to apply the changes you have made to the running &kmyapplication; system.</para></callout>
 </calloutlist>
 </para>
@@ -342,17 +343,17 @@ only the languages supported by the chosen synthesizer.</para></callout>
 synthesizer plugin here.</para></callout>
 <callout arearefs="pt-addtalker-3"><para>When you click here,
 most synthesizer plugins will automatically configure themselves,
-choosing a default setup.  A new <guilabel>Talker</guilabel>
+choosing a default setup.  A new talker
 will appear in the list on the <guilabel>Talkers</guilabel> tab.
 Click the <guibutton>Edit</guibutton>
-button to display or edit the <guilabel>Talker</guilabel>'s 
-configuration.  See <xref linkend="configure-plugin" /></para></callout>
+button to display or edit the talker's 
+configuration.  See <xref linkend="configure-plugin" />.</para></callout>
 </calloutlist>
 </para>
 
 
 <warning><para>
-You must configure at least one <guilabel>Talker</guilabel> and click the <guilabel>Apply</guilabel> or <guilabel>OK</guilabel> buttons before you can start the 
+You must configure at least one talker and click the <guilabel>Apply</guilabel> or <guilabel>OK</guilabel> buttons before you can start the 
 &kmyapplication; system and begin speaking text.  To start the &kmyapplication;
 system, click the <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.
@@ -375,7 +376,7 @@ the <guilabel>Talker Configuration</guilabel> screen appears.
 Each speech synthesis plugin has a different
 <guilabel>Talker Configuration</guilabel> screen.  The following is an example for
 configuring the Festival Interactive plugin.  For specifics for each
-kind of plugin, see <xref linkend="configuration" /></para>
+kind of plugin, see <xref linkend="configuration" />.</para>
 
 <para>
 <screenshot>
@@ -427,7 +428,7 @@ changes will not take effect in the running &kmyapplication; system.
 
 <para>Assuming the test worked, you are almost ready to begin using &kmyapplication;.
 Now go back to the <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech System (KTTSD) box.</guilabel>  This
+<guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  This
 will start the KDE TTS Deamon.  See <xref linkend="general" />.
 You may now begin using &kmyapplication; to
 speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
@@ -563,7 +564,7 @@ in the system tray to restore the screen.</para></callout>
 
 <note><para>The <guilabel>Jobs</guilabel> tab only appears when KTTSD is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
 <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech (KTTSD) box.</guilabel></para>
+<guilabel>Enable Text-to-Speech (KTTSD)</guilabel> box.</para>
 </note>
 
 </sect1>
@@ -1058,7 +1059,7 @@ If you know of a commercial synth, perhaps you can pursuade the vendor
 to donate a free copy to the &kmyapplication; development team.
 In the meantime, you may be able to get
 the synth working using the <guilabel>Command</guilabel> plugin.
-See <xref linkend="using-with-command" /></para>
+See <xref linkend="using-with-command" />.</para>
 </answer>
 </qandaentry>
 </qandaset>
@@ -1300,9 +1301,9 @@ make
 </programlisting>
 
 <para>By default, the commands above will install &kmyapplication; to
-<command>/opt/kde3</command>.  If this directory is not in your
-<command>$KDEDIRS</command> path, you may need to add a
-<command>--prefix=<replaceable>target</replaceable></command> option.
+<filename>/opt/kde3</filename>.  If this directory is not in your
+$<envar>KDEDIRS</envar> path, you may need to add a
+<userinput>--prefix=<replaceable>target</replaceable></userinput> option.
 For example,</para>
 
 <programlisting>
@@ -1310,7 +1311,7 @@ For example,</para>
 make
 </programlisting>
 
-<note><para>On Debian systems, <command><replaceable>/usr/local</replaceable></command>
+<note><para>On Debian systems, <filename><replaceable>/usr/local</replaceable></filename>
 is the usual place to install applications compiled from source code.
 </para></note>
 
@@ -1323,7 +1324,7 @@ make install
 </programlisting>
 
 <para>If you downloaded the &kmyapplication; source from the
-<command>kdeaccessibility</command> CVS module, or downloaded the nightly
+<filename>kdeaccessibility</filename> CVS module, or downloaded the nightly
 CVS tarball, use the following commands to compile and install.
 </para>
 
@@ -1360,7 +1361,7 @@ make install
 <sect2 id="using-with-festival">
 <title>Using with Festival (Interactive)</title>
 
-<para>Festival is one of the better free and open source TTS
+<para>Festival is one of the best free and open source TTS
 engines available.  Voice quality is generally good and there are quite
 a few languages and voices supported.
 For many voices, you can control the volume, 
@@ -1411,7 +1412,7 @@ distro CDs to see if it is included.</para>
 click the <guilabel>Add</guilabel> button.  Choose <guilabel>Festival Interactive</guilabel> and a <guilabel>Language</guilabel>.
 If the <guilabel>Configure Talker</guilabel> screen does not appear, 
 click the <guibutton>Edit</guibutton> button.  If the Festival executable program
-is not in your PATH, enter the full path to the executable.
+is not in your <envar>PATH</envar>, enter the full path to the executable.
 Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
 <guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
 
@@ -1425,28 +1426,28 @@ option is set to <userinput>ISO 8859-2</userinput>.
 
 
 <sect3 id="festival-with-mbrola">
-<title>Using Festival with MBROLA</title>
+<title>Using Festival with &mbrola;</title>
 
-<para>Festival can be used in combination with the MBROLA synthesizer.
-In this mode, Festival does the lexical analysis and MBROLA produces the
-audio.  The MBROLA binary and MBROLA voice files can be downloaded from</para>
+<para>Festival can be used in combination with the &mbrola; synthesizer.
+In this mode, Festival does the lexical analysis and &mbrola; produces the
+audio.  The &mbrola; binary and &mbrola; voice files can be downloaded from</para>
 
 <para><ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para>
 
-<para>Follow the instructions in the <command>readme.txt</command> that comes with
+<para>Follow the instructions in the <filename>readme.txt</filename> that comes with
 the download.</para>
 
-<para>Note that MBROLA is not a complete Text-to-Speech system.  MBROLA synthesizes
+<para>Note that &mbrola; is not a complete Text-to-Speech system.  &mbrola; synthesizes
 speech from diphone files.  You must have additional software that can produce
 the diphones.  When combined with Festival, Festival produces the diphones needed
-by MBROLA.  <command>txt2pho</command> can also be used to produce diphones
-from German text.  See <link linkend="using-with-hadifix">Using with Hadifix</link> for more information.</para>
+by &mbrola;.  <command>txt2pho</command> can also be used to produce diphones
+from German text.  See <xref linkend="using-with-hadifix"/> for more information.</para>
 
-<para>There are three methods of combining Festival with MBROLA.</para>
+<para>There are three methods of combining Festival with &mbrola;.</para>
 
 <para>
 <itemizedlist>
-<listitem><para><link linkend="mbrola-wrappers">MBROLA Wrappers</link>.
+<listitem><para><link linkend="mbrola-wrappers">&mbrola; Wrappers</link>.
 At the time of writing this Handbook,
 this method is limited to English voices.</para></listitem>
 <listitem><para><link linkend="ims-german-festival">IMS German Festival</link>.</para></listitem>
@@ -1457,13 +1458,13 @@ this method is limited to English voices.</para></listitem>
 <!-- ...................................................................... -->
 
 <sect4 id="mbrola-wrappers">
-<title>Using Festival with MBROLA Wrappers</title>
+<title>Using Festival with &mbrola; Wrappers</title>
 
 <para>In this method, additional
 wrapper code is added to Festival to enable speech synthesis using
-MBROLA voice files.  Note that the MBROLA voice files are <emphasis>not</emphasis>
-installed in the MBROLA directory tree.  Instead, they are installed
-in the <command>festival/lib/</command> directory tree.  For instructions, see</para>
+&mbrola; voice files.  Note that the &mbrola; voice files are <emphasis>not</emphasis>
+installed in the &mbrola; directory tree.  Instead, they are installed
+in the <filename>festival/lib/</filename> directory tree.  For instructions, see</para>
 
 <para><ulink url="http://www.cstr.ed.ac.uk/projects/festival/mbrola.html">
 http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</ulink></para>
@@ -1475,20 +1476,20 @@ http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</ulink></para>
 <sect4 id="ims-german-festival">
 <title>Using IMS German Festival</title>
 
-<para>IMS German Festival is a modified version of Festival that uses German MBROLA
+<para>IMS German Festival is a modified version of Festival that uses German &mbrola;
 voices.  It works with either Festival version 1.4.1 or Festival 2.0 (1.95beta).
-First install Festival and MBROLA, if you have not already done so.
+First install Festival and &mbrola;, if you have not already done so.
 Next, download IMS German Festival, from</para>
 
 <para>
 <ulink url="http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html">
 http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html</ulink>.</para>
 
-<para>Follow the instructions in the <command>README</command> that comes with the
+<para>Follow the instructions in the <filename>README</filename> that comes with the
 download.  (Note, if using in combination with Festival 2.0, it is <emphasis>not</emphasis>
-necessary to apply the <command>fixes</command> tarball, but you must still
+necessary to apply the <filename>fixes</filename> tarball, but you must still
 rebuild festival.)  Finally, add the following
-lines to the <command>festival/lib/siteinit.scm</command> file.</para>
+lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
 
 <para>
 <programlisting>
@@ -1509,10 +1510,11 @@ lines to the <command>festival/lib/siteinit.scm</command> file.</para>
 </programlisting>
 </para>
 
-<para>(On some systems, the file you edit is <command>/etc/festival.scm</command>).  
+<para>On some systems, the file you edit is <filename>/etc/festival.scm</filename>.  
 Only add the lines that correspond to the German voices you have installed.
-Substitute the correct path for <userinput><replaceable>/usr/local/mbrola/</replaceable></userinput>
-.  Also note that (at the time of this writing) 
+Substitute the correct path for 
+<userinput><replaceable>/usr/local/mbrola/</replaceable></userinput>.
+Also note that (at the time of this writing) 
 IMS German Festival does not work with the de4, de5, or de6 German voices.</para>
 
 </sect4>
@@ -1523,8 +1525,8 @@ IMS German Festival does not work with the de4, de5, or de6 German voices.</para
 <title>Using Festival-Czech</title>
 
 <para>This method uses some special code to enable speech synthesis
-using Festival with an MBROLA Czech voice.  To install, first download and
-install Festival and MBROLA and make sure both are working.  Next, download
+using Festival with an &mbrola; Czech voice.  To install, first download,
+install Festival and &mbrola;, and make sure both are working.  Next, download
 Festival-Czech from</para>
 
 <para><ulink url="http://www.freebsoft.org/festival-czech">
@@ -1534,7 +1536,7 @@ http://www.freebsoft.org/festival-czech</ulink></para>
 paths as needed.</para></note>
 
 <para>Untar the download to a suitable directory and make
-the lexicon.  The Festival executable must be in your PATH.
+the lexicon.  The Festival executable must be in your <envar>PATH</envar>.
 </para>
 
 <para>
@@ -1546,8 +1548,8 @@ make
 </programlisting>
 </para>
 
-<para>Download the <command>cz2</command> voice file from the MBROLA
-website, and unzip it in the MBROLA directory.</para>
+<para>Download the <filename>cz2</filename> voice file from the &mbrola;
+website, and unzip it in the &mbrola; directory.</para>
 
 <para>
 <programlisting>
@@ -1558,7 +1560,7 @@ unzip cz2-001009.zip
 </programlisting>
 </para>
 
-<para>Add the following lines to the <command>festival/lib/siteinit.scm</command> file.</para>
+<para>Add the following lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
 
 <para>
 <programlisting>
@@ -1581,7 +1583,7 @@ unzip cz2-001009.zip
 </programlisting>
 </para>
 
-<para>(On some systems, the file you edit is <command>/etc/festival.scm</command>).</para>
+<para>On some systems, the file you edit is <filename>/etc/festival.scm</filename>.</para>
 
 </sect4>
 
@@ -1612,7 +1614,7 @@ http://www.speech.cs.cmu.edu/flite/index.html</ulink>
 distro CDs to see if it is included.</para>
 
 <para>Build and install flite following the instructions in the
-<command>README</command> that comes with it.</para>
+<filename>README</filename> that comes with it.</para>
 
 </sect2>
 
@@ -1620,13 +1622,13 @@ distro CDs to see if it is included.</para>
 
 
 <sect2 id="using-with-hadifix">
-<title>Using with Hadifix (MBROLA and txt2pho)</title>
+<title>Using with Hadifix (&mbrola; and txt2pho)</title>
 
 <para>Hadifix is a two-stage synthesis engine based on diphones.
 The <command>txt2pho</command> utility converts text into diphones
-and the <command>MBROLA</command> engine synthesizes the diphones to sound.
+and the &mbrola; engine synthesizes the diphones to sound.
 Voice quality is good, but language support is currently somewhat limited.
-You can control the voice, pitch, speed, and volume from <command>kttsmgr</command>.
+You can control the voice, pitch, speed, and volume from <application>kttsmgr</application>.
 </para>
 
 <para>Synthesizer Name: <guilabel>Hadifix</guilabel></para>
@@ -1640,21 +1642,22 @@ You can control the voice, pitch, speed, and volume from <command>kttsmgr</comma
 <procedure>
 <step><para>Download MBROLA binary from
 <ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para></step>
-<step><para>Install MBROLA to <command>/usr/local/mbrola</command> directory.</para></step>
-<step><para>Download at least one german language file from the MBROLA site.
-Unzip to the <command>/usr/local/mbrola</command> directory.</para></step>
+<step><para>Install &mbrola; to <filename>/usr/local/mbrola</filename> directory.</para></step>
+<step><para>Download at least one german language file from the &mbrola; site.
+Unzip to the <filename>/usr/local/mbrola</filename> directory.</para></step>
 <step><para>Download txt2pho from</para>
 <para>
 <ulink url="http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html">
 http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</ulink>.</para>
 </step>
-<step><para>Unzip txt2pho to <command>/usr/local/txt2pho</command>.</para></step>
+<step><para>Unzip txt2pho to <filename>/usr/local/txt2pho</filename>.</para></step>
 <step><para>Edit <command>txt2phorc</command> file, putting correct data paths in.</para></step>
-<step><para>Either copy <command>txt2phorc</command> to <command>~/.txt2phorc</command> or to <command>/etc/txt2pho</command>.
+<step><para>Either copy <command>txt2phorc</command> to <filename>~/.txt2phorc</filename> or to <filename>/etc/txt2pho</filename>.
 Note that you drop the "rc" in file name.</para></step>
-<step><para>In <userinput>kttsmgr</userinput>, choose the German language (<guilabel>de</guilabel>), and add <guilabel>Hadifix</guilabel>.</para></step>
+<step><para>In <application>kttsmgr</application>, choose the German language 
+(<guilabel>de</guilabel>), and add <guilabel>Hadifix</guilabel>.</para></step>
 <step><para>On the <guilabel>Configure Talker</guilabel> screen,
-configure a voice and the paths to MBROLA and txt2pho.</para></step>
+configure a voice and the paths to &mbrola; and txt2pho.</para></step>
 <step><para>Click the <guibutton>Test</guibutton> button to test.</para></step>
 </procedure>
 
@@ -1679,15 +1682,15 @@ http://epos.ure.cas.cz/</ulink>
 
 <para>Debian Install Command: <userinput>apt-get install epos</userinput></para>
 
-<para>Start <command>kttsmgr</command>.  On the <guilabel>Talkers</guilabel> tab,
+<para>Start <application>kttsmgr</application>.  On the <guilabel>Talkers</guilabel> tab,
 click the <guilabel>Add</guilabel> button.  Choose Czeck or Slovak
 language and <guilabel>Epos TTS Synthesis System</guilabel>.
 If the epos server executable and client are not
-in your PATH, specify the paths to these executables
+in your <envar>PATH</envar>, specify the paths to these executables
 in the <guilabel>Configure Talker</guilabel> screen.  The options boxes
-permit you to pass additional options to the server and client.  In a konsole,
-type <userinput>epos -h</userinput> or <userinput>say -h</userinput>
-for information.</para>
+permit you to pass additional options to the server and client.  In a 
+<application>Konsole</application>, type <userinput>epos -h</userinput> 
+or <userinput>say -h</userinput> for information.</para>
 
 </sect2>
 
@@ -1720,7 +1723,8 @@ http://sourceforge.net/projects/freetts/</ulink>
     <title>Using the Command Plugin</title>
 
 <para>The command plugin permits you to use &kmyapplication; with any
-speech synthesis engine that can be run as a command in a Konsole.</para>
+speech synthesis engine that can be run as a command in a 
+<application>Konsole</application>.</para>
 
 <para>Synthesizer Name: <guilabel>Command</guilabel></para>
 
