@@ -271,6 +271,7 @@ QString FilterMgr::getOutput()
 void FilterMgr::ackFinished()
 {
     m_state = fsIdle;
+    m_text = QString::null;
 }
 
 /**

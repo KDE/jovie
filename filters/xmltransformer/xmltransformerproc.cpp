@@ -333,7 +333,11 @@ void XmlTransformerProc::processOutput()
 /**
  * Acknowledges the finished filtering.
  */
-/*virtual*/ void XmlTransformerProc::ackFinished() { m_state = fsIdle; }
+/*virtual*/ void XmlTransformerProc::ackFinished()
+{
+    m_state = fsIdle;
+    m_text = QString::null;
+}
 
 /**
  * Stops filtering.  The filteringStopped signal will emit when filtering

@@ -716,7 +716,11 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 /**
  * Acknowledges the finished filtering.
  */
-/*virtual*/ void SbdProc::ackFinished() { m_state = fsIdle; }
+/*virtual*/ void SbdProc::ackFinished()
+{
+     m_state = fsIdle;
+     m_sbdThread->setText( QString::null );
+}
 
 /**
  * Stops filtering.  The filteringStopped signal will emit when filtering
