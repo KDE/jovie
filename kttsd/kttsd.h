@@ -2,10 +2,10 @@
   kttsd.h
   KTTSD main class
   -------------------
-  Copyright : (C) 2002-2003 by Jos�Pablo Ezequiel "Pupeno" Fern�dez
+  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernádez <pupeno@kde.org>
-  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernádez <pupeno@kde.org>
+  Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
  ******************************************************************************/
 
 /***************************************************************************
@@ -21,7 +21,7 @@
 #ifndef _KTTSD_H_
 #define _KTTSD_H_
 
-#include "kdedmodule.h"
+#include <kdedmodule.h>
 
 class KTTSD : public KDEDModule{
     Q_OBJECT

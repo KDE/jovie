@@ -2,10 +2,10 @@
   kttsd.cpp
   KTTSD main class
   -------------------
-  Copyright : (C) 2002-2003 by Jos�Pablo Ezequiel "Pupeno" Fern�dez
+  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernádez <pupeno@kde.org>
-  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernádez <pupeno@kde.org>
+  Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
  ******************************************************************************/
 
 /***************************************************************************
@@ -23,6 +23,12 @@
 #include "kttsd.moc"
 
 #include "kttsd.h"
+
+extern "C" {
+    KDEDModule *create_kttsd(const QCString &obj){
+        return new KTTSD(obj);
+    }
+};
 
 class TestObject : public KShared{
     public:
@@ -55,8 +61,4 @@ void KTTSD::registerMe(const QCString &app){
    // When 'app' unregisters with DCOP, the TestObject will get deleted.
 }
 
-extern "C" {
-    KDEDModule *create_KTTSD(const QCString &obj){
-        return new KTTSD(obj);
-    }
-};
+
