@@ -1,6 +1,3 @@
-# This should force the compilation of kttsd first, wich is what provides libkttsd.la
-COMPILE_FIRST = $(top_srcdir)/kttsd/libkttsd
-LIBTOOL = $(SHELL) $(top_builddir)/libtool
 INCLUDES = -I$(top_srcdir)/kttsd/libkttsd $(all_includes)
 METASOURCES = AUTO
 
@@ -16,6 +13,3 @@ messages:
 services_DATA = kttsd.desktop
 servicesdir = $(kde_servicesdir)
 
-$(top_srcdir)/kttsd/libkttsd/libkttsd.la:
-	@echo "Please, compile libkttsd first"
-	## I hope to find a way to force the compilation of kttsd
