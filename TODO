@@ -1,4 +1,6 @@
 _ Filters:
+    _ Allow filtering of Messages and Warnings.  Currently, they are not filtered, except for
+      messages due to KNotify.  Do not do SBD on them, however.
     _ Although one can configure Canadian English voice in Festival, there is no way to choose
       Canadian English in the Talker Chooser.
     _ Provide a way for those apps with KTTSD plugins to disable KNotifies, otherwise, users
@@ -26,6 +28,14 @@ _ Hadifix plugin:
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
 _ KTTSMgr:
+    _ Change toolbar buttons to push buttons on Jobs tab.  Toolbar buttons cannot be reached using
+      keyboard.  Consider grouping into buttons with popup menus.
+        Job: Hold, Resume, Restart, Remove, Later, Change Talker.
+        Sentence: Next, Previous.
+        Part: Next, Previous.
+        Speak: Clipboard, File.
+        Refresh.
+      This will save screen space, but will also mean additional click for each function.
     _ Give Talkers a Talker Name entered by user.  Show this name in Jobs tab, Change Talker screen,
       and in systray menu.
     _ Change the Current Sentence panel to show the current sentence of the selected job?  If selected
@@ -62,12 +72,15 @@ _ KTTSD:
     _ KTTSD should autoconfigure a Talker if there is no configured Talker that supports a requested
       language.  If no Talkers are configured at all, autoconfigure a Talker using the user's
       desktop language.  Must somehow let kttsmgr know about the newly configured Talker.
-    _ Continue revision of KDE Speech API (kspeech.h).
     _ Add support for speech markers.
     _ Implement error signal handling in KTTSD.
     _ Add support for SSML, JSML, Sable and other Speech Markup languages.
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
+_ KSpeech API:
+    _ Add convenience method sayText, which does setText, startText.  Don't forget @Since.
+    _ Add instructions for determining if KTTSD is installed to docs.
+    _ Add info about filtering to docs.
 _ Other/General:
     _ .desktop files must have a Type keyword, but what to use for kcmkttsd_testmessage.desktop?
     _ Add option to kill plugin process when no longer needed so that memory can be recovered.
@@ -81,3 +94,4 @@ _ Other/General:
       to send to a wav file.
     _ Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
     _ IBM ViaVoice plugin?
+    _ Add KTTS plugin to Akkregator.
