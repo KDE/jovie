@@ -219,3 +219,93 @@ VolumeAdjustable=true
 RateAdjustable=true
 PitchAdjustable=false
 Comment=Deutsche weibliche, Festival
+
+[abc_diphone]
+Name=OGC abc
+Language=es
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=Mexican Spanish Male, OGC
+
+[hvs_diphone]
+Name=OGC hvs
+Language=es
+Gender=female
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=Mexican Spanish Female, OGC
+
+[mwm_diphone]
+Name=OGC abc
+Language=en_US
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=American Male, OGC
+
+[aec_diphone]
+Name=OGC aec
+Language=en_US
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=American Male, OGC
+
+[jph_diphone]
+Name=OGC jph
+Language=en_US
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=American Male, OGC
+
+[tll_diphone]
+Name=OGC tll
+Language=en_US
+Gender=female
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=American Female, OGC
+
+[ogirab_diphone]
+Name=OGC ogirab
+Language=en_UK
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=British Male, OGC
+
+[mwm2jph_diphone]
+Name=OGC mwm2jph
+Language=en_US
+Gender=male
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=American Male, OGC
+
+[mwm2tll_diphone]
+Name=OGC mwm2tll
+Language=en_US
+Gender=female
+Preload=false
+VolumeAdjustable=true
+RateAdjustable=true
+PitchAdjustable=true
+Comment=American Female, OGC
