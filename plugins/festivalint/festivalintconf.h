@@ -127,13 +127,26 @@ class FestivalIntConf : public PlugInConf {
         void volumeSlider_valueChanged(int sliderValue);
         void timeSlider_valueChanged(int sliderValue);
         void frequencySlider_valueChanged(int sliderValue);
+        void slotFestivalPath_textChanged();
         void slotSelectVoiceCombo_activated();
         void slotQueryVoicesFinished(const QStringList &voiceCodes);
 
    private:
         int percentToSlider(int percentValue);
         int sliderToPercent(int sliderValue);
-        void setDefaultVoice();
+
+        /**
+        * Given a voice code, returns index into m_voiceList array (and voiceCombo box).
+        * -1 if not found.
+        */
+        int voiceCodeToListIndex(const QString voiceCode);
+
+        /**
+        * Chooses a default voice given scanned list of voices in m_voiceList and current
+        * language and country code, and updates controls.
+        * @param currentVoiceIndex      This voice is preferred if it matches.
+        */
+        void setDefaultVoice(int currentVoiceIndex);
 
         // Configuration Widget.
         FestivalIntConfWidget* m_widget;
@@ -143,7 +156,7 @@ class FestivalIntConf : public PlugInConf {
         // Language country code (if any).
         QString m_countryCode;
         /** List of voices */
-        QValueList<voice> voiceList;
+        QValueList<voice> m_voiceList;
         // Festival synthesizer.
         FestivalIntProc* m_festProc;
         // aRts server.

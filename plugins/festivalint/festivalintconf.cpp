@@ -73,9 +73,11 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
 //    defaults();
 
     connect(m_widget->festivalPath, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
+            this, SLOT(slotFestivalPath_textChanged()));
     connect(m_widget->selectVoiceCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotSelectVoiceCombo_activated()));
+    connect(m_widget->selectVoiceCombo, SIGNAL(activated(const QString&)),
+            this, SLOT(configChanged()));
     connect(m_widget->testButton, SIGNAL(clicked()), this, SLOT(slotTest_clicked()));
     connect(m_widget->rescan, SIGNAL(clicked()), this, SLOT(scanVoices()));
     connect(m_widget->volumeBox, SIGNAL(valueChanged(int)),
@@ -110,6 +112,20 @@ FestivalIntConf::~FestivalIntConf(){
     delete m_progressDlg;
 }
 
+/**
+* Given a voice code, returns index into m_voiceList array (and voiceCombo box).
+* -1 if not found.
+*/
+int FestivalIntConf::voiceCodeToListIndex(const QString voiceCode)
+{
+    for(uint index = 0 ; index < m_voiceList.count(); ++index){
+        // kdDebug() << "Testing: " << voiceSelected << " == " << m_voiceList[index].code << endl;
+        if(voiceCode == m_voiceList[index].code)
+            return index;
+    }
+    return -1;
+}
+
 void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     // kdDebug() << "FestivalIntConf::load: Running" << endl;
 
@@ -121,15 +137,11 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     m_widget->preloadCheckBox->setChecked(false);
     scanVoices();
     QString voiceSelected(config->readEntry("Voice"));
-    for(uint index = 0 ; index < voiceList.count(); ++index){
-        // kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
-        if(voiceSelected == voiceList[index].code)
-        {
-            // kdDebug() << "FestivalIntConf::load: setting voice to " << voiceSelected << endl;
-            m_widget->selectVoiceCombo->setCurrentItem(index);
-            m_widget->preloadCheckBox->setChecked(voiceList[index].preload);
-            break;
-        }
+    int index = voiceCodeToListIndex(voiceSelected);
+    if (index >= 0)
+    {
+        m_widget->selectVoiceCombo->setCurrentItem(index);
+        m_widget->preloadCheckBox->setChecked(m_voiceList[index].preload);
     }
     m_widget->volumeBox->setValue(config->readNumEntry("volume", 100));
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
@@ -145,7 +157,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     config->writePathEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
     config->setGroup(configGroup);
     config->writePathEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
-    config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
+    config->writeEntry("Voice", m_voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     config->writeEntry("volume", m_widget->volumeBox->value());
     config->writeEntry("time", m_widget->timeBox->value());
     config->writeEntry("pitch", m_widget->frequencyBox->value());
@@ -172,33 +184,40 @@ void FestivalIntConf::setDesiredLanguage(const QString &lang)
 
 QString FestivalIntConf::getTalkerCode()
 {
+    if (!m_widget->selectVoiceCombo->isEnabled()) return QString::null;
+    QString exePath = realFilePath(m_widget->festivalPath->url());
+    if (exePath.isEmpty()) return QString::null;
+    if (getLocation(exePath).isEmpty()) return QString::null;
+    if (m_voiceList.count() == 0) return QString::null;
     QString normalTalkerCode;
-    if (voiceList.count() > 0)
-    {
-        voiceStruct voiceTemp = voiceList[m_widget->selectVoiceCombo->currentItem()];
-        // Determine volume attribute.  soft < 75% <= medium <= 125% < loud.
-        QString volume = "medium";
-        if (m_widget->volumeBox->value() < 75) volume = "soft";
-        if (m_widget->volumeBox->value() > 125) volume = "loud";
-        // Determine rate attribute.  slow < 75% <= medium <= 125% < fast.
-        QString rate = "medium";
-        if (m_widget->timeBox->value() < 75) rate = "slow";
-        if (m_widget->timeBox->value() > 125) rate = "fast";
-        normalTalkerCode = QString(
-                "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
-                "<prosody volume=\"%4\" rate=\"%5\" />"
-                "<kttsd synthesizer=\"%6\" />")
-                .arg(voiceTemp.languageCode)
-                .arg(voiceTemp.name)
-                .arg(voiceTemp.gender)
-                .arg(volume)
-                .arg(rate)
-                .arg("Festival Interactive");
-    } else normalTalkerCode = QString::null;
+    voiceStruct voiceTemp = m_voiceList[m_widget->selectVoiceCombo->currentItem()];
+    // Determine volume attribute.  soft < 75% <= medium <= 125% < loud.
+    QString volume = "medium";
+    if (m_widget->volumeBox->value() < 75) volume = "soft";
+    if (m_widget->volumeBox->value() > 125) volume = "loud";
+    // Determine rate attribute.  slow < 75% <= medium <= 125% < fast.
+    QString rate = "medium";
+    if (m_widget->timeBox->value() < 75) rate = "slow";
+    if (m_widget->timeBox->value() > 125) rate = "fast";
+    normalTalkerCode = QString(
+            "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+            "<prosody volume=\"%4\" rate=\"%5\" />"
+            "<kttsd synthesizer=\"%6\" />")
+            .arg(voiceTemp.languageCode)
+            .arg(voiceTemp.name)
+            .arg(voiceTemp.gender)
+            .arg(volume)
+            .arg(rate)
+            .arg("Festival Interactive");
     return normalTalkerCode;
 }
 
-void FestivalIntConf::setDefaultVoice()
+/**
+ * Chooses a default voice given scanned list of voices in m_voiceList and current
+ * language and country code, and updates controls.
+ * @param currentVoiceIndex      This voice is preferred if it matches.
+ */
+void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
 {
     // If language code is known, auto pick first voice that matches the language code.
     if (!m_languageCode.isEmpty())
@@ -209,23 +228,21 @@ void FestivalIntConf::setDefaultVoice()
         if (!m_countryCode.isNull()) languageCode += "_" + m_countryCode;
         // kdDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
         uint index;
-        for(index = 0 ; index < voiceList.count(); ++index)
+        // Prefer existing voice if it matches.
+        if (currentVoiceIndex >= 0)
         {
-            QString vlCode = voiceList[index].languageCode.left(languageCode.length());
-            // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
-            if(languageCode == vlCode)
+            QString vlCode = m_voiceList[currentVoiceIndex].languageCode.left(languageCode.length());
+            if (languageCode = vlCode)
             {
                 found = true;
-                break;
+                index = currentVoiceIndex;
             }
         }
-        // If not found, search for a match on just the language code.
         if (!found)
         {
-            languageCode = m_languageCode;
-            for(index = 0 ; index < voiceList.count(); ++index)
+            for(index = 0 ; index < m_voiceList.count(); ++index)
             {
-                QString vlCode = voiceList[index].languageCode.left(languageCode.length());
+                QString vlCode = m_voiceList[index].languageCode.left(languageCode.length());
                 // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
                 if(languageCode == vlCode)
                 {
@@ -234,12 +251,40 @@ void FestivalIntConf::setDefaultVoice()
                 }
             }
         }
+        // If not found, search for a match on just the language code.
+        if (!found)
+        {
+            languageCode = m_languageCode;
+            // Prefer existing voice if it matches.
+            if (currentVoiceIndex >= 0)
+            {
+                QString vlCode = m_voiceList[currentVoiceIndex].languageCode.left(languageCode.length());
+                if (languageCode = vlCode)
+                {
+                    found = true;
+                    index = currentVoiceIndex;
+                }
+            }
+            if (!found)
+            {
+                for(index = 0 ; index < m_voiceList.count(); ++index)
+                {
+                    QString vlCode = m_voiceList[index].languageCode.left(languageCode.length());
+                    // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
+                    if(languageCode == vlCode)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
         // If not found, pick first voice that is not "Unknown".
         if (!found)
         {
-            for(index = 0 ; index < voiceList.count(); ++index)
+            for(index = 0 ; index < m_voiceList.count(); ++index)
             {
-                if (voiceList[index].name != i18n("Unknown"))
+                if (m_voiceList[index].name != i18n("Unknown"))
                 {
                     found = true;
                     break;
@@ -248,10 +293,10 @@ void FestivalIntConf::setDefaultVoice()
         }
         if (found)
         {
-            // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << voiceList[index].code << endl;
+            // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << m_voiceList[index].code << endl;
             m_widget->selectVoiceCombo->setCurrentItem(index);
-            m_widget->preloadCheckBox->setChecked(voiceList[index].preload);
-            if (voiceList[index].volumeAdjustable)
+            m_widget->preloadCheckBox->setChecked(m_voiceList[index].preload);
+            if (m_voiceList[index].volumeAdjustable)
             {
                 m_widget->volumeBox->setEnabled(true);
                 m_widget->volumeSlider->setEnabled(true);
@@ -263,7 +308,7 @@ void FestivalIntConf::setDefaultVoice()
                 m_widget->volumeBox->setEnabled(false);
                 m_widget->volumeSlider->setEnabled(false);
             }
-            if (voiceList[index].rateAdjustable)
+            if (m_voiceList[index].rateAdjustable)
             {
                 m_widget->timeBox->setEnabled(true);
                 m_widget->timeSlider->setEnabled(true);
@@ -275,7 +320,7 @@ void FestivalIntConf::setDefaultVoice()
                 m_widget->timeBox->setEnabled(false);
                 m_widget->timeSlider->setEnabled(false);
             }
-            if (voiceList[index].pitchAdjustable)
+            if (m_voiceList[index].pitchAdjustable)
             {
                 m_widget->frequencyBox->setEnabled(true);
                 m_widget->frequencySlider->setEnabled(true);
@@ -287,6 +332,7 @@ void FestivalIntConf::setDefaultVoice()
                 m_widget->frequencyBox->setEnabled(false);
                 m_widget->frequencySlider->setEnabled(false);
             }
+            if ((int)index != currentVoiceIndex) configChanged();
         }
     }
 }
@@ -294,7 +340,12 @@ void FestivalIntConf::setDefaultVoice()
 void FestivalIntConf::scanVoices()
 {
     // kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
-    voiceList.clear();
+    // Get existing voice code (if any).
+    QString currentVoiceCode;
+    int index = m_widget->selectVoiceCombo->currentItem();
+    if (index < (int)m_voiceList.count()) currentVoiceCode = m_voiceList[index].code;
+
+    m_voiceList.clear();
     m_widget->selectVoiceCombo->clear();
     m_widget->selectVoiceCombo->insertItem(i18n("Scanning..please wait."));
     m_widget->selectVoiceCombo->setEnabled(false);
@@ -308,9 +359,9 @@ void FestivalIntConf::scanVoices()
     {
         // Set up a progress dialog.
         m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_queryvoices",
-            i18n("Query Voices"),
-            i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
-            true);
+                                            i18n("Query Voices"),
+                                            i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
+                                            true);
         m_progressDlg->progressBar()->hide();
         m_progressDlg->setAllowCancel(true);
 
@@ -323,7 +374,7 @@ void FestivalIntConf::scanVoices()
             connect (m_festProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
         }
         connect (m_festProc, SIGNAL(queryVoicesFinished(const QStringList&)),
-            this, SLOT(slotQueryVoicesFinished(const QStringList&)));
+                 this, SLOT(slotQueryVoicesFinished(const QStringList&)));
         m_festProc->queryVoices(exePath);
 
         // Display progress dialog modally.
@@ -335,7 +386,7 @@ void FestivalIntConf::scanVoices()
         // the progress dialog is closed.
 
         disconnect (m_festProc, SIGNAL(queryVoicesFinished(const QStringList&)),
-            this, SLOT(slotQueryVoicesFinished(const QStringList&)));
+                    this, SLOT(slotQueryVoicesFinished(const QStringList&)));
         if (!m_progressDlg->wasCancelled()) m_festProc->stopText();
         delete m_progressDlg;
         m_progressDlg = 0;
@@ -352,7 +403,7 @@ void FestivalIntConf::scanVoices()
         desktopLanguageCode = twoAlpha.lower();
         // Festival known voices list.
         KConfig voices(KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices",
-            true, false);
+                       true, false);
         QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
         for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
         {
@@ -364,18 +415,18 @@ void FestivalIntConf::scanVoices()
             voiceTemp.languageCode = voices.readEntry("Language", m_languageCode);
             // Get translated comment, fall back to English comment, fall back to code.
             voiceTemp.comment = voices.readEntry("Comment["+desktopLanguageCode+"]",
-                voices.readEntry("Comment", code));
+                    voices.readEntry("Comment", code));
             voiceTemp.gender = voices.readEntry("Gender", "neutral");
             voiceTemp.preload = voices.readBoolEntry("Preload", false);
             voiceTemp.volumeAdjustable = voices.readBoolEntry("VolumeAdjustable", true);
             voiceTemp.rateAdjustable = voices.readBoolEntry("RateAdjustable", true);
             voiceTemp.pitchAdjustable = voices.readBoolEntry("PitchAdjustable", true);
-            voiceList.append(voiceTemp);
+            m_voiceList.append(voiceTemp);
             m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
         }
+        m_widget->selectVoiceCombo->setEnabled(true);
     }
-    m_widget->selectVoiceCombo->setEnabled(true);
-    setDefaultVoice();
+    setDefaultVoice(voiceCodeToListIndex(currentVoiceCode));
 }
 
 void FestivalIntConf::slotQueryVoicesFinished(const QStringList &voiceCodes)
@@ -401,32 +452,32 @@ void FestivalIntConf::slotTest_clicked()
     tempFile.close();
 
     // Get the code for the selected voice.
-    QString voiceCode = voiceList[m_widget->selectVoiceCombo->currentItem()].code;
+    QString voiceCode = m_voiceList[m_widget->selectVoiceCombo->currentItem()].code;
 
     // Use the translated name of the voice as the test message.
-    QString testMsg = voiceList[m_widget->selectVoiceCombo->currentItem()].comment;
+    QString testMsg = m_voiceList[m_widget->selectVoiceCombo->currentItem()].comment;
     // Fall back if none.
     if (testMsg == voiceCode) testMsg =
-        i18n("K D E is a modern graphical desktop for UNIX computers.");
+                i18n("K D E is a modern graphical desktop for UNIX computers.");
 
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "ktts_festivalint_testdlg",
-        i18n("Testing"),
-        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
-        true);
+                                        i18n("Testing"),
+                                        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
+                                        true);
     m_progressDlg->progressBar()->hide();
     m_progressDlg->setAllowCancel(true);
 
     // kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
     connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_festProc->synth(
-        realFilePath(m_widget->festivalPath->url()),
-        testMsg,
-        tmpWaveFile,
-        voiceCode,
-        m_widget->timeBox->value(),
-        m_widget->frequencyBox->value(),
-        m_widget->volumeBox->value());
+            realFilePath(m_widget->festivalPath->url()),
+    testMsg,
+    tmpWaveFile,
+    voiceCode,
+    m_widget->timeBox->value(),
+    m_widget->frequencyBox->value(),
+    m_widget->volumeBox->value());
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
@@ -451,9 +502,9 @@ void FestivalIntConf::slotSynthFinished()
     // If currently playing (or finished playing), stop and delete play object.
     if (m_playObj)
     {
-       m_playObj->halt();
+        m_playObj->halt();
        // Clean up.
-       QFile::remove(m_waveFile);
+        QFile::remove(m_waveFile);
     }
     delete m_playObj;
     delete m_artsServer;
@@ -491,12 +542,22 @@ void FestivalIntConf::slotSynthStopped()
     if (!filename.isNull()) QFile::remove(filename);
 }
 
+void FestivalIntConf::slotFestivalPath_textChanged()
+{
+    QString exePath = realFilePath(m_widget->festivalPath->url());
+    m_widget->selectVoiceCombo->setEnabled(false);
+    if (!exePath.isEmpty() && !getLocation(exePath).isEmpty())
+    {
+        m_widget->rescan->setEnabled(true);
+    } else m_widget->rescan->setEnabled(false);
+}
+
 void FestivalIntConf::slotSelectVoiceCombo_activated()
 {
     int index = m_widget->selectVoiceCombo->currentItem();
     m_widget->preloadCheckBox->setChecked(
-        voiceList[index].preload);
-    if (voiceList[index].volumeAdjustable)
+        m_voiceList[index].preload);
+    if (m_voiceList[index].volumeAdjustable)
     {
         m_widget->volumeBox->setEnabled(true);
         m_widget->volumeSlider->setEnabled(true);
@@ -508,7 +569,7 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
         m_widget->volumeBox->setEnabled(false);
         m_widget->volumeSlider->setEnabled(false);
     }
-    if (voiceList[index].rateAdjustable)
+    if (m_voiceList[index].rateAdjustable)
     {
         m_widget->timeBox->setEnabled(true);
         m_widget->timeSlider->setEnabled(true);
@@ -520,7 +581,7 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
         m_widget->timeBox->setEnabled(false);
         m_widget->timeSlider->setEnabled(false);
     }
-    if (voiceList[index].pitchAdjustable)
+    if (m_voiceList[index].pitchAdjustable)
     {
         m_widget->frequencyBox->setEnabled(true);
         m_widget->frequencySlider->setEnabled(true);
@@ -532,7 +593,6 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
         m_widget->frequencyBox->setEnabled(false);
         m_widget->frequencySlider->setEnabled(false);
     }
-    configChanged();
 }
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent
