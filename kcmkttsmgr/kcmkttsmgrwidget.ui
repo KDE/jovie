@@ -437,7 +437,7 @@
                                     </property>
                                     <widget class="QPushButton">
                                         <property name="name">
-                                            <cstring>higherSbdPriorityButton</cstring>
+                                            <cstring>sbdButton</cstring>
                                         </property>
                                         <property name="sizePolicy">
                                             <sizepolicy>
@@ -448,57 +448,10 @@
                                             </sizepolicy>
                                         </property>
                                         <property name="text">
-                                            <string>U&amp;p</string>
+                                            <string>Co&amp;nfigure</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Click to move selected Sentence Boundary Detector up in the list.  Sentence Boundary Detectors higher in the list are applied first.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>lowerSbdPriorityButton</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>5</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>  Dow&amp;n  </string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to move a Sentence Boundary Detector down in the list.  Sentence Boundary Detectors lower in the list are applied last.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>configureSbdButton</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>5</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Edit...</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string></string>
-                                        </property>
-                                        <property name="toggleButton">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to configure options for the highlighted Sentence Boundary Detector.</string>
+                                            <string>Click this button to edit the Sentence Boundary Detector configuration, or click and hold down to select other operations.</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1388,7 +1341,6 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>

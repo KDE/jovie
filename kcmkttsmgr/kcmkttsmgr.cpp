@@ -32,6 +32,7 @@
 #include <qradiobutton.h>
 #include <qslider.h>
 #include <qlabel.h>
+#include <qpopmenu.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -108,6 +109,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     layout->addWidget(m_kttsmgrw, 0, 0);
 
     // Give buttons icons.
+    // Talkers tab.
     m_kttsmgrw->higherTalkerPriorityButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
     m_kttsmgrw->lowerTalkerPriorityButton->setIconSet(
@@ -117,7 +119,26 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->configureTalkerButton->setIconSet(
         KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
+    // Filters tab.
+    m_kttsmgrw->higherFilterPriorityButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
+    m_kttsmgrw->lowerFilterPriorityButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
+    m_kttsmgrw->removeFilterButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+    m_kttsmgrw->configureFilterButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
+
     m_kttsmgrw->sinkComboBox->setEditable(false);
+
+    // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
+    m_sbdPopmenu = new QPopupMenu( m_kttsmgrw, "SbdPopupMenu" );
+    m_sbdPopmenu->insertItem( i18n("Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
+    m_sbdPopmenu->insertItem( i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
+    m_sbdPopmenu->insertItem( i18n("Dow&n"), this, SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
+    m_sbdPopmenu->insertItem( i18n("Add..."), this, SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
+    m_sbdPopmenu->insertItem( i18n("Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
+    m_kttsmgrw->sbdButton->setPopup( m_sbdPopmenu );
 
     // If GStreamer is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
@@ -154,13 +175,13 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 
     // Talker tab.
     connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
-            this, SLOT(addTalker()));
+            this, SLOT(slot_addTalker()));
     connect(m_kttsmgrw->higherTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(higherTalkerPriority()));
+            this, SLOT(slot_higherTalkerPriority()));
     connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(lowerTalkerPriority()));
+            this, SLOT(slot_lowerTalkerPriority()));
     connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
-            this, SLOT(removeTalker()));
+            this, SLOT(slot_removeTalker()));
     connect(m_kttsmgrw->configureTalkerButton, SIGNAL(clicked()),
             this, SLOT(slot_configureTalker()));
     connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
@@ -168,25 +189,19 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 
     // Filter tab.
     connect(m_kttsmgrw->addFilterButton, SIGNAL(clicked()),
-            this, SLOT(addFilter()));
+            this, SLOT(slot_addNormalFilter()));
     connect(m_kttsmgrw->higherFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(higherFilterPriority()));
+            this, SLOT(slot_higherNormalFilterPriority()));
     connect(m_kttsmgrw->lowerFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(lowerFilterPriority()));
+            this, SLOT(slot_lowerNormalFilterPriority()));
     connect(m_kttsmgrw->removeFilterButton, SIGNAL(clicked()),
-            this, SLOT(removeFilter()));
+            this, SLOT(slot_removeNormalFilter()));
     connect(m_kttsmgrw->configureFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_configureFilter()));
+            this, SLOT(slot_configureNormalFilter()));
     connect(m_kttsmgrw->filtersList, SIGNAL(selectionChanged()),
             this, SLOT(updateFilterButtons()));
     //connect(m_kttsmgrw->filtersList, SIGNAL(stateChanged()),
     //        this, SLOT(configChanged()));
-    connect(m_kttsmgrw->higherSbdPriorityButton, SIGNAL(clicked()),
-            this, SLOT(higherSbdPriority()));
-    connect(m_kttsmgrw->lowerSbdPriorityButton, SIGNAL(clicked()),
-            this, SLOT(lowerSbdPriority()));
-    connect(m_kttsmgrw->configureSbdButton, SIGNAL(clicked()),
-            this, SLOT(slot_configureSbd()));
     connect(m_kttsmgrw->sbdsList, SIGNAL(selectionChanged()),
             this, SLOT(updateSbdButtons()));
 
@@ -376,7 +391,6 @@ void KCMKttsMgr::load()
 
     // Load Filters.
     QListViewItem* filterItem = 0;
-    QListViewItem* sbdItem = 0;
     m_kttsmgrw->filtersList->clear();
     m_kttsmgrw->sbdsList->clear();
     m_kttsmgrw->filtersList->setSortColumn(-1);
@@ -400,27 +414,29 @@ void KCMKttsMgr::load()
             bool checked = m_config->readBoolEntry("Enabled", false);
             if (isSbd)
             {
-                if (!sbdItem)
-                    sbdItem = new KListViewItem(m_kttsmgrw->sbdsList,
+                filterItem = m_kttsmgrw->sbdsList->lastChild();
+                if (!filterItem)
+                    filterItem = new KListViewItem(m_kttsmgrw->sbdsList,
                         userFilterName, filterID, filterPlugInName);
                 else
-                    sbdItem = new KListViewItem(m_kttsmgrw->sbdsList, sbdItem,
+                    filterItem = new KListViewItem(m_kttsmgrw->sbdsList, filterItem,
                         userFilterName, filterID, filterPlugInName);
             } else {
+                filterItem = m_kttsmgrw->filtersList->lastChild();
                 if (!filterItem)
                     filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
                         userFilterName, QCheckListItem::CheckBox, this);
                 else
                     filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
                         userFilterName, QCheckListItem::CheckBox, this);
-                filterItem->setText(flvcFilterID, filterID);
-                filterItem->setText(flvcPlugInName, filterPlugInName);
-                if (multiInstance)
-                    filterItem->setText(flvcMultiInstance, "T");
-                else
-                    filterItem->setText(flvcMultiInstance, "F");
                 dynamic_cast<QCheckListItem*>(filterItem)->setOn(checked);
             }
+            filterItem->setText(flvcFilterID, filterID);
+            filterItem->setText(flvcPlugInName, filterPlugInName);
+            if (multiInstance)
+                filterItem->setText(flvcMultiInstance, "T");
+            else
+                filterItem->setText(flvcMultiInstance, "F");
             if (filterID.toInt() > m_lastFilterID) m_lastFilterID = filterID.toInt();
         }
     }
@@ -447,43 +463,41 @@ void KCMKttsMgr::load()
                 {
                     kdDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName << endl;
                     // Determine if plugin is an SBD filter.
+                    bool multiInstance = filterPlugIn->supportsMultiInstance();
                     bool isSbd = filterPlugIn->isSBD();
                     if (isSbd)
                     {
-                        if (!sbdItem)
-                            sbdItem = new KListViewItem(m_kttsmgrw->sbdsList,
+                        filterItem = m_kttsmgrw->sbdsList->lastChild();
+                        if (!filterItem)
+                            filterItem = new KListViewItem(m_kttsmgrw->sbdsList,
                                 userFilterName, filterID, filterPlugInName);
                         else
-                            sbdItem = new KListViewItem(m_kttsmgrw->sbdsList, sbdItem,
+                            filterItem = new KListViewItem(m_kttsmgrw->sbdsList, filterItem,
                                 userFilterName, filterID, filterPlugInName);
-                        m_config->setGroup(groupName);
-                        m_config->writeEntry("PlugInName", filterPlugInName);
-                        m_config->writeEntry("UserFilterName", userFilterName);
-                        m_config->writeEntry("IsSBD", true);
-                        m_config->writeEntry("Enabled", true);
                     } else {
+                        filterItem = m_kttsmgrw->filtersList->lastChild();
                         if (!filterItem)
                             filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
                                 userFilterName, QCheckListItem::CheckBox, this);
                         else
                             filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
                                 userFilterName, QCheckListItem::CheckBox, this);
-                        filterItem->setText(flvcFilterID, filterID);
-                        filterItem->setText(flvcPlugInName, filterPlugInName);
-                        bool multiInstance = filterPlugIn->supportsMultiInstance();
-                        if (multiInstance)
-                            filterItem->setText(flvcMultiInstance, "T");
-                        else
-                            filterItem->setText(flvcMultiInstance, "F");
                         dynamic_cast<QCheckListItem*>(filterItem)->setOn(false);
-                        m_config->setGroup(groupName);
-                        filterPlugIn->save(m_config, groupName);
-                        m_config->setGroup(groupName);
-                        m_config->writeEntry("PlugInName", filterPlugInName);
-                        m_config->writeEntry("UserFilterName", userFilterName);
-                        m_config->writeEntry("Enabled", false);
-                        m_config->writeEntry("MultiInstance", multiInstance);
                     }
+                    filterItem->setText(flvcFilterID, filterID);
+                    filterItem->setText(flvcPlugInName, filterPlugInName);
+                    if (multiInstance)
+                        filterItem->setText(flvcMultiInstance, "T");
+                    else
+                        filterItem->setText(flvcMultiInstance, "F");
+                    m_config->setGroup(groupName);
+                    filterPlugIn->save(m_config, groupName);
+                    m_config->setGroup(groupName);
+                    m_config->writeEntry("PlugInName", filterPlugInName);
+                    m_config->writeEntry("UserFilterName", userFilterName);
+                    m_config->writeEntry("Enabled", false);
+                    m_config->writeEntry("MultiInstance", multiInstance);
+                    m_config->writeEntry("IsSBD", isSbd);
                     filterIDsList.append(filterID);
                 } else m_lastFilterID--;
             } else
@@ -620,6 +634,7 @@ void KCMKttsMgr::save()
         bool checked = dynamic_cast<QCheckListItem*>(filterItem)->isOn();
         m_config->setGroup("Filter_" + filterID);
         m_config->writeEntry("Enabled", checked);
+        m_config->writeEntry("IsSBD", false);
         filterItem = nextFilterItem;
     }
     QListViewItem* sbdItem = m_kttsmgrw->sbdsList->firstChild();
@@ -996,7 +1011,8 @@ void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talk
 /**
  * Add a talker.
  */
-void KCMKttsMgr::addTalker(){
+void KCMKttsMgr::slot_addTalker()
+{
     AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, this, "AddTalker_widget");
     KDialogBase* dlg = new KDialogBase(
         KDialogBase::Swallow,
@@ -1146,14 +1162,27 @@ void KCMKttsMgr::addTalker(){
     // kdDebug() << "KCMKttsMgr::addTalker: done." << endl;
 }
 
+void KCMKttsMgr::slot_addNormalFilter()
+{
+    addFilter( false );
+}
+
+void KCMKttsMgr:: slot_addSbdFilter()
+{
+    addFilter( true );
+}
+
 /**
 * Add a filter.
 */
-void KCMKttsMgr::addFilter()
+void KCMKttsMgr::addFilter( bool sbd)
 {
     // Build a list of filters that support multiple instances and let user choose.
+    KListView* lView = m_kttsmgrw->filtersList;
+    if (sbd) lView = m_kttsmgrw->sbdsList;
+
     QStringList filterPlugInNames;
-    QListViewItem* item = m_kttsmgrw->filtersList->firstChild();
+    QListViewItem* item = lView->firstChild();
     while (item)
     {
         if (item->text(flvcMultiInstance) == "T")
@@ -1169,7 +1198,15 @@ void KCMKttsMgr::addFilter()
     {
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins(filterPlugInName) == 0)
-            filterPlugInNames.append(filterPlugInName);
+        {
+            KttsFilterConf* filterConf = loadFilterPlugin( filterPlugInName );
+            if (filterConf)
+            {
+                if (filterConf->isSBD() == sbd)
+                    filterPlugInNames.append(filterPlugInName);
+                delete filterConf;
+            }
+        }
     }
 
     // If no choice (shouldn't happen), bail out.
@@ -1236,32 +1273,46 @@ void KCMKttsMgr::addFilter()
         m_config->writeEntry("UserFilterName", userFilterName);
         m_config->writeEntry("MultiInstance", multiInstance);
         m_config->writeEntry("Enabled", true);
+        m_config->writeEntry("IsSBD", sbd);
         m_config->sync();
 
         // Add listview item.
-        QListViewItem* filterItem = m_kttsmgrw->filtersList->lastChild();
-        if (filterItem)
-            filterItem =
-                new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                    userFilterName, QCheckListItem::CheckBox, this);
+        QListViewItem* filterItem = lView->lastChild();
+        if (sbd)
+        {
+            if (filterItem)
+                filterItem = new KListViewItem( lView, filterItem, userFilterName );
+            else
+                filterItem = new KListViewItem( lView, userFilterName );
+        }
         else
-            filterItem =
-                new KttsCheckListItem(m_kttsmgrw->filtersList,
-                    userFilterName, QCheckListItem::CheckBox, this);
+        {
+            if (filterItem)
+                filterItem =
+                    new KttsCheckListItem(lView, filterItem,
+                        userFilterName, QCheckListItem::CheckBox, this);
+            else
+                filterItem =
+                    new KttsCheckListItem(lView,
+                        userFilterName, QCheckListItem::CheckBox, this);
+            dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+        }
         filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
         filterItem->setText(flvcPlugInName, filterPlugInName);
         if (multiInstance)
             filterItem->setText(flvcMultiInstance, "T");
         else
             filterItem->setText(flvcMultiInstance, "F");
-        dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
 
         // Make sure visible.
-        m_kttsmgrw->filtersList->ensureItemVisible(filterItem);
+        lView->ensureItemVisible(filterItem);
 
         // Select the new item, update buttons.
-        m_kttsmgrw->filtersList->setSelected(filterItem, true);
-        updateFilterButtons();
+        lView->setSelected(filterItem, true);
+        if (sbd)
+            updateSbdButtons();
+        else
+            updateFilterButtons();
 
         // Inform Control Center that change has been made.
         configChanged();
@@ -1277,7 +1328,7 @@ void KCMKttsMgr::addFilter()
 /**
 * Remove talker.
 */
-void KCMKttsMgr::removeTalker(){
+void KCMKttsMgr::slot_removeTalker(){
     // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
 
     // Get the selected talker.
@@ -1297,14 +1348,27 @@ void KCMKttsMgr::removeTalker(){
     configChanged();
 }
 
+void KCMKttsMgr::slot_removeNormalFilter()
+{
+    removeFilter( false );
+}
+
+void KCMKttsMgr::slot_removeSbdFilter()
+{
+    removeFilter( true );
+}
+
 /**
 * Remove filter.
 */
-void KCMKttsMgr::removeFilter(){
+void KCMKttsMgr::removeFilter( bool sbd )
+{
     // kdDebug() << "KCMKttsMgr::removeFilter: Running"<< endl;
 
+    KListView* lView = m_kttsmgrw->filtersList;
+    if (sbd) lView = m_kttsmgrw->sbdsList;
     // Get the selected filter.
-    QListViewItem *itemToRemove = m_kttsmgrw->filtersList->selectedItem();
+    QListViewItem *itemToRemove = lView->selectedItem();
     if (!itemToRemove) return;
 
     // Delete the filter from configuration file.
@@ -1315,113 +1379,91 @@ void KCMKttsMgr::removeFilter(){
     // instead of deleting it, uncheck it.
     bool multiInstance = (itemToRemove->text(flvcMultiInstance) == "T");
     QString filterPlugInName = itemToRemove->text(flvcPlugInName);
-    if (!multiInstance || countFilterPlugins(filterPlugInName) <= 1)
+    if (!sbd)
     {
-        dynamic_cast<QCheckListItem*>(itemToRemove)->setOn(false);
-        configChanged();
-        return;
+        if (!multiInstance || countFilterPlugins(filterPlugInName) <= 1)
+        {
+            dynamic_cast<QCheckListItem*>(itemToRemove)->setOn(false);
+            configChanged();
+            return;
+        }
     }
 
     // Delete the filter from list view.
     delete itemToRemove;
 
-    updateFilterButtons();
+    if (sbd)
+        updateSbdButtons();
+    else
+        updateFilterButtons();
 
     // Emit configuraton changed.
     configChanged();
 }
 
-/**
-* This slot is called whenever user clicks the higherTalkerPriority button (up).
-*/
-void KCMKttsMgr::higherTalkerPriority()
+void KCMKttsMgr::slot_higherTalkerPriority()
 {
-    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
-    if (!talkerItem) return;
-    QListViewItem* prevTalkerItem = talkerItem->itemAbove();
-    if (!prevTalkerItem) return;
-    prevTalkerItem->moveItem(talkerItem);
-    m_kttsmgrw->talkersList->setSelected(talkerItem, true);
+    higherItemPriority( m_kttsmgrw->talkersList );
     updateTalkerButtons();
-    configChanged();
 }
 
-/**
- * This slot is called whenever user clicks the higherFilterPriority button (up).
- */
-void KCMKttsMgr::higherFilterPriority()
+void KCMKttsMgr::slot_higherNormalFilterPriority()
 {
-    QListViewItem* filterItem = m_kttsmgrw->filtersList->selectedItem();
-    if (!filterItem) return;
-    QListViewItem* prevFilterItem = filterItem->itemAbove();
-    if (!prevFilterItem) return;
-    prevFilterItem->moveItem(filterItem);
-    m_kttsmgrw->filtersList->setSelected(filterItem, true);
+    higherItemPriority( m_kttsmgrw->filtersList );
     updateFilterButtons();
-    configChanged();
 }
 
-/**
- * This slot is called whenever user clicks the higherSbdPriority button (up).
- */
-void KCMKttsMgr::higherSbdPriority()
+void KCMKttsMgr::slot_higherSbdFilterPriority()
 {
-    QListViewItem* filterItem = m_kttsmgrw->sbdsList->selectedItem();
-    if (!filterItem) return;
-    QListViewItem* prevFilterItem = filterItem->itemAbove();
-    if (!prevFilterItem) return;
-    prevFilterItem->moveItem(filterItem);
-    m_kttsmgrw->sbdsList->setSelected(filterItem, true);
+    higherItemPriority( m_kttsmgrw->sbdsList );
     updateSbdButtons();
-    configChanged();
 }
 
 /**
-* This slot is called whenever user clicks the lowerTalkerPriority button (down).
+* This is called whenever user clicks the Up button.
 */
-void KCMKttsMgr::lowerTalkerPriority()
+void KCMKttsMgr::higherItemPriority( KListView* lView )
 {
-    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
-    if (!talkerItem) return;
-    QListViewItem* nextTalkerItem = talkerItem->itemBelow();
-    if (!nextTalkerItem) return;
-    talkerItem->moveItem(nextTalkerItem);
-    m_kttsmgrw->talkersList->setSelected(talkerItem, true);
+    QListViewItem* item = lView->selectedItem();
+    if (!item) return;
+    QListViewItem* prevItem = item->itemAbove();
+    if (!prevItem) return;
+    prevItem->moveItem(item);
+    lView->setSelected(item, true);
+    lView->ensureItemVisible( item );
+    configChanged();
+}
+
+void KCMKttsMgr::slot_lowerTalkerPriority()
+{
+    lowerItemPriority( m_kttsmgrw->talkersList );
     updateTalkerButtons();
-    configChanged();
 }
 
-/**
-* This slot is called whenever user clicks the lowerFilterPriority button (down).
-*/
-void KCMKttsMgr::lowerFilterPriority()
+void KCMKttsMgr::slot_lowerNormalFilterPriority()
 {
-    // kdDebug() << "KCMKttsMgr::lowerFilterPriority: Running" << endl;
-    QListViewItem* filterItem = m_kttsmgrw->filtersList->selectedItem();
-    if (!filterItem) return;
-    QListViewItem* nextFilterItem = filterItem->itemBelow();
-    if (!nextFilterItem) return;
-    // kdDebug() << "KCMKttsMgr::lowerFilterPriority: moving " << filterItem->text(0) << " below " << nextFilterItem->text(0) << endl;
-    filterItem->moveItem(nextFilterItem);
-    m_kttsmgrw->filtersList->setSelected(filterItem, true);
+    lowerItemPriority( m_kttsmgrw->filtersList );
     updateFilterButtons();
-    configChanged();
+}
+
+void KCMKttsMgr::slot_lowerSbdFilterPriority()
+{
+    lowerItemPriority( m_kttsmgrw->sbdsList );
+    updateSbdButtons();
 }
 
 /**
- * This slot is called whenever user clicks the lowerSbdPriority button (down).
- */
-void KCMKttsMgr::lowerSbdPriority()
+* This is called whenever user clicks the Down button.
+*/
+void KCMKttsMgr::lowerItemPriority( KListView* lView )
 {
-    // kdDebug() << "KCMKttsMgr::lowerSbdPriority: Running" << endl;
-    QListViewItem* filterItem = m_kttsmgrw->sbdsList->selectedItem();
-    if (!filterItem) return;
-    QListViewItem* nextFilterItem = filterItem->itemBelow();
-    if (!nextFilterItem) return;
-    // kdDebug() << "KCMKttsMgr::lowerSbdPriority: moving " << filterItem->text(0) << " below " << nextFilterItem->text(0) << endl;
-    filterItem->moveItem(nextFilterItem);
-    m_kttsmgrw->sbdsList->setSelected(filterItem, true);
-    updateSbdButtons();
+    QListViewItem* item = lView->selectedItem();
+    if (!item) return;
+    QListViewItem* nextItem = item->itemBelow();
+    if (!nextItem) return;
+    item->moveItem(nextItem);
+    lView->setSelected(item, true);
+    lView->ensureItemVisible( item );
     configChanged();
 }
 
@@ -1447,7 +1489,7 @@ void KCMKttsMgr::updateTalkerButtons(){
 }
 
 /**
-* Update the status of the Filter buttons.
+* Update the status of the normal Filter buttons.
 */
 void KCMKttsMgr::updateFilterButtons(){
     // kdDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
@@ -1481,15 +1523,17 @@ void KCMKttsMgr::updateSbdButtons(){
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Running"<< endl;
     QListViewItem* item = m_kttsmgrw->sbdsList->selectedItem();
     if (item) {
-        m_kttsmgrw->configureSbdButton->setEnabled(true);
-        m_kttsmgrw->higherSbdPriorityButton->setEnabled(
-                m_kttsmgrw->sbdsList->selectedItem()->itemAbove() != 0);
-        m_kttsmgrw->lowerSbdPriorityButton->setEnabled(
-                m_kttsmgrw->sbdsList->selectedItem()->itemBelow() != 0);
+        m_sbdPopmenu->setItemEnabled( sbdBtnEdit, true );
+        m_sbdPopmenu->setItemEnabled( sbdBtnUp,
+            m_kttsmgrw->sbdsList->selectedItem()->itemAbove() != 0 );
+        m_sbdPopmenu->setItemEnabled( sbdBtnDown,
+            m_kttsmgrw->sbdsList->selectedItem()->itemBelow() != 0 );
+        m_sbdPopmenu->setItemEnabled( sbdBtnRemove, true );
     } else {
-        m_kttsmgrw->configureSbdButton->setEnabled(false);
-        m_kttsmgrw->higherSbdPriorityButton->setEnabled(false);
-        m_kttsmgrw->lowerSbdPriorityButton->setEnabled(false);
+        m_sbdPopmenu->setItemEnabled( sbdBtnEdit, false );
+        m_sbdPopmenu->setItemEnabled( sbdBtnUp, false );
+        m_sbdPopmenu->setItemEnabled( sbdBtnDown, false );
+        m_sbdPopmenu->setItemEnabled( sbdBtnRemove, false );
     }
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Exiting"<< endl;
 }
@@ -1645,13 +1689,25 @@ void KCMKttsMgr::slot_configureTalker()
     m_loadedTalkerPlugIn = 0;
 }
 
+void KCMKttsMgr::slot_configureNormalFilter()
+{
+    configureFilterItem( false );
+}
+
+void KCMKttsMgr::slot_configureSbdFilter()
+{
+    configureFilterItem( true );
+}
+
 /**
  * User has requested display of filter configuration dialog.
  */
-void KCMKttsMgr::slot_configureFilter()
+void KCMKttsMgr::configureFilterItem( bool sbd )
 {
     // Get highlighted plugin from Filter ListView and load into memory.
-    QListViewItem* filterItem = m_kttsmgrw->filtersList->selectedItem();
+    KListView* lView = m_kttsmgrw->filtersList;
+    if (sbd) lView = m_kttsmgrw->sbdsList;
+    QListViewItem* filterItem = lView->selectedItem();
     if (!filterItem) return;
     QString filterID = filterItem->text(flvcFilterID);
     QString filterPlugInName = filterItem->text(flvcPlugInName);
@@ -1687,68 +1743,14 @@ void KCMKttsMgr::slot_configureFilter()
         m_config->writeEntry("UserFilterName", userFilterName);
         m_config->writeEntry("Enabled", true);
         m_config->writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
+        m_config->writeEntry("IsSBD", sbd);
 
         m_config->sync();
 
         // Update display.
         filterItem->setText(flvcUserName, userFilterName);
-        dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
-
-        // Inform Control Center that configuration has changed.
-        configChanged();
-    }
-
-    delete m_loadedFilterPlugIn;
-    m_loadedFilterPlugIn = 0;
-}
-
-/**
- * User has requested display of SBD filter configuration dialog.
- */
-void KCMKttsMgr::slot_configureSbd()
-{
-    // Get highlighted plugin from Filter ListView and load into memory.
-    QListViewItem* filterItem = m_kttsmgrw->sbdsList->selectedItem();
-    if (!filterItem) return;
-    QString filterID = filterItem->text(slvcFilterID);
-    QString filterPlugInName = filterItem->text(slvcPlugInName);
-    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
-    if (!m_loadedFilterPlugIn) return;
-    // kdDebug() << "KCMKttsMgr::slot_configureSbd: plugin for " << filterPlugInName << " loaded successfully." << endl;
-
-    // Tell plugin to load its configuration.
-    m_config->setGroup(QString("Filter_")+filterID);
-    // kdDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID << endl;
-    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
-
-    // Display configuration dialog.
-    configureFilter();
-
-    // Did user Cancel?
-    if (!m_loadedFilterPlugIn) return;
-
-    // Get user's name for the plugin.
-    QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
-
-    // If user properly configured the plugin, save the configuration.
-    if ( !userFilterName.isEmpty() )
-    {
-
-        // Let plugin save its configuration.
-        m_config->setGroup(QString("Filter_")+filterID);
-        m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
-
-        // Save configuration.
-        m_config->setGroup("Filter_"+filterID);
-        m_config->writeEntry("PlugInName", filterPlugInName);
-        m_config->writeEntry("UserFilterName", userFilterName);
-        m_config->writeEntry("Enabled", true);
-        m_config->writeEntry("IsSBD", true);
-
-        m_config->sync();
-
-        // Update display.
-        filterItem->setText(slvcUserName, userFilterName);
+        if (!sbd)
+            dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
 
         // Inform Control Center that configuration has changed.
         configChanged();

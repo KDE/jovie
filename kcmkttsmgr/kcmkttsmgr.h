@@ -42,6 +42,7 @@ class KListViewItem;
 class KAboutData;
 class KConfig;
 class KAboutApplication;
+class QPopupMenu;
 
 /**
 * @author José Pablo Ezequiel "Pupeno" Fernández
@@ -176,6 +177,16 @@ class KCMKttsMgr :
             slvcUserName,           // Name of filter as set by user and displayed.
             slvcFilterID,           // Internal ID assigned to the filter (hidden).
             slvcPlugInName,         // Name of the filter plugin (from .desktop file, hidden).
+            slvcMultiInstance       // True if multiple instances of this plugin are possible. (hidden)
+        };
+
+        enum SbdButtonIDs
+        {
+            sbdBtnEdit = 1,
+            sbdBtnUp = 2,
+            sbdBtnDown = 3,
+            sbdBtnAdd = 4,
+            sbdBtnRemove = 5
         };
 
         /**
@@ -233,7 +244,24 @@ class KCMKttsMgr :
         /**
         * Display the Filter Configuration Dialog.
         */
+        void configureFilterItem( bool sbd );
         void configureFilter();
+
+        /**
+        * Add a filter.
+        */
+        void addFilter( bool sbd );
+
+        /**
+        * Remove a filter.
+        */
+        void removeFilter( bool sbd );
+
+        /**
+        * Move an item in a KListView up or down.
+        */
+        void lowerItemPriority( KListView* lView );
+        void higherItemPriority( KListView* lView );
 
         /**
         * Count number of configured Filters with the specified plugin name.
@@ -264,6 +292,11 @@ class KCMKttsMgr :
         * Plugin configuration dialog.
         */
         KDialogBase* m_configDlg;
+
+        /**
+        * Sentence Boundary Detector button popup menu.
+        */
+        QPopupMenu* m_sbdPopmenu;
 
         /**
         * Talker(synth) Plugin currently loaded into configuration dialog.
@@ -306,30 +339,32 @@ class KCMKttsMgr :
         * This is a wrapper function that takes the parameters for the real talker from the
         * widgets to later call it.
         */
-        void addTalker();
-        void addFilter();
+        void slot_addTalker();
+        void slot_addNormalFilter();
+        void slot_addSbdFilter();
 
         /**
         * Remove talker/filter.
         * This is a wrapper function that takes the parameters for the real removeTalker from the
         * widgets to later call it.
         */
-        void removeTalker();
-        void removeFilter();
+        void slot_removeTalker();
+        void slot_removeNormalFilter();
+        void slot_removeSbdFilter();
 
         /**
         * This slot is called whenever user clicks the higher*Priority button (up).
         */
-        void higherTalkerPriority();
-        void higherFilterPriority();
-        void higherSbdPriority();
+        void slot_higherTalkerPriority();
+        void slot_higherNormalFilterPriority();
+        void slot_higherSbdFilterPriority();
 
         /**
         * This slot is called whenever user clicks the lower*Priority button (down).
         */
-        void lowerTalkerPriority();
-        void lowerFilterPriority();
-        void lowerSbdPriority();
+        void slot_lowerTalkerPriority();
+        void slot_lowerNormalFilterPriority();
+        void slot_lowerSbdFilterPriority();
 
         /**
         * Update the status of the Talker/Filter buttons.
@@ -352,8 +387,8 @@ class KCMKttsMgr :
         * User has requested to display the Talker/Filter Configuration Dialog.
         */
         void slot_configureTalker();
-        void slot_configureFilter();
-        void slot_configureSbd();
+        void slot_configureNormalFilter();
+        void slot_configureSbdFilter();
 
         /**
         * Displays about dialog.
