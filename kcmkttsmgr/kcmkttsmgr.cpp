@@ -26,6 +26,7 @@
 #include <qcheckbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qtoolbutton.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -94,10 +95,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     layout->addWidget(m_kttsmgrw);
 
     // Give buttons icons.
+    m_kttsmgrw->higherTalkerPriorityButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
     m_kttsmgrw->lowerTalkerPriorityButton->setIconSet(
-        KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
     m_kttsmgrw->removeTalkerButton->setIconSet(
-        KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
     m_kttsmgrw->configureTalkerButton->setIconSet(
         KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
@@ -118,6 +121,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Connect the signals from the KCMKtssMgrWidget to this class.
     connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
             this, SLOT(addTalker()));
+    connect(m_kttsmgrw->higherTalkerPriorityButton, SIGNAL(clicked()),
+            this, SLOT(higherTalkerPriority()));
     connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
             this, SLOT(lowerTalkerPriority()));
     connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
@@ -377,7 +382,7 @@ void KCMKttsMgr::save()
     QListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
     while (talkerItem)
     {
-        QListViewItem* nextTalkerItem = talkerItem->nextSibling();
+        QListViewItem* nextTalkerItem = talkerItem->itemBelow();
         QString talkerID = talkerItem->text(tlvcTalkerID);
         talkerIDsList.append(talkerID);
         talkerItem = nextTalkerItem;
@@ -938,13 +943,28 @@ void KCMKttsMgr::removeTalker(){
 }
 
 /**
-* This slot is called whenever user clicks the lowerTalkerPriority button.
+* This slot is called whenever user clicks the higherTalkerPriority button (up).
+*/
+void KCMKttsMgr::higherTalkerPriority()
+{
+    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
+    if (!talkerItem) return;
+    QListViewItem* prevTalkerItem = talkerItem->itemAbove();
+    if (!prevTalkerItem) return;
+    prevTalkerItem->moveItem(talkerItem);
+    m_kttsmgrw->talkersList->setSelected(talkerItem, true);
+    updateTalkerButtons();
+    configChanged();
+}
+
+/**
+* This slot is called whenever user clicks the lowerTalkerPriority button (down).
 */
 void KCMKttsMgr::lowerTalkerPriority()
 {
     QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
     if (!talkerItem) return;
-    QListViewItem* nextTalkerItem = talkerItem->nextSibling();
+    QListViewItem* nextTalkerItem = talkerItem->itemBelow();
     if (!nextTalkerItem) return;
     talkerItem->moveItem(nextTalkerItem);
     m_kttsmgrw->talkersList->setSelected(talkerItem, true);
@@ -960,11 +980,14 @@ void KCMKttsMgr::updateTalkerButtons(){
     if(m_kttsmgrw->talkersList->selectedItem()){
         m_kttsmgrw->removeTalkerButton->setEnabled(true);
         m_kttsmgrw->configureTalkerButton->setEnabled(true);
+        m_kttsmgrw->higherTalkerPriorityButton->setEnabled(
+            m_kttsmgrw->talkersList->selectedItem()->itemAbove() != 0);
         m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(
-            m_kttsmgrw->talkersList->selectedItem()->nextSibling() != 0);
+            m_kttsmgrw->talkersList->selectedItem()->itemBelow() != 0);
     } else {
         m_kttsmgrw->removeTalkerButton->setEnabled(false);
         m_kttsmgrw->configureTalkerButton->setEnabled(false);
+        m_kttsmgrw->higherTalkerPriorityButton->setEnabled(false);
         m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(false);
     }
     // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting"<< endl;

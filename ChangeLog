@@ -1,6 +1,7 @@
 2004-11-17  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Bug fix.  Hosed Talker in KTTSMgr after removing a Talker and clicking Cancel.
         * In KTTSMgr no longer record LastTalkerID in config file; compute at load time instead.
+        * Change Talker tab in KTTSMgr to "standard" layout.
 
 2004-11-13  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * Fix.  Nothing happens when clicking Configure button for Festival Interactive

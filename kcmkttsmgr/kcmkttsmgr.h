@@ -280,12 +280,17 @@ class KCMKttsMgr :
         void removeTalker();
 
         /**
-         * This slot is called whenever user clicks the lowerTalkerPriority button.
+         * This slot is called whenever user clicks the higherTalkerPriority button (up).
+         */
+        void higherTalkerPriority();
+
+        /**
+         * This slot is called whenever user clicks the lowerTalkerPriority button (down).
          */
         void lowerTalkerPriority();
 
         /**
-        * Update the status of the Talker buttons.
+         * Update the status of the Talker buttons.
         */
         void updateTalkerButtons();
 
