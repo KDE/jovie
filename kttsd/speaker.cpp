@@ -928,7 +928,7 @@ ParsedTalkerCode Speaker::parseTalkerCode(const QString &talkerCode)
     parsedTalkerCode.volume = talkerCode.section("volume=", 1, 1);
     parsedTalkerCode.volume = parsedTalkerCode.volume.section('"', 1, 1);
     parsedTalkerCode.rate = talkerCode.section("rate=", 1, 1);
-    parsedTalkerCode.rate = parsedTalkerCode.rate.section('"', 1);
+    parsedTalkerCode.rate = parsedTalkerCode.rate.section('"', 1, 1);
     parsedTalkerCode.plugInName = talkerCode.section("synthesizer=", 1, 1);
     parsedTalkerCode.plugInName = parsedTalkerCode.plugInName.section('"', 1, 1);
     return parsedTalkerCode;
