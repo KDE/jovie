@@ -22,6 +22,7 @@
 // Qt includes. 
 #include <qfile.h>
 #include <qtimer.h>
+#include <qdir.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -31,7 +32,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <kio/job.h>
+//#include <kio/job.h>
 
 // KTTSD includes.
 #include "player.h"
@@ -1214,12 +1215,14 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
                 QString dest = m_speechData->keepAudioPath + "kttsd-" +
                     QString("%1-%2").arg(it->sentence->jobNum).arg(it->sentence->seq) + ".wav";
                 QFile::remove(dest);
+                QDir d;
+                d.rename(it->audioUrl, dest);
                 // TODO: This is always producing the following.  Why and how to fix?
                 // It moves the files just fine.
                 //  kio (KIOJob): stat file:///home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
                 //  kio (KIOJob): error 11 /home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
                 //  kio (KIOJob): This seems to be a suitable case for trying to rename before stat+[list+]copy+del
-                KIO::move(it->audioUrl, dest, false);
+                // KIO::move(it->audioUrl, dest, false);
             }
             else
                 QFile::remove(it->audioUrl);
