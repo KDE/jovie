@@ -19,4 +19,4 @@ dnl Note that Festival Interactive plugin is always built
 dnl whether binary is found or not, unless user overrides with -disable-festivalint.
 AC_PATH_PROG(festival_bindir, "festival", "no")
 
-AM_CONDITIONAL(include_kttsd_festivalint, test "x$compile_festival_plugin" = "xyes")
+AM_CONDITIONAL(include_kttsd_festivalint, test "x$compile_festivalint_plugin" = "xyes")
