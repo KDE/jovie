@@ -414,7 +414,7 @@ void KttsJobMgrPart::slot_job_resume()
 void KttsJobMgrPart::slot_job_restart()
 {
     uint jobNum = getCurrentJobNum();
-    kdDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum << endl;
+    // kdDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum << endl;
     if (jobNum)
     {
         startText(jobNum);
@@ -665,7 +665,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
     if ( !text.isNull() ) 
     {
         uint jobNum = setText(text, NULL);
-        kdDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
+        // kdDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
         startText(jobNum);
         // Set flag so that the job we just created will be selected when textSet signal is received.
         m_selectOnTextSet = true;
@@ -802,19 +802,19 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
 */
 void KttsJobMgrPart::refreshJobListView()
 {
-    kdDebug() << "KttsJobMgrPart::refreshJobListView: Running" << endl;
+    // kdDebug() << "KttsJobMgrPart::refreshJobListView: Running" << endl;
     m_jobListView->clear();
     enableJobActions(false);
     enableJobPartActions(false);
     QString jobNumbers = getTextJobNumbers();
-    kdDebug() << "jobNumbers: " << jobNumbers << endl;
+    // kdDebug() << "jobNumbers: " << jobNumbers << endl;
     QStringList jobNums = QStringList::split(",", jobNumbers);
     QListViewItem* lastItem = 0;
     QStringList::ConstIterator endJobNums(jobNums.constEnd());
     for( QStringList::ConstIterator it = jobNums.constBegin(); it != endJobNums; ++it)
     {
         QString jobNumStr = *it;
-        kdDebug() << "jobNumStr: " << jobNumStr << endl;
+        // kdDebug() << "jobNumStr: " << jobNumStr << endl;
         uint jobNum = jobNumStr.toUInt(0, 10);
         QByteArray jobInfo = getTextJobInfo(jobNum);
         QDataStream stream(jobInfo, IO_ReadOnly);
@@ -996,7 +996,7 @@ ASYNC KttsJobMgrPart::markerSeen(const QCString&, const QString&)
  */
 ASYNC KttsJobMgrPart::sentenceStarted(const QCString&, const uint jobNum, const uint seq)
 {
-    kdDebug() << "KttsJobMgrPart::sentencedStarted: jobNum = " << jobNum << " seq = " << seq << endl;
+    // kdDebug() << "KttsJobMgrPart::sentencedStarted: jobNum = " << jobNum << " seq = " << seq << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -1012,10 +1012,10 @@ ASYNC KttsJobMgrPart::sentenceStarted(const QCString&, const uint jobNum, const 
 * @param jobNum         Job number of the text job.
 * @param seq            Sequence number of the text.
 * @see getTextCount
-*/        
-ASYNC KttsJobMgrPart::sentenceFinished(const QCString&, const uint jobNum, const uint)
+*/
+ASYNC KttsJobMgrPart::sentenceFinished(const QCString& /*appId*/, const uint /*jobNum*/, const uint /*seq*/)
 {
-    kdDebug() << "KttsJobMgrPart::sentencedFinished: jobNum = " << jobNum << endl;
+    // kdDebug() << "KttsJobMgrPart::sentencedFinished: jobNum = " << jobNum << endl;
 /*
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
@@ -1101,7 +1101,7 @@ ASYNC KttsJobMgrPart::textStarted(const QCString&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
 {
-    kdDebug() << "KttsJobMgrPart::textFinished: jobNum = " << jobNum << endl;
+    // kdDebug() << "KttsJobMgrPart::textFinished: jobNum = " << jobNum << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -1119,7 +1119,7 @@ ASYNC KttsJobMgrPart::textFinished(const QCString&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
 {
-    kdDebug() << "KttsJobMgrPart::textStopped: jobNum = " << jobNum << endl;
+    // kdDebug() << "KttsJobMgrPart::textStopped: jobNum = " << jobNum << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -1135,7 +1135,7 @@ ASYNC KttsJobMgrPart::textStopped(const QCString&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textPaused(const QCString&, const uint jobNum)
 {
-    kdDebug() << "KttsJobMgrPart::textPaused: jobNum = " << jobNum << endl;
+    // kdDebug() << "KttsJobMgrPart::textPaused: jobNum = " << jobNum << endl;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
