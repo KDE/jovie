@@ -762,3 +762,5 @@ void SbdProc::slotSbdThreadFilteringFinished()
     // kdDebug() << "SbdProc::slotSbdThreadFilteringFinished: emitting filterFinished signal." << endl;
     emit filteringFinished();
 }
+
+#include "sbdproc.moc"
