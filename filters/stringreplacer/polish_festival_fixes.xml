@@ -5,7 +5,7 @@
  <language-code>pl</language-code>
  <word>
   <type>RegExp</type>
-  <match><![CDATA[[^a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ\,\"\'\\@#$%^*+=`~-]]]></match>
+  <match><![CDATA[[^a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ\,\"\'\\@#$%^*+=`~]]]></match>
   <subst><![CDATA[ ]]></subst>
  </word>
 </wordlist>
