@@ -386,4 +386,52 @@
   <name>Russian Male</name>
 </voice>
 
+<voice>
+  <code>pc_diphone</code>
+  <language>it</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Italian Male</name>
+</voice>
+
+<voice>
+  <code>lp_diphone</code>
+  <language>it</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Italian Female</name>
+</voice>
+
+<voice>
+  <code>pc_ogi_diphone</code>
+  <language>it</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Italian Male</name>
+</voice>
+
+<voice>
+  <code>lp_ogi_diphone</code>
+  <language>it</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Italian Female</name>
+</voice>
+
 </voices>
