@@ -184,7 +184,9 @@ private:
         jlvcLanguage = 2,             /**< Job language code */
         jlvcState = 3,                /**< Job State */
         jlvcPosition = 4,             /**< Current sentence of job. */
-        jlvcSentences = 5             /**< Number of sentences in job. */
+        jlvcSentences = 5,            /**< Number of sentences in job. */
+        jlvcPartNum = 6,              /**< Current part of the job. */
+        jlvcPartCount = 7             /**< Number of parts in job. */
     };
     
     /**
@@ -202,6 +204,13 @@ private:
     uint getCurrentJobNum();
     
     /**
+    * Get the number of parts in the currently-selected job in the Job List View.
+    * @return               Number of parts in currently-selected job.
+    *                       0 if no currently-selected job.
+    */
+    int getCurrentJobPartCount();
+    
+    /**
     * Given a Job Number, returns the Job List View item containing the job.
     * @param jobNum         Job Number.
     * @return               QListViewItem containing the job or 0 if not found.
@@ -213,6 +222,12 @@ private:
     * @param enable        True to enable the job-related butons.  False to disable.
     */
     void enableJobActions(bool enable);
+    
+    /**
+    * Enables or disables all the job part-related buttons on the toolbar.
+    * @param enable        True to enable the job par-related butons.  False to disable.
+    */
+    void KttsJobMgrPart::enableJobPartActions(bool enable);
     
     /**
     * Refresh display of a single job in the JobListView.

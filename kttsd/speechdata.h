@@ -60,6 +60,7 @@ struct mlJob {
     QCString appId;              /* DCOP senderId of the application that requested the speech job. */
     QString talker;              /* Language code in which to speak the text. */
     int seq;                     /* Current sentence being spoken. */
+    QValueList<int> partSeqNums; /* List containing last sequence number for each part of a job. */
     QStringList sentences;       /* List of sentences in the job. */
 };
 
@@ -92,6 +93,32 @@ class SpeechData : public QObject {
         bool readConfig();
 
         /**
+        * Say a message as soon as possible, interrupting any other speech in progress.
+        * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
+        * by any other applications.
+        * @param msg            The message to be spoken.
+        * @param talker         Code for the language to be spoken in.  Example "en".
+        *                       If NULL, defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified language code,
+        *                       defaults to the user's default talker.
+        * @param appId          The DCOP senderId of the application.  NULL if kttsd.
+        *
+        * If an existing Screen Reader output is in progress, it is stopped and discarded and
+        * replaced with this new message.
+        */
+        void setScreenReaderOutput(const QString &msg, const QString &talker=NULL, const QCString& appId=NULL);
+       
+        /**
+        * Retrieves the Screen Reader Output.
+        */
+        mlText getScreenReaderOutput();
+        
+        /**
+        * Returns true if Screen Reader Output is ready to be spoken.
+        */
+        bool screenReaderOutputReady();
+       
+       /**
         * Add a new warning to the queue (thread safe)
         */
         void enqueueWarning( const QString &, const QString &talker=NULL, const QCString& appId=NULL );
@@ -169,6 +196,24 @@ class SpeechData : public QObject {
         uint setText(const QString &text, const QString &talker=NULL, const QCString& appId=NULL);
         
         /**
+        * Adds another part to a text job.  Does not start speaking the text.
+        * (thread safe)
+        * @param jobNum         Job number of the text job.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the last job queued by any application.
+        * @param text           The message to be spoken.
+        * @param appId          The DCOP senderId of the application.  NULL if kttsd.
+        * @return               Part number for the added part.  Parts are numbered starting at 1.
+        *
+        * The text is parsed into individual sentences.  Call getTextCount to retrieve
+        * the sentence count.  Call startText to mark the job as speakable and if the
+        * job is the first speakable job in the queue, speaking will begin.
+        * @see setText.
+        * @see startText.
+        */
+        int appendText(const QString &text, const uint jobNum=0, const QCString& appId=NULL);
+        
+        /**
         * Get the number of sentences in a text job.
         * (thread safe)
         * @param jobNum         Job number of the text job.
@@ -229,22 +274,31 @@ class SpeechData : public QObject {
         *   - QString talker    Language code in which to speak the text.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
+        *   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
+        *   - int partCount     Total number of parts in the job.
+        *
+        * Note that sequence numbers apply to the entire job.  They do not start from 1 at the beginning of
+        * each part.
         *
         * The following sample code will decode the stream:
-          @verbatim
-            QByteArray jobInfo = getTextJobInfo(jobNum);
-            QDataStream stream(jobInfo, IO_ReadOnly);
-            int state;
-            QCString appId;
-            QString talker;
-            int seq;
-            int sentenceCount;
-            stream >> state;
-            stream >> appId;
-            stream >> talker;
-            stream >> seq;
-            stream >> sentenceCount;
-          @endverbatim
+                @verbatim
+                    QByteArray jobInfo = getTextJobInfo(jobNum);
+                    QDataStream stream(jobInfo, IO_ReadOnly);
+                    int state;
+                    QCString appId;
+                    QString talker;
+                    int seq;
+                    int sentenceCount;
+                    int partNum;
+                    int partCount;
+                    stream >> state;
+                    stream >> appId;
+                    stream >> talker;
+                    stream >> seq;
+                    stream >> sentenceCount;
+                    stream >> partNum;
+                    stream >> partCount;
+                @endverbatim
         */
         QByteArray getTextJobInfo(const uint jobNum=0, const QCString& appId=NULL);
        
@@ -255,7 +309,7 @@ class SpeechData : public QObject {
         *                       but if no such job, applies to the last job queued by any application.
         * @param seq            Sequence number of the sentence.
         * @param appId          The DCOP senderId of the application.  NULL if kttsd.
-        * @return               The specified sentence in the specified job.  If not such
+        * @return               The specified sentence in the specified job.  If no such
         *                       job or sentence, returns "".
         */
         virtual QString getTextJobSentence(const uint jobNum=0, const uint seq=1, const QCString& appId=NULL);
@@ -380,46 +434,38 @@ class SpeechData : public QObject {
         * If the next job in the queue is speakable, it begins speaking.
         */
         void moveTextLater(const uint jobNum=0, const QCString& appId=NULL);
-
+        
         /**
-        * Go to the previous paragraph in a text job.
-        * (thread safe)
+        * Jump to the first sentence of a specified part of a text job.
+        * @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
         *                       but if no such job, applies to the last job queued by any application.
         * @param appId          The DCOP senderId of the application.  NULL if kttsd.
+        * @return               Part number of the part actually jumped to.
+        *
+        * If partNum is greater than the number of parts in the job, jumps to last part.
+        * If partNum is 0, does nothing and returns the current part number.
+        * If no such job, does nothing and returns 0.
+        * Does not affect the current speaking/not-speaking state of the job.
         */
-        void prevParText(const uint jobNum=0, const QCString& appId=NULL);
-
+        int jumpToTextPart(const int partNum, const uint jobNum=0, const QCString& appId=NULL);
+        
         /**
-        * Go to the previous sentence in the queue.
-        * (thread safe)
+        * Advance or rewind N sentences in a text job.
+        * @param n              Number of sentences to advance (positive) or rewind (negative) in the job.
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
         *                       but if no such job, applies to the last job queued by any application.
         * @param appId          The DCOP senderId of the application.  NULL if kttsd.
+        * @return               Sequence number of the sentence actually moved to.  Sequence numbers
+        *                       are numbered starting at 1.
+        *
+        * If no such job, does nothing and returns 0.
+        * If n is zero, returns the current sequence number of the job.
+        * Does not affect the current speaking/not-speaking state of the job.
         */
-        void prevSenText(const uint jobNum=0, const QCString& appId=NULL);
-
-        /**
-        * Go to next sentence in a text job.
-        * (thread safe)
-        * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application,
-        *                       but if no such job, applies to the last job queued by any application.
-        * @param appId          The DCOP senderId of the application.  NULL if kttsd.
-        */
-        void nextSenText(const uint jobNum=0, const QCString& appId=NULL);
-
-        /**
-        * Go to next paragraph in a text job.
-        * (thread safe)
-        * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application,
-        *                       but if no such job, applies to the last job queued by any application.
-        * @param appId          The DCOP senderId of the application.  NULL if kttsd.
-        */
-        void nextParText(const uint jobNum=0, const QCString& appId=NULL);
+        uint moveRelTextSentence(const int n, const uint jobNum=0, const QCString& appId=NULL);
 
         /**
         * Wait condition for new text, messages or warnings.
@@ -582,6 +628,16 @@ class SpeechData : public QObject {
         
     private:
         /**
+        * Screen Reader Output.
+        */
+        mlText screenReaderOutput;
+        
+        /**
+        * Mutex for reading/writing Screen Reader output.
+        */
+        QMutex screenReaderMutex;
+        
+        /**
         * Queue of warnings
         */
         QPtrQueue<mlText> warnings;
@@ -690,6 +746,26 @@ class SpeechData : public QObject {
         */
          QCString getAppIdByJobNum(const uint jobNum);
 
+        /**
+        * Given a job and a sequence number, returns the part that sentence is in.
+        * If no such job or sequence number, returns 0.
+        * @param job            The text job.
+        * @param seq            Sequence number of the sentence.  Sequence numbers begin with 1.
+        * @return               Part number of the part the sentence is in.  Parts are numbered
+        *                       beginning with 1.  If no such job or sentence, returns 0.
+        */
+        int getJobPartNumFromSeq(const mlJob& job, const int seq);
+        
+        /**
+        * Parses a block of text into sentences using the application-specified regular expression
+        * or (if not specified), the default regular expression.
+        * @param text           The message to be spoken.
+        * @param appId          The DCOP senderId of the application.  NULL if kttsd.
+        * @return               List of parsed sentences.
+        */
+        
+        QStringList SpeechData::parseText(const QString &text, const QCString &appId);
+        
         /**
         * Start the next speakable job on the queue.
         * @return               Job number of the started text job.

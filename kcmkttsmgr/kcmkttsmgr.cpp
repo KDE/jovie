@@ -63,19 +63,6 @@ const QString textPostMsgValue = i18n("Resuming text.");
 const bool textPostSndCheckValue = false;
 const QString textPostSndValue = "";
 
-const bool parPreMsgCheckValue = true;
-const QString parPreMsgValue = i18n("Paragraph interrupted. Message.");
-
-const bool parPreSndCheckValue = false;
-const QString parPreSndValue = "";
-
-const bool parPostMsgCheckValue = true;
-const QString parPostMsgValue = i18n("Resuming paragraph.");
-
-const bool parPostSndCheckValue = false;
-const QString parPostSndValue = "";
-
-
 // Make this a plug in.
 typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kttsmgr, KCMKttsMgrFactory("kcmkttsmgr") );
@@ -237,23 +224,6 @@ void KCMKttsMgr::load()
     m_kttsmgrw->textPostSnd->setURL(m_config->readPathEntry("TextPostSnd", textPostSndValue));
     m_kttsmgrw->textPostSnd->setEnabled(m_kttsmgrw->textPostSndCheck->isChecked());
 
-    // Load the configuration of the par interruption messages and sound
-    m_kttsmgrw->parPreMsgCheck->setChecked(m_config->readBoolEntry("ParPreMsgEnabled", parPreMsgCheckValue));
-    m_kttsmgrw->parPreMsg->setText(m_config->readEntry("ParPreMsg", parPreMsgValue));
-    m_kttsmgrw->parPreMsg->setEnabled(m_kttsmgrw->parPreMsgCheck->isChecked());
-
-    m_kttsmgrw->parPreSndCheck->setChecked(m_config->readBoolEntry("ParPreSndEnabled", parPreSndCheckValue));
-    m_kttsmgrw->parPreSnd->setURL(m_config->readPathEntry("ParPreSnd", parPreSndValue));
-    m_kttsmgrw->parPreSnd->setEnabled(m_kttsmgrw->parPreSndCheck->isChecked());
-
-    m_kttsmgrw->parPostMsgCheck->setChecked(m_config->readBoolEntry("ParPostMsgEnabled", parPostMsgCheckValue));
-    m_kttsmgrw->parPostMsg->setText(m_config->readEntry("ParPostMsg", parPostMsgValue));
-    m_kttsmgrw->parPostMsg->setEnabled(m_kttsmgrw->parPostMsgCheck->isChecked());
-
-    m_kttsmgrw->parPostSndCheck->setChecked(m_config->readBoolEntry("ParPostSndEnabled", parPostSndCheckValue));
-    m_kttsmgrw->parPostSnd->setURL(m_config->readPathEntry("ParPostSnd", parPostSndValue));
-    m_kttsmgrw->parPostSnd->setEnabled(m_kttsmgrw->parPostSndCheck->isChecked());
-
     // Overall settings.
     m_kttsmgrw->enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
         m_kttsmgrw->enableKttsdCheckBox->isChecked()));
@@ -316,19 +286,6 @@ void KCMKttsMgr::save()
     m_config->writeEntry("TextPostSndEnabled", m_kttsmgrw->textPostSndCheck->isChecked());
     m_config->writePathEntry("TextPostSnd", m_kttsmgrw->textPostSnd->url());
     
-    // Set par interrumption messages and paths
-    m_config->writeEntry("ParPreMsgEnabled", m_kttsmgrw->parPreMsgCheck->isChecked());
-    m_config->writeEntry("ParPreMsg", m_kttsmgrw->parPreMsg->text());
-    
-    m_config->writeEntry("ParPreSndEnabled", m_kttsmgrw->parPreSndCheck->isChecked()); 
-    m_config->writePathEntry("ParPreSnd", m_kttsmgrw->parPreSnd->url());
-    
-    m_config->writeEntry("ParPostMsgEnabled", m_kttsmgrw->parPostMsgCheck->isChecked());
-    m_config->writeEntry("ParPostMsg", m_kttsmgrw->parPostMsg->text());
-    
-    m_config->writeEntry("ParPostSndEnabled", m_kttsmgrw->parPostSndCheck->isChecked());
-    m_config->writePathEntry("ParPostSnd", m_kttsmgrw->parPostSnd->url());
-
     // Overall settings.
     m_config->writeEntry("EnableKttsd", m_kttsmgrw->enableKttsdCheckBox->isChecked());
     
@@ -384,18 +341,6 @@ void KCMKttsMgr::defaults() {
     
     m_kttsmgrw->textPostSndCheck->setChecked(textPostSndCheckValue);
     m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
-    
-    m_kttsmgrw->parPreMsgCheck->setChecked(parPreMsgCheckValue);
-    m_kttsmgrw->parPreMsg->setText(parPreMsgValue);
-    
-    m_kttsmgrw->parPreSndCheck->setChecked(parPreSndCheckValue);
-    m_kttsmgrw->parPreSnd->setURL(parPreSndValue);
-    
-    m_kttsmgrw->parPostMsgCheck->setChecked(parPostMsgCheckValue);
-    m_kttsmgrw->parPostMsg->setText(parPostMsgValue);
-    
-    m_kttsmgrw->parPostSndCheck->setChecked(parPostSndCheckValue);
-    m_kttsmgrw->parPostSnd->setURL(parPostSndValue);
 }
 
 /**

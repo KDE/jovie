@@ -85,12 +85,6 @@ class Speaker : public QObject, public QThread{
         void readingResumed();
 
         /**
-         * Emitted whenever reading a paragraph was started or finished
-         */
-        void paragraphStarted();
-        void paragraphFinished();
-
-        /**
          * Emitted whenever reading a sentence was started or finished
          */
         void sentenceStarted(QString text, QString language, const QCString& appId, const uint jobNum, const uint seq);
@@ -104,17 +98,23 @@ class Speaker : public QObject, public QThread{
 
     private:
         /**
-         * Checks for warnings and if there's any, it says it.
+        * Checks for Screen Reader Output, if there's any, and says it.
+        */
+        void checkSayScreenReaderOutput();
+        
+        /**
+         * Checks for warnings (and Screen Reader Output) and if there's any, it says it.
          */
         void checkSayWarning();
 
         /**
-         * Checks for messages (and warnings) and if there's any, it says it.
+         * Checks for messages (and Screen Reader and warnings) and if there's any, it says it.
          */
         void checkSayMessage();
 
         /**
-         * Checks for playable texts (messages and warnings) and if there's any, it says it.
+         * Checks for playable texts (Screen Reader, messages, warnings, and text jobs)
+         * and if there's any, it says it.
          */
         void checkSayText();
 

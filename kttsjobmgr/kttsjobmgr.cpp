@@ -137,6 +137,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     m_jobListView->addColumn(i18n("State"));
     m_jobListView->addColumn(i18n("Position"));
     m_jobListView->addColumn(i18n("Sentences"));
+    m_jobListView->addColumn(i18n("Part Num"));
+    m_jobListView->addColumn(i18n("Parts"));
     
     // Do not sort the list.
     m_jobListView->setSorting(-1);
@@ -245,6 +247,8 @@ void KttsJobMgrPart::setupActions()
     
     // All the buttons with "job_" at start of their names will be enabled/disabled when a job is
     // selected in the Job List View.
+    // All the buttons with "part_" at the start of their names will be enabled/disabled when a
+    // job is selected in the Job List View that has multiple parts.
     
     act = new KAction(i18n("&Hold"),
         KGlobal::iconLoader()->loadIconSet("stop", KIcon::Toolbar, 0, true),
@@ -273,9 +277,9 @@ void KttsJobMgrPart::setupActions()
     act->setEnabled(false);
     act->plug(m_toolBar1);
 
-    act = new KAction(i18n("Previous Paragraph"),
+    act = new KAction(i18n("Previous Part"),
         KGlobal::iconLoader()->loadIconSet("2leftarrow", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_prev_par()), actionCollection(), "job_prev_par");
+        0, this, SLOT(slot_job_prev_par()), actionCollection(), "part_prev_par");
     act->plug(m_toolBar2);
     act = new KAction(i18n("Previous Sentence"),
         KGlobal::iconLoader()->loadIconSet("1leftarrow", KIcon::Toolbar, 0, true),
@@ -285,9 +289,9 @@ void KttsJobMgrPart::setupActions()
         KGlobal::iconLoader()->loadIconSet("1rightarrow", KIcon::Toolbar, 0, true),
         0, this, SLOT(slot_job_next_sen()), actionCollection(), "job_next_sen");
     act->plug(m_toolBar2);
-    act = new KAction(i18n("Next Paragraph"),
+    act = new KAction(i18n("Next Part"),
         KGlobal::iconLoader()->loadIconSet("2rightarrow", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_next_par()), actionCollection(), "job_next_par");
+        0, this, SLOT(slot_job_next_par()), actionCollection(), "part_next_par");
     act->plug(m_toolBar2);
     
     act = new KAction(i18n("Speak Clipboard"),
@@ -306,6 +310,7 @@ void KttsJobMgrPart::setupActions()
     // Disable job buttons until a job is selected.
 //    stateChanged("no_job_selected");
     enableJobActions(false);
+    enableJobPartActions(false);
 }
 
 /**
@@ -316,6 +321,7 @@ void KttsJobMgrPart::slot_selectionChanged(QListViewItem*)
     // Enable job buttons.
 //    stateChanged("job_selected");
     enableJobActions(true);
+    enableJobPartActions((getCurrentJobPartCount() > 1));
 }
 
 /**
@@ -358,7 +364,9 @@ void KttsJobMgrPart::slot_job_prev_par()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        prevParText(jobNum);
+        // Get current part number.
+        uint partNum = jumpToTextPart(0, jobNum);
+        if (partNum > 1) jumpToTextPart(--partNum, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -368,7 +376,7 @@ void KttsJobMgrPart::slot_job_prev_sen()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        prevSenText(jobNum);
+        moveRelTextSentence(-1, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -378,7 +386,7 @@ void KttsJobMgrPart::slot_job_next_sen()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        nextSenText(jobNum);
+        moveRelTextSentence(1, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -388,7 +396,9 @@ void KttsJobMgrPart::slot_job_next_par()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        nextParText(jobNum);
+        // Get current part number.
+        uint partNum = jumpToTextPart(0, jobNum);
+        jumpToTextPart(++partNum, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -495,6 +505,23 @@ uint KttsJobMgrPart::getCurrentJobNum()
 }
 
 /**
+* Get the number of parts in the currently-selected job in the Job List View.
+* @return               Number of parts in currently-selected job.
+*                       0 if no currently-selected job.
+*/
+int KttsJobMgrPart::getCurrentJobPartCount()
+{
+    int partCount = 0;
+    QListViewItem* item = m_jobListView->selectedItem();
+    if (item)
+    {
+        QString partCountStr = item->text(jlvcPartCount);
+        partCount = partCountStr.toUInt(0, 10);
+    }
+    return partCount;
+}
+    
+/**
 * Given a Job Number, returns the Job List View item containing the job.
 * @param jobNum         Job Number.
 * @return               QListViewItem containing the job or 0 if not found.
@@ -517,11 +544,15 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
     QString language;
     int seq;
     int sentenceCount;
+    int partNum;
+    int partCount;
     stream >> state;
     stream >> appId;
     stream >> language;
     stream >> seq;
     stream >> sentenceCount;
+    stream >> partNum;
+    stream >> partCount;
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
@@ -529,6 +560,8 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
         item->setText(jlvcState, stateToStr(state));
         item->setText(jlvcPosition, QString::number(seq));
         item->setText(jlvcSentences, QString::number(sentenceCount));
+        item->setText(jlvcPartNum, QString::number(partNum));
+        item->setText(jlvcPartCount, QString::number(partCount));
     }
 }
     
@@ -540,6 +573,7 @@ void KttsJobMgrPart::refreshJobListView()
     kdDebug() << "Running KttsJobMgrPart::refreshJobListView" << endl;
     m_jobListView->clear();
     enableJobActions(false);
+    enableJobPartActions(false);
     QString jobNumbers = getTextJobNumbers();
     kdDebug() << "jobNumbers: " << jobNumbers << endl;
     QStringList jobNums = QStringList::split(",", jobNumbers);
@@ -556,18 +590,24 @@ void KttsJobMgrPart::refreshJobListView()
         QString language;
         int seq;
         int sentenceCount;
+        int partNum;
+        int partCount;
         stream >> state;
         stream >> appId;
         stream >> language;
         stream >> seq;
         stream >> sentenceCount;
+        stream >> partNum;
+        stream >> partCount;
         // Append to list.
         if (lastItem)
             lastItem = new QListViewItem(m_jobListView, lastItem, jobNumStr, appId, language, 
-                stateToStr(state), QString::number(seq), QString::number(sentenceCount));
+                stateToStr(state), QString::number(seq), QString::number(sentenceCount),
+                QString::number(partNum), QString::number(partCount));
         else
             lastItem = new QListViewItem(m_jobListView, jobNumStr, appId, language, 
-                stateToStr(state), QString::number(seq), QString::number(sentenceCount));
+                stateToStr(state), QString::number(seq), QString::number(sentenceCount),
+                QString::number(partNum), QString::number(partCount));
     }
 }
     
@@ -582,7 +622,10 @@ void KttsJobMgrPart::autoSelectInJobListView()
     // If empty, disable job buttons on toolbar.
     QListViewItem* item = m_jobListView->firstChild();
     if (!item)
+    {
         enableJobActions(false);
+        enableJobPartActions(false);
+    }
     else
         // Select first item.  Should fire itemSelected event which will enable job buttons on toolbar.
         m_jobListView->setSelected(item, true);
@@ -601,6 +644,23 @@ void KttsJobMgrPart::enableJobActions(bool enable)
         {
             QString actionName = act->name();
             if (actionName.left(4) == "job_") act->setEnabled(enable);
+        }
+    }
+}
+
+/**
+* Enables or disables all the job part-related buttons on the toolbar.
+* @param enable        True to enable the job par-related butons.  False to disable.
+*/
+void KttsJobMgrPart::enableJobPartActions(bool enable)
+{
+    for (uint index = 0; index < actionCollection()->count(); ++index)
+    {
+        KAction* act = actionCollection()->action(index);
+        if (act)
+        {
+            QString actionName = act->name();
+            if (actionName.left(5) == "part_") act->setEnabled(enable);
         }
     }
 }
@@ -674,14 +734,19 @@ ASYNC KttsJobMgrPart::textSet(const QCString&, const uint jobNum)
     QString language;
     int seq;
     int sentenceCount;
+    int partNum;
+    int partCount;
     stream >> state;
     stream >> appId;
     stream >> language;
     stream >> seq;
     stream >> sentenceCount;
+    stream >> partNum;
+    stream >> partCount;
     QListViewItem* item = new QListViewItem(m_jobListView, m_jobListView->lastItem(), 
         QString::number(jobNum), appId, language, 
-        stateToStr(state), QString::number(seq), QString::number(sentenceCount));
+        stateToStr(state), QString::number(seq), QString::number(sentenceCount),
+        QString::number(partNum), QString::number(partCount));
     // Should we select this job?
     if (selectOnTextSet)
     {

@@ -68,6 +68,7 @@ void Speaker::run()
             return;
         }
 
+        checkSayScreenReaderOutput();
         checkSayWarning();
         checkSayMessage();
         checkSayText();
@@ -76,11 +77,30 @@ void Speaker::run()
 }
 
 /**
+* Checks for Screen Reader Output, if there's any, and says it.
+*/
+void Speaker::checkSayScreenReaderOutput()
+{
+    kdDebug() << "Running: Speaker::checkSayScreenReaderOutput()" << endl;
+    while(speechData->screenReaderOutputReady()){
+        mlText temp = speechData->getScreenReaderOutput();
+        if(loadedPlugIns[temp.talker]){
+            loadedPlugIns[temp.talker]->sayText(temp.text);
+        } else {
+            loadedPlugIns[speechData->defaultTalker]->sayText(temp.text);
+        }
+    }
+}
+
+/**
  * Checks for warnings and if there's any, it says it.
  */
-void Speaker::checkSayWarning(){
+void Speaker::checkSayWarning()
+{
     kdDebug() << "Running: Speaker::checkSayWarning()" << endl;
-    while(speechData->warningInQueue()){
+    while(speechData->screenReaderOutputReady() or speechData->warningInQueue())
+    {
+        checkSayScreenReaderOutput();
         mlText temp = speechData->dequeueWarning();
         if(loadedPlugIns[temp.talker]){
             loadedPlugIns[temp.talker]->sayText(temp.text);
@@ -93,7 +113,8 @@ void Speaker::checkSayWarning(){
 /**
  * Checks for messages (and warnings) and if there's any, it says it.
  */
-void Speaker::checkSayMessage(){
+void Speaker::checkSayMessage()
+{
     while(speechData->messageInQueue() or speechData->warningInQueue()){
         checkSayWarning();
         mlText temp = speechData->dequeueMessage();
@@ -108,40 +129,42 @@ void Speaker::checkSayMessage(){
 /**
  * Checks for playable texts (messages and warnings) and if there's any, it says it.
  */
-void Speaker::checkSayText(){
-    if (speechData->currentlyReading()) {
-        emit readingStarted();
-        emit paragraphStarted();
-    }
-    while(speechData->currentlyReading() or speechData->messageInQueue() or speechData->warningInQueue())
+void Speaker::checkSayText()
+{
+    bool screenReaderAvail = speechData->screenReaderOutputReady();
+    bool warningsAvail = speechData->warningInQueue();
+    bool messagesAvail = speechData->messageInQueue();
+    if (speechData->currentlyReading()) emit readingStarted();
+    while(speechData->currentlyReading() or screenReaderAvail or warningsAvail or messagesAvail)
     {
-        if(speechData->warningInQueue()){
-            emit readingInterrupted();
-            if(speechData->parPreMsgEnabled){
-                loadedPlugIns[speechData->defaultTalker]->sayText(speechData->parPreMsg);
-            }
-            checkSayWarning();
-            if(speechData->parPostMsgEnabled){
-                loadedPlugIns[speechData->defaultTalker]->sayText(speechData->parPostMsg);
-            }
-            emit readingResumed();
-        }
-        mlText temp = speechData->getSentenceText();
-        if (temp.text == "") {
-            if (speechData->currentlyReading()) emit paragraphFinished();
-            if(speechData->messageInQueue()){
+        if (screenReaderAvail) checkSayScreenReaderOutput();
+        if (warningsAvail or messagesAvail)
+        {
+            // TODO: Pre/Post sounds.
+            if (speechData->currentlyReading())
+            {
                 emit readingInterrupted();
-                if(speechData->textPreMsgEnabled){
+                if(speechData->textPreMsgEnabled)
                     loadedPlugIns[speechData->defaultTalker]->sayText(speechData->textPreMsg);
-                }
-                checkSayMessage();
-                if(speechData->textPostMsgEnabled){
+            }
+            if (warningsAvail) checkSayWarning();
+            // Screen Reader or Messages may have been queued while we were speaking warnings.
+            screenReaderAvail = speechData->screenReaderOutputReady();
+            if (screenReaderAvail) checkSayScreenReaderOutput();
+            messagesAvail = speechData->messageInQueue();
+            if (messagesAvail) checkSayMessage();
+            screenReaderAvail = speechData->screenReaderOutputReady();
+            if (screenReaderAvail) checkSayScreenReaderOutput();
+            if (speechData->currentlyReading())
+            {
+                if(speechData->textPostMsgEnabled)
                     loadedPlugIns[speechData->defaultTalker]->sayText(speechData->textPostMsg);
-                }
                 emit readingResumed();
             }
-            if (speechData->currentlyReading()) emit paragraphStarted();
-        } else {
+        }
+        mlText temp = speechData->getSentenceText();
+        if (temp.text != "")
+        {
             kdDebug() << "REALLY SAYING " << temp.text << endl;
             emit sentenceStarted(temp.text, temp.talker, temp.appId, temp.jobNum, temp.seq);
             if(loadedPlugIns[temp.talker]){
@@ -151,11 +174,11 @@ void Speaker::checkSayText(){
             }
             emit sentenceFinished(temp.appId, temp.jobNum, temp.seq);
         }
+        screenReaderAvail = speechData->screenReaderOutputReady();
+        warningsAvail = speechData->warningInQueue();
+        messagesAvail = speechData->messageInQueue();
     }
-    if (speechData->currentlyReading()) {
-        emit paragraphFinished();
-        emit readingStopped();
-    }
+    if (speechData->currentlyReading()) emit readingStopped();
 }
 
 /**

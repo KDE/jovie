@@ -6,10 +6,10 @@
     <Action name="job_resume" />
     <Action name="job_restart" />
     <Separator />
-    <Action name="job_prev_par" />
+    <Action name="part_prev_par" />
     <Action name="job_prev_sen" />
     <Action name="job_next_sen" />
-    <Action name="job_next_par" />
+    <Action name="part_next_par" />
     <Separator />
     <Action name="job_remove" />
     <Action name="job_move" />
@@ -22,10 +22,10 @@
     <Action name="job_resume" />
     <Action name="job_restart" />
     <Separator />
-    <Action name="job_prev_par" />
+    <Action name="part_prev_par" />
     <Action name="job_prev_sen" />
     <Action name="job_next_sen" />
-    <Action name="job_next_par" />
+    <Action name="part_next_par" />
     <Separator />
     <Action name="job_remove" />
     <Action name="job_move" />
@@ -38,10 +38,10 @@
     <Action name="job_resume" />
     <Action name="job_restart" />
     <Separator />
-    <Action name="job_prev_par" />
+    <Action name="part_prev_par" />
     <Action name="job_prev_sen" />
     <Action name="job_next_sen" />
-    <Action name="job_next_par" />
+    <Action name="part_next_par" />
     <Separator />
     <Action name="job_remove" />
     <Action name="job_move" />
@@ -53,10 +53,10 @@
     <Action name="job_resume" />
     <Action name="job_restart" />
     <Separator />
-    <Action name="job_prev_par" />
+    <Action name="part_prev_par" />
     <Action name="job_prev_sen" />
     <Action name="job_next_sen" />
-    <Action name="job_next_par" />
+    <Action name="part_next_par" />
     <Separator />
     <Action name="job_remove" />
     <Action name="job_move" />

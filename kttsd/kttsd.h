@@ -85,6 +85,21 @@ class KTTSD : public QObject, virtual public kspeech
         virtual bool supportsMarkers(const QString &talker=NULL);
         
         /**
+        * Say a message as soon as possible, interrupting any other speech in progress.
+        * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
+        * by any other applications.
+        * @param msg            The message to be spoken.
+        * @param talker         Code for the language to be spoken in.  Example "en".
+        *                       If NULL, defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified language code,
+        *                       defaults to the user's default talker.
+        *
+        * If an existing Screen Reader output is in progress, it is stopped and discarded and
+        * replaced with this new message.
+        */
+        virtual ASYNC sayScreenReaderOutput(const QString &msg, const QString &talker=NULL);
+        
+        /**
         * Say a warning.  The warning will be spoken when the current sentence
         * stops speaking and takes precedence over Messages and regular text.  Warnings should only
         * be used for high-priority messages requiring immediate user attention, such as
@@ -98,8 +113,9 @@ class KTTSD : public QObject, virtual public kspeech
         virtual ASYNC sayWarning(const QString &warning, const QString &talker=NULL);
 
         /**
-        * Say a message.  The message will be spoken when the current text paragraph
-        * stops speaking.  Messages should be used for one-shot messages that can't wait for
+        * Say a message.  The message will be spoken when the current sentence stops speaking
+        * but after any warnings have been spoken.
+        * Messages should be used for one-shot messages that can't wait for
         * normal text messages to stop speaking, such as "You have mail.".
         * @param message        The message to be spoken.
         * @param talker         Code for the language to be spoken in.  Example "en".
@@ -148,6 +164,23 @@ class KTTSD : public QObject, virtual public kspeech
         * @see startText
         */
         virtual uint setText(const QString &text, const QString &talker=NULL);
+        
+        /**
+        * Adds another part to a text job.  Does not start speaking the text.
+        * (thread safe)
+        * @param text           The message to be spoken.
+        * @param jobNum         Job number of the text job.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the last job queued by any application.
+        * @return               Part number for the added part.  Parts are numbered starting at 1.
+        *
+        * The text is parsed into individual sentences.  Call getTextCount to retrieve
+        * the sentence count.  Call startText to mark the job as speakable and if the
+        * job is the first speakable job in the queue, speaking will begin.
+        * @see setText.
+        * @see startText.
+        */
+        int appendText(const QString &text, const uint jobNum=0);
         
         /**
         * Queue a text job from the contents of a file.  Does not start speaking the text.
@@ -230,22 +263,31 @@ class KTTSD : public QObject, virtual public kspeech
         *   - QString talker    Language code in which to speak the text.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
+        *   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
+        *   - int partCount     Total number of parts in the job.
+        *
+        * Note that sequence numbers apply to the entire job.  They do not start from 1 at the beginning of
+        * each part.
         *
         * The following sample code will decode the stream:
-          @verbatim
-            QByteArray jobInfo = getTextJobInfo(jobNum);
-            QDataStream stream(jobInfo, IO_ReadOnly);
-            int state;
-            QCString appId;
-            QString talker;
-            int seq;
-            int sentenceCount;
-            stream >> state;
-            stream >> appId;
-            stream >> talker;
-            stream >> seq;
-            stream >> sentenceCount;
-          @endverbatim
+                @verbatim
+                    QByteArray jobInfo = getTextJobInfo(jobNum);
+                    QDataStream stream(jobInfo, IO_ReadOnly);
+                    int state;
+                    QCString appId;
+                    QString talker;
+                    int seq;
+                    int sentenceCount;
+                    int partNum;
+                    int partCount;
+                    stream >> state;
+                    stream >> appId;
+                    stream >> talker;
+                    stream >> seq;
+                    stream >> sentenceCount;
+                    stream >> partNum;
+                    stream >> partCount;
+                @endverbatim
         */
         virtual QByteArray getTextJobInfo(const uint jobNum=0);
        
@@ -365,33 +407,35 @@ class KTTSD : public QObject, virtual public kspeech
         virtual ASYNC moveTextLater(const uint jobNum=0);
 
         /**
-        * Go to the previous paragraph in a text job.
+        * Jump to the first sentence of a specified part of a text job.
+        * @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
         * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the last job queued by any application.
+        * @return               Part number of the part actually jumped to.
+        *
+        * If partNum is greater than the number of parts in the job, jumps to last part.
+        * If partNum is 0, does nothing and returns the current part number.
+        * If no such job, does nothing and returns 0.
+        * Does not affect the current speaking/not-speaking state of the job.
         */
-        virtual ASYNC prevParText(const uint jobNum=0);
-
-        /**
-        * Go to the previous sentence in the queue.
-        * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
-        */
-        virtual ASYNC prevSenText(const uint jobNum=0);
-
-        /**
-        * Go to next sentence in a text job.
-        * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
-        */
-        virtual ASYNC nextSenText(const uint jobNum=0);
-
-        /**
-        * Go to next paragraph in a text job.
-        * @param jobNum         Job number of the text job.
-        *                       If zero, applies to the last job queued by the application.
-        */
-        virtual ASYNC nextParText(const uint jobNum=0);
+        int jumpToTextPart(const int partNum, const uint jobNum=0);
         
+        /**
+        * Advance or rewind N sentences in a text job.
+        * @param n              Number of sentences to advance (positive) or rewind (negative) in the job.
+        * @param jobNum         Job number of the text job.
+        *                       If zero, applies to the last job queued by the application,
+        *                       but if no such job, applies to the last job queued by any application.
+        * @return               Sequence number of the sentence actually moved to.  Sequence numbers
+        *                       are numbered starting at 1.
+        *
+        * If no such job, does nothing and returns 0.
+        * If n is zero, returns the current sequence number of the job.
+        * Does not affect the current speaking/not-speaking state of the job.
+        */
+        uint moveRelTextSentence(const int n, const uint jobNum=0);
+
         /**
         * Add the clipboard contents to the text queue and begin speaking it.
         */

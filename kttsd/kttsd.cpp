@@ -176,7 +176,7 @@ KTTSD::~KTTSD(){
 * @see kttsdMarkupType
 * TODO: Waiting for plugin api.
 */
-bool KTTSD::supportsMarkup(const QString&, const uint) { return false; }
+bool KTTSD::supportsMarkup(const QString& /*talker=NULL*/, const uint /*markupType=0*/) { return false; }
         
 /**
 * Determine whether the currently-configured speech plugin supports markers in speech markup.
@@ -186,8 +186,24 @@ bool KTTSD::supportsMarkup(const QString&, const uint) { return false; }
 *                       talker supports markers.
 * TODO: Waiting on plugin API.
 */
-bool KTTSD::supportsMarkers(const QString&) { return false; }
+bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) { return false; }
         
+/**
+* Say a message as soon as possible, interrupting any other speech in progress.
+* IMPORTANT: This method is reserved for use by Screen Readers and should not be used
+* by any other applications.
+* @param msg            The message to be spoken.
+* @param talker         Code for the language to be spoken in.  Example "en".
+*                       If NULL, defaults to the user's default talker.
+*                       If no plugin has been configured for the specified language code,
+*                       defaults to the user's default talker.
+*
+* If an existing Screen Reader output is in progress, it is stopped and discarded and
+* replaced with this new message.
+*/
+void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=NULL*/)
+    { speechData->setScreenReaderOutput(msg, talker, getAppId()); }
+
 /**
 * Say a warning.  The warning will be spoken when the current sentence
 * stops speaking and takes precedence over Messages and regular text.  Warnings should only
@@ -199,15 +215,16 @@ bool KTTSD::supportsMarkers(const QString&) { return false; }
 *                       If no plugin has been configured for the specified language code,
 *                       defaults to the user's default talker.
 */
-void KTTSD::sayWarning(const QString &warning, const QString &talker){
+void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
     kdDebug() << "Running: KTTSD::sayWarning(const QString &warning, const QString &talker=NULL)" << endl;
     kdDebug() << "Adding '" << warning << "' to warning queue." << endl;
     speechData->enqueueWarning(warning, talker, getAppId());
 }
 
 /**
-* Say a message.  The message will be spoken when the current text paragraph
-* stops speaking.  Messages should be used for one-shot messages that can't wait for
+* Say a message.  The message will be spoken when the current sentence stops speaking
+* but after any warnings have been spoken.
+* Messages should be used for one-shot messages that can't wait for
 * normal text messages to stop speaking, such as "You have mail.".
 * @param message        The message to be spoken.
 * @param talker         Code for the language to be spoken in.  Example "en".
@@ -215,7 +232,8 @@ void KTTSD::sayWarning(const QString &warning, const QString &talker){
 *                       If no talker has been configured for the specified language code,
 *                       defaults to the user's default talker.
 */
-void KTTSD::sayMessage(const QString &message, const QString &talker){
+void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
+{
     kdDebug() << "Running: KTTSD::sayMessage(const QString &message, const QString &talker=NULL)" << endl;
     kdDebug() << "Adding '" << message << "' to message queue." << endl;
     speechData->enqueueMessage(message, talker, getAppId());
@@ -235,7 +253,8 @@ void KTTSD::sayMessage(const QString &message, const QString &talker){
 * Changing the sentence delimiter does not affect other applications.
 * @see sentenceparsing
 */
-void KTTSD::setSentenceDelimiter(const QString &delimiter) { speechData->setSentenceDelimiter(delimiter, getAppId()); }
+void KTTSD::setSentenceDelimiter(const QString &delimiter)
+    { speechData->setSentenceDelimiter(delimiter, getAppId()); }
         
 /**
 * Queue a text job.  Does not start speaking the text.
@@ -259,13 +278,32 @@ void KTTSD::setSentenceDelimiter(const QString &delimiter) { speechData->setSent
 * @see getTextCount
 * @see startText
 */
-uint KTTSD::setText(const QString &text, const QString &talker){
+uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
+{
     kdDebug() << "Running: setText(const QString &text, const QString &talker=NULL)" << endl;
     kdDebug() << "Setting text: '" << text << "'" << endl;
     uint jobNum = speechData->setText(text, talker, getAppId());
     return jobNum;
 }
 
+/**
+* Adds another part to a text job.  Does not start speaking the text.
+* (thread safe)
+* @param text           The message to be spoken.
+* @param jobNum         Job number of the text job.
+*                       If zero, applies to the last job queued by the application,
+*                       but if no such job, applies to the last job queued by any application.
+* @return               Part number for the added part.  Parts are numbered starting at 1.
+*
+* The text is parsed into individual sentences.  Call getTextCount to retrieve
+* the sentence count.  Call startText to mark the job as speakable and if the
+* job is the first speakable job in the queue, speaking will begin.
+* @see setText.
+* @see startText.
+*/
+int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
+    { return speechData->appendText(text, jobNum, getAppId()); }
+    
 /**
 * Queue a text job from the contents of a file.  Does not start speaking the text.
 * @param filename       Full path to the file to be spoken.  May be a URL.
@@ -288,7 +326,7 @@ uint KTTSD::setText(const QString &text, const QString &talker){
 * @see getTextCount
 * @see startText
 */
-uint KTTSD::setFile(const QString &filename, const QString &talker)
+uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/)
 {
     kdDebug() << "Running: setFile(const QString &filename, const QString &talker=NULL)" << endl;
     QFile file(filename);
@@ -312,7 +350,7 @@ uint KTTSD::setFile(const QString &filename, const QString &talker)
 * method.  The sequence numbers are emitted in the @ref sentenceStarted and
 * @ref sentenceFinished signals.
 */
-int KTTSD::getTextCount(const uint jobNum) { return speechData->getTextCount(jobNum, getAppId()); }
+int KTTSD::getTextCount(const uint jobNum /*=0*/) { return speechData->getTextCount(jobNum, getAppId()); }
 
 /**
 * Get the job number of the current text job.
@@ -344,7 +382,7 @@ QString KTTSD::getTextJobNumbers() { return speechData->getTextJobNumbers(); }
 *
 * @see kttsdJobState
 */
-int KTTSD::getTextJobState(const uint jobNum) { return speechData->getTextJobState(jobNum, getAppId()); }
+int KTTSD::getTextJobState(const uint jobNum /*=0*/) { return speechData->getTextJobState(jobNum, getAppId()); }
 
 /**
 * Get information about a text job.
@@ -376,7 +414,8 @@ int KTTSD::getTextJobState(const uint jobNum) { return speechData->getTextJobSta
     stream >> sentenceCount;
     @endverbatim
 */
-QByteArray KTTSD::getTextJobInfo(const uint jobNum) { return speechData->getTextJobInfo(jobNum, getAppId()); }
+QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
+    { return speechData->getTextJobInfo(jobNum, getAppId()); }
 
 /**
 * Return a sentence of a job.
@@ -386,10 +425,8 @@ QByteArray KTTSD::getTextJobInfo(const uint jobNum) { return speechData->getText
 * @return               The specified sentence in the specified job.  If no such
 *                       job or sentence, returns "".
 */
-QString KTTSD::getTextJobSentence(const uint jobNum, const uint seq)
-{
-    return speechData->getTextJobSentence(jobNum, seq, getAppId());
-}
+QString KTTSD::getTextJobSentence(const uint jobNum /*=0*/, const uint seq /*=1*/)
+    { return speechData->getTextJobSentence(jobNum, seq, getAppId()); }
        
 /**
 * Determine if kttsd is currently speaking any text jobs.
@@ -407,7 +444,8 @@ bool KTTSD::isSpeakingText() { return speechData->isSpeakingText(); }
 * If there is another job in the text queue, and it is marked speakable,
 * that job begins speaking.
 */
-void KTTSD::removeText(const uint jobNum){
+void KTTSD::removeText(const uint jobNum /*=0*/)
+{
     kdDebug() << "Running: KTTSD::removeText()" << endl;
     stopText();
     speechData->removeText(jobNum, getAppId());
@@ -429,7 +467,8 @@ void KTTSD::removeText(const uint jobNum){
 * When all the sentences of the job have been spoken, the job is marked for deletion from
 * the text queue and the @ref textFinished signal is emitted.
 */
-void KTTSD::startText(const uint jobNum){
+void KTTSD::startText(const uint jobNum /*=0*/)
+{
     kdDebug() << "Running: KTTSD::startText()" << endl;
     speechData->startText(jobNum, getAppId());
 }
@@ -447,7 +486,8 @@ void KTTSD::startText(const uint jobNum){
 * Depending upon the speech engine and plugin used, speeking may not stop immediately
 * (it might finish the current sentence).
 */
-void KTTSD::stopText(const uint jobNum){
+void KTTSD::stopText(const uint jobNum /*=0*/)
+{
     kdDebug() << "Running: KTTSD::stopText()" << endl;
     speechData->stopText(jobNum, getAppId());
 }
@@ -466,7 +506,8 @@ void KTTSD::stopText(const uint jobNum){
 * (it might finish the current sentence).
 * @see resumeText
 */
-void KTTSD::pauseText(const uint jobNum){
+void KTTSD::pauseText(const uint jobNum /*=0*/)
+{
     kdDebug() << "Running: KTTSD::pauseText()" << endl;
     speechData->pauseText(jobNum, getAppId());
 }
@@ -486,7 +527,8 @@ void KTTSD::pauseText(const uint jobNum){
 * The @ref textResumed signal is emitted when the job resumes.
 * @see pauseText
 */
-void KTTSD::resumeText(const uint jobNum){
+void KTTSD::resumeText(const uint jobNum /*=0*/)
+{
     kdDebug() << "Running: KTTSD::resumeText()" << endl;
     speechData->resumeText(jobNum, getAppId());
 }
@@ -500,10 +542,8 @@ void KTTSD::resumeText(const uint jobNum){
 *                       If no plugin has been configured for the specified language code,
 *                       defaults to the user's default talker.
 */
-void KTTSD::changeTextTalker(const uint jobNum, const QString &talker)
-{
-    speechData->changeTextTalker(jobNum, talker, getAppId());
-};
+void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=NULL*/)
+    { speechData->changeTextTalker(jobNum, talker, getAppId()); };
 
 /**
 * Move a text job down in the queue so that it is spoken later.
@@ -513,47 +553,40 @@ void KTTSD::changeTextTalker(const uint jobNum, const QString &talker)
 * If the job is currently speaking, it is paused.
 * If the next job in the queue is speakable, it begins speaking.
 */
-void KTTSD::moveTextLater(const uint jobNum) { speechData->moveTextLater(jobNum, getAppId()); }
+void KTTSD::moveTextLater(const uint jobNum /*=0*/)
+    { speechData->moveTextLater(jobNum, getAppId()); }
 
 /**
-* Go to the previous paragraph in a text job.
+* Jump to the first sentence of a specified part of a text job.
+* @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
 * @param jobNum         Job number of the text job.
-*                       If zero, applies to the last job queued by the application.
+*                       If zero, applies to the last job queued by the application,
+*                       but if no such job, applies to the last job queued by any application.
+* @return               Part number of the part actually jumped to.
+*
+* If partNum is greater than the number of parts in the job, jumps to last part.
+* If partNum is 0, does nothing and returns the current part number.
+* If no such job, does nothing and returns 0.
+* Does not affect the current speaking/not-speaking state of the job.
 */
-void KTTSD::prevParText(const uint jobNum){
-    kdDebug() << "Running: KTTSD::prevParText()" << endl;
-    speechData->prevParText(jobNum, getAppId());
-}
-
+int KTTSD::jumpToTextPart(const int partNum, const uint jobNum /*=0*/)
+    { return speechData->jumpToTextPart(partNum, jobNum, getAppId()); }
+    
 /**
-* Go to the previous sentence in the queue.
+* Advance or rewind N sentences in a text job.
+* @param n              Number of sentences to advance (positive) or rewind (negative) in the job.
 * @param jobNum         Job number of the text job.
-*                       If zero, applies to the last job queued by the application.
+*                       If zero, applies to the last job queued by the application,
+*                       but if no such job, applies to the last job queued by any application.
+* @return               Sequence number of the sentence actually moved to.  Sequence numbers
+*                       are numbered starting at 1.
+*
+* If no such job, does nothing and returns 0.
+* If n is zero, returns the current sequence number of the job.
+* Does not affect the current speaking/not-speaking state of the job.
 */
-void KTTSD::prevSenText(const uint jobNum){
-    kdDebug() << "Running: KTTSD::prevSenText()" << endl;
-    speechData->prevSenText(jobNum, getAppId());
-}
-
-/**
-* Go to next sentence in a text job.
-* @param jobNum         Job number of the text job.
-*                       If zero, applies to the last job queued by the application.
-*/
-void KTTSD::nextSenText(const uint jobNum){
-    kdDebug() << "Running: KTTSD::nextSenText()" << endl;
-    speechData->nextSenText(jobNum, getAppId());
-}
-
-/**
-* Go to next paragraph in a text job.
-* @param jobNum         Job number of the text job.
-*                       If zero, applies to the last job queued by the application.
-*/
-void KTTSD::nextParText(const uint jobNum){
-    kdDebug() << "Running: KTTSD::nextParText()" << endl;
-    speechData->nextParText(jobNum, getAppId());
-}
+uint KTTSD::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
+    { return speechData->moveRelTextSentence(n, jobNum, getAppId()); }
 
 /**
 * Add the clipboard contents to the text queue and begin speaking it.
