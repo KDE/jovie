@@ -643,35 +643,39 @@ QString KCMKttsMgr::defaultTalkerCode(const QString &languageCode, const QString
 */
 PlugInConf *KCMKttsMgr::loadPlugin(const QString &plugInName)
 {
-    // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
+    kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
     // Iterate thru the plug in m_offers to find the plug in that matches the plugInName.
     for(unsigned int i=0; i < m_offers.count() ; ++i){
         // Compare the plug in to be loaded with the entry in m_offers[i]
         // kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
-        if(m_offers[i]->name() == plugInName){
-        // When the entry is found, load the plug in
-        // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(m_offers[i]->library());
-        if(factory){
-            // If the factory is created successfully, instantiate the PlugInConf class for the
-            // specific plug in to get the plug in configuration object.
-            PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(m_offers[i]->library(), NULL, m_offers[i]->library());
-            if(plugIn){
-                // If everything went ok, return the plug in pointer.
-                return plugIn;
+        if(m_offers[i]->name() == plugInName)
+        {
+            // When the entry is found, load the plug in
+            // First create a factory for the library
+            KLibFactory *factory = KLibLoader::self()->factory(m_offers[i]->library());
+            if(factory){
+                // If the factory is created successfully, instantiate the PlugInConf class for the
+                // specific plug in to get the plug in configuration object.
+                PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(m_offers[i]->library(), NULL, m_offers[i]->library());
+                if(plugIn){
+                    // If everything went ok, return the plug in pointer.
+                    return plugIn;
+                } else {
+                    // Something went wrong, returning null.
+                    return NULL;
+                    kdDebug() << "KCMKttsMgr::loadPlugin: Unable to instantiate PlugInConf class for plugin " << plugInName << endl;
+                }
             } else {
                 // Something went wrong, returning null.
+                kdDebug() << "KCMKttsMgr::loadPlugin: Unable to create Factory object for plugin " << plugInName << endl;
                 return NULL;
             }
-        } else {
-            // Something went wrong, returning null.
-            return NULL;
-        }
-        break;
+            break;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
+    kdDebug() << "KCMKttsMgr::loadPlugin: KTrader did not return an offer for plugin " << plugInName << endl;
     return NULL;
 }
 
@@ -1015,14 +1019,18 @@ void KCMKttsMgr::slot_configureTalker()
     QString languageCode = m_languagesToCodes[language];
     m_loadedPlugIn = loadPlugin(plugInName);
     if (!m_loadedPlugIn) return;
+    kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << plugInName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
     m_config->setGroup(QString("Talker_")+talkerID);
     m_loadedPlugIn->setDesiredLanguage(languageCode);
+    kdDebug() << "KCMKttsMgr::slot_configureTalker: about to call plugin load() method with Talker ID = " << talkerID << endl;
     m_loadedPlugIn->load(m_config, QString("Talker_")+talkerID);
 
     // Display configuration dialog.
+    kdDebug() << "KCMKttsMgr::slot_configureTalker: about to display configuration dialog." << endl;
     configureTalker();
+    kdDebug() << "KCMKttsMgr::slot_configureTalker: back from configuration dialog." << endl;
 
     // Did user Cancel?
     if (!m_loadedPlugIn) return;
