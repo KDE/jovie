@@ -88,9 +88,11 @@ void FliteConf::save(KConfig *config, const QString &configGroup){
     // kdDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup("Flite");
-    config->writePathEntry("FliteExePath", m_widget->flitePath->url());
+    config->writePathEntry("FliteExePath", 
+        KStandardDirs::realFilePath(m_widget->flitePath->url()));
     config->setGroup(configGroup);
-    config->writePathEntry("FliteExePath", m_widget->flitePath->url());
+    config->writePathEntry("FliteExePath",
+        KStandardDirs::realFilePath(m_widget->flitePath->url()));
 }
 
 void FliteConf::defaults(){
@@ -105,7 +107,7 @@ void FliteConf::setDesiredLanguage(const QString &lang)
 
 QString FliteConf::getTalkerCode()
 {
-    QString fliteExe = m_widget->flitePath->url();
+    QString fliteExe = KStandardDirs::realFilePath(m_widget->flitePath->url());
     if (!fliteExe.isEmpty())
     {
         if (!getLocation(fliteExe).isEmpty())
@@ -154,7 +156,7 @@ void FliteConf::slotFliteTest_clicked()
     m_fliteProc->synth(
         "K D E is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
-        m_widget->flitePath->url());
+        KStandardDirs::realFilePath(m_widget->flitePath->url()));
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.

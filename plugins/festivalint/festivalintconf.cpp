@@ -43,6 +43,7 @@
 #include <knuminput.h>
 #include <kprocio.h>
 #include <kprogress.h>
+#include <kstandarddirs.h>
 
 // KTTS includes.
 #include <pluginconf.h>
@@ -116,7 +117,7 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     config->setGroup("FestivalInt");
     m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", "festival"));
     config->setGroup(configGroup);
-    QString exePath = m_widget->festivalPath->url();
+    QString exePath = KStandardDirs::realFilePath(m_widget->festivalPath->url());
     m_widget->festivalPath->setURL(config->readPathEntry("FestivalExecutablePath", exePath));
     m_widget->preloadCheckBox->setChecked(false);
     scanVoices();
@@ -142,9 +143,9 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     // kdDebug() << "FestivalIntConf::save: Running" << endl;
 
     config->setGroup("FestivalInt");
-    config->writePathEntry("FestivalExecutablePath", m_widget->festivalPath->url());
+    config->writePathEntry("FestivalExecutablePath", KStandardDirs::realFilePath(m_widget->festivalPath->url()));
     config->setGroup(configGroup);
-    config->writePathEntry("FestivalExecutablePath", m_widget->festivalPath->url());
+    config->writePathEntry("FestivalExecutablePath", KStandardDirs::realFilePath(m_widget->festivalPath->url()));
     config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     config->writeEntry("volume", m_widget->volumeBox->value());
     config->writeEntry("time", m_widget->timeBox->value());
@@ -303,7 +304,7 @@ void FestivalIntConf::scanVoices()
     m_supportedVoiceCodes.clear();
     m_widget->selectVoiceCombo->clear();
 
-    QString exePath = m_widget->festivalPath->url();
+    QString exePath = KStandardDirs::realFilePath(m_widget->festivalPath->url());
     if (!getLocation(exePath).isEmpty())
     {
         // Set up a progress dialog.
@@ -420,7 +421,7 @@ void FestivalIntConf::slotTest_clicked()
     // kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
     connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_festProc->synth(
-        m_widget->festivalPath->url(),
+        KStandardDirs::realFilePath(m_widget->festivalPath->url()),
         testMsg,
         tmpWaveFile,
         voiceCode,

@@ -376,13 +376,13 @@ void KCMKttsMgr::save()
     m_config->writeEntry("TextPreMsg", m_kttsmgrw->textPreMsg->text());
 
     m_config->writeEntry("TextPreSndEnabled", m_kttsmgrw->textPreSndCheck->isChecked()); 
-    m_config->writePathEntry("TextPreSnd", m_kttsmgrw->textPreSnd->url());
+    m_config->writePathEntry("TextPreSnd", KStandardDirs::realFilePath(m_kttsmgrw->textPreSnd->url()));
 
     m_config->writeEntry("TextPostMsgEnabled", m_kttsmgrw->textPostMsgCheck->isChecked());
     m_config->writeEntry("TextPostMsg", m_kttsmgrw->textPostMsg->text());
 
     m_config->writeEntry("TextPostSndEnabled", m_kttsmgrw->textPostSndCheck->isChecked());
-    m_config->writePathEntry("TextPostSnd", m_kttsmgrw->textPostSnd->url());
+    m_config->writePathEntry("TextPostSnd", KStandardDirs::realFilePath(m_kttsmgrw->textPostSnd->url()));
 
     // Overall settings.
     m_config->writeEntry("EmbedInSysTray", m_kttsmgrw->embedInSysTrayCheckBox->isChecked());

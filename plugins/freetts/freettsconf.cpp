@@ -97,12 +97,14 @@ void FreeTTSConf::save(KConfig *config, const QString &configGroup){
 	// kdDebug() << "FreeTTSConf::save: Running" << endl;
 
         config->setGroup("FreeTTS");
-        config->writePathEntry("FreeTTSJarPath", m_widget->freettsPath->url());
+        config->writePathEntry("FreeTTSJarPath",
+            KStandardDirs::realFilePath(m_widget->freettsPath->url()));
 
 	config->setGroup(configGroup);
         if(m_widget->freettsPath->url().isEmpty())
 		KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
-	config->writePathEntry("FreeTTSJarPath", m_widget->freettsPath->url());
+	config->writePathEntry("FreeTTSJarPath", 
+        KStandardDirs::realFilePath(m_widget->freettsPath->url()));
 }
 
 void FreeTTSConf::defaults(){
@@ -117,7 +119,7 @@ void FreeTTSConf::setDesiredLanguage(const QString &lang)
 
 QString FreeTTSConf::getTalkerCode()
 {
-    QString freeTTSJar = m_widget->freettsPath->url();
+    QString freeTTSJar = KStandardDirs::realFilePath(m_widget->freettsPath->url());
     if (!freeTTSJar.isEmpty())
     {
         if (!getLocation(freeTTSJar).isEmpty())
@@ -191,7 +193,7 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
         m_freettsProc->synth(
 			"K D E is a modern graphical desktop for Unix computers.",
 	tmpWaveFile,
-	m_widget->freettsPath->url());
+    KStandardDirs::realFilePath(m_widget->freettsPath->url()));
 
         // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
         // or if user clicks Cancel button.

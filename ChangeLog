@@ -1,5 +1,6 @@
 2004-11-26  Gary Cramblitt (PhantomsDad)
         * Slight throughput improvement by eliminating pause at start of each Festival utterance.
+        * Bug fix.  Can find synthesizers when HOME env variable is in the path.
 
 2004-11-25  Gary Cramblitt (PhantomsDad)
         * Add Finnish Male voice (http://www.ling.helsinki.fi/suopuhe/download/)
