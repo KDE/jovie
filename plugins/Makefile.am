@@ -1,16 +1,6 @@
-#kdevelop: festival_DIR = festival
-if include_kttsd_festival
-  festival_DIR = festival
-endif
-
 #kdevelop: festivalint_DIR = festivalint
 if include_kttsd_festivalint
   festivalint_DIR = festivalint
-endif
-
-#kdevelop: festicalcs_DIR = festivalcs
-if include_kttsd_festivalcs
-  festivalcs_DIR = festivalcs
 endif
 
 #kdevelop: freetts_DIR = freetts
@@ -39,9 +29,7 @@ if include_kttsd_epos
 endif
 
 SUBDIRS = \
-        $(festival_DIR) \
         $(festivalint_DIR) \
-        $(festivalcs_DIR) \
         $(freetts_DIR) \
         $(command_DIR) \
         $(hadifix_DIR) \

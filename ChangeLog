@@ -1,3 +1,8 @@
+2005-02-17  Gary Cramblitt (PhantomsDad)
+        * Remove festival/ and festivalcs/ plugins from source tree.  AFAIK, these plugins don't work
+          and nobody is using them.  And these are confusing packagers who think we have a build
+          dependency on Festival and Speech Tools libraries. Use festivalint/.
+
 2005-02-15  Gary Cramblitt (PhantomsDad)
         * Translations now working.
         * Include a copy of kdelibs/interfaces/kspeech in compat/ dir.  This permits distribution

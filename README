@@ -114,10 +114,8 @@ players            Audio plugins for KTTSD.
   artsplayer         aRts audio plugin for KTTSD.
   gstplayer          GStreamer audio plugin for KTTSD.
 plugins            Plugins for KTTSD.  You must have at least one plugin to use KTTSD.
-  festival           Plugin for Festival using statically-linked Festival library.  May not work.
   festivalint        Plugin for Festival using Festival Interactive mode (festival --interactive).
   flite              Plugin for Festival Lite.
-  festivalcs         Plugin for Festival using Festival Client/Server mode.  Under development.
   hadifix            Plugin for Hadifix.
   freetts            Plugin for FreeTTS.
   epos               Plugin for Epos.
