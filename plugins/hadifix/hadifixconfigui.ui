@@ -75,7 +75,7 @@
                         <enum>Sunken</enum>
                     </property>
                     <property name="title">
-                        <string>&amp;Basic options</string>
+                        <string>&amp;Basic Options</string>
                     </property>
                     <grid>
                         <property name="name">
@@ -387,7 +387,7 @@
                         </sizepolicy>
                     </property>
                     <property name="title">
-                        <string>&amp;Advanced options</string>
+                        <string>&amp;Advanced Options</string>
                     </property>
                     <grid>
                         <property name="name">

@@ -437,7 +437,7 @@
                         <cstring>advancedGroupBox</cstring>
                     </property>
                     <property name="title">
-                        <string>Additional options (advanced)</string>
+                        <string>Additional Options (advanced)</string>
                     </property>
                     <grid>
                         <property name="name">
