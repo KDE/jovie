@@ -1,14 +1,20 @@
-//
-// C++ Implementation: kttsmgr
-//
-// Description: 
-//
-//
-// Author: Gary Cramblitt <garycramblitt@comcast.net>, (C) 2004
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/***************************************************** vim:set ts=4 sw=4 sts=4:
+  KTTSD main class
+  -------------------
+  Copyright:
+  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  -------------------
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+ ******************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License or later.      *
+ *                                                                         *
+ ***************************************************************************/
 
 // Qt includes.
 #include <qimage.h>
@@ -31,6 +37,12 @@
 // KTTSMgr includes.
 #include "kttsmgr.h"
 
+static const KCmdLineOptions options[] =
+{
+    { "s", 0, 0 },
+    { "systray", I18N_NOOP("Start minimized in system tray."), 0 }
+};
+
 int main (int argc, char *argv[])
 {
     KGlobal::locale()->setMainCatalogue("kttsd");
@@ -47,12 +59,14 @@ int main (int argc, char *argv[])
     aboutdata.addCredit("David Powell", I18N_NOOP("Testing"), "achiestdragon@gmail.com");
     KCmdLineArgs::init( argc, argv, &aboutdata );
 
-    // KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions( options );
+
     KUniqueApplication::addCmdLineOptions();
 
-    if(!KUniqueApplication::start()){
+    if(!KUniqueApplication::start())
+    {
         kdDebug() << "kttsmgr is already running" << endl;
-          return (0);
+        return (0);
     }
 
     KUniqueApplication app;
@@ -78,6 +92,14 @@ int main (int argc, char *argv[])
     if (embedInSysTray)
         showMainWindowOnStartup = config->readBoolEntry("ShowMainWindowOnStartup", true);
 
+    // If --systray option specified, start minimized in system tray.
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->isSet("systray"))
+    {
+        embedInSysTray = true;
+        showMainWindowOnStartup = false;
+    }
+
     KttsMgrTray* tray = 0;
     if (embedInSysTray)
     {
@@ -86,13 +108,20 @@ int main (int argc, char *argv[])
     }
     else app.setMainWidget(&dlg);
 
+    if (showMainWindowOnStartup)
 #if KDE_VERSION < KDE_MAKE_VERSION (3,3,0)
-    if (showMainWindowOnStartup) dlg.show();
+        dlg.show();
 #else
-    if (showMainWindowOnStartup) tray->setActive();
+    {
+        if (embedInSysTray)
+            tray->setActive();
+        else
+            dlg.show();
+    }
 #endif
-    return app.exec();
+    int result = app.exec();
     delete tray;
+    return result;
 }
 
 /*  KttsMgrTray class */
