@@ -35,9 +35,6 @@
 * dpkg-shlibdeps is reporting:
     dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
 
-* lintian is reporting the following:
-    W: kttsd-appplugins: missing-depends-line
-
 * Should rc files be installed to etc/ tree?
 
 * debuild is ending like this.  Why:
