@@ -223,11 +223,17 @@ void FestivalIntProc::synth(
         QString timeMsg;
         // HTS voices don't work under Debian.  Why?  ..grc
         if (voiceCode.contains("_hts") > 0)
-            timeMsg = QString("(set! hts_duration_stretch %1)").arg(
-                (1.0/(float(time)/100.0)) - 1.0, 0, 'f', 1);
+        {
+            if (time <= 100)
+                timeMsg = QString("(set! hts_duration_stretch %1)").arg(
+                    (1.0/(float(time)/100.0)) - 1.0, 0, 'f', 3);
+            else
+                timeMsg = QString("(set! hts_duration_stretch %1)").arg(
+                        (1.0/(float(time)/100.0)) - 0.65, 0, 'f', 3);
+        }
         else
             timeMsg = QString("(Parameter.set 'Duration_Stretch %1)").arg(
-                1.0/(float(time)/100.0), 0, 'f', 1);
+                1.0/(float(time)/100.0), 0, 'f', 2);
         sendToFestival(timeMsg);
         m_runningTime = time;
     }
