@@ -762,169 +762,145 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox" row="0" column="0">
+                    <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>textInterruptionBox</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>3</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="frameShape">
-                            <enum>GroupBoxPanel</enum>
-                        </property>
-                        <property name="title">
-                            <string>Text Interruption</string>
+                            <cstring>layout15</cstring>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLayoutWidget" row="0" column="0">
+                            <widget class="KURLRequester" row="1" column="1">
                                 <property name="name">
-                                    <cstring>layout5</cstring>
+                                    <cstring>textPreSnd</cstring>
                                 </property>
-                                <grid>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="KURLRequester" row="1" column="1">
-                                        <property name="name">
-                                            <cstring>textPreSnd</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>7</hsizetype>
-                                                <vsizetype>5</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox" row="0" column="0">
-                                        <property name="name">
-                                            <cstring>textPreMsgCheck</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Pre-message:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="tristate">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Pre-message box and enter a Pre-message, which will be spoken whenever a text job is interrupted by another message.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KURLRequester" row="3" column="1">
-                                        <property name="name">
-                                            <cstring>textPostSnd</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>7</hsizetype>
-                                                <vsizetype>5</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KLineEdit" row="0" column="1">
-                                        <property name="name">
-                                            <cstring>textPreMsg</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string></string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Pre-message box and enter a Pre-message, which will be spoken whenever a text job is interrupted by another message.</string>
-                                            <comment>What's this text</comment>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox" row="3" column="0">
-                                        <property name="name">
-                                            <cstring>textPostSndCheck</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Post-s&amp;ound:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox" row="1" column="0">
-                                        <property name="name">
-                                            <cstring>textPreSndCheck</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Pre-sou&amp;nd:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox" row="2" column="0">
-                                        <property name="name">
-                                            <cstring>textPostMsgCheck</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Post-&amp;message:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KLineEdit" row="2" column="1">
-                                        <property name="name">
-                                            <cstring>textPostMsg</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string></string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
-                                            <comment>What's this text</comment>
-                                        </property>
-                                    </widget>
-                                </grid>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>textPostMsg</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
+                                    <comment>What's this text</comment>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>textPostMsgCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Post-&amp;message:</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textPreSndCheck</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Pre-sou&amp;nd:</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textPreMsgCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Pre-message:</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="tristate">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Pre-message box and enter a Pre-message, which will be spoken whenever a text job is interrupted by another message.</string>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="3" column="1">
+                                <property name="name">
+                                    <cstring>textPostSnd</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="0">
+                                <property name="name">
+                                    <cstring>textPostSndCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Post-s&amp;ound:</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>textPreMsg</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check the Pre-message box and enter a Pre-message, which will be spoken whenever a text job is interrupted by another message.</string>
+                                    <comment>What's this text</comment>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -941,7 +917,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>21</width>
-                                <height>20</height>
+                                <height>180</height>
                             </size>
                         </property>
                     </spacer>
@@ -1245,78 +1221,6 @@
         <slot>slotConfigChanged()</slot>
     </connection>
     <connection>
-        <sender>textPostMsgCheck</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPostMsgCheck</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>textPostMsg</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>textPostMsg</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPostSndCheck</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPostSndCheck</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>textPostSnd</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>textPostSnd</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPreMsgCheck</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPreMsgCheck</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>textPreMsg</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>textPreMsg</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPreSndCheck</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>textPreSndCheck</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>textPreSnd</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>textPreSnd</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
         <sender>enableKttsdCheckBox</sender>
         <signal>toggled(bool)</signal>
         <receiver>notifyGroupBox</receiver>
@@ -1411,14 +1315,6 @@
     <tabstop>lowerTalkerPriorityButton</tabstop>
     <tabstop>configureTalkerButton</tabstop>
     <tabstop>removeTalkerButton</tabstop>
-    <tabstop>textPreMsgCheck</tabstop>
-    <tabstop>textPreMsg</tabstop>
-    <tabstop>textPreSndCheck</tabstop>
-    <tabstop>textPreSnd</tabstop>
-    <tabstop>textPostMsgCheck</tabstop>
-    <tabstop>textPostMsg</tabstop>
-    <tabstop>textPostSndCheck</tabstop>
-    <tabstop>textPostSnd</tabstop>
     <tabstop>artsRadioButton</tabstop>
     <tabstop>sinkComboBox</tabstop>
     <tabstop>timeBox</tabstop>
@@ -1452,10 +1348,10 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>kcombobox.h</includehint>
