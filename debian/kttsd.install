@@ -90,14 +90,15 @@ debian/tmp/usr/share/services/kttsd_eposplugin.desktop
 debian/tmp/usr/share/services/kttsd_freettsplugin.desktop
 debian/tmp/usr/share/services/kttsd_stringreplacerplugin.desktop
 debian/tmp/usr/share/services/kttsd_sbdplugin.desktop
-debian/tmp/usr/share/services/kttsd_xmltransformer.desktop
-debian/tmp/usr/share/services/kttsd_talkerchooser.desktop
+debian/tmp/usr/share/services/kttsd_xmltransformerplugin.desktop
+debian/tmp/usr/share/services/kttsd_talkerchooserplugin.desktop
 debian/tmp/usr/share/services/kttsd.desktop
 debian/tmp/usr/share/services/kttsjobmgr.desktop
 debian/tmp/usr/share/services/kttsd_artsplugin.desktop
 debian/tmp/usr/share/services/ktexteditor_kttsd.desktop
 
 debian/tmp/usr/share/apps/khtml/kpartplugins/khtmlkttsd.desktop
+debian/tmp/usr/share/apps/khtml/kpartplugins/khtmlkttsd.rc
 
 debian/tmp/usr/share/icons/hicolor/16x16/actions/male.png
 debian/tmp/usr/share/icons/hicolor/16x16/actions/female.png

@@ -24,7 +24,7 @@ always_skip_languages="xx"
 pofilenames="kttsd kttsd_commandplugin kttsd_eposplugin kttsd_festivalintplugin
 kttsd_fliteplugin kttsd_freettsplugin kttsd_hadifixplugin kttsd_sbdplugin
 kttsd_stringreplacerplugin kttsd_talkerchooserplugin kttsd_xmltransformerplugin
-kttsjobmgr kttsmgr"
+kttsjobmgr kttsmgr kcmkttsd khtmlkttsd ktexteditor_kttsd"
 
 exit_cleanup()
 {
