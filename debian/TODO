@@ -15,6 +15,7 @@
     exuberant-ctag 5.5.4-1        build tag file indexes of source code defini
 
 * Here's my build procedure:
+    - cd kdeaccessibility/doc/kttsd && make distclean && cd kdeaccessibility/kttsd && make distclean
     - If you have not installed kdelibs-dev for KDE 3.4:
         - Copy the following 2 files from kdelibs/interfaces/kspeech to $KDEDIR/include/:
             kspeech.h
@@ -22,9 +23,9 @@
         - Copy the following file from kdelibs/interfaces/kspeech to $KDEDIR/share/servicetypes/:
             dcoptexttospeech.desktop
     - cvs2dist kdeaccessibility kttsd --version 0.3.0
-    - copy resulting kttsd-0.3.0.tar.gz to a work folder and rename to kttsd_0.3.0.orig.tar.gz
+    - Copy resulting kttsd-0.3.0.tar.gz to a work folder and rename to kttsd_0.3.0.orig.tar.gz
       (Note underscore)
-    - unpack tarball
+    - Unpack tarball
     - cd kttsd-0.3.0
     - rm -fR autom4te.cache
     - rm INDEX
