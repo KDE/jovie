@@ -1,3 +1,9 @@
+_ Crash when adding a plugin with "Other" language, and not entering a language code
+  in response to prompt.
+_ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
+  English (at the moment) and is alpha, don't think it is worth it now.
+_ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/
+  Looks like it requires Java VM.
 - Standarize the .desktop files
 - Improve language selection and management in the KTTSD's configuration. Languages added shouldn't be shown in the list of languages to add. Default languages should show only the current languages. Languages should be shown as names and not codes. Languages should be erased from the default language combo box.  If a plugin does not support a language, it should not be choosable.
 - Add ability to configure more than one plugin for a language, but with different voices. Call them "talkers".
