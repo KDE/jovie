@@ -1,3 +1,7 @@
+2004-10-14  Cramblitt <garycramblitt@comcast.net>
+        * Fix crash when clicking Cancel to prompt for Other language code, or user
+          enters an invalid language code.
+        
 2004-10-13  Cramblitt <garycramblitt@comcast.net>
         * libktts is now a versioned shared library.  You may need to remove the
           unversioned library, ie.

@@ -104,7 +104,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // List of languages to be added, true add, false, leave.
     QMap<QString, bool> languagesToBeAdded;
 
-    // Initializate the list of codes
+    // Initialize the list of codes.
     m_languagesMap["other"] = i18n("Other");
     QMap<QString, QString>::ConstIterator endLanguagesMap(m_languagesMap.constEnd());
     for( QMap<QString, QString>::ConstIterator it = m_languagesMap.constBegin(); it != endLanguagesMap; ++it ){
@@ -243,7 +243,7 @@ void KCMKttsMgr::load()
     QStringList::ConstIterator endLangs(langs.constEnd());
     for( QStringList::ConstIterator it = langs.constBegin(); it != endLangs; ++it ) {
         QString langcode = (*it).right((*it).length()-5);
-        kdDebug() << "Loading: " << *it << " Langcode: " << langcode << endl;
+        // kdDebug() << "Loading: " << *it << " Langcode: " << langcode << endl;
         m_config->setGroup(*it);
         addLanguage( langcode, m_config->readEntry("PlugIn"));
         if(!m_loadedLanguages.isEmpty()){
@@ -265,7 +265,7 @@ void KCMKttsMgr::load()
 */
 void KCMKttsMgr::save()
 {
-    kdDebug() << "Running: KCMKttsMgr::save()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::save()"<< endl;
     // Clean up config before saving everything (as kconfig merges, when a language is removed from memory we have to ensure that is removed from disk too)
     QStringList allGroups = m_config->groupList();
     for( QStringList::Iterator it = allGroups.begin(); it != allGroups.end(); ++it )
@@ -449,20 +449,20 @@ PlugInConf *KCMKttsMgr::loadPlugIn(const QString &plugInName){
 * widgets to later call it.
 */
 void KCMKttsMgr::addLanguage(){
-    // kdDebug() << "Running: KCMKttsMgr::addLanguage()"<< endl;
-    // kdDebug() << "Adding plug in " << m_kttsmgrw->plugInSelection->currentText() << " for language " << m_kttsmgrw->languageSelection->currentText() << endl;
+    // kdDebug() << "KCMKttsMgr::addLanguage: Adding plug in " << m_kttsmgrw->plugInSelection->currentText() << " for language " << m_kttsmgrw->languageSelection->currentText() << endl;
     
-    if(m_loadedLanguages.find(m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()]) == 0){
-        if(m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()] == "other"){
-            QString customLanguage = KLineEditDlg::getText(i18n("Create custom language"), i18n("Please enter the code for the custom language:"));
-            addLanguage( customLanguage, m_kttsmgrw-> plugInSelection->currentText());
-        } else {
-            addLanguage( m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()], m_kttsmgrw->plugInSelection->currentText());
-        }
+    QString languageName = m_kttsmgrw->languageSelection->currentText();
+    QString languageCode = m_reverseLanguagesMap[languageName];
+    if(languageCode == "other")
+    {
+        languageCode = KLineEditDlg::getText(i18n("Create custom language"), i18n("Please enter the code for the custom language:"));
+        if (languageCode.isEmpty()) return;
+    }
+    if(m_loadedLanguages.find(languageCode) == 0){
+        addLanguage(languageCode, m_kttsmgrw->plugInSelection->currentText());
         
         // Make sure added language is visible.
-        QListViewItem* listItem = m_loadedLanguages.find(
-            m_reverseLanguagesMap[m_kttsmgrw->languageSelection->currentText()])->listItem;
+        QListViewItem* listItem = m_loadedLanguages.find(languageCode)->listItem;
         if (listItem)
         {
             m_kttsmgrw->languagesList->ensureItemVisible(listItem);
@@ -476,14 +476,14 @@ void KCMKttsMgr::addLanguage(){
     } else {
         KMessageBox::error(0, i18n("This language already has a plugin assigned; please remove it before re-assigning it"), i18n("Language not valid"));
     }
+    // kdDebug() << "KCMKttsMgr::addLanguage: done." << endl;
 }
 
 /**
 * Add a language to the pool of languages for the lang/plugIn pair
 */
 void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName){
-    // kdDebug() << "Running: KCMKttsMgr::addLanguage(const QString &lang, const QString &plugInName)"<< endl;
-    // kdDebug() << "Adding plug in " << plugInName << " for language " << language << endl;
+    // kdDebug() << "KCMKttsMgr::addLanguage: Adding plug in " << plugInName << " for language code  " << language << endl;
     
     // If the language is not in the map, let's add it.
     if(!m_languagesMap.contains(language)){
@@ -517,7 +517,7 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
         // kdDebug() << "Inserting the newLanguage in the QDict" << endl;
         m_loadedLanguages.insert( language, newLanguage);
         
-        // kdDebug() << "Done" <<endl;
+        // kdDebug() << "KCMKttsMgr:addLanguage: Done" <<endl;
     } else {
         KMessageBox::error(0, i18n("Speech syntheziser plugin library not found or corrupted."), i18n("Plugin not found"));
     }
@@ -530,7 +530,7 @@ void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName)
 void KCMKttsMgr::initLanguageCode (const QString &code) {
     if(!m_languagesMap.contains(code)) {
         QString name = QString::null;
-    
+        
         QString file = locate("locale", QString::fromLatin1("%1/entry.desktop").arg(code));
         if (!file.isNull() && !file.isEmpty()) {
             KSimpleConfig entry(file);
@@ -623,7 +623,7 @@ void KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage){
 * Update the status of the Remove button
 */
 void KCMKttsMgr::updateRemoveButton(){
-    // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton: Running"<< endl;
     if(m_kttsmgrw->languagesList->selectedItem()){
         m_kttsmgrw->removeLanguageButton->setEnabled(true);
         m_kttsmgrw->configureLanguageButton->setEnabled(true);
@@ -642,13 +642,14 @@ void KCMKttsMgr::updateRemoveButton(){
         m_kttsmgrw->configureLanguageButton->setEnabled(false);
         if (m_pluginWidget) m_kttsmgrw->mainTab->setTabEnabled(m_pluginWidget, false);
     }
+    // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton: Exiting"<< endl;
 }
 
 /**
 * Update the status of the Default button
 */
 void KCMKttsMgr::updateDefaultButton(){
-    // kdDebug() << "Running: KCMKttsMgr::updateDefaultButton()"<< endl;
+    // kdDebug() << "Running: KCMKttsMgr::updateDefaultButton: Running"<< endl;
     if(m_kttsmgrw->languagesList->selectedItem()){
         if(!m_kttsmgrw->languagesList->selectedItem()->pixmap(2)){
             m_kttsmgrw->makeDefaultLanguage->setEnabled(true);
@@ -658,6 +659,7 @@ void KCMKttsMgr::updateDefaultButton(){
     } else {
         m_kttsmgrw->makeDefaultLanguage->setEnabled(false);
     }
+    // kdDebug() << "Running: KCMKttsMgr::updateDefaultButton: Exiting"<< endl;
 }
 
 /**

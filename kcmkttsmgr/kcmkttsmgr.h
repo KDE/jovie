@@ -179,17 +179,17 @@ class KCMKttsMgr :
         PlugInConf* m_pluginWidget;
         
         /**
-        * List of the objects related to each loaded language
+        * List of the objects related to each loaded language.
         */
         QDict<languageRelatedObjects> m_loadedLanguages;
     
         /**
-        * List of languages codes maped to language names
+        * List of language codes mapped to language names.
         */
         QMap<QString, QString> m_languagesMap;
     
         /**
-        * List of languages names maped to language codes
+        * List of language names mapped to language codes.
         */
         QMap<QString, QString> m_reverseLanguagesMap;
     
