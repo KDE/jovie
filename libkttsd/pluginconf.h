@@ -99,6 +99,16 @@
 * out configuring your plugin for one language, and then change his or her
 * mind to a different language.
 *
+* Also note that language codes may also include an appended country code.
+* For example, "en_GB" for British English.  When @ref getSupportedLanguages is
+* called, you should return as specific a list as possible.  For example,
+* if your plugin supports both American and British English, your returned
+* list would include "en_GB" and "en_US".  When @ref setDesiredLanguage is
+* called, a country code may or may not be included.  If included and your
+* plugin supports the language, but not the specific country variant,
+* your plugin should nevertheless attempt to satisfy the request, returning
+* the actual supported language and country when @ref getTalkerCode is called.
+*
 * @section talkercodes Talker Codes
 *
 * Review the section on Talkers in kspeech.h.
@@ -118,10 +128,15 @@
 * when @ref getTalkerCode is called:
 *
 * - @e lang.         If user has completed configuring your plugin, i.e., it is
-*                    ready to begin synthesizing, return the language code
+*                    ready to begin synthesizing, return the ISO 639-1 language code
 *                    for the language it can synthesize.  If your plugin is not yet 
 *                    fully configured, you should return QString::null for the entire
-*                    talker code.
+*                    talker code.  If your plugin supports a specific national version
+*                    of a language, that should also be included using the ISO 3166
+*                    country code separated from the language code by underscore (_).
+*                    For example, if your plugin synthesizes American English, you would
+*                    return "en_US".  If British English, "en_BR".  And if
+*                    non-specific English, just "en".
 * - @e synthesizer.  The name of your plugin.  Keep short, but long enough to
 *                    distinquish different implementations.  For example,
 *                    Festival Int, Flite, Hadifax.  Use only letters, numbers
@@ -258,6 +273,12 @@ class PlugInConf : public QWidget{
       * @param lang        The desired language code or Null if none.
       *
       * If the plugin is unable to support the desired language, that is OK.
+      * Language codes are given by ISO 639-1 and are in lowercase.
+      * The code may also include an ISO 3166 country code in uppercase
+      * separated from the language code by underscore (_).  For
+      * example, en_GB.  If your plugin supports the given language, but
+      * not the given country, treat it as though the country
+      * code were not specified, i.e., adapt to the given language.
       */
       virtual void setDesiredLanguage(const QString lang);
       
@@ -273,7 +294,19 @@ class PlugInConf : public QWidget{
       /**
       * Return a list of all the languages possibly supported by the plugin.
       * If your plugin can support any language, return Null.
-      * @return            A QStringList of supported language codes, or Null if any.
+      * @return            A QStringList of supported language and optional country
+      *                    codes, or Null if any.
+      *
+      * The languge codes are given in ISO 639-1.  Lowercase should be used.
+      * If your plugin supports various national forms of a language, ISO 3166
+      * country codes should also be include in upperase and separated from
+      * the language code with underscore (_).  Examples:
+      *   en
+      *   en_US
+      *   en_GB
+      *   es
+      *   es_CL
+      * The list you return should be as specific as practicable.
       */
       virtual QStringList getSupportedLanguages();
 
