@@ -2,6 +2,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(CFLAGS_GST) \
+	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
@@ -15,8 +16,8 @@ METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = kcm_kttsd.la
 
-kspeech_DIR = $(kde_includes)
-kspeechsink_DIR = $(kde_includes)
+kspeech_DIR = $(KTTS_KSPEECH_DIR)
+kspeechsink_DIR = $(KTTS_KSPEECH_DIR)
 
 # The source, library search path, and link libraries.
 kcm_kttsd_la_SOURCES = \

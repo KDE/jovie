@@ -2,9 +2,11 @@
 # so keep them synchronized.
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
@@ -17,8 +19,8 @@ METASOURCES = AUTO
 # of the other Makefile.am variables.
 kde_module_LTLIBRARIES =  libkttsjobmgrpart.la
 
-kspeech_DIR = $(kde_includes)
-kspeechsink_DIR = $(kde_includes)
+kspeech_DIR = $(KTTS_KSPEECH_DIR)
+kspeechsink_DIR = $(KTTS_KSPEECH_DIR)
 
 # The source, library search path, and link libraries.
 libkttsjobmgrpart_la_SOURCES = \

@@ -1,6 +1,6 @@
-# Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
-# so keep them synchronized.
+# Include paths.
 INCLUDES = \
+	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
@@ -13,7 +13,7 @@ METASOURCES = AUTO
 # of the other Makefile.am variables.
 bin_PROGRAMS = kttsmgr
 
-kspeech_DIR = $(kde_includes)
+kspeech_DIR = $(KTTS_KSPEECH_DIR)
 
 # The source, library search path, and link libraries.
 kttsmgr_SOURCES =  \

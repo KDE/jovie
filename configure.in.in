@@ -127,3 +127,20 @@ fi
 
 AM_CONDITIONAL(include_kttsd_gstplayer, [test "x$have_gst" = "xyes" && test "x$gstreamer_plugin" = "xyes"])
 
+dnl ================================================================================
+
+dnl If compiling against KDE 3.4, use installed kspeech headers from kdelibs, otherwise use compat directory.
+
+KDE_CHECK_HEADER(kspeech.h,
+    [
+    KTTS_KSPEECH_DIR='$(kde_includes)'
+    KTTS_KSPEECH_INCLUDE=""
+    KTTS_COMPAT_DIR=""
+    ],[
+    KTTS_KSPEECH_DIR='$(top_srcdir)/kttsd/compat/interfaces/kspeech'
+    KTTS_KSPEECH_INCLUDE='-I$(top_srcdir)/kttsd/compat/interfaces/kspeech'
+    KTTS_COMPAT_DIR='compat'
+    ])
+AC_SUBST(KTTS_KSPEECH_DIR)
+AC_SUBST(KTTS_KSPEECH_INCLUDE)
+AC_SUBST(KTTS_COMPAT_DIR)

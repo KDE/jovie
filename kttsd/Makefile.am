@@ -4,6 +4,7 @@ INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(kde_includes)/arts \
 	$(CFLAGS_GST) \
+	$(KTTS_KSPEECH_INCLUDE) \
 	$(all_includes)
 
 # Let am_edit/unsermake handle all of the metasource files (moc).
@@ -16,8 +17,8 @@ METASOURCES = AUTO
 # of the other Makefile.am variables.
 bin_PROGRAMS = kttsd
 
-kspeech_DIR = $(kde_includes)
-kspeechsink_DIR = $(kde_includes)
+kspeech_DIR = $(KTTS_KSPEECH_DIR)
+kspeechsink_DIR = $(KTTS_KSPEECH_DIR)
 
 # The source, library search path, and link libraries.
 # Note: .skel files cause DCOPIDL compiler to generate _skel.cpp file and compile it.
