@@ -626,7 +626,7 @@ void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
 *   <voice lang="en" name="fixed" gender="neutral"/>
 *   <prosody volume="medium" rate="medium"/>
 *   <kttsd synthesizer="Festival" />
-*/         
+*/
 QString KCMKttsMgr::defaultTalkerCode(const QString &languageCode, const QString &plugInName)
 {
     QString talkerCode = QString(
@@ -645,10 +645,13 @@ PlugInConf *KCMKttsMgr::loadPlugin(const QString &plugInName)
 {
     kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
+    // Force reload of KTrader offers.  Fixes bug for Jorge, but I'm not sure why.
+    m_offers = KTrader::self()->query("KTTSD/SynthPlugin");
+
     // Iterate thru the plug in m_offers to find the plug in that matches the plugInName.
     for(unsigned int i=0; i < m_offers.count() ; ++i){
         // Compare the plug in to be loaded with the entry in m_offers[i]
-        // kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
+        kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
         if(m_offers[i]->name() == plugInName)
         {
             // When the entry is found, load the plug in
@@ -1111,3 +1114,5 @@ void KCMKttsMgr::slotConfigDlg_CancelClicked()
 void KCMKttsMgr::aboutSelected(){
     m_aboutDlg->show();
 }
+
+
