@@ -60,6 +60,7 @@ class Speaker : public QObject, public QThread{
          * Tells the thread to exit
          */
         void requestExit();
+        
      signals:
         /**
          * Emitted whenever reading a text was started or resumed
@@ -118,11 +119,6 @@ class Speaker : public QObject, public QThread{
         void checkSayText();
 
         /**
-         * holds true if the thread was requested to exit
-         */
-        bool exitRequested;
-
-        /**
          * QDict of the loaded plug ins for diferent languages
          */
         QDict<PlugInProc> loadedPlugIns;
@@ -131,6 +127,11 @@ class Speaker : public QObject, public QThread{
          * SpeechData local pointer
          */
         SpeechData *speechData;
+        
+        /**
+         * True if the thread was requested to exit
+         */
+        bool exitRequested;
 };
 
 #endif // _SPEAKER_H_

@@ -53,6 +53,6 @@ int main (int argc, char *argv[]){
       return(1);
    }
    
-   kdDebug() << "Starting KTTSD." << endl;
+   kdDebug() << "Entering event loop." << endl;
    return app.exec();
 }

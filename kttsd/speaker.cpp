@@ -38,6 +38,7 @@
 Speaker::Speaker( SpeechData *speechData, QObject *parent, const char *name) : QObject(parent, name), QThread(), speechData(speechData){
     kdDebug() << "Running: Speaker::Speaker()" << endl;
     exitRequested = false;
+    loadedPlugIns.setAutoDelete(true);
 }
 
 /**
@@ -50,22 +51,28 @@ Speaker::~Speaker(){
 /**
  * Base function, where the thread will start
  */
-void Speaker::run(){
+void Speaker::run()
+{
     kdDebug() << "Running: Speaker::run()" << endl;
     kdDebug() << "Speaker thread started" << endl;
 
-    while(true){
+    while(!exitRequested)
+    {
         kdDebug() << "Speaker going to sleep" << endl;
         speechData->newTMW.wait();
         kdDebug() << "Waking speaker up to process the new texts, messages, warnings" << endl;
 
         if (exitRequested)
-          exit();
+        {
+            kdDebug() << "Speaker::run: exiting due to request 1." << endl;
+            return;
+        }
 
         checkSayWarning();
         checkSayMessage();
         checkSayText();
-   }
+    }
+    kdDebug() << "Speaker::run: exiting due to request 2." << endl;
 }
 
 /**
@@ -106,7 +113,8 @@ void Speaker::checkSayText(){
         emit readingStarted();
         emit paragraphStarted();
     }
-    while(speechData->currentlyReading() or speechData->messageInQueue() or speechData->warningInQueue()){
+    while(speechData->currentlyReading() or speechData->messageInQueue() or speechData->warningInQueue())
+    {
         if(speechData->warningInQueue()){
             emit readingInterrupted();
             if(speechData->parPreMsgEnabled){
@@ -215,7 +223,7 @@ int Speaker::loadPlugIns(){
  * Tells the thread to exit
  */
 void Speaker::requestExit(){
-    kdDebug() << "Running: Speaker::requestExit()" << endl;
+    kdDebug() << "Speaker::requestExit: Running" << endl;
     exitRequested = true;
     speechData->newTMW.wakeOne();
 }

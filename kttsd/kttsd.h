@@ -26,15 +26,17 @@
 #include "kspeech.h"
 
 /**
- * KTTSD - the KDE Text-to-speech Deamon.
- *
- * Provides the capability for applications to speak text.
- * Applications may speak text by sending DCOM messages to application "kttsd" object "kspeech".
- *
- * @author José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
- * @author Olaf Schmidt <ojschmidt@kde.org>
- * @author Gary Cramblitt <garycramblitt@comcast.net>
- */
+* KTTSD - the KDE Text-to-speech Deamon.
+*
+* Provides the capability for applications to speak text.
+* Applications may speak text by sending DCOM messages to application "kttsd" object "kspeech".
+*
+* @author José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+* @author Olaf Schmidt <ojschmidt@kde.org>
+* @author Gary Cramblitt <garycramblitt@comcast.net>
+*/
+
+class SpeakerTerminator;
 
 class KTTSD : public QObject, virtual public kspeech
 {
@@ -438,6 +440,11 @@ class KTTSD : public QObject, virtual public kspeech
          * Fires whenever user clicks Apply or OK buttons in Settings dialog.
          */
         void configCommitted();
+        
+        /*
+        * Fires when the SpeakerTerminator object has terminated the speaker.
+        */
+        void speakerFinished();
     
     private:
         /*
@@ -461,6 +468,34 @@ class KTTSD : public QObject, virtual public kspeech
          */
         Speaker *speaker;
 
+        /*
+        * Object that will run in another thread to terminate the speaker.
+        */
+        SpeakerTerminator *speakerTerminator;
+};
+
+/**
+* SpeakerTerminator 
+*
+* A separate thread to request that the speaker thread exit, and when it does, emits a signal.
+* We need to do this in a separate thread because the main thread cannot call speaker->wait(),
+* otherwise it would block the QT event loop and hang the program.
+*/
+class SpeakerTerminator: public QObject, public QThread 
+{
+    Q_OBJECT
+
+    public:
+        SpeakerTerminator(Speaker *speaker, QObject *parent = 0, const char *name = 0);
+    
+    signals:
+        void speakerFinished();
+    
+    protected:   
+        virtual void run();
+    
+    private:
+        Speaker* speaker;
 };
 
 #endif // _KTTSD_H_

@@ -119,12 +119,17 @@ bool KTTSD::initializeSpeaker()
  * Terminate speaker thread
  */
 KTTSD::~KTTSD(){
-    kdDebug() << "Running: KTTSD::~KTTSD()" << endl;
-    kdDebug() << "Stopping KTTSD service" << endl;
+    kdDebug() << "KTTSD::~KTTSD:: Stopping KTTSD service" << endl;
     if (speaker)
     {
+        // Stop the speaker thread.
         speaker->requestExit();
-        speaker->wait();
+        if (!speaker->wait(1000))
+        {
+            // We cannot wait for speaker to terminate, so blow it off and hope for the best.
+            speaker->terminate();
+            speaker->wait();
+        }
         delete speaker;
     }
     delete speechData;
@@ -571,14 +576,29 @@ void KTTSD::reinit()
     // Restart ourself.
     kdDebug() << "Running: KTTSD::reinit()" << endl;
     kdDebug() << "Stopping KTTSD service" << endl;
+    stopText();
     if (speaker)
     {
-        speaker->requestExit();
-        speaker->wait();
-        delete speaker;
-        speaker = 0;
+        // Create a separate thread to terminate and wait for the speaker to exit.
+        // We cannot do it here, otherwise, the main QT event loop would block.
+        speakerTerminator = new SpeakerTerminator(speaker, this, "speakerTerminator");
+        // When speaker exits, finishing reinit in slot speakerFinished.
+        connect (speakerTerminator, SIGNAL(speakerFinished()), 
+            this, SLOT(speakerFinished()));
+        // Stop the speaker.
+        speakerTerminator->start();
     }
+}
+
+void KTTSD::speakerFinished()
+{
+    // Speaker has exited.  Finish reinit.
+    kdDebug() << "KTTSD::speakerFinished: running" << endl;
+    delete speaker;
+    speaker = 0;
+    kdDebug() << "KTTSD::reinit: deleting speechData" << endl;
     if (speechData) delete speechData;
+    kdDebug() << "KTTSD::reinit: speechData deleted" << endl;
     speechData = 0;
 
     kdDebug() << "Starting KTTSD service" << endl;
@@ -660,6 +680,34 @@ const QCString KTTSD::getAppId()
     QCString appId;
     if (client) appId = client->senderId();
     return appId;
+}
+
+/**
+* SpeakerTerminator 
+*
+* A separate thread to request that the speaker thread exit, and when it does, emits a signal.
+* We need to do this in a separate thread because the main thread cannot call speaker->wait(),
+* otherwise it would block the QT event loop and hang the program.
+*/
+SpeakerTerminator::SpeakerTerminator(Speaker *speaker, QObject *parent, const char *name) :
+    QObject(parent, name),
+    QThread(),
+    speaker(speaker)
+{
+    kdDebug() << "SpeakerTerminator::SpeakerTerminator: running" << endl;
+}
+
+void SpeakerTerminator::run()
+{
+    if (speaker)
+    {
+        speaker->requestExit();
+        kdDebug() << "SpeakerTerminator::run: Waiting for speaker to finish" << endl;
+        speaker->wait();
+        kdDebug() << "SpeakerTerminator::run: speaker has finished." << endl;
+        emit speakerFinished();
+    }
+    deleteLater();
 }
 
 #include "kttsd.moc"
