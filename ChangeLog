@@ -1,3 +1,11 @@
+2005-03-05  Gary Cramblitt (PhantomsDad)
+        * Add support for Kiswahili, Zulu, and Ibibio Festival languages.  Get them at
+          http://www.llsti.org/index.htm.  Note that Ibibio does not have an assigned two-letter
+          (iso 639) code, so I gave it Zulu (zu), which is probably as bad as saying that English
+          is French, but it cannot be helped.  The Ibibio and Zulu voices will only speak valid
+          Ibibio or Zulu text, so the Test button is non-functional for them until translators
+          provide translations.
+
 2005-03-02  Gary Cramblitt (PhantomsDad)
         * BUG:100600 Fix for messages and warnings not spoken when text job is paused.
         * Bug.  Talker Chooser claims it can autoconfigure itself, but it cannot really.

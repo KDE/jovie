@@ -434,4 +434,42 @@
   <name>Italian Female</name>
 </voice>
 
+<voice>
+  <code>UON_swahili_kw_multisyn</code>
+  <language>sw</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>true</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>false</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Kiswahili Male</name>
+</voice>
+
+<voice>
+  <code>uyo_ibibio_eno_multisyn</code>
+  <!-- There is no iso 639 (two-letter) code for ibibio.  We use Zulu here.
+       The iso 639-2 (three-letter) code is nic (Niger-Kordofanian) -->
+  <language>zu</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>true</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>false</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Ibibio Female</name>
+</voice>
+
+<voice>
+  <code>csir_isizulu_buhle_multisyn</code>
+  <language>zu</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>true</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>false</rate-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Zulu Male</name>
+</voice>
+
 </voices>
