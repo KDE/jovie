@@ -1,0 +1,16 @@
+if test "x$festival_bindir" = "xno"; then
+  if test "$compile_festivalint_plugin" = "yes"; then
+    echo ""
+    echo "======================================================"
+    echo "The festival program does not appear to be installed"
+    echo "on this system.  The Festival Interactive plugin will"
+    echo "be built, but you need to install festival before you"
+    echo "can use it.  Festival comes on most Linux distribution"
+    echo "CDs, or you can get it at"
+    echo "  http://www.cstr.ed.ac.uk/projects/festival/"
+    echo "Debian users: apt-get install festival"
+    echo "====================================================="
+    all_tests=bad
+  fi
+fi
+

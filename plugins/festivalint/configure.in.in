@@ -1,17 +1,22 @@
-dnl =======================================
-dnl checks for Festival Interactive plug in
-dnl =======================================
+dnl ==============================
+dnl checks for FestivalInt Plug In
+dnl ==============================
 
 AC_ARG_ENABLE(kttsd-festivalint,
               AC_HELP_STRING([--enable-kttsd-festivalint],
-                             [build KTTSD Festival Interactive Plugin [default=yes]]),
+                             [build KTTSD Festival Interactive plugin [default=yes]]),
               festivalint_plugin=$enableval,
               festivalint_plugin=yes)
 
-compile_festivalint_plugin="no"
+compile_festivalint_plugin="yes"
 
-if test "x$festivalint_plugin" = "xyes"; then
-  compile_festivalint_plugin="yes"
+if test "x$festivalint_plugin" = "xno"; then
+  compile_festivalint_plugin="no"
 fi
 
-AM_CONDITIONAL(include_kttsd_festivalint, test "x$compile_festivalint_plugin" = "xyes")
+dnl Check for festival executable.
+dnl Note that Festival Interactive plugin is always built
+dnl whether binary is found or not, unless user overrides with -disable-festivalint.
+AC_PATH_PROG(festival_bindir, "festival", "no")
+
+AM_CONDITIONAL(include_kttsd_festivalint, test "x$compile_festival_plugin" = "xyes")
