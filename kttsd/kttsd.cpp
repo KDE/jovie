@@ -112,6 +112,7 @@ bool KTTSD::initializeSpeaker()
     if (!speechData->readConfig())
     {
         delete speechData;
+        speechData = 0;
         configureSelected();
         speechData = new SpeechData();
         // If still no valid configuration, bail out.
@@ -125,13 +126,13 @@ bool KTTSD::initializeSpeaker()
         }
     }
 
-    connect (speechData, SIGNAL(textStarted()), this, SLOT(textStarted()));
-    connect (speechData, SIGNAL(textFinished()), this, SLOT(textFinished()));
-    connect (speechData, SIGNAL(textStopped()), this, SLOT(textStopped()));
-    connect (speechData, SIGNAL(textPaused()), this, SLOT(textPaused()));
-    connect (speechData, SIGNAL(textResumed()), this, SLOT(textResumed()));
-    connect (speechData, SIGNAL(textSet()), this, SLOT(textSet()));
-    connect (speechData, SIGNAL(textRemoved()), this, SLOT(textRemoved()));
+    connect (speechData, SIGNAL(textStarted()), this, SLOT(slotTextStarted()));
+    connect (speechData, SIGNAL(textFinished()), this, SLOT(slotTextFinished()));
+    connect (speechData, SIGNAL(textStopped()), this, SLOT(slotTextStopped()));
+    connect (speechData, SIGNAL(textPaused()), this, SLOT(slotTextPaused()));
+    connect (speechData, SIGNAL(textResumed()), this, SLOT(slotTextResumed()));
+    connect (speechData, SIGNAL(textSet()), this, SLOT(slotTextSet()));
+    connect (speechData, SIGNAL(textRemoved()), this, SLOT(slotTextRemoved()));
 
     // Create speaker object and load plug ins, checking for the return
     speaker = new Speaker(speechData);
@@ -154,8 +155,10 @@ bool KTTSD::initializeSpeaker()
         return false;
     }
 
-    connect (speaker, SIGNAL(sentenceStarted(QString,QString)), this, SLOT(sentenceStarted(QString,QString)));
-    connect (speaker, SIGNAL(sentenceFinished()), this, SLOT(sentenceFinished()));
+    connect (speaker, SIGNAL(sentenceStarted(QString,QString)), this,
+        SLOT(slotSentenceStarted(QString,QString)));
+    connect (speaker, SIGNAL(sentenceFinished()), this,
+        SLOT(slotSentenceFinished()));
 
     return true;
 }
@@ -167,13 +170,14 @@ bool KTTSD::initializeSpeaker()
 KTTSD::~KTTSD(){
     kdDebug() << "Running: KTTSD::~KTTSD()" << endl;
     kdDebug() << "Stopping KTTSD service" << endl;
+    delete aboutDlg;
     if (speaker)
     {
         speaker->requestExit();
         speaker->wait();
         delete speaker;
     }
-    if (speechData) delete speechData;
+    delete speechData;
 }
 
 /***** DCOP exported functions *****/
@@ -198,7 +202,7 @@ void KTTSD::sayMessage(const QString &message, const QString &language=NULL){
 /**
  * DCOP exported function to set text
  */
-void KTTSD::setText(const QString &text, const QString &language=NULL){
+void KTTSD::setText(const QString &text, const QString &language){
     kdDebug() << "Running: setText(const QString &text, const QString &language=NULL)" << endl;
     kdDebug() << "Setting text: '" << text << "'" << endl;
     speechData->setText(text, language);
@@ -369,8 +373,8 @@ void KTTSD::reinit()
     }
     if (speechData) delete speechData;
     speechData = 0;
-    textStopped();
-    textRemoved();
+    slotTextStopped();
+    slotTextRemoved();
 
     kdDebug() << "Starting KTTSD service" << endl;
     if (!initializeSpeaker()) return;
@@ -412,16 +416,18 @@ void KTTSD::aboutSelected(){
 }
 
 // Slots for the speaker object
-void KTTSD::sentenceStarted(QString text, QString){
+void KTTSD::slotSentenceStarted(QString text, QString){
     viewActiveText->setText (text);
+    emitDcopSignalNoParams("sentenceStarted()");
 }
 
-void KTTSD::sentenceFinished(){
+void KTTSD::slotSentenceFinished(){
     viewActiveText->setText ("");
+    emitDcopSignalNoParams("sentenceFinished()");
 }
 
 // Slots for the speechData object
-void KTTSD::textStarted(){
+void KTTSD::slotTextStarted(){
     buttonOpen->setEnabled (false);
     buttonStart->setEnabled (false);
     buttonRestart->setEnabled (true);
@@ -431,9 +437,12 @@ void KTTSD::textStarted(){
     buttonNextParagraph->setEnabled (true);
     buttonPrevSentence->setEnabled (true);
     buttonPrevParagraph->setEnabled (true);
+    QByteArray params;
+    QDataStream stream(params, IO_WriteOnly);
+    emitDcopSignalNoParams("textStarted()");
 }
 
-void KTTSD::textFinished(){
+void KTTSD::slotTextFinished(){
     buttonOpen->setEnabled (true);
     buttonStart->setEnabled (true);
     buttonRestart->setEnabled (false);
@@ -443,11 +452,12 @@ void KTTSD::textFinished(){
     buttonNextParagraph->setEnabled (false);
     buttonPrevSentence->setEnabled (false);
     buttonPrevParagraph->setEnabled (false);
+    emitDcopSignalNoParams("textFinished()");
     if (checkBoxHide->isChecked())
         hide();
 }
 
-void KTTSD::textStopped(){
+void KTTSD::slotTextStopped(){
     buttonOpen->setEnabled (true);
     buttonStart->setEnabled (true);
     buttonRestart->setEnabled (false);
@@ -457,26 +467,40 @@ void KTTSD::textStopped(){
     buttonNextParagraph->setEnabled (false);
     buttonPrevSentence->setEnabled (false);
     buttonPrevParagraph->setEnabled (false);
+    emitDcopSignalNoParams("textStopped()");
 }
 
-void KTTSD::textPaused(){
+void KTTSD::slotTextPaused(){
     buttonPause->setOn (true);
     viewPaused->setHidden (false);
+    emitDcopSignalNoParams("textPaused()");
 }
 
-void KTTSD::textResumed(){
+void KTTSD::slotTextResumed(){
     buttonPause->setOn (false);
     viewPaused->setHidden (true);
+    emitDcopSignalNoParams("textResumed()");
 }
 
-void KTTSD::textSet(){
+void KTTSD::slotTextSet(){
     buttonStart->setEnabled (true);
+    emitDcopSignalNoParams("textSet()");
 }
 
-void KTTSD::textRemoved(){
+void KTTSD::slotTextRemoved(){
     buttonStart->setEnabled (false);
+    emitDcopSignalNoParams("textRemoved()");
 }
 
+/**
+ * Send a DCOP signal with no parameters.
+ */
+void KTTSD::emitDcopSignalNoParams(const QCString& signalName)
+{
+    QByteArray params;
+    QDataStream stream(params, IO_WriteOnly);
+    emitDCOPSignal(signalName, params);
+}
 
 /***** KTTSDTray *****/
 

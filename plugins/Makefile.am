@@ -19,4 +19,4 @@ if include_kttsd_hadifax
 endif
 
 #SUBDIRS = $(festival_DIR) $(festivalcs_DIR) $(freetts_DIR) $(command_DIR) $(hadifax_DIR)
-SUBDIRS = $(festival_DIR) $(command_DIR) $(hadifax_DIR) festivalint
+SUBDIRS = $(festival_DIR) $(command_DIR) $(hadifax_DIR) festivalint command

@@ -42,7 +42,7 @@ FestivalIntProc::~FestivalIntProc(){
     if (festProc)
     {
         stopText();
-        if (festProc) delete festProc;
+        delete festProc;
     }
 }
 
@@ -80,6 +80,9 @@ void FestivalIntProc::sayText(const QString &text)
     {
         kdDebug()<< "FestivalIntProc::sayText: Creating Festival object" << endl;
         festProc = new KProcIO;
+        if (forceArts) *festProc << "artsdsp";
+        *festProc << "festival";
+        *festProc << "--interactive";
         connect(festProc, SIGNAL(processExited(KProcess*)), this, SLOT(festProcExited(KProcess*)));
         connect(festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
             this, SLOT(festProcReceivedStdout(KProcess*, char*, int)));
@@ -89,9 +92,6 @@ void FestivalIntProc::sayText(const QString &text)
     if (!festProc->isRunning())
     {
         kdDebug()<< "FestivalIntProc::sayText: Starting Festival process" << endl;
-        if (forceArts) *festProc << "artsdsp";
-        *festProc << "festival";
-        *festProc << "--interactive";
         if (festProc->start(KProcess::NotifyOnExit, KProcess::All))
         {
             ready = false;

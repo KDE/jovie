@@ -40,7 +40,9 @@ class FestivalIntProc : public PlugInProc{
         ~FestivalIntProc();
 
         /**
-         * Initializate the speech
+         * Initializate the speech engine.
+         * @param lang            Code giving the language to speak text in.  Example "en".
+         * @param config          Settings
          */
         bool init(const QString &lang, KConfig *config);
         
@@ -49,8 +51,9 @@ class FestivalIntProc : public PlugInProc{
          */
         bool isReady();
         
-        /** Say a text
-         *  text: The text to be speech
+        /**
+         * Say a text string.
+         * @param text            The text to speak.
          */
         void sayText(const QString &text);
 
