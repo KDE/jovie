@@ -31,7 +31,7 @@
 *
 * pluginconf - the KDE Text-to-Speech Deamon Plugin Configuration API.
 *
-* @version 1.0 Draft 1
+* @version 1.0 Draft 2
 *
 * This class defines the interface that plugins to KTTSMGR must implement.
 *
@@ -141,8 +141,6 @@
 *                    distinquish different implementations.  For example,
 *                    Festival Int, Flite, Hadifax.  Use only letters, numbers
 *                    spaces, and underscores (_) in your synthesizer name.
-* - @e codec.        May be any of the text encoding names returned by QTextCodec::names().
-*                    If your plugin does not support codecs, return "Local".
 * - @e gender.       May be "male", "female", or "neutral".
 * - @e name.         The voice code.  If your plugin does not support voices,
 *                    return "fixed".
@@ -155,7 +153,7 @@
 * a fully-specified talker code.
 *
 *   lang="en" name="kal" gender="male" volume="soft" rate="fast"
-*   synthesizer="Festival" codec="Local"
+*   synthesizer="Festival"
 *
 * Each time your plugin emits the @ref changed signal, @ref getTalkerCode will be called.
 *

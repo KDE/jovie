@@ -386,6 +386,15 @@ class KTTSD : public QObject, virtual public kspeech
         virtual ASYNC resumeText(const uint jobNum=0);
         
         /**
+        * Get a list of the talkers configured in KTTS.
+        * @return               A QStringList of fully-specified talker codes, one
+        *                       for each talker user has configured.
+        *
+        * @see talkers
+        */
+        virtual QStringList getTalkers();
+        
+        /**
         * Change the talker for a text job.
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application.
@@ -395,6 +404,20 @@ class KTTSD : public QObject, virtual public kspeech
         *                       defaults to the user's default talker.
         */
         virtual ASYNC changeTextTalker(const uint jobNum=0, const QString &talker=NULL);
+        
+        /**
+        * Get the user's preferred talker attributes.
+        * @return               A fully-specified talker code which is a concatenation of
+        *                       all the user's preferred talker attributes.
+        *
+        * Note that the returned talker code may not exactly match any of the
+        * configured talkers, but there will be at least one talker that matches
+        * each talker code attribute.
+        *
+        * @see talkers
+        * @see getTalkers
+        */
+        virtual QString userTalkerPreferences();
         
         /**
         * Move a text job down in the queue so that it is spoken later.

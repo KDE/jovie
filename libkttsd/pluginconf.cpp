@@ -94,7 +94,7 @@ bool PlugInConf::supportsMultiInstance() { return false; }
 *
 * If the plugin is unable to support the desired language, that is OK.
 */
-void PlugInConf::setDesiredLanguage(const QString lang) { }
+void PlugInConf::setDesiredLanguage(const QString /* lang */) { }
 
 /**
 * Return fully-specified talker code for the configured plugin.  This code
@@ -116,4 +116,4 @@ QString PlugInConf::getTalkerCode() { return QString::null; }
 * If your plugin can support any language, return Null.
 * @return            A QStringList of supported language codes, or Null if unknown.
 */
-QStringList PlugInConf::getSupportedLanguages() { return 0; }
+QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }

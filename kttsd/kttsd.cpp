@@ -568,6 +568,15 @@ void KTTSD::resumeText(const uint jobNum /*=0*/)
 }
 
 /**
+* Get a list of the talkers configured in KTTS.
+* @return               A QStringList of fully-specified talker codes, one
+*                       for each talker user has configured.
+*
+* @see talkers
+*/
+QStringList KTTSD::getTalkers() { return QStringList(); }
+        
+/**
 * Change the talker for a text job.
 * @param jobNum         Job number of the text job.
 *                       If zero, applies to the last job queued by the application.
@@ -582,6 +591,20 @@ void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=
     if (!jNum) jNum = speechData->findAJobNumByAppId(getAppId());
     speechData->changeTextTalker(jNum, talker);
 }
+
+/**
+* Get the user's preferred talker attributes.
+* @return               A fully-specified talker code which is a concatenation of
+*                       all the user's preferred talker attributes.
+*
+* Note that the returned talker code may not exactly match any of the
+* configured talkers, but there will be at least one talker that matches
+* each talker code attribute.
+*
+* @see talkers
+* @see getTalkers
+*/
+QString KTTSD::userTalkerPreferences() { return QString::null; }
 
 /**
 * Move a text job down in the queue so that it is spoken later.
