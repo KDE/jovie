@@ -1,8 +1,85 @@
 KTTSD is the next Proklam.
-The first diference is that KTTSD is implemented as a KDED module.
+The first difference is that KTTSD is implemented as a KDED module.
 It is based on Proklam and depricates Proklam.
 
-Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.or
+Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 
-KTTSD, KDE Text To Speech Daemon is a plug in based dcop service that allows any KDE (or not-KDE) application to send messages using the dcop interface that later will be spoken.
-Among the good things is priority system for warnings, messages and text, texts being long texts that are parsed and offer navegability.
+KTTSD, KDE Text To Speech Daemon is a plug-in based dcop service that
+allows any KDE (or non-KDE) application to send messages using the
+dcop interface that later will be spoken.
+
+Features
+--------
+* Priority system for warnings and messages, while still playing regular texts.
+* Long text is parsed into sentences.  User may backup up sentences and paragraphs,
+  replay, pause, and stop playing.
+
+Requirements
+------------
+KDE 3.2.x and a speech synthesis engine, such as Festival.  Festival can be
+obtained from http://www.cstr.ed.ac.uk/projects/festival/.  Festival is
+distributed with most Linux distros.  Check your distro CDs.  Also works
+with Hadifax or any command that can speak text.
+
+Building
+--------
+If you are building from CVS kdenonbeta module, the usual commands
+
+  cd kdenonbeta
+  echo kttsd > inst-apps
+  make -f Makefile.cvs
+  ./configure
+  make
+  make install  // as root
+
+Before attempting to run QT Designer against plugin .ui files, first copy
+kttsd/libkttsd/pluginconf.h to $KDEDIR/include/.
+  
+Using
+-----
+Make sure your speech engine is working.
+
+To configure the speech plugin for KTTSD
+
+  kcmshell kcmkttsd
+
+To run KTTSD
+
+  kttsd
+
+Click on the kicker icon.  Click "Open text to read out" button, then click
+"Start reading" button.
+
+To set the text to be spoken
+
+ dcop kttsd kspeech setText <text> <language>
+
+where <text> is the text to be spoken, and <language> is a language code
+such as "en", "cy", etc.
+
+Example.
+
+  dcop kttsd kspeech setText "This is a test." "en"
+
+To speak the current text
+
+  dcop kttsd kspeech startText
+
+To stop speaking
+
+  dcop kttsd kspeech stopText
+
+Depending upon the speech plugin used, speaking may not immediately stop.
+
+17 Mar 2004: The Festival plugin does not work for me.  Crashes as soon
+as call to festival_initialize is made.  I suspect that the problem is
+incompatible gcc compilers used to compile kttsd and the libfestival.a
+static library, which on my system, is version 1.42.  So I added the
+Festival (Interactive) plugin that interfaces with Festival interactively
+via pipes ("festival --interactive").  If someone can confirm or deny
+this, I'd be appreciative.. Gary Cramblitt <garycramblitt@comcast.net>.
+The Force Arts option does not currently work with Festival (Interactive)
+plugin.
+
+Festival (Client/Server), festicalcs, is not currently working.
