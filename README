@@ -2,7 +2,7 @@ KTTSD is the next Proklam.
 The first difference is that KTTSD is implemented as a KDED module.
 It is based on Proklam and depricates Proklam.
 
-Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.or
+Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
 Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 
 KTTSD, KDE Text To Speech Daemon is a plug-in based dcop service that
