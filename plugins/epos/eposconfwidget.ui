@@ -145,7 +145,7 @@
                                         <cstring>timeBox</cstring>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".</string>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -167,7 +167,7 @@
                                         <cstring>frequencyBox</cstring>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the tone (frequency) of speech.  Slide the slider to the left to lower the voice tone; to the right to increase tone.  Anything less than 75 percent is considered "low", and anything greater than 125 percent is considered "high".</string>
                                     </property>
                                 </widget>
                             </vbox>
@@ -208,7 +208,7 @@
                                         <number>100</number>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".</string>
                                     </property>
                                 </widget>
                                 <widget class="KIntSpinBox">
@@ -239,7 +239,7 @@
                                         <number>100</number>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the tone (frequency) of speech.  Slide the slider to the left to lower the voice tone; to the right to increase tone.  Anything less than 75 percent is considered "low", and anything greater than 125 percent is considered "high".</string>
                                     </property>
                                 </widget>
                             </vbox>
@@ -278,7 +278,7 @@
                                         <enum>Horizontal</enum>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".</string>
                                     </property>
                                 </widget>
                                 <widget class="QSlider">
@@ -307,7 +307,7 @@
                                         <enum>Horizontal</enum>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the tone (frequency) of speech.  Slide the slider to the left to lower the voice tone; to the right to increase tone.  Anything less than 75 percent is considered "low", and anything greater than 125 percent is considered "high".</string>
                                     </property>
                                 </widget>
                             </vbox>
@@ -464,7 +464,7 @@
                                                 <cstring>eposServerOptions</cstring>
                                             </property>
                                             <property name="whatsThis" stdset="0">
-                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
+                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not us "-o".</string>
                                             </property>
                                         </widget>
                                         <widget class="QLineEdit">
@@ -472,7 +472,7 @@
                                                 <cstring>eposClientOptions</cstring>
                                             </property>
                                             <property name="whatsThis" stdset="0">
-                                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
+                                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.  Do not use "-o".</string>
                                             </property>
                                         </widget>
                                     </vbox>
@@ -507,7 +507,7 @@
                                                 <cstring>festivalVoicesPath</cstring>
                                             </property>
                                             <property name="whatsThis" stdset="0">
-                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.</string>
+                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not us "-o".</string>
                                             </property>
                                         </widget>
                                         <widget class="QLabel">
@@ -532,7 +532,7 @@
                                                 <cstring>festivalVoicesPath</cstring>
                                             </property>
                                             <property name="whatsThis" stdset="0">
-                                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.</string>
+                                                <string>Specify options to be passed to Epos client.  Do not use -o.  To see available options, enter "say -h" in a terminal.  Do not use "-o".</string>
                                             </property>
                                         </widget>
                                     </vbox>

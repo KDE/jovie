@@ -270,7 +270,7 @@
                                         <cstring>volumeBox</cstring>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the volume (loudness) of speech.  Slide the slider to the left to lower the volume; to the right to increase volume.  Anything less than 75 percent is considered "soft", and anything greater than 125 percent is considered "loud".</string>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -314,7 +314,7 @@
                                         <cstring>frequencyBox</cstring>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the tone (frequency) of speech.  Slide the slider to the left to lower the voice tone; to the right to increase tone.  Anything less than 75 percent is considered "low", and anything greater than 125 percent is considered "high".  You cannot change the pitch of MultiSyn voices.</string>
                                     </property>
                                 </widget>
                             </vbox>
@@ -355,7 +355,7 @@
                                         <number>100</number>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the volume (loudness) of speech.  Slide the slider to the left to lower the volume; to the right to increase volume.  Anything less than 75 percent is considered "soft", and anything greater than 125 percent is considered "loud".</string>
                                     </property>
                                 </widget>
                                 <widget class="KIntSpinBox">
@@ -417,7 +417,7 @@
                                         <number>100</number>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the tone (frequency) of speech.  Slide the slider to the left to lower the voice tone; to the right to increase tone.  Anything less than 75 percent is considered "low", and anything greater than 125 percent is considered "high".  You cannot change the pitch of MultiSyn voices.</string>
                                     </property>
                                 </widget>
                             </vbox>
@@ -459,7 +459,7 @@
                                         <enum>Horizontal</enum>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the volume (loudness) of speech.  Slide the slider to the left to lower the volume; to the right to increase volume.  Anything less than 75 percent is considered "soft", and anything greater than 125 percent is considered "loud".</string>
                                     </property>
                                 </widget>
                                 <widget class="QSlider">
@@ -517,7 +517,7 @@
                                         <enum>Horizontal</enum>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+                                        <string>Sets the tone (frequency) of speech.  Slide the slider to the left to lower the voice tone; to the right to increase tone.  Anything less than 75 percent is considered "low", and anything greater than 125 percent is considered "high".  You cannot change the pitch of MultiSyn voices.</string>
                                     </property>
                                 </widget>
                             </vbox>
