@@ -81,13 +81,8 @@ bool SpeechData::readConfig(){
     // Notification (KNotify).
     notify = config->readBoolEntry("Notify", false);
     notifyPassivePopupsOnly = config->readBoolEntry("NotifyPassivePopupsOnly", false);
-    
-    if(config->hasKey("DefaultLanguage")){
-        defaultTalker = config->readEntry("DefaultLanguage");
-        return true;
-    } else {
-        return false;
-    }
+
+    return true;
 }
 /**
 * Destructor
@@ -107,10 +102,10 @@ SpeechData::~SpeechData(){
 * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
 * by any other applications.
 * @param msg            The message to be spoken.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 * @param appId          The DCOP senderId of the application.  NULL if kttsd.
 *
 * If an existing Screen Reader output is in progress, it is stopped and discarded and
@@ -289,7 +284,7 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QCSt
     if (talker != NULL)
         textTalker = talker;
     else
-        textTalker = defaultTalker;
+        textTalker = QString::null;
     mlJob* job = new mlJob;
     uint jobNum = ++jobCounter;
     job->jobNum = jobNum;
@@ -799,10 +794,10 @@ QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
 * @param jobNum         Job number of the text job.
 *                       If zero, applies to the last job queued by the application,
 *                       but if no such job, applies to the last job queued by any application.
-* @param talker         New code for the language to be spoken in.  Example "en".
+* @param talker         New code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 */
 void SpeechData::changeTextTalker(const uint jobNum, const QString &talker)
 {
@@ -812,7 +807,7 @@ void SpeechData::changeTextTalker(const uint jobNum, const QString &talker)
         if (!talker.isEmpty())
             job->talker = talker;
         else
-            job->talker = defaultTalker;
+            job->talker = QString::null;
     }
 }
 

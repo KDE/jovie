@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=Festival C/S
 Name[et]=Festival K/S
 Name[ja]=フェスティバル C/S
@@ -14,10 +15,9 @@ Comment[nl]=Festival spraaksynthetizer Client/Server
 Comment[pt]=O sintetizador de fala cliente/servidor Festival
 Comment[pt_BR]=Sintetizador de voz cliente-servidor Festival
 Comment[sr]=Клијент/сервер синтетизатора говора Festival
-Comment[sr@Latn]=Клијент/сервер синтетизатора говора Festival
 Comment[sv]=Festival talsyntes klient/server
 Comment[xx]=xxFestival speech synthesizer Client/Serverxx
 Type=Service
 ServiceTypes=Proklam/SynthPlugin
 X-KDE-Library=libkttsd_festivalcsplugin
-X-KDE-Languages=en,en_GB,es,cy
+X-KDE-Languages=en,en_US,en_GB,es,cy

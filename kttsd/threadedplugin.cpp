@@ -60,9 +60,9 @@ ThreadedPlugIn::~ThreadedPlugIn()
 /**
 * Initialize the speech plugin.
 */
-bool ThreadedPlugIn::init(const QString &lang, KConfig *config)
+bool ThreadedPlugIn::init(KConfig *config, const QString &configGroup)
 {
-    bool stat = m_plugin->init(lang, config);
+    bool stat = m_plugin->init(config, configGroup);
     m_supportsSynth = m_plugin->supportsSynth();
     // Start thread running, which will immediately go to sleep.
     start();

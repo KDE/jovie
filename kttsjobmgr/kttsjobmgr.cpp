@@ -9,27 +9,32 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "kttsjobmgr.h"
-#include "kttsjobmgr.moc"
 
+// QT includes.
+#include <qdockarea.h>
+#include <qvbox.h>
+#include <qgrid.h>
+#include <qlabel.h>
+#include <qsplitter.h>
+#include <qclipboard.h>
+
+// KDE includes.
 #include <kinstance.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <klistview.h>
 #include <kaction.h>
-#include <qdockarea.h>
-#include <qvbox.h>
-#include <qgrid.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <qlabel.h>
-#include <qsplitter.h>
-#include <qclipboard.h>
 #include <kfiledialog.h>
 #include <kapplication.h>
+#include <kinputdialog.h>
 
+// KTTS includes.
 #include "kspeech.h"
+#include "kttsjobmgr.h"
+#include "kttsjobmgr.moc"
 
 extern "C"
 {
@@ -133,7 +138,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     m_jobListView->setSelectionModeExt(KListView::Single);
     m_jobListView->addColumn(i18n("Job Num"));
     m_jobListView->addColumn(i18n("Owner"));
-    m_jobListView->addColumn(i18n("Language"));
+    m_jobListView->addColumn(i18n("Talker ID"));
     m_jobListView->addColumn(i18n("State"));
     m_jobListView->addColumn(i18n("Position"));
     m_jobListView->addColumn(i18n("Sentences"));
@@ -270,11 +275,9 @@ void KttsJobMgrPart::setupActions()
         KGlobal::iconLoader()->loadIconSet("down", KIcon::Toolbar, 0, true),
         0, this, SLOT(slot_job_move()), actionCollection(), "job_move");
     act->plug(m_toolBar1);
-        // TODO: Remove "todo_" from the name to enable this button when it is implemented.
-    act = new KAction(i18n("Change Language"),
+    act = new KAction(i18n("Change Talker"),
         KGlobal::iconLoader()->loadIconSet("translate", KIcon::Toolbar, 0, true),
-        0, this, SLOT(slot_job_change_talker()), actionCollection(), "todo_job_change_talker");
-    act->setEnabled(false);
+        0, this, SLOT(slot_job_change_talker()), actionCollection(), "job_change_talker");
     act->plug(m_toolBar1);
 
     act = new KAction(i18n("Previous Part"),
@@ -427,7 +430,24 @@ void KttsJobMgrPart::slot_job_move()
 
 void KttsJobMgrPart::slot_job_change_talker()
 {
-    // TODO:
+    uint jobNum = getCurrentJobNum();
+    if (jobNum)
+    {
+        QStringList talkerCodesList = getTalkers();
+        bool okClicked = false;
+        QString newTalker = KInputDialog::getItem(
+            i18n("Select Talker"),
+            i18n("Talker"),
+            talkerCodesList,
+            0,
+            false,
+            &okClicked);
+        if (okClicked)
+        {
+            changeTextTalker(jobNum, newTalker);
+            refreshJob(jobNum);
+        }
+    }
 }
 
 void KttsJobMgrPart::slot_speak_clipboard()
@@ -457,6 +477,8 @@ void KttsJobMgrPart::slot_speak_file()
 
 void KttsJobMgrPart::slot_refresh()
 {
+    // Clear TalkerID cache.
+    m_talkerCodesToTalkerIDs.clear();
     // Get current job number.
     uint jobNum = getCurrentJobNum();
     refreshJobListView();
@@ -541,22 +563,23 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
     QDataStream stream(jobInfo, IO_ReadOnly);
     int state;
     QCString appId;
-    QString language;
+    QString talker;
     int seq;
     int sentenceCount;
     int partNum;
     int partCount;
     stream >> state;
     stream >> appId;
-    stream >> language;
+    stream >> talker;
     stream >> seq;
     stream >> sentenceCount;
     stream >> partNum;
     stream >> partCount;
+    QString talkerID = cachedTalkerCodeToTalkerID(talker);
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcLanguage, language);
+        item->setText(jlvcTalker, talkerID);
         item->setText(jlvcState, stateToStr(state));
         item->setText(jlvcPosition, QString::number(seq));
         item->setText(jlvcSentences, QString::number(sentenceCount));
@@ -588,25 +611,26 @@ void KttsJobMgrPart::refreshJobListView()
         QDataStream stream(jobInfo, IO_ReadOnly);
         int state;
         QCString appId;
-        QString language;
+        QString talkerCode;
         int seq;
         int sentenceCount;
         int partNum;
         int partCount;
         stream >> state;
         stream >> appId;
-        stream >> language;
+        stream >> talkerCode;
         stream >> seq;
         stream >> sentenceCount;
         stream >> partNum;
         stream >> partCount;
+        QString talkerID = cachedTalkerCodeToTalkerID(talkerCode);
         // Append to list.
         if (lastItem)
-            lastItem = new QListViewItem(m_jobListView, lastItem, jobNumStr, appId, language, 
+            lastItem = new QListViewItem(m_jobListView, lastItem, jobNumStr, appId, talkerID, 
                 stateToStr(state), QString::number(seq), QString::number(sentenceCount),
                 QString::number(partNum), QString::number(partCount));
         else
-            lastItem = new QListViewItem(m_jobListView, jobNumStr, appId, language, 
+            lastItem = new QListViewItem(m_jobListView, jobNumStr, appId, talkerID,
                 stateToStr(state), QString::number(seq), QString::number(sentenceCount),
                 QString::number(partNum), QString::number(partCount));
     }
@@ -630,6 +654,25 @@ void KttsJobMgrPart::autoSelectInJobListView()
     else
         // Select first item.  Should fire itemSelected event which will enable job buttons on toolbar.
         m_jobListView->setSelected(item, true);
+}
+
+/**
+* Return the Talker ID corresponding to a Talker Code, retrieving from cached list if present.
+* @param talkerCode    Talker Code.
+* @return              Talker ID.
+*/
+QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
+{
+    // If in the cache, return that.
+    if (m_talkerCodesToTalkerIDs.contains(talkerCode))
+        return m_talkerCodesToTalkerIDs[talkerCode];
+    else
+    {
+        // Otherwise, retrieve Talker ID from KTTSD and cache it.
+        QString talkerID = talkerCodeToTalkerId(talkerCode);
+        m_talkerCodesToTalkerIDs[talkerCode] = talkerID;
+        return talkerID;
+    }
 }
 
 /**
@@ -732,20 +775,21 @@ ASYNC KttsJobMgrPart::textSet(const QCString&, const uint jobNum)
     QDataStream stream(jobInfo, IO_ReadOnly);
     int state;
     QCString appId;
-    QString language;
+    QString talkerCode;
     int seq;
     int sentenceCount;
     int partNum;
     int partCount;
     stream >> state;
     stream >> appId;
-    stream >> language;
+    stream >> talkerCode;
     stream >> seq;
     stream >> sentenceCount;
     stream >> partNum;
     stream >> partCount;
+    QString talkerID = cachedTalkerCodeToTalkerID(talkerCode);
     QListViewItem* item = new QListViewItem(m_jobListView, m_jobListView->lastItem(), 
-        QString::number(jobNum), appId, language, 
+        QString::number(jobNum), appId, talkerID, 
         stateToStr(state), QString::number(seq), QString::number(sentenceCount),
         QString::number(partNum), QString::number(partCount));
     // Should we select this job?

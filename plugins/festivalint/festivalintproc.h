@@ -42,10 +42,10 @@ class FestivalIntProc : public PlugInProc{
 
         /**
          * Initializate the speech engine.
-         * @param lang            Code giving the language to speak text in.  Example "en".
-         * @param config          Settings
+         * @param config          Settings object.
+         * @param configGroup     Settings group.
          */
-        virtual bool init(const QString &lang, KConfig *config);
+        virtual bool init(KConfig *config, const QString &configGroup);
         
         /**
          * Returns true when festival is ready to speak a sentence.

@@ -9,4 +9,4 @@ Comment[sv]=Festival Lite (flite) talsyntes
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_fliteplugin
-X-KDE-Languages=en,en_GB
+X-KDE-Languages=en,en_US,en_GB

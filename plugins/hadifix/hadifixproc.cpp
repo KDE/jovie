@@ -44,8 +44,8 @@ class HadifixProcPrivate {
         delete hadifixProc;
       };
 
-      void load(KConfig *config, const QString &langGroup) {
-         config->setGroup(QString("Lang_")+langGroup);
+      void load(KConfig *config, const QString &configGroup) {
+         config->setGroup(configGroup);
          hadifix  = config->readEntry ("hadifixExec",   QString::null);
          mbrola   = config->readEntry ("mbrolaExec",    QString::null);
          voice    = config->readEntry ("voice",         QString::null);
@@ -87,13 +87,13 @@ HadifixProc::~HadifixProc(){
 }
 
 /** Initializate the speech */
-bool HadifixProc::init(const QString &lang, KConfig *config){
+bool HadifixProc::init(KConfig *config, const QString &configGroup){
    kdDebug() << "HadifixProc::init: Running" << endl;
    kdDebug() << "HadifixProc::init: Initializing plug in: Hadifix" << endl;
 
    if (d == 0)
       d = new HadifixProcPrivate();
-   d->load(config, lang);
+   d->load(config, configGroup);
    return true;
 }
 

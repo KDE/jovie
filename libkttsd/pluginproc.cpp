@@ -27,21 +27,21 @@
 * Constructor
 */
 PlugInProc::PlugInProc( QObject *parent, const char *name) : QObject(parent, name){
-    kdDebug() << "Running: PlugInProc::PlugInProc( QObject *parent, const char *name)" << endl;
+    // kdDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 
 /**
 * Destructor
 */
 PlugInProc::~PlugInProc(){
-    kdDebug() << "Running: PlugInProc::~PlugInProc()" << endl;
+    // kdDebug() << "PlugInProc::~PlugInProc: Running" << endl;
 }
 
 /**
 * Initializate the speech plugin.
 */
-bool PlugInProc::init(const QString& /*lang*/, KConfig* /*config*/){
-    kdDebug() << "Running: PlugInProc::init(const QString &lang)" << endl;
+bool PlugInProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
+    // kdDebug() << "PlugInProc::init: Running" << endl;
     return false;
 }
 
@@ -52,7 +52,7 @@ bool PlugInProc::init(const QString& /*lang*/, KConfig* /*config*/){
 * If the plugin supports asynchronous operation, it should return immediately.
 */
 void PlugInProc::sayText(const QString& /*text*/){
-    kdDebug() << "Running: PlugInProc::sayText(const QString &text)" << endl;
+    // kdDebug() << "PlugInProc::sayText: Running" << endl;
 }
 
 /**
@@ -82,7 +82,7 @@ QString PlugInProc::getFilename() { return QString::null; };
 * The plugin should return to the psIdle state.
 */
 void PlugInProc::stopText(){
-    kdDebug() << "Running: PlugInProc::stopText()" << endl;
+    // kdDebug() << "PlugInProc::stopText: Running" << endl;
 }
 
 /**
@@ -103,7 +103,7 @@ pluginState PlugInProc::getState() { return psIdle; }
 * Calling program should call getFilename prior to ackFinished.
 */
 void PlugInProc::ackFinished() { }
-        
+
 /**
 * Returns True if the plugin supports asynchronous processing,
 * i.e., returns immediately from sayText or synthText.

@@ -46,10 +46,10 @@ FreeTTSProc::~FreeTTSProc() {
 }
 
 /** Initializate the speech */
-bool FreeTTSProc::init(const QString &lang, KConfig *config) {
+bool FreeTTSProc::init(KConfig *config, const QString &configGroup) {
 	kdDebug() << "Running: FreeTTSProc::init()" << endl;
 	kdDebug() << "Initializing plug in: FreeTTS" << endl;
-	config->setGroup(QString("Lang_") + lang);
+	config->setGroup(configGroup);
 	m_freettsJarPath = config->readPathEntry("FreeTTSJarPath", "freetts.jar");
 	kdDebug() << "FreeTTSProc::init: path to freetts.jar: " << m_freettsJarPath << endl;
 	return true;

@@ -190,7 +190,7 @@ private:
     {
         jlvcJobNum = 0,               /**< Job Number. */
         jlvcOwner = 1,                /**< AppId of job owner */
-        jlvcLanguage = 2,             /**< Job language code */
+        jlvcTalker = 2,               /**< Job Talker Code (as specified by application) */
         jlvcState = 3,                /**< Job State */
         jlvcPosition = 4,             /**< Current sentence of job. */
         jlvcSentences = 5,            /**< Number of sentences in job. */
@@ -256,6 +256,13 @@ private:
     void autoSelectInJobListView();
     
     /**
+    * Return the Talker ID corresponding to a Talker Code, retrieving from cached list if present.
+    * @param talkerCode    Talker Code.
+    * @return              Talker ID.
+    */
+    QString cachedTalkerCodeToTalkerID(const QString& talkerCode);
+    
+    /**
     * Job List View
     */
     KListView* m_jobListView;
@@ -278,6 +285,11 @@ private:
     * is announced in a textSet signal.
     */
     bool selectOnTextSet;
+    
+    /**
+    * Cache mapping Talker Codes to Talker IDs.
+    */
+    QMap<QString,QString> m_talkerCodesToTalkerIDs;
 };
 
 class KttsJobMgrBrowserExtension : public KParts::BrowserExtension

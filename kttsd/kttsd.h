@@ -66,7 +66,7 @@ class KTTSD : public QObject, virtual public kspeech
         
         /**
         * Determine whether the currently-configured speech plugin supports a speech markup language.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
         * @param markupType     The kttsd code for the desired speech markup language.
         * @return               True if the plugin currently configured for the indicated
@@ -77,7 +77,7 @@ class KTTSD : public QObject, virtual public kspeech
         
         /**
         * Determine whether the currently-configured speech plugin supports markers in speech markup.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
         * @return               True if the plugin currently configured for the indicated
         *                       talker supports markers.
@@ -89,10 +89,10 @@ class KTTSD : public QObject, virtual public kspeech
         * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
         * by any other applications.
         * @param msg            The message to be spoken.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         *
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
         * replaced with this new message.
@@ -105,10 +105,10 @@ class KTTSD : public QObject, virtual public kspeech
         * be used for high-priority messages requiring immediate user attention, such as
         * "WARNING. CPU is overheating."
         * @param warning        The warning to be spoken.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         */
         virtual ASYNC sayWarning(const QString &warning, const QString &talker=NULL);
 
@@ -118,10 +118,10 @@ class KTTSD : public QObject, virtual public kspeech
         * Messages should be used for one-shot messages that can't wait for
         * normal text messages to stop speaking, such as "You have mail.".
         * @param message        The message to be spoken.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no talker has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no talker has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         */
         virtual ASYNC sayMessage(const QString &message, const QString &talker=NULL);
 
@@ -144,10 +144,10 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Queue a text job.  Does not start speaking the text.
         * @param text           The message to be spoken.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default plugin.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default plugin.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         * @return               Job number.
         *
         * Plain text is parsed into individual sentences using the current sentence delimiter.
@@ -185,10 +185,10 @@ class KTTSD : public QObject, virtual public kspeech
         /**
         * Queue a text job from the contents of a file.  Does not start speaking the text.
         * @param filename       Full path to the file to be spoken.  May be a URL.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         * @return               Job number.  0 if an error occurs.
         *
         * Plain text is parsed into individual sentences using the current sentence delimiter.
@@ -294,6 +294,14 @@ class KTTSD : public QObject, virtual public kspeech
         */
         virtual QByteArray getTextJobInfo(const uint jobNum=0);
        
+        /**
+        * Given a Talker Code, returns the Talker ID of the talker that would speak
+        * a text job with that Talker Code.
+        * @param talkerCode     Talker Code.
+        * @return               Talker ID of the talker that would speak the text job.
+        */
+        virtual QString talkerCodeToTalkerId(const QString& talkerCode);
+        
         /**
         * Return a sentence of a job.
         * @param jobNum         Job number of the text job.
@@ -408,26 +416,21 @@ class KTTSD : public QObject, virtual public kspeech
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
         *                       but if no such job, applies to the current job (if any).
-        * @param talker         New code for the language to be spoken in.  Example "en".
+        * @param talker         New code for the talker to do the speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         */
         virtual ASYNC changeTextTalker(const uint jobNum=0, const QString &talker=NULL);
         
         /**
-        * Get the user's preferred talker attributes.
-        * @return               A fully-specified talker code which is a concatenation of
-        *                       all the user's preferred talker attributes.
-        *
-        * Note that the returned talker code may not exactly match any of the
-        * configured talkers, but there will be at least one talker that matches
-        * each talker code attribute.
+        * Get the user's default talker.
+        * @return               A fully-specified talker code.
         *
         * @see talkers
         * @see getTalkers
         */
-        virtual QString userTalkerPreferences();
+        virtual QString userDefaultTalker();
         
         /**
         * Move a text job down in the queue so that it is spoken later.

@@ -47,7 +47,7 @@ class CommandProc : public PlugInProc{
         ~CommandProc();
     
         /** Initializate the speech */
-        bool init (const QString &lang, KConfig *config);
+        bool init (KConfig *config, const QString &configGroup);
     
         /**
          * Say a text string.

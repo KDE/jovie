@@ -41,19 +41,19 @@
 EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    kdDebug() << "EposConf::EposConf: Running" << endl;
+    // kdDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
-    
+
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "EposConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new EposConfWidget(this, "EposConfigWidget");
     layout->addWidget(m_widget);
-    
+
     defaults();
-    
+
     connect(m_widget->eposServerPath, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
     connect(m_widget->eposClientPath, SIGNAL(textChanged(const QString&)),
@@ -70,7 +70,7 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
 
 /** Destructor */
 EposConf::~EposConf(){
-    kdDebug() << "Running: EposConf::~EposConf()" << endl;
+    // kdDebug() << "Running: EposConf::~EposConf()" << endl;
     if (m_playObj) m_playObj->halt();
     delete m_playObj;
     delete m_artsServer;
@@ -78,10 +78,10 @@ EposConf::~EposConf(){
     delete m_eposProc;
 }
 
-void EposConf::load(KConfig *config, const QString &langGroup){
-    kdDebug() << "EposConf::load: Loading configuration for language " << langGroup << " with plug in " << "Epos" << endl;
+void EposConf::load(KConfig *config, const QString &configGroup){
+    // kdDebug() << "EposConf::load: Running " << endl;
 
-    config->setGroup(langGroup);
+    config->setGroup(configGroup);
     m_widget->eposServerPath->setURL(config->readPathEntry("EposServerExePath", "epos"));
     m_widget->eposClientPath->setURL(config->readPathEntry("EposClientExePath", "say"));
     m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
@@ -103,10 +103,14 @@ void EposConf::load(KConfig *config, const QString &langGroup){
     m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
-void EposConf::save(KConfig *config, const QString &langGroup){
-    kdDebug() << "EposConf::save: Saving configuration for language " << langGroup << " with plug in " << "Epos" << endl;
+void EposConf::save(KConfig *config, const QString &configGroup){
+    // kdDebug() << "EposConf::save: Running" << endl;
 
-    config->setGroup(langGroup);
+    config->setGroup("Epos");
+    config->writePathEntry("EposServerExePath", m_widget->eposServerPath->url());
+    config->writePathEntry("EposClientExePath", m_widget->eposClientPath->url());
+
+    config->setGroup(configGroup);
     config->writePathEntry("EposServerExePath", m_widget->eposServerPath->url());
     config->writePathEntry("EposClientExePath", m_widget->eposClientPath->url());
     config->writeEntry("EposServerOptions", m_widget->eposServerOptions->text());
@@ -123,13 +127,41 @@ void EposConf::save(KConfig *config, const QString &langGroup){
 }
 
 void EposConf::defaults(){
-    kdDebug() << "EposConf::defaults: Running" << endl;
+    // kdDebug() << "EposConf::defaults: Running" << endl;
     m_widget->eposServerPath->setURL("epos");
     m_widget->eposClientPath->setURL("say");
     m_widget->eposServerOptions->setText("");
     m_widget->eposClientOptions->setText("");
     buildCodecList();
     m_widget->characterCodingBox->setCurrentItem(0);
+}
+
+void EposConf::setDesiredLanguage(const QString &lang)
+{
+    m_languageCode = lang;
+}
+
+QString EposConf::getTalkerCode()
+{
+    QString eposServerExe = m_widget->eposServerPath->url();
+    QString eposClientExe = m_widget->eposClientPath->url();
+    if (!eposServerExe.isEmpty() && !eposClientExe.isEmpty())
+    {
+        if (!getLocation(eposServerExe).isEmpty() && !getLocation(eposClientExe).isEmpty())
+        {
+            return QString(
+                    "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                    "<prosody volume=\"%4\" rate=\"%5\" />"
+                    "<kttsd synthesizer=\"%6\" />")
+                    .arg(m_languageCode)
+                    .arg("fixed")
+                    .arg("neutral")
+                    .arg("medium")
+                    .arg("medium")
+                    .arg("Epos TTS Synthesis System");
+        }
+    }
+    return QString::null;
 }
 
 void EposConf::buildCodecList () {
@@ -144,10 +176,10 @@ void EposConf::buildCodecList () {
       m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
         EposProc::UseCodec + i);
 }
-        
+
 void EposConf::slotEposTest_clicked()
 {
-    kdDebug() << "EposConf::slotEposTest_clicked(): Running" << endl;
+    // kdDebug() << "EposConf::slotEposTest_clicked(): Running" << endl;
     // If currently synthesizing, stop it.
     if (m_eposProc)
         m_eposProc->stopText();

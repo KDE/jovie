@@ -52,13 +52,13 @@ CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& 
     m_playObj = 0;
     m_artsServer = 0;
     m_commandProc = 0;
-    
+
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "CommandConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new CommandConfWidget(this, "CommandConfigWidget");
     layout->addWidget(m_widget);
-    
+
     defaults();
     connect(m_widget->characterCodingBox, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
@@ -83,13 +83,13 @@ CommandConf::~CommandConf()
     delete m_commandProc;
 }
 
-void CommandConf::load(KConfig *config, const QString &langGroup) {
+void CommandConf::load(KConfig *config, const QString &configGroup) {
     kdDebug() << "CommandConf::load: Running" << endl;
-    config->setGroup(langGroup);
+    config->setGroup(configGroup);
     m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
     m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", true));
-    m_language = langGroup;
     QString codecString = config->readEntry("Codec", "Local");
+    m_languageCode = config->readEntry("LanguageCode", m_languageCode);
     int codec;
     if (codecString == "Local")
         codec = CommandProc::Local;
@@ -106,12 +106,11 @@ void CommandConf::load(KConfig *config, const QString &langGroup) {
     m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
-void CommandConf::save(KConfig *config, const QString &langGroup) {
+void CommandConf::save(KConfig *config, const QString &configGroup) {
     kdDebug() << "CommandConf::save: Running" << endl;
-    config->setGroup(langGroup);
+    config->setGroup(configGroup);
     config->writeEntry("Command", m_widget->urlReq->url());
     config->writeEntry("StdIn", m_widget->stdInButton->isChecked());
-    m_language = langGroup;
     int codec = m_widget->characterCodingBox->currentItem();
     if (codec == CommandProc::Local)
         config->writeEntry("Codec", "Local");
@@ -133,6 +132,30 @@ void CommandConf::defaults(){
     m_widget->characterCodingBox->setCurrentItem(0);
 }
 
+void CommandConf::setDesiredLanguage(const QString &lang)
+{
+    m_languageCode = lang;
+}
+
+QString CommandConf::getTalkerCode()
+{
+    QString url = m_widget->urlReq->url();
+    if (!url.isEmpty())
+    {
+        return QString(
+                "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                "<prosody volume=\"%4\" rate=\"%5\" />"
+                "<kttsd synthesizer=\"%6\" />")
+                .arg(m_languageCode)
+                .arg("fixed")
+                .arg("neutral")
+                .arg("medium")
+                .arg("medium")
+                .arg("Command");
+    }
+    return QString::null;
+}
+
 void CommandConf::buildCodecList () {
    QString local = i18n("Local")+" (";
    local += QTextCodec::codecForLocale()->name();
@@ -145,7 +168,7 @@ void CommandConf::buildCodecList () {
       m_widget->characterCodingBox->insertItem(QTextCodec::codecForIndex(i)->name(),
         CommandProc::UseCodec + i);
 }
-        
+
 void CommandConf::slotCommandTest_clicked()
 {
     kdDebug() << "CommandConf::slotCommandTest_clicked(): " << endl;
@@ -170,7 +193,7 @@ void CommandConf::slotCommandTest_clicked()
         m_widget->stdInButton->isChecked(),
         m_widget->characterCodingBox->currentItem(),
         QTextCodec::codecForName(m_widget->characterCodingBox->text(m_widget->characterCodingBox->currentItem())),
-        m_language);
+        m_languageCode);
 }
 
 void CommandConf::slotSynthFinished()

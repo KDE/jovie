@@ -46,11 +46,11 @@ FestivalConf::~FestivalConf(){
    kdDebug() << "Running: FestivalConf::~FestivalConf()" << endl;
 }
 
-void FestivalConf::load(KConfig *config, const QString &langGroup){
-   kdDebug() << "Running: FestivalConf::load(KConfig *config, const QString &langGroup)" << endl;
-   kdDebug() << "Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
+void FestivalConf::load(KConfig *config, const QString &configGroup){
+   // kdDebug() << "Running: FestivalConf::load(KConfig *config, const QString &langGroup)" << endl;
+   // kdDebug() << "Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
-   config->setGroup(langGroup);
+   config->setGroup(configGroup);
    festivalVoicesPath->setURL(config->readPathEntry("VoicesPath"));
    forceArts->setChecked(config->readBoolEntry("Arts"));
    scanVoices();
@@ -65,11 +65,11 @@ void FestivalConf::load(KConfig *config, const QString &langGroup){
    }
 }
 
-void FestivalConf::save(KConfig *config, const QString &langGroup){
-   kdDebug() << "Running: FestivalConf::save(KConfig *config, const QString &langGroup)" << endl;
-   kdDebug() << "Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
+void FestivalConf::save(KConfig *config, const QString &configGroup){
+   // kdDebug() << "Running: FestivalConf::save(KConfig *config, const QString &langGroup)" << endl;
+   // kdDebug() << "Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
 
-   config->setGroup(langGroup);
+   config->setGroup(configGroup);
    config->writePathEntry("VoicesPath", festivalVoicesPath->url());
    config->writeEntry("Arts", forceArts->isChecked());
    config->writeEntry("Voice", voiceList[selectVoiceCombo->currentItem()].code);
@@ -77,6 +77,30 @@ void FestivalConf::save(KConfig *config, const QString &langGroup){
 
 void FestivalConf::defaults(){
    kdDebug() << "Running: FestivalConf::defaults()" << endl;
+}
+
+void FestivalConf::setDesiredLanguage(const QString &lang)
+{
+    m_languageCode = lang;
+}
+
+QString FestivalConf::getTalkerCode()
+{
+    QString normalTalkerCode;
+    if (voiceList.count() > 0)
+    {
+        normalTalkerCode = QString(
+                "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                "<prosody volume=\"%4\" rate=\"%5\" />"
+                "<kttsd synthesizer=\"%6\" />")
+                .arg(m_languageCode)
+                .arg(voiceList[selectVoiceCombo->currentItem()].code)
+                .arg("neutral")
+                .arg("medium")
+                .arg("medium")
+                .arg("Festival");
+    } else normalTalkerCode = QString::null;
+    return normalTalkerCode;
 }
 
 void FestivalConf::scanVoices(){

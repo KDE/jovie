@@ -170,7 +170,7 @@ KTTSD::~KTTSD(){
 
 /**
 * Determine whether the currently-configured speech plugin supports a speech markup language.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
 * @param markupType     The kttsd code for the desired speech markup language.
 * @return               True if the plugin currently configured for the indicated
@@ -182,7 +182,7 @@ bool KTTSD::supportsMarkup(const QString& /*talker=NULL*/, const uint /*markupTy
         
 /**
 * Determine whether the currently-configured speech plugin supports markers in speech markup.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
 * @return               True if the plugin currently configured for the indicated
 *                       talker supports markers.
@@ -195,10 +195,10 @@ bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) { return false; }
 * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
 * by any other applications.
 * @param msg            The message to be spoken.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 *
 * If an existing Screen Reader output is in progress, it is stopped and discarded and
 * replaced with this new message.
@@ -215,10 +215,10 @@ void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=N
 * be used for high-priority messages requiring immediate user attention, such as
 * "WARNING. CPU is overheating."
 * @param warning        The warning to be spoken.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 */
 void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
     // kdDebug() << "KTTSD::sayWarning: Running" << endl;
@@ -233,10 +233,10 @@ void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
 * Messages should be used for one-shot messages that can't wait for
 * normal text messages to stop speaking, such as "You have mail.".
 * @param message        The message to be spoken.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no talker has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no talker has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 */
 void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
 {
@@ -266,10 +266,10 @@ void KTTSD::setSentenceDelimiter(const QString &delimiter)
 /**
 * Queue a text job.  Does not start speaking the text.
 * @param text           The message to be spoken.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default plugin.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default plugin.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 * @return               Job number.
 *
 * Plain text is parsed into individual sentences using the current sentence delimiter.
@@ -316,10 +316,10 @@ int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
 /**
 * Queue a text job from the contents of a file.  Does not start speaking the text.
 * @param filename       Full path to the file to be spoken.  May be a URL.
-* @param talker         Code for the language to be spoken in.  Example "en".
+* @param talker         Code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 * @return               Job number.  0 if an error occurs.
 *
 * Plain text is parsed into individual sentences using the current sentence delimiter.
@@ -432,6 +432,17 @@ int KTTSD::getTextJobState(const uint jobNum /*=0*/)
 QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 {
     return m_speechData->getTextJobInfo(applyDefaultJobNum(jobNum));
+}
+
+/**
+* Given a Talker Code, returns the Talker ID of the talker that would speak
+* a text job with that Talker Code.
+* @param talkerCode     Talker Code.
+* @return               Talker ID of the talker that would speak the text job.
+*/
+QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
+{
+    return m_speaker->talkerCodeToTalkerId(talkerCode);
 }
 
 /**
@@ -558,16 +569,16 @@ void KTTSD::resumeText(const uint jobNum /*=0*/)
 *
 * @see talkers
 */
-QStringList KTTSD::getTalkers() { return QStringList(); }
+QStringList KTTSD::getTalkers() { return m_speaker->getTalkers(); }
         
 /**
 * Change the talker for a text job.
 * @param jobNum         Job number of the text job.
 *                       If zero, applies to the last job queued by the application.
-* @param talker         New code for the language to be spoken in.  Example "en".
+* @param talker         New code for the talker to do the speaking.  Example "en".
 *                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified language code,
-*                       defaults to the user's default talker.
+*                       If no plugin has been configured for the specified Talker code,
+*                       defaults to the closest matching talker.
 */
 void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=NULL*/)
 {
@@ -575,18 +586,16 @@ void KTTSD::changeTextTalker(const uint jobNum /*=0*/, const QString &talker /*=
 }
 
 /**
-* Get the user's preferred talker attributes.
-* @return               A fully-specified talker code which is a concatenation of
-*                       all the user's preferred talker attributes.
-*
-* Note that the returned talker code may not exactly match any of the
-* configured talkers, but there will be at least one talker that matches
-* each talker code attribute.
+* Get the user's default talker.
+* @return               A fully-specified talker code.
 *
 * @see talkers
 * @see getTalkers
 */
-QString KTTSD::userTalkerPreferences() { return QString::null; }
+QString KTTSD::userDefaultTalker()
+{
+    return m_speaker->userDefaultTalker();
+}
 
 /**
 * Move a text job down in the queue so that it is spoken later.

@@ -66,13 +66,13 @@ CommandProc::~CommandProc()
 }
 
 /** Initialize */
-bool CommandProc::init(const QString &lang, KConfig *config){
-    kdDebug() << "CommandProc::init: Initializing plug in: Command for language " << lang << endl;
+bool CommandProc::init(KConfig *config, const QString &configGroup){
+    kdDebug() << "CommandProc::init: Initializing plug in: Command " << endl;
 
-    config->setGroup(QString("Lang_")+lang);
+    config->setGroup(configGroup);
     m_ttsCommand = config->readEntry("Command", "cat -");
     m_stdin = config->readBoolEntry("StdIn", true);
-    m_language = lang;
+    m_language = config->readEntry("LanguageCode", "en");
     
     // Support separate synthesis if the TTS command contains %w macro.
     m_supportsSynth = (m_ttsCommand.contains("%w"));

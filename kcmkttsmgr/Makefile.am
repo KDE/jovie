@@ -17,16 +17,25 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = kcm_kttsd.la kcm_kttsmgr.la
 
 # The source, library search path, and link libraries.
-kcm_kttsd_la_SOURCES = kcmkttsmgr.cpp kcmkttsmgrwidget.ui
+kcm_kttsd_la_SOURCES = \
+	kcmkttsmgr.cpp \
+	kcmkttsmgrwidget.ui \
+	addtalker.cpp \
+	addtalkerwidget.ui
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined 
 kcm_kttsd_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_QT) $(LIB_KIO) $(LIB_KDECORE)
 
-kcm_kttsmgr_la_SOURCES = kcmkttsmgr.cpp kcmkttsmgrwidget.ui
+kcm_kttsmgr_la_SOURCES = \
+	kcmkttsmgr.cpp \
+	kcmkttsmgrwidget.ui \
+	addtalker.cpp \
+	addtalkerwidget.ui
 kcm_kttsmgr_la_LDFLAGS = -avoid-version -module -no-undefined 
 kcm_kttsmgr_la_LIBADD = $(top_builddir)/kttsd/libktts/libktts.la $(top_builddir)/kttsd/libkttsd/libkttsd.la $(LIB_QT) $(LIB_KIO) $(LIB_KDECORE)
 
 # Header files that should not be installed.
-noinst_HEADERS = kcmkttsmgr.h kcmkttsmgrwidget.h kcmkttsmgrwidget.ui.h
+noinst_HEADERS = kcmkttsmgr.h kcmkttsmgrwidget.h kcmkttsmgrwidget.ui.h \
+	addtalker.h
 
 # Install desktop file to application directory.
 apps_DATA = kcmkttsd.desktop kcmkttsmgr.desktop

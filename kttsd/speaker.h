@@ -26,7 +26,6 @@
 
 // Qt includes.
 #include <qobject.h>
-#include <qdict.h>
 #include <qvaluevector.h>
 #include <qevent.h>
 
@@ -85,6 +84,29 @@ struct Utt{
     Player* audioPlayer;         /* The audio player audibilizing the utterance.  Null
                                     if not currently audibilizing or if plugin doesn't
                                     support synthesis. */
+};
+
+/**
+ * Structure containing information from a Talker Code parsed into individual attributes.
+ */
+struct ParsedTalkerCode{
+    QString languageCode;       /* lang="xx" */
+    QString countryCode;        /* lang="yy_xx */
+    QString voice;              /* name="xxx" */
+    QString gender;             /* gender="xxx" */
+    QString volume;             /* volume="xxx" */
+    QString rate;               /* rate="xxx" */
+    QString plugInName;         /* synthesizer="xxx" */
+};
+
+/**
+ * Structure containing information for a talker (plugin).
+ */
+struct TalkerInfo{
+    PlugInProc* plugIn;                  /* Instance of the plugin, i.e., the Talker. */
+    QString talkerID;                    /* ID of the talker. */
+    QString talkerCode;                  /* The Talker's Talker Code in XML format. */
+    ParsedTalkerCode parsedTalkerCode;   /* The Talker's Talker Code parsed into individual attributes. */
 };
 
 /**
@@ -253,7 +275,31 @@ class Speaker : public QObject{
         */
         uint moveRelTextSentence(const int n, const uint jobNum);
      
-     signals:
+        /**
+        * Get a list of the talkers configured in KTTS.
+        * @return               A QStringList of fully-specified talker codes, one
+        *                       for each talker user has configured.
+        */
+        QStringList Speaker::getTalkers();
+        
+        /**
+        * Given a Talker Code, returns the Talker ID of the talker that would speak
+        * a text job with that Talker Code.
+        * @param talkerCode     Talker Code.
+        * @return               Talker ID of the talker that would speak the text job.
+        */
+        QString talkerCodeToTalkerId(const QString& talkerCode);
+        
+        /**
+        * Get the user's default talker.
+        * @return               A fully-specified talker code.
+        *
+        * @see talkers
+        * @see getTalkers
+        */
+        QString userDefaultTalker();
+    
+    signals:
         /**
          * Emitted whenever reading a text was started or resumed
          */
@@ -375,6 +421,31 @@ class Speaker : public QObject{
 
     private:
         /**
+        * Given a talker code, normalizes it into a standard form.
+        * @param talkerCode      Unnormalized talker code.
+        * @return                Normalized talker code.
+        */
+        QString normalizeTalkerCode(const QString &talkerCode);
+
+        /**
+        * Given a talker code, parses out the attributes.
+        * @param talkerCode       The talker code.
+        * @return                 The attributes of the talker code parsed into
+        *                         individual fields.
+        */
+        ParsedTalkerCode parseTalkerCode(const QString &talkerCode);
+        
+        /**
+        * Given a talker code, returns pointer to the closest matching plugin.
+        * @param talker          The talker (language) code.
+        * @return                Index to m_loadedPlugins array of Talkers.
+        *
+        * If a plugin has not been loaded to match the talker, returns the default
+        * plugin.
+        */
+        int talkerToPluginIndex(const QString& talker);
+        
+        /**
         * Given a talker code, returns pointer to the closest matching plugin.
         * @param talker          The talker (language) code.
         * @return                Pointer to closest matching plugin.
@@ -385,7 +456,7 @@ class Speaker : public QObject{
         PlugInProc* talkerToPlugin(QString& talker);
         
         /**
-        * Converts an utterance state enumerator to a displayable string.
+         * Converts an utterance state enumerator to a displayable string.
         * @param state           Utterance state.
         * @return                Displayable string for utterance state.
         */
@@ -493,9 +564,9 @@ class Speaker : public QObject{
         Player* createPlayerObject();
         
         /**
-         * QDict of the loaded plug ins for diferent languages
+         * Array of the loaded plug ins for different Talkers.
          */
-        QDict<PlugInProc> loadedPlugIns;
+        QValueVector<TalkerInfo> m_loadedPlugIns;
 
         /**
          * SpeechData local pointer
@@ -545,6 +616,11 @@ class Speaker : public QObject{
         uint m_lastJobNum;
         QCString m_lastAppId;
         uint m_lastSeq;
+        
+        /**
+         * Cache of talker codes and index of closest matching Talker.
+         */
+        QMap<QString,int> m_talkerToPlugInCache;
 };
 
 #endif // _SPEAKER_H_

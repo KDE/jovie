@@ -45,15 +45,15 @@ FestivalProc::~FestivalProc(){
 }
 
 /** Initializate the speech */
-bool FestivalProc::init(const QString &lang, KConfig *config){
-    kdDebug() << "Running: FestivalProc::init(const QString &lang)" << endl;
+bool FestivalProc::init(KConfig *config, const QString &configGroup){
+    kdDebug() << "FestivalProc::init: Running" << endl;
     kdDebug() << "Initializing plug in: Festival" << endl;
 
     // To save resources, this founction should get a KConfig too
     // This KConfig will be passed to this function (already opened) from speaker.cpp
     // KConfig *config = new KConfig("kttsdrc");
     // KConfig *config = KGlobal::config();
-    config->setGroup(QString("Lang_")+lang);
+    config->setGroup(configGroup);
     forceArts = config->readBoolEntry("Arts");
 
     // Get the code for the selected voice

@@ -44,7 +44,7 @@
 * the ID of the application that requested it be spoken, and a sequence number.
 */
 struct mlText{
-    QString talker;              /* Language code for the sentence. */
+    QString talker;              /* Requested Talker code for the sentence. */
     QString text;                /* Text of sentence. */
     QCString appId;              /* DCOP senderId of the application that requested the speech. */
     uint jobNum;                 /* Text jobNum.  Only applies to text messages; not warning and messages. */
@@ -58,7 +58,7 @@ struct mlJob {
     uint jobNum;                 /* Job number. */
     kspeech::kttsdJobState state; /* Job state. */
     QCString appId;              /* DCOP senderId of the application that requested the speech job. */
-    QString talker;              /* Language code in which to speak the text. */
+    QString talker;              /* Requested Talker code in which to speak the text. */
     int seq;                     /* Current sentence being spoken. */
     QValueList<int> partSeqNums; /* List containing last sequence number for each part of a job. */
     QStringList sentences;       /* List of sentences in the job. */
@@ -97,10 +97,10 @@ class SpeechData : public QObject {
         * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
         * by any other applications.
         * @param msg            The message to be spoken.
-        * @param talker         Code for the language to be spoken in.  Example "en".
+        * @param talker         Code for the talker to speak the message.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         * @param appId          The DCOP senderId of the application.
         *
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
@@ -191,10 +191,10 @@ class SpeechData : public QObject {
         * Queue a text job.  Does not start speaking the text.
         * (thread safe)
         * @param text           The message to be spoken.
-        * @param talker         Code for the language to be spoken in.  Example "en".
-        *                       If NULL, defaults to the user's default plugin.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default plugin.
+        * @param talker         Code for the talker to speak the text.  Example "en".
+        *                       If NULL, defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         * @param appId          The DCOP senderId of the application.
         * @return               Job number.
         *
@@ -270,7 +270,7 @@ class SpeechData : public QObject {
         * The stream contains the following elements:
         *   - int state         Job state.
         *   - QCString appId    DCOP senderId of the application that requested the speech job.
-        *   - QString talker    Language code in which to speak the text.
+        *   - QString talker    Talker code as requested by application.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
         *   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
@@ -322,10 +322,10 @@ class SpeechData : public QObject {
         /**
         * Change the talker for a text job.
         * @param jobNum         Job number of the text job.
-        * @param talker         New code for the language to be spoken in.  Example "en".
+        * @param talker         New code for the talker to do speaking.  Example "en".
         *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified language code,
-        *                       defaults to the user's default talker.
+        *                       If no plugin has been configured for the specified Talker code,
+        *                       defaults to the closest matching talker.
         */
         void changeTextTalker(const uint jobNum, const QString &talker);
         
@@ -508,11 +508,6 @@ class SpeechData : public QObject {
         * Notify passive popups only.
         */
         bool notifyPassivePopupsOnly;
-
-        /**
-        * Default talker.
-        */
-        QString defaultTalker;
 
         /**
         * Configuration

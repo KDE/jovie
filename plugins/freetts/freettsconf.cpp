@@ -42,7 +42,7 @@
 FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/*args*/) : 
 	PlugInConf( parent, name ) {
 	
-	kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
+	// kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
 	m_freettsProc = 0;
 	m_artsServer = 0;
 	m_playObj = 0;
@@ -62,7 +62,7 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/
 
 /** Destructor */
 FreeTTSConf::~FreeTTSConf() {
-	kdDebug() << "Running: FreeTTSConf::~FreeTTSConf()" << endl;
+	// kdDebug() << "Running: FreeTTSConf::~FreeTTSConf()" << endl;
 	if (m_playObj) m_playObj->halt();
 	delete m_playObj;
 	delete m_artsServer;
@@ -70,31 +70,65 @@ FreeTTSConf::~FreeTTSConf() {
 	delete m_freettsProc;
 }
 
-void FreeTTSConf::load(KConfig *config, const QString &langGroup) {
-	kdDebug() << "FreeTTSConf::load: Loading configuration for language " << langGroup << " with plug in " << "FreeTTS" << endl;
+void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
+	// kdDebug() << "FreeTTSConf::load: Running" << endl;
 
-	config->setGroup(langGroup);
-	m_widget->freettsPath->setURL(config->readPathEntry("FreeTTSJarPath", ""));
-	
-	if(m_widget->freettsPath->url().isEmpty())
-		m_widget->freettsPath->setURL(getLocation("freetts.jar"));
+	config->setGroup(configGroup);
+        QString freeTTSJar = config->readPathEntry("FreeTTSJarPath", QString::null);
+        if (freeTTSJar.isEmpty())
+        {
+            config->setGroup("FreeTTS");
+            freeTTSJar = config->readPathEntry("FreeTTSJarPath", QString::null);
+        }
+	if (freeTTSJar.isEmpty())
+	    freeTTSJar = getLocation("freetts.jar");
+        m_widget->freettsPath->setURL(freeTTSJar);
 	/// If freettsPath is still empty, then we couldn't find the file in the path.
 }
 
-void FreeTTSConf::save(KConfig *config, const QString &langGroup){
-	kdDebug() << "FreeTTSConf::save: Saving configuration for language " << langGroup << " with plug in " << "FreeTTS" << endl;
+void FreeTTSConf::save(KConfig *config, const QString &configGroup){
+	// kdDebug() << "FreeTTSConf::save: Running" << endl;
 
-	config->setGroup(langGroup);
-    if(m_widget->freettsPath->url().isEmpty())
+        config->setGroup("FreeTTS");
+        config->writePathEntry("FreeTTSJarPath", m_widget->freettsPath->url());
+
+	config->setGroup(configGroup);
+        if(m_widget->freettsPath->url().isEmpty())
 		KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
 	config->writePathEntry("FreeTTSJarPath", m_widget->freettsPath->url());
 }
 
 void FreeTTSConf::defaults(){
-	kdDebug() << "Running: FreeTTSConf::defaults()" << endl;
+	// kdDebug() << "Running: FreeTTSConf::defaults()" << endl;
 	m_widget->freettsPath->setURL("");
 }
 
+void FreeTTSConf::setDesiredLanguage(const QString &lang)
+{
+    m_languageCode = lang;
+}
+
+QString FreeTTSConf::getTalkerCode()
+{
+    QString freeTTSJar = m_widget->freettsPath->url();
+    if (!freeTTSJar.isEmpty())
+    {
+        if (!getLocation(freeTTSJar).isEmpty())
+        {
+            return QString(
+                    "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                    "<prosody volume=\"%4\" rate=\"%5\" />"
+                    "<kttsd synthesizer=\"%6\" />")
+                    .arg(m_languageCode)
+                    .arg("fixed")
+                    .arg("neutral")
+                    .arg("medium")
+                    .arg("medium")
+                    .arg("FreeTTS");
+        }
+    }
+    return QString::null;
+}
 
 // QString FreeTTSConf::getLocation(const QString &name) {
 // 	/// Iterate over the path and see if 'name' exists in it. Return the
@@ -122,7 +156,7 @@ void FreeTTSConf::defaults(){
 
 void FreeTTSConf::slotFreeTTSTest_clicked()
 {
-	kdDebug() << "FreeTTSConf::slotFreeTTSTest_clicked(): Running" << endl;
+	// kdDebug() << "FreeTTSConf::slotFreeTTSTest_clicked(): Running" << endl;
     // If currently synthesizing, stop it.
 	if (m_freettsProc)
 		m_freettsProc->stopText();

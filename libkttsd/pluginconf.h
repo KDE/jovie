@@ -112,7 +112,11 @@
 * Review the section on Talkers in kspeech.h.
 *
 * When your plugin is added to the KTTSMGR, @ref getSupportedLanguages
-* will be called followed by @ref setDesiredLanguage.  Next, @ref getTalkerCode
+* will be called followed by @ref setDesiredLanguage and @ref load.
+* Note that the configuration file will most likely be empty when
+* @ref load is called.
+
+* Next, @ref getTalkerCode
 * will be called.  If your plugin can automatically configure itself to the desired
 * language, it should do so and return a fully-specified talker code.  If your
 * plugin is not yet ready and requires user help, return QString::null. Note that
@@ -150,10 +154,12 @@
 * The order of the attributes you return does not matter.  Here is an example of
 * a fully-specified talker code.
 *
-*   lang="en" name="kal" gender="male" volume="soft" rate="fast"
-*   synthesizer="Festival"
+*   lang="en" name="Kal" gender="male" volume="soft" rate="fast"
+*   synthesizer="Festival Interactive"
 *
 * Each time your plugin emits the @ref changed signal, @ref getTalkerCode will be called.
+* The configuration dialog OK button will be disabled until you return a non-null
+* Talker Code.
 *
 * It is possible that your plugin does not know the language supported.  The generic
 * Command plugin is example of such a case, since the user enters an arbitrary command.
@@ -188,11 +194,9 @@
 * is added to KTTSMGR, or another instance is added, it will be able to find them
 * automatically.
 *
-* Note that until your plugin returns a talker code from @ref getTalkerCode,
-* the @e configGroup parameter in the call to @ref load will be Null.  In this case,
-* you cannot load instance-specific options, but you can still load the
-* options from the all-instances group.
-*
+* @ref setDesiredLanguage is always called just prior to @ref load, therefore
+* it is not necessary to save the language code, unless your plugin needs it in
+* order to synthesize speech.
 */
 class PlugInConf : public QWidget{
     Q_OBJECT
@@ -239,6 +243,10 @@ class PlugInConf : public QWidget{
         * @param config      Pointer to a KConfig object.
         * @param configGroup Call config->setGroup with this argument before
         *                    saving your configuration.
+        *
+        * @ref setDesiredLanguage is always called just prior to @ref load, therefore
+        * it is not necessary to save the language code, unless your plugin needs it in
+        * order to synthesize speech.
         */
         virtual void save(KConfig *config, const QString &configGroup);
 
@@ -276,7 +284,7 @@ class PlugInConf : public QWidget{
         * not the given country, treat it as though the country
         * code were not specified, i.e., adapt to the given language.
         */
-        virtual void setDesiredLanguage(const QString lang);
+        virtual void setDesiredLanguage(const QString &lang);
       
         /**
         * Return fully-specified talker code for the configured plugin.  This code
@@ -333,9 +341,17 @@ class PlugInConf : public QWidget{
         *                    if its not found.
         */
         QString getLocation(const QString &name);
+        
+        /**
+        * Breaks a language code into the language code and country code (if any).
+        * @param languageCode   Language code.
+        * @return countryCode   Just the country code part (if any).
+        * @return               Just the language code part.
+        */
+        QString splitLanguageCode(const QString& languageCode, QString& countryCode);
 
         /// The system path in a QStringList.
-        QStringList m_path;      
+        QStringList m_path;
 };
 
 #endif  //_PLUGINCONF_H_

@@ -1,15 +1,13 @@
+_ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
+_ How to set Help anchor and app name within jobmgr part?
 _ Remove kcm_kttsmgr once all apps (KSayIt) have stopped using it.
 _ Add a plugin for TuxTalk, http://tuxtalk.sourceforge.net/.  Since it only supports
   English (at the moment) and is alpha, don't think it is worth it now.
 _ Add a plugin for dhvani, an Indian and Hindi TTS engine, http://dhvani.sourceforge.net/
   Currently written in c, but it looks like future versions will require Java VM.
-- Standarize the .desktop files
-- Improve language selection and management in the KTTSD's configuration. Languages added shouldn't be shown in the list of languages to add. Default languages should show only the current languages. Languages should be shown as names and not codes. Languages should be erased from the default language combo box.  If a plugin does not support a language, it should not be choosable.
-- Add ability to configure more than one plugin for a language, but with different voices. Call them "talkers".
-- Add support for XML::Sable and other Speech Markup languages.
+- Add support for SSML, JSML, Sable and other Speech Markup languages.
 - Continue revision of KDE Speech API (kspeech.h).
 - Add support for speech markers.
-- Add support for moving a text job to a different talker (language/plugin).
 - Finish Festival Client/Server plugin.
 - Festival plugin (static library) crashes on first call to library.
 - Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
@@ -20,8 +18,5 @@ _ IBM ViaVoice plugin?
 _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ Implement error signal handling in KTTSD.
 _ Add option not to have system tray icon in kttsmgr.
-
-Widgets needed; useful for whole KDE:
-- Language selection widgets, configurable and versatile.
-- A good password line edit which will allow to set the password.
-- A Tab Widget with buttons on the tab to close (remove) the tabs (ala Konversation).
+_ When GStreamer bindings become available, add as alternative to aRts.
+  Note that gstreamer 0.6 has issues with .wav files.

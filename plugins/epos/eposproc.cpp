@@ -55,11 +55,12 @@ EposProc::~EposProc(){
 }
 
 /** Initialize the speech */
-bool EposProc::init(const QString& lang, KConfig* config){
-    // kdDebug() << "Running: EposProc::init(const QString &lang)" << endl;
+bool EposProc::init(KConfig* config, const QString& configGroup)
+{
+    // kdDebug() << "EposProc::init: Running" << endl;
     // kdDebug() << "Initializing plug in: Epos" << endl;
     // Retrieve path to epos executable.
-    config->setGroup(QString("Lang_")+lang);
+    config->setGroup(configGroup);
     m_eposServerExePath = config->readPathEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readPathEntry("EposClientExePath", "say");
     m_eposServerOptions = config->readEntry("EposServerOptions", QString::null);

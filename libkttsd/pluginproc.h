@@ -241,26 +241,20 @@ class PlugInProc : virtual public QObject{
         virtual ~PlugInProc();
 
         /**
-        * Initializate the speech plugin.
-        * @param lang                    Talker code that can be used to
-        *                                read from KConfig object.
-        * @param config                  KConfig object providing access to the
-        *                                KTTSD settings.
-        * @return                        False if the plugin could not be intialized
-        *                                (speech engine failed to load, for instance).
+        * Initializate the speech engine.
+        * @param config          Settings object.
+        * @param configGroup     Settings Group.
         *
         * Sample code for reading configuration:
         *
           @verbatim
-            config->setGroup(QString("Lang_")+lang);
-            // Get the code for the selected voice
-            KConfig voices(KGlobal::dirs()->resourceDirs("data").last()
-              + "/kttsd/festival/voices", true, false);
-            voices.setGroup(config->readEntry("Voice"));
-            voiceCode = "("+voices.readEntry("Code")+")";
+            config->setGroup(configGroup);
+            m_fliteExePath = config->readPathEntry("FliteExePath", "flite");
+            kdDebug() << "FliteProc::init: path to flite: " << m_fliteExePath << endl;
+            config->setGroup(configGroup);
           @endverbatim
         */
-        virtual bool init(const QString &lang, KConfig *config);
+        virtual bool init(KConfig *config, const QString &configGroup);
 
         /** 
         * Say a text.  Synthesize and audibilize it.

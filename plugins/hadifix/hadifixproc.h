@@ -43,7 +43,7 @@ class HadifixProc : public PlugInProc{
     ~HadifixProc();
     
     /** Initializate the speech */
-    virtual bool init (const QString &lang, KConfig *config);
+    virtual bool init (KConfig *config, const QString &configGroup);
     
     /** 
     * Say a text.  Synthesize and audibilize it.

@@ -20,13 +20,17 @@
 #ifndef KCMKTTSMGR_H
 #define KCMKTTSMGR_H
 
-#include <kcmodule.h>
-#include <qdict.h>
+// Qt includes.
 #include <qmap.h>
+
+// KDE includes.
+#include <kcmodule.h>
 #include <ktrader.h>
 #include <kdebug.h>
 #include <kparts/part.h>
 
+// KTTS includes.
+#include "addtalker.h"
 #include "kcmkttsmgrwidget.h"
 #include "kspeechsink.h"
 
@@ -35,17 +39,6 @@ class KListViewItem;
 class KAboutData;
 class KConfig;
 class KAboutApplication;
-
-/**
-* This strcture is used to keep track of the objects asociated with a talker.
-* From the widget of the plug in to the object in the list
-*/
-struct languageRelatedObjects {
-   PlugInConf *plugIn;
-   QString plugInName;
-   QString plugInLib;
-   KListViewItem *listItem;
-};
 
 /**
 * @author José Pablo Ezequiel "Pupeno" Fernández
@@ -58,19 +51,10 @@ class KCMKttsMgr :
     Q_OBJECT
 
     public:
-        enum widgetPages
-        {
-            wpGeneral = 0,          // General tab.
-            wpLanguages = 1,        // Languages tab.
-            wpPluginProperties = 2, // Plugin properties tab.
-            wpInterruption = 3,     // Interruption tab.
-            wpJobs = 4              // Jobs tab.
-        };
-        
         KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);
 
         ~KCMKttsMgr();
-      
+
         /**
         * This method is invoked whenever the module should read its 
         * configuration (most of the times from a config file) and update the 
@@ -80,7 +64,7 @@ class KCMKttsMgr :
         * so you probably want to call this method in the constructor.
         */
         void load();
-    
+
         /**
         * This function gets called when the user wants to save the settings in 
         * the user interface, updating the config files or wherever the 
@@ -88,7 +72,7 @@ class KCMKttsMgr :
         * or "Ok".
         */
         void save();
-    
+
         /**
         * This function is called to set the settings in the module to sensible
         * default values. It gets called when hitting the "Default" button. The 
@@ -96,7 +80,7 @@ class KCMKttsMgr :
         * uses when started without a config file.
         */
         void defaults();
-    
+
         /**
         * This is a static method which gets called to realize the modules settings
         * durign the startup of KDE. NOTE that most modules do not implement this 
@@ -106,7 +90,7 @@ class KCMKttsMgr :
         * not needed in this case.
         */
         static void init();
-    
+
         /**
         * The control center calls this function to decide which buttons should
         * be displayed. For example, it does not make sense to display an "Apply" 
@@ -114,22 +98,22 @@ class KCMKttsMgr :
         * modules using setButtons.
         */
         int buttons();
-    
+
         /**
         * This function returns the small quickhelp.
         * That is displayed in the sidebar in the KControl
         */
         QString quickHelp() const;
-        
+
         /**
         * Return the about information for this module
         */
         const KAboutData* aboutData() const;
-        
+
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
         /** Most of these are not used */
-        
+
         /**
         * This signal is emitted when KTTSD starts or restarts after a call to reinit.
         */
@@ -138,134 +122,198 @@ class KCMKttsMgr :
         * This signal is emitted just before KTTSD exits.
         */
         virtual void kttsdExiting();
-    
+
     private:
+        enum widgetPages
+        {
+            wpGeneral = 0,          // General tab.
+            wpLanguages = 1,        // Languages tab.
+            wpInterruption = 2,     // Interruption tab.
+            wpJobs = 3              // Jobs tab.
+        };
+
+        enum TalkerListViewColumn
+        {
+            tlvcTalkerID,
+            tlvcLanguage,
+            tlvcPlugInName,
+            tlvcVoice,
+            tlvcGender,
+            tlvcVolume,
+            tlvcRate,
+        };
+
         /**
-        * Add a language to the pool of languages for the lang/plugIn pair
+        * Given a talker code, normalizes it into a standard form and returns language code.
+        * @param talkerCode      Unnormalized talker code.
+        * @param languageCode    Parsed language code.
+        * @return                Normalized talker code.
         */
-        void addLanguage(const QString &language, const QString &plugInName);
-    
+        QString normalizeTalkerCode(const QString &talkerCode, QString &languageCode);
+
         /**
-        * Initializes the language with the given language code by determining
-        * its name.
+        * Given a talker code, parses out the attributes.
+        * @param talkerCode       The talker code.
+        * @return languageCode    Language Code.
+        * @return voice           Voice name.
+        * @return gender          Gender.
+        * @return volume          Volume.
+        * @return rate            Rate.
+        * @return plugInName      Name of Synthesizer.
         */
-        void initLanguageCode(const QString &code);
-    
+        void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
+            QString &languageCode,
+            QString &voice,
+            QString &gender,
+            QString &volume,
+            QString &rate,
+            QString &plugInName);
+
         /**
-        * Remove a language named lang
-        */
-        void removeLanguage(const QString &language);
-    
+        * Given a language code and plugin name, returns a normalized default talker code.
+        * @param languageCode     Language code.
+        * @param plugInName       Name of the plugin.
+        * @return                 Full normalized talker code.
+        *
+        * Example returned from defaultTalkerCode("en", "Festival")
+        *   <voice lang="en" name="fixed" gender="neutral"/>
+        *   <prosody volume="medium" rate="medium"/>
+        *   <kttsd synthesizer="Festival" />
+        */         
+        QString defaultTalkerCode(const QString &languageCode, const QString &plugInName);
+
         /**
-        * Set the default language
+        * Given an item in the talker listview and a talker code, sets the columns of the item.
+        * @param talkerItem       QListViewItem.
+        * @param talkerCode       Talker Code.
         */
-        void setDefaultLanguage(const QString &defaultLanguage);
-    
+        void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
+
         /**
-        * Loads the configuration plug in for a specific plug in
+        * Loads the configuration plugin for a named plugin.
         */
-        PlugInConf *loadPlugIn(const QString &plugInName);
-        
+        PlugInConf *loadPlugin(const QString &plugInName);
+
+        /**
+        * Converts a language code plus optional country code to language description.
+        */
+        QString languageCodeToLanguage(const QString &languageCode);
+
+        /**
+         * Display the Talker Configuration Dialog.
+         */
+        void configureTalker();
+
         /**
         * Main widget
         */
         KCMKttsMgrWidget *m_kttsmgrw;
-        
-        /**
-        * Current Plugin widget.
-        */
-        PlugInConf* m_pluginWidget;
-        
-        /**
-        * List of the objects related to each loaded language.
-        */
-        QDict<languageRelatedObjects> m_loadedLanguages;
-    
-        /**
-        * List of language codes mapped to language names.
-        */
-        QMap<QString, QString> m_languagesMap;
-    
-        /**
-        * List of language names mapped to language codes.
-        */
-        QMap<QString, QString> m_reverseLanguagesMap;
-    
+
         /**
         * List of available plug ins
         */
         KTrader::OfferList m_offers;
-    
+
         /**
         * Object holding all the configuration
         */
         KConfig *m_config;
-        
+
         /**
         * KTTS Job Manager.
         */
         KParts::ReadOnlyPart *m_jobMgrPart;
-    
+
         /**
         * About dialog.
         */
         KAboutApplication *m_aboutDlg;
-    
+
+        /**
+        * Plugin configuration dialog.
+        */
+        KDialogBase* m_configDlg;
+
+        /**
+        * Plugin currently loaded into configuration dialog.
+        */
+        PlugInConf *m_loadedPlugIn;
+
+        /**
+        * Last talker ID.  Used to generate a new ID.
+        */
+        QString m_lastTalkerID;
+
+        /**
+        * Dictionary mapping language names to codes.
+        */
+        QMap<QString, QString> m_languagesToCodes;
+
+        /**
+        * A QMap of languages codes indexed by synthesizer that supports them.
+        */
+        SynthToLangMap m_synthToLangMap;
+
     private slots:
         /**
-        * Add a language
-        * This is a wrapper function that takes the parameters for the real addLanguage from the
+        * Add a talker.
+        * This is a wrapper function that takes the parameters for the real talker from the
         * widgets to later call it.
         */
-        void addLanguage();
-    
+        void addTalker();
+
         /**
-        * Remove language 
-        * This is a wrapper function that takes the parameters for the real removeLanguage from the
+        * Remove talker. 
+        * This is a wrapper function that takes the parameters for the real removeTalker from the
         * widgets to later call it.
         */
-        void removeLanguage();
-    
+        void removeTalker();
+
         /**
-        * Set default langauge
-        * This is a wrapper function that takes the parameters for the real setDefaultLanguage from the
-        * widgets to later call it.
-        */
-        void setDefaultLanguage();
-    
+         * This slot is called whenever user clicks the lowerTalkerPriority button.
+         */
+        void lowerTalkerPriority();
+
         /**
-        * Update the status of the Remove button
+        * Update the status of the Talker buttons.
         */
-        void updateRemoveButton();
-    
-        /**
-        * Update the status of the Default button
-        */
-        void updateDefaultButton();
-        
+        void updateTalkerButtons();
+
         /**
         * This slot is used to emit the signal changed when any widget changes the configuration 
         */
         void configChanged(){
-            kdDebug() << "Running: KCMKttsMgr::configChanged()"<< endl;
+            // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
             emit changed(true);
         };
-        
+
         /**
         * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
         */
         void enableKttsdToggled(bool checked);
-        
+
         /**
-        * Switch to the Properties tab.
+        * User has requested to display the Talker Configuration Dialog.
         */
-        void configurePlugin();
+        void slot_configureTalker();
 
         /**
         * Displays about dialog.
         */
         void aboutSelected();
 
+        /**
+        * Slots for the Talker Configuration dialog.
+        */
+        void slotConfigDlg_ConfigChanged();
+        void slotConfigDlg_DefaultClicked();
+        void slotConfigDlg_OkClicked();
+        void slotConfigDlg_CancelClicked();
+
+        /**
+        * Other slots.
+        */
+        void slotTabChanged();
 };
 
 #endif

@@ -42,7 +42,7 @@ class FestivalProc : public PlugInProc{
         /**
          * Initializate the speech
          */
-        bool init(const QString &lang, KConfig *config);
+        bool init(KConfig *config, const QString &configGroup);
 
         /** Say a text
          *  text: The text to be speech

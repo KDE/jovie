@@ -19,10 +19,14 @@
 // C++ library includes.
 #include <cstdlib>
 
-// Qt includes
+// Qt includes.
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qstring.h>
+
+// KDE includes.
+#include <kglobal.h>
+#include <klocale.h>
 
 // PluginConf includes.
 #include "pluginconf.h"
@@ -91,8 +95,12 @@ void PlugInConf::defaults(){
 * Indicates whether the plugin supports multiple instances.  Return
 * False if only one instance of the plugin can run at a time.
 * @return            True if multiple instances are possible.
+*
+* It is assumed that most plugins can support multiple instances.
+* A plugin must override this method and return false if it
+* cannot support multiple instances.
 */
-bool PlugInConf::supportsMultiInstance() { return false; }
+bool PlugInConf::supportsMultiInstance() { return true; }
 
 /**
 * This function informs the plugin of the desired language to be spoken
@@ -104,7 +112,7 @@ bool PlugInConf::supportsMultiInstance() { return false; }
 *
 * If the plugin is unable to support the desired language, that is OK.
 */
-void PlugInConf::setDesiredLanguage(const QString /* lang */) { }
+void PlugInConf::setDesiredLanguage(const QString& /*lang*/ ) { }
 
 /**
 * Return fully-specified talker code for the configured plugin.  This code
@@ -156,3 +164,19 @@ QString PlugInConf::getLocation(const QString &name) {
     }
     return "";
 }
+
+/**
+* Breaks a language code into the language code and country code (if any).
+* @param languageCode   Language code.
+* @return countryCode   Just the country code part (if any).
+* @return               Just the language code part.
+*/
+QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& countryCode)
+{
+    QString locale = languageCode;
+    QString langCode;
+    QString charSet;
+    KGlobal::locale()->splitLocale(locale, langCode, countryCode, charSet);
+    return langCode;
+}
+

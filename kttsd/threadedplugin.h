@@ -46,7 +46,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         /**
         * Initializate the speech plugin.
         */
-        virtual bool init(const QString &lang, KConfig *config);
+        virtual bool init(KConfig *config, const QString &configGroup);
 
         /** 
         * Say a text.  Synthesize and audibilize it.

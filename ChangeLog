@@ -1,3 +1,14 @@
+2004-11-03  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
+        * Add ability to configure more than one plugin for a language, but with different
+          voices. Call them "talkers".
+        * Improve language selection and management in the KTTSD's configuration. Languages
+          added shouldn't be shown in the list of languages to add. Default languages should
+          show only the current languages. Languages should be shown as names and not codes.
+          Languages should be erased from the default language combo box.  If a plugin does
+          not support a language, it should not be choosable.
+        * Add support for moving a text job to a different talker (language/plugin).
+        * Standarize the .desktop files
+
 2004-10-20  Gary Cramblitt (PhantomsDad) <garycramblitt@comcast.net>
         * kcm_kttsmgr and kcm_kttsd are now identical libraries/KCModules.
           Applications should use kcm_kttsd.  When all apps have stopped

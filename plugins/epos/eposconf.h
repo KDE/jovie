@@ -55,14 +55,14 @@ class EposConf : public PlugInConf {
         * valid settings. NOTE that this is not called after the modules is loaded,
         * so you probably want to call this method in the constructor.
         */
-        void load(KConfig *config, const QString &langGroup);
+        void load(KConfig *config, const QString &configGroup);
 
         /** This function gets called when the user wants to save the settings in 
         * the user interface, updating the config files or wherever the 
         * configuration is stored. The method is called when the user clicks "Apply" 
         * or "Ok". 
         */
-        void save(KConfig *config, const QString &langGroup);
+        void save(KConfig *config, const QString &configGroup);
 
         /** This function is called to set the settings in the module to sensible
         * default values. It gets called when hitting the "Default" button. The 
@@ -71,6 +71,33 @@ class EposConf : public PlugInConf {
         */
         void defaults();
 
+        /**
+        * This function informs the plugin of the desired language to be spoken
+        * by the plugin.  The plugin should attempt to adapt itself to the
+        * specified language code, choosing sensible defaults if necessary.
+        * If the passed-in code is QString::null, no specific language has
+        * been chosen.
+        * @param lang        The desired language code or Null if none.
+        *
+        * If the plugin is unable to support the desired language, that is OK.
+        * Language codes are given by ISO 639-1 and are in lowercase.
+        * The code may also include an ISO 3166 country code in uppercase
+        * separated from the language code by underscore (_).  For
+        * example, en_GB.  If your plugin supports the given language, but
+        * not the given country, treat it as though the country
+        * code were not specified, i.e., adapt to the given language.
+        */
+        void setDesiredLanguage(const QString &lang);
+
+        /**
+        * Return fully-specified talker code for the configured plugin.  This code
+        * uniquely identifies the configured instance of the plugin and distinquishes
+        * one instance from another.  If the plugin has not been fully configured,
+        * i.e., cannot yet synthesize, return QString::null.
+        * @return            Fully-specified talker code.
+        */
+        QString getTalkerCode();
+
     private slots:
         void configChanged(){
             kdDebug() << "EposConf::configChanged: Running" << endl;
@@ -78,13 +105,16 @@ class EposConf : public PlugInConf {
         };
         void slotEposTest_clicked();
         void slotSynthFinished();
-   
+
     private:
+        // Language code.
+        QString m_languageCode;
+
         void buildCodecList ();
-        
+
         // Configuration widget.
         EposConfWidget* m_widget;
-        
+
         // Epos synthesizer.
         EposProc* m_eposProc;
         // aRts server.

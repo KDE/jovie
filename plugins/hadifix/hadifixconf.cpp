@@ -15,21 +15,22 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
+// Qt includes. 
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qgroupbox.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qdir.h> 
-
+#include <qdir.h>
+#include <qfileinfo.h>
 #include <qfile.h>
 
+// KDE includes.
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
 #include <kplayobject.h>
 #include <kplayobjectfactory.h>
-
 #include <ktempfile.h>
 #include <kaboutdata.h>
 #include <kaboutapplication.h>
@@ -40,15 +41,15 @@
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
 #include <kdialogbase.h>
-
 #include <klineedit.h>
 #include <knuminput.h>
 
+// KTTS includes.
 #include <pluginconf.h>
 
+// Hadifix includes.
 #include "hadifixproc.h"
 #include "voicefileui.h"
-
 #include "hadifixconfigui.h"
 #include "hadifixconf.h"
 #include "hadifixconf.moc"
@@ -121,8 +122,8 @@ class HadifixConfPrivate {
                            100, 100, 100);
       };
 
-      void load (KConfig *config, const QString &langGroup) {
-         config->setGroup(langGroup);
+      void load (KConfig *config, const QString &configGroup) {
+         config->setGroup(configGroup);
          
          QStringList::iterator it = defaultVoices.begin();
          QString voice = config->readEntry("voice", *it);
@@ -142,8 +143,8 @@ class HadifixConfPrivate {
          );
       };
 
-      void save (KConfig *config, const QString &langGroup) {
-         config->setGroup(langGroup);
+      void save (KConfig *config, const QString &configGroup) {
+         config->setGroup(configGroup);
          config->writeEntry ("hadifixExec",configWidget->hadifixURL->url());
          config->writeEntry ("mbrolaExec", configWidget->mbrolaURL->url());
          config->writeEntry ("voice",      configWidget->getVoiceFilename());
@@ -152,9 +153,10 @@ class HadifixConfPrivate {
          config->writeEntry ("time",       configWidget->timeBox->value());
          config->writeEntry ("pitch",      configWidget->frequencyBox->value());
       }
-      
+
       HadifixConfigUI *configWidget;
-      
+
+      QString languageCode;
       QString defaultHadifixExec;
       QString defaultMbrolaExec;
       QStringList defaultVoices;
@@ -196,19 +198,54 @@ HadifixConf::~HadifixConf(){
    delete d;
 }
 
-void HadifixConf::load(KConfig *config, const QString &langGroup) {
+void HadifixConf::load(KConfig *config, const QString &configGroup) {
    kdDebug() << "HadifixConf::load: Running" << endl;
-   d->load (config, langGroup);
+   d->load (config, configGroup);
 }
 
-void HadifixConf::save(KConfig *config, const QString &langGroup) {
+void HadifixConf::save(KConfig *config, const QString &configGroup) {
    kdDebug() << "HadifixConf::save: Running" << endl;
-   d->save (config, langGroup);
+   d->save (config, configGroup);
 }
 
 void HadifixConf::defaults() {
    kdDebug() << "HadifixConf::defaults: Running" << endl;
    d->setDefaults();
+}
+
+void HadifixConf::setDesiredLanguage(const QString &lang)
+{
+    d->languageCode = lang;
+}
+
+QString HadifixConf::getTalkerCode()
+{
+    if (!d->configWidget->hadifixURL->url().isEmpty() && !d->configWidget->mbrolaURL->url().isEmpty())
+    {
+        QString voiceFile = d->configWidget->getVoiceFilename();
+        if (QFileInfo(voiceFile).exists())
+        {
+            QString gender = "male";
+            if (!d->configWidget->isMaleVoice()) gender = "female";
+            QString volume = "medium";
+            if (d->configWidget->volumeBox->value() < 75) volume = "soft";
+            if (d->configWidget->volumeBox->value() > 125) volume = "loud";
+            QString rate = "medium";
+            if (d->configWidget->timeBox->value() < 75) rate = "slow";
+            if (d->configWidget->timeBox->value() > 125) rate = "fast";
+            return QString(
+                    "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                    "<prosody volume=\"%4\" rate=\"%5\" />"
+                    "<kttsd synthesizer=\"%6\" />")
+                    .arg(d->languageCode)
+                    .arg(QFileInfo(voiceFile).baseName(false))
+                    .arg(gender)
+                    .arg(volume)
+                    .arg(rate)
+                    .arg("Hadifix");
+        }
+    }
+    return QString::null;
 }
 
 void HadifixConf::voiceButton_clicked () {

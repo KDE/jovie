@@ -92,13 +92,13 @@ FestivalIntConf::~FestivalIntConf(){
     delete m_festProc;
 }
 
-void FestivalIntConf::load(KConfig *config, const QString &langGroup){
-    // kdDebug() << "FestivalIntConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival" << endl;
+void FestivalIntConf::load(KConfig *config, const QString &configGroup){
+    // kdDebug() << "FestivalIntConf::load: Running" << endl;
 
-    m_langGroup = langGroup;
-    config->setGroup(langGroup);
+    config->setGroup("FestivalInt");
     m_widget->festivalVoicesPath->setURL(config->readPathEntry("VoicesPath",
         getDefaultVoicesPath()));
+    config->setGroup(configGroup);
     scanVoices();
     setDefaultVoice();
     QString voiceSelected(config->readEntry("Voice"));
@@ -106,19 +106,19 @@ void FestivalIntConf::load(KConfig *config, const QString &langGroup){
         // kdDebug() << "Testing: " << voiceSelected << " == " << voiceList[index].code << endl;
         if(voiceSelected == voiceList[index].code){
             // kdDebug() << "FestivalIntConf::load: setting voice to " << voiceSelected << endl;
-            m_widget->selectVoiceCombo->setCurrentItem(index);  
+            m_widget->selectVoiceCombo->setCurrentItem(index);
             break;
         }
     }
     m_widget->timeBox->setValue(config->readNumEntry("time",    100));
 }
 
-void FestivalIntConf::save(KConfig *config, const QString &langGroup){
-    // kdDebug() << "FestivalIntConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival" << endl;
+void FestivalIntConf::save(KConfig *config, const QString &configGroup){
+    // kdDebug() << "FestivalIntConf::save: Running" << endl;
 
-    m_langGroup = langGroup;
-    config->setGroup(langGroup);
+    config->setGroup("FestivalInt");
     config->writePathEntry("VoicesPath", m_widget->festivalVoicesPath->url());
+    config->setGroup(configGroup);
     config->writeEntry("Voice", voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     config->writeEntry ("time", m_widget->timeBox->value());
 }
@@ -129,6 +129,35 @@ void FestivalIntConf::defaults(){
     m_widget->timeBox->setValue(100);
     timeBox_valueChanged(100);
     scanVoices();
+}
+
+void FestivalIntConf::setDesiredLanguage(const QString &lang)
+{
+    m_languageCode = splitLanguageCode(lang, m_countryCode);
+}
+
+QString FestivalIntConf::getTalkerCode()
+{
+    QString normalTalkerCode;
+    if (voiceList.count() > 0)
+    {
+        voiceStruct voiceTemp = voiceList[m_widget->selectVoiceCombo->currentItem()];
+        // Determine rate attribute.  slow < 75% <= medium <= 125% < fast.
+        QString rate = "medium";
+        if (m_widget->timeBox->value() < 75) rate = "slow";
+        if (m_widget->timeBox->value() > 125) rate = "fast";
+        normalTalkerCode = QString(
+                "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                "<prosody volume=\"%4\" rate=\"%5\" />"
+                "<kttsd synthesizer=\"%6\" />")
+                .arg(voiceTemp.languageCode)
+                .arg(voiceTemp.name)
+                .arg(voiceTemp.gender)
+                .arg("medium")
+                .arg(rate)
+                .arg("Festival Interactive");
+    } else normalTalkerCode = QString::null;
+    return normalTalkerCode;
 }
 
 QString FestivalIntConf::getDefaultVoicesPath()
@@ -152,21 +181,43 @@ QString FestivalIntConf::getDefaultVoicesPath()
 void FestivalIntConf::setDefaultVoice()
 {
     // If language code is known, auto pick first voice that matches the language code.
-    if (!m_langGroup.isNull())
+    if (!m_languageCode.isEmpty())
     {
-        // Skip over "Lang_".
-        QString languageCode = m_langGroup.mid(5);
+        bool found = false;
+        // First search for a match on both language code and country code.
+        QString languageCode = m_languageCode;
+        if (!m_countryCode.isNull()) languageCode += "_" + m_countryCode;
         // kdDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
-        for(uint index = 0 ; index < voiceList.count(); ++index)
+        uint index;
+        for(index = 0 ; index < voiceList.count(); ++index)
         {
             QString vlCode = voiceList[index].languageCode.left(languageCode.length());
             // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
             if(languageCode == vlCode)
             {
-                // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << voiceList[index].code << endl;
-                m_widget->selectVoiceCombo->setCurrentItem(index);  
+                found = true;
                 break;
             }
+        }
+        // If not found, search for a match on just the language code.
+        if (!found)
+        {
+            languageCode = m_languageCode;
+            for(index = 0 ; index < voiceList.count(); ++index)
+            {
+                QString vlCode = voiceList[index].languageCode.left(languageCode.length());
+                // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
+                if(languageCode == vlCode)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found)
+        {
+            // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << voiceList[index].code << endl;
+            m_widget->selectVoiceCombo->setCurrentItem(index);
         }
     }
 }
@@ -193,6 +244,7 @@ void FestivalIntConf::scanVoices(){
         voiceTemp.name = voices.readEntry("Name");
         voiceTemp.comment = voices.readEntry("Comment");
         voiceTemp.languageCode = voices.readEntry("Language");
+        voiceTemp.gender = voices.readEntry("Gender", "neutral");
         voiceList.append(voiceTemp);
         m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.comment + ")");
     }
@@ -215,13 +267,13 @@ void FestivalIntConf::slotTest_clicked()
     QString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
     
-    // Get the code for the selected voice
+    // Get the code for the selected voice.
     KConfig voices(KGlobal::dirs()->resourceDirs("data").last() +
         "/kttsd/festivalint/voices", true, false);
     voices.setGroup(voiceList[m_widget->selectVoiceCombo->currentItem()].code);
     QString voiceCode = "("+voices.readEntry("Code")+")";
     // Use the translated name of the voice as the test message.
-    QString testMsg = voices.readEntry("Comment[" + m_langGroup + "]");
+    QString testMsg = voices.readEntry("Comment[" + m_languageCode + "]");
     // Fall back to English if no such translation.
     if (testMsg.isNull()) testMsg = voices.readEntry("Comment");
     // Fall back if none.

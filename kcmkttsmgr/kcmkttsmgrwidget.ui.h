@@ -7,38 +7,10 @@
 ** place of a destructor.
 *****************************************************************************/
 
-void KCMKttsMgrWidget::slotAddLanguage(){
-    kdDebug() << "Running: KCMKttsMgrWidget::slotAddLanguage()" << endl;
-    emit addLanguage();
-}
-
 void KCMKttsMgrWidget::slotConfigChanged(){
-    kdDebug() << "Running: KCMKttsMgrWidget:slotConfigChanged():" << endl;
+    // kdDebug() << "Running: KCMKttsMgrWidget:slotConfigChanged():" << endl;
     emit configChanged();
 }
 
-void KCMKttsMgrWidget::slotRemoveLanguage(){
-    kdDebug() << "Running: KCMKttsMgrWidget::slotRemoveLanguage()" << endl;
-    emit removeLanguage();
-}
-
-void KCMKttsMgrWidget::slotSetDefaultLanguage(){
-    kdDebug() << "Running: KCMKttsMgrWidget::slotSetDefaultLanguage()" << endl;
-    emit setDefaultLanguage();
-}
-
-void KCMKttsMgrWidget::slotUpdateRemoveButton(){
-    kdDebug() << "Running: KCMKttsMgrWidget::slotUpdateRemoveButton()" << endl;
-    emit updateRemoveButton();
-}
-
-void KCMKttsMgrWidget::slotUpdateDefaultButton(){
-    kdDebug() << "Running: KCMKttsMgrWidget::slotUpdateDefaultButton()" << endl;
-    emit updateDefaultButton();
-}
 
 
-void KCMKttsMgrWidget::textPreSndCheck_clicked()
-{
-
-}

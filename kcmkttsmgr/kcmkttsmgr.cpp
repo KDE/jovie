@@ -17,37 +17,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <dcopclient.h>
-
+// Qt includes.
 #include <qtabwidget.h>
 #include <qcheckbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
-#include <qwaitcondition.h>
 
+// KDE includes.
+#include <dcopclient.h>
 #include <klistview.h>
-#include <kcombobox.h>
 #include <kparts/componentfactory.h>
-#include <kmessagebox.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
 #include <kapplication.h>
-#include <kprocess.h>
 #include <kgenericfactory.h>
-// #include <ksimpleconfig.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
 #include <kaboutapplication.h>
-#include <kpopupmenu.h>
 
+// KTTS includes.
 #include "kcmkttsmgr.moc"
 #include "kcmkttsmgr.h"
 #include "pluginconf.h"
 
-// Some constants
+// Some constants.
+// Defaults set when clicking Defaults button.
+const bool enableNotifyCheckBoxValue = false;
+const bool enablePassiveOnlyCheckBoxValue = false;
+
 const bool textPreMsgCheckValue = true;
 const QString textPreMsgValue = i18n("Text interrupted. Message.");
 
@@ -68,7 +67,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kcm_kttsd") );
 K_EXPORT_COMPONENT_FACTORY( kcm_kttsmgr, KCMKttsMgrFactory("kcm_kttsmgr") );
 
 /**
-* Constructor
+* Constructor.
 * Makes the list of plug ins.
 * And the languages acording to the plug ins.
 */
@@ -77,77 +76,48 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     KCModule(KCMKttsMgrFactory::instance(), parent, name)
 {
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
-    
+
     // Initialize some variables.
     m_jobMgrPart = 0;
-    m_pluginWidget = 0;
-    
-    //Defaults
-    //textPreMsgValue = i18n("Paragraph interrupted. Message.");
+    m_configDlg = 0;
 
     // Add the KTTS Manager widget
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
     layout->addWidget(m_kttsmgrw);
-    
-    // Connect the signals from the KCMKtssMgrWidget to this class
-    connect( m_kttsmgrw, SIGNAL( addLanguage() ), this, SLOT( addLanguage() ) );
-    connect( m_kttsmgrw, SIGNAL( configChanged() ), this, SLOT( configChanged() ) );
-    connect( m_kttsmgrw, SIGNAL( removeLanguage() ), this, SLOT( removeLanguage() ) );
-    connect( m_kttsmgrw, SIGNAL( setDefaultLanguage() ), this, SLOT( setDefaultLanguage() ) );
-    connect( m_kttsmgrw, SIGNAL( updateRemoveButton() ), this, SLOT( updateRemoveButton() ) );
-    connect( m_kttsmgrw, SIGNAL( updateDefaultButton() ), this, SLOT( updateDefaultButton() ) );
-    connect( m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
-        SLOT( enableKttsdToggled(bool) ) );
-    connect( m_kttsmgrw->configureLanguageButton, SIGNAL(clicked()),
-        this, SLOT(configurePlugin()));
 
-    // List of languages to be added, true add, false, leave.
-    QMap<QString, bool> languagesToBeAdded;
+    // Give buttons icons.
+    m_kttsmgrw->lowerTalkerPriorityButton->setIconSet(
+        KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
+    m_kttsmgrw->removeTalkerButton->setIconSet(
+        KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+    m_kttsmgrw->configureTalkerButton->setIconSet(
+        KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
-    // Initialize the list of codes.
-    m_languagesMap["other"] = i18n("Other");
-    QMap<QString, QString>::ConstIterator endLanguagesMap(m_languagesMap.constEnd());
-    for( QMap<QString, QString>::ConstIterator it = m_languagesMap.constBegin(); it != endLanguagesMap; ++it ){
-        m_reverseLanguagesMap[it.data()] = it.key();
-        languagesToBeAdded[it.key()] = false;
-    }
-    languagesToBeAdded["other"] = true;
+    // Connect the signals from the KCMKtssMgrWidget to this class.
+    connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
+        this, SLOT(addTalker()));
+    connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
+        this, SLOT(lowerTalkerPriority()));
+    connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
+        this, SLOT(removeTalker()));
+    connect(m_kttsmgrw->configureTalkerButton, SIGNAL(clicked()),
+        this, SLOT(slot_configureTalker()));
+    connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
+        this, SLOT(updateTalkerButtons()));
+    connect(m_kttsmgrw, SIGNAL( configChanged() ),
+        this, SLOT( configChanged() ) );
+    connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
+        SLOT(enableKttsdToggled(bool)));
+    connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
+        this, SLOT(slotTabChanged()));
 
-    // Object for the KTTSD configuration
+    // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
 
-    // Set autoDelete to the list of structures of languages/plugins
-    m_loadedLanguages.setAutoDelete(true);
-
-    // Query for all the KCMKTTSD SynthPlugins and store the list in m_offers
-    m_offers = KTrader::self()->query("KTTSD/SynthPlugin");
-
-    // Iterate thru the posible plug ins and have them added to the combo box plugInSelection and make the list of posible languages
-    for(unsigned int i=0; i < m_offers.count() ; ++i){
-        m_kttsmgrw->plugInSelection->insertItem(m_offers[i]->name(), i);
-
-        // Add the plug in to the combo box
-        QStringList languages = m_offers[i]->property("X-KDE-Languages").toStringList();
-
-        QStringList::ConstIterator endLanguages(languages.constEnd());
-        for( QStringList::ConstIterator it = languages.constBegin(); it != endLanguages; ++it ) {
-            languagesToBeAdded[*it] = true;
-            initLanguageCode (*it);
-        }
-    }
-
-    // Insert the list of languages into the comobo box for language selection
-    QMap<QString, bool>::ConstIterator endLanguagesToBeAdded(languagesToBeAdded.constEnd());
-    for( QMap<QString, bool>::ConstIterator it = languagesToBeAdded.constBegin(); it != endLanguagesToBeAdded; ++it ) {
-        if(it.data()){
-            m_kttsmgrw->languageSelection->insertItem(m_languagesMap[it.key()]);
-        }
-    }
-
-    // Load the configuration from the file to the widgets :P
+    // Load configuration.
     load();
-    
+
     // Register DCOP client.
     DCOPClient *client = kapp->dcopClient();
     if (!client->isRegistered())
@@ -155,7 +125,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         client->attach();
         client->registerAs(kapp->name());    
     }
-    
+
     // Connect KTTSD DCOP signals to our slots.
     if (!connectDCOPSignal("kttsd", "kspeech",
         "kttsdStarted()",
@@ -165,7 +135,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         "kttsdExiting()",
         "kttsdExiting()",
         false);
-        
+
     // See if KTTSD is already running.
     if (client->isApplicationRegistered("kttsd"))
         kttsdStarted();
@@ -175,14 +145,14 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 
     // About Dialog.
     m_aboutDlg = new KAboutApplication (aboutData(), m_kttsmgrw, "KDE Text-to-Speech Manager", false);
-    
+
 } 
 
 /**
-* Destructor
+* Destructor.
 */
 KCMKttsMgr::~KCMKttsMgr(){
-    // kdDebug() << "Running: KCMKttsMgr::~KCMKttsMgr()" << endl;
+    // kdDebug() << "KCMKttsMgr::~KCMKttsMgr: Running" << endl;
 }
 
 /**
@@ -195,17 +165,7 @@ KCMKttsMgr::~KCMKttsMgr(){
 */
 void KCMKttsMgr::load()
 {
-    // kdDebug() << "Running: KCMKttsMgr::load()"<< endl;
-
-    // Get rid of everything first for the sake of the reset button
-    // Maybe we should do something here to jump to the right tab if the reset button was presed being in tab, anyway, that's not so bad
-    QStringList languagesToRemove;
-    for( QDictIterator<languageRelatedObjects> it( m_loadedLanguages ) ; it.current(); ++it ){
-        languagesToRemove << it.currentKey();
-    }
-    for( QStringList::Iterator it = languagesToRemove.begin(); it != languagesToRemove.end(); ++it ) {
-        removeLanguage(*it);
-    }
+    // kdDebug() << "KCMKttsMgr::load: Running" << endl;
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
     m_config->setGroup("General");
@@ -230,33 +190,100 @@ void KCMKttsMgr::load()
     // Overall settings.
     m_kttsmgrw->enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
         m_kttsmgrw->enableKttsdCheckBox->isChecked()));
-    
+
     // Notification settings.
     m_kttsmgrw->enableNotifyCheckBox->setChecked(m_config->readBoolEntry("Notify",
         m_kttsmgrw->enableNotifyCheckBox->isChecked()));
     m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPassivePopupsOnly",
         m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()));
-    
-    QString defaultLanguage = m_config->readEntry("DefaultLanguage");
 
-    // Iterate thru loaded languages and load them and their configuration
-    QStringList langs = m_config->groupList().grep("Lang_");
-    QStringList::ConstIterator endLangs(langs.constEnd());
-    for( QStringList::ConstIterator it = langs.constBegin(); it != endLangs; ++it ) {
-        QString langcode = (*it).right((*it).length()-5);
-        // kdDebug() << "Loading: " << *it << " Langcode: " << langcode << endl;
-        m_config->setGroup(*it);
-        addLanguage( langcode, m_config->readEntry("PlugIn"));
-        if(!m_loadedLanguages.isEmpty()){
-            m_loadedLanguages[langcode]->plugIn->load(m_config, *it);
+    // Last plugin ID.  Used to generate a new ID for an added talker.
+    m_lastTalkerID = m_config->readEntry("LastTalkerID", "0");
+
+    // Dictionary mapping languages to language codes.
+    m_languagesToCodes.clear();
+
+    // Load existing Talkers into the listview.
+    m_kttsmgrw->talkersList->clear();
+    m_kttsmgrw->talkersList->setSortColumn(-1);
+    QStringList talkerIDsList = m_config->readListEntry("TalkerIDs", ',');
+    if (!talkerIDsList.isEmpty())
+    {
+        QListViewItem* talkerItem = 0;
+        QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
+        for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
+        {
+            QString talkerID = *it;
+            // kdDebug() << "KCMKttsMgr::load: talkerID = " << talkerID << endl;
+            m_config->setGroup(QString("Talker_") + talkerID);
+            QString talkerCode = m_config->readEntry("TalkerCode");
+            QString languageCode;
+            talkerCode = normalizeTalkerCode(talkerCode, languageCode);
+            QString language = languageCodeToLanguage(languageCode);
+            QString plugInName = m_config->readEntry("PlugIn", "");
+            // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
+            if (talkerItem)
+                talkerItem =
+                    new KListViewItem(m_kttsmgrw->talkersList, talkerItem, talkerID, language, plugInName);
+            else
+                talkerItem =
+                    new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, plugInName);
+            updateTalkerItem(talkerItem, talkerCode);
+            m_languagesToCodes[language] = languageCode;
         }
     }
 
-    // we need the languages loaded to set the default one, chicken and egg, never liked chicken
-    setDefaultLanguage(defaultLanguage);
-    updateDefaultButton();
-    updateRemoveButton();
-} 
+    // Query for all the KCMKTTSD SynthPlugins and store the list in m_offers.
+    m_offers = KTrader::self()->query("KTTSD/SynthPlugin");
+
+    // Iterate thru the posible plug ins getting their language support codes.
+    for(unsigned int i=0; i < m_offers.count() ; ++i)
+    {
+        QString plugInName = m_offers[i]->name();
+        QStringList languageCodes = m_offers[i]->property("X-KDE-Languages").toStringList();
+        // Add language codes to the language-to-language code map.
+        QStringList::ConstIterator endLanguages(languageCodes.constEnd());
+        for( QStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
+        {
+            QString language = languageCodeToLanguage(*it);
+            m_languagesToCodes[language] = *it;
+        }
+
+        // All plugins support "Other".
+        // TODO: Eventually, this should not be necessary, since all plugins will know
+        // the languages they support and report them in call to getSupportedLanguages().
+        if (!languageCodes.contains("other")) languageCodes.append("other");
+
+        // Add supported language codes to synthesizer-to-language map.
+        m_synthToLangMap[plugInName] = languageCodes;
+    }
+
+    // Add "Other" language.
+    m_languagesToCodes[i18n("Other")] = "other";
+
+    updateTalkerButtons();
+}
+
+/**
+* Converts a language code plus optional country code to language description.
+*/
+QString KCMKttsMgr::languageCodeToLanguage(const QString &languageCode)
+{
+    QString twoAlpha;
+    QString countryCode;
+    QString charSet;
+    QString language;
+    if (languageCode == "other")
+        language = i18n("Other");
+    else
+    {
+        KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
+        language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
+    }
+    if (!countryCode.isEmpty())
+        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ")";
+    return language;
+}
 
 /**
 * This function gets called when the user wants to save the settings in 
@@ -266,54 +293,49 @@ void KCMKttsMgr::load()
 */
 void KCMKttsMgr::save()
 {
-    // kdDebug() << "Running: KCMKttsMgr::save()"<< endl;
-    // Clean up config before saving everything (as kconfig merges, when a language is removed from memory we have to ensure that is removed from disk too)
-    QStringList allGroups = m_config->groupList();
-    for( QStringList::Iterator it = allGroups.begin(); it != allGroups.end(); ++it )
-    {
-        m_config->deleteGroup(*it);
-    }
+    // kdDebug() << "KCMKttsMgr::save: Running" << endl;
+    // Clean up config.
+    m_config->deleteGroup("General");
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
     m_config->setGroup("General");
-    
+
     // Set text interrumption messages and paths
     m_config->writeEntry("TextPreMsgEnabled", m_kttsmgrw->textPreMsgCheck->isChecked());
     m_config->writeEntry("TextPreMsg", m_kttsmgrw->textPreMsg->text());
-    
+
     m_config->writeEntry("TextPreSndEnabled", m_kttsmgrw->textPreSndCheck->isChecked()); 
     m_config->writePathEntry("TextPreSnd", m_kttsmgrw->textPreSnd->url());
-    
+
     m_config->writeEntry("TextPostMsgEnabled", m_kttsmgrw->textPostMsgCheck->isChecked());
     m_config->writeEntry("TextPostMsg", m_kttsmgrw->textPostMsg->text());
-    
+
     m_config->writeEntry("TextPostSndEnabled", m_kttsmgrw->textPostSndCheck->isChecked());
     m_config->writePathEntry("TextPostSnd", m_kttsmgrw->textPostSnd->url());
-    
+
     // Overall settings.
     m_config->writeEntry("EnableKttsd", m_kttsmgrw->enableKttsdCheckBox->isChecked());
-    
+
     // Notification settings.
     m_config->writeEntry("Notify", m_kttsmgrw->enableNotifyCheckBox->isChecked());
     m_config->writeEntry("NotifyPassivePopupsOnly", m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked());
-    
-    // Iterate thru loaded languages and store their configuration
-    for(QDictIterator<languageRelatedObjects> it(m_loadedLanguages); it.current() ; ++it){
-        // kdDebug() << "Saving: " << it.currentKey() << endl;
-        
-        // Let's check if this is the default language
-        if(it.current()->listItem->pixmap(2)){
-            // If it is, store it, and store it in General
-            m_config->setGroup("General");
-            m_config->writeEntry("DefaultLanguage", it.currentKey());
-        }
-        m_config->setGroup(QString("Lang_")+it.currentKey());
-        m_config->writeEntry("PlugIn", it.current()->plugInName);
-        it.current()->plugIn->save(m_config, QString("Lang_")+it.currentKey());
+
+    // Get ordered list of all talker IDs.
+    QStringList talkerIDsList;
+    QListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
+    while (talkerItem)
+    {
+        QListViewItem* nextTalkerItem = talkerItem->nextSibling();
+        QString talkerID = talkerItem->text(tlvcTalkerID);
+        talkerIDsList.append(talkerID);
+        talkerItem = nextTalkerItem;
     }
-    
+    QString talkerIDs = talkerIDsList.join(",");
+    m_config->writeEntry("TalkerIDs", talkerIDs);
+    m_config->writeEntry("LastTalkerID", m_lastTalkerID);
+
     m_config->sync();
-    
+
     // If KTTSD is running, reinitialize it.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
@@ -323,7 +345,12 @@ void KCMKttsMgr::save()
         QByteArray data;
         client->send("kttsd", "kspeech", "reinit()", data);
     }
-} 
+}
+
+void KCMKttsMgr::slotTabChanged()
+{
+    setButtons(buttons());
+}
 
 /**
 * This function is called to set the settings in the module to sensible
@@ -332,29 +359,67 @@ void KCMKttsMgr::save()
 * uses when started without a config file.
 */
 void KCMKttsMgr::defaults() {
-    // kdDebug() << "Running: KCMKttsMgr::defaults()"<< endl;
-    
+    // kdDebug() << "Running: KCMKttsMgr::defaults: Running"<< endl;
+
     int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
     bool changed = false;
-    if (currentPageIndex == wpInterruption)
+    switch (currentPageIndex)
     {
-        m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
-        m_kttsmgrw->textPreMsg->setText(textPreMsgValue);
-        
-        m_kttsmgrw->textPreSndCheck->setChecked(textPreSndCheckValue);
-        m_kttsmgrw->textPreSnd->setURL(textPreSndValue);
-        
-        m_kttsmgrw->textPostMsgCheck->setChecked(textPostMsgCheckValue);
-        m_kttsmgrw->textPostMsg->setText(textPostMsgValue);
-        
-        m_kttsmgrw->textPostSndCheck->setChecked(textPostSndCheckValue);
-        m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
-        changed = true;
-    }
-    if (currentPageIndex == wpPluginProperties)
-    {
-        if (m_pluginWidget) m_pluginWidget->defaults();
-        changed = true;
+        case wpGeneral:
+            if (m_kttsmgrw->enableNotifyCheckBox->isChecked() != enableNotifyCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->enableNotifyCheckBox->setChecked(enableNotifyCheckBoxValue);
+            }
+            if (m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked() != enablePassiveOnlyCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(enablePassiveOnlyCheckBoxValue);
+            }
+            break;
+
+        case wpInterruption:
+            if (m_kttsmgrw->textPreMsgCheck->isChecked() != textPreMsgCheckValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
+            }
+            if (m_kttsmgrw->textPreMsg->text() != textPreMsgValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPreMsg->setText(textPreMsgValue);
+            }
+            if (m_kttsmgrw->textPreSndCheck->isChecked() != textPreSndCheckValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPreSndCheck->setChecked(textPreSndCheckValue);
+            }
+            if (m_kttsmgrw->textPreSnd->url() != textPreSndValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPreSnd->setURL(textPreSndValue);
+            }
+            if (m_kttsmgrw->textPostMsgCheck->isChecked() != textPostMsgCheckValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPostMsgCheck->setChecked(textPostMsgCheckValue);
+            }
+            if (m_kttsmgrw->textPostMsg->text() != textPostMsgValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPostMsg->setText(textPostMsgValue);
+            }
+            if (m_kttsmgrw->textPostSndCheck->isChecked() != textPostSndCheckValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPostSndCheck->setChecked(textPostSndCheckValue);
+            }
+            if (m_kttsmgrw->textPostSnd->url() != textPostSndValue)
+            {
+                changed = true;
+                m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
+            }
+            break;
     }
     if (changed) configChanged();
 }
@@ -368,8 +433,8 @@ void KCMKttsMgr::defaults() {
 * not needed in this case.
 */
 void KCMKttsMgr::init(){
-    // kdDebug() << "Running: KCMKttsMgr::init()"<< endl;
-} 
+    // kdDebug() << "KCMKttsMgr::init: Running" << endl;
+}
 
 /**
 * The control center calls this function to decide which buttons should
@@ -378,16 +443,27 @@ void KCMKttsMgr::init(){
 * modules using setButtons.
 */
 int KCMKttsMgr::buttons() {
-    // kdDebug() << "Running: KCMKttsMgr::buttons()"<< endl;
-    return KCModule::Ok|KCModule::Apply|KCModule::Help|KCModule::Reset;
-} 
+    // kdDebug() << "KCMKttsMgr::buttons: Running"<< endl;
+    if (!m_kttsmgrw)
+        return KCModule::Ok|KCModule::Apply|KCModule::Help;
+    else
+    {
+        // TODO: This isn't working.  We prefer to hide (or disable) Defaults button
+        // on all except Interruption tab.
+        int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
+        if (currentPageIndex == wpInterruption)
+            return KCModule::Ok|KCModule::Apply|KCModule::Help|KCModule::Default;
+        else
+            return KCModule::Ok|KCModule::Apply|KCModule::Help;
+    }
+}
 
 /**
 * This function returns the small quickhelp.
 * That is displayed in the sidebar in the KControl
 */
 QString KCMKttsMgr::quickHelp() const{
-    // kdDebug() << "Running: KCMKttsMgr::quickHelp()"<< endl;
+    // kdDebug() << "KCMKttsMgr::quickHelp: Running"<< endl;
     return i18n(
         "<h1>Text-to-Speech</h1>"
         "<p>This is the configuration for the text-to-speech dcop service</p>"
@@ -410,263 +486,362 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 }
 
 /**
-* Loads the configuration plug in for a specific plug in
+* Given a talker code, normalizes it into a standard form, and extracts language code.
+* @param talkerCode      Unnormalized talker code.
+* @param languageCode    Parsed language code.
+* @return                Normalized talker code.
 */
-PlugInConf *KCMKttsMgr::loadPlugIn(const QString &plugInName){
-    // kdDebug() << "Running: KCMKttsMgr::loadPlugIn(const QString &plugInName)"<< endl;
+QString KCMKttsMgr::normalizeTalkerCode(const QString &talkerCode, QString& languageCode)
+{
+    QString voice;
+    QString gender;
+    QString volume;
+    QString rate;
+    QString plugInName;
+    parseTalkerCode(talkerCode, languageCode, voice, gender, volume, rate, plugInName);
+    if (voice.isEmpty()) voice = "fixed";
+    if (gender.isEmpty()) gender = "neutral";
+    if (volume.isEmpty()) volume = "medium";
+    if (rate.isEmpty()) rate = "medium";
+    QString normalTalkerCode = QString(
+        "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+        "<prosody volume=\"%4\" rate=\"%5\" />"
+        "<kttsd synthesizer=\"%6\" />")
+        .arg(languageCode)
+        .arg(voice)
+        .arg(gender)
+        .arg(volume)
+        .arg(rate)
+        .arg(plugInName);
+    return normalTalkerCode;
+}
 
-    // Iterate thru the plug in m_offers to find the plug in that matches the plugInName
+/**
+* Given a talker code, parses out the attributes.
+* @param talkerCode       The talker code.
+* @return languageCode    Language Code.
+* @return voice           Voice name.
+* @return gender          Gender.
+* @return volume          Volume.
+* @return rate            Rate.
+* @return plugInName      Name of Synthesizer.
+*/
+void KCMKttsMgr::parseTalkerCode(const QString &talkerCode,
+    QString &languageCode,
+    QString &voice,
+    QString &gender,
+    QString &volume,
+    QString &rate,
+    QString &plugInName)
+{
+    languageCode = talkerCode.section("lang=", 1, 1);
+    languageCode = languageCode.section('"', 1, 1);
+    voice = talkerCode.section("name=", 1, 1);
+    voice = voice.section('"', 1, 1);
+    gender = talkerCode.section("gender=", 1, 1);
+    gender = gender.section('"', 1, 1);
+    volume = talkerCode.section("volume=", 1, 1);
+    volume = volume.section('"', 1, 1);
+    rate = talkerCode.section("rate=", 1, 1);
+    rate = rate.section('"', 1, 1);
+    plugInName = talkerCode.section("synthesizer=", 1, 1);
+    plugInName = plugInName.section('"', 1, 1);
+}
+
+/**
+* Given a language code and plugin name, returns a normalized default talker code.
+* @param languageCode     Language code.
+* @param plugInName       Name of the plugin.
+* @return                 Full normalized talker code.
+*
+* Example returned from defaultTalkerCode("en", "Festival")
+*   <voice lang="en" name="fixed" gender="neutral"/>
+*   <prosody volume="medium" rate="medium"/>
+*   <kttsd synthesizer="Festival" />
+*/         
+QString KCMKttsMgr::defaultTalkerCode(const QString &languageCode, const QString &plugInName)
+{
+    QString talkerCode = QString(
+        "<voice lang=\"%1\" name=\"fixed\" gender=\"neutral\" />"
+        "<prosody volume=\"medium\" rate=\"medium\" />"
+        "<kttsd synthesizer=\"%1\" />")
+        .arg(languageCode)
+        .arg(plugInName);
+    return talkerCode;
+}
+
+/**
+* Loads the configuration plug in for a named plug in.
+*/
+PlugInConf *KCMKttsMgr::loadPlugin(const QString &plugInName)
+{
+    // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
+
+    // Iterate thru the plug in m_offers to find the plug in that matches the plugInName.
     for(unsigned int i=0; i < m_offers.count() ; ++i){
-        // Compare the plug in to be loeaded with the entry in m_offers[i]
+        // Compare the plug in to be loaded with the entry in m_offers[i]
         // kdDebug() << "Comparing " << m_offers[i]->name() << " to " << plugInName << endl;
         if(m_offers[i]->name() == plugInName){
         // When the entry is found, load the plug in
         // First create a factory for the library
         KLibFactory *factory = KLibLoader::self()->factory(m_offers[i]->library());
         if(factory){
-            // If the factory is created succesfully, isntatiate the PlugInConf class for the specific plug in to get the plug in configuration object.
+            // If the factory is created successfully, instantiate the PlugInConf class for the
+            // specific plug in to get the plug in configuration object.
             PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(m_offers[i]->library(), NULL, m_offers[i]->library());
             if(plugIn){
-                // If everything went ok, return the plug in pointer
+                // If everything went ok, return the plug in pointer.
                 return plugIn;
             } else {
-                // Something went wront, returning null
+                // Something went wrong, returning null.
                 return NULL;
             }
         } else {
-            // Something went wront, returning null
+            // Something went wrong, returning null.
             return NULL;
         }
         break;
         }
     }
-    // The plug in was not found (unexpected behaviour, returns null)
+    // The plug in was not found (unexpected behaviour, returns null).
     return NULL;
 }
-    
+
 /**
-* Add a language
-* This is a wrapper function that takes the parameters for the real addLanguage from the
-* widgets to later call it.
+* Given an item in the talker listview and a talker code, sets the columns of the item.
+* @param talkerItem       QListViewItem.
+* @param talkerCode       Talker Code.
 */
-void KCMKttsMgr::addLanguage(){
-    // kdDebug() << "KCMKttsMgr::addLanguage: Adding plug in " << m_kttsmgrw->plugInSelection->currentText() << " for language " << m_kttsmgrw->languageSelection->currentText() << endl;
-    
-    QString languageName = m_kttsmgrw->languageSelection->currentText();
-    QString languageCode = m_reverseLanguagesMap[languageName];
+void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode)
+{
+    QString languageCode;
+    QString voice;
+    QString gender;
+    QString volume;
+    QString rate;
+    QString plugInName;
+    parseTalkerCode(talkerCode, languageCode, voice, gender, volume, rate, plugInName);
+    if (!languageCode.isEmpty())
+    {
+        QString language = languageCodeToLanguage(languageCode);
+        if (!language.isEmpty())
+        {
+            m_languagesToCodes[language] = languageCode;
+            talkerItem->setText(tlvcLanguage, language);
+        }
+    }
+    if (!plugInName.isEmpty()) talkerItem->setText(tlvcPlugInName, plugInName);
+    if (!voice.isEmpty()) talkerItem->setText(tlvcVoice, voice);
+    if (!gender.isEmpty()) talkerItem->setText(tlvcGender, gender);
+    if (!volume.isEmpty()) talkerItem->setText(tlvcVolume, volume);
+    if (!rate.isEmpty()) talkerItem->setText(tlvcRate, rate);
+}
+
+/**
+* Add a talker.
+*/
+void KCMKttsMgr::addTalker(){
+    AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, this, "AddTalker_widget");
+    KDialogBase* dlg = new KDialogBase(
+        KDialogBase::Swallow,
+        i18n("Add Talker"),
+        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
+        KDialogBase::Cancel,
+        m_kttsmgrw,
+        "AddTalker_dlg",
+        true,
+        true);
+    dlg->setMainWidget(addTalkerWidget);
+    dlg->setHelp("select-plugin", "kttsd");
+    int dlgResult = dlg->exec();
+    QString languageCode = addTalkerWidget->getLanguageCode();
+    QString plugInName = addTalkerWidget->getSynthesizer();
+    delete dlg;
+    // TODO: Also delete addTalkerWidget?
+    if (dlgResult != QDialog::Accepted) return;
+
+    // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
     {
-        languageCode = KLineEditDlg::getText(i18n("Create custom language"), i18n("Please enter the code for the custom language:"));
-        if (languageCode.isEmpty()) return;
-    }
-    if(m_loadedLanguages.find(languageCode) == 0){
-        addLanguage(languageCode, m_kttsmgrw->plugInSelection->currentText());
-        
-        // Make sure added language is visible.
-        QListViewItem* listItem = m_loadedLanguages.find(languageCode)->listItem;
-        if (listItem)
+        // Create a  QHBox to host KListView.
+        QHBox* hBox = new QHBox(m_kttsmgrw, "SelectLanguage_hbox");
+        // Create a KListView and fill with all known languages.
+        KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
+        langLView->addColumn(i18n("Language"));
+        langLView->addColumn(i18n("Code"));
+        QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
+        QString locale;
+        QString countryCode;
+        QString charSet;
+        QString language;
+        int allLocalesCount = allLocales.count();
+        for (int ndx=0; ndx < allLocalesCount; ndx++)
         {
-            m_kttsmgrw->languagesList->ensureItemVisible(listItem);
-        
-            // Select the new item, update buttons, and update Properties tab.
-            m_kttsmgrw->languagesList->setSelected(listItem, true);
-            updateDefaultButton();
-            updateRemoveButton();
-            // Tell plugin to load default configuration.
-            m_loadedLanguages.find(languageCode)->plugIn->load(m_config, "Lang_" + languageCode);
+            locale = allLocales[ndx];
+            KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);
+            language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
+            if (!countryCode.isEmpty()) language +=
+                        " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
+            new KListViewItem(langLView, language, locale);
         }
-    
-    } else {
-        KMessageBox::error(0, i18n("This language already has a plugin assigned; please remove it before re-assigning it"), i18n("Language not valid"));
+        // Sort by language.
+        langLView->setSorting(0);
+        langLView->sort();
+        // Display the box in a dialog.
+        KDialogBase* dlg = new KDialogBase(
+            KDialogBase::Swallow,
+            i18n("Select Language"),
+            KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
+            KDialogBase::Cancel,
+            m_kttsmgrw,
+            "SelectLanguage_dlg",
+            true,
+            true);
+        dlg->setMainWidget(hBox);
+        dlg->setHelp("select-plugin", "kttsd");
+        dlg->setInitialSize(QSize(200, 500), false);
+        dlgResult = dlg->exec();
+        languageCode = QString::null;
+        if (langLView->currentItem()) languageCode = langLView->currentItem()->text(1);
+        delete dlg;
+        // TODO: Also delete KListView and QHBox?
+        if (dlgResult != QDialog::Accepted) return;
     }
-    // kdDebug() << "KCMKttsMgr::addLanguage: done." << endl;
-}
 
-/**
-* Add a language to the pool of languages for the lang/plugIn pair
-*/
-void KCMKttsMgr::addLanguage(const QString &language, const QString &plugInName){
-    // kdDebug() << "KCMKttsMgr::addLanguage: Adding plug in " << plugInName << " for language code  " << language << endl;
-    
-    // If the language is not in the map, let's add it.
-    if(!m_languagesMap.contains(language)){
-        initLanguageCode (language);
-    }
-    
-    // This object will contain pointers to all the objects related to a single language/plug in pair.
-    // kdDebug() << "Creating newLanguage" << endl;
-    languageRelatedObjects *newLanguage = new languageRelatedObjects();
-    
-    // Load the plug in
-    // kdDebug() << "Creating the new plugIn" << endl;
-    newLanguage->plugIn = loadPlugIn(plugInName);
-    
-    // If there wasn't any error, let's go on
-    if(newLanguage->plugIn){
-        // Create the item in the list and add it and store the pointer in the structure
-        // kdDebug() << "Creating the new listItem" << endl;
-    
-        newLanguage->listItem = new KListViewItem(m_kttsmgrw->languagesList, m_languagesMap[language], plugInName);
-    
-        // Store the name of the plug in in the structure
-        // kdDebug() << "Storing the plug in name" << endl;
-        newLanguage->plugInName = plugInName;
-    
-        // Let plug in changes be as global changed to show apply button.
-        // kdDebug() << "Connecting" << endl;
-        connect(  newLanguage->plugIn, SIGNAL( changed(bool) ), this, SLOT( configChanged() )  );
-    
-        // Let's insert it in the QDict to keep track of language structure
-        // kdDebug() << "Inserting the newLanguage in the QDict" << endl;
-        m_loadedLanguages.insert( language, newLanguage);
-        
-        // kdDebug() << "KCMKttsMgr:addLanguage: Done" <<endl;
-    } else {
-        KMessageBox::error(0, i18n("Speech syntheziser plugin library not found or corrupted."), i18n("Plugin not found"));
-    }
-}
+    if (languageCode.isEmpty()) return;
+    QString language = languageCodeToLanguage(languageCode);
+    if (language.isEmpty()) return;
 
-/**
-* Initializes the language with the given language code by determining
-* its name (in the language of user's current desktop setting).
-*/
-void KCMKttsMgr::initLanguageCode (const QString &code) {
-    if(!m_languagesMap.contains(code)) {
-        // QString name = QString::null;
-        
-        QString name = KGlobal::locale()->twoAlphaToLanguageName(code);
-        
-        /*
-        QString file = locate("locale", QString::fromLatin1("l10n/%1/entry.desktop").arg(code));
-        if (!file.isNull() && !file.isEmpty()) {
-            KSimpleConfig entry(file);
-            entry.setGroup("KCM Locale");
-            name = entry.readEntry("Name", QString::null);
-        }*/
-    
-        if (name.isNull() || name.isEmpty())
-            name = code;
+    m_languagesToCodes[language] = languageCode;
+
+    // Assign a new Talker ID for the talker.  Wraps around to 1.
+    QString talkerID = QString::number(m_lastTalkerID.toInt()+1);
+
+    // Erase extraneous Talker configuration entries that might be there.
+    m_config->deleteGroup(QString("Talker_")+talkerID);
+    m_config->sync();
+
+    // Load the plugin.
+    m_loadedPlugIn = loadPlugin(plugInName);
+    if (!m_loadedPlugIn) return;
+
+    // Give plugin the user's language code and permit plugin to autoconfigure itself.
+    m_loadedPlugIn->setDesiredLanguage(languageCode);
+    m_loadedPlugIn->load(m_config, QString("Talker_")+talkerID);
+
+    // If plugin was able to configure itself, it returns a full talker code.
+    // If not, display configuration dialog for user to configure the plugin.
+    QString talkerCode = m_loadedPlugIn->getTalkerCode();
+    if (talkerCode.isEmpty())
+    {
+        // Display configuration dialog.
+        configureTalker();
+        // Did user Cancel?
+        if (!m_loadedPlugIn) return;
+        talkerCode = m_loadedPlugIn->getTalkerCode();
+    }
+
+    // If still no Talker Code, abandon.
+    if (!talkerCode.isEmpty())
+    {
+        // Let plugin save its configuration.
+        m_config->setGroup(QString("Talker_")+talkerID);
+        m_loadedPlugIn->save(m_config, QString("Talker_"+talkerID));
+
+        // Record last Talker ID used for next add.
+        m_lastTalkerID = talkerID;
+
+        // Record configuration data.  Note, might as well do this now.
+        m_config->setGroup(QString("Talker_")+talkerID);
+        m_config->writeEntry("PlugIn", plugInName);
+        talkerCode = normalizeTalkerCode(talkerCode, languageCode);
+        m_config->writeEntry("TalkerCode", talkerCode);
+        m_config->sync();
+
+        // Add listview item.
+        QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
+        if (talkerItem)
+            talkerItem =
+                new KListViewItem(m_kttsmgrw->talkersList, talkerItem, m_lastTalkerID, language, plugInName);
         else
-            name = name + QString::fromLatin1(" (%1)").arg(code);
-    
-        kdDebug() << "KCMKttsMgr::initLanguageCode: adding code " << code << " name " << name << endl;
-        m_languagesMap[code] = name;
-        m_reverseLanguagesMap[name] = code;
+            talkerItem =
+                new KListViewItem(m_kttsmgrw->talkersList, m_lastTalkerID, language, plugInName);
+
+        // Set additional columns of the listview item.
+        updateTalkerItem(talkerItem, talkerCode);
+
+        // Make sure visible.
+        m_kttsmgrw->talkersList->ensureItemVisible(talkerItem);
+
+        // Select the new item, update buttons.
+        m_kttsmgrw->talkersList->setSelected(talkerItem, true);
+        updateTalkerButtons();
+
+        // Inform Control Center that change has been made.
+        configChanged();
     }
+
+    // Don't need plugin in memory anymore.
+    delete m_loadedPlugIn;
+    m_loadedPlugIn = 0;
+
+    // kdDebug() << "KCMKttsMgr::addTalker: done." << endl;
 }
 
 /**
-* Remove language 
-* This is a wrapper function that takes the parameters for the real removeLanguage from the
-* widgets to later call it.
+* Remove talker. 
 */
-void KCMKttsMgr::removeLanguage(){
-    // kdDebug() << "Running: KCMKttsMgr::removeLanguage()"<< endl;
-    
-    // Get the selected language
-    QListViewItem *itemToRemove = m_kttsmgrw->languagesList->selectedItem();
-    
-    // Call the real removeLanguage function
-    if(itemToRemove){
-        removeLanguage(m_reverseLanguagesMap[itemToRemove->text(0)]);
-    }
+void KCMKttsMgr::removeTalker(){
+    // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
+
+    // Get the selected talker.
+    QListViewItem *itemToRemove = m_kttsmgrw->talkersList->selectedItem();
+    if (!itemToRemove) return;
+
+    // Delete the talker from configuration file.
+    QString talkerID = itemToRemove->text(tlvcTalkerID);
+    m_config->deleteGroup("Talker_"+talkerID, true, false);
+
+    // Delete the talker from list view.
+    delete itemToRemove;
+
+    updateTalkerButtons();
+
+    // Emit configuraton changed.
+    configChanged();
 }
 
 /**
-* Remove a language named lang
+* This slot is called whenever user clicks the lowerTalkerPriority button.
 */
-void KCMKttsMgr::removeLanguage(const QString &language){
-    // kdDebug() << "Running: KCMKttsMgr::removeLanguage(const QString &language)"<< endl;
-    if(m_loadedLanguages[language]){
-        // Remove the KListViewItem object
-        m_kttsmgrw->languagesList->takeItem(m_loadedLanguages[language]->listItem);
-    
-        // Remove the configuration widget
-        delete m_loadedLanguages[language]->plugIn;
-    
-        // And finish removing the wholestructure from memory
-        m_loadedLanguages.remove(language);
-    }
+void KCMKttsMgr::lowerTalkerPriority()
+{
+    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
+    if (!talkerItem) return;
+    QListViewItem* nextTalkerItem = talkerItem->nextSibling();
+    if (!nextTalkerItem) return;
+    talkerItem->moveItem(nextTalkerItem);
+    m_kttsmgrw->talkersList->setSelected(talkerItem, true);
+    updateTalkerButtons();
+    configChanged();
 }
 
 /**
-* Set default langauge
-* This is a wrapper function that takes the parameters for the real setDefaultLanguage from the
-* widgets to later call it.
+* Update the status of the Talker buttons.
 */
-void KCMKttsMgr::setDefaultLanguage(){
-    // kdDebug() << "Running: KCMKttsMgr::setDefaultLanguage()"<< endl;
-    // Get the selected language
-    QListViewItem *defaultLanguageItem = m_kttsmgrw->languagesList->selectedItem();
-    
-    // Call the real setDefaultLanguage function
-    if(defaultLanguageItem){
-        setDefaultLanguage(m_reverseLanguagesMap[defaultLanguageItem->text(0)]);
-    }
-}
-
-/**
-* Set the default language
-*/
-void KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage){
-    // kdDebug() << "Running: KCMKttsMgr::setDefaultLanguage(const QString &defaultLanguage)"<< endl;
-    // Yes should be a beautiful tick icon
-    for(QDictIterator<languageRelatedObjects> it(m_loadedLanguages); it.current() ; ++it){
-        if(it.currentKey() == defaultLanguage){
-            kdDebug() << "Setting " << it.currentKey() << " as the default language" << endl;
-            it.current()->listItem->setPixmap(2, DesktopIcon("ok", 16));
-            m_kttsmgrw->languagesList->setSelected(it.current()->listItem, true);
-            m_kttsmgrw->languagesList->ensureItemVisible(it.current()->listItem);
-//            it.current()->listItem->setSelected(true);
-        } else {
-            kdDebug() << "UN-Setting " << it.currentKey() << " as the default language" << endl;
-            it.current()->listItem->setPixmap(2, NULL);
-        }
-    }
-    updateDefaultButton();
-}
-
-/**
-* Update the status of the Remove button
-*/
-void KCMKttsMgr::updateRemoveButton(){
-    // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton: Running"<< endl;
-    if(m_kttsmgrw->languagesList->selectedItem()){
-        m_kttsmgrw->removeLanguageButton->setEnabled(true);
-        m_kttsmgrw->configureLanguageButton->setEnabled(true);
-        QString language = m_kttsmgrw->languagesList->selectedItem()->text(0);
-        // Remove Properties tab for old selected plugin.
-        int currentTab = m_kttsmgrw->mainTab->currentPageIndex();
-        if (m_pluginWidget)
-            m_kttsmgrw->mainTab->removePage(m_pluginWidget);
-        // Set up Properties tab for newly selected plugin.
-        m_pluginWidget = m_loadedLanguages[m_reverseLanguagesMap[language]]->plugIn;
-        m_kttsmgrw->mainTab->insertTab(m_pluginWidget, "Properties", wpPluginProperties);
-        m_pluginWidget->setEnabled(true);
-        if (currentTab) m_kttsmgrw->mainTab->setCurrentPage(currentTab);
+void KCMKttsMgr::updateTalkerButtons(){
+    // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Running"<< endl;
+    if(m_kttsmgrw->talkersList->selectedItem()){
+        m_kttsmgrw->removeTalkerButton->setEnabled(true);
+        m_kttsmgrw->configureTalkerButton->setEnabled(true);
+        m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(
+            m_kttsmgrw->talkersList->selectedItem()->nextSibling() != 0);
     } else {
-        m_kttsmgrw->removeLanguageButton->setEnabled(false);
-        m_kttsmgrw->configureLanguageButton->setEnabled(false);
-        if (m_pluginWidget) m_kttsmgrw->mainTab->setTabEnabled(m_pluginWidget, false);
+        m_kttsmgrw->removeTalkerButton->setEnabled(false);
+        m_kttsmgrw->configureTalkerButton->setEnabled(false);
+        m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(false);
     }
-    // kdDebug() << "Running: KCMKttsMgr::updateRemoveButton: Exiting"<< endl;
-}
-
-/**
-* Update the status of the Default button
-*/
-void KCMKttsMgr::updateDefaultButton(){
-    // kdDebug() << "Running: KCMKttsMgr::updateDefaultButton: Running"<< endl;
-    if(m_kttsmgrw->languagesList->selectedItem()){
-        if(!m_kttsmgrw->languagesList->selectedItem()->pixmap(2)){
-            m_kttsmgrw->makeDefaultLanguage->setEnabled(true);
-        } else {
-            m_kttsmgrw->makeDefaultLanguage->setEnabled(false);
-        }
-    } else {
-        m_kttsmgrw->makeDefaultLanguage->setEnabled(false);
-    }
-    // kdDebug() << "Running: KCMKttsMgr::updateDefaultButton: Exiting"<< endl;
+    // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting"<< endl;
 }
 
 /**
@@ -678,7 +853,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     static bool reenter;
     if (reenter) return;
     reenter = true;
-    // kdDebug() << "Running enableKttsdToggled" << endl;
+    // kdDebug() << "KCMKttsMgr::enableKttsdToggled: Running" << endl;
     // See if KTTSD is running.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
@@ -712,7 +887,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
 */
 void KCMKttsMgr::kttsdStarted()
 {
-    // kdDebug() << "KCMKttsMgr::kttsdStarted running" << endl;
+    // kdDebug() << "KCMKttsMgr::kttsdStarted: Running" << endl;
     bool kttsdLoaded = (m_jobMgrPart != 0);
     // Load Job Manager Part library.
     if (!kttsdLoaded)
@@ -746,7 +921,7 @@ void KCMKttsMgr::kttsdStarted()
 */
 void KCMKttsMgr::kttsdExiting()
 {
-    // kdDebug() << "KCMKttsMgr::kttsdExiting running" << endl;
+    // kdDebug() << "KCMKttsMgr::kttsdExiting: Running" << endl;
     if (m_jobMgrPart)
     {
         m_kttsmgrw->mainTab->removePage(m_jobMgrPart->widget());
@@ -757,14 +932,104 @@ void KCMKttsMgr::kttsdExiting()
 }
 
 /**
-* Switch to the Properties tab.
+* User has requested display talker configuration dialog.
 */
-void KCMKttsMgr::configurePlugin()
+void KCMKttsMgr::slot_configureTalker()
 {
-    if (m_pluginWidget) m_kttsmgrw->mainTab->setCurrentPage(wpPluginProperties);
+    // Get highlighted plugin from Talker ListView and load into memory.
+    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
+    if (!talkerItem) return;
+    QString talkerID = talkerItem->text(tlvcTalkerID);
+    QString plugInName = talkerItem->text(tlvcPlugInName);
+    QString language = talkerItem->text(tlvcLanguage);
+    QString languageCode = m_languagesToCodes[language];
+    m_loadedPlugIn = loadPlugin(plugInName);
+    if (!m_loadedPlugIn) return;
+
+    // Tell plugin to load its configuration.
+    m_config->setGroup(QString("Talker_")+talkerID);
+    m_loadedPlugIn->setDesiredLanguage(languageCode);
+    m_loadedPlugIn->load(m_config, QString("Talker_")+talkerID);
+
+    // Display configuration dialog.
+    configureTalker();
+
+    // Did user Cancel?
+    if (!m_loadedPlugIn) return;
+
+    // Get Talker Code.  Note that plugin may return a code different from before.
+    QString talkerCode = m_loadedPlugIn->getTalkerCode();
+
+    // If plugin was successfully configured, save its configuration.
+    if (!talkerCode.isEmpty())
+    {
+        m_config->setGroup(QString("Talker_")+talkerID);
+        m_loadedPlugIn->save(m_config, QString("Talker_")+talkerID);
+        m_config->setGroup(QString("Talker_")+talkerID);
+        talkerCode = normalizeTalkerCode(talkerCode, languageCode);
+        m_config->writeEntry("TalkerCode", talkerCode);
+        m_config->sync();
+
+        // Update display.
+        updateTalkerItem(talkerItem, talkerCode);
+
+        // Inform Control Center that configuration has changed.
+        configChanged();
+    }
+
+    delete m_loadedPlugIn;
+    m_loadedPlugIn = 0;
 }
 
-// System tray context menu entries
+/**
+* Display talker configuration dialog.  The plugin is assumed already loaded into
+* memory referenced by m_loadedPlugIn.
+*/
+void KCMKttsMgr::configureTalker()
+{
+    if (!m_loadedPlugIn) return;
+    m_configDlg = new KDialogBase(
+        KDialogBase::Swallow,
+        i18n("Talker Configuration"),
+        KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Cancel,
+        KDialogBase::Cancel,
+        m_kttsmgrw,
+        "configureTalker_dlg",
+        true,
+        true);
+    m_configDlg->setInitialSize(QSize(700, 300), false);
+    m_configDlg->setMainWidget(m_loadedPlugIn);
+    m_configDlg->setHelp("configure-plugin", "kttsd");
+    m_configDlg->enableButtonOK(false);
+    connect(m_loadedPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigDlg_ConfigChanged() ));
+    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigDlg_DefaultClicked() ));
+    connect(m_configDlg, SIGNAL( okClicked() ), this, SLOT( slotConfigDlg_OkClicked() ));
+    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigDlg_CancelClicked() ));
+    m_configDlg->exec();
+}
+
+void KCMKttsMgr::slotConfigDlg_ConfigChanged()
+{
+    m_configDlg->enableButtonOK(!m_loadedPlugIn->getTalkerCode().isEmpty());
+}
+
+void KCMKttsMgr::slotConfigDlg_DefaultClicked()
+{
+    m_loadedPlugIn->defaults();
+}
+
+void KCMKttsMgr::slotConfigDlg_OkClicked()
+{
+    kdDebug() << "KCMKttsMgr::slotConfigDlg_OkClicked: Running" << endl;
+}
+
+void KCMKttsMgr::slotConfigDlg_CancelClicked()
+{
+    delete m_loadedPlugIn;
+    m_loadedPlugIn = 0;
+}
+
+// System tray context menu entries.
 void KCMKttsMgr::aboutSelected(){
     m_aboutDlg->show();
 }

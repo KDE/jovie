@@ -38,7 +38,7 @@
 FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    kdDebug() << "FliteConf::FliteConf: Running" << endl;
+    // kdDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;
     m_artsServer = 0;
     m_playObj = 0;
@@ -58,7 +58,7 @@ FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*ar
 
 /** Destructor */
 FliteConf::~FliteConf(){
-    kdDebug() << "Running: FliteConf::~FliteConf()" << endl;
+    // kdDebug() << "Running: FliteConf::~FliteConf()" << endl;
     if (m_playObj) m_playObj->halt();
     delete m_playObj;
     delete m_artsServer;
@@ -66,28 +66,63 @@ FliteConf::~FliteConf(){
     delete m_fliteProc;
 }
 
-void FliteConf::load(KConfig *config, const QString &langGroup){
-    kdDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
+void FliteConf::load(KConfig *config, const QString &configGroup){
+    // kdDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
-    config->setGroup(langGroup);
-    m_widget->flitePath->setURL(config->readPathEntry("FliteExePath", "flite"));
+    config->setGroup(configGroup);
+    QString fliteExe = config->readPathEntry("FliteExePath", QString::null);
+    if (fliteExe.isEmpty())
+    {
+        config->setGroup("Flite");
+        fliteExe = config->readPathEntry("FliteExePath", "flite");
+    }
+    m_widget->flitePath->setURL(fliteExe);
 }
 
-void FliteConf::save(KConfig *config, const QString &langGroup){
-    kdDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
+void FliteConf::save(KConfig *config, const QString &configGroup){
+    // kdDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
-    config->setGroup(langGroup);
+    config->setGroup("Flite");
+    config->writePathEntry("FliteExePath", m_widget->flitePath->url());
+    config->setGroup(configGroup);
     config->writePathEntry("FliteExePath", m_widget->flitePath->url());
 }
 
 void FliteConf::defaults(){
-    kdDebug() << "FliteConf::defaults: Running" << endl;
+    // kdDebug() << "FliteConf::defaults: Running" << endl;
     m_widget->flitePath->setURL("flite");
+}
+
+void FliteConf::setDesiredLanguage(const QString &lang)
+{
+    m_languageCode = lang;
+}
+
+QString FliteConf::getTalkerCode()
+{
+    QString fliteExe = m_widget->flitePath->url();
+    if (!fliteExe.isEmpty())
+    {
+        if (!getLocation(fliteExe).isEmpty())
+        {
+            return QString(
+                    "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
+                    "<prosody volume=\"%4\" rate=\"%5\" />"
+                    "<kttsd synthesizer=\"%6\" />")
+                    .arg(m_languageCode)
+                    .arg("fixed")
+                    .arg("neutral")
+                    .arg("medium")
+                    .arg("medium")
+                    .arg("Festival Lite (flite)");
+        }
+    }
+    return QString::null;
 }
 
 void FliteConf::slotFliteTest_clicked()
 {
-    kdDebug() << "FliteConf::slotFliteTest_clicked(): Running" << endl;
+    // kdDebug() << "FliteConf::slotFliteTest_clicked(): Running" << endl;
     // If currently synthesizing, stop it.
     if (m_fliteProc)
         m_fliteProc->stopText();
