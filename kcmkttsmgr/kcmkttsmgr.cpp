@@ -32,7 +32,7 @@
 #include <qradiobutton.h>
 #include <qslider.h>
 #include <qlabel.h>
-#include <qpopmenu.h>
+#include <qpopupmenu.h>
 
 // KDE includes.
 #include <dcopclient.h>
