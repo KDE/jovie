@@ -36,6 +36,7 @@ int main (int argc, char *argv[])
     aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
     aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
     KCmdLineArgs::init( argc, argv, &aboutdata );
+
     // KCmdLineArgs::addCmdLineOptions( options );
     KUniqueApplication::addCmdLineOptions();
 
@@ -45,6 +46,9 @@ int main (int argc, char *argv[])
     }
 
     KUniqueApplication app;
+
+    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Panel);
+    aboutdata.setProgramLogo(icon.convertToImage());
 
     // The real work of KTTS Manager is done in the KControl Module kcmkttsd.
     KCMultiDialog dlg(KCMultiDialog::Plain, "KDE Text-to-Speech Manager", 0, "kttsmgrdlg", false);
