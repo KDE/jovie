@@ -3,20 +3,21 @@
   This file is the templates for the configuration plug ins.
   ------------------- 
   Copyright : (C) 2002 by José Pablo Ezequiel "Pupeno" Fernández
+              (C) 2003 by José Pablo Ezequiel "Pupeno" Fernández
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Current Maintainer: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org> 
  ******************************************************************************/
 
-/******************************************************************************
- *                                                                            *
- *    This program is free software; you can redistribute it and/or modify    *
- *    it under the terms of the GNU General Public License as published by    *
- *    the Free Software Foundation; either version 2 of the License.          *
- *                                                                            *
- ******************************************************************************/
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ ***************************************************************************/
 
-// $Id$
+// $Id: $
 
 #include "pluginconf.h"
 #include "pluginconf.moc"
