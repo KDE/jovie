@@ -1,0 +1,121 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>XmlTransformerConfWidget</class>
+<author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>XmlTransformerConfWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>470</width>
+            <height>116</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Configure XML Transformer</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="1">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>nameLineEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>xsltPath</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>xsltprocPath</cstring>
+                    </property>
+                    <property name="url" stdset="0">
+                        <string>xsltproc</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout6</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>nameLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Name:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>nameLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This filter only applies to text spoken in the specified language.</string>
+                        <comment>What's this text</comment>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>xsltLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;XSLT file:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>xsltPath</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>xsltprocLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>xsltproc &amp;executable:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>xsltprocPath</cstring>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>
