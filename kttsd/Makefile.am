@@ -4,13 +4,13 @@ INCLUDES = \
 	-I$(top_srcdir)/kttsd/libktts \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(kde_includes)/arts \
-	-I$(CFLAGS_GST) \
+	$(CFLAGS_GST) \
 	$(all_includes)
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/kttsd/libkttsd \
 	-I$(top_srcdir)/kttsd/libktts \
 	-I$(kde_includes)/arts \
-	-I$(CFLAGS_GST) \
+	$(CFLAGS_GST) \
 	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
