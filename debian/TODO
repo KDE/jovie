@@ -9,18 +9,24 @@
   should I just remove that from the control file?  (It was put there by
   dh_make.)
   
+* dpkg-shlibdeps is reporting:
+    dpkg-shlibdeps: warning: could not find path for libktts.so.1
+    dpkg-shlibdeps: warning: could not find path for libkttsd.so.1
+  
 * How do I do the library and doc symlinks, i.e.,
     debian/tmp/usr/lib/libkttsd.so.1 -> libkttsd.so.1.0.0
     debian/tmp/usr/lib/libkttsd.so -> libkttsd.so.1.0.0
     debian/tmp/usr/share/doc/HTML/en/kttsd-0.2.0-apidocs/common -> ../../../kde/HTML/en/common
 
 * lintian is reporting the following:
-    E: kttsd-dev: no-shlibs-control-file usr/lib/libktts.so
-    W: kttsd-dev: missing-depends-line
+    W: kttsd source: changelog-should-mention-nmu
+    W: kttsd source: source-nmu-has-incorrect-version-number 0.2.0
     W: kttsd-appplugins: missing-depends-line
     E: kttsd: ldconfig-symlink-missing-for-shlib usr/lib/libkttsd.so.1 usr/lib/libkttsd.so.1.0.0 libkttsd.so.1
-  My issue with the first E above is libktts is versionless.
+    E: kttsd: ldconfig-symlink-missing-for-shlib usr/lib/libktts.so.1 usr/lib/libktts.so.1.0.0 libktts.so.1
 
 * Should rc files be installed to etc/ tree?
+
+* Add Handbook to kttsd.install file (symlinks?)
 
 * Remove kcm_kttsd library once KMouth stops using it.
