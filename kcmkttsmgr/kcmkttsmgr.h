@@ -379,6 +379,11 @@ class KCMKttsMgr :
         void enableKttsdToggled(bool checked);
 
         /**
+        * This signal is emitted whenever user toggles the Enable notifications check box.
+        */
+        void slotEnableNotifyCheckBoxToggled(bool checked);
+
+        /**
         * This signal is emitted whenever user checks/unchecks the GStreamer radio button.
         */
         void slotGstreamerRadioButton_toggled(bool state);

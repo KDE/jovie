@@ -65,6 +65,7 @@
 // Some constants.
 // Defaults set when clicking Defaults button.
 const bool enableNotifyCheckBoxValue = false;
+const bool enablePopupsOnlyCheckBoxValue = true;
 const bool enablePassiveOnlyCheckBoxValue = false;
 
 const bool embedInSysTrayCheckBoxValue = true;
@@ -228,6 +229,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // General tab.
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(enableKttsdToggled(bool)));
+    connect(m_kttsmgrw->enableNotifyCheckBox, SIGNAL(toggled(bool)),
+            SLOT(slotEnableNotifyCheckBoxToggled(bool)));
 
     // Others.
     connect(m_kttsmgrw, SIGNAL( configChanged() ),
@@ -313,6 +316,8 @@ void KCMKttsMgr::load()
     // Notification settings.
     m_kttsmgrw->enableNotifyCheckBox->setChecked(m_config->readBoolEntry("Notify",
         m_kttsmgrw->enableNotifyCheckBox->isChecked()));
+    m_kttsmgrw->enablePopupsOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPopupsOnly",
+        m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked()));
     m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPassivePopupsOnly",
         m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()));
 
@@ -536,7 +541,8 @@ void KCMKttsMgr::load()
     }
 
     // Enable/disable Notifications box based on Enable KTTSD checkbox.
-    m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(m_kttsmgrw->enableNotifyCheckBox->isChecked());
+    m_kttsmgrw->enablePopupsOnlyCheckBox->setEnabled(m_kttsmgrw->enableNotifyCheckBox->isChecked());
+    m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked());
     m_kttsmgrw->notifyGroupBox->setEnabled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
     // Enable ShowMainWindowOnStartup checkbox based on EmbedInSysTray checkbox.
@@ -605,6 +611,7 @@ void KCMKttsMgr::save()
 
     // Notification settings.
     m_config->writeEntry("Notify", m_kttsmgrw->enableNotifyCheckBox->isChecked());
+    m_config->writeEntry("NotifyPopupsOnly", m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked());
     m_config->writeEntry("NotifyPassivePopupsOnly", m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked());
 
     // Audio Output.
@@ -730,6 +737,11 @@ void KCMKttsMgr::defaults() {
             {
                 changed = true;
                 m_kttsmgrw->enableNotifyCheckBox->setChecked(enableNotifyCheckBoxValue);
+            }
+            if (m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked() != enablePopupsOnlyCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->enablePopupsOnlyCheckBox->setChecked(enablePopupsOnlyCheckBoxValue);
             }
             if (m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked() != enablePassiveOnlyCheckBoxValue)
             {
@@ -1941,6 +1953,18 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
 }
+
+/**
+ * This signal is emitted whenever user toggles the Enable notifications check box.
+ */
+void KCMKttsMgr::slotEnableNotifyCheckBoxToggled(bool checked)
+{
+    if (checked)
+        m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked());
+    else
+        m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(false);
+}
+
 
 // System tray context menu entries.
 void KCMKttsMgr::aboutSelected(){

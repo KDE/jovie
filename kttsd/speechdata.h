@@ -531,6 +531,11 @@ class SpeechData : public QObject {
         bool notify;
 
         /**
+        * Notify popups only.
+        */
+        bool notifyPopupsOnly;
+
+        /**
         * Notify passive popups only.
         */
         bool notifyPassivePopupsOnly;

@@ -94,6 +94,7 @@ bool SpeechData::readConfig(){
 
     // Notification (KNotify).
     notify = config->readBoolEntry("Notify", false);
+    notifyPopupsOnly = config->readBoolEntry("NotifyPopupsOnly", true);
     notifyPassivePopupsOnly = config->readBoolEntry("NotifyPassivePopupsOnly", false);
 
     // Create an initial FilterMgr for the pool to save time later.

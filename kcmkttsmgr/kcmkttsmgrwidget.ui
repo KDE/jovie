@@ -48,6 +48,34 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>enableKttsdCheckBox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
+                        </property>
+                    </widget>
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>spacer5</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="QGroupBox" row="1" column="1">
                         <property name="name">
                             <cstring>notifyGroupBox</cstring>
@@ -58,11 +86,11 @@
                         <property name="title">
                             <string>&amp;Notifications</string>
                         </property>
-                        <vbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLayoutWidget">
+                            <widget class="QLayoutWidget" row="0" column="0">
                                 <property name="name">
                                     <cstring>layout9</cstring>
                                 </property>
@@ -83,7 +111,7 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLayoutWidget">
+                            <widget class="QLayoutWidget" row="1" column="0">
                                 <property name="name">
                                     <cstring>layout15</cstring>
                                 </property>
@@ -110,6 +138,47 @@
                                     </spacer>
                                     <widget class="QCheckBox">
                                         <property name="name">
+                                            <cstring>enablePopupsOnlyCheckBox</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Messages in popup &amp;windows only</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget" row="2" column="0">
+                                <property name="name">
+                                    <cstring>layout14</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>50</width>
+                                                <height>21</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
                                             <cstring>enablePassiveOnlyCheckBox</cstring>
                                         </property>
                                         <property name="text">
@@ -121,7 +190,21 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                        </vbox>
+                        </grid>
+                    </widget>
+                    <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>embedInSysTrayCheckBox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Em&amp;bed Text-to-Speech Manager in system tray</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>When checked, KTTSMgr displays an icon in the system tray, and clicking OK or Cancel buttons does not stop KTTSMgr.  Use system tray context menu to quit KTTSMgr.  This setting takes effect when KTTSMgr is next started.  This setting has no effect when running in the KDE Control Center.</string>
+                        </property>
                     </widget>
                     <spacer row="4" column="1">
                         <property name="name">
@@ -136,35 +219,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>30</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>enableKttsdCheckBox</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
-                        </property>
-                    </widget>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>spacer5</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
+                                <height>120</height>
                             </size>
                         </property>
                     </spacer>
@@ -208,20 +263,6 @@
                                 </property>
                             </widget>
                         </hbox>
-                    </widget>
-                    <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>embedInSysTrayCheckBox</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Em&amp;bed Text-to-Speech Manager in system tray</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>When checked, KTTSMgr displays an icon in the system tray, and clicking OK or Cancel buttons does not stop KTTSMgr.  Use system tray context menu to quit KTTSMgr.  This setting takes effect when KTTSMgr is next started.  This setting has no effect when running in the KDE Control Center.</string>
-                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -1284,7 +1325,7 @@
     <connection>
         <sender>enableNotifyCheckBox</sender>
         <signal>toggled(bool)</signal>
-        <receiver>enablePassiveOnlyCheckBox</receiver>
+        <receiver>enablePopupsOnlyCheckBox</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
@@ -1294,7 +1335,7 @@
         <slot>slotConfigChanged()</slot>
     </connection>
     <connection>
-        <sender>enablePassiveOnlyCheckBox</sender>
+        <sender>enablePopupsOnlyCheckBox</sender>
         <signal>clicked()</signal>
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
@@ -1335,11 +1376,24 @@
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
+    <connection>
+        <sender>enablePopupsOnlyCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>enablePassiveOnlyCheckBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>enablePassiveOnlyCheckBox</sender>
+        <signal>clicked()</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainTab</tabstop>
     <tabstop>enableKttsdCheckBox</tabstop>
     <tabstop>enableNotifyCheckBox</tabstop>
+    <tabstop>enablePopupsOnlyCheckBox</tabstop>
     <tabstop>enablePassiveOnlyCheckBox</tabstop>
     <tabstop>embedInSysTrayCheckBox</tabstop>
     <tabstop>showMainWindowOnStartupCheckBox</tabstop>
@@ -1369,6 +1423,7 @@
     <tabstop>sinkComboBox</tabstop>
     <tabstop>timeBox</tabstop>
     <tabstop>keepAudioCheckBox</tabstop>
+    <tabstop>keepAudioPath</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">klocale.h</include>

@@ -1,3 +1,8 @@
+_ Although one can configure Canadian English voice in Festival, there is no way to choose
+  Canadian English in the Talker Chooser.
+_ Provide a way for those apps with KTTSD plugins to disable KNotifies, otherwise, users
+  can't have both KNotify turned on and the app's plugin.  For example, Konversation or
+  Kopete.
 _ .desktop files must have a Type keyword, but what to use for kcmkttsd_testmessage.desktop?
 _ Add ability to quickly pick default Talker to systray menu.
 _ More problems with KCMultiDialog.  In addition to not being able to size horizontally less than

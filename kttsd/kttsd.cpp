@@ -787,6 +787,10 @@ void KTTSD::configCommitted() {
 
 /**
 * This signal is emitted by KNotify when a notification event occurs.
+*    ds << event << fromApp << text << sound << file << present << level
+*       << winId << eventId;
+* default_presentation contains these ORed events: None=0, Sound=1, Messagebox=2, Logfile=4, Stderr=8,
+* PassivePopup=16, Execute=32, Taskbar=64
 */
 void KTTSD::notificationSignal( const QString&, const QString&,
     const QString &text, const QString&, const QString&,
@@ -795,12 +799,14 @@ void KTTSD::notificationSignal( const QString&, const QString&,
     if (!m_speaker) return;
     if (!text.isNull())
         if ( m_speechData->notify )
-            if ( ( present & KNotifyClient::PassivePopup )
-                 || !m_speechData->notifyPassivePopupsOnly )
-                {
-                    m_speechData->enqueueMessage(text, NULL, getAppId());
-                    m_speaker->doUtterances();
-                }
+            if (!m_speechData->notifyPopupsOnly ||
+                (present & (KNotifyClient::Messagebox | KNotifyClient::PassivePopup)))
+                if (!m_speechData->notifyPassivePopupsOnly ||
+                    ( present & KNotifyClient::PassivePopup ))
+                    {
+                        m_speechData->enqueueMessage(text, NULL, getAppId());
+                        m_speaker->doUtterances();
+                    }
 }
 
 // Slots for the speaker object
