@@ -220,8 +220,14 @@ void FestivalIntProc::synth(
     startEngine(festivalExePath, voiceCode);
     // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
-        QString timeMsg = QString("(Parameter.set 'Duration_Stretch %1)").arg(
-            1.0/(float(time)/100.0), 0, 'f', 1);
+        QString timeMsg;
+        // HTS voices don't work under Debian.  Why?  ..grc
+        if (voiceCode.contains("_hts") > 0)
+            timeMsg = QString("(set! hts_duration_stretch %1)").arg(
+                (1.0/(float(time)/100.0)) - 1.0, 0, 'f', 1);
+        else
+            timeMsg = QString("(Parameter.set 'Duration_Stretch %1)").arg(
+                1.0/(float(time)/100.0), 0, 'f', 1);
         sendToFestival(timeMsg);
         m_runningTime = time;
     }
