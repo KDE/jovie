@@ -37,3 +37,7 @@ install-data-local:
 uninstall-local:
 	-rm -f $(DESTDIR)$(kde_icondir)/hicolor/16x16/actions/male.png
 	-rm -f $(DESTDIR)$(kde_icondir)/hicolor/16x16/actions/female.png
+
+# Get translators to translate library
+messages: rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_hadifixplugin.pot

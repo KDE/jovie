@@ -21,3 +21,6 @@ libkttsd_commandplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -l
 services_DATA = kttsd_commandplugin.desktop
 servicesdir = $(kde_servicesdir)
 
+# Get translators to translate library
+messages: rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_commandplugin.pot

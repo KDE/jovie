@@ -22,3 +22,7 @@ libkttsd_freettsplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 services_DATA = kttsd_freettsplugin.desktop
 servicesdir = $(kde_servicesdir)
+
+# Get translators to translate library
+messages: rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_freettsplugin.pot

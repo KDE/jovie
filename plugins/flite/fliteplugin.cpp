@@ -21,5 +21,5 @@
 #include "fliteproc.h"
 
 typedef K_TYPELIST_2( FliteProc, FliteConf ) Flite;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_fliteplugin, KGenericFactory<Flite>("plugin_Flite") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_fliteplugin, KGenericFactory<Flite>("kttsd_fliteplugin") );
 

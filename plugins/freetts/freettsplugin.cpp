@@ -22,5 +22,5 @@
 #include "freettsproc.h"
 
 typedef K_TYPELIST_2( FreeTTSProc, FreeTTSConf ) FreeTTS;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_freettsplugin, KGenericFactory<FreeTTS>("plugin_FreeTTS"));
+K_EXPORT_COMPONENT_FACTORY( libkttsd_freettsplugin, KGenericFactory<FreeTTS>("kttsd_freettsplugin"));
 

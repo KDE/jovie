@@ -22,3 +22,7 @@ services_DATA = kttsd_fliteplugin.desktop
 servicesdir = $(kde_servicesdir)
 
 noinst_HEADERS =  fliteproc.h fliteconf.h fliteconfwidget.h
+
+# Get translators to translate library
+messages: rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kttsd_fliteplugin.pot
