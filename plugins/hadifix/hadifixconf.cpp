@@ -148,8 +148,8 @@ class HadifixConfPrivate {
 
       void save (KConfig *config, const QString &configGroup) {
          config->setGroup(configGroup);
-         config->writeEntry ("hadifixExec", KStandardDirs::realFilePath(configWidget->hadifixURL->url()));
-         config->writeEntry ("mbrolaExec", KStandardDirs::realFilePath(configWidget->mbrolaURL->url()));
+         config->writeEntry ("hadifixExec", PlugInConf::realFilePath(configWidget->hadifixURL->url()));
+         config->writeEntry ("mbrolaExec", PlugInConf::realFilePath(configWidget->mbrolaURL->url()));
          config->writeEntry ("voice",      configWidget->getVoiceFilename());
          config->writeEntry ("gender",     configWidget->isMaleVoice());
          config->writeEntry ("volume",     configWidget->volumeBox->value());
@@ -313,9 +313,9 @@ void HadifixConf::testButton_clicked () {
 
    connect (d->hadifixProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
    d->hadifixProc->synth ("K D E ist eine moderne grafische Arbeitsumgebung für Unix-Computer.",
-      KStandardDirs::realFilePath(d->configWidget->hadifixURL->url()),
+      realFilePath(d->configWidget->hadifixURL->url()),
       d->configWidget->isMaleVoice(),
-      KStandardDirs::realFilePath(d->configWidget->mbrolaURL->url()),
+      realFilePath(d->configWidget->mbrolaURL->url()),
       d->configWidget->getVoiceFilename(),
       d->configWidget->volumeBox->value(),
       d->configWidget->timeBox->value(),

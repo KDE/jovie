@@ -17,7 +17,8 @@
  ***************************************************************************/
 
 // C++ library includes.
-#include <cstdlib>
+#include <stdlib.h>
+#include <sys/param.h>
 
 // Qt includes.
 #include <qfile.h>
@@ -181,3 +182,15 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
     return langCode;
 }
 
+QString PlugInConf::realFilePath(const QString &filename)
+{
+    char realpath_buffer[MAXPATHLEN + 1];
+    memset(realpath_buffer, 0, MAXPATHLEN + 1);
+
+    /* If the path contains symlinks, get the real name */
+    if (realpath( QFile::encodeName(filename).data(), realpath_buffer) != 0) {
+        //succes, use result from realpath
+        return QFile::decodeName(realpath_buffer);
+    }
+    return filename;
+}

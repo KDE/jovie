@@ -140,15 +140,15 @@ void EposConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("Epos");
     config->writePathEntry("EposServerExePath",
-        KStandardDirs::realFilePath(m_widget->eposServerPath->url()));
+        realFilePath(m_widget->eposServerPath->url()));
     config->writePathEntry("EposClientExePath", 
-        KStandardDirs::realFilePath(m_widget->eposClientPath->url()));
+        realFilePath(m_widget->eposClientPath->url()));
     config->writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
     config->setGroup(configGroup);
     config->writePathEntry("EposServerExePath", 
-        KStandardDirs::realFilePath(m_widget->eposServerPath->url()));
+        realFilePath(m_widget->eposServerPath->url()));
     config->writePathEntry("EposClientExePath", 
-        KStandardDirs::realFilePath(m_widget->eposClientPath->url()));
+        realFilePath(m_widget->eposClientPath->url()));
     config->writeEntry("EposServerOptions", m_widget->eposServerOptions->text());
     config->writeEntry("EposClientOptions", m_widget->eposClientOptions->text());
     config->writeEntry("time", m_widget->timeBox->value());
@@ -185,8 +185,8 @@ void EposConf::setDesiredLanguage(const QString &lang)
 
 QString EposConf::getTalkerCode()
 {
-    QString eposServerExe = KStandardDirs::realFilePath(m_widget->eposServerPath->url());
-    QString eposClientExe = KStandardDirs::realFilePath(m_widget->eposClientPath->url());
+    QString eposServerExe = realFilePath(m_widget->eposServerPath->url());
+    QString eposClientExe = realFilePath(m_widget->eposClientPath->url());
     if (!eposServerExe.isEmpty() && !eposClientExe.isEmpty())
     {
         if (!getLocation(eposServerExe).isEmpty() && !getLocation(eposClientExe).isEmpty())
@@ -253,8 +253,8 @@ void EposConf::slotEposTest_clicked()
     m_eposProc->synth(
         "K D E is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
-        KStandardDirs::realFilePath(m_widget->eposServerPath->url()),
-        KStandardDirs::realFilePath(m_widget->eposClientPath->url()),
+        realFilePath(m_widget->eposServerPath->url()),
+        realFilePath(m_widget->eposClientPath->url()),
         m_widget->eposServerOptions->text(),
         m_widget->eposClientOptions->text(),
         m_widget->characterCodingBox->currentItem(),

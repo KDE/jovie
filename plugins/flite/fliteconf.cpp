@@ -89,10 +89,10 @@ void FliteConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("Flite");
     config->writePathEntry("FliteExePath", 
-        KStandardDirs::realFilePath(m_widget->flitePath->url()));
+        realFilePath(m_widget->flitePath->url()));
     config->setGroup(configGroup);
     config->writePathEntry("FliteExePath",
-        KStandardDirs::realFilePath(m_widget->flitePath->url()));
+        realFilePath(m_widget->flitePath->url()));
 }
 
 void FliteConf::defaults(){
@@ -107,7 +107,7 @@ void FliteConf::setDesiredLanguage(const QString &lang)
 
 QString FliteConf::getTalkerCode()
 {
-    QString fliteExe = KStandardDirs::realFilePath(m_widget->flitePath->url());
+    QString fliteExe = realFilePath(m_widget->flitePath->url());
     if (!fliteExe.isEmpty())
     {
         if (!getLocation(fliteExe).isEmpty())
@@ -156,7 +156,7 @@ void FliteConf::slotFliteTest_clicked()
     m_fliteProc->synth(
         "K D E is a modern graphical desktop for Unix computers.",
         tmpWaveFile,
-        KStandardDirs::realFilePath(m_widget->flitePath->url()));
+        realFilePath(m_widget->flitePath->url()));
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.

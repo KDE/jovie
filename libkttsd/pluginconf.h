@@ -316,6 +316,8 @@ class PlugInConf : public QWidget{
         */
         virtual QStringList getSupportedLanguages();
 
+        static QString realFilePath(const QString &filename);
+
     public slots:
         /**
         * This slot is used internally when the configuration is changed.  It is
