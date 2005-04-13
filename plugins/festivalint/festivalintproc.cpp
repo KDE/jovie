@@ -485,19 +485,24 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     {
         // Look for opening ( and closing ).
         buf.simplifyWhiteSpace();
-        if (buf.left(1) == "(")
-        {
-            int rightParen = buf.find(')');
-            if (rightParen > 0)
-            {
-                m_waitingQueryVoices = false;
-                // Extract contents between parens.
-                buf = buf.mid(1, rightParen - 1);
-                // Space separated list.
-                voiceCodesList = QStringList::split(" ", buf, false);
-                emitQueryVoicesFinished = true;
-            }
-        }
+		if (buf.left(3) == "nil") {
+			emitQueryVoicesFinished = true;
+			m_waitingQueryVoices = false;
+		} else {
+			if (buf.left(1) == "(")
+			{
+				int rightParen = buf.find(')');
+				if (rightParen > 0)
+				{
+					m_waitingQueryVoices = false;
+					// Extract contents between parens.
+					buf = buf.mid(1, rightParen - 1);
+					// Space separated list.
+					voiceCodesList = QStringList::split(" ", buf, false);
+					emitQueryVoicesFinished = true;
+				}
+			}
+		}
     }
     if (promptSeen)
     {
