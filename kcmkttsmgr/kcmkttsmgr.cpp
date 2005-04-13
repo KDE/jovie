@@ -2376,7 +2376,7 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
         eventName = NotifyEvent::getEventName(eventSrc, event);
     QString actionName = NotifyAction::actionName( action );
     QString actionDisplayName = NotifyAction::actionDisplayName( action );
-    if (action == NotifyAction::SpeakCustom) actionName = "\"" + message + "\"";
+    if (action == NotifyAction::SpeakCustom) actionDisplayName = "\"" + message + "\"";
     QString talkerName = talkerCode.getTranslatedDescription();
     if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
     {
