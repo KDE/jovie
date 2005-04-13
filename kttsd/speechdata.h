@@ -80,6 +80,26 @@ struct PooledFilterMgr {
 };
 
 /**
+ * Struct used to keep notification options.
+ */
+struct NotifyOptions {
+    QString eventName;
+    int action;
+    QString talker;
+    QString customMsg;
+};
+
+/**
+ * A list of notification options for a single app, indexed by event.
+ */
+typedef QMap<QString, NotifyOptions> NotifyEventMap;
+
+/**
+ * A list of notification event maps for all apps, indexed by app.
+ */
+typedef QMap<QString, NotifyEventMap> NotifyAppMap;
+
+/**
  * SpeechData class which is in charge of maintaining all the data on the memory.
  * It maintains queues and has methods to enque
  * messages and warnings and manage the text queues.
@@ -526,19 +546,13 @@ class SpeechData : public QObject {
         QString keepAudioPath;
 
         /**
-        * Notify.
+        * Notification settings.
         */
         bool notify;
-
-        /**
-        * Notify popups only.
-        */
-        bool notifyPopupsOnly;
-
-        /**
-        * Notify passive popups only.
-        */
-        bool notifyPassivePopupsOnly;
+        bool notifyExcludeEventsWithSound;
+        NotifyAppMap notifyAppMap;
+        int notifyDefaultPresent;
+        NotifyOptions notifyDefaultOptions;
 
         /**
         * Automatically start KTTSMgr whenever speaking.
@@ -697,6 +711,11 @@ class SpeechData : public QObject {
         * As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
         */
         void doFiltering();
+
+        /**
+        * Loads notify events from a file.  Clearing data if clear is True.
+        */
+        void loadNotifyEventsFromFile( const QString& filename, bool clear);
 
     private slots:
         void slotFilterMgrFinished();

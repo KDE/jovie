@@ -40,6 +40,7 @@
 TalkerMgr::TalkerMgr(QObject *parent, const char *name) :
     QObject( parent, name )
 {
+    m_loadedPlugIns.setAutoDelete(true);
 }
 
 /**
@@ -47,8 +48,6 @@ TalkerMgr::TalkerMgr(QObject *parent, const char *name) :
  */
 TalkerMgr::~TalkerMgr()
 {
-    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
-        delete m_loadedPlugIns[ndx].plugIn;
     m_loadedPlugIns.clear();
 }
 
@@ -62,9 +61,9 @@ int TalkerMgr::loadPlugIns(KConfig* config)
     int bad = 0;
 
     m_talkerToPlugInCache.clear();
-    for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
-        delete m_loadedPlugIns[ndx].plugIn;
     m_loadedPlugIns.clear();
+    m_loadedTalkerCodes.clear();
+    m_loadedTalkerIds.clear();
 
     config->setGroup("General");
     QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
@@ -94,7 +93,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             {
                 QString synthName = config->readEntry("PlugIn", QString::null);
                 // See if the translated name will untranslate.  If not, well, sorry.
-                desktopEntryName = TalkerNameToDesktopEntryName(synthName);
+                desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
                 if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
             }
@@ -127,15 +126,11 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                         kdDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
                         bad++;
                     } else {
-                        TalkerInfo talkerInfo;
-                        talkerInfo.talkerID = talkerID;
-                        talkerInfo.talkerCode = talkerCode;
-                        talkerInfo.parsedTalkerCode = TalkerCode(talkerCode);
                         if (speech->supportsAsync())
                         {
                             speech->init(config, "Talker_" + talkerID);
                             // kdDebug() << "Plug in " << desktopEntryName << " created successfully." << endl;
-                            talkerInfo.plugIn = speech;
+                            m_loadedPlugIns.append(speech);
                         } else {
                             // Synchronous plugins are run in a separate thread.
                             // Init will start the thread and it will immediately go to sleep.
@@ -144,10 +139,11 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                                     this, threadedPlugInName.latin1());
                             speechThread->init(config, "Talker_" + talkerCode);
                             // kdDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
-                            talkerInfo.plugIn = speechThread;
+                            m_loadedPlugIns.append(speechThread);
                         }
                         good++;
-                        m_loadedPlugIns.append(talkerInfo);
+                        m_loadedTalkerCodes.append(TalkerCode(talkerCode));
+                        m_loadedTalkerIds.append(talkerID);
                     }
                 } else {
                     kdDebug() << "Couldn't create the factory object from " << offers[0]->library() << endl;
@@ -184,7 +180,7 @@ QStringList TalkerMgr::getTalkers()
     QStringList talkerList;
     for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
     {
-        talkerList.append(m_loadedPlugIns[ndx].talkerCode);
+        talkerList.append(m_loadedTalkerCodes[ndx].getTalkerCode());
     }
     return talkerList;
 }
@@ -194,11 +190,7 @@ QStringList TalkerMgr::getTalkers()
  */
 QPtrList<PlugInProc> TalkerMgr::getLoadedPlugIns()
 {
-    QPtrList<PlugInProc> plugins;
-    int loadedPlugInsCount = int(m_loadedPlugIns.count());
-    for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
-        plugins.append(m_loadedPlugIns[ndx].plugIn);
-    return plugins;
+    return m_loadedPlugIns;
 }
 
 /**
@@ -217,118 +209,8 @@ int TalkerMgr::talkerToPluginIndex(const QString& talker) const
         return m_talkerToPlugInCache[talker];
     else
     {
-        // Parse the given talker.
-        TalkerCode parsedTalkerCode(talker);
-        // If no language code specified, use the language code of the default plugin.
-        if (parsedTalkerCode.languageCode().isEmpty()) parsedTalkerCode.setLanguageCode(
-                    m_loadedPlugIns[0].parsedTalkerCode.languageCode());
-        // TODO: If there are no talkers configured in the language, %KTTSD will attempt
-        //       to automatically configure one (see automatic configuraton discussion below)
-        // The talker that matches on the most priority attributes wins.
-        int loadedPlugInsCount = int(m_loadedPlugIns.count());
-        QMemArray<int> priorityMatch(loadedPlugInsCount);
-        for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
-        {
-            priorityMatch[ndx] = 0;
-            // kdDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
-            if (parsedTalkerCode.languageCode() == m_loadedPlugIns[ndx].parsedTalkerCode.languageCode())
-            {
-                priorityMatch[ndx]++;
-                // kdDebug() << "TalkerMgr::talkerToPluginIndex: Match on language " << parsedTalkerCode.languageCode() << endl;
-            }
-            if (parsedTalkerCode.countryCode().left(1) == "*")
-                if (parsedTalkerCode.countryCode().mid(1) ==
-                    m_loadedPlugIns[ndx].parsedTalkerCode.countryCode())
-                    priorityMatch[ndx]++;
-            if (parsedTalkerCode.voice().left(1) == "*")
-                if (parsedTalkerCode.voice().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.voice())
-                    priorityMatch[ndx]++;
-            if (parsedTalkerCode.gender().left(1) == "*")
-                if (parsedTalkerCode.gender().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.gender())
-                    priorityMatch[ndx]++;
-            if (parsedTalkerCode.volume().left(1) == "*")
-                if (parsedTalkerCode.volume().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.volume())
-                    priorityMatch[ndx]++;
-            if (parsedTalkerCode.rate().left(1) == "*")
-                if (parsedTalkerCode.rate().mid(1) == m_loadedPlugIns[ndx].parsedTalkerCode.rate())
-                    priorityMatch[ndx]++;
-            if (parsedTalkerCode.plugInName().left(1) == "*")
-                if (parsedTalkerCode.plugInName().mid(1) ==
-                    m_loadedPlugIns[ndx].parsedTalkerCode.plugInName())
-                    priorityMatch[ndx]++;
-        }
-        int maxPriority = -1;
-        for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
-        {
-            if (priorityMatch[ndx] > maxPriority) maxPriority = priorityMatch[ndx];
-        }
-        int winnerCount = 0;
-        int winner = -1;
-        for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
-        {
-            if (priorityMatch[ndx] == maxPriority)
-            {
-                winnerCount++;
-                winner = ndx;
-            }
-        }
-        // kdDebug() << "TalkerMgr::talkerToPluginIndex: winnerCount = " << winnerCount << " winner = " << winner << endl;
-        // If a tie, the one that matches on the most preferred attributes wins.
-        // If there is still a tie, the one nearest the top of the kttsmgr display
-        // (first configured) will be chosen.
-        if (winnerCount > 1)
-        {
-            QMemArray<int> preferredMatch(loadedPlugInsCount);
-            for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
-            {
-                preferredMatch[ndx] = 0;
-                if (priorityMatch[ndx] == maxPriority)
-                {
-                    if (parsedTalkerCode.countryCode().left(1) != "*")
-                        if (parsedTalkerCode.countryCode() == m_loadedPlugIns[ndx].parsedTalkerCode.countryCode())
-                            preferredMatch[ndx]++;
-                    if (parsedTalkerCode.voice().left(1) != "*")
-                        if (parsedTalkerCode.voice() == m_loadedPlugIns[ndx].parsedTalkerCode.voice())
-                            preferredMatch[ndx]++;
-                    if (parsedTalkerCode.gender().left(1) != "*")
-                        if (parsedTalkerCode.gender() == m_loadedPlugIns[ndx].parsedTalkerCode.gender())
-                            preferredMatch[ndx]++;
-                    if (parsedTalkerCode.volume().left(1) != "*")
-                        if (parsedTalkerCode.volume() == m_loadedPlugIns[ndx].parsedTalkerCode.volume())
-                            preferredMatch[ndx]++;
-                    if (parsedTalkerCode.rate().left(1) != "*")
-                        if (parsedTalkerCode.rate() == m_loadedPlugIns[ndx].parsedTalkerCode.rate())
-                            preferredMatch[ndx]++;
-                    if (parsedTalkerCode.plugInName().left(1) != "*")
-                        if (parsedTalkerCode.plugInName() ==
-                            m_loadedPlugIns[ndx].parsedTalkerCode.plugInName())
-                            preferredMatch[ndx]++;
-                }
-            }
-            int maxPreferred = -1;
-            for (int ndx = 0; ndx < loadedPlugInsCount; ++ndx)
-            {
-                if (preferredMatch[ndx] > maxPreferred) maxPreferred = preferredMatch[ndx];
-            }
-            winner = -1;
-            for (int ndx = loadedPlugInsCount-1; ndx >= 0; ndx--)
-            {
-                if (priorityMatch[ndx] == maxPriority)
-                {
-                    if (preferredMatch[ndx] == maxPreferred)
-                    {
-                        winner = ndx;
-                    }
-                }
-            }
-        }
-        // If no winner found, use the first plugin.
-        if (winner < 0) winner = 0;
-        // Cache the answer. 
-        // FIXME this is really ugly but needed at the moment (because of const)
-        // The best thing to do would be to emit a signal that lets us know to cache this talker.
-        const_cast<TalkerMgr*>(this)->m_talkerToPlugInCache[talker] = winner;
-        // kdDebug() << "TalkerMgr::talkerToPluginIndex: returning winner = " << winner << endl;
+        int winner = TalkerCode::findClosestMatchingTalker(m_loadedTalkerCodes, talker, true);
+        m_talkerToPlugInCache[talker] = winner;
         return winner;
     }
 }
@@ -349,7 +231,7 @@ int TalkerMgr::talkerToPluginIndex(const QString& talker) const
 PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker) const
 {
     int talkerNdx = talkerToPluginIndex(talker);
-    return m_loadedPlugIns[talkerNdx].plugIn;
+    return const_cast< QPtrList<PlugInProc>* >(&m_loadedPlugIns)->at(talkerNdx);
 }
 
 /**
@@ -370,7 +252,7 @@ PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker) const
 TalkerCode* TalkerMgr::talkerToTalkerCode(const QString& talker)
 {
     int talkerNdx = talkerToPluginIndex(talker);
-    return new TalkerCode(&m_loadedPlugIns[talkerNdx].parsedTalkerCode);
+    return new TalkerCode(&m_loadedTalkerCodes[talkerNdx]);
 }
 
 /**
@@ -382,7 +264,7 @@ TalkerCode* TalkerMgr::talkerToTalkerCode(const QString& talker)
 QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
 {
     int talkerNdx = talkerToPluginIndex(talkerCode);
-    return m_loadedPlugIns[talkerNdx].talkerID;
+    return m_loadedTalkerIds[talkerNdx];
 }
 
 /**
@@ -394,7 +276,7 @@ QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
  */
 QString TalkerMgr::userDefaultTalker() const
 {
-    return m_loadedPlugIns[0].talkerCode;
+    return m_loadedTalkerCodes[0].getTalkerCode();
 }
 
 /**
@@ -414,24 +296,6 @@ bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/)
     PlugInProc* plugin = talkerToPlugin(matchingTalker);
     return ( plugin->getSsmlXsltFilename() !=
             KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl");
-}
-
-/**
- * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
- * @param name                   The translated plugin name.  From Name= line in .desktop file.
- * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
- *                               QString::null if not found.
- */
-QString TalkerMgr::TalkerNameToDesktopEntryName(const QString& name)
-{
-    if (name.isEmpty()) return QString::null;
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-    QString("Name == '%1'").arg(name));
-
-    if (offers.count() == 1)
-        return offers[0]->desktopEntryName();
-    else
-        return QString::null;
 }
 
 bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)

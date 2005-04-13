@@ -93,7 +93,7 @@ protected:
     * @param jobNum         Job number of the text job.
     * @param seq            Sequence number of the text.
     * @see getTextCount
-    */        
+    */
     ASYNC sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
 
     /**
@@ -185,7 +185,7 @@ private:
     {
         jlvcJobNum = 0,               /**< Job Number. */
         jlvcOwner = 1,                /**< AppId of job owner */
-        jlvcTalker = 2,               /**< Job Talker Code (as specified by application) */
+        jlvcTalkerID = 2,             /**< Job Talker ID */
         jlvcState = 3,                /**< Job State */
         jlvcPosition = 4,             /**< Current sentence of job. */
         jlvcSentences = 5,            /**< Number of sentences in job. */
@@ -194,59 +194,11 @@ private:
     };
 
     /**
-    * Columns in the listview when selecting a talker.
-    */
-    enum TalkerListViewColumn
-    {
-        tlvcLanguage,
-        tlvcSynthName,
-        tlvcVoice,
-        tlvcGender,
-        tlvcVolume,
-        tlvcRate,
-    };
-
-    /**
     * Convert a KTTSD job state integer into a display string.
     * @param state          KTTSD job state
     * @return               Display string for the state.
     */
     QString stateToStr(int state);
-
-    /**
-    * Translates Talker Code attributes to displayable translated strings.
-    */
-    QString translatedGender(const QString &gender);
-    QString translatedVolume(const QString &volume);
-    QString translatedRate(const QString &rate);
-
-    /**
-     * Given a talker code, parses out the attributes.
-     * @param talkerCode       The talker code.
-     * @return languageCode    Language Code.
-     * @return voice           Voice name.
-     * @return gender          Gender.
-     * @return volume          Volume.
-     * @return rate            Rate.
-     * @return plugInName      Name of Synthesizer.
-     */
-    void parseTalkerCode(const QString &talkerCode,
-        QString &languageCode,
-        QString &voice,
-        QString &gender,
-        QString &volume,
-        QString &rate,
-        QString &plugInName);
-
-    /**
-    * Converts a language code plus optional country code to language description.
-    */
-    QString languageCodeToLanguage(const QString &languageCode);
-
-    /**
-    * Convert a Talker Code to a translated, displayable name.
-    */
-    QString talkerCodeToDisplayName(const QString &talkerCode);
 
     /**
     * Get the Job Number of the currently-selected job in the Job List View.
@@ -306,14 +258,7 @@ private:
     QString cachedTalkerCodeToTalkerID(const QString& talkerCode);
 
     /**
-    * Given a talker listview item and a talker code, sets the columns of the item.
-    * @param talkerItem       QListViewItem.
-    * @param talkerCode       Talker Code.
-    */
-    void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
-
-    /**
-    * Job List View
+    * Job ListView.
     */
     KListView* m_jobListView;
     KttsJobMgrBrowserExtension *m_extension;

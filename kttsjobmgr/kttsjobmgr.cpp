@@ -2,7 +2,7 @@
   A KPart to display running jobs in KTTSD and permit user to stop, rewind,
   advance, change Talker, etc. 
   -------------------
-  Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2004,2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
  ******************************************************************************/
@@ -39,7 +39,7 @@
 // KTTS includes.
 #include "kspeech.h"
 #include "talkercode.h"
-#include "selecttalkerwidget.h"
+#include "selecttalkerdlg.h"
 #include "kttsjobmgr.h"
 #include "kttsjobmgr.moc"
 
@@ -472,6 +472,7 @@ void KttsJobMgrPart::slot_job_remove()
     if (jobNum)
     {
         removeText(jobNum);
+        m_currentSentence->clear();
     }
 }
 
@@ -488,168 +489,23 @@ void KttsJobMgrPart::slot_job_move()
     }
 }
 
-QString KttsJobMgrPart::translatedGender(const QString &gender)
-{
-    if (gender == "male")
-        return i18n("male");
-    else if (gender == "female")
-        return i18n("female");
-    else if (gender == "neutral")
-        return i18n("neutral gender", "neutral");
-    else return gender;
-}
-
-QString KttsJobMgrPart::translatedVolume(const QString &volume)
-{
-    if (volume == "medium")
-        return i18n("medium sound", "medium");
-    else if (volume == "loud")
-        return i18n("loud sound", "loud");
-    else if (volume == "soft")
-        return i18n("soft sound", "soft");
-    else return volume;
-}
-
-QString KttsJobMgrPart::translatedRate(const QString &rate)
-{
-    if (rate == "medium")
-        return i18n("medium speed", "medium");
-    else if (rate == "fast")
-        return i18n("fast speed", "fast");
-    else if (rate == "slow")
-        return i18n("slow speed", "slow");
-    else return rate;
-}
-
-/**
- * Given a talker code, parses out the attributes.
- * @param talkerCode       The talker code.
- * @return languageCode    Language Code.
- * @return voice           Voice name.
- * @return gender          Gender.
- * @return volume          Volume.
- * @return rate            Rate.
- * @return plugInName      Name of Synthesizer plugin.
- */
-void KttsJobMgrPart::parseTalkerCode(const QString &talkerCode,
-    QString &languageCode,
-    QString &voice,
-    QString &gender,
-    QString &volume,
-    QString &rate,
-    QString &plugInName)
-{
-    languageCode = talkerCode.section("lang=", 1, 1);
-    languageCode = languageCode.section('"', 1, 1);
-    voice = talkerCode.section("name=", 1, 1);
-    voice = voice.section('"', 1, 1);
-    gender = talkerCode.section("gender=", 1, 1);
-    gender = gender.section('"', 1, 1);
-    volume = talkerCode.section("volume=", 1, 1);
-    volume = volume.section('"', 1, 1);
-    rate = talkerCode.section("rate=", 1, 1);
-    rate = rate.section('"', 1, 1);
-    plugInName = talkerCode.section("synthesizer=", 1, 1);
-    plugInName = plugInName.section('"', 1, 1);
-}
-
-/**
- * Converts a language code plus optional country code to language description.
- */
-QString KttsJobMgrPart::languageCodeToLanguage(const QString &languageCode)
-{
-    QString twoAlpha;
-    QString countryCode;
-    QString charSet;
-    QString language;
-    if (languageCode == "other")
-        language = i18n("Other");
-    else
-    {
-        KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
-        language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
-    }
-    if (!countryCode.isEmpty())
-        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ")";
-    return language;
-}
-
-/**
-* Convert a Talker Code to a translated, displayable name.
-*/
-QString KttsJobMgrPart::talkerCodeToDisplayName(const QString &talkerCode)
-{
-    QString languageCode;
-    QString voice;
-    QString gender;
-    QString volume;
-    QString rate;
-    QString plugInName;
-    parseTalkerCode(talkerCode, languageCode, voice, gender, volume, rate, plugInName);
-    QString display;
-    if (!languageCode.isEmpty()) display = languageCodeToLanguage(languageCode);
-    if (!plugInName.isEmpty()) display += "," + plugInName;
-    if (!voice.isEmpty()) display += "," + voice;
-    if (!gender.isEmpty()) display += "," + translatedGender(gender);
-    if (!volume.isEmpty()) display += "," + translatedVolume(volume);
-    if (!rate.isEmpty()) display += "," + translatedRate(rate);
-    return display;
-}
-
 void KttsJobMgrPart::slot_job_change_talker()
 {
-    uint jobNum = getCurrentJobNum();
-    if (jobNum)
+    QListViewItem* item = m_jobListView->selectedItem();
+    if (item)
     {
-        QStringList talkerCodesList = getTalkers();
-        // Create SelectTalker widget.
-        SelectTalkerWidget* stw = new SelectTalkerWidget();
-        stw->talkersList->setSelectionMode(QListView::Single);
-        // A list of the items in the listview.
-        QValueList<QListViewItem*> talkersListItems;
-        QListViewItem* talkerItem = 0;
-        // Fill rows and columns.
-        uint talkerCodesListCount = talkerCodesList.count();
-        for (uint index = 0; index < talkerCodesListCount; index++)
-        {
-            QString code = talkerCodesList[index];
-            TalkerCode parsedTalkerCode(code);
-            QString language = parsedTalkerCode.languageCode();
-            QString synthName = parsedTalkerCode.plugInName();
-            if (talkerItem)
-                talkerItem =
-                    new KListViewItem(stw->talkersList, talkerItem, language, synthName);
-            else
-                talkerItem =
-                    new KListViewItem(stw->talkersList, language, synthName);
-            updateTalkerItem(talkerItem, code);
-            talkersListItems.append(talkerItem);
-        }
-        // Display the listview in a dialog.
-        KDialogBase* dlg = new KDialogBase(
-            KDialogBase::Swallow,
-            i18n("Select Talker"),
-            KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-            KDialogBase::Cancel,
-            widget(),
-            "selectTalker_dlg",
-            true,
-            true);
-        dlg->setInitialSize(QSize(700, 300), false);
-        dlg->setMainWidget(stw);
-        // dlg->setHelp("configure-plugin", "kttsd");
-        if (dlg->exec() == QDialog::Accepted)
-        {
-            talkerItem = stw->talkersList->selectedItem();
-            if (talkerItem)
-            {
-                uint index = talkersListItems.findIndex(talkerItem);
-                changeTextTalker(talkerCodesList[index], jobNum);
-                refreshJob(jobNum);
-            }
-        }
-        delete stw;
-        delete dlg;
+        QString talkerID = item->text(jlvcTalkerID);
+        QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
+        int ndx = talkerIDs.findIndex(talkerID);
+        QString talkerCode;
+        if (ndx >= 0) talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
+        SelectTalkerDlg dlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
+        int dlgResult = dlg.exec();
+        if (dlgResult != KDialogBase::Accepted) return;
+        talkerCode = dlg.getSelectedTalkerCode();
+        int jobNum = item->text(jlvcJobNum).toInt();
+        changeTextTalker(talkerCode, jobNum);
+        refreshJob(jobNum);
     }
 }
 
@@ -662,7 +518,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
     QString text = cb->text();
 
     // Speak it.
-    if ( !text.isNull() ) 
+    if ( !text.isNull() )
     {
         uint jobNum = setText(text, NULL);
         // kdDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
@@ -788,7 +644,7 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
     QListViewItem* item = findItemByJobNum(jobNum);
     if (item)
     {
-        item->setText(jlvcTalker, talkerID);
+        item->setText(jlvcTalkerID, talkerID);
         item->setText(jlvcState, stateToStr(state));
         item->setText(jlvcPosition, QString::number(seq));
         item->setText(jlvcSentences, QString::number(sentenceCount));
@@ -882,36 +738,6 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
         m_talkerCodesToTalkerIDs[talkerCode] = talkerID;
         return talkerID;
     }
-}
-
-/**
- * Given an item in the talker listview and a talker code, sets the columns of the item.
- * @param talkerItem       QListViewItem.
- * @param talkerCode       Talker Code.
- */
-void KttsJobMgrPart::updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode)
-{
-    TalkerCode parsedTalkerCode(talkerCode);
-    QString fullLanguageCode = parsedTalkerCode.fullLanguageCode();
-    if (!fullLanguageCode.isEmpty())
-    {
-        QString language = parsedTalkerCode.languageCodeToLanguage(fullLanguageCode);
-        if (!language.isEmpty())
-        {
-            talkerItem->setText(tlvcLanguage, language);
-        }
-    }
-    // Don't update the Synthesizer name with plugInName.  The former is a translated
-    // name; the latter an English name.
-    // if (!plugInName.isEmpty()) talkerItem->setText(tlvcSynthName, plugInName);
-    if (!parsedTalkerCode.voice().isEmpty())
-        talkerItem->setText(tlvcVoice, parsedTalkerCode.voice());
-    if (!parsedTalkerCode.gender().isEmpty())
-        talkerItem->setText(tlvcGender, translatedGender(parsedTalkerCode.gender()));
-    if (!parsedTalkerCode.volume().isEmpty())
-        talkerItem->setText(tlvcVolume, translatedVolume(parsedTalkerCode.volume()));
-    if (!parsedTalkerCode.rate().isEmpty())
-        talkerItem->setText(tlvcRate, translatedRate(parsedTalkerCode.rate()));
 }
 
 /**

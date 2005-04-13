@@ -27,7 +27,6 @@
 // Qt includes.
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluevector.h>
 #include <qmap.h>
 #include <qptrlist.h>
 
@@ -38,16 +37,6 @@
 class TalkerMgr: public QObject
 {
 public:
-
-    /**
-     * Structure containing information for a talker (plugin).
-     */
-    struct TalkerInfo{
-        PlugInProc* plugIn;                  /* Instance of the plugin, i.e., the Talker. */
-        QString talkerID;                    /* ID of the talker. */
-        QString talkerCode;                  /* The Talker's Talker Code in XML format. */
-        TalkerCode parsedTalkerCode;         /* The Talker's Talker Code parsed into individual attributes. */
-    };
 
     /**
      * Constructor.
@@ -154,22 +143,17 @@ public:
 private:
 
     /**
-     * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
-     * @param name                   The translated plugin name.  From Name= line in .desktop file.
-     * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-     *                               QString::null if not found.
-     */
-    QString TalkerNameToDesktopEntryName(const QString& name);
-
-    /**
      * Array of the loaded plug ins for different Talkers.
+     * Array of parsed Talker Codes for the plugins.
      */
-    QValueVector<TalkerInfo> m_loadedPlugIns;
+    QPtrList<PlugInProc> m_loadedPlugIns;
+    QStringList m_loadedTalkerIds;
+    TalkerCode::TalkerCodeList m_loadedTalkerCodes;
 
     /**
      * Cache of talker codes and index of closest matching Talker.
      */
-    QMap<QString,int> m_talkerToPlugInCache;
+    mutable QMap<QString,int> m_talkerToPlugInCache;
 };
 
 #endif      // _TALKERMGR_H_

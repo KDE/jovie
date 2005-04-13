@@ -22,6 +22,7 @@
 #include "kdeexportfix.h"
 
 class QString;
+class QComboBox;
 
 class KDE_EXPORT KttsUtils {
 
@@ -30,7 +31,7 @@ public:
     KttsUtils();
     /// Destructor
     ~KttsUtils();
-    
+
     /** 
      * Check if an XML document has a certain root element.
      * @param xmldoc                 The document to check for the element.
@@ -38,7 +39,7 @@ public:
      * @returns                             true if the root element exists in the document, false otherwise.
      */
     static bool hasRootElement(const QString &xmldoc, const QString &elementName);
-    
+
     /** 
      * Check if an XML document has a certain DOCTYPE.
      * @param xmldoc             The document to check for the doctype.
@@ -48,6 +49,12 @@ public:
      * @returns                         true if the parameters match the doctype, false otherwise.
      */
     static bool hasDoctype(const QString &xmldoc, const QString &name/*, const QString &publicId, const QString &systemId*/);
+
+    /**
+     * Sets the current item in the given combobox to the item with the given text.
+     * If item with the text not found, does nothing.
+     */
+    static void setCbItemFromText(QComboBox* cb, const QString& text);
 
 };
 

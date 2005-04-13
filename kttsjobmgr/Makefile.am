@@ -21,8 +21,8 @@ kspeechsink_DIR = $(KTTS_KSPEECH_DIR)
 # The source, library search path, and link libraries.
 libkttsjobmgrpart_la_SOURCES = \
 	kspeech.stub kspeechsink.skel \
-	kttsjobmgr.cpp \
-	selecttalkerwidget.ui
+	kttsjobmgr.cpp
+
 libkttsjobmgrpart_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries) $(KDE_PLUGIN)
 libkttsjobmgrpart_la_LIBADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \

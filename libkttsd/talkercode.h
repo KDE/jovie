@@ -30,6 +30,7 @@
 #include <qstring.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
+#include <qvaluelist.h>
 
 class KDE_EXPORT TalkerCode
 {
@@ -48,6 +49,8 @@ class KDE_EXPORT TalkerCode
          */
         ~TalkerCode();
 
+        typedef QValueList<TalkerCode> TalkerCodeList;
+
         /**
          * Properties.
          */
@@ -62,7 +65,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Returns the language code plus country code (if any).
          */
-        QString fullLanguageCode();
+        QString fullLanguageCode() const;
 
         void setLanguageCode(const QString &languageCode);
         void setCountryCode(const QString &countryCode);
@@ -80,7 +83,12 @@ class KDE_EXPORT TalkerCode
         /**
          * The Talker Code returned in XML format.
          */
-        QString getTalkerCode();
+        QString getTalkerCode() const;
+
+        /**
+         * The Talker Code translated for display.
+         */
+        QString getTranslatedDescription() const;
 
         /**
          * Normalizes the Talker Code by filling in defaults.
@@ -135,6 +143,40 @@ class KDE_EXPORT TalkerCode
         static QString untranslatedGender(const QString &gender);
         static QString untranslatedVolume(const QString &volume);
         static QString untranslatedRate(const QString &rate);
+
+        /**
+         * Given a list of parsed talker codes and a desired talker code, finds the closest
+         * matching talker in the list.
+         * @param talkers                       The list of parsed talker codes.
+         * @param talker                        The desired talker code.
+         * @param assumeDefaultLang             If true, and desired talker code lacks a language code,
+         *                                      the default language is assumed.
+         * @return                              Index into talkers of the closest matching talker.
+         */
+        static int findClosestMatchingTalker(
+            const TalkerCodeList& talkers,
+            const QString& talker,
+            bool assumeDefaultLang = true);
+
+        /**
+         * Strips leading * from a code.
+         */
+        static QString stripPrefer( const QString& code, bool& preferred);
+
+        /**
+        * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
+        * @param name                   The translated plugin name.  From Name= line in .desktop file.
+        * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+        *                               QString::null if not found.
+        */
+        static QString TalkerNameToDesktopEntryName(const QString& name);
+
+        /**
+        * Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
+        * @param desktopEntryName       The DesktopEntryName.
+        * @return                       The translated Name of the plugin, from Name= line in .desktop file.
+        */
+        static QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
 
     private:
         /**

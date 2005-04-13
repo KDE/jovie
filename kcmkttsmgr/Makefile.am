@@ -21,11 +21,15 @@ kspeechsink_DIR = $(KTTS_KSPEECH_DIR)
 
 # The source, library search path, and link libraries.
 kcm_kttsd_la_SOURCES = \
-	kspeech.stub kspeechsink.skel \
+	kspeech.stub \
+	kspeechsink.skel \
 	kcmkttsmgr.cpp \
 	kcmkttsmgrwidget.ui \
 	addtalker.cpp \
-	addtalkerwidget.ui
+	addtalkerwidget.ui \
+	selectevent.cpp \
+	selecteventwidget.ui
+
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
 kcm_kttsd_la_LIBADD = \
 	$(top_builddir)/kttsd/libkttsd/libkttsd.la \
@@ -36,7 +40,8 @@ noinst_HEADERS = \
 	kcmkttsmgr.h \
 	kcmkttsmgrwidget.h \
 	kcmkttsmgrwidget.ui.h \
-	addtalker.h
+	addtalker.h \
+	selectevent.h
 
 # K Menu entry.
 xdg_apps_DATA = kcmkttsd.desktop

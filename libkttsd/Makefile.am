@@ -1,5 +1,4 @@
-# Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
-# so keep them synchronized.
+# Include paths.
 INCLUDES = $(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
@@ -21,7 +20,10 @@ libkttsd_la_SOURCES = \
 	talkercode.cpp \
 	filterproc.cpp \
 	filterconf.cpp \
-	utils.cpp
+	utils.cpp \
+	selecttalkerwidget.ui \
+	selecttalkerdlg.cpp \
+	notify.cpp
 
 libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
 libkttsd_la_LIBADD = $(LIB_KIO)
@@ -35,7 +37,8 @@ noinst_HEADERS = \
 	stretcher.h \
 	talkercode.h \
 	utils.h \
-	kdeexportfix.h
+	kdeexportfix.h \
+	selecttalkerdlg.h
 
 # This library is installed as a service.
 servicetypes_DATA = kttsd_synthplugin.desktop

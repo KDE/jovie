@@ -33,6 +33,7 @@
 #include <qslider.h>
 #include <qlabel.h>
 #include <qpopupmenu.h>
+#include <qbuttongroup.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -50,6 +51,7 @@
 #include <kcombobox.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 
 // KTTS includes.
 #include "talkercode.h"
@@ -57,6 +59,10 @@
 #include "filterconf.h"
 #include "testplayer.h"
 #include "player.h"
+#include "selecttalkerdlg.h"
+#include "selectevent.h"
+#include "notify.h"
+#include "utils.h"
 
 // KCMKttsMgr includes.
 #include "kcmkttsmgr.h"
@@ -64,15 +70,14 @@
 
 // Some constants.
 // Defaults set when clicking Defaults button.
-const bool enableNotifyCheckBoxValue = false;
-const bool enablePopupsOnlyCheckBoxValue = true;
-const bool enablePassiveOnlyCheckBoxValue = false;
-
 const bool embedInSysTrayCheckBoxValue = true;
 const bool showMainWindowOnStartupCheckBoxValue = true;
 
 const bool autostartMgrCheckBoxValue = true;
 const bool autoexitMgrCheckBoxValue = true;
+
+const bool notifyEnableCheckBoxValue = false;
+const bool notifyExcludeEventsWithSoundCheckBoxValue = true;
 
 const bool textPreMsgCheckValue = true;
 const QString textPreMsgValue = i18n("Text interrupted. Message.");
@@ -137,6 +142,19 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
     m_kttsmgrw->configureFilterButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
+
+    // Notify tab.
+    m_kttsmgrw->notifyActionComboBox->clear();
+    for (int ndx = 0; ndx < NotifyAction::count(); ++ndx)
+        m_kttsmgrw->notifyActionComboBox->insertItem( NotifyAction::actionDisplayName( ndx ) );
+    m_kttsmgrw->notifyPresentComboBox->clear();
+    for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
+        m_kttsmgrw->notifyPresentComboBox->insertItem( NotifyPresent::presentDisplayName( ndx ) );
+
+    m_kttsmgrw->notifyRemoveButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+    m_kttsmgrw->notifyTestButton->setIconSet(
+            KGlobal::iconLoader()->loadIconSet("speak", KIcon::Small));
 
     m_kttsmgrw->sinkComboBox->setEditable(false);
 
@@ -229,8 +247,34 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // General tab.
     connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(enableKttsdToggled(bool)));
-    connect(m_kttsmgrw->enableNotifyCheckBox, SIGNAL(toggled(bool)),
-            SLOT(slotEnableNotifyCheckBoxToggled(bool)));
+
+    // Notify tab.
+    connect(m_kttsmgrw->notifyEnableCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotNotifyEnableCheckBox_toggled(bool)));
+    connect(m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(configChanged()));
+    connect(m_kttsmgrw->notifyAddButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyAddButton_clicked()));
+    connect(m_kttsmgrw->notifyRemoveButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyRemoveButton_clicked()));
+    connect(m_kttsmgrw->notifyClearButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyClearButton_clicked()));
+    connect(m_kttsmgrw->notifyLoadButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyLoadButton_clicked()));
+    connect(m_kttsmgrw->notifySaveButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifySaveButton_clicked()));
+    connect(m_kttsmgrw->notifyListView, SIGNAL(selectionChanged()),
+            this, SLOT(slotNotifyListView_selectionChanged()));
+    connect(m_kttsmgrw->notifyPresentComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotNotifyPresentComboBox_activated(int)));
+    connect(m_kttsmgrw->notifyActionComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotNotifyActionComboBox_activated(int)));
+    connect(m_kttsmgrw->notifyTestButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyTestButton_clicked()));
+    connect(m_kttsmgrw->notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotNotifyMsgLineEdit_textChanged(const QString&)));
+    connect(m_kttsmgrw->notifyTalkerButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyTalkerButton_clicked()));
 
     // Others.
     connect(m_kttsmgrw, SIGNAL( configChanged() ),
@@ -322,12 +366,19 @@ void KCMKttsMgr::load()
     m_kttsmgrw->autoexitMgrCheckBox->setChecked(m_config->readBoolEntry("AutoExitManager", true));
 
     // Notification settings.
-    m_kttsmgrw->enableNotifyCheckBox->setChecked(m_config->readBoolEntry("Notify",
-        m_kttsmgrw->enableNotifyCheckBox->isChecked()));
-    m_kttsmgrw->enablePopupsOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPopupsOnly",
-        m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked()));
-    m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(m_config->readBoolEntry("NotifyPassivePopupsOnly",
-        m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked()));
+    m_kttsmgrw->notifyEnableCheckBox->setChecked(m_config->readBoolEntry("Notify",
+        m_kttsmgrw->notifyEnableCheckBox->isChecked()));
+    m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->setChecked(
+        m_config->readBoolEntry("ExcludeEventsWithSound",
+        m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->isChecked()));
+    slotNotifyClearButton_clicked();
+    loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
+    slotNotifyEnableCheckBox_toggled( m_kttsmgrw->notifyEnableCheckBox->isChecked() );
+    // Auto-expand and position on the Default item.
+    QListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
+    if ( item )
+        if ( item->childCount() > 0 ) item = item->firstChild();
+    if ( item ) m_kttsmgrw->notifyListView->ensureItemVisible( item );
 
     // Audio Output.
     int audioOutputMethod = 0;
@@ -387,20 +438,20 @@ void KCMKttsMgr::load()
             {
                 synthName = m_config->readEntry("PlugIn", QString::null);
                 // See if the translated name will untranslate.  If not, well, sorry.
-                desktopEntryName = TalkerNameToDesktopEntryName(synthName);
+                desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
                 if (!desktopEntryName.isEmpty()) m_config->writeEntry("DesktopEntryName", desktopEntryName);
             }
-            synthName = TalkerDesktopEntryNameToName(desktopEntryName);
+            synthName = TalkerCode::TalkerDesktopEntryNameToName(desktopEntryName);
             if (!synthName.isEmpty())
             {
                 // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
                 if (talkerItem)
-                    talkerItem =
-                        new KListViewItem(m_kttsmgrw->talkersList, talkerItem, talkerID, language, synthName);
+                    talkerItem = new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
+                        talkerID, language, synthName);
                 else
-                    talkerItem =
-                        new KListViewItem(m_kttsmgrw->talkersList, talkerID, language, synthName);
+                    talkerItem = new KListViewItem(m_kttsmgrw->talkersList,
+                        talkerID, language, synthName);
                 updateTalkerItem(talkerItem, talkerCode);
                 m_languagesToCodes[language] = fullLanguageCode;
                 if (talkerID.toInt() > m_lastTalkerID) m_lastTalkerID = talkerID.toInt();
@@ -586,20 +637,16 @@ void KCMKttsMgr::load()
         enableKttsdToggled(false);
     }
 
-    // Enable/disable Notifications box based on Enable KTTSD checkbox.
-    m_kttsmgrw->enablePopupsOnlyCheckBox->setEnabled(m_kttsmgrw->enableNotifyCheckBox->isChecked());
-    m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked());
-    m_kttsmgrw->notifyGroupBox->setEnabled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
-
     // Enable ShowMainWindowOnStartup checkbox based on EmbedInSysTray checkbox.
     m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(
         m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
 
     // GStreamer settings.
     m_config->setGroup("GStreamerPlayer");
-    m_kttsmgrw->sinkComboBox->setCurrentText(m_config->readEntry("SinkName", "osssink"));
+    KttsUtils::setCbItemFromText(m_kttsmgrw->sinkComboBox, m_config->readEntry("SinkName", "osssink"));
 
     // Update controls based on new states.
+    slotNotifyListView_selectionChanged();
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
@@ -663,9 +710,10 @@ void KCMKttsMgr::save()
     m_config->writeEntry("EnableKttsd", m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
     // Notification settings.
-    m_config->writeEntry("Notify", m_kttsmgrw->enableNotifyCheckBox->isChecked());
-    m_config->writeEntry("NotifyPopupsOnly", m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked());
-    m_config->writeEntry("NotifyPassivePopupsOnly", m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked());
+    m_config->writeEntry("Notify", m_kttsmgrw->notifyEnableCheckBox->isChecked());
+    m_config->writeEntry("ExcludeEventsWithSound",
+        m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->isChecked());
+    saveNotifyEventsToFile( locateLocal("config", "kttsd_notifyevents.xml") );
 
     // Audio Output.
     int audioOutputMethod = 0;
@@ -749,10 +797,7 @@ void KCMKttsMgr::save()
 
     // If we automatically unchecked the Enable KTTSD checkbox, stop KTTSD.
     if (enableKttsdWasToggled)
-    {
         enableKttsdToggled(false);
-        m_kttsmgrw->notifyGroupBox->setEnabled(false);
-    }
     else
     {
         // If KTTSD is running, reinitialize it.
@@ -796,21 +841,6 @@ void KCMKttsMgr::defaults() {
     switch (currentPageIndex)
     {
         case wpGeneral:
-            if (m_kttsmgrw->enableNotifyCheckBox->isChecked() != enableNotifyCheckBoxValue)
-            {
-                changed = true;
-                m_kttsmgrw->enableNotifyCheckBox->setChecked(enableNotifyCheckBoxValue);
-            }
-            if (m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked() != enablePopupsOnlyCheckBoxValue)
-            {
-                changed = true;
-                m_kttsmgrw->enablePopupsOnlyCheckBox->setChecked(enablePopupsOnlyCheckBoxValue);
-            }
-            if (m_kttsmgrw->enablePassiveOnlyCheckBox->isChecked() != enablePassiveOnlyCheckBoxValue)
-            {
-                changed = true;
-                m_kttsmgrw->enablePassiveOnlyCheckBox->setChecked(enablePassiveOnlyCheckBoxValue);
-            }
             if (m_kttsmgrw->embedInSysTrayCheckBox->isChecked() != embedInSysTrayCheckBoxValue)
             {
                 changed = true;
@@ -834,6 +864,22 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 m_kttsmgrw->autoexitMgrCheckBox->setChecked(
                     autoexitMgrCheckBoxValue);
+            }
+            break;
+
+        case wpNotify:
+            if (m_kttsmgrw->notifyEnableCheckBox->isChecked() != notifyEnableCheckBoxValue)
+            {
+                changed = true;
+                m_kttsmgrw->notifyEnableCheckBox->setChecked(notifyEnableCheckBoxValue);
+                m_kttsmgrw->notifyGroup->setChecked( notifyEnableCheckBoxValue );
+            }
+            if (m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->isChecked() !=
+                notifyExcludeEventsWithSoundCheckBoxValue )
+            {
+                changed = true;
+                m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->setChecked(
+                    notifyExcludeEventsWithSoundCheckBoxValue );
             }
             break;
 
@@ -1042,39 +1088,6 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
     return NULL;
 }
 
-QString KCMKttsMgr::translatedGender(const QString &gender)
-{
-    if (gender == "male")
-        return i18n("male");
-    else if (gender == "female")
-        return i18n("female");
-    else if (gender == "neutral")
-        return i18n("neutral gender", "neutral");
-    else return gender;
-}
-
-QString KCMKttsMgr::translatedVolume(const QString &volume)
-{
-    if (volume == "medium")
-        return i18n("medium sound", "medium");
-    else if (volume == "loud")
-        return i18n("loud sound", "loud");
-    else if (volume == "soft")
-        return i18n("soft sound", "soft");
-    else return volume;
-}
-
-QString KCMKttsMgr::translatedRate(const QString &rate)
-{
-    if (rate == "medium")
-        return i18n("medium speed", "medium");
-    else if (rate == "fast")
-        return i18n("fast speed", "fast");
-    else if (rate == "slow")
-        return i18n("slow speed", "slow");
-    else return rate;
-}
-
 /**
 * Given an item in the talker listview and a talker code, sets the columns of the item.
 * @param talkerItem       QListViewItem.
@@ -1099,11 +1112,11 @@ void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talk
     if (!parsedTalkerCode.voice().isEmpty())
         talkerItem->setText(tlvcVoice, parsedTalkerCode.voice());
     if (!parsedTalkerCode.gender().isEmpty())
-        talkerItem->setText(tlvcGender, translatedGender(parsedTalkerCode.gender()));
+        talkerItem->setText(tlvcGender, TalkerCode::translatedGender(parsedTalkerCode.gender()));
     if (!parsedTalkerCode.volume().isEmpty())
-        talkerItem->setText(tlvcVolume, translatedVolume(parsedTalkerCode.volume()));
+        talkerItem->setText(tlvcVolume, TalkerCode::translatedVolume(parsedTalkerCode.volume()));
     if (!parsedTalkerCode.rate().isEmpty())
-        talkerItem->setText(tlvcRate, translatedRate(parsedTalkerCode.rate()));
+        talkerItem->setText(tlvcRate, TalkerCode::translatedRate(parsedTalkerCode.rate()));
 }
 
 /**
@@ -1148,10 +1161,7 @@ void KCMKttsMgr::slot_addTalker()
         for (int ndx=0; ndx < allLocalesCount; ndx++)
         {
             locale = allLocales[ndx];
-            KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);
-            language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
-            if (!countryCode.isEmpty()) language +=
-                        " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
+            language = TalkerCode::languageCodeToLanguage(locale);
             new KListViewItem(langLView, language, locale);
         }
         // Sort by language.
@@ -1159,20 +1169,20 @@ void KCMKttsMgr::slot_addTalker()
         langLView->sort();
         // Display the box in a dialog.
         KDialogBase* dlg = new KDialogBase(
-                KDialogBase::Swallow,
-        i18n("Select Language"),
-        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
-        m_kttsmgrw,
-        "SelectLanguage_dlg",
-        true,
-        true);
+            KDialogBase::Swallow,
+            i18n("Select Language"),
+            KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
+            KDialogBase::Cancel,
+            m_kttsmgrw,
+            "SelectLanguage_dlg",
+            true,
+            true);
         dlg->setMainWidget(hBox);
         dlg->setHelp("select-plugin", "kttsd");
         dlg->setInitialSize(QSize(200, 500), false);
         dlgResult = dlg->exec();
         languageCode = QString::null;
-        if (langLView->currentItem()) languageCode = langLView->currentItem()->text(1);
+        if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
         delete dlg;
         // TODO: Also delete KListView and QHBox?
         if (dlgResult != QDialog::Accepted) return;
@@ -1192,7 +1202,7 @@ void KCMKttsMgr::slot_addTalker()
     m_config->sync();
 
     // Convert translated plugin name to DesktopEntryName.
-    QString desktopEntryName = TalkerNameToDesktopEntryName(synthName);
+    QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
     // This shouldn't happen, but just in case.
     if (desktopEntryName.isEmpty()) return;
 
@@ -1242,13 +1252,11 @@ void KCMKttsMgr::slot_addTalker()
         // Add listview item.
         QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
-            talkerItem =
-                    new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
-                                      QString::number(m_lastTalkerID), language, synthName);
+            talkerItem =  new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
+                QString::number(m_lastTalkerID), language, synthName);
         else
-            talkerItem =
-                    new KListViewItem(m_kttsmgrw->talkersList, QString::number(m_lastTalkerID),
-                                      language, synthName);
+            talkerItem = new KListViewItem(m_kttsmgrw->talkersList,
+                QString::number(m_lastTalkerID), language, synthName);
 
         // Set additional columns of the listview item.
         updateTalkerItem(talkerItem, talkerCode);
@@ -1414,13 +1422,11 @@ void KCMKttsMgr::addFilter( bool sbd)
         else
         {
             if (filterItem)
-                filterItem =
-                    new KttsCheckListItem(lView, filterItem,
-                        userFilterName, QCheckListItem::CheckBox, this);
+                filterItem = new KttsCheckListItem(lView, filterItem,
+                    userFilterName, QCheckListItem::CheckBox, this);
             else
-                filterItem =
-                    new KttsCheckListItem(lView,
-                        userFilterName, QCheckListItem::CheckBox, this);
+                filterItem = new KttsCheckListItem(lView,
+                    userFilterName, QCheckListItem::CheckBox, this);
             dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
         }
         filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
@@ -2044,59 +2050,12 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 }
 
 /**
- * This signal is emitted whenever user toggles the Enable notifications check box.
- */
-void KCMKttsMgr::slotEnableNotifyCheckBoxToggled(bool checked)
-{
-    if (checked)
-        m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(m_kttsmgrw->enablePopupsOnlyCheckBox->isChecked());
-    else
-        m_kttsmgrw->enablePassiveOnlyCheckBox->setEnabled(false);
-}
-
-
-/**
 * This slot is called whenever user checks/unchecks item in Filters list.
 */
 void KCMKttsMgr::slotFiltersList_stateChanged()
 {
     // kdDebug() << "KCMKttsMgr::slotFiltersList_stateChanged: calling configChanged" << endl;
     configChanged();
-}
-
-/**
-* Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
-* @param name                   The translated plugin name.  From Name= line in .desktop file.
-* @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-*                               QString::null if not found.
-*/
-QString KCMKttsMgr::TalkerNameToDesktopEntryName(const QString& name)
-{
-    if (name.isEmpty()) return QString::null;
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-        QString("Name == '%1'").arg(name));
-
-    if (offers.count() == 1)
-        return offers[0]->desktopEntryName();
-    else
-        return QString::null;
-}
-
-/**
-* Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
-* @param desktopEntryName       The DesktopEntryName.
-* @return                       The translated Name of the plugin, from Name= line in .desktop file.
-*/
-QString KCMKttsMgr::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
-{
-    if (desktopEntryName.isEmpty()) return QString::null;
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-    QString("DesktopEntryName == '%1'").arg(desktopEntryName));
-
-    if (offers.count() == 1)
-        return offers[0]->name();
-    else
-        return QString::null;
 }
 
 /**
@@ -2132,6 +2091,430 @@ QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName
         return offers[0]->name();
     else
         return QString::null;
+}
+
+/**
+ * Loads notify events from a file.  Clearing listview if clear is True.
+ */
+QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clear)
+{
+    // Open existing event list.
+    QFile file( filename );
+    if ( !file.open( IO_ReadOnly ) )
+    {
+        return i18n("Unable to open file.") + filename;
+    }
+    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
+    QDomDocument doc( "" );
+    if ( !doc.setContent( &file ) ) {
+        file.close();
+        return i18n("File not in proper XML format.");
+    }
+    // kdDebug() << "StringReplacerConf::load: document successfully parsed." << endl;
+    file.close();
+
+    // Clear list view.
+    if ( clear ) m_kttsmgrw->notifyListView->clear();
+
+    // Event list.
+    QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
+    int eventListCount = eventList.count();
+    for (int eventIndex = 0; eventIndex < eventListCount; eventIndex++)
+    {
+        QDomNode eventNode = eventList.item(eventIndex);
+        QDomNodeList propList = eventNode.childNodes();
+        QString eventSrc;
+        QString event;
+        QString actionName;
+        QString message;
+        TalkerCode talkerCode;
+        int propListCount = propList.count();
+        for (int propIndex = 0; propIndex < propListCount; propIndex++)
+        {
+            QDomNode propNode = propList.item(propIndex);
+            QDomElement prop = propNode.toElement();
+            if (prop.tagName() == "eventSrc") eventSrc = prop.text();
+            if (prop.tagName() == "event") event = prop.text();
+            if (prop.tagName() == "action") actionName = prop.text();
+            if (prop.tagName() == "message") message = prop.text();
+            if (prop.tagName() == "talker") talkerCode = TalkerCode(prop.text(), false);
+        }
+        addNotifyItem(eventSrc, event, NotifyAction::action( actionName ), message, talkerCode);
+    }
+
+    return QString::null;
+}
+
+/**
+ * Saves notify events to a file.
+ */
+QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
+{
+    QFile file( filename );
+    if ( !file.open( IO_WriteOnly ) )
+        return i18n("Unable to open file ") + filename;
+
+    QDomDocument doc( "" );
+
+    QDomElement root = doc.createElement( "notifyEventList" );
+    doc.appendChild( root );
+
+    // Events.
+    KListView* lv = m_kttsmgrw->notifyListView;
+    QListViewItemIterator it(lv);
+    while ( it.current() )
+    {
+        QListViewItem* item = *it;
+        if ( item->depth() > 0 )
+        {
+            QDomElement wordTag = doc.createElement( "notifyEvent" );
+            root.appendChild( wordTag );
+
+            QDomElement propTag = doc.createElement( "eventSrc" );
+            wordTag.appendChild( propTag);
+            QDomText t = doc.createTextNode( item->text(nlvcEventSrc) );
+            propTag.appendChild( t );
+
+            propTag = doc.createElement( "event" );
+            wordTag.appendChild( propTag);
+            t = doc.createTextNode( item->text(nlvcEvent) );
+            propTag.appendChild( t );
+
+            propTag = doc.createElement( "action" );
+            wordTag.appendChild( propTag);
+            t = doc.createTextNode( item->text(nlvcAction) );
+            propTag.appendChild( t );
+
+            if ( item->text(nlvcAction) == NotifyAction::actionName( NotifyAction::SpeakCustom ) )
+            {
+                propTag = doc.createElement( "message" );
+                wordTag.appendChild( propTag);
+                QString msg = item->text(nlvcActionName);
+                int msglen = msg.length();
+                msg = msg.mid( 1, msglen-2 );
+                t = doc.createCDATASection( msg );
+                propTag.appendChild( t );
+            }
+
+            propTag = doc.createElement( "talker" );
+            wordTag.appendChild( propTag);
+            t = doc.createCDATASection( item->text(nlvcTalker) );
+            propTag.appendChild( t );
+        }
+        ++it;
+    }
+
+    // Write it all out.
+    QTextStream ts( &file );
+    ts.setEncoding( QTextStream::UnicodeUTF8 );
+    ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    ts << doc.toString();
+    file.close();
+
+    return QString::null;
+}
+
+void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
+{
+    m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->setEnabled( checked );
+    m_kttsmgrw->notifyGroup->setEnabled( checked );
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
+{
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if ( !item ) return;        // should not happen
+    item->setText( nlvcEvent, NotifyPresent::presentName( index ) );
+    item->setText( nlvcEventName, NotifyPresent::presentDisplayName( index ) );
+    bool enableIt = ( index != NotifyPresent::None);
+    m_kttsmgrw->notifyActionComboBox->setEnabled( enableIt );
+    m_kttsmgrw->notifyTalkerButton->setEnabled( enableIt );
+    if (!enableIt)
+    {
+        m_kttsmgrw->notifyTalkerLineEdit->clear();
+    } else {
+        if ( m_kttsmgrw->notifyTalkerLineEdit->text().isEmpty() )
+        {
+            m_kttsmgrw->notifyTalkerLineEdit->setText( i18n("default") );
+        }
+    }
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyListView_selectionChanged()
+{
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if ( item )
+    {
+        bool topLevel = ( item->depth() == 0 );
+        if ( topLevel )
+        {
+            m_kttsmgrw->notifyPresentComboBox->setEnabled( false );
+            m_kttsmgrw->notifyActionComboBox->setEnabled( false );
+            m_kttsmgrw->notifyTestButton->setEnabled( false );
+            m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
+            m_kttsmgrw->notifyMsgLineEdit->clear();
+            m_kttsmgrw->notifyTalkerButton->setEnabled( false );
+            m_kttsmgrw->notifyTalkerLineEdit->clear();
+            bool defaultItem = ( item->text(nlvcEventSrc) == "default" );
+            m_kttsmgrw->notifyRemoveButton->setEnabled( !defaultItem );
+        } else {
+            bool defaultItem = ( item->parent()->text(nlvcEventSrc) == "default" );
+            m_kttsmgrw->notifyPresentComboBox->setEnabled( defaultItem );
+            if ( defaultItem )
+                m_kttsmgrw->notifyPresentComboBox->setCurrentItem( NotifyPresent::present( item->text( nlvcEvent ) ) );
+            m_kttsmgrw->notifyActionComboBox->setEnabled( true );
+            int action = NotifyAction::action( item->text( nlvcAction ) );
+            m_kttsmgrw->notifyActionComboBox->setCurrentItem( action );
+            m_kttsmgrw->notifyTalkerButton->setEnabled( true );
+            TalkerCode talkerCode( item->text( nlvcTalker ) );
+            m_kttsmgrw->notifyTalkerLineEdit->setText( talkerCode.getTranslatedDescription() );
+            if ( action == NotifyAction::SpeakCustom )
+            {
+                m_kttsmgrw->notifyMsgLineEdit->setEnabled( true );
+                QString msg = item->text( nlvcActionName );
+                int msglen = msg.length();
+                msg = msg.mid( 1, msglen-2 );
+                m_kttsmgrw->notifyMsgLineEdit->setText( msg );
+                m_kttsmgrw->notifyTestButton->setEnabled( 
+                    !m_kttsmgrw->notifyMsgLineEdit->text().isEmpty() );
+            } else {
+                m_kttsmgrw->notifyTestButton->setEnabled( false );
+                m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
+                m_kttsmgrw->notifyMsgLineEdit->clear();
+            }
+            m_kttsmgrw->notifyRemoveButton->setEnabled( !defaultItem );
+        }
+    } else {
+        m_kttsmgrw->notifyPresentComboBox->setEnabled( false );
+        m_kttsmgrw->notifyActionComboBox->setEnabled( false );
+        m_kttsmgrw->notifyTestButton->setEnabled( false );
+        m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
+        m_kttsmgrw->notifyMsgLineEdit->clear();
+        m_kttsmgrw->notifyTalkerButton->setEnabled( false );
+        m_kttsmgrw->notifyTalkerLineEdit->clear();
+        m_kttsmgrw->notifyRemoveButton->setEnabled( false );
+    }
+}
+
+void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
+{
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if ( item )
+        if ( item->depth() == 0 ) item = 0;
+    if ( !item ) return;  // This shouldn't happen.
+    item->setText( nlvcAction, NotifyAction::actionName( index ) );
+    item->setText( nlvcActionName, NotifyAction::actionDisplayName( index ) );
+    if ( index == NotifyAction::SpeakCustom )
+        item->setText( nlvcActionName, "\"" + m_kttsmgrw->notifyMsgLineEdit->text() + "\"" );
+    if ( index == NotifyAction::DoNotSpeak )
+        item->setPixmap( nlvcActionName, SmallIcon( "nospeak" ) );
+    else
+        item->setPixmap( nlvcActionName, SmallIcon( "speak" ) );
+    slotNotifyListView_selectionChanged();
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
+{
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if ( item )
+        if ( item->depth() == 0 ) item = 0;
+    if ( !item ) return;  // This shouldn't happen.
+    if ( m_kttsmgrw->notifyActionComboBox->currentItem() != NotifyAction::SpeakCustom) return;
+    item->setText( nlvcActionName, "\"" + text + "\"" );
+    m_kttsmgrw->notifyTestButton->setEnabled( !text.isEmpty() );
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyTestButton_clicked()
+{
+    // TODO:
+}
+
+void KCMKttsMgr::slotNotifyTalkerButton_clicked()
+{
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if ( item )
+        if ( item->depth() == 0 ) item = 0;
+    if ( !item ) return;  // This shouldn't happen.
+    QString talkerCode = item->text( nlvcTalker );
+    SelectTalkerDlg dlg( m_kttsmgrw, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
+    int dlgResult = dlg.exec();
+    if ( dlgResult != KDialogBase::Accepted ) return;
+    item->setText( nlvcTalker, dlg.getSelectedTalkerCode() );
+    QString talkerName = dlg.getSelectedTranslatedDescription();
+    item->setText( nlvcTalkerName, talkerName );
+    m_kttsmgrw->notifyTalkerLineEdit->setText( talkerName );
+    configChanged();
+}
+
+/**
+ * Adds an item to the notify listview.
+ * message is only needed if action = naSpeakCustom.
+ */
+QListViewItem* KCMKttsMgr::addNotifyItem(
+    const QString& eventSrc,
+    const QString& event,
+    int action,
+    const QString& message,
+    TalkerCode& talkerCode)
+{
+    KListView* lv = m_kttsmgrw->notifyListView;
+    QListViewItem* item = 0;
+    QString iconName;
+    QString eventSrcName;
+    if (eventSrc == "default")
+        eventSrcName = i18n("Default (all other events)");
+    else
+        eventSrcName = NotifyEvent::getEventSrcName(eventSrc, iconName);
+    QString eventName;
+    if (eventSrc == "default")
+        eventName = NotifyPresent::presentDisplayName( event );
+    else
+        eventName = NotifyEvent::getEventName(eventSrc, event);
+    QString actionName = NotifyAction::actionName( action );
+    QString actionDisplayName = NotifyAction::actionDisplayName( action );
+    if (action == NotifyAction::SpeakCustom) actionName = "\"" + message + "\"";
+    QString talkerName = talkerCode.getTranslatedDescription();
+    if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
+    {
+        QListViewItem* parentItem = lv->findItem(eventSrcName, nlvcEventSrcName);
+        if (!parentItem)
+        {
+            item = lv->lastItem();
+            if (!item)
+                parentItem = new KListViewItem(lv, eventSrcName, QString::null, QString::null,
+                    eventSrc);
+            else
+                parentItem = new KListViewItem(lv, item, eventSrcName, QString::null, QString::null,
+                    eventSrc);
+            if ( !iconName.isEmpty() )
+                parentItem->setPixmap( nlvcEventSrcName, SmallIcon( iconName ) );
+        }
+        // No duplicates.
+        item = lv->findItem( event, nlvcEvent );
+        if ( !item || item->parent() != parentItem )
+            item = new KListViewItem(parentItem, eventName, actionDisplayName, talkerName,
+                eventSrc, event, actionName, talkerCode.getTalkerCode());
+        if ( action == NotifyAction::DoNotSpeak )
+            item->setPixmap( nlvcActionName, SmallIcon( "nospeak" ) );
+        else
+            item->setPixmap( nlvcActionName, SmallIcon( "speak" ) );
+    }
+    return item;
+}
+
+void KCMKttsMgr::slotNotifyAddButton_clicked()
+{
+    QListView* lv = m_kttsmgrw->notifyListView;
+    QListViewItem* item = lv->selectedItem();
+    QString eventSrc;
+    if ( item ) eventSrc = item->text( nlvcEventSrc );
+    SelectEvent* selectEventWidget = new SelectEvent( this, "SelectEvent_widget", 0, eventSrc );
+    KDialogBase* dlg = new KDialogBase(
+        KDialogBase::Swallow,
+        i18n("Select Event"),
+        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
+        KDialogBase::Cancel,
+        m_kttsmgrw,
+        "SelectEvent_dlg",
+        true,
+        true);
+    dlg->setMainWidget( selectEventWidget );
+    dlg->setInitialSize( QSize(500, 400) );
+    // dlg->setHelp("select-plugin", "kttsd");
+    int dlgResult = dlg->exec();
+    eventSrc = selectEventWidget->getEventSrc();
+    QString event = selectEventWidget->getEvent();
+    delete dlg;
+    if ( dlgResult != QDialog::Accepted ) return;
+    if ( eventSrc.isEmpty() || event.isEmpty() ) return;
+    // Use Default action, message, and talker.
+    QString actionName;
+    int action;
+    QString msg;
+    TalkerCode talkerCode;
+    item = lv->findItem( "default", nlvcEventSrc );
+    if ( item )
+    {
+        if ( item->childCount() > 0 ) item = item->firstChild();
+        if ( item )
+        {
+            actionName = item->text( nlvcAction );
+            action = NotifyAction::action( actionName );
+            talkerCode = TalkerCode( item->text( nlvcTalker ) );
+            if (action == NotifyAction::SpeakCustom )
+            {
+                msg = item->text(nlvcActionName);
+                int msglen = msg.length();
+                msg = msg.mid( 1, msglen-2 );
+            }
+        }
+    }
+    item = addNotifyItem( eventSrc, event, action, msg, talkerCode );
+    lv->ensureItemVisible( item );
+    lv->setSelected( item, true );
+    slotNotifyListView_selectionChanged();
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyClearButton_clicked()
+{
+    m_kttsmgrw->notifyListView->clear();
+    TalkerCode talkerCode( QString::null );
+    QListViewItem* item = addNotifyItem(
+        QString("default"),
+        NotifyPresent::presentName(NotifyPresent::Passive),
+        NotifyAction::SpeakEventName,
+        QString::null,
+        talkerCode );
+    QListView* lv = m_kttsmgrw->notifyListView;
+    lv->ensureItemVisible( item );
+    lv->setSelected( item, true );
+    slotNotifyListView_selectionChanged();
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyRemoveButton_clicked()
+{
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    delete item;
+    slotNotifyListView_selectionChanged();
+    configChanged();
+}
+
+void KCMKttsMgr::slotNotifyLoadButton_clicked()
+{
+    // QString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
+    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/notify/").last();
+    QString filename = KFileDialog::getOpenFileName(
+        dataDir,
+        "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
+        m_kttsmgrw,
+        "event_loadfile");
+    if ( filename.isEmpty() ) return;
+    QString errMsg = loadNotifyEventsFromFile( filename, true );
+    slotNotifyListView_selectionChanged();
+    if ( !errMsg.isEmpty() )
+        KMessageBox::sorry( m_kttsmgrw, errMsg, i18n("Error Opening File") );
+    else
+        configChanged();
+}
+
+void KCMKttsMgr::slotNotifySaveButton_clicked()
+{
+    QString filename = KFileDialog::getSaveFileName(
+        KGlobal::dirs()->saveLocation( "data" ,"kttsd/notify/", false ),
+        "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
+        m_kttsmgrw,
+        "event_savefile");
+    if ( filename.isEmpty() ) return;
+    QString errMsg = saveNotifyEventsToFile( filename );
+    slotNotifyListView_selectionChanged();
+    if ( !errMsg.isEmpty() )
+        KMessageBox::sorry( m_kttsmgrw, errMsg, i18n("Error Opening File") );
 }
 
 // ----------------------------------------------------------------------------

@@ -14,8 +14,10 @@
  *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  ***************************************************************************/
+
 #include <qstring.h>
 #include <kdebug.h>
+#include <qcombobox.h>
 
 #include "utils.h"
 
@@ -107,3 +109,21 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
     // Match the doctype statement if it exists.
     return (doc.startsWith("<!DOCTYPE " + name) || doc.startsWith(" <!DOCTYPE " + name));
 }
+
+/**
+ * Sets the current item in the given combobox to the item with the given text.
+ * If item with the text not found, does nothing.
+ */
+/*static*/ void KttsUtils::setCbItemFromText(QComboBox* cb, const QString& text)
+{
+    const int itemCount = cb->count();
+    for (int ndx = 0; ndx < itemCount; ++ndx)
+    {
+        if (cb->text(ndx) == text)
+        {
+            cb->setCurrentItem(ndx);
+            return;
+        }
+    }
+}
+

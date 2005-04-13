@@ -1,3 +1,8 @@
+2005-04-12  Gary Cramblitt (PhantomsDad)
+        * Enhanced notification options.  Ability to customize each application event.
+        * Enhanced Talker chooser for notifications and Job Manager.
+        * Fix bug in Talker matching algorithm.
+
 2005-03-18  Gary Cramblitt (PhantomsDad)
         * Added --systray cmdline option to KTTSMgr, which causes it to start minimized in system
           tray.

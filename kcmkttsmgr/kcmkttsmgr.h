@@ -47,6 +47,7 @@ class QPopupMenu;
 * @author José Pablo Ezequiel "Pupeno" Fernández
 * @author Gary Cramblitt
 */
+
 class KCMKttsMgr :
     public KCModule,
     virtual public KSpeechSink
@@ -150,11 +151,24 @@ class KCMKttsMgr :
         enum widgetPages
         {
             wpGeneral = 0,          // General tab.
-            wpFilters = 1,          // Filters tab.
-            wpTalkers = 2,          // Talkers tab.
-            wpInterruption = 3,     // Interruption tab.
-            wpAudio = 4,            // Audio tab.
-            wpJobs = 5              // Jobs tab.
+            wpTalkers = 1,          // Talkers tab.
+            wpNotify = 2,           // Notify tab.
+            wpFilters = 3,          // Filters tab.
+            wpInterruption = 4,     // Interruption tab.
+            wpAudio = 5,            // Audio tab.
+            wpJobs = 6              // Jobs tab.
+        };
+
+        enum NotifyListViewColumn
+        {
+            nlvcEventSrcName = 0,
+            nlvcEventName = 0,
+            nlvcActionName = 1,
+            nlvcTalkerName = 2,
+            nlvcEventSrc = 3,      // hidden
+            nlvcEvent = 4,         // hidden
+            nlvcAction = 5,        // hidden
+            nlvcTalker = 6         // hidden
         };
 
         enum TalkerListViewColumn
@@ -192,13 +206,6 @@ class KCMKttsMgr :
             sbdBtnAdd = 4,
             sbdBtnRemove = 5
         };
-
-        /**
-        * These functions return translated Talker Code attributes.
-        */
-        QString translatedGender(const QString &gender);
-        QString translatedVolume(const QString &volume);
-        QString translatedRate(const QString &rate);
 
         /**
         * Conversion functions for percent boxes to/from sliders.
@@ -273,21 +280,6 @@ class KCMKttsMgr :
         int countFilterPlugins(const QString& filterPlugInName);
 
         /**
-        * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
-        * @param name                   The translated plugin name.  From Name= line in .desktop file.
-        * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        *                               QString::null if not found.
-        */
-        QString TalkerNameToDesktopEntryName(const QString& name);
-
-        /**
-        * Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
-        * @param desktopEntryName       The DesktopEntryName.
-        * @return                       The translated Name of the plugin, from Name= line in .desktop file.
-        */
-        QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
-
-        /**
          * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
          * @param name                   The translated plugin name.  From Name= line in .desktop file.
          * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
@@ -301,6 +293,27 @@ class KCMKttsMgr :
          * @return                       The translated Name of the plugin, from Name= line in .desktop file.
          */
         QString FilterDesktopEntryNameToName(const QString& desktopEntryName);
+
+        /**
+         * Loads notify events from a file.  Clearing listview if clear is True.
+         */
+        QString loadNotifyEventsFromFile( const QString& filename, bool clear);
+
+        /**
+         * Saves notify events to a file.
+         */
+        QString saveNotifyEventsToFile(const QString& filename);
+
+        /**
+         * Adds an item to the notify listview.
+         * message is only needed if action = nactSpeakCustom.
+         */
+        QListViewItem* addNotifyItem(
+            const QString& eventSrc,
+            const QString& event,
+            int action,
+            const QString& message,
+            TalkerCode& talkerCode);
 
         /**
         * Main widget
@@ -373,6 +386,11 @@ class KCMKttsMgr :
         */
         SynthToLangMap m_synthToLangMap;
 
+        /**
+        * Default Talker Code for notifications.
+        */
+        QString m_defaultNotifyTalkerCode;
+
     private slots:
         /**
         * Add a talker/filter.
@@ -419,11 +437,6 @@ class KCMKttsMgr :
         void enableKttsdToggled(bool checked);
 
         /**
-        * This signal is emitted whenever user toggles the Enable notifications check box.
-        */
-        void slotEnableNotifyCheckBoxToggled(bool checked);
-
-        /**
         * This signal is emitted whenever user checks/unchecks the GStreamer radio button.
         */
         void slotGstreamerRadioButton_toggled(bool state);
@@ -455,6 +468,22 @@ class KCMKttsMgr :
         * Keep Audio CheckBox slot.
         */
         void keepAudioCheckBox_toggled(bool checked);
+
+        /**
+        * Notify tab slots.
+        */
+        void slotNotifyEnableCheckBox_toggled(bool checked);
+        void slotNotifyAddButton_clicked();
+        void slotNotifyRemoveButton_clicked();
+        void slotNotifyClearButton_clicked();
+        void slotNotifyLoadButton_clicked();
+        void slotNotifySaveButton_clicked();
+        void slotNotifyListView_selectionChanged();
+        void slotNotifyPresentComboBox_activated(int index);
+        void slotNotifyActionComboBox_activated(int index);
+        void slotNotifyTestButton_clicked();
+        void slotNotifyMsgLineEdit_textChanged(const QString& text);
+        void slotNotifyTalkerButton_clicked();
 
         /**
         * Other slots.

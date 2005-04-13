@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Convenience object for manipulating Talker Codes.
-  For an explanation of what a Talker Code is, see speech.h. 
+  For an explanation of what a Talker Code is, see kspeech.h. 
   -------------------
   Copyright:
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
@@ -25,6 +25,8 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
+#include <ktrader.h>
+#include <kdebug.h>
 
 // TalkerCode includes.
 #include "talkercode.h"
@@ -89,7 +91,7 @@ void TalkerCode::setFullLanguageCode(const QString &fullLanguageCode)
 /**
  * Returns the language code plus country code (if any).
  */
-QString TalkerCode::fullLanguageCode()
+QString TalkerCode::fullLanguageCode() const
 {
     if (!m_countryCode.isEmpty())
         return m_languageCode + "_" + m_countryCode;
@@ -100,19 +102,42 @@ QString TalkerCode::fullLanguageCode()
 /**
  * The Talker Code returned in XML format.
  */
-QString TalkerCode::getTalkerCode()
+QString TalkerCode::getTalkerCode() const
 {
+    QString code;
     QString languageCode = m_languageCode;
     if (!m_countryCode.isEmpty()) languageCode += "_" + m_countryCode;
-    QString code = "<voice lang=\"" + languageCode + "\" ";
+    if (!languageCode.isEmpty()) code = "lang=\"" + languageCode + "\" ";
     if (!m_voice.isEmpty()) code += "name=\"" + m_voice + "\" ";
     if (!m_gender.isEmpty()) code += "gender=\"" + m_gender + "\" ";
-    code += "/>";
+    if (!code.isEmpty()) code = "<voice " + code + "/>";
     QString prosody;
     if (!m_volume.isEmpty()) prosody = "volume=\"" + m_volume + "\" ";
     if (!m_rate.isEmpty()) prosody += "rate=\"" + m_rate + "\" ";
     if (!prosody.isEmpty()) code += "<prosody " + prosody + "/>";
     if (!m_plugInName.isEmpty()) code += "<kttsd synthesizer=\"" + m_plugInName + "\" />";
+    return code;
+}
+
+/**
+ * The Talker Code translated for display.
+ */
+QString TalkerCode::getTranslatedDescription() const
+{
+    QString code;
+    bool prefer;
+    QString fullLangCode = fullLanguageCode();
+    if (!fullLangCode.isEmpty()) code = languageCodeToLanguage( fullLangCode );
+    // TODO: The PlugInName is always English.  Need a way to convert this to a translated
+    // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
+    // from the config file).
+    if (!m_plugInName.isEmpty()) code += " " + stripPrefer(m_plugInName, prefer);
+    if (!m_voice.isEmpty()) code += " " + stripPrefer(m_voice, prefer);
+    if (!m_gender.isEmpty()) code += " " + translatedGender(stripPrefer(m_gender, prefer));
+    if (!m_volume.isEmpty()) code += " " + translatedVolume(stripPrefer(m_volume, prefer));
+    if (!m_rate.isEmpty()) code += " " + translatedRate(stripPrefer(m_rate, prefer));
+    code = code.stripWhiteSpace();
+    if (code.isEmpty()) code = i18n("default");
     return code;
 }
 
@@ -294,5 +319,194 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     m_rate = m_rate.section('"', 1, 1);
     m_plugInName = talkerCode.section("synthesizer=", 1, 1);
     m_plugInName = m_plugInName.section('"', 1, 1);
+}
+
+/**
+ * Given a list of parsed talker codes and a desired talker code, finds the closest
+ * matching talker in the list.
+ * @param talkers                       The list of parsed talker codes.
+ * @param talker                        The desired talker code.
+ * @param assumeDefaultLang             If true, and desired talker code lacks a language code,
+ *                                      the default language is assumed.
+ * @return                              Index into talkers of the closest matching talker.
+ */
+/*static*/ int TalkerCode::findClosestMatchingTalker(
+    const TalkerCodeList& talkers,
+    const QString& talker,
+    bool assumeDefaultLang)
+{
+    // kdDebug() << "TalkerCode::findClosestMatchingTalker: matching on talker code " << talker << endl;
+    // If nothing to match on, winner is top in the list.
+    if (talker.isEmpty()) return 0;
+    // Parse the given talker.
+    TalkerCode parsedTalkerCode(talker);
+    // If no language code specified, use the language code of the default talker.
+    if (assumeDefaultLang)
+    {
+        if (parsedTalkerCode.languageCode().isEmpty()) parsedTalkerCode.setLanguageCode(
+            talkers[0].languageCode());
+    }
+    // The talker that matches on the most priority attributes wins.
+    int talkersCount = int(talkers.count());
+    QMemArray<int> priorityMatch(talkersCount);
+    for (int ndx = 0; ndx < talkersCount; ++ndx)
+    {
+        priorityMatch[ndx] = 0;
+        // kdDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
+        if (parsedTalkerCode.languageCode() == talkers[ndx].languageCode())
+        {
+            priorityMatch[ndx]++;
+            // kdDebug() << "TalkerCode::findClosestMatchingTalker: Match on language " << parsedTalkerCode.languageCode() << endl;
+        }
+        if (parsedTalkerCode.countryCode().left(1) == "*")
+            if (parsedTalkerCode.countryCode().mid(1) ==
+                talkers[ndx].countryCode())
+                priorityMatch[ndx]++;
+        if (parsedTalkerCode.voice().left(1) == "*")
+            if (parsedTalkerCode.voice().mid(1) == talkers[ndx].voice())
+                priorityMatch[ndx]++;
+        if (parsedTalkerCode.gender().left(1) == "*")
+            if (parsedTalkerCode.gender().mid(1) == talkers[ndx].gender())
+                priorityMatch[ndx]++;
+        if (parsedTalkerCode.volume().left(1) == "*")
+            if (parsedTalkerCode.volume().mid(1) == talkers[ndx].volume())
+                priorityMatch[ndx]++;
+        if (parsedTalkerCode.rate().left(1) == "*")
+            if (parsedTalkerCode.rate().mid(1) == talkers[ndx].rate())
+                priorityMatch[ndx]++;
+        if (parsedTalkerCode.plugInName().left(1) == "*")
+            if (parsedTalkerCode.plugInName().mid(1) ==
+                talkers[ndx].plugInName())
+                priorityMatch[ndx]++;
+    }
+    // Determine the maximum number of priority attributes that were matched.
+    int maxPriority = -1;
+    for (int ndx = 0; ndx < talkersCount; ++ndx)
+    {
+        if (priorityMatch[ndx] > maxPriority) maxPriority = priorityMatch[ndx];
+    }
+    // Find the talker(s) that matched on most priority attributes.
+    int winnerCount = 0;
+    int winner = -1;
+    for (int ndx = 0; ndx < talkersCount; ++ndx)
+    {
+        if (priorityMatch[ndx] == maxPriority)
+        {
+            winnerCount++;
+            winner = ndx;
+        }
+    }
+    // kdDebug() << "Priority phase: winnerCount = " << winnerCount 
+    //     << " winner = " << winner
+    //     << " maxPriority = " << maxPriority << endl;
+    // If a tie, the one that matches on the most priority and preferred attributes wins.
+    // If there is still a tie, the one nearest the top of the kttsmgr display
+    // (first configured) will be chosen.
+    if (winnerCount > 1)
+    {
+        QMemArray<int> preferredMatch(talkersCount);
+        for (int ndx = 0; ndx < talkersCount; ++ndx)
+        {
+            preferredMatch[ndx] = 0;
+            if (priorityMatch[ndx] == maxPriority)
+            {
+                if (parsedTalkerCode.countryCode().left(1) != "*")
+                    if (!talkers[ndx].countryCode().isEmpty())
+                        if (parsedTalkerCode.countryCode() == talkers[ndx].countryCode())
+                            preferredMatch[ndx]++;
+                if (parsedTalkerCode.voice().left(1) != "*")
+                    if (parsedTalkerCode.voice() == talkers[ndx].voice())
+                        preferredMatch[ndx]++;
+                if (parsedTalkerCode.gender().left(1) != "*")
+                    if (parsedTalkerCode.gender() == talkers[ndx].gender())
+                        preferredMatch[ndx]++;
+                if (parsedTalkerCode.volume().left(1) != "*")
+                    if (parsedTalkerCode.volume() == talkers[ndx].volume())
+                        preferredMatch[ndx]++;
+                if (parsedTalkerCode.rate().left(1) != "*")
+                    if (parsedTalkerCode.rate() == talkers[ndx].rate())
+                        preferredMatch[ndx]++;
+                if (parsedTalkerCode.plugInName().left(1) != "*")
+                    if (parsedTalkerCode.plugInName() ==
+                        talkers[ndx].plugInName())
+                        preferredMatch[ndx]++;
+            }
+        }
+        // Determine the maximum number of preferred attributes that were matched.
+        int maxPreferred = -1;
+        for (int ndx = 0; ndx < talkersCount; ++ndx)
+        {
+            if (preferredMatch[ndx] > maxPreferred) maxPreferred = preferredMatch[ndx];
+        }
+        winner = -1;
+        winnerCount = 0;
+        // Find the talker that matched on most priority and preferred attributes.
+        // Work bottom to top so topmost wins in a tie.
+        for (int ndx = talkersCount-1; ndx >= 0; --ndx)
+        {
+            if (priorityMatch[ndx] == maxPriority)
+            {
+                if (preferredMatch[ndx] == maxPreferred)
+                {
+                    winnerCount++;
+                    winner = ndx;
+                }
+            }
+        }
+        // kdDebug() << "Preferred phase: winnerCount = " << winnerCount 
+        //     << " winner = " << winner
+        //     << " maxPreferred = " << maxPreferred << endl;
+    }
+    // If no winner found, use the first talker.
+    if (winner < 0) winner = 0;
+    // kdDebug() << "TalkerCode::findClosestMatchingTalker: returning winner = " << winner << endl;
+    return winner;
+}
+
+/*static*/ QString TalkerCode::stripPrefer( const QString& code, bool& preferred)
+{
+    if ( code.left(1) == "*" )
+    {
+        preferred = true;
+        return code.mid(1);
+    } else {
+        preferred = false;
+        return code;
+    }
+}
+
+/**
+* Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
+* @param name                   The translated plugin name.  From Name= line in .desktop file.
+* @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
+*                               QString::null if not found.
+*/
+/*static*/ QString TalkerCode::TalkerNameToDesktopEntryName(const QString& name)
+{
+    if (name.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+        QString("Name == '%1'").arg(name));
+
+    if (offers.count() == 1)
+        return offers[0]->desktopEntryName();
+    else
+        return QString::null;
+}
+
+/**
+* Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
+* @param desktopEntryName       The DesktopEntryName.
+* @return                       The translated Name of the plugin, from Name= line in .desktop file.
+*/
+/*static*/ QString TalkerCode::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
+{
+    if (desktopEntryName.isEmpty()) return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+    QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+
+    if (offers.count() == 1)
+        return offers[0]->name();
+    else
+        return QString::null;
 }
 

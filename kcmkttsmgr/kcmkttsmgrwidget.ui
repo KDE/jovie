@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>527</width>
-            <height>394</height>
+            <width>638</width>
+            <height>380</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -58,139 +58,6 @@
                         <property name="whatsThis" stdset="0">
                             <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
                         </property>
-                    </widget>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>spacer5</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox" row="1" column="1">
-                        <property name="name">
-                            <cstring>notifyGroupBox</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="title">
-                            <string>&amp;Notifications</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLayoutWidget" row="0" column="0">
-                                <property name="name">
-                                    <cstring>layout9</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>enableNotifyCheckBox</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Speak notifications (KNotify)</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check to enable speaking of messages routed from applications through KNotify, the KDE Notification system.</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget" row="2" column="0">
-                                <property name="name">
-                                    <cstring>layout14</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Fixed</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>40</width>
-                                                <height>21</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>enablePassiveOnlyCheckBox</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Passive popups only</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check to limit notification speaking to those messages displayed in passive popups only.</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget" row="1" column="0">
-                                <property name="name">
-                                    <cstring>layout15</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Fixed</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>16</width>
-                                                <height>21</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>enablePopupsOnlyCheckBox</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Messages in popup &amp;windows only</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Check to limit notification speaking to those messages displayed in popup windows only.</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                        </grid>
                     </widget>
                     <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
                         <property name="name">
@@ -318,261 +185,6 @@
                         <property name="whatsThis" stdset="0">
                             <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em&gt;Note&lt;em&gt;: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
                         </property>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>TabPage</cstring>
-                </property>
-                <attribute name="title">
-                    <string>&amp;Filters</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
-                        <property name="name">
-                            <cstring>layout14</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="KListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Filter</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>filtersList</cstring>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.  Filters modify text before it is spoken.  They can be used to substitute for mispronounced words, transform XML from one form to another, or change the default Talker to be used for speech output.</string>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout9_2</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>addFilterButton</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Add...</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string></string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to add and configure a new Filter.</string>
-                                            <comment>What's this text</comment>
-                                        </property>
-                                    </widget>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>higherFilterPriorityButton</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>5</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>U&amp;p</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to move selected filter up in the list.  Filters higher in the list are applied first.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>lowerFilterPriorityButton</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>5</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Do&amp;wn</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to move a filter down in the list.  Filters lower in the list are applied last.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>configureFilterButton</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Edit...</string>
-                                        </property>
-                                        <property name="toggleButton">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to configure options for the highlighted Filter.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>removeFilterButton</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Remove</string>
-                                        </property>
-                                        <property name="toggleButton">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to remove the highlighted Filter.</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer11_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget" row="1" column="0">
-                        <property name="name">
-                            <cstring>layout18</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="KListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Sentence Boundary Detector</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>sbdsList</cstring>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>This is a list of all the configured Sentence Boundary Detector (SBD) Filters.  SBDs break long text jobs up into sentences, which reduces the time before a job begins speaking, and permits you to advance or rewind through a job.  SBDs are applied in the order listed (top to bottom) after all the normal filters at the top of this screen have been applied.  Filtering stops when the first SBD modifies the text.</string>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout16</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>sbdButton</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>5</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Co&amp;nfigure</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click this button to edit the Sentence Boundary Detector (SBD) configuration or add additional SBD filters.</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer11_2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>11</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
                     </widget>
                 </grid>
             </widget>
@@ -803,6 +415,651 @@
                                 </property>
                             </spacer>
                         </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Notifications</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>notifyGroup</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="title">
+                            <string></string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="KListView" row="1" column="0">
+                                <column>
+                                    <property name="text">
+                                        <string>Application/Event</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Action</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Talker</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>notifyListView</cstring>
+                                </property>
+                                <property name="rootIsDecorated">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string></string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>This is a list of configured application events and actions to be taken when received.  The "default" event governs all events not specifically configured.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="2" column="0">
+                                <property name="name">
+                                    <cstring>layout21</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>notifyPresentLabel</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>0</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Notifications to speak:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>notifyWhatComboBox</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Applies only to the default event.  Does not affect application-specific events.  Only events that display in the manner which you select will be spoken.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox">
+                                        <property name="name">
+                                            <cstring>notifyPresentComboBox</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Applies only to the default event.  Does not affect application-specific events.  Only events that display in the manner which you select will be spoken.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget" row="0" column="0">
+                                <property name="name">
+                                    <cstring>layout28</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>notifyAddButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Add...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to configure notification for a specific application event.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>notifyRemoveButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Re&amp;move</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to remove a specific notification event from the list.  You cannot remove the default event.</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer16</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>152</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>notifyClearButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Cl&amp;ear</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Removes all the application specific events.  The default event remains.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>notifyLoadButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Load...</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to read configured notification events from a file.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>notifySaveButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Save...</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to write all the configured application events to a file.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget" row="3" column="0">
+                                <property name="name">
+                                    <cstring>notifyExceptionActionLayout</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QPushButton" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>notifyTestButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string></string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>When a custom text message is specified, click this button to test the message.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>notifyActionLabel</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>0</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Ac&amp;tion:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>notifyActionComboBox</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>&lt;qt&gt;Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl&gt;&lt;dt&gt;%e&lt;/dt&gt;&lt;dd&gt;Name of the event&lt;/dd&gt;&lt;dt&gt;%a&lt;/dt&gt;&lt;dd&gt;Application that sent the event&lt;/dd&gt;&lt;dt&gt;%m&lt;/dt&gt;&lt;dd&gt;The message sent by the application&lt;/dd&gt;&lt;/dl&gt;&lt;/qt&gt;</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit" row="0" column="3">
+                                        <property name="name">
+                                            <cstring>notifyMsgLineEdit</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>&lt;qt&gt;Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl&gt;&lt;dt&gt;%e&lt;/dt&gt;&lt;dd&gt;Name of the event&lt;/dd&gt;&lt;dt&gt;%a&lt;/dt&gt;&lt;dd&gt;Application that sent the event&lt;/dd&gt;&lt;dt&gt;%m&lt;/dt&gt;&lt;dd&gt;The message sent by the application&lt;/dd&gt;&lt;/dl&gt;&lt;/qt&gt;</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>notifyActionComboBox</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>0</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>&lt;qt&gt;Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl&gt;&lt;dt&gt;%e&lt;/dt&gt;&lt;dd&gt;Name of the event&lt;/dd&gt;&lt;dt&gt;%a&lt;/dt&gt;&lt;dd&gt;Application that sent the event&lt;/dd&gt;&lt;dt&gt;%m&lt;/dt&gt;&lt;dd&gt;The message sent by the application&lt;/dd&gt;&lt;/dl&gt;&lt;/qt&gt;</string>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <widget class="QLayoutWidget" row="4" column="0">
+                                <property name="name">
+                                    <cstring>layout19_2</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>notifyTalkerLabel</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>0</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Talke&amp;r:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>notifyTalkerLineEdit</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>The Talker that will speak the notification.  The "default" Talker is the topmost talker listed on the Talkers tab.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit">
+                                        <property name="name">
+                                            <cstring>notifyTalkerLineEdit</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="paletteForegroundColor">
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>The Talker that will speak the notification.  The "default" Talker is the topmost talker listed on the Talkers tab.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>notifyTalkerButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>...</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to select the Talker to speak the notification.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout17</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>notifyEnableCheckBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Speak notifications (&amp;KNotify)</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>When checked and KTTS is enabled, notification events from applications sent via KNotify will be spoken according to the options you set on this tab.</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer12</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>16</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>notifyExcludeEventsWithSoundCheckBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;xclude notifications with a sound</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>When checked, notification events that have a sound will not be spoken.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Filters</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout14</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Filter</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>filtersList</cstring>
+                                </property>
+                                <property name="fullWidth">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.  Filters modify text before it is spoken.  They can be used to substitute for mispronounced words, transform XML from one form to another, or change the default Talker to be used for speech output.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout9_2</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>addFilterButton</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Add...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to add and configure a new Filter.</string>
+                                            <comment>What's this text</comment>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>higherFilterPriorityButton</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>U&amp;p</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to move selected filter up in the list.  Filters higher in the list are applied first.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>lowerFilterPriorityButton</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Do&amp;wn</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to move a filter down in the list.  Filters lower in the list are applied last.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>configureFilterButton</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Edit...</string>
+                                        </property>
+                                        <property name="toggleButton">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to configure options for the highlighted Filter.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>removeFilterButton</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                        <property name="toggleButton">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to remove the highlighted Filter.</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer11_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="0">
+                        <property name="name">
+                            <cstring>layout18</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Sentence Boundary Detector</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>sbdsList</cstring>
+                                </property>
+                                <property name="fullWidth">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>This is a list of all the configured Sentence Boundary Detector (SBD) Filters.  SBDs break long text jobs up into sentences, which reduces the time before a job begins speaking, and permits you to advance or rewind through a job.  SBDs are applied in the order listed (top to bottom) after all the normal filters at the top of this screen have been applied.  Filtering stops when the first SBD modifies the text.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout16</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>sbdButton</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Co&amp;nfigure</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click this button to edit the Sentence Boundary Detector (SBD) configuration or add additional SBD filters.</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer11_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>11</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
                     </widget>
                 </grid>
             </widget>
@@ -1285,30 +1542,6 @@
         <slot>slotConfigChanged()</slot>
     </connection>
     <connection>
-        <sender>enableKttsdCheckBox</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>notifyGroupBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>enableNotifyCheckBox</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>enablePopupsOnlyCheckBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>enableNotifyCheckBox</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
-        <sender>enablePopupsOnlyCheckBox</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
         <sender>embedInSysTrayCheckBox</sender>
         <signal>toggled(bool)</signal>
         <receiver>showMainWindowOnStartupCheckBox</receiver>
@@ -1345,18 +1578,6 @@
         <slot>slotConfigChanged()</slot>
     </connection>
     <connection>
-        <sender>enablePopupsOnlyCheckBox</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>enablePassiveOnlyCheckBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>enablePassiveOnlyCheckBox</sender>
-        <signal>clicked()</signal>
-        <receiver>KCMKttsMgrWidget</receiver>
-        <slot>slotConfigChanged()</slot>
-    </connection>
-    <connection>
         <sender>autostartMgrCheckBox</sender>
         <signal>toggled(bool)</signal>
         <receiver>autoexitMgrCheckBox</receiver>
@@ -1378,11 +1599,30 @@
 <tabstops>
     <tabstop>mainTab</tabstop>
     <tabstop>enableKttsdCheckBox</tabstop>
-    <tabstop>enableNotifyCheckBox</tabstop>
-    <tabstop>enablePopupsOnlyCheckBox</tabstop>
-    <tabstop>enablePassiveOnlyCheckBox</tabstop>
     <tabstop>embedInSysTrayCheckBox</tabstop>
     <tabstop>showMainWindowOnStartupCheckBox</tabstop>
+    <tabstop>autostartMgrCheckBox</tabstop>
+    <tabstop>autoexitMgrCheckBox</tabstop>
+    <tabstop>talkersList</tabstop>
+    <tabstop>addTalkerButton</tabstop>
+    <tabstop>higherTalkerPriorityButton</tabstop>
+    <tabstop>lowerTalkerPriorityButton</tabstop>
+    <tabstop>configureTalkerButton</tabstop>
+    <tabstop>removeTalkerButton</tabstop>
+    <tabstop>notifyEnableCheckBox</tabstop>
+    <tabstop>notifyExcludeEventsWithSoundCheckBox</tabstop>
+    <tabstop>notifyAddButton</tabstop>
+    <tabstop>notifyRemoveButton</tabstop>
+    <tabstop>notifyClearButton</tabstop>
+    <tabstop>notifyLoadButton</tabstop>
+    <tabstop>notifySaveButton</tabstop>
+    <tabstop>notifyListView</tabstop>
+    <tabstop>notifyPresentComboBox</tabstop>
+    <tabstop>notifyActionComboBox</tabstop>
+    <tabstop>notifyTestButton</tabstop>
+    <tabstop>notifyMsgLineEdit</tabstop>
+    <tabstop>notifyTalkerLineEdit</tabstop>
+    <tabstop>notifyTalkerButton</tabstop>
     <tabstop>filtersList</tabstop>
     <tabstop>addFilterButton</tabstop>
     <tabstop>higherFilterPriorityButton</tabstop>
@@ -1391,12 +1631,14 @@
     <tabstop>removeFilterButton</tabstop>
     <tabstop>sbdsList</tabstop>
     <tabstop>sbdButton</tabstop>
-    <tabstop>talkersList</tabstop>
-    <tabstop>addTalkerButton</tabstop>
-    <tabstop>higherTalkerPriorityButton</tabstop>
-    <tabstop>lowerTalkerPriorityButton</tabstop>
-    <tabstop>configureTalkerButton</tabstop>
-    <tabstop>removeTalkerButton</tabstop>
+    <tabstop>textPreMsgCheck</tabstop>
+    <tabstop>textPreMsg</tabstop>
+    <tabstop>textPreSndCheck</tabstop>
+    <tabstop>textPreSnd</tabstop>
+    <tabstop>textPostMsgCheck</tabstop>
+    <tabstop>textPostMsg</tabstop>
+    <tabstop>textPostSndCheck</tabstop>
+    <tabstop>textPostSnd</tabstop>
     <tabstop>artsRadioButton</tabstop>
     <tabstop>sinkComboBox</tabstop>
     <tabstop>timeBox</tabstop>
@@ -1423,10 +1665,13 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

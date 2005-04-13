@@ -3,6 +3,10 @@
  <name>Emoticons (English)</name>
  <language-code>en</language-code>
  <appid>knotify</appid>
+ <appid>kopete</appid>
+ <appid>ksirc</appid>
+ <appid>kvirc</appid>
+ <appid>konversation</appid>
  <word>
   <type>RegExp</type>
   <match><![CDATA[\s\:\)]]></match>

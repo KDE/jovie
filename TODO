@@ -27,6 +27,9 @@ _ Hadifix plugin:
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
 _ KTTSMgr:
+    _ If the Resume button is accidentally clicked twice, it restarts a paused job from the beginning.
+      According to the API, resumeText() will restart a job that is already speaking.  Either the
+      API should be changed, or the Resume button should be disabled for speaking jobs.
     _ Give Talkers a Talker Name entered by user.  Show this name in Jobs tab, Change Talker screen,
       and in systray menu.
     _ Change the Current Sentence panel to show the current sentence of the selected job?  If selected

@@ -1,0 +1,62 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>SelectEventWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SelectEventWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>472</width>
+            <height>326</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>eventSrcLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Event source:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>eventSrcComboBox</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="1">
+            <property name="name">
+                <cstring>eventSrcComboBox</cstring>
+            </property>
+        </widget>
+        <widget class="KListView" row="1" column="0" rowspan="1" colspan="2">
+            <column>
+                <property name="text">
+                    <string>Events</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>eventsListView</cstring>
+            </property>
+            <property name="fullWidth">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
+</UI>
