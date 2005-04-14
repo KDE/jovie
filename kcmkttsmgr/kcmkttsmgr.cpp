@@ -1736,7 +1736,8 @@ void KCMKttsMgr::kttsdStarted()
     if (kttsdLoaded)
     {
         m_kttsmgrw->enableKttsdCheckBox->setChecked(true);
-        m_kttsmgrw->notifyTestButton->setEnabled(!m_kttsmgrw->notifyMsgLineEdit->text().isEmpty());
+        // Enable/disable notify Test button.
+        slotNotifyListView_selectionChanged();
     } else {
         m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
         m_kttsmgrw->notifyTestButton->setEnabled(false);
@@ -2284,15 +2285,14 @@ void KCMKttsMgr::slotNotifyListView_selectionChanged()
                 int msglen = msg.length();
                 msg = msg.mid( 1, msglen-2 );
                 m_kttsmgrw->notifyMsgLineEdit->setText( msg );
-                m_kttsmgrw->notifyTestButton->setEnabled( 
-                    !m_kttsmgrw->notifyMsgLineEdit->text().isEmpty() &&
-                    m_kttsmgrw->enableKttsdCheckBox->isChecked() );
             } else {
-                m_kttsmgrw->notifyTestButton->setEnabled( false );
                 m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
                 m_kttsmgrw->notifyMsgLineEdit->clear();
             }
             m_kttsmgrw->notifyRemoveButton->setEnabled( !defaultItem );
+            m_kttsmgrw->notifyTestButton->setEnabled(
+                action != NotifyAction::DoNotSpeak &&
+                m_kttsmgrw->enableKttsdCheckBox->isChecked());
         }
     } else {
         m_kttsmgrw->notifyPresentComboBox->setEnabled( false );
@@ -2342,11 +2342,24 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
     QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (item)
     {
-        QString msg = m_kttsmgrw->notifyMsgLineEdit->text();
-        msg.replace("%a", i18n("sample application"));
-        msg.replace("%e", i18n("sample event"));
-        msg.replace("%m", i18n("sample notification message"));
-        sayMessage(msg, item->text(nlvcTalker));
+        QString msg;
+        int action = NotifyAction::action(item->text(nlvcAction));
+        switch (action)
+        {
+            case NotifyAction::SpeakEventName:
+                msg = item->text(nlvcEventName);
+                break;
+            case NotifyAction::SpeakMsg:
+                msg = i18n("sample notification message");
+                break;
+            case NotifyAction::SpeakCustom:
+                msg = m_kttsmgrw->notifyMsgLineEdit->text();
+                msg.replace("%a", i18n("sample application"));
+                msg.replace("%e", i18n("sample event"));
+                msg.replace("%m", i18n("sample notification message"));
+                break;
+        }
+        if (!msg.isEmpty()) sayMessage(msg, item->text(nlvcTalker));
     }
 }
 
