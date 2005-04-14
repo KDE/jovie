@@ -633,8 +633,11 @@
                                         <property name="text">
                                             <string></string>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Click to test notification</string>
+                                        </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>When a custom text message is specified, click this button to test the message.</string>
+                                            <string>Click this button to test the notification.  A sample message will be spoken.  Note: The Text-to-Speech system must be enabled.</string>
                                         </property>
                                     </widget>
                                     <widget class="QLabel" row="0" column="0">
