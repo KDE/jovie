@@ -105,6 +105,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kttsd") );
 * And the languages acording to the plug ins.
 */
 KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
+    DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kcmkttsmgr_kspeechsink"),
     KCModule(KCMKttsMgrFactory::instance(), parent, name)
 {
@@ -1677,6 +1678,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
             {
                 kdDebug() << "Starting KTTSD failed with message " << error << endl;
                 m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+                m_kttsmgrw->notifyTestButton->setEnabled(false);
             }
         }
     }
@@ -1732,9 +1734,13 @@ void KCMKttsMgr::kttsdStarted()
     }
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded)
+    {
         m_kttsmgrw->enableKttsdCheckBox->setChecked(true);
-    else
+        m_kttsmgrw->notifyTestButton->setEnabled(!m_kttsmgrw->notifyMsgLineEdit->text().isEmpty());
+    } else {
         m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->notifyTestButton->setEnabled(false);
+    }
 }
 
 /**
@@ -1750,6 +1756,7 @@ void KCMKttsMgr::kttsdExiting()
         m_jobMgrPart = 0;
     }
     m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+    m_kttsmgrw->notifyTestButton->setEnabled(false);
 }
 
 /**
@@ -2278,7 +2285,8 @@ void KCMKttsMgr::slotNotifyListView_selectionChanged()
                 msg = msg.mid( 1, msglen-2 );
                 m_kttsmgrw->notifyMsgLineEdit->setText( msg );
                 m_kttsmgrw->notifyTestButton->setEnabled( 
-                    !m_kttsmgrw->notifyMsgLineEdit->text().isEmpty() );
+                    !m_kttsmgrw->notifyMsgLineEdit->text().isEmpty() &&
+                    m_kttsmgrw->enableKttsdCheckBox->isChecked() );
             } else {
                 m_kttsmgrw->notifyTestButton->setEnabled( false );
                 m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
@@ -2324,13 +2332,22 @@ void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
     if ( !item ) return;  // This shouldn't happen.
     if ( m_kttsmgrw->notifyActionComboBox->currentItem() != NotifyAction::SpeakCustom) return;
     item->setText( nlvcActionName, "\"" + text + "\"" );
-    m_kttsmgrw->notifyTestButton->setEnabled( !text.isEmpty() );
+    m_kttsmgrw->notifyTestButton->setEnabled(
+        !text.isEmpty() && m_kttsmgrw->enableKttsdCheckBox->isChecked());
     configChanged();
 }
 
 void KCMKttsMgr::slotNotifyTestButton_clicked()
 {
-    // TODO:
+    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if (item)
+    {
+        QString msg = m_kttsmgrw->notifyMsgLineEdit->text();
+        msg.replace("%a", i18n("sample application"));
+        msg.replace("%e", i18n("sample event"));
+        msg.replace("%m", i18n("sample notification message"));
+        sayMessage(msg, item->text(nlvcTalker));
+    }
 }
 
 void KCMKttsMgr::slotNotifyTalkerButton_clicked()

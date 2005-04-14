@@ -34,6 +34,7 @@
 // KTTS includes.
 #include "addtalker.h"
 #include "kcmkttsmgrwidget.h"
+#include "kspeech_stub.h"
 #include "kspeechsink.h"
 
 class PlugInConf;
@@ -50,6 +51,7 @@ class QPopupMenu;
 
 class KCMKttsMgr :
     public KCModule,
+    public KSpeech_stub,
     virtual public KSpeechSink
 {
     Q_OBJECT
