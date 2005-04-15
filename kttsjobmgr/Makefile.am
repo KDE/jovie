@@ -29,7 +29,7 @@ libkttsjobmgrpart_la_LIBADD = \
 	$(LIB_KFILE) $(LIBVM) $(LIB_KPARTS)
 
 # Header files not to be installed.
-noinst_HEADERS = selecttalkerwidget.h
+noinst_HEADERS = 
 
 # Install desktop file to standard services directory.
 kde_services_DATA =  kttsjobmgr.desktop
