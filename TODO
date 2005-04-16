@@ -67,6 +67,8 @@ _ KTTSD:
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
 _ Other/General:
+    _ Save buttons should confirm if user chooses an existing file.  KFileDialog doesn't seem to
+      offer this option, but shouldn't it?
     _ .desktop files must have a Type keyword, but what to use for kcmkttsd_testmessage.desktop?
     _ Add option to kill plugin process when no longer needed so that memory can be recovered.
       Or maybe some sort of "nice" setting so that process will be swapped out when no longer needed.

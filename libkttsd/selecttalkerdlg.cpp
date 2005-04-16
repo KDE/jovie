@@ -44,7 +44,7 @@
 #include "utils.h"
 #include "selecttalkerdlg.h"
 
-// #include "selecttalkerdlg.moc"
+#include "selecttalkerdlg.moc"
 
 SelectTalkerDlg::SelectTalkerDlg(
     QWidget* parent,
@@ -62,9 +62,9 @@ SelectTalkerDlg::SelectTalkerDlg(
         KDialogBase::Ok)
 {
     m_widget = new SelectTalkerWidget( this );
+    setInitialSize( QSize(700,600) );
     setMainWidget( m_widget );
     // TODO: Why won't KDialogBase properly size itself?
-    setInitialSize( QSize(700,600) );
     m_runningTalkers = runningTalkers;
     m_talkerCode = TalkerCode( talkerCode, false );
 
@@ -364,4 +364,3 @@ void SelectTalkerDlg::enableDisableControls()
     m_widget->closestMatchGroupBox->setEnabled( enableClosest );
     m_widget->talkersListView->setEnabled( enableSpecific );
 }
-
