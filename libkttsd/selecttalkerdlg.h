@@ -37,7 +37,8 @@
 
 // KTTS includes.
 #include "talkercode.h"
-#include "selecttalkerwidget.h"
+
+class SelectTalkerWidget;
 
 class KDE_EXPORT SelectTalkerDlg : public KDialogBase
 {

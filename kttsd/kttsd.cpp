@@ -885,6 +885,13 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
                 {
                     found = true;
                     notifyOptions = notifyEventMap[ event ];
+                } else {
+                    // Check for app-specific default.
+                    if ( notifyEventMap.contains( "default" ) )
+                    {
+                        found = true;
+                        notifyOptions = notifyEventMap[ event ];
+                    }
                 }
             }
             // If no app-specific action, try default.

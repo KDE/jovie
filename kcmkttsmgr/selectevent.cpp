@@ -109,6 +109,13 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     }
     delete config;
     eventsListView->sort();
+    item = eventsListView->lastChild();
+    QString eventDesc = i18n("All other %1 events").arg(eventSrcComboBox->currentText());
+    if ( !item )
+        item = new KListViewItem( eventsListView, eventDesc, "default" );
+    else
+        item = new KListViewItem( eventsListView, item, eventDesc, "default" );
+
 }
 
 QString SelectEvent::getEventSrc()

@@ -1,3 +1,11 @@
+2005-04-17  Gary Cramblitt (PhantomsDad)
+        * Actions to be taken on notifications may now be specified at three levels:
+            Specific event of specific application
+            All other events of specific application
+            All other events
+        * When the last event of an application is deleted, delete the app from
+          Notifications list.
+
 2005-04-12  Gary Cramblitt (PhantomsDad)
         * Enhanced notification options.  Ability to customize each application event.
         * Enhanced Talker chooser for notifications and Job Manager.

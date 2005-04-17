@@ -2403,7 +2403,12 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
     if (eventSrc == "default")
         eventName = NotifyPresent::presentDisplayName( event );
     else
-        eventName = NotifyEvent::getEventName(eventSrc, event);
+    {
+        if (event == "default")
+            eventName = i18n("All other %1 events").arg(eventSrcName);
+        else
+            eventName = NotifyEvent::getEventName(eventSrc, event);
+    }
     QString actionName = NotifyAction::actionName( action );
     QString actionDisplayName = NotifyAction::actionDisplayName( action );
     if (action == NotifyAction::SpeakCustom) actionDisplayName = "\"" + message + "\"";
@@ -2510,7 +2515,13 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 {
     QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    if (!item) return;
+    QListViewItem* parentItem = item->parent();
     delete item;
+    if (parentItem)
+    {
+        if (parentItem->childCount() == 0) delete parentItem;
+    }
     slotNotifyListView_selectionChanged();
     configChanged();
 }

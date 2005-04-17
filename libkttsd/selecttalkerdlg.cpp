@@ -42,8 +42,8 @@
 
 // KTTS includes.
 #include "utils.h"
+#include "selecttalkerwidget.h"
 #include "selecttalkerdlg.h"
-
 #include "selecttalkerdlg.moc"
 
 SelectTalkerDlg::SelectTalkerDlg(
