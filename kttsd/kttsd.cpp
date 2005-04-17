@@ -890,7 +890,7 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
                     if ( notifyEventMap.contains( "default" ) )
                     {
                         found = true;
-                        notifyOptions = notifyEventMap[ event ];
+                        notifyOptions = notifyEventMap[ "default" ];
                         notifyOptions.eventName = QString::null;
                     }
                 }
