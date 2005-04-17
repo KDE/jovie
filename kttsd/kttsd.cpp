@@ -891,6 +891,7 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
                     {
                         found = true;
                         notifyOptions = notifyEventMap[ event ];
+                        notifyOptions.eventName = QString::null;
                     }
                 }
             }
