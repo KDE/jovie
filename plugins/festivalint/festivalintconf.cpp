@@ -46,9 +46,9 @@
 #include <knuminput.h>
 #include <kprocio.h>
 #include <kprogress.h>
+#include <kiconloader.h>
 
 // KTTS includes.
-#include "pluginconf.h"
 #include "testplayer.h"
 
 // FestivalInt includes.
@@ -469,6 +469,8 @@ void FestivalIntConf::scanVoices()
 
         // Iterate thru list of voice codes returned by Festival,
         // find matching entry in voices.xml file, and add to list of supported voices.
+        QPixmap maleIcon = KGlobal::iconLoader()->loadIcon("male", KIcon::Small);
+        QPixmap femaleIcon = KGlobal::iconLoader()->loadIcon("female", KIcon::Small);
         QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
         for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
         {
@@ -494,7 +496,13 @@ void FestivalIntConf::scanVoices()
                     voiceTemp.rateAdjustable = readXmlBool(voiceNode, "rate-adjustable", true);
                     voiceTemp.pitchAdjustable = readXmlBool(voiceNode, "pitch-adjustable", true);
                     m_voiceList.append(voiceTemp);
-                    m_widget->selectVoiceCombo->insertItem(voiceTemp.name + " (" + voiceTemp.code + ")");
+                    QString voiceDisplayName = voiceTemp.name + " (" + voiceTemp.code + ")";
+                    if (voiceTemp.gender == "male")
+                        m_widget->selectVoiceCombo->insertItem(maleIcon, voiceDisplayName);
+                    else if (voiceTemp.gender == "female")
+                        m_widget->selectVoiceCombo->insertItem(femaleIcon, voiceDisplayName);
+                    else
+                        m_widget->selectVoiceCombo->insertItem(voiceDisplayName);
                     break;
                 }
             }

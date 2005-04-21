@@ -33,7 +33,7 @@
 #include <kdebug.h>
 
 // KTTS includes.
-#include <pluginconf.h>
+#include "pluginconf.h"
 
 // FestivalInt includes.
 #include "festivalintconfwidget.h"
