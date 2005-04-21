@@ -221,7 +221,15 @@ void TalkerCode::normalize()
         language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
     }
     if (!countryCode.isEmpty())
-        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ")";
+    {
+        QString countryName = KGlobal::locale()->twoAlphaToCountryName(countryCode);
+        // Some abbreviations to save screen space.
+        if (countryName == i18n("full country name", "United States of America"))
+            countryName = i18n("abbreviated country name", "USA");
+        if (countryName == i18n("full country name", "United Kingdom"))
+            countryName = i18n("abbreviated country name", "UK");
+        language += " (" + countryName + ")";
+    }
     return language;
 }
 
