@@ -42,6 +42,7 @@
 // KTTS includes.
 #include <pluginconf.h>
 #include <testplayer.h>
+#include <talkercode.h>
 
 // Hadifix includes.
 #include "hadifixproc.h"
@@ -125,6 +126,17 @@ class HadifixConfPrivate {
 
       void setDefaults () {
          QStringList::iterator it = defaultVoices.begin();
+         // Find a voice that matches language code, if any.
+         if (!languageCode.isEmpty())
+         {
+            QString justLang = languageCode.left(2);
+            for (;it != defaultVoices.end();++it)
+            {
+               QString voiceCode = QFileInfo(*it).baseName(false).left(2);
+               if (voiceCode == justLang) break;
+            }
+            if (it == defaultVoices.end()) it = defaultVoices.begin();
+         }
          HadifixProc::VoiceGender gender;
          gender = HadifixProc::determineGender(defaultMbrolaExec, *it);
          
@@ -136,8 +148,7 @@ class HadifixConfPrivate {
       void load (KConfig *config, const QString &configGroup) {
          config->setGroup(configGroup);
          
-         QStringList::iterator it = defaultVoices.begin();
-         QString voice = config->readEntry("voice", *it);
+         QString voice = config->readEntry("voice", configWidget->getVoiceFilename());
          
          HadifixProc::VoiceGender gender;
          gender = HadifixProc::determineGender(defaultMbrolaExec, voice);
@@ -224,6 +235,7 @@ HadifixConf::~HadifixConf(){
 
 void HadifixConf::load(KConfig *config, const QString &configGroup) {
    // kdDebug() << "HadifixConf::load: Running" << endl;
+   d->setDefaults();
    d->load (config, configGroup);
 }
 
@@ -249,6 +261,17 @@ QString HadifixConf::getTalkerCode()
         QString voiceFile = d->configWidget->getVoiceFilename();
         if (QFileInfo(voiceFile).exists())
         {
+            // mbrola voice file names usually start with two-letter language code,
+            // but this is by no means guaranteed.
+            QString voiceCode = QFileInfo(voiceFile).baseName(false);
+            QString voiceLangCode = voiceCode.left(2);
+            if (d->languageCode.left(2) != voiceLangCode)
+            {
+               // Verify that first two letters of voice filename are a valid language code.
+               // If they are, switch to that language.
+               if (!TalkerCode::languageCodeToLanguage(voiceLangCode).isEmpty())
+                   d->languageCode = voiceLangCode;
+            }
             QString gender = "male";
             if (!d->configWidget->isMaleVoice()) gender = "female";
             QString volume = "medium";
@@ -262,7 +285,7 @@ QString HadifixConf::getTalkerCode()
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
                     .arg(d->languageCode)
-                    .arg(QFileInfo(voiceFile).baseName(false))
+                    .arg(voiceCode)
                     .arg(gender)
                     .arg(volume)
                     .arg(rate)
