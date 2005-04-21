@@ -18,6 +18,7 @@
  
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtextcodec.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -39,6 +40,7 @@ class HadifixProcPrivate {
          volume = 100;
          time = 100;
          pitch = 100;
+         codec = 0;
       };
 
       ~HadifixProcPrivate() {
@@ -54,6 +56,7 @@ class HadifixProcPrivate {
          volume   = config->readNumEntry ("volume",     100);
          time     = config->readNumEntry ("time",       100);
          pitch    = config->readNumEntry ("pitch",      100);
+         codec    = PlugInProc::codecNameToCodec(config->readEntry ("codec", "Local"));
       };
 
       QString hadifix;
@@ -67,6 +70,7 @@ class HadifixProcPrivate {
       bool waitingStop;      
       KShellProcess* hadifixProc;
       volatile pluginState state;
+      QTextCodec* codec;
       QString synthFilename;
 };
 
@@ -129,7 +133,7 @@ void HadifixProc::synthText(const QString &text, const QString &suggestedFilenam
 {
     if (d == 0) return;  // Caller should have called init.
     synth(text, d->hadifix, d->gender, d->mbrola, d->voice, d->volume,
-        d->time, d->pitch, suggestedFilename);    
+        d->time, d->pitch, d->codec, suggestedFilename);
 }
 
 /**
@@ -148,6 +152,7 @@ void HadifixProc::synth(QString text,
                         QString hadifix, bool isMale,
                         QString mbrola,  QString voice,
                         int volume, int time, int pitch,
+                        QTextCodec *codec,
                         const QString waveFilename)
 {
    // kdDebug() << "HadifixProc::synth: Saying text: '" << text << "' using Hadifix plug in" << endl;
@@ -205,9 +210,16 @@ void HadifixProc::synth(QString text,
    {
      kdDebug() << "HadifixProc::synth: start process failed." << endl;
      d->state = psIdle;
-   } else
+   } else {
+     QCString encodedText;
+     if (codec) {
+       encodedText = codec->fromUnicode(text);
+       // kdDebug() << "HadifixProc::synth: encoding using " << codec->name() << endl;
+     } else
+       encodedText = text.latin1();  // Should not happen, but just in case.
      // Send the text to be synthesized to process.
-     d->hadifixProc->writeStdin(text.latin1(), text.length());
+     d->hadifixProc->writeStdin(encodedText, encodedText.length());
+   }
 }
 
 /**

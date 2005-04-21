@@ -70,7 +70,8 @@ class HadifixConfPrivate {
 
       void setConfiguration (QString hadifixExec,  QString mbrolaExec,
                              QString voice,        bool male,
-                             int volume, int time, int pitch)
+                             int volume, int time, int pitch,
+                             QString codecName)
       {
          configWidget->hadifixURL->setURL (hadifixExec);
          configWidget->mbrolaURL->setURL (mbrolaExec);
@@ -79,6 +80,8 @@ class HadifixConfPrivate {
          configWidget->volumeBox->setValue (volume);
          configWidget->timeBox->setValue (time);
          configWidget->frequencyBox->setValue (pitch);
+         int codec = PlugInProc::codecNameToListIndex(codecName, codecList);
+         configWidget->characterCodingBox->setCurrentItem(codec);
       }
 
       void initializeVoices () {
@@ -102,6 +105,24 @@ class HadifixConfPrivate {
          }
       };
 
+      void initializeCharacterCodes() {
+         // Build codec list and fill combobox.
+         codecList = PlugInProc::buildCodecList();
+         configWidget->characterCodingBox->clear();
+         configWidget->characterCodingBox->insertStringList(codecList);
+      }
+
+      void setDefaultEncodingFromVoice() {
+         QString voiceFile = configWidget->getVoiceFilename();
+         QString voiceCode = QFileInfo(voiceFile).baseName(false);
+         voiceCode = voiceCode.left(2);
+         QString codecName = "Local";
+         if (voiceCode == "de") codecName = "ISO 8859-1";
+         if (voiceCode == "hu") codecName = "ISO 8859-2";
+         configWidget->characterCodingBox->setCurrentItem(PlugInProc::codecNameToListIndex(
+            codecName, codecList));
+}
+
       void setDefaults () {
          QStringList::iterator it = defaultVoices.begin();
          HadifixProc::VoiceGender gender;
@@ -109,7 +130,7 @@ class HadifixConfPrivate {
          
          setConfiguration (defaultHadifixExec, defaultMbrolaExec,
                            *it, gender == HadifixProc::MaleGender,
-                           100, 100, 100);
+                           100, 100, 100, "Local");
       };
 
       void load (KConfig *config, const QString &configGroup) {
@@ -121,6 +142,13 @@ class HadifixConfPrivate {
          HadifixProc::VoiceGender gender;
          gender = HadifixProc::determineGender(defaultMbrolaExec, voice);
          bool isMale = (gender == HadifixProc::MaleGender);
+
+         QString defaultCodecName = "Local";
+         // TODO: Need a better way to determine proper codec for each voice.
+         // This will do for now.
+         QString voiceCode = QFileInfo(voice).baseName(false);
+         if (voiceCode.left(2) == "de") defaultCodecName = "ISO 8859-1";
+         if (voiceCode.left(2) == "hu") defaultCodecName = "ISO 8859-2";
          
          setConfiguration (
                config->readEntry ("hadifixExec",defaultHadifixExec),
@@ -129,7 +157,8 @@ class HadifixConfPrivate {
                config->readBoolEntry("gender",  isMale),
                config->readNumEntry ("volume",  100),
                config->readNumEntry ("time",    100),
-               config->readNumEntry ("pitch",   100)
+               config->readNumEntry ("pitch",   100),
+               config->readEntry ("codec",      defaultCodecName)
          );
       };
 
@@ -142,6 +171,8 @@ class HadifixConfPrivate {
          config->writeEntry ("volume",     configWidget->volumeBox->value());
          config->writeEntry ("time",       configWidget->timeBox->value());
          config->writeEntry ("pitch",      configWidget->frequencyBox->value());
+         config->writeEntry ("codec",      PlugInProc::codecIndexToCodecName(
+                                              configWidget->characterCodingBox->currentItem(), codecList));
       }
 
       HadifixConfigUI *configWidget;
@@ -150,6 +181,7 @@ class HadifixConfPrivate {
       QString defaultHadifixExec;
       QString defaultMbrolaExec;
       QStringList defaultVoices;
+      QStringList codecList;
 
       // Wave file playing on play object.
       QString waveFile;
@@ -175,6 +207,10 @@ HadifixConf::HadifixConf( QWidget* parent, const char* name, const QStringList &
    connect(d->configWidget->voiceButton, SIGNAL(clicked()), this, SLOT(voiceButton_clicked()));
    connect(d->configWidget->testButton, SIGNAL(clicked()), this, SLOT(testButton_clicked()));
    connect(d->configWidget, SIGNAL(changed(bool)), this, SLOT(configChanged (bool)));
+   connect(d->configWidget->characterCodingBox, SIGNAL(textChanged(const QString&)),
+        this, SLOT(configChanged()));
+   connect(d->configWidget->voiceCombo, SIGNAL(activated(int)), this, SLOT(voiceCombo_activated(int)));
+   d->initializeCharacterCodes();
    d->initializeVoices();
    d->setDefaults();
    layout->addWidget (d->configWidget);
@@ -252,10 +288,16 @@ void HadifixConf::voiceButton_clicked () {
    if (dialog->exec() == QDialog::Accepted) {
       d->configWidget->setVoice (widget->voiceFileURL->url(),
                                  widget->maleOption->isChecked());
+      d->setDefaultEncodingFromVoice();
       emit changed(true);
    }
    
    delete dialog;
+}
+
+void HadifixConf::voiceCombo_activated(int /*index*/)
+{
+    d->setDefaultEncodingFromVoice();
 }
 
 void HadifixConf::testButton_clicked () {
@@ -298,6 +340,7 @@ void HadifixConf::testButton_clicked () {
       d->configWidget->volumeBox->value(),
       d->configWidget->timeBox->value(),
       d->configWidget->frequencyBox->value(),
+      PlugInProc::codecIndexToCodec(d->configWidget->characterCodingBox->currentItem(), d->codecList),
       tmpWaveFile);
 
    // Display progress dialog modally.  Processing continues when plugin signals synthFinished,

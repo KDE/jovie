@@ -160,6 +160,7 @@ class HadifixProc : public PlugInProc{
                             QString hadifix, bool isMale,
                             QString mbrola,  QString voice,
                             int volume, int time, int pitch,
+                            QTextCodec* codec,
                             const QString waveFilename);
     
     /**

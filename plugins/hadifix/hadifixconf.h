@@ -73,6 +73,7 @@ class HadifixConf : public PlugInConf {
     private slots:
         virtual void voiceButton_clicked();
         virtual void testButton_clicked();
+        virtual void voiceCombo_activated(int index);
         void slotSynthFinished();
         void slotSynthStopped();
 

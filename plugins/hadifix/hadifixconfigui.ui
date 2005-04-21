@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>578</width>
-            <height>350</height>
+            <height>388</height>
         </rect>
     </property>
     <property name="caption">
@@ -94,7 +94,10 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Voice file:</string>
+                                <string>&amp;Voice file:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>voiceCombo</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Select a voice for speaking text.  If no voices are listed, check your Mbrola configuration.  You must install at least one voice.</string>
@@ -145,7 +148,10 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Volume ratio:</string>
+                                <string>Volume &amp;ratio:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>volumeBox</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
@@ -232,6 +238,9 @@
                             <property name="text">
                                 <string>Speed:</string>
                             </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>timeBox</cstring>
+                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
                             </property>
@@ -309,7 +318,10 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Pitch:</string>
+                                <string>&amp;Pitch:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>frequencyBox</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
@@ -401,7 +413,10 @@
                                 <cstring>hadifixBinLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>txt2pho executable:</string>
+                                <string>txt2pho e&amp;xecutable:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>hadifixURL</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
@@ -428,7 +443,10 @@
                                 <cstring>mbrolaBinLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Mbrola executable:</string>
+                                <string>&amp;Mbrola executable:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>mbrolaURL</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
@@ -449,6 +467,51 @@
                             <property name="whatsThis" stdset="0">
                                 <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
                             </property>
+                        </widget>
+                        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>layout5</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>characterCodingLabel</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Character &amp;encoding:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>characterCodingBox</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KComboBox">
+                                    <property name="name">
+                                        <cstring>characterCodingBox</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>7</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>This combo box specifies which character encoding is used for passing the text.  For most western languages, use ISO-8859-1.  For Hungarian, use ISO-8859-2.</string>
+                                    </property>
+                                </widget>
+                            </hbox>
                         </widget>
                     </grid>
                 </widget>
@@ -623,6 +686,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>
