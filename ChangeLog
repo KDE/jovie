@@ -6,6 +6,7 @@
           chosen language.
         * Abbreviate USA and UK country names to save space.
         * Display male/female icons in Festival Interactive configuration dialog.
+        * Use new Select Talker dialog in Talker Chooser filter.
 
 2005-04-17  Gary Cramblitt (PhantomsDad)
         * Actions to be taken on notifications may now be specified at three levels

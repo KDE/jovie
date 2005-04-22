@@ -1,7 +1,4 @@
 _ Filters:
-    _ Change TalkerChooser filter to use new SelectTalker dialog.
-    _ Although one can configure Canadian English voice in Festival, there is no way to choose
-      Canadian English in the Talker Chooser.
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
     _ Add KNewStuff capability for folks to upload/download filter configs.
 _ Audio Plugins:

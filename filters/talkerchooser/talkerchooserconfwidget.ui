@@ -10,8 +10,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>548</width>
-            <height>378</height>
+            <width>547</width>
+            <height>240</height>
         </rect>
     </property>
     <property name="caption">
@@ -84,13 +84,13 @@
                                 <cstring>reLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Text contains:</string>
+                                <string>Te&amp;xt contains:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>languageLineEdit</cstring>
+                                <cstring>reLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank, the filter applies to all text jobs of any language.</string>
@@ -165,303 +165,66 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="2" column="0">
+        <widget class="QLayoutWidget" row="2" column="0">
             <property name="name">
-                <cstring>groupBox4</cstring>
+                <cstring>layout19_2</cstring>
             </property>
-            <property name="title">
-                <string>&amp;Use Closest Matching Talker Having</string>
-            </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout10</cstring>
+                        <cstring>talkerLabel</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>languageLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Language:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>languageCheckBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>languageLineEdit</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank, the filter applies to all text jobs of any language.</string>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>languageBrowseButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>...</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>languageCheckBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="0">
-                    <property name="name">
-                        <cstring>layout11</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>synthLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Synthesizer:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>WordBreak|AlignVCenter|AlignLeft</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>synthCheckBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>synthComboBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>synthCheckBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="2" column="0">
-                    <property name="name">
-                        <cstring>layout14</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>volumeLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Volume:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>volumeCheckBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>volumeComboBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>volumeCheckBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>preferredLabel</cstring>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Checked items are preferred over unchecked items.</string>
+                        <string>&amp;Talker:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>talkerLineEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The new Talker that will be used when the conditions above are met.  The default Talker is the topmost in the Talkers tab.  Click the button to choose a Talker.</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="2">
+                <widget class="KLineEdit">
                     <property name="name">
-                        <cstring>layout12</cstring>
+                        <cstring>talkerLineEdit</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>genderLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Gender:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>genderCheckBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>genderComboBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>genderCheckBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The new Talker that will be used when the conditions above are met.  The default Talker is the topmost in the Talkers tab.  Click the button to choose a Talker.</string>
+                    </property>
                 </widget>
-                <widget class="QLayoutWidget" row="2" column="2">
+                <widget class="KPushButton">
                     <property name="name">
-                        <cstring>layout13</cstring>
+                        <cstring>talkerButton</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>rateLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Rate:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>rateCheckBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>rateComboBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>rateCheckBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="Line" row="1" column="1" rowspan="2" colspan="1">
-                    <property name="name">
-                        <cstring>line1</cstring>
+                    <property name="text">
+                        <string>...</string>
                     </property>
-                    <property name="frameShape">
-                        <enum>VLine</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Plain</enum>
-                    </property>
-                    <property name="lineWidth">
-                        <number>2</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
+                    <property name="whatsThis" stdset="0">
+                        <string>Click to select a Talker.</string>
                     </property>
                 </widget>
-            </grid>
+            </hbox>
         </widget>
         <widget class="QLayoutWidget" row="3" column="0">
             <property name="name">
@@ -484,10 +247,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Load...</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
+                        <string>&amp;Load...</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Click to load a Talker Chooser configuration from a file.</string>
@@ -507,10 +267,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Save...</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
+                        <string>&amp;Save...</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Click to save this Talker Chooser to a file.</string>
@@ -530,10 +287,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Clear</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
+                        <string>Cl&amp;ear</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Click to clear everything.</string>
@@ -551,17 +305,6 @@
     <tabstop>reLineEdit</tabstop>
     <tabstop>reEditorButton</tabstop>
     <tabstop>appIdLineEdit</tabstop>
-    <tabstop>languageLineEdit</tabstop>
-    <tabstop>languageBrowseButton</tabstop>
-    <tabstop>languageCheckBox</tabstop>
-    <tabstop>synthComboBox</tabstop>
-    <tabstop>synthCheckBox</tabstop>
-    <tabstop>genderComboBox</tabstop>
-    <tabstop>genderCheckBox</tabstop>
-    <tabstop>volumeComboBox</tabstop>
-    <tabstop>volumeCheckBox</tabstop>
-    <tabstop>rateComboBox</tabstop>
-    <tabstop>rateCheckBox</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
@@ -571,10 +314,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>

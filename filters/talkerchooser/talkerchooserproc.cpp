@@ -33,6 +33,7 @@
 
 // Talker Chooser includes.
 #include "talkerchooserproc.h"
+#include "talkerchooserproc.moc"
 
 /**
  * Constructor.
@@ -65,11 +66,18 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
     config->setGroup( configGroup );
     m_re = config->readEntry( "MatchRegExp" );
     m_appIdList = config->readListEntry( "AppIDs" );
-    m_languageCode = config->readEntry( "LanguageCode" );
-    m_synth = config->readEntry( "SynthInName" );
-    m_gender = config->readEntry( "Gender" );
-    m_volume = config->readEntry( "Volume" );
-    m_rate = config->readEntry( "Rate" );
+    m_chosenTalkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
+    // Legacy settings.
+    QString s = config->readEntry( "LanguageCode" );
+    if (!s.isEmpty()) m_chosenTalkerCode.setFullLanguageCode(s);
+    s = config->readEntry( "SynthInName" );
+    if (!s.isEmpty()) m_chosenTalkerCode.setPlugInName(s);
+    s = config->readEntry( "Gender" );
+    if (!s.isEmpty()) m_chosenTalkerCode.setGender(s);
+    s = config->readEntry( "Volume" );
+    if (!s.isEmpty()) m_chosenTalkerCode.setVolume(s);
+    s = config->readEntry( "Rate" );
+    if (!s.isEmpty()) m_chosenTalkerCode.setRate(s);
     return true;
 }
 
@@ -129,15 +137,12 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
     //         " gender " << m_gender << " synth " << m_synth <<
     //         " volume " << m_volume << " rate " << m_rate << endl;
     // Only override the language if user specified a language code.
-    if ( !m_languageCode.isEmpty() )
-        talkerCode->setFullLanguageCode( m_languageCode );
-    talkerCode->setVoice( QString::null );
-    talkerCode->setGender( m_gender );
-    talkerCode->setPlugInName( m_synth );
-    talkerCode->setVolume( m_volume );
-    talkerCode->setRate( m_rate );
+    if (!m_chosenTalkerCode.fullLanguageCode().isEmpty())
+        talkerCode->setFullLanguageCode(m_chosenTalkerCode.fullLanguageCode());
+    talkerCode->setVoice(m_chosenTalkerCode.voice());
+    talkerCode->setGender(m_chosenTalkerCode.gender());
+    talkerCode->setPlugInName(m_chosenTalkerCode.plugInName());
+    talkerCode->setVolume(m_chosenTalkerCode.volume());
+    talkerCode->setRate(m_chosenTalkerCode.rate());
     return inputText;
 }
-
-
-#include "talkerchooserproc.moc"

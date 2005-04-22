@@ -5,5 +5,6 @@ LanguageCode=
 MatchRegExp=
 Rate=
 SynthName=
-UserFilterName=Talker Chooser
+TalkerCode=<voice gender="*female" />
+UserFilterName=Obsolete.  Use Notifications tab instead.
 Volume=

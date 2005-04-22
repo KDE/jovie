@@ -33,6 +33,8 @@
 
 // KTTS includes.
 #include "filterconf.h"
+#include "talkercode.h"
+#include "selecttalkerdlg.h"
 
 // TalkerChooser includes.
 #include "talkerchooserconfwidget.h"
@@ -114,27 +116,19 @@ class TalkerChooserConf : public KttsFilterConf
         virtual QString userPlugInName();
 
     private slots:
-        void slotLanguageBrowseButton_clicked();
         void slotReEditorButton_clicked();
-
-        void slotSynthCheckBox_activated( const QString& text );
-        void slotGenderCheckBox_activated( const QString& text );
-        void slotVolumeCheckBox_activated( const QString& text );
-        void slotRateCheckBox_activated( const QString& text );
-
+        void slotTalkerButton_clicked();
         void slotLoadButton_clicked();
         void slotSaveButton_clicked();
         void slotClearButton_clicked();
 
     private:
-        QString readTalkerSetting(KConfig* config, const QString& key, bool* preferred);
-
         // Configuration Widget.
-        TalkerChooserConfWidget* m_widget;
+        TalkerChooserConfWidget*    m_widget;
         // True if kdeutils Regular Expression Editor is installed.
-        bool m_reEditorInstalled;
-        // Language Code.
-        QString m_languageCode;
+        bool                        m_reEditorInstalled;
+        // User's chosen Talker Code.
+        TalkerCode                  m_talkerCode;
 };
 
 #endif  //_TALKERCHOOSERCONF_H_

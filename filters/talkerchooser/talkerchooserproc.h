@@ -26,6 +26,7 @@
 
 // KTTS includes.
 #include "filterproc.h"
+#include "talkercode.h"
 
 class TalkerChooserProc : virtual public KttsFilterProc
 {
@@ -78,14 +79,9 @@ public:
 
 private:
 
-    QString m_re;
-    QStringList m_appIdList;
-    QString m_languageCode;
-    QString m_synth;
-    QString m_gender;
-    QString m_volume;
-    QString m_rate;
-
+    QString         m_re;
+    QStringList     m_appIdList;
+    TalkerCode      m_chosenTalkerCode;
 };
 
 #endif      // _TALKERCHOOSERPROC_H_

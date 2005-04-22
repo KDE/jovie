@@ -25,12 +25,9 @@
 #include <qstring.h>
 #include <qhbox.h>
 #include <qlayout.h>
-#include <qcheckbox.h>
 
 // KDE includes.
-#include <kglobal.h>
 #include <klocale.h>
-#include <klistview.h>
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kdialogbase.h>
@@ -42,13 +39,10 @@
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 
 // KTTS includes.
-#include "filterconf.h"
-#include "talkercode.h"
 
-// StringReplacer includes.
+// TalkerChooser includes.
 #include "talkerchooserconf.h"
 #include "talkerchooserconf.moc"
 
@@ -67,31 +61,6 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const Q
     m_widget = new TalkerChooserConfWidget(this, "TalkerChooserConfigWidget");
     layout->addWidget(m_widget);
 
-    // Fill combo boxes.
-    KComboBox* cb = m_widget->genderComboBox;
-    cb->insertItem( "" );
-    cb->insertItem( TalkerCode::translatedGender("male") );
-    cb->insertItem( TalkerCode::translatedGender("female") );
-    cb->insertItem( TalkerCode::translatedGender("neutral") );
-
-    cb = m_widget->volumeComboBox;
-    cb->insertItem( "" );
-    cb->insertItem( TalkerCode::translatedVolume("medium") );
-    cb->insertItem( TalkerCode::translatedVolume("loud") );
-    cb->insertItem( TalkerCode::translatedVolume("soft") );
-
-    cb = m_widget->rateComboBox;
-    cb->insertItem( "" );
-    cb->insertItem( TalkerCode::translatedRate("medium") );
-    cb->insertItem( TalkerCode::translatedRate("fast") );
-    cb->insertItem( TalkerCode::translatedRate("slow") );
-
-    cb = m_widget->synthComboBox;
-    cb->insertItem( "" );
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
-    for(unsigned int i=0; i < offers.count() ; ++i)
-        cb->insertItem(offers[i]->name());
-
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
     m_widget->reEditorButton->setEnabled(m_reEditorInstalled);
@@ -104,27 +73,8 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const Q
             this, SLOT(slotReEditorButton_clicked()));
     connect(m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-
-    connect(m_widget->languageBrowseButton, SIGNAL(clicked()),
-            this, SLOT(slotLanguageBrowseButton_clicked()));
-
-    connect(m_widget->synthComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(slotSynthCheckBox_activated(const QString&)));
-    connect(m_widget->genderComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(slotGenderCheckBox_activated(const QString&)));
-    connect(m_widget->volumeComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(slotVolumeCheckBox_activated(const QString&)));
-    connect(m_widget->rateComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(slotRateCheckBox_activated(const QString&)));
-
-    connect(m_widget->synthCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_widget->genderCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_widget->volumeCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_widget->rateCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
+    connect(m_widget->talkerButton, SIGNAL(clicked()),
+            this, SLOT(slotTalkerButton_clicked()));
 
     connect(m_widget->loadButton, SIGNAL(clicked()),
             this, SLOT(slotLoadButton_clicked()));
@@ -142,14 +92,6 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const Q
 */
 TalkerChooserConf::~TalkerChooserConf(){
     // kdDebug() << "TalkerChooserConf::~TalkerChooserConf: Running" << endl;
-}
-
-QString TalkerChooserConf::readTalkerSetting(KConfig* config, const QString& key, bool* preferred)
-{
-    QString val = config->readEntry( key );
-    *preferred = (val.startsWith("*"));
-    if (*preferred) val = val.mid(1);
-    return val;
 }
 
 /**
@@ -174,37 +116,20 @@ void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
     m_widget->appIdLineEdit->setText(
             config->readEntry("AppIDs", m_widget->appIdLineEdit->text()) );
 
-    bool preferred = false;
-    QString val;
+    m_talkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
+    // Legacy settings.
+    QString s = config->readEntry( "LanguageCode" );
+    if (!s.isEmpty()) m_talkerCode.setFullLanguageCode(s);
+    s = config->readEntry( "SynthInName" );
+    if (!s.isEmpty()) m_talkerCode.setPlugInName(s);
+    s = config->readEntry( "Gender" );
+    if (!s.isEmpty()) m_talkerCode.setGender(s);
+    s = config->readEntry( "Volume" );
+    if (!s.isEmpty()) m_talkerCode.setVolume(s);
+    s = config->readEntry( "Rate" );
+    if (!s.isEmpty()) m_talkerCode.setRate(s);
 
-    m_languageCode = readTalkerSetting( config, "LanguageCode", &preferred );
-    QString language = "";
-    if (!m_languageCode.isEmpty())
-    {
-        language = KGlobal::locale()->twoAlphaToLanguageName(m_languageCode);
-        m_widget->languageLineEdit->setText( language );
-    }
-    m_widget->languageCheckBox->setChecked( preferred );
-
-    val = readTalkerSetting( config, "SynthName", &preferred );
-    m_widget->synthComboBox->setCurrentItem( val );
-    m_widget->synthCheckBox->setChecked( preferred );
-    m_widget->synthCheckBox->setEnabled( !val.isEmpty() );
-
-    val = TalkerCode::translatedGender( readTalkerSetting( config, "Gender", &preferred ) );
-    m_widget->genderComboBox->setCurrentItem( val );
-    m_widget->genderCheckBox->setChecked( preferred );
-    m_widget->genderCheckBox->setEnabled( !val.isEmpty() );
-
-    val = TalkerCode::translatedVolume( readTalkerSetting( config, "Volume", &preferred ) );
-    m_widget->volumeComboBox->setCurrentItem( val );
-    m_widget->volumeCheckBox->setChecked( preferred );
-    m_widget->volumeCheckBox->setEnabled( !val.isEmpty() );
-
-    val = TalkerCode::translatedRate( readTalkerSetting( config, "Rate", &preferred ) );
-    m_widget->rateComboBox->setCurrentItem( val );
-    m_widget->rateCheckBox->setChecked( preferred );
-    m_widget->rateCheckBox->setEnabled( !val.isEmpty() );
+    m_widget->talkerLineEdit->setText(m_talkerCode.getTranslatedDescription());
 }
 
 /**
@@ -223,27 +148,7 @@ void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
     config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry( "MatchRegExp", m_widget->reLineEdit->text() );
     config->writeEntry( "AppIDs", m_widget->appIdLineEdit->text().replace(" ", "") );
-    QString val;
-
-    val = m_languageCode;
-    if ( m_widget->languageCheckBox->isChecked() ) val.prepend( "*" );
-    config->writeEntry( "LanguageCode", m_languageCode );
-
-    val = m_widget->synthComboBox->currentText();
-    if ( m_widget->synthCheckBox->isChecked() ) val.prepend( "*" );
-    config->writeEntry( "SynthName", val );
-
-    val = TalkerCode::untranslatedGender( m_widget->genderComboBox->currentText() );
-    if ( m_widget->genderCheckBox->isChecked() ) val.prepend( "*" );
-    config->writeEntry( "Gender", val );
-
-    val = TalkerCode::untranslatedVolume( m_widget->volumeComboBox->currentText() );
-    if ( m_widget->volumeCheckBox->isChecked() ) val.prepend( "*" );
-    config->writeEntry( "Volume", val );
-
-    val = TalkerCode::untranslatedRate( m_widget->rateComboBox->currentText() );
-    if ( m_widget->rateCheckBox->isChecked() ) val.prepend( "*" );
-    config->writeEntry( "Rate", val );
+    config->writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
 }
 
 /** 
@@ -261,23 +166,9 @@ void TalkerChooserConf::defaults(){
     m_widget->reLineEdit->setText( "" );
     // Default App ID is blank.
     m_widget->appIdLineEdit->setText( "" );
-    // kdDebug() << "TalkerChooserConf::defaults: Exiting" << endl;
-    m_languageCode = QString::null;
-    m_widget->languageLineEdit->setText( "" );
-    m_widget->languageCheckBox->setChecked( false );
-    m_widget->languageCheckBox->setEnabled( false );
-    m_widget->synthComboBox->setCurrentItem( 0 );
-    m_widget->synthCheckBox->setChecked( false );
-    m_widget->synthCheckBox->setEnabled( false );
-    m_widget->genderComboBox->setCurrentItem( 0 );
-    m_widget->genderCheckBox->setChecked( false );
-    m_widget->genderCheckBox->setEnabled( false );
-    m_widget->volumeComboBox->setCurrentItem( 0 );
-    m_widget->volumeCheckBox->setChecked( false );
-    m_widget->volumeCheckBox->setEnabled( false );
-    m_widget->rateComboBox->setCurrentItem( 0 );
-    m_widget->rateCheckBox->setChecked( false );
-    m_widget->rateCheckBox->setEnabled( false );
+    // Default to using default Talker.
+    m_talkerCode = TalkerCode( QString::null, false );
+    m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
 }
 
 /**
@@ -297,78 +188,12 @@ bool TalkerChooserConf::supportsMultiInstance() { return true; }
  */
 QString TalkerChooserConf::userPlugInName()
 {
-    if (m_widget->languageLineEdit->text().isEmpty() &&
-        m_widget->synthComboBox->currentText().isEmpty() &&
-        m_widget->genderComboBox->currentText().isEmpty() &&
-        m_widget->volumeComboBox->currentText().isEmpty() &&
-        m_widget->rateComboBox->currentText().isEmpty())
-        return QString::null;
+    if (m_widget->talkerLineEdit->text().isEmpty()) return QString::null;
+    if (m_widget->appIdLineEdit->text().isEmpty() &&
+        m_widget->reLineEdit->text().isEmpty()) return QString::null;
     QString instName = m_widget->nameLineEdit->text();
+    if (instName.isEmpty()) return QString::null;
     return instName;
-}
-
-void TalkerChooserConf::slotLanguageBrowseButton_clicked()
-{
-    // Create a  QHBox to host KListView.
-    QHBox* hBox = new QHBox(m_widget, "SelectLanguage_hbox");
-    // Create a KListView and fill with all known languages.
-    KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
-    langLView->addColumn(i18n("Language"));
-    langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(QListView::Single);
-    QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-    QString locale;
-    QString languageCode;
-    QString countryCode;
-    QString charSet;
-    QString language;
-    // Blank line so user can select no language.
-    QListViewItem* item = new KListViewItem(langLView, "", "");
-    if (m_languageCode.isEmpty()) item->setSelected(true);
-    int allLocalesCount = allLocales.count();
-    for (int ndx=0; ndx < allLocalesCount; ndx++)
-    {
-        locale = allLocales[ndx];
-        KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);
-        language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
-        if (!countryCode.isEmpty()) language +=
-            " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        item = new KListViewItem(langLView, language, locale);
-        if (m_languageCode == locale) item->setSelected(true);
-    }
-    // Sort by language.
-    langLView->setSorting(0);
-    langLView->sort();
-    // Display the box in a dialog.
-    KDialogBase* dlg = new KDialogBase(
-        KDialogBase::Swallow,
-        i18n("Select Languages"),
-        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
-        m_widget,
-        "SelectLanguage_dlg",
-        true,
-        true);
-    dlg->setMainWidget(hBox);
-    dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500), false);
-    // TODO: This isn't working.  Furthermore, item appears selected but is not.
-    langLView->ensureItemVisible(langLView->selectedItem());
-    int dlgResult = dlg->exec();
-    if (dlgResult == QDialog::Accepted)
-    {
-        if (langLView->selectedItem())
-        {
-            language = langLView->selectedItem()->text(0);
-            m_languageCode = langLView->selectedItem()->text(1);
-        }
-    }
-    delete dlg;
-    // TODO: Also delete KListView and QHBox?
-    language = KGlobal::locale()->twoAlphaToLanguageName(m_languageCode);
-    m_widget->languageLineEdit->setText(language);
-    m_widget->languageCheckBox->setChecked( !language.isEmpty() );
-    configChanged();
 }
 
 void TalkerChooserConf::slotReEditorButton_clicked()
@@ -394,28 +219,14 @@ void TalkerChooserConf::slotReEditorButton_clicked()
     } else return;
 }
 
-void TalkerChooserConf::slotSynthCheckBox_activated( const QString& text )
+void TalkerChooserConf::slotTalkerButton_clicked()
 {
-    m_widget->synthCheckBox->setEnabled( !text.isEmpty() );
-    if ( text.isEmpty() ) m_widget->synthCheckBox->setChecked( false );
-    configChanged();
-}
-void TalkerChooserConf::slotGenderCheckBox_activated( const QString& text )
-{
-    m_widget->genderCheckBox->setEnabled( !text.isEmpty() );
-    if ( text.isEmpty() ) m_widget->genderCheckBox->setChecked( false );
-    configChanged();
-}
-void TalkerChooserConf::slotVolumeCheckBox_activated( const QString& text )
-{
-    m_widget->volumeCheckBox->setEnabled( !text.isEmpty() );
-    if ( text.isEmpty() ) m_widget->volumeCheckBox->setChecked( false );
-    configChanged();
-}
-void TalkerChooserConf::slotRateCheckBox_activated( const QString& text )
-{
-    m_widget->rateCheckBox->setEnabled( !text.isEmpty() );
-    if ( text.isEmpty() ) m_widget->rateCheckBox->setChecked( false );
+    QString talkerCode = m_talkerCode.getTalkerCode();
+    SelectTalkerDlg dlg( m_widget, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
+    int dlgResult = dlg.exec();
+    if ( dlgResult != KDialogBase::Accepted ) return;
+    m_talkerCode = TalkerCode( dlg.getSelectedTalkerCode(), false );
+    m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
 }
 
@@ -452,21 +263,7 @@ void TalkerChooserConf::slotClearButton_clicked()
     m_widget->nameLineEdit->setText( QString::null );
     m_widget->reLineEdit->setText( QString::null );
     m_widget->appIdLineEdit->setText( QString::null );
-    m_languageCode = QString::null;
-    m_widget->languageLineEdit->setText( QString::null );
-    m_widget->languageCheckBox->setChecked( false );
-    m_widget->languageCheckBox->setEnabled( false );
-    m_widget->synthComboBox->setCurrentItem( 0 );
-    m_widget->synthCheckBox->setChecked( false );
-    m_widget->synthCheckBox->setEnabled( false );
-    m_widget->genderComboBox->setCurrentItem( 0 );
-    m_widget->genderCheckBox->setChecked( false );
-    m_widget->genderCheckBox->setEnabled( false );
-    m_widget->volumeComboBox->setCurrentItem( 0 );
-    m_widget->volumeCheckBox->setChecked( false );
-    m_widget->volumeCheckBox->setEnabled( false );
-    m_widget->rateComboBox->setCurrentItem( 0 );
-    m_widget->rateCheckBox->setChecked( false );
-    m_widget->rateCheckBox->setEnabled( false );
+    m_talkerCode = TalkerCode( QString::null, false );
+    m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
 }
