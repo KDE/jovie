@@ -1,5 +1,14 @@
+2005-04-21  Gary Cramblitt (PhantomsDad)
+        * New Hungarian Hadifix (mbrola and txt2pho) voice available at
+            http://tkltrans.sourceforge.net/
+          Since Hungarian requires ISO 8859-2 character encoding, added encoding option to
+          Hadifix plugin.  Also, Hadifix plugin auto-selects a voice matching the user's
+          chosen language.
+        * Abbreviate USA and UK country names to save space.
+        * Display male/female icons in Festival Interactive configuration dialog.
+
 2005-04-17  Gary Cramblitt (PhantomsDad)
-        * Actions to be taken on notifications may now be specified at three levels:
+        * Actions to be taken on notifications may now be specified at three levels
             Specific event of specific application
             All other events of specific application
             All other events

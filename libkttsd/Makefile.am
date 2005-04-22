@@ -21,8 +21,8 @@ libkttsd_la_SOURCES = \
 	filterproc.cpp \
 	filterconf.cpp \
 	utils.cpp \
-	selecttalkerwidget.ui \
 	selecttalkerdlg.cpp \
+	selecttalkerwidget.ui \
 	notify.cpp
 
 libkttsd_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined

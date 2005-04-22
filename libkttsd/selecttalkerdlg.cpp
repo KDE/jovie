@@ -29,7 +29,6 @@
 #include <qradiobutton.h>
 #include <qhbox.h>
 #include <qgroupbox.h>
-#include <qlayout.h>
 
 // KDE includes.
 #include <kcombobox.h>
@@ -42,7 +41,6 @@
 
 // KTTS includes.
 #include "utils.h"
-#include "selecttalkerwidget.h"
 #include "selecttalkerdlg.h"
 #include "selecttalkerdlg.moc"
 
@@ -62,9 +60,10 @@ SelectTalkerDlg::SelectTalkerDlg(
         KDialogBase::Ok)
 {
     m_widget = new SelectTalkerWidget( this );
-    setInitialSize( QSize(700,600) );
+    // TODO: How do I do this in a general way and still get KDialogBase to properly resize?
+    m_widget->setMinimumSize( QSize(700,500) );
+    // setInitialSize( QSize(700,600) );
     setMainWidget( m_widget );
-    // TODO: Why won't KDialogBase properly size itself?
     m_runningTalkers = runningTalkers;
     m_talkerCode = TalkerCode( talkerCode, false );
 

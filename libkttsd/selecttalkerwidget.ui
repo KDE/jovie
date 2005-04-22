@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>526</width>
-            <height>427</height>
+            <width>558</width>
+            <height>447</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -526,9 +526,6 @@
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
-                            </property>
-                            <property name="resizePolicy">
-                                <enum>Default</enum>
                             </property>
                             <property name="resizeMode">
                                 <enum>LastColumn</enum>

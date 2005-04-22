@@ -37,8 +37,7 @@
 
 // KTTS includes.
 #include "talkercode.h"
-
-class SelectTalkerWidget;
+#include "selecttalkerwidget.h"
 
 class KDE_EXPORT SelectTalkerDlg : public KDialogBase
 {
@@ -68,7 +67,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
         ~SelectTalkerDlg();
 
         /**
-         * Returns the Talker Code user chose.  QString::null if none chosen.
+         * Returns the Talker Code user chose.  QString::null if default Talker chosen.
          * Note that if user did not choose a specific Talker, this will be a partial Talker Code.
          */
         QString getSelectedTalkerCode();
@@ -104,7 +103,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
         bool m_runningTalkers;
         // Current Talker Code.
         TalkerCode m_talkerCode;
-        // List parsed talker codes for the configured Talkers.
+        // List of parsed talker codes for the configured Talkers.
         TalkerCode::TalkerCodeList m_talkers;
 };
 
