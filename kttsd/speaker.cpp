@@ -632,15 +632,24 @@ void Speaker::pauseText(const uint jobNum)
  */
 void Speaker::resumeText(const uint jobNum)
 {
-    if (m_speechData->getTextJobState(jobNum) != KSpeech::jsPaused)
-        startText(jobNum);
-    else
+    int state = m_speechData->getTextJobState(jobNum);
+    switch (state)
     {
-        if (jobNum == m_currentJobNum)
-            m_speechData->setTextJobState(jobNum, KSpeech::jsSpeaking);
-        else
-            m_speechData->setTextJobState(jobNum, KSpeech::jsSpeakable);
-        doUtterances();
+        case KSpeech::jsQueued:
+        case KSpeech::jsFinished:
+            startText(jobNum);
+            break;
+        case KSpeech::jsSpeakable:
+        case KSpeech::jsSpeaking:
+            doUtterances();
+            break;
+        case KSpeech::jsPaused:
+            if (jobNum == m_currentJobNum)
+                m_speechData->setTextJobState(jobNum, KSpeech::jsSpeaking);
+            else
+                m_speechData->setTextJobState(jobNum, KSpeech::jsSpeakable);
+            doUtterances();
+            break;
     }
 }
 

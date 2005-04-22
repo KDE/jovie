@@ -1,3 +1,6 @@
+2005-04-22  Gary Cramblitt (PhantomsDad)
+        * If resumeText is called on a speaking job, do not restart it.
+
 2005-04-21  Gary Cramblitt (PhantomsDad)
         * New Hungarian Hadifix (mbrola and txt2pho) voice available at
             http://tkltrans.sourceforge.net/
