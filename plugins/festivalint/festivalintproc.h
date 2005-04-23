@@ -236,6 +236,11 @@ class FestivalIntProc : public PlugInProc{
         bool isSable(const QString &text);
 
         /**
+        * We attempt to shorten sentences longer than this by replacing commas with periods.
+        */
+        static const int c_tooLong = 600;
+
+        /**
         * Path to the Festival executable.
         */
         QString m_festivalExePath;

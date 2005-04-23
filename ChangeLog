@@ -1,3 +1,8 @@
+2005-04-23  Gary Cramblitt (PhantomsDad)
+        * Break sentences longer than 600 characters into shorter sentences by changing comma to
+          period.  This prevents Festival from droning on lower and lower in tone until it is
+          unintelligible or crashes.
+
 2005-04-22  Gary Cramblitt (PhantomsDad)
         * If resumeText is called on a speaking job, do not restart it.
 

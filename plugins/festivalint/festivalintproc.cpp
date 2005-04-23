@@ -293,8 +293,28 @@ void FestivalIntProc::synth(
         m_runningPitch = pitch;
     }
 
-    // Encode quotation characters.
     QString saidText = text;
+
+    // Split really long sentences into shorter sentences, by looking for commas and converting
+    // to periods.
+    int len = saidText.length();
+    while (len > c_tooLong)
+    {
+        len = saidText.findRev(", ", len - (c_tooLong * 2 / 3), true);
+        if (len != -1)
+        {
+            QString c = saidText.mid(len+2, 1);
+            if (c != c.upper())
+            {
+                saidText.replace(len, 2, ". ");
+                saidText.replace(len+2, 1, c.upper());
+                kdDebug() << "FestivalIntProc::synth: Splitting long sentence at " << len << endl;
+                // kdDebug() << saidText << endl;
+            }
+        }
+    }
+
+    // Encode quotation characters.
     saidText.replace("\\\"", "#!#!");
     saidText.replace("\"", "\\\"");
     saidText.replace("#!#!", "\\\"");
