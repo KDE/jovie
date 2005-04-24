@@ -100,7 +100,7 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
     m_widget->xsltPath->setURL( config->readEntry( "XsltFilePath", m_widget->xsltPath->url() ) );
     m_widget->xsltprocPath->setURL( config->readEntry( "XsltprocPath", m_widget->xsltprocPath->url() ) );
     m_widget->rootElementLineEdit->setText(
-            config->readEntry( "Root Element", m_widget->rootElementLineEdit->text() ) );
+            config->readEntry( "RootElement", m_widget->rootElementLineEdit->text() ) );
     m_widget->doctypeLineEdit->setText(
             config->readEntry( "DocType", m_widget->doctypeLineEdit->text() ) );
     m_widget->appIdLineEdit->setText(
