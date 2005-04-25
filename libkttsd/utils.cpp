@@ -83,31 +83,34 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
 */
 bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const QString &publicId, const QString &systemId*/) {
     // Strip all whitespace and go from there.
-    QString doc = xmldoc.simplifyWhiteSpace();
+    QString doc = xmldoc.stripWhiteSpace();
     // Take off the <?xml...?> if it exists
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
         int xmlStatementEnd = doc.find("?>");
         if(xmlStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
         }
         xmlStatementEnd += 2;  // len '?>' == 2
         doc = doc.right(doc.length() - xmlStatementEnd);
+        doc = doc.stripWhiteSpace();
     }
     // Take off leading comments, if they exist.
-    while(doc.startsWith("<!--") || doc.startsWith(" <!--")) {
+    while(doc.startsWith("<!--")) {
         int commentStatementEnd = doc.find("-->");
         if(commentStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
         }
         commentStatementEnd += 3; // len '>' == 2
         doc = doc.right(doc.length() - commentStatementEnd);
+        doc = doc.stripWhiteSpace();
     }
     // Match the doctype statement if it exists.
-    return (doc.startsWith("<!DOCTYPE " + name) || doc.startsWith(" <!DOCTYPE " + name));
+    // kdDebug() << "KttsUtils::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name << endl;
+    return (doc.startsWith("<!DOCTYPE " + name));
 }
 
 /**
