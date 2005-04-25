@@ -78,8 +78,8 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     m_rootElementList = config->readListEntry( "RootElement", ',' );
     m_doctypeList = config->readListEntry( "DocType", ',' );
     m_appIdList = config->readListEntry( "AppID", ',' );
-    // kdDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath << endl;
-    // kdDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath << endl;
+    kdDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath << endl;
+    kdDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath << endl;
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );
 }
 
@@ -143,7 +143,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 {
     m_wasModified = false;
 
-    // kdDebug() << "XmlTransformerProc::asyncConvert: Running." << endl;
+    kdDebug() << "XmlTransformerProc::asyncConvert: Running." << endl;
     m_text = inputText;
     // If not properly configured, do nothing.
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() )
@@ -167,14 +167,14 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         }
         if ( !found )
         {
-            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList << endl;
+            kdDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList << endl;
             return false;
         }
     }
     if ( !m_doctypeList.isEmpty() )
     {
         bool found = false;
-        for ( uint ndx=0; ndx < m_rootElementList.count(); ++ndx )
+        for ( uint ndx=0; ndx < m_doctypeList.count(); ++ndx )
         {
             if ( KttsUtils::hasDoctype( inputText, m_doctypeList[ndx] ) )
             {
@@ -184,7 +184,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         }
         if ( !found )
         {
-            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find doctype(s)" << m_doctypeList << endl;
+            kdDebug() << "XmlTransformerProc::asyncConvert: Did not find doctype(s)" << m_doctypeList << endl;
             return false;
         }
     }
@@ -206,7 +206,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         }
         if ( !found )
         {
-            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find appId(s)" << m_appIdList << endl;
+            kdDebug() << "XmlTransformerProc::asyncConvert: Did not find appId(s)" << m_appIdList << endl;
             return false;
         }
     }
@@ -221,9 +221,8 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         return false;
     }
     // TODO: Is encoding an issue here?
-    // TODO: It would be nice if we detected whether the XML is properly formed
-    // with the required xml processing instruction and encoding attribute.  If
-    // not wrap it in such.  But maybe this should be handled by SpeechData::setText()?
+    // If input does not have xml processing instruction, add it.
+    if (!inputText.startsWith("<?xml")) *wstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     *wstream << inputText;
     inFile.close();
 #if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)
