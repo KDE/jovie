@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wordlist>
+ <name>Fix Festival Unspeakable Characters</name>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[[\x92-\x95]]]></match>
+  <subst><![CDATA[']]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[']]></match>
+  <subst><![CDATA[']]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[’]]></match>
+  <subst><![CDATA[']]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[—]]></match>
+  <subst><![CDATA[,]]></subst>
+ </word>
+</wordlist>
