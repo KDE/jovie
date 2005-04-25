@@ -1,5 +1,8 @@
 _ Filters:
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
+    _ Many xhtml pages have invalid code containing ampersands in URIs.  For example, go to
+      www.google.com and look at the source.  The URIs contain ampersands that should be &amp;.
+      This causes xsltproc to choke.
     _ Add KNewStuff capability for folks to upload/download filter configs.
 _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
