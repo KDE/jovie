@@ -25,6 +25,8 @@
 #include <qobjectlist.h>
 #include <qwhatsthis.h>
 
+#include <qmime.h>
+
 // KDE includes.
 #include <kinstance.h>
 #include <klocale.h>
@@ -514,11 +516,25 @@ void KttsJobMgrPart::slot_speak_clipboard()
     // Get the clipboard object.
     QClipboard *cb = kapp->clipboard();
 
+
     // Copy text from the clipboard.
-    QString text = cb->text();
+    QString text;
+    /* This code turned off until reliable xml/html processing can be achieved.
+    QMimeSource* data = cb->data();
+    if (data)
+    {
+        if (data->provides("text/html"))
+        {
+            QByteArray d = data->encodedData("text/html");
+            text = QString(d);
+            kdDebug() << "text/html: " << text << endl;
+        }
+    }
+    if (text.isEmpty())  */
+        text = cb->text();
 
     // Speak it.
-    if ( !text.isNull() )
+    if ( !text.isEmpty() )
     {
         uint jobNum = setText(text, NULL);
         // kdDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
