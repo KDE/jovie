@@ -79,7 +79,7 @@ QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
    
    // First of all:
    // dereference links to the mbrola executable (if mbrolaExec is a link).
-   for (int i = 0; i < 10; i++) {
+   for (int i = 0; i < 10; ++i) {
       // If we have a chain of more than ten links something is surely wrong.
       QFileInfo info (mbrolaExec);
       if (info.exists() && info.isSymLink())

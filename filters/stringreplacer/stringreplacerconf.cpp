@@ -213,8 +213,8 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     QListViewItem* item = 0;
     if ( !clear ) item = m_widget->substLView->lastChild();
     QDomNodeList wordList = doc.elementsByTagName("word");
-    int wordListCount = wordList.count();
-    for (int wordIndex = 0; wordIndex < wordListCount; wordIndex++)
+    const int wordListCount = wordList.count();
+    for (int wordIndex = 0; wordIndex < wordListCount; ++wordIndex)
     {
         // kdDebug() << "StringReplacerConf::load: start parsing of word " << wordIndex << endl;
         QDomNode wordNode = wordList.item(wordIndex);
@@ -222,8 +222,8 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         QString wordType;
         QString match;
         QString subst;
-        int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; propIndex++)
+        const int propListCount = propList.count();
+        for (int propIndex = 0; propIndex < propListCount; ++propIndex)
         {
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
@@ -432,8 +432,8 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     // Blank line so user can select no language.
     QListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_languageCodeList.isEmpty()) item->setSelected(true);
-    int allLocalesCount = allLocales.count();
-    for (int ndx=0; ndx < allLocalesCount; ndx++)
+    const int allLocalesCount = allLocales.count();
+    for (int ndx=0; ndx < allLocalesCount; ++ndx)
     {
         locale = allLocales[ndx];
         KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);

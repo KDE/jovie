@@ -174,7 +174,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     QListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
-    for (int ndx=0; ndx < allLocalesCount; ndx++)
+    for (int ndx=0; ndx < allLocalesCount; ++ndx)
     {
         locale = allLocales[ndx];
         language = TalkerCode::languageCodeToLanguage(locale);

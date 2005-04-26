@@ -159,8 +159,8 @@ void SpeechData::loadNotifyEventsFromFile( const QString& filename, bool clear)
 
     // Event list.
     QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
-    int eventListCount = eventList.count();
-    for (int eventIndex = 0; eventIndex < eventListCount; eventIndex++)
+    const int eventListCount = eventList.count();
+    for (int eventIndex = 0; eventIndex < eventListCount; ++eventIndex)
     {
         QDomNode eventNode = eventList.item(eventIndex);
         QDomNodeList propList = eventNode.childNodes();
@@ -169,8 +169,8 @@ void SpeechData::loadNotifyEventsFromFile( const QString& filename, bool clear)
         QString actionName;
         QString message;
         TalkerCode talkerCode;
-        int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; propIndex++)
+        const int propListCount = propList.count();
+        for (int propIndex = 0; propIndex < propListCount; ++propIndex)
         {
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();

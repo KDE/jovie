@@ -187,7 +187,7 @@ QString PlugInProc::getSsmlXsltFilename()
     codecList.append(local);
     codecList.append(i18n("Latin1"));
     codecList.append(i18n("Unicode"));
-    for (int i = 0; (QTextCodec::codecForIndex(i)); i++ )
+    for (int i = 0; (QTextCodec::codecForIndex(i)); ++i )
         codecList.append(QTextCodec::codecForIndex(i)->name());
     return codecList;
 }
@@ -215,7 +215,8 @@ QString PlugInProc::getSsmlXsltFilename()
         codec = PlugInProc::Unicode;
     else {
         codec = PlugInProc::Local;
-        for (uint i = PlugInProc::UseCodec; i < codecList.count(); i++ )
+        const uint codecListCount = codecList.count();
+        for (uint i = PlugInProc::UseCodec; i < codecListCount; ++i )
             if (codecName == codecList[i])
                 codec = i;
     }

@@ -95,13 +95,13 @@ void AddTalker::setSynthToLangMap(SynthToLangMap synthToLangMap)
     m_synthToLangMap = synthToLangMap;
     // "Invert" the map, i.e., map language codes to synthesizers.
     QStringList synthList = m_synthToLangMap.keys();
-    int synthListCount = synthList.count();
-    for (int synthNdx=0; synthNdx < synthListCount; synthNdx++)
+    const int synthListCount = synthList.count();
+    for (int synthNdx=0; synthNdx < synthListCount; ++synthNdx)
     {
         QString synth = synthList[synthNdx];
         QStringList languageCodeList = m_synthToLangMap[synth];
-        int languageCodeListCount = languageCodeList.count();
-        for (int langNdx=0; langNdx < languageCodeListCount; langNdx++)
+        const int languageCodeListCount = languageCodeList.count();
+        for (int langNdx=0; langNdx < languageCodeListCount; ++langNdx)
         {
             QString languageCode = languageCodeList[langNdx];
             QStringList synthesizerList = m_langToSynthMap[languageCode];
@@ -111,8 +111,8 @@ void AddTalker::setSynthToLangMap(SynthToLangMap synthToLangMap)
     }
     // Fill language to language code map.
     QStringList languageCodeList = m_langToSynthMap.keys();
-    int languageCodeListCount = languageCodeList.count();
-    for (int ndx = 0; ndx < languageCodeListCount; ndx++)
+    const int languageCodeListCount = languageCodeList.count();
+    for (int ndx = 0; ndx < languageCodeListCount; ++ndx)
     {
         QString languageCode = languageCodeList[ndx];
         QString language = languageCodeToLanguage(languageCode);
@@ -150,14 +150,14 @@ void AddTalker::applyFilter()
         // Fill language combobox will all possible languages.
         languageSelection->clear();
         QStringList languageCodeList = m_langToSynthMap.keys();
-        int languageCodeListCount = languageCodeList.count();
+        const int languageCodeListCount = languageCodeList.count();
         QStringList languageList;
-        for (int ndx=0; ndx < languageCodeListCount; ndx++)
+        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
             languageList.append(languageCodeToLanguage(languageCodeList[ndx]));
         }
         languageList.sort();
-        for (int ndx=0; ndx < languageCodeListCount; ndx++)
+        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
             languageSelection->insertItem(languageList[ndx]);
         }
@@ -174,8 +174,8 @@ void AddTalker::applyFilter()
         // Fill synthesizer combobox.
         synthesizerSelection->clear();
         synthList.sort();
-        int synthListCount = synthList.count();
-        for (int ndx=0; ndx < synthListCount; ndx++)
+        const int synthListCount = synthList.count();
+        for (int ndx=0; ndx < synthListCount; ++ndx)
         {
             synthesizerSelection->insertItem(synthList[ndx]);
         }
@@ -190,8 +190,8 @@ void AddTalker::applyFilter()
         synthesizerSelection->clear();
         QStringList synthList = m_synthToLangMap.keys();
         synthList.sort();
-        int synthListCount = synthList.count();
-        for (int ndx=0; ndx < synthListCount; ndx++)
+        const int synthListCount = synthList.count();
+        for (int ndx=0; ndx < synthListCount; ++ndx)
         {
             synthesizerSelection->insertItem(synthList[ndx]);
         }
@@ -205,14 +205,14 @@ void AddTalker::applyFilter()
         QString language = languageSelection->currentText();
         // Fill language combobox with language descriptions.
         languageSelection->clear();
-        int languageCodeListCount = languageCodeList.count();
+        const int languageCodeListCount = languageCodeList.count();
         QStringList languageList;
-        for (int ndx=0; ndx < languageCodeListCount; ndx++)
+        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
             languageList.append(languageCodeToLanguage(languageCodeList[ndx]));
         }
         languageList.sort();
-        for (int ndx=0; ndx < languageCodeListCount; ndx++)
+        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
             languageSelection->insertItem(languageList[ndx]);
         }

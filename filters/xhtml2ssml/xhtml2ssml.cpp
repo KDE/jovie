@@ -54,7 +54,8 @@ bool XHTMLToSSMLParser::startDocument() {
 bool XHTMLToSSMLParser::startElement(const QString &, const QString &, const QString &qName, const QXmlAttributes &atts) {
     QString attributes = "";
     if(atts.length() > 0) {
-        for(int i = 0; i <= atts.length() - 1; i++)
+        const int attsLength = atts.lenght();
+        for(int i = 0; i < attsLength; ++i)
             attributes += " " + atts.qName(i) + "=\"" + atts.value(i) + "\"";
     }
     QString fromelement = qName + attributes;

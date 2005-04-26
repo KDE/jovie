@@ -59,7 +59,8 @@ int main(int argc, char *argv[])
     if (args->isSet("list"))
     {
         // Iterate thru the offers to list the plugins.
-        for(unsigned int ndx=0; ndx < offers.count() ; ndx++)
+        const int offersCount = offers.count();
+        for(int ndx=0; ndx < offersCount ; ++ndx)
         {
             QString name = offers[ndx]->name();
             cout << name.latin1() << endl;
@@ -75,7 +76,8 @@ int main(int argc, char *argv[])
 
     if (filterName.isEmpty()) kdError(1) << "No filter name given." << endl;
 
-    for(unsigned int ndx=0; ndx < offers.count() ; ndx++)
+    const int offersCount = offers.count();
+    for(int ndx=0; ndx < offersCount ; ++ndx)
     {
         if(offers[ndx]->name() == filterName)
         {

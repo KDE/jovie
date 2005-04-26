@@ -121,7 +121,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
     {
         case etSpeak: {
             SpeakElem e = m_speakStack.top();
-            for ( int ndx=0; ndx < attrCount; ndx++ )
+            for ( int ndx=0; ndx < attrCount; ++ndx )
             {
                 QDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "lang" )      e.lang = a.value();
@@ -137,7 +137,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             break; }
         case etProsody: {
             ProsodyElem e = m_prosodyStack.top();
-            for ( int ndx=0; ndx < attrCount; ndx++ )
+            for ( int ndx=0; ndx < attrCount; ++ndx )
             {
                 QDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "pitch" )    e.pitch = a.value();
@@ -151,7 +151,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             break; }
         case etEmphasis: {
             EmphasisElem e = m_emphasisStack.top();
-            for ( int ndx=0; ndx < attrCount; ndx++ )
+            for ( int ndx=0; ndx < attrCount; ++ndx )
             {
                 QDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "level" )    e.level = a.value();
@@ -160,7 +160,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             break; }
         case etPS: {
             PSElem e = m_psStack.top();
-            for ( int ndx=0; ndx < attrCount; ndx++ )
+            for ( int ndx=0; ndx < attrCount; ++ndx )
             {
                 QDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "lang" )     e.lang = a.value();
@@ -245,7 +245,7 @@ QString SbdThread::makeBreakElem( const QDomElement& e )
     QString s = "<break";
     QDomNamedNodeMap attrList = e.attributes();
     int attrCount = attrList.count();
-    for ( int ndx=0; ndx < attrCount; ndx++ )
+    for ( int ndx=0; ndx < attrCount; ++ndx )
     {
         QDomAttr a = attrList.item( ndx ).toAttr();
         s += makeAttr( a.name(), a.value() );
@@ -351,7 +351,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             // kdDebug() << "SbdThread::parseSsmlNode: parsedPlainText = [" << d << "]" << endl;
             QStringList sentenceList = QStringList::split( '\t', s, false );
             int lastNdx = sentenceList.count() - 1;
-            for ( int ndx=0; ndx < lastNdx; ndx++ )
+            for ( int ndx=0; ndx < lastNdx; ++ndx )
             {
                 result += startSentence();
                 result += makeSentence( sentenceList[ndx] );
@@ -369,7 +369,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             QString s = parsePlainText( n.toCDATASection().data(), re );
             QStringList sentenceList = QStringList::split( '\t', s, false );
             int lastNdx = sentenceList.count() - 1;
-            for ( int ndx=0; ndx < lastNdx; ndx++ )
+            for ( int ndx=0; ndx < lastNdx; ++ndx )
             {
                 result += startSentence();
                 result += makeSentence( makeCDATA( sentenceList[ndx] ) );

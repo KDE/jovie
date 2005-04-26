@@ -119,16 +119,16 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
 
     // Word list.
     QDomNodeList wordList = doc.elementsByTagName("word");
-    int wordListCount = wordList.count();
-    for (int wordIndex = 0; wordIndex < wordListCount; wordIndex++)
+    const int wordListCount = wordList.count();
+    for (int wordIndex = 0; wordIndex < wordListCount; ++wordIndex)
     {
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
         QString match;
         QString subst;
-        int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; propIndex++)
+        const int propListCount = propList.count();
+        for (int propIndex = 0; propIndex < propListCount; ++propIndex)
         {
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
@@ -210,7 +210,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     }
     QString newText = inputText;
     const int listCount = m_matchList.count();
-    for ( int index = 0; index < listCount; index++ )
+    for ( int index = 0; index < listCount; ++index )
     {
         //kdDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index] << endl;
         newText.replace( m_matchList[index], m_substList[index] );

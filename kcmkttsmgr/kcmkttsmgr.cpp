@@ -572,7 +572,7 @@ void KCMKttsMgr::load()
             KttsFilterConf* filterPlugIn = loadFilterPlugin(filterPlugInName);
             if (filterPlugIn)
             {
-                m_lastFilterID++;
+                ++m_lastFilterID;
                 QString filterID = QString::number(m_lastFilterID);
                 QString groupName = "Filter_" + filterID;
                 filterPlugIn->load(m_config, groupName);
@@ -1158,8 +1158,8 @@ void KCMKttsMgr::slot_addTalker()
         QString countryCode;
         QString charSet;
         QString language;
-        int allLocalesCount = allLocales.count();
-        for (int ndx=0; ndx < allLocalesCount; ndx++)
+        const int allLocalesCount = allLocales.count();
+        for (int ndx=0; ndx < allLocalesCount; ++ndx)
         {
             locale = allLocales[ndx];
             language = TalkerCode::languageCodeToLanguage(locale);
@@ -2126,8 +2126,8 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
 
     // Event list.
     QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
-    int eventListCount = eventList.count();
-    for (int eventIndex = 0; eventIndex < eventListCount; eventIndex++)
+    const int eventListCount = eventList.count();
+    for (int eventIndex = 0; eventIndex < eventListCount; ++eventIndex)
     {
         QDomNode eventNode = eventList.item(eventIndex);
         QDomNodeList propList = eventNode.childNodes();
@@ -2136,8 +2136,8 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
         QString actionName;
         QString message;
         TalkerCode talkerCode;
-        int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; propIndex++)
+        const int propListCount = propList.count();
+        for (int propIndex = 0; propIndex < propListCount; ++propIndex)
         {
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();

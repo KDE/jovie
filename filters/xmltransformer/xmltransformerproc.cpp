@@ -264,7 +264,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 // Process output when xsltproc exits.
 void XmlTransformerProc::processOutput()
 {
-    QFile::remove(m_inFilename);
+    // QFile::remove(m_inFilename);
 
     int exitStatus = 11;
     if (m_xsltProc->normalExit())
@@ -296,10 +296,10 @@ void XmlTransformerProc::processOutput()
     m_text = rstream.read();
     readfile.close();
 
-    // kdDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
+    kdDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
 
     // Clean up.
-    QFile::remove(m_outFilename);
+    // QFile::remove(m_outFilename);
 
     m_state = fsFinished;
     m_wasModified = true;
@@ -366,9 +366,9 @@ void XmlTransformerProc::slotProcessExited(KProcess*)
     processOutput();
 }
 
-void XmlTransformerProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+void XmlTransformerProc::slotReceivedStdout(KProcess*, char* /*buffer*/, int /*buflen*/)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    // QString buf = QString::fromLatin1(buffer, buflen);
     // kdDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf << endl;
 }
 

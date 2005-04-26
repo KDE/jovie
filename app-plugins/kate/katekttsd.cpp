@@ -57,7 +57,7 @@ void KateKttsdPlugin::addView(KTextEditor::View *view)
 
 void KateKttsdPlugin::removeView(KTextEditor::View *view)
 {
-    for (uint z=0; z < m_views.count(); z++)
+    for (uint z=0; z < m_views.count(); ++z)
         if (m_views.at(z)->parentClient() == view)
     {
         KateKttsdPluginView *nview = m_views.at(z);

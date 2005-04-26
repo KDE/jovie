@@ -248,8 +248,8 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     // Blank line so user can select no language.
     QListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_languageCodeList.isEmpty()) item->setSelected(true);
-    int allLocalesCount = allLocales.count();
-    for (int ndx=0; ndx < allLocalesCount; ndx++)
+    const int allLocalesCount = allLocales.count();
+    for (int ndx=0; ndx < allLocalesCount; ++ndx)
     {
         locale = allLocales[ndx];
         KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);

@@ -87,7 +87,8 @@ XMLElement XMLElement::fromQString(const QString &str) {
     sections.pop_front();
     // Loop over the remaining strings which are attributes="values"
     if(sections.count()) {
-        for(int i = 0; i <= sections.count() - 1; i++) {
+        const int sectionsCount = sections.count();
+        for(int i = 0; i < sectionsCount; ++i) {
             QStringList list = QStringList::split("=", sections[i]);
             if(list.count() != 2) {
                 std::cerr << "XMLElement::fromQString: Cannot convert list: " << list.join("|") << ". `" << str << "' is not in valid format.\n";

@@ -110,10 +110,10 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                 "KTTSD/SynthPlugin", QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
             if(offers.count() > 1){
-                bad++;
+                ++bad;
                 kdDebug() << "More than 1 plug in doesn't make any sense, well, let's use any" << endl;
             } else if(offers.count() < 1){
-                bad++;
+                ++bad;
                 kdDebug() << "Less than 1 plug in, nothing can be done" << endl;
             } else {
                 kdDebug() << "Loading " << offers[0]->library() << endl;
@@ -124,7 +124,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                             offers[0]->library().latin1(), this, offers[0]->library().latin1());
                     if(!speech){
                         kdDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
-                        bad++;
+                        ++bad;
                     } else {
                         if (speech->supportsAsync())
                         {
@@ -141,13 +141,13 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                             // kdDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
                             m_loadedPlugIns.append(speechThread);
                         }
-                        good++;
+                        ++good;
                         m_loadedTalkerCodes.append(TalkerCode(talkerCode));
                         m_loadedTalkerIds.append(talkerID);
                     }
                 } else {
                     kdDebug() << "Couldn't create the factory object from " << offers[0]->library() << endl;
-                    bad++;
+                    ++bad;
                 }
             }
         }

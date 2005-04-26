@@ -131,7 +131,8 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
 
     // Connect plugins to slots.
     QPtrList<PlugInProc> plugins = m_talkerMgr->getLoadedPlugIns();
-    for (uint ndx = 0; ndx < plugins.count(); ndx++)
+    const int pluginsCount = plugins.count();
+    for (int ndx = 0; ndx < pluginsCount; ++ndx)
     {
         PlugInProc* speech = plugins.at(ndx);
         connect(speech, SIGNAL(synthFinished()),
@@ -1087,7 +1088,7 @@ bool Speaker::getNextUtterance()
             }
             // Insert the new message or warning.
             it = m_uttQueue.insert(it, *utt);
-            it++;
+            ++it;
             // Resumption message and sound.
             if (interrupting)
             {

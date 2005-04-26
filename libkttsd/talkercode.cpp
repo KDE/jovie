@@ -363,29 +363,29 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
         // kdDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
         if (parsedTalkerCode.languageCode() == talkers[ndx].languageCode())
         {
-            priorityMatch[ndx]++;
+            ++priorityMatch[ndx];
             // kdDebug() << "TalkerCode::findClosestMatchingTalker: Match on language " << parsedTalkerCode.languageCode() << endl;
         }
         if (parsedTalkerCode.countryCode().left(1) == "*")
             if (parsedTalkerCode.countryCode().mid(1) ==
                 talkers[ndx].countryCode())
-                priorityMatch[ndx]++;
+                ++priorityMatch[ndx];
         if (parsedTalkerCode.voice().left(1) == "*")
             if (parsedTalkerCode.voice().mid(1) == talkers[ndx].voice())
-                priorityMatch[ndx]++;
+                ++priorityMatch[ndx];
         if (parsedTalkerCode.gender().left(1) == "*")
             if (parsedTalkerCode.gender().mid(1) == talkers[ndx].gender())
-                priorityMatch[ndx]++;
+                ++priorityMatch[ndx];
         if (parsedTalkerCode.volume().left(1) == "*")
             if (parsedTalkerCode.volume().mid(1) == talkers[ndx].volume())
-                priorityMatch[ndx]++;
+                ++priorityMatch[ndx];
         if (parsedTalkerCode.rate().left(1) == "*")
             if (parsedTalkerCode.rate().mid(1) == talkers[ndx].rate())
-                priorityMatch[ndx]++;
+                ++priorityMatch[ndx];
         if (parsedTalkerCode.plugInName().left(1) == "*")
             if (parsedTalkerCode.plugInName().mid(1) ==
                 talkers[ndx].plugInName())
-                priorityMatch[ndx]++;
+                ++priorityMatch[ndx];
     }
     // Determine the maximum number of priority attributes that were matched.
     int maxPriority = -1;
@@ -400,7 +400,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     {
         if (priorityMatch[ndx] == maxPriority)
         {
-            winnerCount++;
+            ++winnerCount;
             winner = ndx;
         }
     }
@@ -421,23 +421,23 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
                 if (parsedTalkerCode.countryCode().left(1) != "*")
                     if (!talkers[ndx].countryCode().isEmpty())
                         if (parsedTalkerCode.countryCode() == talkers[ndx].countryCode())
-                            preferredMatch[ndx]++;
+                            ++preferredMatch[ndx];
                 if (parsedTalkerCode.voice().left(1) != "*")
                     if (parsedTalkerCode.voice() == talkers[ndx].voice())
-                        preferredMatch[ndx]++;
+                        ++preferredMatch[ndx];
                 if (parsedTalkerCode.gender().left(1) != "*")
                     if (parsedTalkerCode.gender() == talkers[ndx].gender())
-                        preferredMatch[ndx]++;
+                        ++preferredMatch[ndx];
                 if (parsedTalkerCode.volume().left(1) != "*")
                     if (parsedTalkerCode.volume() == talkers[ndx].volume())
-                        preferredMatch[ndx]++;
+                        ++preferredMatch[ndx];
                 if (parsedTalkerCode.rate().left(1) != "*")
                     if (parsedTalkerCode.rate() == talkers[ndx].rate())
-                        preferredMatch[ndx]++;
+                        ++preferredMatch[ndx];
                 if (parsedTalkerCode.plugInName().left(1) != "*")
                     if (parsedTalkerCode.plugInName() ==
                         talkers[ndx].plugInName())
-                        preferredMatch[ndx]++;
+                        ++preferredMatch[ndx];
             }
         }
         // Determine the maximum number of preferred attributes that were matched.
@@ -456,7 +456,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
             {
                 if (preferredMatch[ndx] == maxPreferred)
                 {
-                    winnerCount++;
+                    ++winnerCount;
                     winner = ndx;
                 }
             }

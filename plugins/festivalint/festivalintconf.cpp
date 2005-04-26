@@ -476,7 +476,7 @@ void FestivalIntConf::scanVoices()
         {
             QString code = *it;
             bool found = false;
-            for (uint index=0; index < voicesCount; index++)
+            for (uint index=0; index < voicesCount; ++index)
             {
                 QDomNode voiceNode = voices.item(index);
                 QString voiceCode = readXmlString(voiceNode, "code", QString::null);
