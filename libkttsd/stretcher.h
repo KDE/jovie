@@ -84,6 +84,10 @@ class KDE_EXPORT Stretcher : public QObject{
         void slotProcessExited(KProcess* proc);
 
     private:
+        // Do not copy this object.
+        Stretcher(const Stretcher& t);
+        Stretcher& operator= (const Stretcher& t);
+
         // Stretcher state.
         int m_state;
 
