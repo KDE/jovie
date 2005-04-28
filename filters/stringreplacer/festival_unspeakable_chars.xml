@@ -3,22 +3,77 @@
  <name>Fix Festival Unspeakable Characters</name>
  <word>
   <type>RegExp</type>
-  <match><![CDATA[[\x92-\x95]]]></match>
+  <match><![CDATA[\x80]]></match>
+  <subst><![CDATA[ Euro ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x82]]></match>
   <subst><![CDATA[']]></subst>
  </word>
  <word>
   <type>RegExp</type>
-  <match><![CDATA[']]></match>
+  <match><![CDATA[\x84]]></match>
+  <subst><![CDATA["]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x85]]></match>
+  <subst><![CDATA[...]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x89]]></match>
+  <subst><![CDATA[ per Mille ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x8B]]></match>
+  <subst><![CDATA[<]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[[\x91-\x92]]]></match>
   <subst><![CDATA[']]></subst>
  </word>
  <word>
-  <type>Word</type>
-  <match><![CDATA[’]]></match>
-  <subst><![CDATA[']]></subst>
+  <type>RegExp</type>
+  <match><![CDATA[[\x93-\x94]]]></match>
+  <subst><![CDATA["]]></subst>
  </word>
  <word>
-  <type>Word</type>
-  <match><![CDATA[—]]></match>
-  <subst><![CDATA[,]]></subst>
+  <type>RegExp</type>
+  <match><![CDATA[[\x96-\x97]]]></match>
+  <subst><![CDATA[-]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x98]]></match>
+  <subst><![CDATA[~]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x99]]></match>
+  <subst><![CDATA[ trademark ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\x9B]]></match>
+  <subst><![CDATA[>]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[[\x80-\x9F]]]></match>
+  <subst><![CDATA[]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\{]]></match>
+  <subst><![CDATA[ left curly brace ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\}]]></match>
+  <subst><![CDATA[ right curly brace ]]></subst>
  </word>
 </wordlist>
