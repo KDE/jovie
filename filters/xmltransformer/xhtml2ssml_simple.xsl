@@ -32,53 +32,54 @@
 
 <!-- html -->
 <!-- local-name() must be used in order to ignore namespaces. -->
-<xsl:template match="*[local-name()='html']">
+<xsl:template match="*[local-name()='html' or local-name()='HTML']">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Ignore header, speak the body of xhtml document. -->
+<xsl:template match="*[local-name()='head' or local-name()='HEAD']"/>
+<xsl:template match="*[local-name()='body' or local-name()='BODY']">
     <xsl:element name="speak">
-        <xsl:copy-of select="@lang"/>
+        <xsl:copy-of select="/html/@lang"/>
+        <xsl:copy-of select="/HTML/@lang"/>
         <xsl:apply-templates/>
     </xsl:element>
 </xsl:template>
 
-<!-- Ignore header, speak the body of xhtml document. -->
-<xsl:template match="*[local-name()='head']"/>
-<xsl:template match="*[local-name()='body']">
-    <xsl:apply-templates/>
-</xsl:template>
-
 <!-- Paragraph -->
-<xsl:template match="*[local-name()='p']">
+<xsl:template match="*[local-name()='p' or local-name()='P']">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!--  H1, H2, H3, H4, H5, H6:  ignore tag, speak content as sentence. -->
-<xsl:template match="*[local-name()='h1|h2|h3|h4|h5|h6']">
+<xsl:template match="*[contains('h1|h2|h3|h4|h5|h6|H1|H2|H3|H4|H5|H6|',concat(local-name(),'|'))]">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!-- DFN, LI, DD, DT:  ignore tag, speak content. -->
-<xsl:template match="*[local-name()='dfn|li|dd|dt']">
+<xsl:template match="*[contains('dfn|li|dd|dt|DFN|LI|DD|DT|',concat(local-name(),'|'))]">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!-- PRE, CODE, TT;  ignore tag, speak content. -->
-<xsl:template match="*[local-name()='pre|code|tt']">
+<xsl:template match="*[contains('pre|code|tt|PRE|CODE|TT|',concat(local-name(),'|'))]">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!-- EM, STRONG, I, B, S, STRIKE, U:  speak emphasized.  -->
-<xsl:template match="*[local-name()='em|strong|i|b|s|strike']">
-    <emphasis level="moderate">
+<xsl:template match="*[contains('em|strong|i|b|s|strike|EM|STRONG|I|B|S|STRIKE|',concat(local-name(),'|'))]">
+    <emphasis level="strong">
         <xsl:apply-templates/>
     </emphasis>
 </xsl:template>
 
 <!-- A: speak hyperlink emphasized, address fast. -->
-<xsl:template match="*[local-name()='a']">
+<xsl:template match="*[local-name()='a' or local-name()='A']">
     <xsl:if test="@href">
         <emphasis level="moderate">
             <xsl:apply-templates/>
         </emphasis>
-        <prosody rate="fast">
+        <prosody rate="fast" volume="soft">
             <xsl:value-of select="'Link to. '"/>
             <xsl:value-of select="@href"/>
         </prosody>
@@ -86,9 +87,9 @@
 </xsl:template>
 
 <!-- Ignore scripts. -->
-<xsl:template match="*[local-name()='script']"/>
+<xsl:template match="*[local-name()='script' or local-name()='SCRIPT']"/>
 
 <!-- Ignore styles. -->
-<xsl:template match="*[local-name()='style']"/>
+<xsl:template match="*[local-name()='style' or local-name()='STYLE']"/>
 
 </xsl:stylesheet>

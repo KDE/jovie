@@ -77,158 +77,159 @@ They are mapped to rate and volume respectively.
 
 <!-- html -->
 <!-- local-name() must be used in order to ignore namespaces. -->
-<xsl:template match="*[local-name()='html']">
+<xsl:template match="*[local-name()='html' or local-name()='HTML']">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Ignore header, speak the body of xhtml document. -->
+<xsl:template match="*[local-name()='head' or local-name()='HEAD']"/>
+<xsl:template match="*[local-name()='body' or local-name()='BODY']">
     <xsl:element name="speak">
-        <xsl:copy-of select="@lang"/>
+        <xsl:copy-of select="/html/@lang"/>
+        <xsl:copy-of select="/HTML/@lang"/>
         <xsl:apply-templates/>
     </xsl:element>
 </xsl:template>
 
-<!-- Ignore header, speak the body of xhtml document. -->
-<xsl:template match="*[local-name()='head']"/>
-<xsl:template match="*[local-name()='body']">
-    <xsl:apply-templates/>
-</xsl:template>
-
 <!-- Paragraph -->
-<xsl:template match="*[local-name()='p']">
+<xsl:template match="*[local-name()='p' or local-name()='P']">
     <p><xsl:apply-templates/></p>
 </xsl:template>
 
 <!--  H1            { pitch: x-low; range: x-high;  rate: slow;  volume: x-loud } -->
-<xsl:template match="*[local-name()='h1']">
+<xsl:template match="*[local-name()='h1' or local-name()='H1']">
     <voice gender="male"><prosody pitch="x-low" range="x-high" rate="slow" volume="x-loud">
         <xsl:apply-templates/>
     </prosody></voice>
 </xsl:template>
 
 <!-- H2            { male; pitch: x-low;  range: high;  rate: slow;  volume: x-loud } -->
-<xsl:template match="*[local-name()='h2']">
+<xsl:template match="*[local-name()='h2' or local-name()='H2']">
     <voice gender="male"><prosody pitch="x-low" range="high" rate="slow" volume="x-loud">
         <xsl:apply-templates/>
     </prosody></voice>
 </xsl:template>
 
 <!-- H3            { male; pitch: low;    range: high;  rate: slow;  volume: x-loud } -->
-<xsl:template match="*[local-name()='h3']">
+<xsl:template match="*[local-name()='h3' or local-name()='H3']">
     <voice gender="male"><prosody pitch="low" range="high" rate="slow" volume="x-loud">
         <xsl:apply-templates/>
     </prosody></voice>
 </xsl:template>
 
 <!-- H4            { male; pitch: medium; range: medium;  rate: slow;  volume: x-loud } -->
-<xsl:template match="*[local-name()='h4']">
+<xsl:template match="*[local-name()='h4' or local-name()='H4']">
     <voice gender="male"><prosody pitch="medium" range="medium" rate="slow" volume="x-loud">
         <xsl:apply-templates/>
     </prosody></voice>
 </xsl:template>
 
 <!-- H5            { male; pitch: medium; range: low;  rate: slow;  volume: x-loud } -->
-<xsl:template match="*[local-name()='h5']">
+<xsl:template match="*[local-name()='h5' or local-name()='H5']">
     <voice gender="male"><prosody pitch="low" range="low" rate="slow" volume="x-loud">
         <xsl:apply-templates/>
     </prosody></voice>
 </xsl:template>
 
 <!-- H6            { male; pitch: medium; range: x-low;  rate: slow;  volume: x-loud } -->
-<xsl:template match="*[local-name()='h6']">
+<xsl:template match="*[local-name()='h6' or local-name()='H6']">
     <voice gender="male"><prosody pitch="medium" range="x-low" rate="slow" volume="x-loud">
         <xsl:apply-templates/>
     </prosody></voice>
 </xsl:template>
 
 <!-- LI, DD        { pitch: medium; } -->
-<xsl:template match="*[local-name()='li']">
+<xsl:template match="*[local-name()='li' or local-name()='LI']">
     <prosody pitch="medium">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
-<xsl:template match="*[local-name()='dd']">
+<xsl:template match="*[local-name()='dd' or local-name()='DD']">
     <prosody pitch="medium">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- DT            { pitch: medium; rate: x-fast } -->
-<xsl:template match="*[local-name()='dt']">
+<xsl:template match="*[local-name()='dt' or local-name()='DT']">
     <prosody pitch="medium" rate="x-fast">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- PRE, CODE, TT { pitch: medium; range: x-low;  rate: slow;   volume: loud } -->
-<xsl:template match="*[local-name()='pre']">
+<xsl:template match="*[local-name()='pre' or local-name()='PRE']">
     <prosody pitch="medium" range="x-low" rate="slow" volume="loud">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
-<xsl:template match="*[local-name()='code']">
+<xsl:template match="*[local-name()='code' or local-name()='CODE']">
     <prosody pitch="medium" range="x-low" rate="slow" volume="loud">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
-<xsl:template match="*[local-name()='tt']">
+<xsl:template match="*[local-name()='tt' or local-name()='TT']">
     <prosody pitch="medium" range="x-low" rate="slow" volume="loud">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- EM            { pitch: medium; range: medium; rate: medium; volume: loud } -->
-<xsl:template match="*[local-name()='em']">
+<xsl:template match="*[local-name()='em' or local-name()='EM']">
     <prosody pitch="medium" range="medium" rate="medium" volume="loud">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- STRONG        { pitch: medium; range: medium; rate: x-fast; volume: x-loud } -->
-<xsl:template match="*[local-name()='strong']">
+<xsl:template match="*[local-name()='strong' or local-name()='STRONG']">
     <prosody pitch="medium" range="medium" rate="x-fast" volume="x-loud">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- DFN           { pitch: high;   range: medium; rate: medium } -->
-<xsl:template match="*[local-name()='pre']">
+<xsl:template match="*[local-name()='dfn' or local-name()='DFN']">
     <prosody pitch="high" range="medium" rate="medium">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- S, STRIKE     { volume: x-soft } -->
-<xsl:template match="*[local-name()='s']">
+<xsl:template match="*[local-name()='s' or local-name()='S']">
     <prosody volume="x-soft">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
-<xsl:template match="*[local-name()='strike']">
+<xsl:template match="*[local-name()='strike' or local-name()='STRIKE']">
     <prosody volume="x-soft">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- I             { pitch: high; range: medium; rate: fast; volume: medium } -->
-<xsl:template match="*[local-name()='i']">
+<xsl:template match="*[local-name()='i' or local-name()='I']">
     <prosody pitch="high" range="medium" rate="fast" volume="medium">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- B             { pitch: high; range: medium; rate: x-fast; volume: x-loud } -->
-<xsl:template match="*[local-name()='b']">
+<xsl:template match="*[local-name()='b' or local-name()='B']">
     <prosody pitch="high" range="medium" rate="x-fast" volume="x-loud">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- U             { volume: medium } -->
-<xsl:template match="*[local-name()='u']">
+<xsl:template match="*[local-name()='u' or local-name()='U']">
     <prosody pitch="medium">
         <xsl:apply-templates/>
     </prosody>
 </xsl:template>
 
 <!-- A            { female } -->
-<xsl:template match="*[local-name()='a']">
+<xsl:template match="*[local-name()='a' or local-name()='A']">
     <voice gender="female">
         <xsl:apply-templates/>
     </voice>
@@ -243,9 +244,9 @@ They are mapped to rate and volume respectively.
 </xsl:template>
 
 <!-- Ignore scripts. -->
-<xsl:template match="*[local-name()='script']"/>
+<xsl:template match="*[local-name()='script' or local-name()='SCRIPT']"/>
 
 <!-- Ignore styles. -->
-<xsl:template match="*[local-name()='style']"/>
+<xsl:template match="*[local-name()='style' or local-name()='STYLE']"/>
 
 </xsl:stylesheet>

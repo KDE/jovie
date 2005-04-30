@@ -200,6 +200,11 @@ KTTSD::~KTTSD(){
 */
 bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/) const
 {
+    if (markupType == KSpeech::mtHtml)
+    {
+        if (!m_speechData) return false;
+        return m_speechData->supportsHTML;
+    }
     if (markupType != KSpeech::mtSsml) return false;
     if (!m_talkerMgr) return false;
     return m_talkerMgr->supportsMarkup(fixNullString(talker), markupType);

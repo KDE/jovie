@@ -275,7 +275,11 @@ QString SbdThread::makeSentence( const QString& text )
     if ( !v.isEmpty() ) s += v;
     if ( !p.isEmpty() ) s += p;
     if ( !e.isEmpty() ) s += e;
-    s += text;
+    // Escape ampersands and less thans.
+    QString newText = text;
+    newText.replace(QRegExp("&(?!amp;)"), "&amp;");
+    newText.replace(QRegExp("<(?!lt;)"), "&lt;");
+    s += newText;
     if ( !e.isEmpty() ) s += "</emphasis>";
     if ( !p.isEmpty() ) s += "</prosody>";
     if ( !v.isEmpty() ) s += "</voice>";

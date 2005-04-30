@@ -32,7 +32,7 @@ class KttsJobMgrBrowserExtension;
 class KListView;
 class QListViewItem;
 class QVBox;
-class QLabel;
+class KTextEdit;
 
 class KttsJobMgrFactory : public KLibFactory
 {
@@ -266,7 +266,7 @@ private:
     /**
     * Current sentence box.
     */
-    QLabel* m_currentSentence;
+    KTextEdit* m_currentSentence;
 
     /**
     * Box containing buttons.

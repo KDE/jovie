@@ -218,13 +218,13 @@
                 <xsl:attribute name="LEVEL">0%</xsl:attribute>
             </xsl:when>
             <xsl:when test="name($a[1])='volume' and $a[1]='soft'">
-                <xsl:attribute name="LEVEL">-30%</xsl:attribute>
-            </xsl:when>
-            <xsl:when test="name($a[1])='volume' and $a[1]='x-soft'">
                 <xsl:attribute name="LEVEL">-50%</xsl:attribute>
             </xsl:when>
+            <xsl:when test="name($a[1])='volume' and $a[1]='x-soft'">
+                <xsl:attribute name="LEVEL">-70%</xsl:attribute>
+            </xsl:when>
             <xsl:when test="name($a[1])='volume' and $a[1]='silent'">
-                <xsl:attribute name="LEVEL">-80%</xsl:attribute>
+                <xsl:attribute name="LEVEL">-100%</xsl:attribute>
             </xsl:when>
             <xsl:when test="name($a[1])='volume'">
                 <xsl:attribute name="LEVEL"><xsl:value-of select=" $a[1]"/></xsl:attribute>

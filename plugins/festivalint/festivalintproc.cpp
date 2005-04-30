@@ -52,6 +52,7 @@ FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStri
     m_waitingStop = false;
     m_festProc = 0;
     m_state = psIdle;
+    m_supportsSSML = ssUnknown;
     m_languageCode = "en";
     m_codec = QTextCodec::codecForName("ISO8859-1");
 }
@@ -97,6 +98,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     // If voice should be pre-loaded, start Festival and load the voice.
     m_preload = config->readBoolEntry("Preload", false);
     m_languageCode = config->readEntry("LanguageCode", "en");
+    m_supportsSSML = static_cast<SupportsSSML>(config->readNumEntry("SupportsSSML", ssUnknown));
     QString codecName = config->readEntry("Codec", "Latin1");
     m_codec = codecNameToCodec(codecName);
     if (m_preload) startEngine(m_festivalExePath, m_voiceCode, m_languageCode, m_codec);
@@ -145,6 +147,8 @@ bool FestivalIntProc::queryVoices(const QString &festivalExePath)
     startEngine(festivalExePath, QString::null, m_languageCode, m_codec);
     // Set state, waiting for voice codes list from Festival.
     m_waitingQueryVoices = true;
+    // Voice rab_diphone is needed in order to support SSML.
+    m_supportsSSML = ssUnknown;
     // Send command to query the voice codes.
     sendToFestival("(print (mapcar (lambda (pair) (car pair)) voice-locations))");
     return true;
@@ -558,6 +562,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     if (emitQueryVoicesFinished)
     {
         // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting queryVoicesFinished" << endl;
+        m_supportsSSML = (voiceCodesList.contains("rab_diphone")) ? ssYes : ssNo;
         emit queryVoicesFinished(voiceCodesList);
     }
 }
@@ -649,6 +654,9 @@ bool FestivalIntProc::supportsSynth() { return true; }
 */
 QString FestivalIntProc::getSsmlXsltFilename()
 {
-    return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/festivalint/xslt/SSMLtoSable.xsl";
+    if (m_supportsSSML == ssYes)
+        return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/festivalint/xslt/SSMLtoSable.xsl";
+    else
+        return PlugInProc::getSsmlXsltFilename();
 }
 

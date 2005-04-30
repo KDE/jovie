@@ -37,8 +37,8 @@
 
 // FestivalInt includes.
 #include "festivalintconfwidget.h"
+#include "festivalintproc.h"
 
-class FestivalIntProc;
 class KProgressDialog;
 class QDomNode;
 
@@ -181,5 +181,7 @@ class FestivalIntConf : public PlugInConf {
         QStringList m_supportedVoiceCodes;
         // List of displayed codec names.
         QStringList m_codecList;
+        // Whether Festival supports SSML or not.
+        FestivalIntProc::SupportsSSML m_supportsSSML;
 };
 #endif // _FESTIVALINTCONF_H_

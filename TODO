@@ -1,8 +1,5 @@
 _ Filters:
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
-    _ Many xhtml pages have invalid code containing ampersands in URIs.  For example, go to
-      www.google.com and look at the source.  The URIs contain ampersands that should be &amp;.
-      This causes xsltproc to choke.
     _ Add KNewStuff capability for folks to upload/download filter configs.
 _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
@@ -38,9 +35,6 @@ _ KTTSMgr:
       speaking job?  But that could become confusing for users with selection jumping around.
     _ Add ability to quickly pick default Talker in systray menu.
     _ KCMultiDialog has a bug that won't allow sizing the screen narrower than 640.
-    _ When speaking SSML, the window expands to maximum height to accomodate displaying the
-      "Current Sentence", which is all of the SSML.  Annoying.  Better to not expand and display
-      vertical scrollbar.
     _ Overall Audio Speed should be a realtime setting, i.e., not necessary to click Apply.
     _ Disable Audio Speed control if sox not installed (configure.in.in but runtime check would be better).
     _ Add drag N drop for the Talkers so it is easier to change the ordering.

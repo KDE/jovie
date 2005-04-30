@@ -19,6 +19,6 @@ servicesdir = $(kde_servicesdir)
 
 # Install data files.
 xmltransformerdatadir = $(kde_datadir)/kttsd/xmltransformer/
-xmltransformerdata_DATA = xhtml2ssml.xsl
+xmltransformerdata_DATA = xhtml2ssml.xsl xhtml2ssml_simple.xsl
 
 noinst_HEADERS =  xmltransformerconfwidget.h

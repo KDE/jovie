@@ -37,6 +37,12 @@ class FestivalIntProc : public PlugInProc{
     Q_OBJECT 
 
     public:
+        enum SupportsSSML {
+            ssUnknown,
+            ssYes,
+            ssNo
+        };
+
         /**
          * Constructor
          */
@@ -189,6 +195,14 @@ class FestivalIntProc : public PlugInProc{
         */
         QString getSsmlXsltFilename();
 
+        /**
+        * Whether Festival supports SSML or not.
+        * 0 = Unknown
+        * 1 = Yes
+        * 2 = No
+        */
+        SupportsSSML supportsSSML() { return m_supportsSSML; }
+
     signals:
         /**
         * This signal fires upon completion of a queryVoices operation.
@@ -336,6 +350,12 @@ class FestivalIntProc : public PlugInProc{
         * Codec.
         */
         QTextCodec* m_codec;
+
+        /**
+        * Flag if SSML is supported.  Festival cannot support SABLE (and therefore SSML)
+        * unless rab_diphone (British male) is installed. Gawd, I hope Festival folks fix this!
+        */
+        SupportsSSML m_supportsSSML;
 };
 
 #endif // _FESTIVALINTPROC_H_

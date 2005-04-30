@@ -1,3 +1,16 @@
+2005-04-30  Gary Cramblitt (PhantomsDad)
+        * Change Current Sentence widget in Jobs tab to KTextEdit to avoid resizing when text does
+          not fit in box.
+        * HTML to SSML now working pretty well.  Note that you must
+            1.  Have Festival 1.95 installed.
+            2.  Have rab_diphone voice installed.
+            3.  Have xsltproc installed.
+            4.  If you have Festival Talker configured, reconfigure it (Edit) so that it will detect
+                if you have rab_diphone voice installed.  You must hit the Apply button.
+            5.  Enable XML Transformer filter and point it to xhtml2ssml_simple.xsl stylesheet.
+            6.  Right now, only speaks HTML from Konqi if you paste HTML from clipboard.
+                Speak button in Konqi not yet enabled until I get some confidence it is working well.
+
 2005-04-23  Gary Cramblitt (PhantomsDad)
         * Break sentences longer than 600 characters into shorter sentences by changing comma to
           period.  This prevents Festival from droning on lower and lower in tone until it is

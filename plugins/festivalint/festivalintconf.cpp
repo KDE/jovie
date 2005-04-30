@@ -63,6 +63,7 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
     // kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
     m_festProc = 0;
     m_progressDlg = 0;
+    m_supportsSSML = FestivalIntProc::ssUnknown;
 
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "FestivalIntConfigWidgetLayout");
@@ -159,6 +160,8 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     m_widget->preloadCheckBox->setChecked(config->readBoolEntry(
         "Preload", m_widget->preloadCheckBox->isChecked()));
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
+    m_supportsSSML = static_cast<FestivalIntProc::SupportsSSML>(
+        config->readNumEntry("SupportsSSML", FestivalIntProc::ssUnknown));
     QString codecName = PlugInProc::codecIndexToCodecName(
         m_widget->characterCodingBox->currentItem(), m_codecList);
     codecName = config->readEntry("Codec", codecName);
@@ -178,6 +181,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     config->writeEntry("pitch", m_widget->frequencyBox->value());
     config->writeEntry("Preload", m_widget->preloadCheckBox->isChecked());
     config->writeEntry("LanguageCode", m_voiceList[m_widget->selectVoiceCombo->currentItem()].languageCode);
+    config->writeEntry("SupportsSSML", m_supportsSSML);
     int codec = m_widget->characterCodingBox->currentItem();
     config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
@@ -444,6 +448,7 @@ void FestivalIntConf::scanVoices()
         if (!m_progressDlg->wasCancelled()) m_festProc->stopText();
         delete m_progressDlg;
         m_progressDlg = 0;
+        m_supportsSSML = m_festProc->supportsSSML();
     }
 
     if (!m_supportedVoiceCodes.isEmpty())

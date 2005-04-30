@@ -569,6 +569,11 @@ class SpeechData : public QObject {
         */
         KConfig *config;
 
+        /**
+        * True if at least one XML Transformer plugin for html is enabled.
+        */
+        bool supportsHTML;
+
     signals:
         /**
         * This signal is emitted whenever a new text job is added to the queue.

@@ -148,6 +148,11 @@ class FilterMgr : public KttsFilterProc
         void setNoSBD(bool noSBD);
         bool noSBD();
 
+        /**
+         * True if there is at least one XML Transformer filter for html.
+         */
+        bool supportsHTML() { return m_supportsHTML; }
+
     protected:
         bool event ( QEvent * e );
 
@@ -187,6 +192,8 @@ class FilterMgr : public KttsFilterProc
         int m_state;
         // True if SBD Filters should not be called.
         bool m_noSBD;
+        // True if at least one XML Transformer for html is enabled.
+        bool m_supportsHTML;
 };
 
 #endif      // _FILTERMGR_H_

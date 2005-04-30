@@ -37,6 +37,7 @@
 #include <kencodingfiledialog.h>
 #include <kapplication.h>
 #include <kinputdialog.h>
+#include <ktextedit.h>
 
 // KTTS includes.
 #include "kspeech.h"
@@ -288,9 +289,12 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     currentSentenceLabel->setText(i18n("Current Sentence"));
 
     // Create a box to contain the current sentence.
-    m_currentSentence = new QLabel(sentenceVBox);
-    m_currentSentence->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_currentSentence->setAlignment(Qt::AlignAuto | Qt::AlignTop | Qt::WordBreak);
+    m_currentSentence = new KTextEdit(sentenceVBox);
+    m_currentSentence->setReadOnly(TRUE);
+    m_currentSentence->setWordWrap(QTextEdit::WidgetWidth);
+    m_currentSentence->setWrapPolicy(QTextEdit::AtWordOrDocumentBoundary);
+    m_currentSentence->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_currentSentence->setVScrollBarMode(QScrollView::Auto);
     wt = i18n(
             "<p>The text of the sentence currently speaking.</p>");
     QWhatsThis::add(m_currentSentence, wt);
@@ -519,18 +523,27 @@ void KttsJobMgrPart::slot_speak_clipboard()
 
     // Copy text from the clipboard.
     QString text;
-    /* This code turned off until reliable xml/html processing can be achieved.
     QMimeSource* data = cb->data();
     if (data)
     {
         if (data->provides("text/html"))
         {
-            QByteArray d = data->encodedData("text/html");
-            text = QString(d);
-            kdDebug() << "text/html: " << text << endl;
+            if (supportsMarkup(NULL, KSpeech::mtHtml))
+            {
+                QByteArray d = data->encodedData("text/html");
+                text = QString(d);
+            }
+        }
+        if (data->provides("text/ssml"))
+        {
+            if (supportsMarkup(NULL, KSpeech::mtSsml))
+            {
+                QByteArray d = data->encodedData("text/ssml");
+                text = QString(d);
+            }
         }
     }
-    if (text.isEmpty())  */
+    if (text.isEmpty())
         text = cb->text();
 
     // Speak it.

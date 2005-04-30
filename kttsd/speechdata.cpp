@@ -59,6 +59,7 @@ SpeechData::SpeechData(){
     jobCounter = 0;
     config = 0;
     textJobs.setAutoDelete(true);
+    supportsHTML = false;
 
     // Warnings queue to be autodelete  (thread safe)
     warnings.setAutoDelete(true);
@@ -117,6 +118,7 @@ bool SpeechData::readConfig(){
     PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
     FilterMgr* filterMgr = new FilterMgr();
     filterMgr->init(config, "General");
+    supportsHTML = filterMgr->supportsHTML();
     pooledFilterMgr->filterMgr = filterMgr;
     pooledFilterMgr->busy = false;
     pooledFilterMgr->job = 0;

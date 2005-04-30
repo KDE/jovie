@@ -43,6 +43,7 @@ FilterMgr::FilterMgr( QObject *parent, const char *name) :
     // kdDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;
     m_noSBD = false;
+    m_supportsHTML = false;
     m_talkerCode = 0;
 }
 
@@ -115,6 +116,9 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
                     filterProc->init( config, groupName );
                     m_filterList.append( filterProc );
                 }
+                if (config->readEntry("DocType").contains("html") ||
+                    config->readEntry("RootElement").contains("html"))
+                    m_supportsHTML = true;
             }
         }
     }
