@@ -183,7 +183,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         *m_festProc << "--interactive";
         m_festProc->setEnvironment("LANG", languageCode + "." + codec->mimeName());
         m_festProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->mimeName());
-        kdDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
+        // kdDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
         connect(m_festProc, SIGNAL(processExited(KProcess*)),
                 this, SLOT(slotProcessExited(KProcess*)));
         connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
@@ -505,7 +505,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     bool promptSeen = (buf.contains("festival>") > 0);
     bool emitQueryVoicesFinished = false;
     QStringList voiceCodesList;
-    if (m_waitingQueryVoices)
+    if (m_waitingQueryVoices && m_outputQueue.isEmpty())
     {
         // Look for opening ( and closing ).
         buf.simplifyWhiteSpace();

@@ -153,7 +153,7 @@ class FestivalIntConf : public PlugInConf {
         * Given a voice code, returns index into m_voiceList array (and voiceCombo box).
         * -1 if not found.
         */
-        int voiceCodeToListIndex(const QString voiceCode);
+        int voiceCodeToListIndex(const QString& voiceCode) const;
 
         /**
         * Chooses a default voice given scanned list of voices in m_voiceList and current

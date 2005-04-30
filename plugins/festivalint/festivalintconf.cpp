@@ -126,10 +126,11 @@ FestivalIntConf::~FestivalIntConf(){
 * Given a voice code, returns index into m_voiceList array (and voiceCombo box).
 * -1 if not found.
 */
-int FestivalIntConf::voiceCodeToListIndex(const QString voiceCode)
+int FestivalIntConf::voiceCodeToListIndex(const QString& voiceCode) const
 {
-    for(uint index = 0 ; index < m_voiceList.count(); ++index){
-        // kdDebug() << "Testing: " << voiceSelected << " == " << m_voiceList[index].code << endl;
+    const int voiceListCount = m_voiceList.count();
+    for(int index = 0; index < voiceListCount; ++index){
+        // kdDebug() << "Testing: " << voiceCode << " == " << m_voiceList[index].code << endl;
         if(voiceCode == m_voiceList[index].code)
             return index;
     }
@@ -409,7 +410,7 @@ void FestivalIntConf::scanVoices()
     m_widget->selectVoiceCombo->setEnabled(false);
 
     // Clear existing list of supported voice codes.
-    m_supportedVoiceCodes.clear();
+    // m_supportedVoiceCodes.clear();
     m_widget->selectVoiceCombo->clear();
 
     QString exePath = realFilePath(m_widget->festivalPath->url());
@@ -528,7 +529,7 @@ void FestivalIntConf::scanVoices()
             }
         }
         m_widget->selectVoiceCombo->setEnabled(true);
-    }
+    } else kdDebug() << "FestivalIntConf::scanVoices: No voices found" << endl;
     setDefaultVoice(voiceCodeToListIndex(currentVoiceCode));
     // Emit configChanged if the enabled state of the selectVoiceCombo has changed.
     // This occurs when user changes Festival EXE path, then clicks Rescan.
@@ -537,6 +538,7 @@ void FestivalIntConf::scanVoices()
 
 void FestivalIntConf::slotQueryVoicesFinished(const QStringList &voiceCodes)
 {
+    // kdDebug() << "FestivalIntConf::slotQueryVoicesFinished: voiceCodes.count() = " << voiceCodes.count() << endl;
     m_supportedVoiceCodes = voiceCodes;
     if (m_progressDlg) m_progressDlg->close();
 }
