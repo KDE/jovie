@@ -145,3 +145,5 @@ QString SelectEvent::makeRelative( const QString& fullPath )
     return fullPath.mid( slash+1 );
 }
 
+
+#include "selectevent.moc"
