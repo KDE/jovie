@@ -91,8 +91,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-02-01</date>
-<releaseinfo>1.03.00</releaseinfo>
+<date>2005-05-04</date>
+<releaseinfo>1.04.00</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -165,8 +165,8 @@ including instances where Kate is embedded in another KDE application.</para></l
 <listitem><para>Long text is parsed into sentences.  User may backup by sentence
 or paragraph, replay, pause, and stop playing.</para></listitem>
 <listitem><para>Audio output via aRts or GStreamer (version 0.8.7 or later)</para></listitem>
-<listitem><para>User-configurable filters for substituting mispoken words, choosing
-speech synthesizers, and transforming XML documents.</para></listitem>
+<listitem><para>User-configurable filters for substituting misspoken words, choosing
+speech synthesizers, and transforming XHMTL/XML documents.</para></listitem>
 </itemizedlist>
 
 <para>Programmer features:</para>
@@ -254,9 +254,9 @@ To start the &kmyapplication; system, type the following command in a Konsole
 <para>or click on &kmyapplication; in the KDE Menu.</para>
 
 <para>If this is the first time running <command>kttsmgr</command>, or
-if you have not yet configured any Talkers, the <guilabel>Talkers</guilabel>
-screen appears.  See <xref linkend="select-plugin" />.
-If you have already configured at least one Talker, the <guilabel>General</guilabel>
+if you have not yet configured any talkers, the <guilabel>Talkers</guilabel>
+screen appears.  See <xref linkend="configure-plugin" />.
+If you have already configured at least one talker, the <guilabel>General</guilabel>
 screen appears.  See <xref linkend="general" />.</para>
 
 </sect1>
@@ -264,11 +264,30 @@ screen appears.  See <xref linkend="general" />.</para>
 <!-- ...................................................................... -->
 
 
-<sect1 id="select-plugin">
-<title>Selecting Synthesis Plugins (Talkers)</title>
+<sect1 id="configure-plugin">
+<title>Configuring Synthesis Plugins (Talkers)</title>
+
+<para>Most text-to-speech (TTS) synthesizers offer multiple languages and voices
+and may offer multiple speaking genders, volumes, and rates.  You may configure more than
+one instance of a synthesizer.  Each combination of language, synthesizer, voice,
+gender, volume, and rate is called a talker.  You must configure at least one talker
+before you can start &kmyapplication; and begin speaking text.</para>
+
+<note><para>Multiple talkers for the same synthesizer is similar to multiple print
+queues for a single physical printer.</para></note>
+
+<para>When applications send text to &kmyapplication;, they may specify the
+attributes of the preferred talker to do the synthesis.  For example,
+an application may request an English language female talker.  If you have
+configured a talker with both the English language and female gender, that
+talker will be used, otherwise the closest matching talker will be automatically
+picked.  To learn more about how &kmyapplication; picks talkers, see
+<xref linkend="filters" />.</para>
 
 <para>When you click the <guilabel>Talkers</guilabel> tab in <command>kttsmgr</command>,
-the <guilabel>Talkers</guilabel> screen appears.</para>
+the <guilabel>Talkers</guilabel> screen appears.  This screen also automatically
+appears if you start <command>kttsmgr</command> and you have not yet configured
+any talkers.</para>
 
 <para>
 <screenshot>
@@ -296,16 +315,16 @@ the <guilabel>Talkers</guilabel> screen appears.</para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-talker-1"><para>Click to add a new talker, which is a speech synthesis plugin.</para></callout>
+<callout arearefs="pt-talker-1"><para>Click to add a new talker.</para></callout>
 <callout arearefs="pt-talker-2"><para>All the configured <guilabel>Talkers</guilabel> are listed here.  Highest priority <guilabel>Talkers</guilabel> are listed at the top.  The top-most talker will be used to do the speaking when an application does not specify a talker.</para></callout>
 <callout arearefs="pt-talker-3"><para>Click on a talker in the list to highlight it and click this button to remove it.</para></callout>
-<callout arearefs="pt-talker-4"><para>Click on a talker in the list to highlight it and click this button to display the synthesis plugin's configuration dialog.</para></callout>
+<callout arearefs="pt-talker-4"><para>Click on a talker in the list to highlight it and click this button to display the synthesis plugin's configuration dialog.  See below.</para></callout>
 <callout arearefs="pt-talker-5"><para>Click on a talker in the list to highlight it and click this button to move it down one row in the list.  The lower a talker appears in the list, the lower its priority.</para></callout>
 <callout arearefs="pt-talker-6"><para>Click one of these buttons to apply the changes you have made to the running &kmyapplication; system.</para></callout>
 </calloutlist>
 </para>
 
-<para>When you click the <guilabel>Add</guilabel> button, the <guilabel>Add Talker</guilabel> screen appears.</para>
+<para>When you click the <guibutton>Add</guibutton> button, the <guilabel>Add Talker</guilabel> screen appears.</para>
 
 <para>
 	<screenshot>
@@ -346,34 +365,16 @@ synthesizer plugin here.</para></callout>
 <callout arearefs="pt-addtalker-3"><para>When you click here,
 most synthesizer plugins will automatically configure themselves,
 choosing a default setup.  A new talker
-will appear in the list on the <guilabel>Talkers</guilabel> tab.
-Click the <guibutton>Edit</guibutton>
-button to display or edit the talker's 
-configuration.  See <xref linkend="configure-plugin" />.</para></callout>
+will appear in the list in the <guilabel>Talkers</guilabel> screen.
+Click the <guibutton>Edit</guibutton> button to display or edit the talker's 
+configuration.</para></callout>
 </calloutlist>
 </para>
 
-
-<warning><para>
-You must configure at least one talker and click the <guilabel>Apply</guilabel> or <guilabel>OK</guilabel> buttons before you can start the 
-&kmyapplication; system and begin speaking text.  To start the &kmyapplication;
-system, click the <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.
-see <xref linkend="general" />.
-</para>
-</warning>
-
-</sect1>
-
-<!-- ...................................................................... -->
-
-
-<sect1 id="configure-plugin">
-<title>Configuring Synthesis Plugins (Talkers)</title>
-
-<para>When you click the <guilabel>Add</guilabel> button on the
-<guilabel>Talkers</guilabel> tab and add a Talker, or click the
-<guilabel>Edit</guilabel> button,
+<para>When you click the <guibutton>Add</guibutton> button on the
+<guilabel>Talkers</guilabel> tab and add a talker that cannot
+automatically configure itself, or click the
+<guibutton>Edit</guibutton> button,
 the <guilabel>Talker Configuration</guilabel> screen appears.
 Each speech synthesis plugin has a different
 <guilabel>Talker Configuration</guilabel> screen.  The following is an example for
@@ -392,6 +393,7 @@ kind of plugin, see <xref linkend="configuration" />.</para>
 				<area id="pt-prop-4" coords="1 1"/>
 				<area id="pt-prop-5" coords="1 1"/>
 				<area id="pt-prop-6" coords="1 1"/>
+				<area id="pt-prop-7" coords="1 1"/>
 			</areaspec>
 			<imageobject>
 				<imagedata fileref="festivalintconf.png" format="PNG"/>
@@ -411,18 +413,21 @@ If Festival is in your PATH environment variable, just enter
 <userinput><replaceable>festival</replaceable></userinput>.</para></callout>
 <callout arearefs="pt-prop-2"><para>Click to scan for available voices.</para></callout>
 <callout arearefs="pt-prop-3"><para>Select a voice.</para></callout>
-<callout arearefs="pt-prop-4"><para>Click to test.  You should hear a test sentence spoken.</para></callout>
-<callout arearefs="pt-prop-5"><para>Use these controls to set the volume, talking speed, and
+<callout arearefs="pt-prop-4"><para>Select a character encoding for text sent to Festival.
+For voices that are known to &kmyapplication;, this setting will be picked for you automatically.  In general, western languages use ISO 8859-1.  Eastern European languages such
+as Czech or Slovak use ISO 8859-2.</para></callout>
+<callout arearefs="pt-prop-5"><para>Click to test.  You should hear a test sentence spoken.</para></callout>
+<callout arearefs="pt-prop-6"><para>Use these controls to set the volume, talking speed, and
 pitch (tone) of the synthesized speech.  If any of these are disabled (grayed), the chosen
 voice does not support changing them.</para></callout>
-<callout arearefs="pt-prop-6"><para>Some voices, such as the MultiSyn voices, are so large
+<callout arearefs="pt-prop-7"><para>Some voices, such as the MultiSyn voices, are so large
 that they require several seconds to load.  Checking this box will cause them to be loaded
 when KTTSD is started, thereby saving time (at the expense of using more memory)
 before the first sentence is synthesized.</para></callout>
 </calloutlist>
 </para>
 
-<para>Click the <guibutton>OK</guibutton> button to save the Talker configuration settings.</para>
+<para>Click the <guibutton>OK</guibutton> button to save the talker configuration settings.</para>
 
 <warning><para>
 Be sure to click the <guibutton>Apply</guibutton> button, otherwise your
@@ -446,7 +451,7 @@ See <xref linkend="jobmgr" />.
 <sect1 id="general">
 <title>Starting KTTSD and Setting General Options</title>
 
-<para>Once you have configured at least one Talker,
+<para>Once you have configured at least one talker,
 you can start the KDE Text-to-Speech System.  Click on the
 <guilabel>General</guilabel> tab.  The <guilabel>General</guilabel>
 screen appears.  You can also set some general options on this screen.
@@ -464,7 +469,6 @@ screen appears.  You can also set some general options on this screen.
 					<area id="pt-gen-4" coords="1 1"/>
                     <area id="pt-gen-5" coords="1 1"/>
                     <area id="pt-gen-6" coords="1 1"/>
-                    <area id="pt-gen-7" coords="1 1"/>
 				</areaspec>
 				<imageobject>
 					<imagedata fileref="general.png" format="PNG"/>
@@ -479,30 +483,24 @@ screen appears.  You can also set some general options on this screen.
 
 <para>
 <calloutlist>
-<callout arearefs="pt-gen-1"><para>Check this box to activate the &kmyapplication; system.  This starts the KDE TTS Deamon (KTTSD).  If KTTSD starts successfully,
+<callout arearefs="pt-gen-1"><para>Check this box to activate the &kmyapplication; system.
+This starts the KDE TTS Deamon (KTTSD).  If KTTSD starts successfully,
 the <guilabel>Jobs</guilabel> tab will appear.
 Once KTTSD has been started, you can begin creating and speaking text jobs.
 See <xref linkend="jobmgr" />.  Unchecking will stop KTTSD and deactivate the KDE TTS system.
-<note><para>If this box is disabled, you have not yet configured any Talkers
-(or you forgot to click the <guilabel>Apply</guilabel> button).
-See <xref linkend="select-plugin"/>.</para></note>
+<note><para>If this box is disabled, you have not yet configured any talkers
+(or you forgot to click the <guibutton>Apply</guibutton> button).
+See <xref linkend="configure-plugin"/>.</para></note>
 </para></callout>
-<callout arearefs="pt-gen-2"><para>Check this box to speak KDE notifications.
-See <xref linkend="knotify" /> for more information.</para></callout>
-<callout arearefs="pt-gen-3"><para>Check this box to speak only those KDE notifications that
-are displayed in a popup window.</para></callout>
-<callout arearefs="pt-gen-4"><para>Check this box to speak only those KDE notifications that
-are displayed in a passive popup window.</para></callout>
-<callout arearefs="pt-gen-5"><para>When this box is checked, an icon appears
+<callout arearefs="pt-gen-2"><para>When this box is checked, an icon appears
 in the system tray whenever <command>kttsmgr</command> is running.  In this
-mode, clicking <guilabel>OK</guilabel> or <guilabel>Cancel</guilabel> does
+mode, clicking <guibutton>OK</guibutton> or <guibutton>Cancel</guibutton> does
 not cause <command>kttsmgr</command> to exit.  Instead, the screen
 disappears but <command>kttsmgr</command> continues running in the system
 tray.  Click the icon to restore the screen.  To quit <command>kttsmgr</command>,
 right-click on the icon in the system tray and choose <guilabel>Quit</guilabel>.
-When unchecked, an icon
-does not appear in the system tray.  Clicking <guilabel>OK</guilabel>
-or <guilabel>Cancel</guilabel> quits <command>kttsmgr</command>.
+When unchecked, an icon does not appear in the system tray.  Clicking <guibutton>OK</guibutton>
+or <guibutton>Cancel</guibutton> quits <command>kttsmgr</command>.
 <note><para>When <command>kttsmgr</command> exits, 
 &kmyapplication; keeps running if the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box is checked.</para></note>
 <note><para>This option does not take effect until the next time
@@ -510,11 +508,17 @@ or <guilabel>Cancel</guilabel> quits <command>kttsmgr</command>.
 <note><para>This option has no effect when <command>kttsmgr</command> is
 running in the KDE Control Center.</para></note>
 </para></callout>
-<callout arearefs="pt-gen-6"><para>When this box is checked, the <command>kttsmgr</command> screen appears when you start <command>kttsmgr</command>.  If unchecked, the
+<callout arearefs="pt-gen-3"><para>When this box is checked, the <command>kttsmgr</command> screen appears when you start <command>kttsmgr</command>.  If unchecked, the
 <command>kttsmgr</command> icon appears in the system tray when
 <command>kttsmgr</command> is started, but the screen does not appear.
 Click the icon in the system tray to make the screen appear.</para></callout>
-<callout arearefs="pt-gen-7"><para>Be sure to click here to save your settings.</para></callout>
+<callout arearefs="pt-gen-4"><para>When this box is checked, and <command>kttsmgr</command> is 
+not already running, it will appear in the system tray whenever KTTSD is speaking.
+This gives you an opportunity to stop or otherwise manage the speaking.</para></callout>
+<callout arearefs="pt-gen-5"><para>When this box is checked, and <command>kttsmgr</command>
+automatically appears in the system tray whenever speaking, it will also disappear
+automatically when speaking has finished.</para></callout>
+<callout arearefs="pt-gen-6"><para>Be sure to click here to save your settings.</para></callout>
 </calloutlist>
 </para>
 
@@ -540,6 +544,8 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
 				<area id="pt-jobmgr-3" coords="1 1"/>
 				<area id="pt-jobmgr-4" coords="1 1"/>
 				<area id="pt-jobmgr-5" coords="1 1"/>
+				<area id="pt-jobmgr-6" coords="1 1"/>
+				<area id="pt-jobmgr-7" coords="1 1"/>
 			</areaspec>
 			<imageobject>
 				<imagedata fileref="jobs.png" format="PNG"/>
@@ -554,22 +560,30 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-jobmgr-1"><para>The buttons on this toolbar permit you to start,
-delete, and pause text jobs.  Select a job in the list below, then click
+<callout arearefs="pt-jobmgr-1"><para>All of the text jobs currently in the queue
+are listed here, together with the application that queued the job,
+the current job state, number of sentences in the job,
+and current sentence number.  The <guilabel>Talker ID</guilabel> corresponds to the
+<guilabel>ID</guilabel> column on the <guilabel>Talkers</guilabel> screen.
+</para></callout>
+<callout arearefs="pt-jobmgr-2"><para>The buttons in this row permit you to start,
+delete, and pause text jobs.  Select a job in the list above, then click
 one of these buttons.</para></callout>
-<callout arearefs="pt-jobmgr-2"><para>The buttons on this toolbar permit
+<callout arearefs="pt-jobmgr-3"><para>The buttons in this row permit
 you to advance or rewind by sentence within the job selected in the list
-below.  (Not all jobs have multiple parts.)</para></callout>
-<callout arearefs="pt-jobmgr-3"><para>The buttons on this toolbar permit
+above.  (Not all jobs have multiple parts.)</para></callout>
+<callout arearefs="pt-jobmgr-4"><para>The buttons in this row permit
 you to speak the text currently in the KDE clipboard, or open a text file
-for speaking.  You can also refresh the list of text jobs.</para></callout>
-<callout arearefs="pt-jobmgr-4"><para>The currently-speaking sentence
-appears here.  If you need to, you can resize this panel by dragging the
-divider up or down.</para></callout>
-<callout arearefs="pt-jobmgr-5"><para>When you click <guibutton>OK</guibutton>,
+for speaking.  You can also refresh the list of text jobs or
+change the talker for a job.  See <xref linkend="selecttalker" />.</para></callout>
+<callout arearefs="pt-jobmgr-5"><para>The currently-speaking sentence
+appears here.</para></callout>
+<callout arearefs="pt-jobmgr-6"><para>When you click <guibutton>OK</guibutton>,
 all changes to settings on other screens are applied (if any) and
 <command>kttsmgr</command> minimizes to the system tray.  Click on the icon
 in the system tray to restore the screen.</para></callout>
+<callout arearefs="pt-jobmgr-7"><para>Drag this divider to resize
+the jobs listing and <guilabel>Current sentence</guilabel> panels.</para></callout>
 </calloutlist>
 </para>
 
@@ -577,6 +591,14 @@ in the system tray to restore the screen.</para></callout>
 <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech (KTTSD)</guilabel> box.</para>
 </note>
+
+<note><para>If you do not have the aRts audio subsystem installed, but you
+do have GStreamer installed, click the <guilabel>Audio</guilabel> tab.
+See <xref linkend="audio" />.</para></note>
+
+<note><para>Only Text jobs are listed and controlled on this screen.
+Screen Reader Output, Warnings, and Messages are not displayed.  For more information
+about &kmyapplication; message types, see <xref linkend="filters" />.</para></note>
 
 </sect1>
 
@@ -647,508 +669,12 @@ Many of the <guilabel>Talkers</guilabel> have a <guilabel>Speed</guilabel>
 setting in their configuration dialogs, which you can display by clicking
 <guibutton>Edit</guibutton> on the <guilabel>Talkers</guilabel> screen.  This
 <guilabel>Speed</guilabel> setting on the <guilabel>Audio</guilabel> screen
-is in addition to the Talker speed setting and generally can be used
-even if the Talker does not support a speed setting.  For this speed setting
+is in addition to the talker speed setting and generally can be used
+even if the talker does not support a speed setting.  For this speed setting
 to work, you must have the <command>sox</command>
 utility installed on your system (Debian users: 
 <command>apt-get install sox</command>).  Also, this speed setting is ignored
 when speaking text containing SSML.  (See <xref linkend="ssml" />)</para></note>
-
-</sect1>
-
-<!-- ...................................................................... -->
-
-<sect1 id="filters">
-<title>Filters</title>
-
-<para>Filters are an advanced feature of &kmyapplication;.  For the
-basic operation of &kmyapplication; they are not needed.</para>
-
-<para>Filters are used to pre-process text before it is sent to the
-speech synthesis engine.  They are useful for enhancing speech,
-substituting for mispoken words or abbreviations, choosing the
-appropriate language and talker to do the speaking, or working around 
-certain limitations of speech synthesizers and their voices.</para>
-
-<para>To understand how to use filters, it is
-helpful to first understand how text is processed by &kmyapplication;.
-Text spoken by &kmyapplication; is of four possible types.</para>
-
-<para>
-<itemizedlist>
-<listitem><para>Screen Reader Output.</para></listitem>
-<listitem><para>Warnings.</para></listitem>
-<listitem><para>Messages</para></listitem>
-<listitem><para>Text Jobs</para></listitem>
-</itemizedlist>
-</para>
-
-<para>The type is determined by the application that sends the text
-to &kmyapplication;.  Screen Reader Output is used by applications
-designed for the blind or low-sighted.  Screen Reader Outputs are always
-spoken before any other type and will interrupt any type of speech.
-Warnings and Messages are short messages that alert you to urgent
-information.  They interrupt Text Jobs.  Warnings are higher
-priority than Messages.  KMouth is an example of an application that
-uses Messages for its speech.  KDE Notifications are also Messages.
-The rest are ordinary Text Jobs.  Any job you initiate from the
-<guilabel>Jobs</guilabel> tab is a Text Job.  KSayit is an example
-of an application that uses Text Jobs.  Text Jobs are intended for
-longer speech output that is not urgent.</para>
-
-<para>The first thing you must know about filters is that they are
-applied only to ordinary Text Jobs and to KDE Notification messages.
-All other Screen Reader Ouput, Warnings, and Messages are not
-affected by filters.</para>
-
-<para>There are two kinds of filters --
-ordinary filters and Sentence Boundary Detector (SBD) filters.
-SBDs break text up into individual sentences.  This allows
-&kmyapplication; to begin speaking faster because it need only
-synthesize the first sentence; not the entire Text Job.
-It also permits you to advance or rewind by sentence in the
-<guilabel>Jobs</guilabel> tab, or to stop or pause Text Jobs when
-the speech synthesizer does not directly support stopping of speech.
-</para>
-
-<para>Ordinary filters process the text and pass it on to the
-next filter.  There are currently three kinds of ordinary filters.
-</para>
-
-<para>
-<itemizedlist>
-<listitem><para>String Replacers.</para></listitem>
-<listitem><para>XML Transformers</para></listitem>
-<listitem><para>Talker Choosers.</para></listitem>
-</itemizedlist>
-</para>
-
-<note><para>Filters are implemented using a plugin architecture.
-In the future, there may be additional kinds of filters.</para></note>
-
-<para>String Replacer filters substitute pieces of text with
-other text.  The replaced pieces are matched either as words or
-as regular expressions.  &kmyapplication; comes with pre-defined
-String Replacer filters for speaking abbreviations, speaking
-chat emoticons, such as ":-)", or reformatting notification
-messages from Konversation or KMail into a more understandable
-form.
-</para>
-
-<para>XML Transformers use an XML Style Language - Transforms (XSLT)
-file to convert XML of one format to another format.
-&kmyapplication; comes with an XSLT file for converting
-XHTML into SSML, but this should be considered highly experimental.
-</para>
-
-<para>Talker Choosers permit you redirect jobs to a talker 
-based on the contents of the text, or upon the application that sent it
-to &kmyapplication;.  For example, if you have configured a female talker
-in the <guilabel>Talkers</guilabel> tab, you can direct text coming from
-KDE Notifications to that talker.  See <xref linkend="select-plugin" />.
-</para>
-
-<para>Each of these kinds of filters has configurable rules for when
-the filter should apply itself to the text to be spoken.  If the
-filter determines that it should not apply itself, the text
-is passed on to the next filter unaltered.</para>
-
-<para>When a Text Job or KDE Notification message is sent to &kmyapplication;,
-it passes through each of the enabled filters you have configured in the
-screen below.  The order is from top to bottom.  After passing through
-each of the ordinary filters listed in the top portion of the screen, Text Jobs
-are passed to the <guilabel>Sentence Boundary Detector</guilabel> (SBD) filters.
-(KDE Notifications never pass through SBD filters.)
-Unlike ordinary filters, the first SBD filter that makes changes to the text
-stops any further filtering.
-</para>
-
-<para>To use filters, click the <guilabel>Filters</guilabel> tab in <command>kttsmgr</command>.</para>
-
-<para>
-    <screenshot>
-        <screeninfo>The KDE Text-to-Speech Manager (Filters tab).</screeninfo>
-        <mediaobjectco>
-            <imageobjectco>
-                <areaspec units="calspair">
-                    <area id="pt-filters-1" coords="1 1"/>
-                    <area id="pt-filters-2" coords="1 1"/>
-                    <area id="pt-filters-3" coords="1 1"/>
-                    <area id="pt-filters-4" coords="1 1"/>
-                    <area id="pt-filters-5" coords="1 1"/>
-                    <area id="pt-filters-6" coords="1 1"/>
-                    <area id="pt-filters-7" coords="1 1"/>
-                    <area id="pt-filters-8" coords="1 1"/>
-                </areaspec>
-                <imageobject>
-                    <imagedata fileref="filters.png" format="PNG"/>
-                </imageobject>
-            </imageobjectco>
-            <textobject>
-                <phrase>The KDE Text-to-Speech Manager (Filters tab)</phrase>
-            </textobject>
-        </mediaobjectco>
-    </screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-filters-1"><para>This is the list of configured ordinary filters.
-If unchecked, the filter is inactive and will be bypassed.
-When you run &kmyapplication; for the first time, this is automatically filled
-with one instance of each kind of filter, but they are all inactive.
-Filters are applied in the order specified here, top to bottom.</para></callout>
-<callout arearefs="pt-filters-2"><para>Click here to add a new filter.  You will
-be prompted for the kind of filter to add.  After choosing the kind,
-see the configuration dialogs below.</para></callout>
-<callout arearefs="pt-filters-3"><para>Click here to remove a filter.  If the
-filter is the last of its kind, it is not removed; instead it is inactivated.</para></callout>
-<callout arearefs="pt-filters-4"><para>Click here to change the configuration
-of a filter.  See the configuration dialogs below.</para></callout>
-<callout arearefs="pt-filters-5"><para>Click these buttons to move a filter
-up or down in the list.</para></callout>
-<callout arearefs="pt-filters-6"><para>These are the Sentence Boundary Detector
-filters.  When you first start &kmyapplication;, the Standard Sentence Boundary Detector
-is automatically configured for you.  You can change this filter's configuration,
-or add additional Sentence Boundary Detectors, but we advise beginners not
-to change them.</para></callout>
-<callout arearefs="pt-filters-7"><para>This drop-down button permits you
-to add, remove, edit, or change the order of Sentence Boundary Detector filters.</para></callout>
-<callout arearefs="pt-filters-8"><para>Be sure to click here, otherwise your
-settings will not take effect.</para></callout>
-</calloutlist>
-</para>
-
-<!-- ...................................................................... -->
-
-<sect2 id="stringreplacer">
-<title>Configuring String Replacer Filters.</title>
-
-<para>You configure String Replacer filters by supplying
-a list of words or regular expressions to be matched.
-When the matched words or regular expressions are found in the
-text, each is replaced by a substitute string you supply.
-Matching is case insensitive.</para>
-
-<para>
-    <screenshot>
-        <screeninfo>String Replacer</screeninfo>
-        <mediaobjectco>
-            <imageobjectco>
-                <areaspec units="calspair">
-                    <area id="pt-stringreplacer-1" coords="1 1"/>
-                    <area id="pt-stringreplacer-2" coords="1 1"/>
-                    <area id="pt-stringreplacer-3" coords="1 1"/>
-                    <area id="pt-stringreplacer-4" coords="1 1"/>
-                    <area id="pt-stringreplacer-5" coords="1 1"/>
-                    <area id="pt-stringreplacer-6" coords="1 1"/>
-                    <area id="pt-stringreplacer-7" coords="1 1"/>
-                    <area id="pt-stringreplacer-8" coords="1 1"/>
-                    <area id="pt-stringreplacer-9" coords="1 1"/>
-                </areaspec>
-                <imageobject>
-                    <imagedata fileref="stringreplacer.png" format="PNG"/>
-                </imageobject>
-            </imageobjectco>
-            <textobject>
-                <phrase>String Replacer</phrase>
-            </textobject>
-        </mediaobjectco>
-    </screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-stringreplacer-1"><para>Enter a name for your filter.  Use any
-name you like that distinquishes it from all other filters.</para></callout>
-<callout arearefs="pt-stringreplacer-2"><para>This is the list of words
-and regular expressions.  The filter searches for matches on each string in
-the <guilabel>Match</guilabel> column, replacing the matched string
-with the string in the <guilabel>Replace With</guilabel> column.</para></callout>
-<callout arearefs="pt-stringreplacer-3"><para>Click here to add another word or
-regular expression to the list.</para></callout>
-<callout arearefs="pt-stringreplacer-4"><para>Click here to move the currently
-highlighted word or regular expression up or down in the list.  The list
-is processed in the order displayed, top to bottom.</para></callout>
-<callout arearefs="pt-stringreplacer-5"><para>Click to change an existing word
-or regular expression in the list.</para></callout>
-<callout arearefs="pt-stringreplacer-6"><para>Click to remove the currently
-highlighted word or regular expression from the list.</para></callout>
-<callout arearefs="pt-stringreplacer-7"><para>Use these buttons to load
-a list of words or regular expression from a file, save the current list to
-a file, or clear the entire list.  When loading from a file, the items in the
-file are appended to the existing list.</para></callout>
-<callout arearefs="pt-stringreplacer-8"><para>If not blank, the filter will
-apply itself only if the Text Job's talker language matches
-the language you enter here.  Click the button to display a list of languages.
-You may select more than one language by pressing
-<keycap>&Ctrl;</keycap> while clicking.</para></callout>
-<callout arearefs="pt-stringreplacer-9"><para>If not blank, the filter will
-apply itself only if the text came from one of the applications listed.
-You may enter more than one application separated by commas.
-Example: <command><userinput>knotify,konversation</userinput></command></para>
-<tip><para>You can discover the <guilabel>Application ID</guilabel>
-of running programs using the <command>kdcop</command> program.
-You should leave the DCOP numbers out.  For example, if kdcop shows
-an Application ID of <command>kopete-3432</command>, you would just
-enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
-</calloutlist>
-</para>
-
-<para>The String Replacer filter will only apply itself to the text
-if all non-blank conditions are met in the 
-<guilabel>Apply This Filter When</guilabel> box.</para>
-
-<para>All matching is case insensitive.</para>
-
-<para>When matching words, the String Replacer filter internally uses a
-regular expression of the form <command>\s<userinput>word</userinput>\s</command>.
-In other words, the word must have word boundaries (spaces) on either side of it.</para>
-
-<para>A discussion on how to write regular expressions is outside the scope
-of this handbook.  If you have the KDE Regular Expression editor installed,
-there is a button available on the <guilabel>Add</guilabel> or
-<guilabel>Edit</guilabel> screens that will assist you at
-constructing regular expressions.  The KDE Regular Expression Editor is part
-of the <command>kdeutils</command> package.</para>
-
-<para>&kmyapplication; comes with a few word list files, including a list
-of emoticons, such as ":-)", some abbreviations typically used in IRC or
-instant messaging applications, and a list of other abbreviations.
-There is also a list of special characters which the current version
-of the Polish Festival voice cannot handle.
-If you develop useful word lists of your own, user the <guilabel>Save</guilabel>
-button to save them to a file and send them to the
-&kmyapplication; team for inclusion in the next version.</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-<sect2 id="xmltransformer">
-<title>Configuring XML Transformer Filters.</title>
-
-<para>The XML Transformer filter uses XSLT files to transform XML from
-one format to another.  XSLT, the XML Style Language - Transforms, is a W3C
-standard language for performing such transformations.
-It can only be used on well-formed XML.</para>
-
-<para>
-    <screenshot>
-        <screeninfo>XML Transformer</screeninfo>
-        <mediaobjectco>
-            <imageobjectco>
-                <areaspec units="calspair">
-                    <area id="pt-xmltransformer-1" coords="1 1"/>
-                    <area id="pt-xmltransformer-2" coords="1 1"/>
-                    <area id="pt-xmltransformer-3" coords="1 1"/>
-                    <area id="pt-xmltransformer-4" coords="1 1"/>
-                    <area id="pt-xmltransformer-5" coords="1 1"/>
-                    <area id="pt-xmltransformer-6" coords="1 1"/>
-                </areaspec>
-                <imageobject>
-                    <imagedata fileref="xmltransformer.png" format="PNG"/>
-                </imageobject>
-            </imageobjectco>
-            <textobject>
-                <phrase>XML Transformer</phrase>
-            </textobject>
-        </mediaobjectco>
-    </screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-xmltransformer-1"><para>Enter a name for your filter.  Use any
-name you like that distinquishes it from all other filters.</para></callout>
-<callout arearefs="pt-xmltransformer-2"><para>Enter the full path
-to an existing XSLT file, which will perform the transformation.</para></callout>
-<callout arearefs="pt-xmltransformer-3"><para>Specify the path to the
-<command>xsltproc</command> utility.  If xsltproc is in your environment
-PATH, simply enter <command><userinput>xsltproc</userinput></command>.</para></callout>
-<callout arearefs="pt-xmltransformer-4"><para>If not blank, the filter
-will apply itself only if the XML has the specified root element. This distinquishes one
-form of XML from another.</para></callout>
-<callout arearefs="pt-xmltransformer-5"><para>If not blank, the filter
-will apply itself only if the XML has a <command><![CDATA[<!DOCTYPE]]></command> specification
-beginning with the entered string.  For example,
-<command><userinput>html</userinput></command> will match
-<command><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></command>.
-</para></callout>
-<callout arearefs="pt-xmltransformer-6"><para>If not blank, the filter will
-apply itself only if the text came from one of the applications listed.
-You may enter more than one application separated by commas.
-Example: <command><userinput>knotify,konversation</userinput></command></para>
-<tip><para>You can discover the <guilabel>Application ID</guilabel>
-of running programs using the <command>kdcop</command> program.
-You should leave the DCOP numbers out.  For example, if kdcop shows
-an Application ID of <command>kopete-3432</command>, you would just
-enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
-</calloutlist>
-</para>
-
-<para>The XML Transformer filter will only apply itself to the text
-if all non-blank conditions are met in the 
-<guilabel>Apply This Filter When</guilabel> box.</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-<sect2 id="talkerchooser">
-<title>Configuring Talker Chooser Filters.</title>
-
-<para>Talker Chooser filters are used to direct the text to a desired
-talker configured in the <guilabel>Talker</guilabel> tab, or to any
-talker having specified attributes.  For example,
-you can specify that text coming from <command>knotify</command>
-should be spoken using a talker configured with a female voice.
-See <xref linkend="select-plugin" />.</para>
-
-<para>Just before &kmyapplication; begins sending text to each of the
-filters, it picks a talker to to speak the text.  The talker chosen is
-based on the talker attributes specified by the application that sent
-the text to &kmyapplication; and the attributes of the talkers that
-you have configured on the <guilabel>Talkers</guilabel> tab.
-The Talker Chooser filter permits you to override the
-chosen talker.
-</para>
-
-<para>
-    <screenshot>
-        <screeninfo>Talker Chooser</screeninfo>
-        <mediaobjectco>
-            <imageobjectco>
-                <areaspec units="calspair">
-                    <area id="pt-talkerchooser-1" coords="1 1"/>
-                    <area id="pt-talkerchooser-2" coords="1 1"/>
-                    <area id="pt-talkerchooser-3" coords="1 1"/>
-                    <area id="pt-talkerchooser-4" coords="1 1"/>
-                    <area id="pt-talkerchooser-5" coords="1 1"/>
-                    <area id="pt-talkerchooser-6" coords="1 1"/>
-                </areaspec>
-                <imageobject>
-                    <imagedata fileref="talkerchooser.png" format="PNG"/>
-                </imageobject>
-            </imageobjectco>
-            <textobject>
-                <phrase>Talker Chooser</phrase>
-            </textobject>
-        </mediaobjectco>
-    </screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-talkerchooser-1"><para>Enter a name for your filter.  Use any
-name you like that distinquishes it from all other filters.</para></callout>
-<callout arearefs="pt-talkerchooser-2"><para>If not blank, the filter will apply
-itself only if the text contains the entered regular expression.  If it is installed,
-click the browse button to launch the KDE Regular Expression Editor to assist you at entering
-the regular expression.</para>
-<tip><para>For better performance, try to "anchor" the regular expression to the
-start of the string.  In other words, start your regular expression with
-<command><userinput><![CDATA[^]]></userinput></command>.</para></tip></callout>
-<callout arearefs="pt-talkerchooser-3"><para>If not blank, the filter will
-apply itself only if the text came from one of the applications listed.
-You may enter more than one application separated by commas.
-Example: <command><userinput>knotify,konversation</userinput></command></para>
-<tip><para>You can discover the <guilabel>Application ID</guilabel>
-of running programs using the <command>kdcop</command> program.
-You should leave the DCOP numbers out.  For example, if kdcop shows
-an Application ID of <command>kopete-3432</command>, you would just
-enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
-<callout arearefs="pt-talkerchooser-4"><para>Specify the attributes of the
-talker you prefer to speak the text here.  If the text meets the filter
-conditions above, a talker will be chosen that most closely matches
-the attributes you specify here.  You can specify
-a language by clicking this button.</para></callout>
-<callout arearefs="pt-talkerchooser-5"><para>Similarly, the entries
-you make here also specify the attributes of the talker you prefer to
-speak the text.  You do not have to specify all attributes.</para></callout>
-<callout arearefs="pt-talkerchooser-6"><para>You can specify that an
-attribute is more important than other attributes by checking these
-boxes.</para></callout>
-</calloutlist>
-</para>
-
-<para>The Talker Chooser filter will only apply itself to the text
-if all non-blank conditions are met in the 
-<guilabel>Apply This Filter When</guilabel> box.</para>
-
-<para>The <guilabel>Language</guilabel> attribute is special because
-text will probably be unintelligible if spoken by a talker that
-speaks a language different from the text.  Therefore, language
-is automatically a <guilabel>preferred</guilabel> attribute.
-If you specify a language, it will override the chosen language,
-but if you leave it blank, the existing language already chosen
-by &kmyapplication; will be used.  If the application that sent the
-text to &kmyapplication; did not specify a language, &kmyapplication;
-assigns the language of the topmost talker you have configured in the
-<guilabel>Talkers</guilabel> tab.  The other attributes always
-override.  In other words, if you leave the <guilabel>Rate</guilabel>
-attribute blank, the Talker Chooser will find the closest
-matching talker independently of rate of speech.</para>
-
-<para>The easiest way to learn how to configure Talker Choosers is
-to experiment.  Disable the Talker Chooser and submit some text.
-In the <guilabel>Jobs</guilabel> tab, note the talker that
-&kmyapplication; chooses.  Enable the Talker Chooser, enter some
-attributes, and try again to see how the choice is affected.
-Of course, you must have more than one talker configured for
-the Talker Chooser to do anything.</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-<sect2 id="sbd">
-<title>Configuring Sentence Boundary Detector Filters.</title>
-
-<para>Sentence Boundary Detector (SBD) filters break text up into individual sentences.
-This is important because it</para>
-
-<itemizedlist>
-<listitem><para>allows &kmyapplication; to begin speaking faster
-because it need only synthesize the first sentence, rather than the entire
-block of text, which might be very long, and</para></listitem>
-<listitem><para>allows you to rewind and advance by sentences in the
-<guilabel>Jobs</guilabel> tab, and</para></listitem>
-<listitem><para>allows you to pause or stop Text Jobs in the
-<guilabel>Jobs</guilabel> tab even if the speech synthesizer is not
-capable of being stopped.</para></listitem>
-</itemizedlist>
-
-<para>For these reasons, the Standard Sentence Boundary Detector filter
-is automatically configured the first time you run <command>kttsmgr</command>
-and cannot be disabled (although you can remove it).  We advise you
-not to modify this filter unless you know what you are doing.</para>
-
-<para>You can, however, add additional SBD filters to solve certain
-problems.  For example, as of February 2005, the Polish Festival voice
-has the annoying attribute of speaking sentence punctuation.  It will
-speak the periods at the end of each sentence, for instance.  You cannot solve this problem
-by creating a String Replacer filter to remove the sentence punctuation,
-because doing so will prevent the Standard SBD from recognizing any
-sentences.  Instead, you can create a modified version of the
-Standard SBD that recognizes sentences while simultaneously removing
-the sentence punctuation.  To do this, add an SBD filter and use the
-<guilabel>Load</guilabel> button to load the <filename>polish_festival_sbdrc</filename>
-file that comes with &kmyapplication;.</para>
-
-<para>SBD filters work by matching an end-of-sentence regular expression
-and inserting Tab (decimal 8) characters at the sentence boundaries.
-(All Tab characters are automatically stripped from text before filtering begins.)
-Note that the Standard SBD preserves the sentence punctuation.
-</para>
-
-<para>SBD filters are never applied to KDE Notification messages (knotify).</para>
-
-<para>If you accidentally remove the Standard Sentence Boundary Detectory filter,
-you can get it back by loading the <filename>standard_sbdrc</filename> file,
-which comes with &kmyapplication;.</para>
-
-</sect2>
 
 </sect1>
 
@@ -1299,13 +825,172 @@ have KDE speak the text of the IRC message to you.</para>
 
 <para>In general, if a KDE application supports KNotify, a
 <guilabel>Notifications</guilabel> menu item will appear under the
-<guilabel>Settings</guilabel> menu.  The specifics for configuring
+application's <guilabel>Settings</guilabel> menu.  The specifics for configuring
 each application with KNotify vary from application to application.</para>
 
 <para>To enable &kmyapplication; to speak KNotify text notifications,
-start <command>kttsmgr</command>, click the <guilabel>General</guilabel> tab,
-and check the <guilabel>Speak notifications (KNotify)</guilabel> box.
-Then click the <guibutton>Apply</guibutton> button.</para>
+start <command>kttsmgr</command> and click the <guilabel>Notifications</guilabel> tab.
+The <guilabel>Notifications</guilabel> screen appears.</para>
+
+<para>
+<screenshot>
+<screeninfo>The KDE Text-to-Speech Manager (Notifications tab).</screeninfo>
+	<mediaobjectco>
+		<imageobjectco>
+			<areaspec units="calspair">
+				<area id="pt-notify-1" coords="1 1"/>
+				<area id="pt-notify-2" coords="1 1"/>
+				<area id="pt-notify-3" coords="1 1"/>
+				<area id="pt-notify-4" coords="1 1"/>
+				<area id="pt-notify-5" coords="1 1"/>
+				<area id="pt-notify-6" coords="1 1"/>
+				<area id="pt-notify-7" coords="1 1"/>
+				<area id="pt-notify-8" coords="1 1"/>
+				<area id="pt-notify-9" coords="1 1"/>
+				<area id="pt-notify-10" coords="1 1"/>
+			</areaspec>
+			<imageobject>
+				<imagedata fileref="notifications.png" format="PNG"/>
+			</imageobject>
+		</imageobjectco>
+		<textobject>
+			<phrase>The KDE Text-to-Speech Manager (Notification tab)</phrase>
+		</textobject>
+	</mediaobjectco>
+</screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-notify-1"><para>Check this box to enable speaking of
+KDE notifications.  If unchecked, everything else on this screen is disabled
+and &kmyapplication; does not speak any notifications.</para></callout>
+<callout arearefs="pt-notify-2"><para>When checked, any application
+that sends an event with a sound will not be spoken by &kmyapplication;.</para></callout>
+<callout arearefs="pt-notify-3"><para>Use these buttons to add or delete
+application events from the list below.  When you click
+the <guibutton>Add</guibutton> button, a screen appears in which
+you select the application and event you want to add to the list.
+</para></callout>
+<callout arearefs="pt-notify-4"><para>This event will speak the message
+Konversation sends when someone mentions your nickname in an Internet Relay Chat message.
+</para></callout>
+<callout arearefs="pt-notify-5"><para>For all other events coming from
+Konversation, no action will be taken in &kmyapplication;.</para></callout>
+<callout arearefs="pt-notify-6"><para>For all events not otherwise
+specified in the list, no action will be taken in &kmyapplication;.</para></callout>
+<callout arearefs="pt-notify-7"><para>Use this box to specify what
+&kmyapplication; should do when it receives an event.  Your choices are:</para>
+<para>
+<variablelist>
+<varlistentry>
+<term>Speak event name</term>
+<listitem><para>Speaks the name of the event; what you see listed in the
+event list on this screen.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Speak the notification message</term>
+<listitem><para>Speaks the message as it is sent from the application.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Do not speak the notification</term>
+<listitem><para>Does not speak this event at all.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Speak custom text</term>
+<listitem><para>Speaks the text you enter in the box to the right.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+</callout>
+<callout arearefs="pt-notify-8"><para>If the action is
+<guilabel>Speak custom text</guilabel>, enter the text of the message
+you would like spoken here.  Within the message, you may use the following
+substitution strings:</para>
+<para>
+<variablelist>
+<varlistentry>
+<term>%e</term>
+<listitem><para>The name of the event</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>%a</term>
+<listitem><para>The name of the application that sent the event</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>%m</term>
+<listitem><para>The message the application sent</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+</callout>
+<callout arearefs="pt-notify-9"><para>Test the message by clicking here.</para></callout>
+<callout arearefs="pt-notify-10"><para>You may specify the attributes of the
+desired talker to speak the notification message here.
+<command><userinput>default</userinput></command>
+will use the topmost talker listed in the <guilabel>Talkers</guilabel>
+screen.  See <xref linkend="selecttalker" />.
+</para></callout>
+</calloutlist>
+</para>
+
+<para>Notice there are three levels of events.  If an action for a specific event
+of a specific application is specified, that action is taken.  Otherwise, if
+an action for all other events of a specific application is specified, that
+action is taken.  Otherwise, the action specified for all other events
+under <guilabel>Default (all other events)</guilabel> is taken.</para>
+
+<para>The event <guilabel>all notifications</guilabel>
+for application <guilabel>Default (all other events)</guilabel>
+may not be deleted from the list.  For the default all other events,
+you may specify the kind of notifications that are spoken, as follows:</para>
+
+<variablelist>
+<varlistentry>
+<term>none</term>
+<listitem><para>None will be spoken.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>notification dialogs</term>
+<listitem><para>Notifications that display a dialog on your screen, that you must then
+dismiss, will be spoken.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>passive popups</term>
+<listitem><para>Notifications that display a passive dialog on your screen,
+that automatically disappear after a moment, will be spoken.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>notification dialogs and passive popups</term>
+<listitem><para>Notifications that display on screen, passively or not,
+will be spoken.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>all notifications</term>
+<listitem><para>All notifications, regardless of whether they produce
+a display on screen, will be spoken.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<tip><para>String Replacer filters are a good way to clean up messages
+sent from applications if they are mispronounced or misspoken in 
+&kmyapplication;.  The <filename>kmail.xml</filename> file, which
+comes with &kmyapplication;, is a good example.  It removes <command>br</command>,
+and <command>b</command> tags from the KMail notification messages and also removes the
+phrase <command>/local/inbox/</command>, since this
+may be safely assumed in most cases.  See <xref linkend="stringreplacer" />.
+</para></tip>
+
+<para>Use the <guibutton>Save</guibutton> button to save your
+notification settings to a file.  Use the <guibutton>Load</guibutton>
+button to load saved settings from a file.  The loaded events are merged
+with existing events in the list.  If you want to start with
+an empty event list, click the <guibutton>Clear</guibutton>
+button first.  All events except for <guilabel>all notifications</guilabel>
+will be erased.</para>
+
+<note><para>Be sure to click <guibutton>Apply</guibutton>
+or <guibutton>OK</guibutton> to save your settings.</para></note>
 
 </sect1>
 
@@ -1362,6 +1047,649 @@ will usually cause the SSML text to be spoken in a monotone.</para></listitem>
 <para>More robust support for SSML is planned for the next version of
 &kmyapplication;.
 </para>
+
+</sect1>
+
+<!-- ...................................................................... -->
+
+<sect1 id="filters">
+<title>Filters (Advanced)</title>
+
+<para>Filters are an advanced feature of &kmyapplication;.  For the
+basic operation of &kmyapplication;, they are not needed.</para>
+
+<para>Filters are used to pre-process text before it is sent to the
+speech synthesis engine.  They are useful for enhancing speech,
+substituting for misspoken words or abbreviations, choosing the
+appropriate language and talker to do the speaking, or working around 
+certain limitations of speech synthesizers and their voices.</para>
+
+<!-- ...................................................................... -->
+
+<sect2 id="msg-types">
+<title>Types of &kmyapplication; Messages</title>
+
+<para>To understand how to use filters, it is
+helpful to first understand how text is processed by &kmyapplication;.
+Text spoken by &kmyapplication; is of four possible types.</para>
+
+<para>
+<itemizedlist>
+<listitem><para>Screen Reader Output.</para></listitem>
+<listitem><para>Warnings.</para></listitem>
+<listitem><para>Messages</para></listitem>
+<listitem><para>Text Jobs</para></listitem>
+</itemizedlist>
+</para>
+
+<para>The type is determined by the application that sends the text
+to &kmyapplication;.</para>
+
+<para>Screen Reader Output has the highest priority.  It is reserved for use
+by Screen Reader applications.  Screen Reader Output preempts all other
+messages, causing those jobs to pause.  Once the Screen Reader Output has
+been spoken, the preempted messages will automatically resume.
+</para>
+
+<para>Warnings are the next highest priority.  It is reserved for high-priority
+messages, such as "CPU is over-heating."  A Warning will preempt Messages
+and regular text, causing those jobs to pause.  Once the Warning has been
+spoken, the preempted messages will automatically resume.</para>
+
+<para>Messages are the next highest priority.  A Message will preempt regular
+text jobs.  KMouth is an example of an application that uses Messages.
+For example, while reading out long text from a web page,
+KMouth can be used to greet someone who walks into the room.
+KDE Notifications are also Messages  (see <xref linkend="knotify" />).</para>
+
+<para>The rest are ordinary Text Jobs.  Any job you initiate from the
+<guilabel>Jobs</guilabel> tab is a Text Job.  KSayit is an example
+of an application that uses Text Jobs.  Text Jobs are intended for
+longer speech output that is not urgent.</para>
+
+<para>All four kinds of jobs are queues, except for Screen Reader Output.
+If a Screen Reader Output is sent from an application while
+&kmyapplication; is speaking another Screen Reader Output, the speaking message 
+is stopped and discarded.</para>
+
+</sect2>
+
+<!-- ...................................................................... -->
+
+<sect2 id="filter-types">
+<title>Types of Filters</title>
+
+<para>The first thing you must know about filters is that they are
+applied only to ordinary Text Jobs and to KDE Notification messages.
+All other Screen Reader Ouput, Warnings, and Messages are not
+affected by filters.</para>
+
+<para>There are two kinds of filters --
+ordinary filters and Sentence Boundary Detector (SBD) filters.
+SBDs break text up into individual sentences.  This allows
+&kmyapplication; to begin speaking faster because it need only
+synthesize the first sentence; not the entire Text Job.
+It also permits you to advance or rewind by sentence in the
+<guilabel>Jobs</guilabel> tab, or to stop or pause Text Jobs when
+the speech synthesizer does not directly support stopping of speech.
+</para>
+
+<para>Ordinary filters process the text and pass it on to the
+next filter.  There are currently three kinds of ordinary filters.
+</para>
+
+<para>
+<itemizedlist>
+<listitem><para>String Replacers.</para></listitem>
+<listitem><para>XML Transformers</para></listitem>
+<listitem><para>Talker Choosers.</para></listitem>
+</itemizedlist>
+</para>
+
+<note><para>Filters are implemented using a plugin architecture.
+In the future, there may be additional kinds of filters.</para></note>
+
+<para>String Replacer filters substitute pieces of text with
+other text.  The replaced pieces are matched either as words or
+as regular expressions.  &kmyapplication; comes with pre-defined
+String Replacer filters for speaking abbreviations, speaking
+chat emoticons, such as ":-)", or reformatting notification
+messages from Konversation or KMail into a more understandable
+form.
+</para>
+
+<para>XML Transformers use an XML Style Language - Transforms (XSLT)
+file to convert XML of one format to another format.
+&kmyapplication; comes with a couple of XSLT files for converting
+XHTML into SSML.
+</para>
+
+<para>Talker Choosers permit you redirect jobs to a talker 
+based on the contents of the text, or upon the application that sent it
+to &kmyapplication;.  For example, if you have configured a female talker
+in the <guilabel>Talkers</guilabel> tab, you can direct text coming from
+KSayIt to that talker.  See <xref linkend="configure-plugin" />.
+</para>
+
+<para>Each of these kinds of filters has configurable rules for when
+the filter should apply itself to the text to be spoken.  If the
+filter determines that it should not apply itself, the text
+is passed on to the next filter unaltered.</para>
+
+<para>When a Text Job or KDE Notification message is sent to &kmyapplication;,
+it passes through each of the enabled filters you have configured in the
+screen below.  The order is from top to bottom.  After passing through
+each of the ordinary filters listed in the top portion of the screen, Text Jobs
+are passed to the <guilabel>Sentence Boundary Detector</guilabel> (SBD) filters.
+(KDE Notifications never pass through SBD filters.)
+Unlike ordinary filters, the first SBD filter that makes changes to the text
+stops any further filtering.
+</para>
+
+</sect2>
+
+<!-- ...................................................................... -->
+
+<sect2 id="configure-filters">
+<title>Configuring Filters</title>
+
+<para>To use filters, click the <guilabel>Filters</guilabel> tab in <command>kttsmgr</command>.</para>
+
+<para>
+    <screenshot>
+        <screeninfo>The KDE Text-to-Speech Manager (Filters tab).</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-filters-1" coords="1 1"/>
+                    <area id="pt-filters-2" coords="1 1"/>
+                    <area id="pt-filters-3" coords="1 1"/>
+                    <area id="pt-filters-4" coords="1 1"/>
+                    <area id="pt-filters-5" coords="1 1"/>
+                    <area id="pt-filters-6" coords="1 1"/>
+                    <area id="pt-filters-7" coords="1 1"/>
+                    <area id="pt-filters-8" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="filters.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>The KDE Text-to-Speech Manager (Filters tab)</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-filters-1"><para>This is the list of configured ordinary filters.
+If unchecked, the filter is inactive and will be bypassed.
+Filters are applied in the order specified here, top to bottom.</para></callout>
+<callout arearefs="pt-filters-2"><para>Click here to add a new filter.  You will
+be prompted for the kind of filter to add.  After choosing the kind,
+see the configuration dialogs below.</para></callout>
+<callout arearefs="pt-filters-3"><para>Click here to remove a filter.</para></callout>
+<callout arearefs="pt-filters-4"><para>Click here to change the configuration
+of a filter.  See the configuration dialogs below.</para></callout>
+<callout arearefs="pt-filters-5"><para>Click these buttons to move a filter
+up or down in the list.</para></callout>
+<callout arearefs="pt-filters-6"><para>These are the Sentence Boundary Detector
+filters.  When you first start &kmyapplication;, the Standard Sentence Boundary Detector
+is automatically configured for you.  You can change this filter's configuration,
+or add additional Sentence Boundary Detectors, but we advise beginners not
+to change them.</para></callout>
+<callout arearefs="pt-filters-7"><para>This drop-down button permits you
+to add, remove, edit, or change the order of Sentence Boundary Detector filters.</para></callout>
+<callout arearefs="pt-filters-8"><para>Be sure to click here, otherwise your
+settings will not take effect.</para></callout>
+</calloutlist>
+</para>
+
+</sect2>
+
+<!-- ...................................................................... -->
+
+<sect2 id="stringreplacer">
+<title>Configuring String Replacer Filters</title>
+
+<para>You configure String Replacer filters by supplying
+a list of words or regular expressions to be matched.
+When the matched words or regular expressions are found in the
+text, each is replaced by a substitute string you supply.
+Matching is case insensitive.</para>
+
+<para>
+    <screenshot>
+        <screeninfo>String Replacer</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-stringreplacer-1" coords="1 1"/>
+                    <area id="pt-stringreplacer-2" coords="1 1"/>
+                    <area id="pt-stringreplacer-3" coords="1 1"/>
+                    <area id="pt-stringreplacer-4" coords="1 1"/>
+                    <area id="pt-stringreplacer-5" coords="1 1"/>
+                    <area id="pt-stringreplacer-6" coords="1 1"/>
+                    <area id="pt-stringreplacer-7" coords="1 1"/>
+                    <area id="pt-stringreplacer-8" coords="1 1"/>
+                    <area id="pt-stringreplacer-9" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="stringreplacer.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>String Replacer</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-stringreplacer-1"><para>Enter a name for your filter.  Use any
+name you like that distinquishes it from all other filters.</para></callout>
+<callout arearefs="pt-stringreplacer-2"><para>This is the list of words
+and regular expressions.  The filter searches for matches on each string in
+the <guilabel>Match</guilabel> column, replacing the matched string
+with the string in the <guilabel>Replace With</guilabel> column.  The list
+is processed in the order displayed, top to bottom.</para></callout>
+<callout arearefs="pt-stringreplacer-3"><para>Click here to add another word or
+regular expression to the list.</para></callout>
+<callout arearefs="pt-stringreplacer-4"><para>Click here to move the currently
+highlighted word or regular expression up or down in the list.</para></callout>
+<callout arearefs="pt-stringreplacer-5"><para>Click to change an existing word
+or regular expression in the list.</para></callout>
+<callout arearefs="pt-stringreplacer-6"><para>Click to remove the currently
+highlighted word or regular expression from the list.</para></callout>
+<callout arearefs="pt-stringreplacer-7"><para>Use these buttons to load
+a list of words or regular expression from a file, save the current list to
+a file, or clear the entire list.  When loading from a file, the items in the
+file are appended to the existing list.</para></callout>
+<callout arearefs="pt-stringreplacer-8"><para>If not blank, the filter will
+apply itself only if the job's talker language matches
+the language you enter here.  Click the button to display a list of languages.
+You may select more than one language by pressing
+<keycap>&Ctrl;</keycap> while clicking.</para></callout>
+<callout arearefs="pt-stringreplacer-9"><para>If not blank, the filter will
+apply itself only if the text came from one of the applications listed.
+You may enter more than one application separated by commas.
+Example: <command><userinput>konversation,kmail</userinput></command></para>
+<tip><para>You can discover the <guilabel>Application ID</guilabel>
+of running programs using the <command>kdcop</command> program.
+You should leave the DCOP numbers out.  For example, if kdcop shows
+an Application ID of <command>kopete-3432</command>, you would just
+enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
+</calloutlist>
+</para>
+
+<para>The String Replacer filter will only apply itself to the text
+if all non-blank conditions are met in the 
+<guilabel>Apply This Filter When</guilabel> box.
+if all the boxes are blank, the filter will apply to all text.</para>
+
+<para>All matching is case insensitive.</para>
+
+<para>When matching words, the String Replacer filter internally uses a
+regular expression of the form <command>\s<userinput>word</userinput>\s</command>.
+In other words, the word must have word boundaries (spaces) on either side of it.</para>
+
+<para>A discussion on how to write regular expressions is outside the scope
+of this handbook.  If you have the KDE Regular Expression editor installed,
+there is a button available on the <guilabel>Add</guilabel> or
+<guilabel>Edit</guilabel> screens that will assist you at
+constructing regular expressions.  The KDE Regular Expression Editor is part
+of the <command>kdeutils</command> package.</para>
+
+<para>&kmyapplication; comes with a few word list files, including a list
+of emoticons, such as ":-)", some abbreviations typically used in IRC or
+instant messaging applications, and a list of other abbreviations.
+There is also a list of special characters which the current version
+of the Polish Festival voice cannot handle.
+If you develop useful word lists of your own, use the <guibutton>Save</guibutton>
+button to save them to a file and send them to the
+&kmyapplication; team for inclusion in the next version.</para>
+
+</sect2>
+
+<!-- ...................................................................... -->
+
+<sect2 id="xmltransformer">
+<title>Configuring XML Transformer Filters</title>
+
+<para>The XML Transformer filter uses XSLT files to transform XML from
+one format to another.  XSLT, the XML Style Language - Transforms, is a W3C
+standard language for performing such transformations.
+It can only be used on well-formed XML.  You must have the
+<command>xsltproc</command> utility installed.</para>
+
+<para>
+    <screenshot>
+        <screeninfo>XML Transformer</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-xmltransformer-1" coords="1 1"/>
+                    <area id="pt-xmltransformer-2" coords="1 1"/>
+                    <area id="pt-xmltransformer-3" coords="1 1"/>
+                    <area id="pt-xmltransformer-4" coords="1 1"/>
+                    <area id="pt-xmltransformer-5" coords="1 1"/>
+                    <area id="pt-xmltransformer-6" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="xmltransformer.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>XML Transformer</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-xmltransformer-1"><para>Enter a name for your filter.  Use any
+name you like that distinquishes it from all other filters.</para></callout>
+<callout arearefs="pt-xmltransformer-2"><para>Enter the full path
+to an existing XSLT file, which will perform the transformation.</para></callout>
+<callout arearefs="pt-xmltransformer-3"><para>Specify the path to the
+<command>xsltproc</command> utility.  If xsltproc is in your environment
+PATH, simply enter <command><userinput>xsltproc</userinput></command>.</para></callout>
+<callout arearefs="pt-xmltransformer-4"><para>If not blank, the filter
+will apply itself only if the XML has the specified root element. This distinquishes one
+form of XML from another.</para></callout>
+<callout arearefs="pt-xmltransformer-5"><para>If not blank, the filter
+will apply itself only if the XML has a <command><![CDATA[<!DOCTYPE]]></command> specification
+beginning with the entered string.  For example,
+<command><userinput>html</userinput></command> will match
+<command><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></command>.
+</para></callout>
+<callout arearefs="pt-xmltransformer-6"><para>If not blank, the filter will
+apply itself only if the text came from one of the applications listed.
+You may enter more than one application separated by commas.
+Example: <command><userinput>konversation,kmail</userinput></command></para>
+<tip><para>You can discover the <guilabel>Application ID</guilabel>
+of running programs using the <command>kdcop</command> program.
+You should leave the DCOP numbers out.  For example, if kdcop shows
+an Application ID of <command>kopete-3432</command>, you would just
+enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
+</calloutlist>
+</para>
+
+<para>The XML Transformer filter will only apply itself to the text
+if all non-blank conditions are met in the 
+<guilabel>Apply This Filter When</guilabel> box.  If all the
+boxes are blank, it will apply to all text.  However,
+you should fill in at least one box, since many text jobs will not be in
+XML format.</para>
+
+</sect2>
+
+<!-- ...................................................................... -->
+
+<sect2 id="talkerchooser">
+<title>Configuring Talker Chooser Filters</title>
+
+<para>Talker Chooser filters are used to direct the text to a desired
+talker configured in the <guilabel>Talker</guilabel> tab, or to any
+talker having specified attributes.  For example,
+you can specify that text coming from <command>kmail</command>
+should be spoken using a talker configured with a female voice.
+See <xref linkend="configure-plugin" />.</para>
+
+<para>Just before &kmyapplication; begins sending text to each of the
+filters, it picks a talker to speak the text.  The talker chosen is
+based on the talker attributes specified by the application that sent
+the text to &kmyapplication; and the attributes of the talkers that
+you have configured on the <guilabel>Talkers</guilabel> tab.
+The Talker Chooser filter permits you to override the
+chosen talker.
+</para>
+
+<para>
+    <screenshot>
+        <screeninfo>Talker Chooser</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-talkerchooser-1" coords="1 1"/>
+                    <area id="pt-talkerchooser-2" coords="1 1"/>
+                    <area id="pt-talkerchooser-3" coords="1 1"/>
+                    <area id="pt-talkerchooser-4" coords="1 1"/>
+                    <area id="pt-talkerchooser-5" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="talkerchooser.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>Talker Chooser</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
+</para>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-talkerchooser-1"><para>Enter a name for your filter.  Use any
+name you like that distinquishes it from all other filters.</para></callout>
+<callout arearefs="pt-talkerchooser-2"><para>If not blank, the filter will apply
+itself only if the text contains the entered regular expression.  If it is installed,
+click the browse button to launch the KDE Regular Expression Editor to assist you at entering
+the regular expression.</para>
+<tip><para>For better performance, try to "anchor" the regular expression to the
+start of the string.  In other words, start your regular expression with
+<command><userinput><![CDATA[^]]></userinput></command>.</para></tip></callout>
+<callout arearefs="pt-talkerchooser-3"><para>If not blank, the filter will
+apply itself only if the text came from one of the applications listed.
+You may enter more than one application separated by commas.
+Example: <command><userinput>konversation,kmail</userinput></command></para>
+<tip><para>You can discover the <guilabel>Application ID</guilabel>
+of running programs using the <command>kdcop</command> program.
+You should leave the DCOP numbers out.  For example, if kdcop shows
+an Application ID of <command>kopete-3432</command>, you would just
+enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
+<callout arearefs="pt-talkerchooser-4"><para>Specify the attributes of the
+talker you prefer to speak the text here.  If the text meets the filter
+conditions above, a talker will be chosen that most closely matches
+the attributes you specify here.  Click the button at the right to
+display the <guilabel>Select Talker</guilabel> screen.
+See <xref linkend="selecttalker" />.</para></callout>
+<callout arearefs="pt-talkerchooser-5"><para>Use these buttons
+to save your Talker Chooser settings, load settings from a saved file,
+or clear all the settings.</para></callout>
+</calloutlist>
+</para>
+
+<para>The Talker Chooser filter will only apply itself to the text
+if all non-blank conditions are met in the 
+<guilabel>Apply This Filter When</guilabel> box.  You must fill in
+at least one of the boxes.</para>
+
+<para>The easiest way to learn how to configure Talker Choosers is
+to experiment.  Disable the Talker Chooser and submit some text.
+In the <guilabel>Jobs</guilabel> tab, note the talker that
+&kmyapplication; chooses.  Click the <guibutton>Change Talker</guibutton>
+button, enter some attributes, and try again to see how the choice is affected.
+Of course, you must have more than one talker configured for
+the Talker Chooser to do anything.</para>
+
+</sect2>
+
+<!-- ...................................................................... -->
+
+<sect2 id="sbd">
+<title>Configuring Sentence Boundary Detector Filters</title>
+
+<para>Sentence Boundary Detector (SBD) filters break text up into individual sentences.
+This is important because it</para>
+
+<itemizedlist>
+<listitem><para>allows &kmyapplication; to begin speaking faster
+because it need only synthesize the first sentence, rather than the entire
+block of text, which might be very long, and</para></listitem>
+<listitem><para>allows you to rewind and advance by sentences in the
+<guilabel>Jobs</guilabel> tab, and</para></listitem>
+<listitem><para>allows you to pause or stop Text Jobs in the
+<guilabel>Jobs</guilabel> tab even if the speech synthesizer is not
+capable of being stopped.</para></listitem>
+</itemizedlist>
+
+<para>For these reasons, the Standard Sentence Boundary Detector filter
+is automatically configured the first time you run <command>kttsmgr</command>
+and cannot be disabled (although you can remove it).  We advise you
+not to modify this filter unless you know what you are doing.</para>
+
+<para>You can, however, add additional SBD filters to solve certain
+problems.  For example, as of February 2005, the Polish Festival voice
+has the annoying attribute of speaking sentence punctuation.  It will
+speak the periods at the end of each sentence, for instance.  You cannot solve this problem
+by creating a String Replacer filter to remove the sentence punctuation,
+because doing so will prevent the Standard SBD from recognizing any
+sentences.  Instead, you can create a modified version of the
+Standard SBD that recognizes sentences while simultaneously removing
+the sentence punctuation.  To do this, add an SBD filter and use the
+<guibutton>Load</guibutton> button to load the <filename>polish_festival_sbdrc</filename>
+file that comes with &kmyapplication;.</para>
+
+<para>SBD filters work by matching an end-of-sentence regular expression
+and inserting Tab (decimal 8) characters at the sentence boundaries.
+(All Tab characters are automatically stripped from text before filtering begins.)
+Note that the Standard SBD preserves the sentence punctuation.
+</para>
+
+<para>SBD filters are never applied to KDE Notification messages (knotify).</para>
+
+<para>If you accidentally remove the Standard Sentence Boundary Detectory filter,
+you can get it back by loading the <filename>standard_sbdrc</filename> file,
+which comes with &kmyapplication;.</para>
+
+</sect2>
+
+</sect1>
+
+<!-- ...................................................................... -->
+
+<sect1 id="selecttalker">
+<title>Selecting Talkers (Advanced)</title>
+
+<para>You can configure
+any number of talkers in the <guilabel>Talkers</guilabel> tab.
+See <xref linkend="configure-plugin" />.  When applications send text
+to &kmyapplication;, they may specify the attributes of a desired
+talker to speak the text.  &kmyapplication; will pick the closest
+matching talker from among the talkers you have configured to satisfy
+the application's request.  For example, an application might request
+the text be spoken by an English female voice.  If you have configured
+a talker with English language and female gender, that talker will be used.
+If you have configured all English male talkers, one of those talkers
+will be used.  If an application specifies no attributes,
+the default (topmost) talker listed in the <guilabel>Talkers</guilabel>
+tab is used.</para>
+
+<para>When applications specify the attributes of the desired talker,
+they may indicate that certain attributes are "preferred" over other
+attributes.  For example, an application may specify that it wishes
+that a female loud voice speak the text, and that the loud attribute is
+"preferred" over the female attribute.  If you had a female soft talker
+and a male loud talker configured, &kmyapplication; will choose the male
+loud talker to do the speaking.  Since language is a critical parameter
+in making speech understandable, it is always a "preferred" attribute.</para>
+
+<para>Using the <guilabel>Select Talker</guilabel> screen, you may
+override application talker settings.  The screen is displayed</para>
+
+<itemizedlist>
+<listitem><para>when you click the <guibutton>Change Talker</guibutton>
+button on the <guilabel>Jobs</guilabel> tab, or</para></listitem>
+<listitem><para>when you click the <guilabel>Talker</guilabel> button
+on the <guilabel>Filter Configuration</guilabel> dialog for
+a Talker Chooser filter, or</para></listitem>
+<listitem><para>when you click the <guilabel>Talker</guilabel> button
+on the <guilabel>Notifications</guilabel> tab.</para></listitem>
+</itemizedlist>
+
+<para>
+    <screenshot>
+        <screeninfo>Select Talker</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-selecttalker-1" coords="1 1"/>
+                    <area id="pt-selecttalker-2" coords="1 1"/>
+                    <area id="pt-selecttalker-3" coords="1 1"/>
+                    <area id="pt-selecttalker-4" coords="1 1"/>
+                    <area id="pt-selecttalker-5" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="selecttalker.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>Select Talker</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
+</para>
+
+<para>The screen offers three methods to specify desired talker
+attributes:</para>
+
+<itemizedlist>
+<listitem><para>Use the default talker (topmost in the
+<guilabel>Talkers</guilabel> tab).  In other words, no talker attributes
+are specified.</para></listitem>
+<listitem><para>Use the closest matching talker having one or more specified attributes.</para></listitem>
+<listitem><para>Use the closest matching talker having all the attributes
+of a configured talker.  If you don't delete or modify the talker's settings,
+&kmyapplication; will pick that specific talker.  If you delete or modify the
+talker's settings, then &kmyapplication; will pick the closest matching talker
+having the talker's original attributes.</para></listitem>
+</itemizedlist>
+
+<para>
+<calloutlist>
+<callout arearefs="pt-selecttalker-1"><para>Choose the method for entering
+the desired talker attributes by clicking one of these radio buttons.</para></callout>
+<callout arearefs="pt-selecttalker-2"><para>Choose the attributes of the desired
+talker here.  Leave an attribute blank if you do not care about that attribute.</para></callout>
+<callout arearefs="pt-selecttalker-3"><para>Check this box if you wish the
+attribute to be "preferred" over other attributes.  You may check more than one
+box.</para></callout>
+<callout arearefs="pt-selecttalker-4"><para>Since language is a critical factor
+in making speech understandable, it is always a preferred attribute.  It is rare
+that you will use this attribute.  The only time you might specify the language
+attribute is when you know a specific application sends text in a language
+different from your desktop.</para></callout>
+<callout arearefs="pt-selecttalker-5"><para>This is a list of the talkers
+you currently have configured in &kmyapplication;.  By choosing one of these,
+in effect, you are specifying all the attributes of that talker.  If that
+talker is still configured when text is sent, you'll get an exact match and that
+talker will be chosen.  However, if you later delete the talker, or modify
+its settings, it might not be the chosen talker anymore.  The talker
+most closely matching the original attributes will be chosen.</para></callout>
+</calloutlist>
+</para>
+
+<para>The <guilabel>Language</guilabel> attribute is special because
+text will probably be unintelligible if spoken by a talker that
+speaks a language different from the text.  Therefore, language
+is automatically a "preferred" attribute. If you specify a language,
+it will override the chosen language, but if you leave it blank,
+the existing language already chosen
+by &kmyapplication; will be used.  If the application that sent the
+text to &kmyapplication; did not specify a language, &kmyapplication; assigns
+the language of the topmost talker you have configured in the
+<guilabel>Talkers</guilabel> tab.  In other words, the topmost
+talker is assumed to speak the language of your desktop.</para>
+
+<tip><para>To clear all the attributes in the
+<guilabel>Use closest matching Talker having</guilabel> section,
+first click the <guilabel>Use default Talker</guilabel> radio button,
+then click the <guilabel>Use closest matching Talker having</guilabel>
+radio button.</para></tip>
 
 </sect1>
 
@@ -1528,6 +1856,19 @@ application work. -->
 <qandaset id="faqlist">
 <qandaentry>
 <question>
+<para><command>kttsmgr</command> immediately crashes when I start it.  I
+compiled with debug support and I don't even get a backtrace.</para>
+</question>
+<answer>
+<para>GStreamer has crashed taking &kmyapplication; down with it.  You most
+likely need to "register" GStreamer.  For GStreamer 0.8x, the command is
+<command>gst-register-0.8</command>.  If this doesn't solve the problem,
+you may have an incompatible version of GStreamer installed.  You could
+try uninstalling GStreamer.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
 <para>I need to start over.  How do I get &kmyapplication; completely terminated?</para>
 </question>
 <answer>
@@ -1578,9 +1919,81 @@ the synth working using the <guilabel>Command</guilabel> plugin.
 See <xref linkend="using-with-command" />.</para>
 </answer>
 </qandaentry>
+<qandaentry>
+<question>
+<para>&kmyapplication; is speaking too slow.  How can I speed it up?</para>
+</question>
+<answer>
+<para>There is a <guilabel>Speed</guilabel> setting on the <guilabel>Audio</guilabel>
+tab.  For this to work, you must have the <command>sox</command> utility
+installed and available in the PATH.  Some synthesis plugins, such as
+Festival Interactive also provide a <guilabel>Speed</guilabel>
+setting in the talker configuration dialog.  Depending upon the
+voice used, it may or may not be enabled.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>OK, that works for some things, but web pages are still spoken too slow.</para>
+</question>
+<answer>
+<para>The speed settings are ignored when &kmyapplication; is speaking
+HTML.  (This is because the HTML is converted into SSML, which has its own
+"rate" tags.)  Either disable the HTML XML Transformer filter
+(see <xref linkend="filters" />, or if you are brave, edit the .xsl file
+in the HTML to SSML Transformer filter and increase the default talking rate.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>I cannot get web pages to speak in a female voice.  I have female Festival talker
+configured, but &kmyapplication; always speaks web pages in a male voice.</para>
+</question>
+<answer>
+<para>As of Festival 1.95 beta, the SABLE GENDER tag doesn't seem to be working.
+To keep Festival from producing errors, the SSML to SABLE .xsl file strips the
+gender tags out.  The same applies to voice tags as well.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>I have the HTML XML Transformer filter configured, but web pages are not spoken at
+all using the Festival plugin.</para>
+</question>
+<answer>
+<para>Due to a bug in Festival 1.95 beta, you must install the
+<command>rab_diphone</command> (British male) voice for SABLE to work at all, even
+if you are not using that voice to speak the web pages.  Also,
+make sure the <command>xsltproc</command> utility is installed and in the PATH.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>Certain characters or punctuation seem to be producing errors in the synthesizer,
+making it skip entire sentences, or pronounce gibberish.  What can I do?</para>
+</question>
+<answer>
+<para>First, make sure the <guilabel>Character encoding</guilabel> option in the
+talker's configuration dialog is properly set for the language.  If certain words
+or characters are causing problems, a String Replacer filter might help.
+If certain sentence punctuation characters are confusing the synth, you'll need to
+configure a Sentence Boundary Detector filter.  See <xref linkend="filters" />.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>I added a String Replacer filter of my own and now &kmyapplication;
+will not allow me to rewind or advance by sentence.  On the <guilabel>Jobs</guilabel>
+tab, it claims each job has only one sentence.  What did I do wrong?</para>
+</question>
+<answer>
+<para>You must not filter out sentence punctuation characters (period, question mark,
+exclamation mark, colon, and semicolon).
+For these characters, use a Sentence Boundary Detector filter instead.</para>
+</answer>
+</qandaentry>
 </qandaset>
 </chapter>
-
 
 <!-- ====================================================================== -->
 
@@ -1631,7 +2044,8 @@ Documentation Copyright &copy; 2004 Gary R. Cramblitt <email>garycramblitt@comca
 &underGPL;        	 <!-- GPL License -->
 
 <note><para>Speech synthesis engines used by &kmyapplication; have their own
-licenses.  See each engine's documentation or website for details.</para></note>
+licenses.  See each engine's documentation or website for details.
+Some voices also have their own licensing.</para></note>
 
 </chapter>
 
@@ -1661,7 +2075,7 @@ application -->
 on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
 KDE Accessibility</ulink> web site (http://accessibility.kde.org).</para>
 
-<para>If you have access to KDE CVS, you can download &kmyapplication;
+<para>If you have access to the KDE code repository, you can download &kmyapplication;
 by checking out the <command>kdeaccessibility</command> module.  &kmyapplication;
 will be found in the <command>kttsd</command> directory.  You can also
 download a nightly tarball of all kdeaccessibility from
@@ -1692,7 +2106,8 @@ and spoken languages are currently supported.</para>
 
 <row>
 <entry>Festival</entry>
-<entry>American English, British, Spanish, German, Finnish, Czech, Polish, Russian</entry>
+<entry>American English, British, Spanish, German, Finnish, Czech, Polish, Russian,
+Italian, French Canadian, Kiswahili, Zulu, and Ibibio</entry>
 </row>
 
 <row>
@@ -1726,7 +2141,10 @@ a Konsole.</para>
 <note><para>
 The languages listed above may not be comprehensive or up-to-date.
 Check the specifications for each engine for a complete list of supported
-languages.
+languages.  Also check the
+<ulink url="http://accessibility.kde.org/developer/kttsd/index.php">
+&kmyapplication;</ulink> website for additional
+information that might not have made it into this handbook.
 </para></note>
 
 <note>
@@ -1837,8 +2255,8 @@ make install
 </programlisting>
 
 <para>If you downloaded the &kmyapplication; source from the
-<filename>kdeaccessibility</filename> CVS module, or downloaded the nightly
-CVS tarball, use the following commands to compile and install.
+<filename>kdeaccessibility</filename> code repository module, or downloaded the nightly
+tarball, use the following commands to compile and install.
 </para>
 
 <programlisting>
@@ -1890,7 +2308,9 @@ http://www.cstr.ed.ac.uk/projects/festival/</ulink>
 
 <para>
 You will need to install at least one language.  Follow the instructions
-that come with Festival.
+that come with Festival.  If you will be speaking web pages,
+you must install the <command>rab_diphone</command> (British Male)
+voice.
 </para>
 
 <para>Additional English festival voices are available from</para>
@@ -1932,16 +2352,30 @@ is still in early development.  Untar to
 talker, the voice code is <userinput>msu_ru_nsh_diphone</userinput>.  Be sure to
 select a single-byte cryllic encoding, such as <userinput>KOI8-R</userinput>.</para>
 
+<para>Italian voices for Festival 1.95 beta are available at</para>
+
+<para><ulink url="http://www.csrf.pd.cnr.it/TTS/It-FESTIVAL-download.htm">
+http://www.csrf.pd.cnr.it/TTS/It-FESTIVAL-download.htm</ulink>.</para>
+
+<para>If you get CRC errors when you unzip, try downloading again.</para>
+
+<para>Kiswahili, Zulu, and Ibibio voices for Festival 1.95 beta are available at</para>
+
+<para><ulink url="http://www.llsti.org/">http://www.llsti.org/</ulink>.</para>
+
+<para>Unfortunately, the Hindi voice also available there will not work with
+&kmyapplication;.</para>
+
+<para>Commercial voices, including a French Canadian voice,
+can be purchased from Cepstral, LLC at</para>
+
+<para><ulink url="http://www.cepstral.com/">http://www.cepstral.com/</ulink></para>
+
+<para>The FAQ on their Support page has information about using their voices
+in Festival.</para>
+
 <para>Festival is typically included with &Linux; distributions.  Check your
 distro CDs to see if it is included.</para>
-
-<para>Start <userinput>kttsmgr</userinput>.  On the <guilabel>Talkers</guilabel> screen,
-click the <guilabel>Add</guilabel> button.  Choose <guilabel>Festival Interactive</guilabel> and a <guilabel>Language</guilabel>.
-If the <guilabel>Configure Talker</guilabel> screen does not appear, 
-click the <guibutton>Edit</guibutton> button.  If the Festival executable program
-is not in your <envar>PATH</envar>, enter the full path to the executable.
-Click the <guibutton>Rescan</guibutton> button, pick a voice, and click the 
-<guibutton>Test</guibutton> button.  You should hear a test sentence spoken.</para>
 
 <note>
 <para>When using the Polish or Czech languages, be sure the <guilabel>Encoding</guilabel>
@@ -2055,7 +2489,7 @@ IMS German Festival does not work with the de4, de5, or de6 German voices.</para
 <title>Using Festival-Czech</title>
 
 <para>This method uses some special code to enable speech synthesis
-using Festival with an &mbrola; Czech voice.  To install, first download,
+using Festival with an &mbrola; Czech voice.  To install, first download and 
 install Festival and &mbrola;, and make sure both are working.  Next, download
 Festival-Czech from</para>
 
@@ -2213,7 +2647,7 @@ http://epos.ure.cas.cz/</ulink>
 <para>Debian Install Command: <userinput>apt-get install epos</userinput></para>
 
 <para>Start <application>kttsmgr</application>.  On the <guilabel>Talkers</guilabel> tab,
-click the <guilabel>Add</guilabel> button.  Choose Czeck or Slovak
+click the <guibutton>Add</guibutton> button.  Choose Czeck or Slovak
 language and <guilabel>Epos TTS Synthesis System</guilabel>.
 If the epos server executable and client are not
 in your <envar>PATH</envar>, specify the paths to these executables
