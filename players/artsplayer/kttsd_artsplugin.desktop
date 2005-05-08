@@ -49,6 +49,7 @@ Comment[sr]=Arts као аудио прикључак за KTTSD
 Comment[sr@Latn]=Arts kao audio priključak za KTTSD
 Comment[sv]=KTTSD-ljudinsticksprogram för aRts
 Comment[ta]=KTTSD aRts கேட்பொலி சொருகுப்பொருள்
+Comment[tg]=KTTSD фарҳанги модули аудио
 Comment[uk]=Звуковий втулок aRts для KTTSD
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
