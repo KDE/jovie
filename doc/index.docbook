@@ -187,7 +187,7 @@ speech synthesizers, and transforming XHMTL/XML documents.</para></listitem>
 
 <varlistentry>
 <term><command>kttsd</command></term>
-<listitem><para>the KDE Text-to-Speech Deamon, which is a non-GUI
+<listitem><para>the KDE Text-to-Speech Daemon, which is a non-GUI
 application that provides TTS services to applications via DCOP.
 </para></listitem></varlistentry>
 
@@ -437,7 +437,7 @@ changes will not take effect in the running &kmyapplication; system.
 <para>Assuming the test worked, you are almost ready to begin using &kmyapplication;.
 Now go back to the <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  This
-will start the KDE TTS Deamon.  See <xref linkend="general" />.
+will start the KDE TTS Daemon.  See <xref linkend="general" />.
 You may now begin using &kmyapplication; to
 speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
 See <xref linkend="jobmgr" />.
@@ -484,7 +484,7 @@ screen appears.  You can also set some general options on this screen.
 <para>
 <calloutlist>
 <callout arearefs="pt-gen-1"><para>Check this box to activate the &kmyapplication; system.
-This starts the KDE TTS Deamon (KTTSD).  If KTTSD starts successfully,
+This starts the KDE TTS Daemon (KTTSD).  If KTTSD starts successfully,
 the <guilabel>Jobs</guilabel> tab will appear.
 Once KTTSD has been started, you can begin creating and speaking text jobs.
 See <xref linkend="jobmgr" />.  Unchecking will stop KTTSD and deactivate the KDE TTS system.
@@ -1678,8 +1678,7 @@ text will probably be unintelligible if spoken by a talker that
 speaks a language different from the text.  Therefore, language
 is automatically a "preferred" attribute. If you specify a language,
 it will override the chosen language, but if you leave it blank,
-the existing language already chosen
-by &kmyapplication; will be used.  If the application that sent the
+the existing language setting will be used.  If the application that sent the
 text to &kmyapplication; did not specify a language, &kmyapplication; assigns
 the language of the topmost talker you have configured in the
 <guilabel>Talkers</guilabel> tab.  In other words, the topmost
