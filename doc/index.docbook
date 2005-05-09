@@ -2349,7 +2349,7 @@ http://nshmyrev.narod.ru/festival/festival.html
 is still in early development.  Untar to
 <filename>festival/lib/voices/russian/</filename>.  When you configure the Russian
 talker, the voice code is <userinput>msu_ru_nsh_diphone</userinput>.  Be sure to
-select a single-byte cryllic encoding, such as <userinput>KOI8-R</userinput>.</para>
+select an 8-bit cryllic encoding, such as <userinput>KOI8-R</userinput>.</para>
 
 <para>Italian voices for Festival 1.95 beta are available at</para>
 
@@ -2381,7 +2381,7 @@ distro CDs to see if it is included.</para>
 option is set to <userinput>ISO 8859-2</userinput>.
 </para>
 <para>When using the Russian voice, be sure the <guilabel>Encoding</guilabel>
-option is set to a single-byte cryllic encoding, such as <userinput>KOI8-R</userinput>.
+option is set to an 8-bit cryllic encoding, such as <userinput>KOI8-R</userinput>.
 </para>
 </note>
 
