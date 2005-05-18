@@ -1120,9 +1120,8 @@ is stopped and discarded.</para>
 <title>Types of Filters</title>
 
 <para>The first thing you must know about filters is that they are
-applied only to ordinary Text Jobs and to KDE Notification messages.
-All other Screen Reader Ouput, Warnings, and Messages are not
-affected by filters.</para>
+never applied to Screen Reader Output.  They are applied to
+Warnings, Messages, and Text jobs, and also KDE notifications (KNotify).</para>
 
 <para>There are two kinds of filters --
 ordinary filters and Sentence Boundary Detector (SBD) filters.
@@ -1176,12 +1175,12 @@ the filter should apply itself to the text to be spoken.  If the
 filter determines that it should not apply itself, the text
 is passed on to the next filter unaltered.</para>
 
-<para>When a Text Job or KDE Notification message is sent to &kmyapplication;,
+<para>When a Text Job, Message, Warning, or KDE Notification message is sent to &kmyapplication;,
 it passes through each of the enabled filters you have configured in the
 screen below.  The order is from top to bottom.  After passing through
 each of the ordinary filters listed in the top portion of the screen, Text Jobs
 are passed to the <guilabel>Sentence Boundary Detector</guilabel> (SBD) filters.
-(KDE Notifications never pass through SBD filters.)
+(KDE Notifications, Warnings, and Messages never pass through SBD filters.)
 Unlike ordinary filters, the first SBD filter that makes changes to the text
 stops any further filtering.
 </para>
@@ -1560,7 +1559,8 @@ and inserting Tab (decimal 8) characters at the sentence boundaries.
 Note that the Standard SBD preserves the sentence punctuation.
 </para>
 
-<para>SBD filters are never applied to KDE Notification messages (knotify).</para>
+<para>SBD filters are never applied to KDE Notification messages (knotify),
+Warnings, Messages, or Screen Reader Outputs.</para>
 
 <para>If you accidentally remove the Standard Sentence Boundary Detectory filter,
 you can get it back by loading the <filename>standard_sbdrc</filename> file,
