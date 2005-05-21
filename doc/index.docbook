@@ -1939,7 +1939,7 @@ voice used, it may or may not be enabled.</para>
 <para>The speed settings are ignored when &kmyapplication; is speaking
 HTML.  (This is because the HTML is converted into SSML, which has its own
 "rate" tags.)  Either disable the HTML XML Transformer filter
-(see <xref linkend="filters" />, or if you are brave, edit the .xsl file
+(see <xref linkend="filters"/>), or if you are brave, edit the .xsl file
 in the HTML to SSML Transformer filter and increase the default talking rate.</para>
 </answer>
 </qandaentry>
