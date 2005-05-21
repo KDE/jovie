@@ -472,4 +472,220 @@
   <name>Zulu Male</name>
 </voice>
 
+<voice>
+  <code>cepstral_david</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_diane</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_william</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_amy</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_frank</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_emily</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_duncan</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_linda</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_robin</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_walter</code>
+  <language>en_US</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>American Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_lawrence</code>
+  <language>en_UK</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>British Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_millie</code>
+  <language>en_UK</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>British Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_jean-pierre</code>
+  <language>fr_CA</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>French Canadian Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_isabelle</code>
+  <language>fr_CA</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>French Canadian Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_matthias</code>
+  <language>de</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>German Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_katrin</code>
+  <language>de</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>German Female</name>
+</voice>
+
+<voice>
+  <code>cepstral_miguel</code>
+  <language>es</language>
+  <codec>ISO 8859-1</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>Americas Spanish Male</name>
+</voice>
+
+<voice>
+  <code>cepstral_marta</code>
+  <language>es</language>
+  <codec>ISO 8859-1</codec>
+  <gender>female</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <rate-adjustable>true</rate-adjustable>
+  <pitch-adjustable>false/</pitch-adjustable>
+  <name>Americas Spanish Female</name>
+</voice>
+
 </voices>
