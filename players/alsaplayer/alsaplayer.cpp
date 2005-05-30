@@ -324,8 +324,8 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
         }
         it = snd_config_iterator_next(it);
     }
-    snd_pcm_info_free(pcminfo);
-    snd_ctl_card_info_free(info);
+    // snd_pcm_info_free(pcminfo);
+    // snd_ctl_card_info_free(info);
     return result;
 }
 
