@@ -32,6 +32,7 @@
 #include <qobject.h>
 #include <qthread.h>
 #include <qfile.h>
+#include <qmutex.h>
 
 // KDE includes.
 #include <config.h>
@@ -124,6 +125,7 @@ private:
     float m_currentVolume;
     QString m_pcmName;
     char* pcm_name;
+    QMutex m_mutex;
 
     QFile audiofile;
     QString name;

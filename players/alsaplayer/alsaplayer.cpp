@@ -167,14 +167,18 @@ void AlsaPlayer::startPlay(const QString &file)
 void AlsaPlayer::pause()
 {
     if (running()) {
+        m_mutex.lock();
         if (handle) {
             // Some hardware can pause; some can't.  canPause is set in set_params.
-            if (canPause)
+            if (canPause) {
                 snd_pcm_pause(handle, true);
-            else
+                m_mutex.unlock();
+            } else {
                 // TODO: Need to support pausing for hardware that does not support it.
                 // Perhaps by setting a flag and causing pcm_write routine to sleep?
+                m_mutex.unlock();
                 stop();
+            }
         }
     }
 }
@@ -182,8 +186,10 @@ void AlsaPlayer::pause()
 void AlsaPlayer::stop()
 {
     if (running()) {
+        m_mutex.lock();
         /* Stop PCM device and drop pending frames */
         if (handle) snd_pcm_drop(handle);
+        m_mutex.unlock();
         /* Wait for thread to exit */
         wait();
     }
@@ -377,6 +383,7 @@ void AlsaPlayer::init()
 
 void AlsaPlayer::cleanup()
 {
+    m_mutex.lock();
     if (pcm_name) delete pcm_name;
     if (fd >= 0) audiofile.close();
     if (handle) snd_pcm_close(handle);
@@ -384,6 +391,7 @@ void AlsaPlayer::cleanup()
     if (log) snd_output_close(log);
     snd_config_update_free_global();
     init();
+    m_mutex.unlock();
 }
 
 /*
