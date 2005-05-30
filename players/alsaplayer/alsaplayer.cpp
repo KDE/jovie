@@ -47,13 +47,13 @@
 #define error(...) do {\
     QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
 	s += dbgStr.sprintf( __VA_ARGS__); \
-	kdDebug() << s << endl; \
+	kdDebug() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #else
 #define error(args...) do {\
 	QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
 	s += dbgStr.sprintf( ##args); \
-	kdDebug() << s << endl; \
+	kdDebug() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #endif	
 
@@ -167,13 +167,15 @@ void AlsaPlayer::startPlay(const QString &file)
 void AlsaPlayer::pause()
 {
     if (running()) {
-        // Some hardware can pause; some can't.  canPause is set in set_params.
-        if (canPause)
-            snd_pcm_pause(handle, true);
-        else
-            // TODO: Need to support pausing for hardware that does not support it.
-            // Perhaps by setting a flag and causing pcm_write routine to sleep?
-            stop();
+        if (handle) {
+            // Some hardware can pause; some can't.  canPause is set in set_params.
+            if (canPause)
+                snd_pcm_pause(handle, true);
+            else
+                // TODO: Need to support pausing for hardware that does not support it.
+                // Perhaps by setting a flag and causing pcm_write routine to sleep?
+                stop();
+        }
     }
 }
 
@@ -181,7 +183,7 @@ void AlsaPlayer::stop()
 {
     if (running()) {
         /* Stop PCM device and drop pending frames */
-        snd_pcm_drop(handle);
+        if (handle) snd_pcm_drop(handle);
         /* Wait for thread to exit */
         wait();
     }
@@ -672,17 +674,17 @@ void AlsaPlayer::set_params(void)
 		err = snd_pcm_hw_params_set_access(handle, params,
 						   SND_PCM_ACCESS_RW_NONINTERLEAVED);
 	if (err < 0) {
-		error("Access type not available");
+		error("Error setting access type.");
 		stopAndExit();
 	}
 	err = snd_pcm_hw_params_set_format(handle, params, hwparams.format);
 	if (err < 0) {
-		error("Sample format non available");
+		error("Error setting sample format to %i", hwparams.format);
 		stopAndExit();
 	}
 	err = snd_pcm_hw_params_set_channels(handle, params, hwparams.channels);
 	if (err < 0) {
-		error("Channels count non available");
+		error("Error setting channel count to %i", hwparams.channels);
 		stopAndExit();
 	}
 
