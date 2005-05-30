@@ -382,7 +382,7 @@ void AlsaPlayer::cleanup()
  */
 void AlsaPlayer::stopAndExit()
 {
-    snd_pcm_drop(handle);
+    if (handle) snd_pcm_drop(handle);
     cleanup();
     exit();
 }
@@ -393,7 +393,8 @@ void AlsaPlayer::stopAndExit()
  
 ssize_t AlsaPlayer::safe_read(int fd, void *buf, size_t count)
 {
-	ssize_t result = 0, res;
+	ssize_t result = 0
+    ssize_t res;
 
 	while (count > 0) {
 		if ((res = read(fd, buf, count)) == 0)
