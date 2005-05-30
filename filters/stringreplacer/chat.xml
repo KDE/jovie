@@ -9,8 +9,23 @@
  <appid>konversation</appid>
  <word>
   <type>RegExp</type>
-  <match><![CDATA[^<([^>]+)>]]></match>
-  <subst><![CDATA[\1 says ]]></subst>
+  <match><![CDATA[<qt>]]></match>
+  <subst><![CDATA[ ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[&lt([^>]+)&gt]]></match>
+  <subst><![CDATA[ \1 says ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[<br>]]></match>
+  <subst><![CDATA[]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[</qt>]]></match>
+  <subst><![CDATA[ ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
@@ -109,8 +124,23 @@
  </word>
  <word>
   <type>Word</type>
-  <match><![CDATA[np]]></match>
-  <subst><![CDATA[no problem]]></subst>
+  <match><![CDATA[ad]]></match>
+  <subst><![CDATA[add]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[afaik]]></match>
+  <subst><![CDATA[as far as I know]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[afk]]></match>
+  <subst><![CDATA[away from keyboard]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[asap]]></match>
+  <subst><![CDATA[as soon as possable]]></subst>
  </word>
  <word>
   <type>Word</type>
@@ -119,8 +149,123 @@
  </word>
  <word>
   <type>Word</type>
-  <match><![CDATA[imho]]></match>
-  <subst><![CDATA[in my humble opinion]]></subst>
+  <match><![CDATA[ayt]]></match>
+  <subst><![CDATA[are you there]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[b4]]></match>
+  <subst><![CDATA[before]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[b4n]]></match>
+  <subst><![CDATA[bye for now]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[bak]]></match>
+  <subst><![CDATA[back]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[bbl]]></match>
+  <subst><![CDATA[be back later]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[bf]]></match>
+  <subst><![CDATA[boy friend]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[b/f]]></match>
+  <subst><![CDATA[boy friend]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[brb]]></match>
+  <subst><![CDATA[be right back]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[btw]]></match>
+  <subst><![CDATA[by the way]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[cu]]></match>
+  <subst><![CDATA[see you]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[cul]]></match>
+  <subst><![CDATA[see you later]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[cul8r]]></match>
+  <subst><![CDATA[see you later]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[cya]]></match>
+  <subst><![CDATA[see you later]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[d/l]]></match>
+  <subst><![CDATA[down load]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[dvd]]></match>
+  <subst><![CDATA[de vee de]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[f2f]]></match>
+  <subst><![CDATA[face to face]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[fubar]]></match>
+  <subst><![CDATA[fecked up beyond all repair]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[fyi]]></match>
+  <subst><![CDATA[for your information]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[gf]]></match>
+  <subst><![CDATA[girl friend]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[g/f]]></match>
+  <subst><![CDATA[girl friend]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[gtg]]></match>
+  <subst><![CDATA[got to go]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[hmm]]></match>
+  <subst><![CDATA[hurrmmm]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[hth]]></match>
+  <subst><![CDATA[hope that helps]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ic]]></match>
+  <subst><![CDATA[i see]]></subst>
  </word>
  <word>
   <type>Word</type>
@@ -129,8 +274,178 @@
  </word>
  <word>
   <type>Word</type>
-  <match><![CDATA[hmm]]></match>
-  <subst><![CDATA[hoom]]></subst>
+  <match><![CDATA[imao]]></match>
+  <subst><![CDATA[in my arrogant opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[imco]]></match>
+  <subst><![CDATA[in my considered opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ime]]></match>
+  <subst><![CDATA[in my experience]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[imho]]></match>
+  <subst><![CDATA[in my humble opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[imnsho]]></match>
+  <subst><![CDATA[in my not so humble opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[imo]]></match>
+  <subst><![CDATA[in my opinion]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ip]]></match>
+  <subst><![CDATA[i p]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[isdn]]></match>
+  <subst><![CDATA[i s d n]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[k]]></match>
+  <subst><![CDATA[ho kay]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[kde]]></match>
+  <subst><![CDATA[k d e]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[kbd]]></match>
+  <subst><![CDATA[keyboard]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[lshmba]]></match>
+  <subst><![CDATA[laughing so hard my belly aches]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[lthtt]]></match>
+  <subst><![CDATA[laughing too hard to type]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ltns]]></match>
+  <subst><![CDATA[long time no see]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[lol]]></match>
+  <subst><![CDATA[lafes out loud]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[m8]]></match>
+  <subst><![CDATA[mate]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[msg]]></match>
+  <subst><![CDATA[message]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[np]]></match>
+  <subst><![CDATA[no problem]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[oic]]></match>
+  <subst><![CDATA[oh i see]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ok]]></match>
+  <subst><![CDATA[ho kay]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ott]]></match>
+  <subst><![CDATA[over the top]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[pc]]></match>
+  <subst><![CDATA[p c]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ppc]]></match>
+  <subst><![CDATA[power p c]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[ppl]]></match>
+  <subst><![CDATA[people]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[rotfl]]></match>
+  <subst><![CDATA[rolling on the floor laughing]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[rotflol]]></match>
+  <subst><![CDATA[rolling on the floor laughing out loud]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[rsvp]]></match>
+  <subst><![CDATA[please reply]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[scsi]]></match>
+  <subst><![CDATA[scuzy]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[suse]]></match>
+  <subst><![CDATA[sue see]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[sec]]></match>
+  <subst><![CDATA[second]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[secs]]></match>
+  <subst><![CDATA[seconds]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[thx]]></match>
+  <subst><![CDATA[thanks]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[tnx]]></match>
+  <subst><![CDATA[thanks]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[wo]]></match>
+  <subst><![CDATA[without]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <match><![CDATA[wb]]></match>
+  <subst><![CDATA[welcome back]]></subst>
  </word>
  <word>
   <type>Word</type>
@@ -144,168 +459,13 @@
  </word>
  <word>
   <type>Word</type>
-  <match><![CDATA[afaik]]></match>
-  <subst><![CDATA[as far as I know]]></subst>
+  <match><![CDATA[wtg]]></match>
+  <subst><![CDATA[way to go]]></subst>
  </word>
  <word>
   <type>Word</type>
-  <match><![CDATA[btw]]></match>
-  <subst><![CDATA[by the way]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[brb]]></match>
-  <subst><![CDATA[be right back]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[cya]]></match>
-  <subst><![CDATA[see ya]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[gtg]]></match>
-  <subst><![CDATA[got to go]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[lol]]></match>
-  <subst><![CDATA[lafes out loud]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[m8]]></match>
-  <subst><![CDATA[mate]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[^<([^>]+)>]]></match>
-  <subst><![CDATA[\1 says ]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\;\)]]></match>
-  <subst><![CDATA[ winks]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\<]]></match>
-  <subst><![CDATA[ sad face]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\>]]></match>
-  <subst><![CDATA[ grins]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\|]]></match>
-  <subst><![CDATA[ straight faced]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\-\|]]></match>
-  <subst><![CDATA[ straight faced]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\-\)]]></match>
-  <subst><![CDATA[ smiles]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\'\(]]></match>
-  <subst><![CDATA[ cries]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\(]]></match>
-  <subst><![CDATA[ sad face]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\)]]></match>
-  <subst><![CDATA[ smiles]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\@]]></match>
-  <subst><![CDATA[ angry look]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:\$]]></match>
-  <subst><![CDATA[ blushes]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\(\@\)]]></match>
-  <subst><![CDATA[ cat face]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\(6\)]]></match>
-  <subst><![CDATA[ devil]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\(a\)]]></match>
-  <subst><![CDATA[ angel]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:D]]></match>
-  <subst><![CDATA[ grins]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\(h\)]]></match>
-  <subst><![CDATA[ cool shades]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\so\_O]]></match>
-  <subst><![CDATA[ winks]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\:p]]></match>
-  <subst><![CDATA[ sticks out tung]]></subst>
- </word>
- <word>
-  <type>RegExp</type>
-  <match><![CDATA[\s\(s\)]]></match>
-  <subst><![CDATA[ sleepy]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[np]]></match>
-  <subst><![CDATA[no problem]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[atm]]></match>
-  <subst><![CDATA[at the moment]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[imho]]></match>
-  <subst><![CDATA[in my humble opinion]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[iirc]]></match>
-  <subst><![CDATA[if I recall correctly]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[hmm]]></match>
-  <subst><![CDATA[hoom]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[wtf]]></match>
-  <subst><![CDATA[what the heck]]></subst>
+  <match><![CDATA[wtgp]]></match>
+  <subst><![CDATA[want to go private]]></subst>
  </word>
  <word>
   <type>Word</type>
@@ -314,37 +474,12 @@
  </word>
  <word>
   <type>Word</type>
-  <match><![CDATA[afaik]]></match>
-  <subst><![CDATA[as far as I know]]></subst>
+  <match><![CDATA[wygiswypf]]></match>
+  <subst><![CDATA[what you get is what you pay for]]></subst>
  </word>
  <word>
-  <type>Word</type>
-  <match><![CDATA[btw]]></match>
-  <subst><![CDATA[by the way]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[brb]]></match>
-  <subst><![CDATA[be right back]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[cya]]></match>
-  <subst><![CDATA[see ya]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[gtg]]></match>
-  <subst><![CDATA[got to go]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[lol]]></match>
-  <subst><![CDATA[lafes out loud]]></subst>
- </word>
- <word>
-  <type>Word</type>
-  <match><![CDATA[m8]]></match>
-  <subst><![CDATA[mate]]></subst>
+  <type>RegExp</type>
+  <match><![CDATA[\_]]></match>
+  <subst><![CDATA[]]></subst>
  </word>
 </wordlist>
