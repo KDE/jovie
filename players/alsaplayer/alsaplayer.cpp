@@ -97,9 +97,9 @@ void AlsaPlayer::startPlay(const QString &file)
     // kdDebug() << "AlsaPlayer::run: pName = " << pName << endl;
 	pcm_name = qstrdup(pName.ascii());
 	int err;
-	// snd_pcm_info_t *info;
+	snd_pcm_info_t *info;
 
-	// snd_pcm_info_alloca(&info);
+	snd_pcm_info_alloca(&info);
 
 	err = snd_output_stdio_attach(&log, stderr, 0);
 	assert(err >= 0);
@@ -111,6 +111,11 @@ void AlsaPlayer::startPlay(const QString &file)
 	err = snd_pcm_open(&handle, pcm_name, stream, open_mode);
 	if (err < 0) {
 		error("audio open error: %s", snd_strerror(err));
+		return;
+	}
+
+	if ((err = snd_pcm_info(handle, info)) < 0) {
+		error("info error: %s", snd_strerror(err));
 		return;
 	}
 
@@ -299,6 +304,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
                     if ((err = snd_ctl_open(&handle, name, 0)) >= 0) {
                         if ((err = snd_ctl_card_info(handle, info)) >= 0) {
                             int dev = -1;
+                            snd_pcm_stream_t stream = SND_PCM_STREAM_PLAYBACK;
                             while (snd_ctl_pcm_next_device(handle, &dev) >= 0 && dev >= 0) {
                                 snd_pcm_info_set_device(pcminfo, dev);
                                 snd_pcm_info_set_subdevice(pcminfo, 0);
@@ -324,6 +330,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
         }
         it = snd_config_iterator_next(it);
     }
+    snd_config_update_free_global();
     // snd_pcm_info_free(pcminfo);
     // snd_ctl_card_info_free(info);
     return result;
