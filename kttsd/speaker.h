@@ -556,6 +556,7 @@ class Speaker : public QObject{
         * Which audio player to use.
         *  0 = aRts
         *  1 = gstreamer
+        *  2 = ALSA
         */
         int m_playerOption;
 
@@ -565,9 +566,9 @@ class Speaker : public QObject{
         float m_audioStretchFactor;
 
         /**
-        * GStreamer sink name to use.
+        * GStreamer sink name to use, or ALSA PCM device name.
         */
-        QString m_gstreamerSinkName;
+        QString m_sinkName;
 
         /**
         * Timer for monitoring audio player.

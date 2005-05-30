@@ -124,8 +124,18 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_playerOption = m_speechData->config->readNumEntry("AudioOutputMethod", 0);  // default to aRts.
     // Map 50% to 100% onto 2.0 to 0.5.
     m_audioStretchFactor = 1.0/(float(m_speechData->config->readNumEntry("AudioStretchFactor", 100))/100.0);
-    m_speechData->config->setGroup("GStreamerPlayer");
-    m_gstreamerSinkName = m_speechData->config->readEntry("SinkName", "osssink");
+    switch (m_playerOption)
+    {
+        case 0: break;
+        case 1:
+            m_speechData->config->setGroup("GStreamerPlayer");
+            m_sinkName = m_speechData->config->readEntry("SinkName", "osssink");
+            break;
+        case 2:
+            m_speechData->config->setGroup("ALSAPlayer");
+            m_sinkName = m_speechData->config->readEntry("PcmName", "default");
+            break;
+    }
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 
@@ -1269,7 +1279,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
         case usPaused:
         case usPreempted:
         {
-                        // Note: Must call stop(), even if player not currently playing.  Why?
+            // Note: Must call stop(), even if player not currently playing.  Why?
             it->audioPlayer->stop();
             delete it->audioPlayer;
             break;
@@ -1501,6 +1511,11 @@ Player* Speaker::createPlayerObject()
                 plugInName = "kttsd_gstplugin";
                 break;
             }
+        case 2 :
+            {
+                plugInName = "kttsd_alsaplugin";
+                break;
+            }
         default:
             {
                 plugInName = "kttsd_artsplugin";
@@ -1512,7 +1527,7 @@ Player* Speaker::createPlayerObject()
 
     if(offers.count() == 1)
     {
-        // kdDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
+        kdDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
@@ -1521,8 +1536,8 @@ Player* Speaker::createPlayerObject()
     }
     if (player == 0)
     {
-        // If we tried for GStreamer plugin and failed, fall back to aRts plugin.
-        if (m_playerOption == 1)
+        // If we tried for GStreamer or ALSA plugin and failed, fall back to aRts plugin.
+        if (m_playerOption != 0)
         {
             kdDebug() << "Speaker::createPlayerObject: Could not load " + plugInName + 
                 " plugin.  Falling back to aRts." << endl;
@@ -1542,8 +1557,7 @@ Player* Speaker::createPlayerObject()
                 return createPlayerObject();
             }
         }
-        else
-            player->setSinkName(m_gstreamerSinkName);
+    if (player) player->setSinkName(m_sinkName);
     return player;
 }
 

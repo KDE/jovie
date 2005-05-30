@@ -158,6 +158,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             KGlobal::iconLoader()->loadIconSet("speak", KIcon::Small));
 
     m_kttsmgrw->sinkComboBox->setEditable(false);
+    m_kttsmgrw->pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
     m_sbdPopmenu = new QPopupMenu( m_kttsmgrw, "SbdPopupMenu" );
@@ -183,6 +184,23 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         // kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer sinkList = " << sinkList << endl;
         m_kttsmgrw->sinkComboBox->clear();
         m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
+    }
+    delete player;
+    delete testPlayer;
+
+    // If ALSA is available, enable its radio button.
+    // Determine if available by loading its plugin.  If it fails, not available.
+    testPlayer = new TestPlayer();
+    player = testPlayer->createPlayerObject(2);
+    if (player)
+    {
+        m_kttsmgrw->alsaRadioButton->setEnabled(true);
+        m_kttsmgrw->pcmLabel->setEnabled(true);
+        m_kttsmgrw->pcmComboBox->setEnabled(true);
+        QStringList pcmList = player->getPluginList("");
+        kdDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
+        m_kttsmgrw->pcmComboBox->clear();
+        m_kttsmgrw->pcmComboBox->insertStringList(pcmList);
     }
     delete player;
     delete testPlayer;
@@ -234,6 +252,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Audio tab.
     connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotGstreamerRadioButton_toggled(bool)));
+    connect(m_kttsmgrw->alsaRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotAlsaRadioButton_toggled(bool)));
     connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
     connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)),
@@ -384,6 +404,7 @@ void KCMKttsMgr::load()
     // Audio Output.
     int audioOutputMethod = 0;
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    if (m_kttsmgrw->alsaRadioButton->isChecked()) audioOutputMethod = 2;
     audioOutputMethod = m_config->readNumEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
@@ -392,6 +413,10 @@ void KCMKttsMgr::load()
             break;
         case 1:
             m_kttsmgrw->gstreamerRadioButton->setChecked(true);
+            break;
+        case 2:
+            m_kttsmgrw->alsaRadioButton->setChecked(true);
+            break;
     }
     m_kttsmgrw->timeBox->setValue(m_config->readNumEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(m_kttsmgrw->timeBox->value());
@@ -646,12 +671,17 @@ void KCMKttsMgr::load()
     m_config->setGroup("GStreamerPlayer");
     KttsUtils::setCbItemFromText(m_kttsmgrw->sinkComboBox, m_config->readEntry("SinkName", "osssink"));
 
+    // ALSA settings.
+    m_config->setGroup("ALSAPlayer");
+    KttsUtils::setCbItemFromText(m_kttsmgrw->pcmComboBox, m_config->readEntry("PcmName", "default"));
+
     // Update controls based on new states.
     slotNotifyListView_selectionChanged();
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
     slotGstreamerRadioButton_toggled(m_kttsmgrw->gstreamerRadioButton->isChecked());
+    slotAlsaRadioButton_toggled(m_kttsmgrw->alsaRadioButton->isChecked());
 
     m_changed = false;
     m_suppressConfigChanged = false;
@@ -719,6 +749,7 @@ void KCMKttsMgr::save()
     // Audio Output.
     int audioOutputMethod = 0;
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    if (m_kttsmgrw->alsaRadioButton->isChecked()) audioOutputMethod = 2;
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
     m_config->writeEntry("AudioStretchFactor", m_kttsmgrw->timeBox->value());
     m_config->writeEntry("KeepAudio", m_kttsmgrw->keepAudioCheckBox->isChecked());
@@ -793,6 +824,10 @@ void KCMKttsMgr::save()
     // GStreamer settings.
     m_config->setGroup("GStreamerPlayer");
     m_config->writeEntry("SinkName", m_kttsmgrw->sinkComboBox->currentText());
+
+    // ALSA settings.
+    m_config->setGroup("ALSAPlayer");
+    m_config->writeEntry("PcmName", m_kttsmgrw->pcmComboBox->currentText());
 
     m_config->sync();
 
@@ -1704,6 +1739,14 @@ void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
     m_kttsmgrw->sinkComboBox->setEnabled(state);
 }
 
+/**
+* This signal is emitted whenever user checks/unchecks the ALSA radio button.
+*/
+void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
+{
+    m_kttsmgrw->pcmLabel->setEnabled(state);
+    m_kttsmgrw->pcmComboBox->setEnabled(state);
+}
 
 /**
 * This slot is called whenever KTTSD starts or restarts.
@@ -1928,9 +1971,16 @@ void KCMKttsMgr::configureTalker()
     connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
     // Create a Player object for the plugin to use for testing.
     int playerOption = 0;
-    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) playerOption = 1;
+    QString sinkName;
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) {
+        playerOption = 1;
+        sinkName = m_kttsmgrw->sinkComboBox->currentText();
+    }
+    if (m_kttsmgrw->alsaRadioButton->isChecked()) {
+        playerOption = 2;
+        sinkName = m_kttsmgrw->pcmComboBox->currentText();
+    }
     float audioStretchFactor = 1.0/(float(m_kttsmgrw->timeBox->value())/100.0);
-    QString sinkName = m_kttsmgrw->sinkComboBox->currentText();
     // kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;
     TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", 
         playerOption, audioStretchFactor, sinkName);

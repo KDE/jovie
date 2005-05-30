@@ -1249,6 +1249,23 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <spacer row="0" column="1">
+                        <property name="name">
+                            <cstring>spacer9</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>229</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <spacer row="3" column="0">
                         <property name="name">
                             <cstring>spacer8</cstring>
@@ -1262,10 +1279,50 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>146</height>
+                                <height>30</height>
                             </size>
                         </property>
                     </spacer>
+                    <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>layout12</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>keepAudioCheckBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Keep audio files:</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check this if you want to keep the generated audio (wav) files.  You will find them in the indicated directory.</string>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester">
+                                <property name="name">
+                                    <cstring>keepAudioPath</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Specify the directory in which the audio files will be copied.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
                     <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>layout13</cstring>
@@ -1358,23 +1415,6 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <spacer row="0" column="1">
-                        <property name="name">
-                            <cstring>spacer9</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>229</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
                             <cstring>audioButtonGroup</cstring>
@@ -1397,23 +1437,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>artsRadioButton</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>a&amp;Rts</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>0</number>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Check to use the KDE aRts system for audio output.</string>
-                                </property>
-                            </widget>
                             <widget class="QRadioButton" row="1" column="0">
                                 <property name="name">
                                     <cstring>gstreamerRadioButton</cstring>
@@ -1424,8 +1447,34 @@
                                 <property name="text">
                                     <string>GStrea&amp;mer</string>
                                 </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>&lt;p&gt;Check to use the GStreamer audio output system.  You must also select a &lt;b&gt;Sink&lt;/b&gt; plugin.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="3" column="0">
+                                <property name="name">
+                                    <cstring>alsaRadioButton</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>ALSA</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check to use Advanced Linux Sound Architecture (ALSA) for audio output.</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget" row="2" column="0">
@@ -1488,47 +1537,84 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>layout12</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox">
+                            <widget class="QLayoutWidget" row="4" column="0">
                                 <property name="name">
-                                    <cstring>keepAudioCheckBox</cstring>
+                                    <cstring>layout8_2</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer9_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>30</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>pcmLabel</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Device:</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the sound sink to be used for GStreamer output.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KComboBox">
+                                        <property name="name">
+                                            <cstring>pcmComboBox</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the PCM device to be used for ALSA output.  Select "default" to use the default ALSA device.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>artsRadioButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Keep audio files:</string>
+                                    <string>a&amp;Rts</string>
                                 </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Check this if you want to keep the generated audio (wav) files.  You will find them in the indicated directory.</string>
-                                </property>
-                            </widget>
-                            <widget class="KURLRequester">
-                                <property name="name">
-                                    <cstring>keepAudioPath</cstring>
-                                </property>
-                                <property name="enabled">
+                                <property name="checked">
                                     <bool>true</bool>
                                 </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Specify the directory in which the audio files will be copied.</string>
+                                    <string>Check to use the KDE aRts system for audio output.</string>
                                 </property>
                             </widget>
-                        </hbox>
+                        </grid>
                     </widget>
                 </grid>
             </widget>
@@ -1598,6 +1684,18 @@
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
+    <connection>
+        <sender>pcmComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>alsaRadioButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainTab</tabstop>
@@ -1644,6 +1742,7 @@
     <tabstop>textPostSnd</tabstop>
     <tabstop>artsRadioButton</tabstop>
     <tabstop>sinkComboBox</tabstop>
+    <tabstop>pcmComboBox</tabstop>
     <tabstop>timeBox</tabstop>
     <tabstop>keepAudioCheckBox</tabstop>
     <tabstop>keepAudioPath</tabstop>
@@ -1652,7 +1751,6 @@
     <include location="global" impldecl="in declaration">klocale.h</include>
     <include location="global" impldecl="in implementation">klocale.h</include>
     <include location="global" impldecl="in implementation">kdebug.h</include>
-    <include location="local" impldecl="in implementation">kcmkttsmgrwidget.ui.h</include>
 </includes>
 <signals>
     <signal>configChanged()</signal>
@@ -1683,10 +1781,11 @@
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kcombobox.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

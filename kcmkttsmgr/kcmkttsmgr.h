@@ -444,6 +444,11 @@ class KCMKttsMgr :
         void slotGstreamerRadioButton_toggled(bool state);
 
         /**
+        * This signal is emitted whenever user checks/unchecks the ALSA radio button.
+        */
+        void slotAlsaRadioButton_toggled(bool state);
+
+        /**
         * User has requested to display the Talker/Filter Configuration Dialog.
         */
         void slot_configureTalker();

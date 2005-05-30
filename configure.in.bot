@@ -48,3 +48,10 @@ if test "x$have_gst" = "xyes" && test "x$gstreamer_plugin" = "xyes"; then
 	echo "*"
 	echo "********************************************************"
 fi
+if test "x$have_alsa" = "xno" && test "x$alsa_plugin" = "xyes"; then
+	echo "********************************************************"
+    echo "* The build of the KTTS ALSA audio plugin has been"
+    echo "* disabled because the ALSA sound library headers"
+    echo "* (alsa/asoundlib.h) were not found."
+	echo "********************************************************"
+fi

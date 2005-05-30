@@ -68,6 +68,7 @@ TestPlayer::~TestPlayer()
  * Sets which audio player to use.
  *  0 = aRts
  *  1 = gstreamer
+ *  2 = ALSA
  */
 void TestPlayer::setPlayerOption(const int playerOption) { m_playerOption = playerOption; }
 
@@ -143,6 +144,11 @@ Player* TestPlayer::createPlayerObject(int playerOption)
             plugInName = "kttsd_gstplugin";
             break;
         }
+        case 2 :
+        {
+            plugInName = "kttsd_alsaplugin";
+            break;
+        }
         default:
         {
             plugInName = "kttsd_artsplugin";
@@ -175,9 +181,8 @@ Player* TestPlayer::createPlayerObject(int playerOption)
                 delete player;
                 player = 0;
             }
-            else
-                player->setSinkName(m_sinkName);
         }
+    if (player) player->setSinkName(m_sinkName);
     return player;
 }
 
