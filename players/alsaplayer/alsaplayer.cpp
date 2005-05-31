@@ -226,8 +226,7 @@ bool AlsaPlayer::playing() const
                       || (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING);
                 kdDebug() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
-            // TODO: This crashes.  Why?
-            // snd_pcm_status_free(status);
+            kdDebug() << "position = " << position() << endl;
         }
         m_mutex.unlock();
     }
@@ -249,7 +248,6 @@ bool AlsaPlayer::paused() const
                 result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_PAUSED);
                 kdDebug() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
-            // snd_pcm_status_free(status);
         }
         m_mutex.unlock();
     }
@@ -258,17 +256,35 @@ bool AlsaPlayer::paused() const
 
 int AlsaPlayer::totalTime() const
 {
-    return 0;
+    int total = 0;
+    int rate = hwparams.rate;
+    int channels = hwparams.channels;
+    if (rate > 0 && channels > 0) {
+        total = int((double(pbrec_count) / rate) / channels);
+        // kdDebug() << "AlsaPlayer::totalTime: pbrec_count = " << pbrec_count << " rate = " << rate << " channels = " << channels << endl;
+        // kdDebug() << "AlsaPlayer: totalTime = " << total << endl;
+    }
+    return total;
 }
 
 int AlsaPlayer::currentTime() const
 {
-    return 0;
+    int current = 0;
+    int rate = hwparams.rate;
+    int channels = hwparams.channels;
+    if (rate > 0 && channels > 0) {
+        current = int((double(fdcount) / rate) / channels);
+        // kdDebug() << "AlsaPlayer::currentTime: fdcount = " << fdcount << " rate = " << rate << " channels = " << channels << endl;
+        // kdDebug() << "AlsaPlayer:: currentTime = " << current << endl;
+    }
+    return current;
 }
 
 int AlsaPlayer::position() const
 {
-    return 0;
+    // TODO: Make this more accurate by adding frames that have been so-far
+    // played within the Alsa ring buffer.
+    return pbrec_count > 0 ? int(double(fdcount) * 1000 / pbrec_count + .5) : 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -277,10 +293,12 @@ int AlsaPlayer::position() const
 
 void AlsaPlayer::seek(int /*seekTime*/)
 {
+    // TODO:
 }
 
 void AlsaPlayer::seekPosition(int /*position*/)
 {
+    // TODO:
 }
 
 /*
