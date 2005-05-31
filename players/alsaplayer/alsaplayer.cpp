@@ -213,19 +213,23 @@ float AlsaPlayer::volume() const
 bool AlsaPlayer::playing() const
 {
     bool result = false;
-    if (running() && handle) {
-        snd_pcm_status_t *status;
-        snd_pcm_status_alloca(&status);
-        int res;
-        if ((res = snd_pcm_status(handle, status)) < 0)
-            kdDebug() << "AlsaPlayer::playing: status error: " << snd_strerror(res) << endl;
-        else {
-            result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_RUNNING)
-                  || (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING);
-            kdDebug() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
+    if (running()) {
+        m_mutex.lock();
+        if (handle) {
+            snd_pcm_status_t *status;
+            snd_pcm_status_alloca(&status);
+            int res;
+            if ((res = snd_pcm_status(handle, status)) < 0)
+                kdDebug() << "AlsaPlayer::playing: status error: " << snd_strerror(res) << endl;
+            else {
+                result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_RUNNING)
+                      || (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING);
+                kdDebug() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
+            }
+            // TODO: This crashes.  Why?
+            // snd_pcm_status_free(status);
         }
-        // TODO: This crashes.  Why?
-        // snd_pcm_status_free(status);
+        m_mutex.unlock();
     }
     return result;
 }
@@ -233,17 +237,21 @@ bool AlsaPlayer::playing() const
 bool AlsaPlayer::paused() const
 {
     bool result = false;
-    if (running() && handle) {
-        snd_pcm_status_t *status;
-        snd_pcm_status_alloca(&status);
-        int res;
-        if ((res = snd_pcm_status(handle, status)) < 0)
-            kdDebug() << "AlsaPlayer::paused: status error: " << snd_strerror(res) << endl;
-        else {
-            result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_PAUSED);
-            kdDebug() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
+    if (running()) {
+        m_mutex.lock();
+        if (handle) {
+            snd_pcm_status_t *status;
+            snd_pcm_status_alloca(&status);
+            int res;
+            if ((res = snd_pcm_status(handle, status)) < 0)
+                kdDebug() << "AlsaPlayer::paused: status error: " << snd_strerror(res) << endl;
+            else {
+                result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_PAUSED);
+                kdDebug() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
+            }
+            // snd_pcm_status_free(status);
         }
-        // snd_pcm_status_free(status);
+        m_mutex.unlock();
     }
     return result;
 }

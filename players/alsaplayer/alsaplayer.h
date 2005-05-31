@@ -125,7 +125,7 @@ private:
     float m_currentVolume;
     QString m_pcmName;
     char* pcm_name;
-    QMutex m_mutex;
+    mutable QMutex m_mutex;
 
     QFile audiofile;
     QString name;
