@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=KTTSD ALSA Plugin
 Name[ga]=Breiseán KTTSD ALSA
 Comment=KTTSD ALSA audio plugin
+Comment[ga]=Breiseán fuaime KTTSD ALSA
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
 X-KDE-Library=libkttsd_alsaplugin
