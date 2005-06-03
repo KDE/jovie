@@ -213,7 +213,7 @@ HadifixConf::HadifixConf( QWidget* parent, const char* name, const QStringList &
    d->configWidget = new HadifixConfigUI (this, "configWidget");
    
    QString file = locate("data", "LICENSES/LGPL_V2");
-   i18n("This plugin is distributed under the terms of the LGPL v2.");
+   i18n("This plugin is distributed under the terms of the GPL v2 or later.");
    
    connect(d->configWidget->voiceButton, SIGNAL(clicked()), this, SLOT(voiceButton_clicked()));
    connect(d->configWidget->testButton, SIGNAL(clicked()), this, SLOT(testButton_clicked()));
