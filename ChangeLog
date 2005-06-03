@@ -1,3 +1,7 @@
+2005-06-03  Gary Cramblitt (PhantomsDad)
+        * New ALSA audio plugin.  Build it with ./configure --enable-kttsd-alsa for now.
+        * New Qt Rich Text to Plain Text filter by David Powell.
+
 2005-04-30  Gary Cramblitt (PhantomsDad)
         * Change Current Sentence widget in Jobs tab to KTextEdit to avoid resizing when text does
           not fit in box.

@@ -226,7 +226,6 @@ bool AlsaPlayer::playing() const
                       || (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING);
                 kdDebug() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
-            kdDebug() << "position = " << position() << endl;
         }
         m_mutex.unlock();
     }
@@ -990,14 +989,16 @@ ssize_t AlsaPlayer::pcm_write(char *data, size_t count)
 	ssize_t r;
 	ssize_t result = 0;
 
-	if (sleep_min == 0 &&
-	    count < chunk_size) {
+	if (sleep_min == 0 && count < chunk_size) {
+        // kdDebug() << "AlsaPlayer::pcm_write: calling snd_pcm_format_set_silence" << endl;
 		snd_pcm_format_set_silence(hwparams.format, data + count * bits_per_frame / 8, (chunk_size - count) * hwparams.channels);
 		count = chunk_size;
 	}
 	while (count > 0) {
+        // kdDebug() << "AlsaPlayer::pcm_write: calling writei_func, count = " << count << endl;
 		r = writei_func(handle, data, count);
 		if (r == -EAGAIN || (r >= 0 && (size_t)r < count)) {
+            // kdDebug() << "AlsaPlayer::pcm_write: r = " << r << " calling snd_pcm_wait" << endl;
 			snd_pcm_wait(handle, 1000);
 		} else if (r == -EPIPE) {
 			xrun();
@@ -1398,7 +1399,7 @@ void AlsaPlayer::playback_go(int fd, size_t loaded, off64_t count, int rtype, co
 		l = 0;
 	}
 	snd_pcm_drain(handle);
-    kdDebug() << "Exiting playback_go" << endl;
+    // kdDebug() << "Exiting playback_go" << endl;
 }
 
 /*

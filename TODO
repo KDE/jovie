@@ -1,10 +1,22 @@
 _ Filters:
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
     _ Add KNewStuff capability for folks to upload/download filter configs.
+    _ There should be a default set of filters configured when user first runs KTTSMgr.
+      If user presses Default button, it should ask user whether to replace all existing
+      filters with the standard set.  The standard set should probably include
+      the Qt to Plain Text and Fix Festival Unspeakable Characters filters, but I'm not
+      sure about the latter when desktop is not ISO 8859-1.
+    _ For XML Transformer filters, it should be possible to specify both
+      "Root element is" and "DOCTYPE" as an OR condition.
+_ Handbook:
+    _ Mention that "Root element is" and "DOCTYPE" are case sensitive.  "html" is not
+      the same as "HTML".  It should stay this way, BTW.  Proper xhtml requires lowercase
+      tags.
 _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
     _ Add option to automatically turn down music player volume while speaking (via dcop).
+    _ Now that we have ALSA plugin, make "without-arts" work.
 _ Festival Interactive plugin:
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
@@ -36,6 +48,8 @@ _ KTTSMgr:
     _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
     _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ KTTSD:
+    _ I am told that when kttsd crashes, it can take knotify down with it.  See about
+      "disconnecting" knotify from kttsd (using post to Qt event queue).
     _ Strange msg being produced by KIO::move, but it works fine. ??
         kio (KIOJob): stat file:///home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
         kio (KIOJob): error 11 /home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
