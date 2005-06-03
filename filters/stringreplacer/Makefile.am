@@ -27,6 +27,7 @@ stringreplacerdata_DATA = \
 	polish_festival_fixes.xml \
 	polish_festival_unspeakables.xml \
 	kmail.xml \
-	festival_unspeakable_chars.xml
+	festival_unspeakable_chars.xml \
+	qt2plaintext.xml
 
 noinst_HEADERS =  stringreplacerconfwidget.h editreplacementwidget.h
