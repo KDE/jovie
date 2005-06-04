@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD ALSA Plugin
+Name[da]=KTTSD ALSA plugin
 Name[ga]=Breiseán KTTSD ALSA
 Comment=KTTSD ALSA audio plugin
+Comment[da]=KTTSD ALSA lyd-plugin
 Comment[ga]=Breiseán fuaime KTTSD ALSA
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
