@@ -39,6 +39,11 @@
  </word>
  <word>
   <type>RegExp</type>
+  <match><![CDATA[\s\:\/]]></match>
+  <subst><![CDATA[ frowns ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
   <match><![CDATA[\s\:\>]]></match>
   <subst><![CDATA[ grins]]></subst>
  </word>
@@ -478,8 +483,28 @@
   <subst><![CDATA[what you get is what you pay for]]></subst>
  </word>
  <word>
+  <type>Word</type>
+  <match><![CDATA[yw]]></match>
+  <subst><![CDATA[your welcome]]></subst>
+ </word>
+ <word>
   <type>RegExp</type>
   <match><![CDATA[\_]]></match>
   <subst><![CDATA[]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\\o\/]]></match>
+  <subst><![CDATA[ cheers ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\/o\\]]></match>
+  <subst><![CDATA[ covers ears ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[\:\-\/]]></match>
+  <subst><![CDATA[ frowns ]]></subst>
  </word>
 </wordlist>
