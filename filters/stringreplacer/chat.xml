@@ -494,6 +494,11 @@
  </word>
  <word>
   <type>RegExp</type>
+  <match><![CDATA[\|]]></match>
+  <subst><![CDATA[ ]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
   <match><![CDATA[\\o\/]]></match>
   <subst><![CDATA[ cheers ]]></subst>
  </word>
