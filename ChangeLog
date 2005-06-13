@@ -1,5 +1,8 @@
-2005-06-07  Gary Cramblitt (PhantomsDad)
+2005-06-12  Gary Cramblitt (PhantomsDad)
         * New aKode audio plugin.  Build it with ./configure --enable-kttsd-akode.
+          There are a couple of problems.  See README players/akodeplayer/README.
+        * Activate rich speak (XHTML to SSML) in Konqueror plugin.  To speak richly,
+          you must configure the xhtml2ssml_simple XML Transformer plugin.
 
 2005-06-03  Gary Cramblitt (PhantomsDad)
         * New ALSA audio plugin.  Build it with ./configure --enable-kttsd-alsa for now.
