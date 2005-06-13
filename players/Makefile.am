@@ -8,9 +8,15 @@ if include_kttsd_alsaplayer
     alsaplayer_DIR = alsaplayer
 endif
 
+#kdevelop: akodeplayer_DIR = akodeplayer
+if include_kttsd_akodeplayer
+    akodeplayer_DIR = akodeplayer
+endif
+
 SUBDIRS = \
     artsplayer \
     $(alsaplayer_DIR) \
-    $(gstplayer_DIR)
+    $(gstplayer_DIR) \
+    $(akodeplayer_DIR)
 
 kde_servicetypes_DATA = kttsd_audioplugin.desktop

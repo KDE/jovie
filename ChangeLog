@@ -1,3 +1,6 @@
+2005-06-07  Gary Cramblitt (PhantomsDad)
+        * New aKode audio plugin.  Build it with ./configure --enable-kttsd-akode.
+
 2005-06-03  Gary Cramblitt (PhantomsDad)
         * New ALSA audio plugin.  Build it with ./configure --enable-kttsd-alsa for now.
         * New Qt Rich Text to Plain Text filter by David Powell.

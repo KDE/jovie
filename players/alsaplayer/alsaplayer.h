@@ -101,6 +101,8 @@ private:
     void cleanup();
     void stopAndExit();
 
+    QString timestamp() const;
+
     ssize_t safe_read(int fd, void *buf, size_t count);
     int test_vocfile(void *buffer);
     size_t test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line);

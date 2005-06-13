@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>638</width>
-            <height>380</height>
+            <height>382</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -1249,40 +1249,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="0" column="1">
-                        <property name="name">
-                            <cstring>spacer9</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>229</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="3" column="0">
-                        <property name="name">
-                            <cstring>spacer8</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>30</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>layout12</cstring>
@@ -1415,6 +1381,40 @@
                             </widget>
                         </hbox>
                     </widget>
+                    <spacer row="0" column="1">
+                        <property name="name">
+                            <cstring>spacer9</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>140</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <spacer row="3" column="0">
+                        <property name="name">
+                            <cstring>spacer8</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
                             <cstring>audioButtonGroup</cstring>
@@ -1454,30 +1454,24 @@
                                     <string>&lt;p&gt;Check to use the GStreamer audio output system.  You must also select a &lt;b&gt;Sink&lt;/b&gt; plugin.&lt;/p&gt;</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton" row="3" column="0">
+                            <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>alsaRadioButton</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
+                                    <cstring>artsRadioButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>ALSA</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
+                                    <string>a&amp;Rts</string>
                                 </property>
                                 <property name="checked">
-                                    <bool>false</bool>
+                                    <bool>true</bool>
                                 </property>
                                 <property name="buttonGroupId">
                                     <number>0</number>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Check to use Advanced Linux Sound Architecture (ALSA) for audio output.</string>
+                                    <string>Check to use the KDE aRts system for audio output.</string>
                                 </property>
                             </widget>
-                            <widget class="QLayoutWidget" row="2" column="0">
+                            <widget class="QLayoutWidget" row="1" column="1">
                                 <property name="name">
                                     <cstring>layout8</cstring>
                                 </property>
@@ -1485,23 +1479,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer9_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Fixed</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>30</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
                                     <widget class="QLabel">
                                         <property name="name">
                                             <cstring>sinkLabel</cstring>
@@ -1537,7 +1514,53 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLayoutWidget" row="4" column="0">
+                            <widget class="QRadioButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>alsaRadioButton</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>ALSA</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check to use Advanced Linux Sound Architecture (ALSA) for audio output.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="3" column="0">
+                                <property name="name">
+                                    <cstring>akodeRadioButton</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>aKode</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;Check to use aKode for audio output.  You must also select a &lt;b&gt;Sink&lt;/b&gt;.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="2" column="1">
                                 <property name="name">
                                     <cstring>layout8_2</cstring>
                                 </property>
@@ -1545,23 +1568,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer9_2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Fixed</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>30</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
                                     <widget class="QLabel">
                                         <property name="name">
                                             <cstring>pcmLabel</cstring>
@@ -1597,22 +1603,48 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QRadioButton" row="0" column="0">
+                            <widget class="QLayoutWidget" row="3" column="1">
                                 <property name="name">
-                                    <cstring>artsRadioButton</cstring>
+                                    <cstring>layout8_2_2</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>a&amp;Rts</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>0</number>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Check to use the KDE aRts system for audio output.</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>akodeSinkLabel</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Sink:</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the sound sink to be used for aKode output.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KComboBox">
+                                        <property name="name">
+                                            <cstring>akodeComboBox</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select the sink to be used for aKode output.  Select "auto" to let aKode pick the best output method.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
                         </grid>
                     </widget>
@@ -1696,6 +1728,18 @@
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
+    <connection>
+        <sender>akodeRadioButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>akodeComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainTab</tabstop>
@@ -1743,6 +1787,7 @@
     <tabstop>artsRadioButton</tabstop>
     <tabstop>sinkComboBox</tabstop>
     <tabstop>pcmComboBox</tabstop>
+    <tabstop>akodeComboBox</tabstop>
     <tabstop>timeBox</tabstop>
     <tabstop>keepAudioCheckBox</tabstop>
     <tabstop>keepAudioPath</tabstop>
@@ -1785,6 +1830,7 @@
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
 </includehints>

@@ -47,15 +47,29 @@
 #define error(...) do {\
     QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
 	s += dbgStr.sprintf( __VA_ARGS__); \
-	kdDebug() << "AlsaPlayer::" << s << endl; \
+	kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #else
 #define error(args...) do {\
 	QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
 	s += dbgStr.sprintf( ##args); \
-	kdDebug() << "AlsaPlayer::" << s << endl; \
+	kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #endif	
+
+QString AlsaPlayer::timestamp() const
+{
+    time_t t;
+    struct timeval tv;
+    char *tstr;
+    t = time(NULL);
+    tstr = strdup(ctime(&t));
+    tstr[strlen(tstr)-1] = 0;
+    gettimeofday(&tv,NULL);
+    QString ts;
+    ts.sprintf(" %s [%d] ",tstr, (int) tv.tv_usec);
+    return ts;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // public methods
@@ -94,7 +108,7 @@ void AlsaPlayer::startPlay(const QString &file)
 /*virtual*/ void AlsaPlayer::run()
 {
     QString pName = m_pcmName.section(" ", 0, 0);
-    // kdDebug() << "AlsaPlayer::run: pName = " << pName << endl;
+    // kdDebug() << timestamp() << "AlsaPlayer::run: pName = " << pName << endl;
 	pcm_name = qstrdup(pName.ascii());
 	int err;
 	snd_pcm_info_t *info;
@@ -188,6 +202,7 @@ void AlsaPlayer::stop()
     if (running()) {
         m_mutex.lock();
         /* Stop PCM device and drop pending frames */
+        // kdDebug() << timestamp() << "AlsaPlayer::stop: calling snd_pcm_drop" << endl;
         if (handle) snd_pcm_drop(handle);
         m_mutex.unlock();
         /* Wait for thread to exit */
@@ -220,11 +235,11 @@ bool AlsaPlayer::playing() const
             snd_pcm_status_alloca(&status);
             int res;
             if ((res = snd_pcm_status(handle, status)) < 0)
-                kdDebug() << "AlsaPlayer::playing: status error: " << snd_strerror(res) << endl;
+                kdDebug() << timestamp() << "AlsaPlayer::playing: status error: " << snd_strerror(res) << endl;
             else {
                 result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_RUNNING)
                       || (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING);
-                kdDebug() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
+                // kdDebug() << timestamp() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
         }
         m_mutex.unlock();
@@ -242,10 +257,10 @@ bool AlsaPlayer::paused() const
             snd_pcm_status_alloca(&status);
             int res;
             if ((res = snd_pcm_status(handle, status)) < 0)
-                kdDebug() << "AlsaPlayer::paused: status error: " << snd_strerror(res) << endl;
+                kdDebug() << timestamp() << "AlsaPlayer::paused: status error: " << snd_strerror(res) << endl;
             else {
                 result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_PAUSED);
-                kdDebug() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
+                // kdDebug() << timestamp() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
         }
         m_mutex.unlock();
@@ -260,8 +275,8 @@ int AlsaPlayer::totalTime() const
     int channels = hwparams.channels;
     if (rate > 0 && channels > 0) {
         total = int((double(pbrec_count) / rate) / channels);
-        // kdDebug() << "AlsaPlayer::totalTime: pbrec_count = " << pbrec_count << " rate = " << rate << " channels = " << channels << endl;
-        // kdDebug() << "AlsaPlayer: totalTime = " << total << endl;
+        // kdDebug() << timestamp() << "AlsaPlayer::totalTime: pbrec_count = " << pbrec_count << " rate = " << rate << " channels = " << channels << endl;
+        // kdDebug() << timestamp() << "AlsaPlayer: totalTime = " << total << endl;
     }
     return total;
 }
@@ -273,8 +288,8 @@ int AlsaPlayer::currentTime() const
     int channels = hwparams.channels;
     if (rate > 0 && channels > 0) {
         current = int((double(fdcount) / rate) / channels);
-        // kdDebug() << "AlsaPlayer::currentTime: fdcount = " << fdcount << " rate = " << rate << " channels = " << channels << endl;
-        // kdDebug() << "AlsaPlayer:: currentTime = " << current << endl;
+        // kdDebug() << timestamp() << "AlsaPlayer::currentTime: fdcount = " << fdcount << " rate = " << rate << " channels = " << channels << endl;
+        // kdDebug() << timestamp() << "AlsaPlayer:: currentTime = " << current << endl;
     }
     return current;
 }
@@ -351,7 +366,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
                                     pluginName += ",";
                                     pluginName += snd_pcm_info_get_name(pcminfo);
                                     result.append(pluginName);
-                                    kdDebug() << pluginName << endl;
+                                    // kdDebug() << pluginName << endl;
                                 }
                             }
                         }
@@ -555,13 +570,13 @@ ssize_t AlsaPlayer::test_wavefile(int fd, char *_buffer, size_t size)
 	case 8:
 		if (hwparams.format != DEFAULT_FORMAT &&
 		    hwparams.format != SND_PCM_FORMAT_U8)
-			kdDebug() << dbgStr.sprintf( "Warning: format is changed to U8") << endl;
+			kdDebug() << timestamp() << "Warning: format is changed to U8" << endl;
 		hwparams.format = SND_PCM_FORMAT_U8;
 		break;
 	case 16:
 		if (hwparams.format != DEFAULT_FORMAT &&
 		    hwparams.format != SND_PCM_FORMAT_S16_LE)
-			kdDebug() << dbgStr.sprintf( "Warning: format is changed to S16_LE") << endl;
+			kdDebug() << timestamp() << "Warning: format is changed to S16_LE" << endl;
 		hwparams.format = SND_PCM_FORMAT_S16_LE;
 		break;
 	case 24:
@@ -569,13 +584,13 @@ ssize_t AlsaPlayer::test_wavefile(int fd, char *_buffer, size_t size)
 		case 3:
 			if (hwparams.format != DEFAULT_FORMAT &&
 			    hwparams.format != SND_PCM_FORMAT_S24_3LE)
-				kdDebug() << dbgStr.sprintf( "Warning: format is changed to S24_3LE") << endl;
+				kdDebug() << timestamp() << "Warning: format is changed to S24_3LE" << endl;
 			hwparams.format = SND_PCM_FORMAT_S24_3LE;
 			break;
 		case 4:
 			if (hwparams.format != DEFAULT_FORMAT &&
 			    hwparams.format != SND_PCM_FORMAT_S24_LE)
-				kdDebug() << dbgStr.sprintf( "Warning: format is changed to S24_LE") << endl;
+				kdDebug() << timestamp() << "Warning: format is changed to S24_LE" << endl;
 			hwparams.format = SND_PCM_FORMAT_S24_LE;
 			break;
 		default:
@@ -644,19 +659,19 @@ int AlsaPlayer::test_au(int fd, char *buffer)
 	case AU_FMT_ULAW:
 		if (hwparams.format != DEFAULT_FORMAT &&
 		    hwparams.format != SND_PCM_FORMAT_MU_LAW)
-			kdDebug() << dbgStr.sprintf( "Warning: format is changed to MU_LAW") << endl;
+			kdDebug() << timestamp() << "Warning: format is changed to MU_LAW" << endl;
 		hwparams.format = SND_PCM_FORMAT_MU_LAW;
 		break;
 	case AU_FMT_LIN8:
 		if (hwparams.format != DEFAULT_FORMAT &&
 		    hwparams.format != SND_PCM_FORMAT_U8)
-			kdDebug() << dbgStr.sprintf( "Warning: format is changed to U8") << endl;
+			kdDebug() << timestamp() << "Warning: format is changed to U8" << endl;
 		hwparams.format = SND_PCM_FORMAT_U8;
 		break;
 	case AU_FMT_LIN16:
 		if (hwparams.format != DEFAULT_FORMAT &&
 		    hwparams.format != SND_PCM_FORMAT_S16_BE)
-			kdDebug() << dbgStr.sprintf( "Warning: format is changed to S16_BE") << endl;
+			kdDebug() << timestamp() << "Warning: format is changed to S16_BE" << endl;
 		hwparams.format = SND_PCM_FORMAT_S16_BE;
 		break;
 	default:
@@ -730,8 +745,8 @@ void AlsaPlayer::set_params(void)
 	assert(err >= 0);
 	if ((float)rate * 1.05 < hwparams.rate || (float)rate * 0.95 > hwparams.rate) {
 		if (!quiet_mode) {
-			kdDebug() << dbgStr.sprintf( "Warning: rate is not accurate (requested = %iHz, got = %iHz)", rate, hwparams.rate) << endl;
-			kdDebug() << dbgStr.sprintf( "         please, try the plug plugin (-Dplug:%s)", snd_pcm_name(handle)) << endl;
+			kdDebug() << timestamp() << dbgStr.sprintf( "Warning: rate is not accurate (requested = %iHz, got = %iHz)", rate, hwparams.rate) << endl;
+			kdDebug() << timestamp() << dbgStr.sprintf( "         please, try the plug plugin (-Dplug:%s)", snd_pcm_name(handle)) << endl;
 		}
 	}
 	rate = hwparams.rate;
@@ -864,11 +879,11 @@ void AlsaPlayer::xrun(void)
 		gettimeofday(&now, 0);
 		snd_pcm_status_get_trigger_tstamp(status, &tstamp);
 		timersub(&now, &tstamp, &diff);
-		kdDebug() << dbgStr.sprintf( "%s!!! (at least %.3f ms long)",
+		kdDebug() << timestamp() << dbgStr.sprintf( "%s!!! (at least %.3f ms long)",
 			stream == SND_PCM_STREAM_PLAYBACK ? "underrun" : "overrun",
 			diff.tv_sec * 1000 + diff.tv_usec / 1000.0) << endl;
 		if (verbose) {
-			kdDebug() << dbgStr.sprintf( "Status:") << endl;
+			kdDebug() << timestamp() << dbgStr.sprintf( "Status:") << endl;
 			snd_pcm_status_dump(status, log);
 		}
 		if ((res = snd_pcm_prepare(handle))<0) {
@@ -878,11 +893,11 @@ void AlsaPlayer::xrun(void)
 		return;		/* ok, data should be accepted again */
 	} if (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING) {
 		if (verbose) {
-			kdDebug() << dbgStr.sprintf( "Status(DRAINING):") << endl;
+			kdDebug() << timestamp() << dbgStr.sprintf( "Status(DRAINING):") << endl;
 			snd_pcm_status_dump(status, log);
 		}
 		if (stream == SND_PCM_STREAM_CAPTURE) {
-			kdDebug() << dbgStr.sprintf( "capture stream format change? attempting recover...") << endl;
+			kdDebug() << timestamp() << dbgStr.sprintf( "capture stream format change? attempting recover...") << endl;
 			if ((res = snd_pcm_prepare(handle))<0) {
 				error("xrun(DRAINING): prepare error: %s", snd_strerror(res));
 				stopAndExit();
@@ -891,7 +906,7 @@ void AlsaPlayer::xrun(void)
 		}
 	}
 	if (verbose) {
-		kdDebug() << dbgStr.sprintf( "Status(R/W):") << endl;
+		kdDebug() << timestamp() << dbgStr.sprintf( "Status(R/W):") << endl;
 		snd_pcm_status_dump(status, log);
 	}
 	error("read/write error, state = %s", snd_pcm_state_name(snd_pcm_status_get_state(status)));
@@ -904,19 +919,19 @@ void AlsaPlayer::suspend(void)
 	int res;
 
 	if (!quiet_mode)
-		kdDebug() << dbgStr.sprintf( "Suspended. Trying resume. ") << endl;
+		kdDebug() << timestamp() << dbgStr.sprintf( "Suspended. Trying resume. ") << endl;
 	while ((res = snd_pcm_resume(handle)) == -EAGAIN)
 		sleep(1);	/* wait until suspend flag is released */
 	if (res < 0) {
 		if (!quiet_mode)
-			kdDebug() << dbgStr.sprintf( "Failed. Restarting stream. ") << endl;
+			kdDebug() << timestamp() << dbgStr.sprintf( "Failed. Restarting stream. ") << endl;
 		if ((res = snd_pcm_prepare(handle)) < 0) {
 			error("suspend: prepare error: %s", snd_strerror(res));
 			stopAndExit();
 		}
 	}
 	if (!quiet_mode)
-		kdDebug() << dbgStr.sprintf( "Done.") << endl;
+		kdDebug() << timestamp() << dbgStr.sprintf( "Done.") << endl;
 }
 
 /* peak handler */
@@ -967,7 +982,7 @@ void AlsaPlayer::compute_max_peak(char *data, size_t count)
 	max = 1 << (bits_per_sample-1);
 	if (max <= 0)
 		max = 0x7fffffff;
-	kdDebug() << dbgStr.sprintf("Max peak (%li samples): %05i (0x%04x) ", (long)ocount, max_peak, max_peak);
+	kdDebug() << timestamp() << dbgStr.sprintf("Max peak (%li samples): %05i (0x%04x) ", (long)ocount, max_peak, max_peak);
 	if (bits_per_sample > 16)
 		perc = max_peak / (max / 100);
 	else
@@ -990,15 +1005,15 @@ ssize_t AlsaPlayer::pcm_write(char *data, size_t count)
 	ssize_t result = 0;
 
 	if (sleep_min == 0 && count < chunk_size) {
-        // kdDebug() << "AlsaPlayer::pcm_write: calling snd_pcm_format_set_silence" << endl;
+        // kdDebug() << timestamp() << "AlsaPlayer::pcm_write: calling snd_pcm_format_set_silence" << endl;
 		snd_pcm_format_set_silence(hwparams.format, data + count * bits_per_frame / 8, (chunk_size - count) * hwparams.channels);
 		count = chunk_size;
 	}
 	while (count > 0) {
-        // kdDebug() << "AlsaPlayer::pcm_write: calling writei_func, count = " << count << endl;
+        // kdDebug() << timestamp() << "AlsaPlayer::pcm_write: calling writei_func, count = " << count << endl;
 		r = writei_func(handle, data, count);
 		if (r == -EAGAIN || (r >= 0 && (size_t)r < count)) {
-            // kdDebug() << "AlsaPlayer::pcm_write: r = " << r << " calling snd_pcm_wait" << endl;
+            kdDebug() << timestamp() << "AlsaPlayer::pcm_write: r = " << r << " calling snd_pcm_wait" << endl;
 			snd_pcm_wait(handle, 1000);
 		} else if (r == -EPIPE) {
 			xrun();
@@ -1077,7 +1092,7 @@ void AlsaPlayer::voc_pcm_flush(void)
 		size_t b;
 		if (sleep_min == 0) {
 			if (snd_pcm_format_set_silence(hwparams.format, audiobuf + buffer_pos, chunk_bytes - buffer_pos * 8 / bits_per_sample) < 0)
-				kdDebug() << dbgStr.sprintf( "voc_pcm_flush - silence error") << endl;
+				kdDebug() << timestamp() << dbgStr.sprintf( "voc_pcm_flush - silence error") << endl;
 			b = chunk_size;
 		} else {
 			b = buffer_pos * 8 / bits_per_frame;
@@ -1113,7 +1128,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 		stopAndExit();
 	}
 	if (!quiet_mode) {
-		kdDebug() << dbgStr.sprintf( "Playing Creative Labs Channel file '%s'...", name) << endl;
+		kdDebug() << timestamp() << dbgStr.sprintf( "Playing Creative Labs Channel file '%s'...", name) << endl;
 	}
 	/* first we waste the rest of header, ugly but we don't need seek */
 	while (ofs > (ssize_t)chunk_bytes) {
@@ -1178,7 +1193,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 					hwparams.rate = (int) (vd->tc);
 					hwparams.rate = 1000000 / (256 - hwparams.rate);
 #if 0
-					kdDebug() << dbgStr.sprintf("Channel data %d Hz", dsp_speed) << endl;
+					kdDebug() << timestamp() << dbgStr.sprintf("Channel data %d Hz", dsp_speed) << endl;
 #endif
 					if (vd->pack) {		/* /dev/dsp can't it */
 						error("can't play packed .voc files");
@@ -1194,7 +1209,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 				break;
 			case 2:	/* nothing to do, pure data */
 #if 0
-				kdDebug() << "Channel continuation") << endl;
+				kdDebug() << timestamp() << "Channel continuation") << endl;
 #endif
 				break;
 			case 3:	/* a silence block, no data, only a count */
@@ -1206,7 +1221,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 				set_params();
 				silence = (((size_t) * sp) * 1000) / hwparams.rate;
 #if 0
-				kdDebug() << dbgStr.sprintf("Silence for %d ms", (int) silence) << endl;
+				kdDebug() << timestamp() << dbgStr.sprintf("Silence for %d ms", (int) silence) << endl;
 #endif
 				voc_write_silence(*sp);
 				break;
@@ -1214,13 +1229,13 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 				sp = (u_short *) data;
 				COUNT1(sizeof(u_short));
 #if 0
-				kdDebug() << dbgStr.sprintf("Marker %d", *sp) << endl;
+				kdDebug() << timestamp() << dbgStr.sprintf("Marker %d", *sp) << endl;
 #endif
 				break;
 			case 5:	/* ASCII text, we copy to stderr */
 				output = 1;
 #if 0
-				kdDebug() << "ASCII - text :") << endl;
+				kdDebug() << timestamp() << "ASCII - text :") << endl;
 #endif
 				break;
 			case 6:	/* repeat marker, says repeatcount */
@@ -1229,7 +1244,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 				repeat = *(u_short *) data;
 				COUNT1(sizeof(u_short));
 #if 0
-				kdDebug() << dbgStr.sprintf("Repeat loop %d times", repeat) << endl;
+				kdDebug() << timestamp() << dbgStr.sprintf("Repeat loop %d times", repeat) << endl;
 #endif
 				if (filepos >= 0) {	/* if < 0, one seek fails, why test another */
 					if ((filepos = lseek64(fd, 0, 1)) < 0) {
@@ -1246,13 +1261,13 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 				if (repeat) {
 					if (repeat != 0xFFFF) {
 #if 0
-						kdDebug() << dbgStr.sprintf("Repeat loop %d", repeat) << endl;
+						kdDebug() << timestamp() << dbgStr.sprintf("Repeat loop %d", repeat) << endl;
 #endif
 						--repeat;
 					}
 #if 0
 					else
-						kdDebug() << "Neverending loop" << endl;
+						kdDebug() << timestamp() << "Neverending loop" << endl;
 #endif
 					lseek64(fd, filepos, 0);
 					in_buffer = 0;	/* clear the buffer */
@@ -1260,7 +1275,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 				}
 #if 0
 				else
-					kdDebug() << "End repeat loop" << endl;
+					kdDebug() << timestamp() << "End repeat loop" << endl;
 #endif
 				break;
 			case 8:	/* the extension to play Stereo, I have SB 1.0 :-( */
@@ -1277,7 +1292,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 					return;
 				}
 #if 0
-				kdDebug() << dbgStr.sprintf("Extended block %s %d Hz",
+				kdDebug() << timestamp() << dbgStr.sprintf("Extended block %s %d Hz",
 					 (eb->mode ? "Stereo" : "Mono"), dsp_speed) << endl;
 #endif
 				break;
@@ -1346,7 +1361,7 @@ void AlsaPlayer::header(int /*rtype*/, const char* /*name*/)
 			s += dbgStr.sprintf( "Stereo");
 		else
 			s += dbgStr.sprintf( "Channels %i", hwparams.channels);
-		kdDebug() << s << endl;
+		kdDebug() << timestamp() << s << endl;
 	}
 }
 
@@ -1399,7 +1414,7 @@ void AlsaPlayer::playback_go(int fd, size_t loaded, off64_t count, int rtype, co
 		l = 0;
 	}
 	snd_pcm_drain(handle);
-    // kdDebug() << "Exiting playback_go" << endl;
+    // kdDebug() << timestamp() << "Exiting playback_go" << endl;
 }
 
 /*

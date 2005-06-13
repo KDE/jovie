@@ -1,0 +1,20 @@
+This is an aKode audio plugin for KTTS.
+
+There are two problems right now (12 Jun 2005) that prevent this from being usable
+for KTTS:
+
+1.  There's a bug in aKode that prevents it from playing .wav files.  Apply
+    decoderpluginhandler.diff to kdemultimedia/akode/lib/decoderpluginhandler.cpp
+    and rebuild kdemultimedia/akode/lib.  Waiting for carewolf to apply this
+    patch.
+
+2.  aKode doesn't instantly stop when calling pause() or stop().
+    See bug:107135.
+
+If you want to try this plugin, add --enable-kttsd-akode to ./configure command.
+
+If the problems above aren't addressed, this plugin should probably be removed
+from KTTS.
+
+-- Gary Cramblitt (PhantomsDad)
+

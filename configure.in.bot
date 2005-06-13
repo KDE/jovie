@@ -55,3 +55,10 @@ if test "x$have_alsa" = "xno" && test "x$alsa_plugin" = "xyes"; then
     echo "* (alsa/asoundlib.h) were not found."
 	echo "********************************************************"
 fi
+if test "x$have_akode" = "xno" && test "x$akode_plugin" = "xyes"; then
+	echo "********************************************************"
+    echo "* The build of the KTTS aKode audio plugin has been"
+    echo "* disabled because the aKode library headers"
+    echo "* (akode/player.h akode/decoder.h) were not found."
+	echo "********************************************************"
+fi

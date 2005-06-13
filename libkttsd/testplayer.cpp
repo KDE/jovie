@@ -69,6 +69,7 @@ TestPlayer::~TestPlayer()
  *  0 = aRts
  *  1 = gstreamer
  *  2 = ALSA
+ *  3 = aKode
  */
 void TestPlayer::setPlayerOption(const int playerOption) { m_playerOption = playerOption; }
 
@@ -147,6 +148,11 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         case 2 :
         {
             plugInName = "kttsd_alsaplugin";
+            break;
+        }
+        case 3 :
+        {
+            plugInName = "kttsd_akodeplugin";
             break;
         }
         default:

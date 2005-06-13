@@ -13,6 +13,8 @@ _ Handbook:
       the same as "HTML".  It should stay this way, BTW.  Proper xhtml requires lowercase
       tags.
 _ Audio Plugins:
+    _ Popping noise at the end of each utterance when using ALSA audio plugin.
+      aKode's ALSA plugin does not have this problem.
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
     _ Add option to automatically turn down music player volume while speaking (via dcop).

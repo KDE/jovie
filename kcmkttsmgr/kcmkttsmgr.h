@@ -449,6 +449,11 @@ class KCMKttsMgr :
         void slotAlsaRadioButton_toggled(bool state);
 
         /**
+        * This signal is emitted whenever user checks/unchecks the aKode radio button.
+        */
+        void slotAkodeRadioButton_toggled(bool state);
+
+        /**
         * User has requested to display the Talker/Filter Configuration Dialog.
         */
         void slot_configureTalker();

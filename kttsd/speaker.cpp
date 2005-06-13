@@ -135,6 +135,10 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
             m_speechData->config->setGroup("ALSAPlayer");
             m_sinkName = m_speechData->config->readEntry("PcmName", "default");
             break;
+        case 3:
+            m_speechData->config->setGroup("aKodePlayer");
+            m_sinkName = m_speechData->config->readEntry("SinkName", "auto");
+            break;
     }
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
@@ -1514,6 +1518,11 @@ Player* Speaker::createPlayerObject()
         case 2 :
             {
                 plugInName = "kttsd_alsaplugin";
+                break;
+            }
+        case 3 :
+            {
+                plugInName = "kttsd_akodeplugin";
                 break;
             }
         default:
