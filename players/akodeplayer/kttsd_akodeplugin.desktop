@@ -1,9 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD aKode Plugin
-Name[xx]=xxKTTSD aKode Pluginxx
 Comment=KTTSD aKode audio plugin
-Comment[xx]=xxKTTSD aKode audio pluginxx
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
 X-KDE-Library=libkttsd_akodeplugin
