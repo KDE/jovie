@@ -1,11 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD ALSA Plugin
+Name[br]=Lugent ALSA evit KTTSD
 Name[da]=KTTSD ALSA plugin
 Name[ga]=Breiseán KTTSD ALSA
 Name[pa]=KTTSD ALSA ਪਲੱਗਿੰਨ
 Comment=KTTSD ALSA audio plugin
 Comment[bg]=Аудио приставка на KTTSD за ALSA
+Comment[br]=Lugent klevet ALSA evit KTTSD
 Comment[da]=KTTSD ALSA lyd-plugin
 Comment[ga]=Breiseán fuaime KTTSD ALSA
 Comment[pa]=KTTSD ALSA ਆਡੀਓ ਪਲੱਗਿੰਨ

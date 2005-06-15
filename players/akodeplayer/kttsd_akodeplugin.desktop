@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD aKode Plugin
+Name[br]=Lugent aKode evit KTTSD
+Name[da]=KTTSD aKode-plugin
 Comment=KTTSD aKode audio plugin
+Comment[br]=Lugent klevet aKode evit KTTSD
+Comment[da]=KTTSD aKode lyd-plugin
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
 X-KDE-Library=libkttsd_akodeplugin
