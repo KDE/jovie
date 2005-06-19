@@ -974,7 +974,8 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
             // Queue msg if we should speak something.
             if ( !msg.isEmpty() )
             {
-                m_speechData->enqueueMessage( msg, talker, fromApp.utf8() );
+                QString fromApps = fromApp + ",knotify";
+                m_speechData->enqueueMessage( msg, talker, fromApps.utf8() );
                 m_speaker->doUtterances();
             }
         }
