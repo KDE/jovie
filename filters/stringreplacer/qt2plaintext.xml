@@ -1,298 +1,299 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wordlist>
  <name>Qt Rich Text to Plain Text</name>
+ <appid>knotify</appid>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<qt>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</qt>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<h1>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<h2>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<h3>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</h1>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</h2>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</h3>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<p>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</p>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<center>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</center>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<blockquote>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</blockquote>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<ul>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</ul>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<ol>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</ol>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<li>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</li>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<a>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</a>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<em>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</em>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<strong>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</strong>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<bold>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</bold>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<b>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</b>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<u>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</u>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<big>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</big>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<small>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</small>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<hr/>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<br/>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<nobr>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</nobr>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<table>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</table>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<tr>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</tr>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<td>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</td>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<th>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</th>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
-  <match><![CDATA[<img src=]]></match>
+  <type>RegExp</type>
+  <match><![CDATA[<img src\=]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
-  <match><![CDATA[<a href=]]></match>
+  <type>RegExp</type>
+  <match><![CDATA[<a href\=]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[/>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<img>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[">]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<pre>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</pre>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<tt>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</tt>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[<code>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <match><![CDATA[</code>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
