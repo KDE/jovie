@@ -1,0 +1,31 @@
+The <a href="http://accessibility.kde.org/developer/kttsd/index.php">KDE Text-to-Speech System</a> currently supports the following languages via non-commercial TTS systems and voices on the Linux platform:
+
+American English
+British
+Spanish
+German
+Finnish
+Czech
+Polish
+Russian
+Italian
+Kiswahili
+Zulu
+Ibibio
+
+Notably absent from this list is French (French Canadian voices can be purchased from <a href="http://www.cepstral.com">Cepstral LLC</a>).  This is a damn shame.
+
+If you are French speaking, your mission, should you choose to accept it, is to develop a free and easy-to-install French language package for KTTS on the Linux platform.  There are several possible ways this could be done:
+
+1.  MBROLA and txt2pho.  This solution uses MBROLA to synthesize voice from phonemes.  What's needed is a means to convert text into phonemes.  There are French voices available for MBROLA at <a href="http://tcts.fpms.ac.be/synthesis/mbrola/mbrcopybin.html">http://tcts.fpms.ac.be/synthesis/mbrola/mbrcopybin.html</a>.  There are txt2pho utilities and other TTS systems available at <a href="http://tcts.fpms.ac.be/synthesis/mbrola/mbrtts.html">http://tcts.fpms.ac.be/synthesis/mbrola/mbrtts.html</a>.  I tried these without success.  In some cases, the txt2pho programs fussed about "little endian", so this might require some perl programming.  If you get a solution working this way, it would employ the Hadifix plugin in KTTS.
+
+2.  MBROLA and Festival.  Like #1, this solution uses MBROLA to synthesize voice from phonemes, but uses Festival to do the text to phoneme conversion.  More info at <a href="http://www.cstr.ed.ac.uk/projects/festival/mbrola.html">http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</a>.  A solution using this technique was developed for Festival 1.4.3 called FranFest.  Google for "FranFest".  Also, here's an article that explains how to install it: <a href="http://www.pollock-nageoire.net/festival/festival-english004.html">http://www.pollock-nageoire.net/festival/festival-english004.html</a>.  The problem with this is 1) it requires patching and rebuilding Festival, and 2) it needs to be adapted to Festival 2.0 (1.95 beta).  I would recommend approaching the Festival programmers about incorporating this patch into Festival permanently.
+
+3.  Native Festival.  Develop a "native" voice for Festival so that Festival can do the full TTS conversion.  This is much harder than #1 or #2, but would be much easier for KTTS users to install.  From time to time, I have seen people mention on the festival-talk mailing list that they are working on this, so it may already be done or near done.  More info at <a href="http://festvox.org/maillists.html">http://festvox.org/maillists.html</a>.  Unfortunately, the festival-talk mailing list archive is not available.  I can send you an mbox of what I have if you are interested.
+
+Whatever solution you come up with, you'll need to document how French KTTS users install and configure it.  If your solution uses Festival, it must list the voice code for the French voice in response to the following Scheme statement:
+
+  (print (mapcar (lambda (pair) (car pair)) voice-locations))
+
+Contact me in irc.kde.org channel #kde-accessibility for more information.
+
