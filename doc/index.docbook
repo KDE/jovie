@@ -18,6 +18,11 @@
   <!-- Do not define any other entities; instead, use the entities
        from entities/general.entities and $LANG/user.entities. -->
 ]>
+<!-- Note to translators: KTTSD is meant to be built under KDE
+     versions 3.2 and later.  Please avoid entities that won't
+     be defined under those KDE versions.  Thanks.
+-->
+
 <!-- kdoctemplate v0.9 January 10 2003
      Changes to comments to clarify entity usage January 10 2003
      Minor update to "Credits and Licenses" section on August 24, 2000
