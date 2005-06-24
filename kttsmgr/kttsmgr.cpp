@@ -145,7 +145,7 @@ KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
     if ( !r.isValid() )
         return;
 
-    QString status = "<qt><b>KttsMgr</b> - ";
+    QString status = "<qt><b>KTTSMgr</b> - ";
     status += i18n("<qt>Text-to-Speech Manager");
     status += "<br/><br/>";
     status += kttsMgrTray->getStatus();
