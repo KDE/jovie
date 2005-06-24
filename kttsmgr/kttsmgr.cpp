@@ -18,7 +18,6 @@
 
 // Qt includes.
 #include <qimage.h>
-#include <qtooltip.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -127,6 +126,34 @@ int main (int argc, char *argv[])
     return result;
 }
 
+/*  KttsToolTip class */
+
+KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
+{
+}
+
+/*virtual*/ void KttsToolTip::maybeTip ( const QPoint & p )
+{
+    Q_UNUSED(p);
+
+    if (!parentWidget()->inherits("KttsMgrTray"))
+        return;
+
+    KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
+
+    QRect r(kttsMgrTray->geometry());
+    if ( !r.isValid() )
+        return;
+
+    QString status = "<qt><b>KttsMgr</b> - ";
+    status += i18n("<qt>Text-to-Speech Manager");
+    status += "<br/><br/>";
+    status += kttsMgrTray->getStatus();
+    status += "</qt>";
+
+    tip(r, status);
+}
+
 /*  KttsMgrTray class */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
@@ -137,7 +164,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
 
-    QToolTip::add(this, i18n("Text-to-Speech Manager"));
+    // QToolTip::add(this, i18n("Text-to-Speech Manager"));
+    m_toolTip = new KttsToolTip(this);
 
     int id;
     id = contextMenu()->idAt(0);
@@ -169,11 +197,14 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     }
 }
 
-KttsMgrTray::~KttsMgrTray() { }
+KttsMgrTray::~KttsMgrTray()
+{
+    delete m_toolTip;
+}
 
 void KttsMgrTray::textFinished(const QCString& /*appId*/, uint /*jobNum*/)
 {
-    kdDebug() << "KttsMgrTray::textFinished: running" << endl;
+    // kdDebug() << "KttsMgrTray::textFinished: running" << endl;
     exitWhenFinishedSpeaking();
 }
 
@@ -201,6 +232,46 @@ void KttsMgrTray::exitWhenFinishedSpeaking()
     kapp->quit();
 }
 
+/**
+* Convert a KTTSD job state integer into a display string.
+* @param state          KTTSD job state
+* @return               Display string for the state.
+*/
+QString KttsMgrTray::stateToStr(int state)
+{
+    switch( state )
+    {
+        case KSpeech::jsQueued: return        i18n("Queued");
+        case KSpeech::jsSpeakable: return     i18n("Waiting");
+        case KSpeech::jsSpeaking: return      i18n("Speaking");
+        case KSpeech::jsPaused: return        i18n("Paused");
+        case KSpeech::jsFinished: return      i18n("Finished");
+        default: return                       i18n("Unknown");
+    }
+}
+
+QString KttsMgrTray::getStatus()
+{
+    if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
+    uint jobCount = getTextJobCount();
+    QString status = i18n("1 job", "%n jobs", jobCount);
+    if (jobCount > 0)
+    {
+        uint job = getCurrentTextJob();
+        int jobState = 0;
+        if (job != 0)
+        {
+            // kdDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
+            jobState = getTextJobState(job);
+            int sentenceCount = getTextCount(job);
+            uint seq = moveRelTextSentence(0, job);
+            status += i18n(", current job %1 at sentence %2 of %3 sentences"
+                ).arg(stateToStr(jobState)).arg(seq).arg(sentenceCount);
+        }
+    }
+    return status;
+}
+
 void KttsMgrTray::speakClipboardSelected()
 {
     if (!isKttsdRunning())
@@ -225,7 +296,7 @@ void KttsMgrTray::helpSelected()
 
 void KttsMgrTray::quitSelected()
 {
-    kdDebug() << "Running KttsMgrTray::quitSelected" << endl;
+    // kdDebug() << "Running KttsMgrTray::quitSelected" << endl;
     kapp->quit();
 }
 
