@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Festival Interactive
 Name[da]=Festival Interaktiv
+Name[el]=Διαδραστικό Festival
 Name[fi]=Interaktiivinen Festival
 Name[is]=Festival gagnvirkni
 Name[it]=Festival Interattivo
@@ -16,6 +17,7 @@ Comment[ca]=Sintetitzador de veu Festival
 Comment[cs]=Hlasový syntetizér Festival
 Comment[da]=Festival tale-synthetizer
 Comment[de]=Festival Sprachsynthesizer
+Comment[el]=Συνθέτης ομιλίας Festival
 Comment[es]=Sintetizador de texto a voz Festival
 Comment[et]=Kõnesüntesaator Festival
 Comment[fi]=Festival puhesyntetisaattori
