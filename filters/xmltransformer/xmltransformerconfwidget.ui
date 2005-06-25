@@ -127,7 +127,7 @@
                 <string>Apply This &amp;Filter When</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>These settings determines when the filter is applied to text of jobs.</string>
+                <string>These settings determines when the filter is applied to text.</string>
             </property>
             <grid>
                 <property name="name">
@@ -198,7 +198,7 @@
                                 <cstring>doctypeLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>DOC&amp;TYPE is:</string>
+                                <string>or DOC&amp;TYPE is:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignVCenter|AlignRight</set>
@@ -215,7 +215,7 @@
                                 <cstring>appIdLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Application &amp;ID contains:</string>
+                                <string>and Application &amp;ID contains:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignVCenter|AlignRight</set>

@@ -153,10 +153,10 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         return false;
     }
 
-    // If not correct XML type, do nothing.
+    bool found = false;
+    // If not correct XML type, or DOCTYPE, do nothing.
     if ( !m_rootElementList.isEmpty() )
     {
-        bool found = false;
         // kdDebug() << "XmlTransformerProc::asyncConvert:: searching for root elements " << m_rootElementList << endl;
         for ( uint ndx=0; ndx < m_rootElementList.count(); ++ndx )
         {
@@ -166,15 +166,14 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
                 break;
             }
         }
-        if ( !found )
+        if ( !found && m_doctypeList.isEmpty() )
         {
-            // kdDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList << endl;
+            kdDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList << endl;
             return false;
         }
     }
-    if ( !m_doctypeList.isEmpty() )
+    if ( !found && !m_doctypeList.isEmpty() )
     {
-        bool found = false;
         for ( uint ndx=0; ndx < m_doctypeList.count(); ++ndx )
         {
             if ( KttsUtils::hasDoctype( inputText, m_doctypeList[ndx] ) )
@@ -196,7 +195,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         QString appIdStr = appId;
         // kdDebug() << "XmlTransformrProc::convert: converting " << inputText << " if appId "
         //     << appId << " matches " << m_appIdList << endl;
-        bool found = false;
+        found = false;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
