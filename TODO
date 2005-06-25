@@ -1,5 +1,6 @@
 _ Filters:
-    _ The Qt Rich Text to Plain Text filter mangles ssml, producing "Invalid S S M L".
+    _ Since filters now apply to all message types except Screen Reader, the WhatThis
+      help needs correction.
     _ For XML Transformer filters, it should be possible to specify both
       "Root element is" and "DOCTYPE" as an OR condition.
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
