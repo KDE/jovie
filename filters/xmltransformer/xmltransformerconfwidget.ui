@@ -146,7 +146,7 @@
                                 <cstring>rootElementLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This filter will be applied only to text jobs having the specified XML root element.  If blank, applies to all text jobs.  You may enter more than one root element separated by commas.  Example: "html".</string>
+                                <string>This filter will be applied only to text having the specified XML root element.  If blank, applies to all text.  You may enter more than one root element separated by commas.  Example: "html".</string>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -154,7 +154,7 @@
                                 <cstring>doctypeLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This filter will be applied only to text jobs having the specified DOCTYPE specification.  If blank, applies to all text jobs.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
+                                <string>This filter will be applied only to text having the specified DOCTYPE specification.  If blank, applies to all text.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -162,7 +162,7 @@
                                 <cstring>appIdLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>&lt;qt&gt;Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b&gt;knotify&lt;/b&gt; to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt&gt;</string>
+                                <string>&lt;qt&gt;Enter a DCOP Application ID.  This filter will only apply to text queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b&gt;knotify&lt;/b&gt; to match all messages sent as KDE notifications.  If blank, this filter applies to text queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt&gt;</string>
                             </property>
                         </widget>
                     </vbox>
@@ -189,7 +189,7 @@
                                 <cstring>rootElementLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This filter will be applied only to text jobs having the specified XML root element.  If blank, applies to all text jobs.  You may enter more than one root element separated by commas.  Example: "html".</string>
+                                <string>This filter will be applied only to text having the specified XML root element.  If blank, applies to all text.  You may enter more than one root element separated by commas.  Example: "html".</string>
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
@@ -207,7 +207,7 @@
                                 <cstring>doctypeLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This filter will be applied only to text jobs having the specified DOCTYPE specification.  If blank, applies to all text jobs.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
+                                <string>This filter will be applied only to text having the specified DOCTYPE specification.  If blank, applies to all text.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -224,7 +224,7 @@
                                 <cstring>appIdLineEdit</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
+                                <string>&lt;qt&gt;Enter a DCOP Application ID.  This filter will only apply to text queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b&gt;knotify&lt;/b&gt; to match all messages sent as KDE notifications.  If blank, this filter applies to text queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt&gt;</string>
                             </property>
                         </widget>
                     </vbox>
