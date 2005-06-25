@@ -1,8 +1,4 @@
 _ Filters:
-    _ Since filters now apply to all message types except Screen Reader, the WhatThis
-      help needs correction.
-    _ For XML Transformer filters, it should be possible to specify both
-      "Root element is" and "DOCTYPE" as an OR condition.
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
     _ Add KNewStuff capability for folks to upload/download filter configs.
     _ There should be a default set of filters configured when user first runs KTTSMgr.

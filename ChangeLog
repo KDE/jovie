@@ -1,3 +1,6 @@
+2005-06-25  Gary Cramblitt (PhantomsDad)
+        * The XML Transformer filter now applies itself when the root element OR doctype and appId match.
+
 2005-06-12  Gary Cramblitt (PhantomsDad)
         * New aKode audio plugin.  Build it with ./configure --enable-kttsd-akode.
           There are a couple of problems.  See README players/akodeplayer/README.
