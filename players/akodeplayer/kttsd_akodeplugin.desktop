@@ -10,6 +10,7 @@ Name[sr]=aKode прикључак за KTTSD
 Name[sr@Latn]=aKode priključak za KTTSD
 Name[sv]=KTTSD-insticksprogram för aKode
 Comment=KTTSD aKode audio plugin
+Comment[bg]=Аудио приставка на KTTSD за aKode
 Comment[br]=Lugent klevet aKode evit KTTSD
 Comment[da]=KTTSD aKode lyd-plugin
 Comment[et]=KTTSD aKode audioplugin
