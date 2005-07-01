@@ -1,6 +1,5 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-	-I$(kde_includes)/arts \
 	$(all_includes)
 
 METASOURCES = AUTO
@@ -14,7 +13,7 @@ libkttsd_hadifixplugin_la_SOURCES = \
 	hadifixconfigui.ui \
 	voicefileui.ui
 libkttsd_hadifixplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libkttsd_hadifixplugin_la_LIBADD = $(LIB_KDECORE) $(LIB_KFILE) -lartskde $(top_builddir)/kttsd/libkttsd/libkttsd.la
+libkttsd_hadifixplugin_la_LIBADD = $(LIB_KDECORE) $(LIB_KFILE) $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 services_DATA = kttsd_hadifixplugin.desktop
 servicesdir = $(kde_servicesdir)

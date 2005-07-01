@@ -22,7 +22,6 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kplayobject.h>
 
 #include <pluginconf.h>
 

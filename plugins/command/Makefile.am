@@ -1,6 +1,5 @@
 INCLUDES = \
         -I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
-        -I$(kde_includes)/arts \
         $(all_includes)
 
 METASOURCES = AUTO
@@ -13,7 +12,7 @@ libkttsd_commandplugin_la_SOURCES = \
         commandproc.cpp \
         commandplugin.cpp
 libkttsd_commandplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries)
-libkttsd_commandplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lartskde
+libkttsd_commandplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 services_DATA = kttsd_commandplugin.desktop
 servicesdir = $(kde_servicesdir)
