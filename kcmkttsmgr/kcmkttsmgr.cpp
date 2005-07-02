@@ -171,10 +171,21 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_sbdPopmenu->insertItem( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
     m_kttsmgrw->sbdButton->setPopup( m_sbdPopmenu );
 
-    // If GStreamer is available, enable its radio button.
+    // If aRts is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
     TestPlayer* testPlayer = new TestPlayer();
-    Player* player = testPlayer->createPlayerObject(1);
+    Player* player = testPlayer->createPlayerObject(0);
+    if (player)
+        m_kttsmgrw->artsRadioButton->setEnabled(true);
+    else
+        m_kttsmgrw->artsRadioButton->setEnabled(false);
+    delete player;
+    delete testPlayer;
+
+    // If GStreamer is available, enable its radio button.
+    // Determine if available by loading its plugin.  If it fails, not available.
+    testPlayer = new TestPlayer();
+    player = testPlayer->createPlayerObject(1);
     if (player)
     {
         m_kttsmgrw->gstreamerRadioButton->setEnabled(true);

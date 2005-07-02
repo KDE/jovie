@@ -2,10 +2,6 @@
 
 ### AM_INIT_AUTOMAKE(kttsd,0.2.0)
 
-if test "x$build_arts" = "xno"; then
-	DO_NOT_COMPILE="$DO_NOT_COMPILE kttsd"
-fi
-
 AC_ARG_ENABLE(kttsd-gstreamer,
               AC_HELP_STRING([--enable-kttsd-gstreamer],
                              [build KTTSD GStreamer audio plugin [default=no]]),
@@ -14,9 +10,9 @@ AC_ARG_ENABLE(kttsd-gstreamer,
 
 AC_ARG_ENABLE(kttsd-alsa,
               AC_HELP_STRING([--enable-kttsd-alsa],
-                             [build KTTSD ALSA audio plugin [default=no]]),
+                             [build KTTSD ALSA audio plugin [default=yes]]),
               alsa_plugin=$enableval,
-              alsa_plugin=no)
+              alsa_plugin=yes)
 
 AC_ARG_ENABLE(kttsd-akode,
               AC_HELP_STRING([--enable-kttsd-akode],
@@ -138,6 +134,12 @@ else
 fi
 
 AM_CONDITIONAL(include_kttsd_gstplayer, [test "x$have_gst" = "xyes" && test "x$gstreamer_plugin" = "xyes"])
+
+dnl ================================================================================
+
+dnl Do not compile artsplayer plugin if user specifies --without-arts
+
+AM_CONDITIONAL(include_kttsd_artsplayer, [test "x$build_arts" = "xyes"])
 
 dnl ================================================================================
 

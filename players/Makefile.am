@@ -1,3 +1,8 @@
+#kdevelop: artsplayer_DIR = artsplayer
+if include_kttsd_artsplayer
+    artsplayer_DIR = artsplayer
+endif
+
 #kdevelop: gstplayer_DIR = gstplayer
 if include_kttsd_gstplayer
     gstplayer_DIR = gstplayer
@@ -14,7 +19,7 @@ if include_kttsd_akodeplayer
 endif
 
 SUBDIRS = \
-    artsplayer \
+    $(artsplayer_DIR) \
     $(alsaplayer_DIR) \
     $(gstplayer_DIR) \
     $(akodeplayer_DIR)
