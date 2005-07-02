@@ -46,7 +46,10 @@ User features:
     instances where Kate is embedded in another KDE application.
   * Long text is parsed into sentences. User may backup by sentence
     or paragraph, replay, pause, and stop playing.
-  * Audio output via aRts or GStreamer (version 0.8.7 or later)
+  * Filter plugins for converting chat emoticons to speakable words,
+    fix mispronunciations, and convert xhtml to SSML.
+  * Audio output via aRts, ALSA, GStreamer (version 0.8.7 or later),
+    or aKode.
 
 Programmer features:
   * Priority system for screen reader outputs, warnings and messages,
@@ -84,16 +87,45 @@ See the KTTS Handbook
 for complete instructions on installing, compiling, configuring, and using
 KTTS.
 
+Audio Plugins
+-------------
+KTTS can be built with the following audio plugins.  The "Default Configure
+"Option" column shows the default option for the configure command.
+The "Alternate" column gives the opposite configure option:
+
+  System     Plugin        Default Configure Option  Alternate
+  ------     ------------  ------------------------- ------------------------
+  aRts       artsplayer    --with-arts               --without-arts
+  ALSA       alsaplayer    --enable-kttsd-alsa       --disable-kttsd-alsa
+  GStreamer  gstplayer     --disable-kttsd-gstreamer --enable-kttsd-gstreamer
+  aKode      akodeplayer   --disable-kttsd-akode     --enable-kttsd-akode
+
+You *must* have at least one of these plugins for KTTS to work.
+
+The aKode and GStreamer players are not built by default because they have issues
+with instant stopping and starting.
+
+Packager Notes
+--------------
+The following speech synthesizer plugins are all built by default.
+Some of them are runtime only dependent upon non-free software.
+(Non-free according to Debian Policy). The "Configure Option to
+not build" column shows the configure command to not build the plugin:
+
+  Synth          License   Configure Option to not build
+  -------------  --------  -----------------------------
+  Festival       free      --disable-kttsd-festivalint
+  Festival Lite  free      --disable-kttsd-flite
+  Epos           free      --disable-kttsd-epos
+  Command        free      --disable-kttsd-command
+  Hadifix        non-free  --disable-kttsd-hadifix
+  FreeTTS        non-free  --disable-kttsd-freetts
+
 IMPORTANT NOTE TO BINARY PACKAGERS:
 Please do not distribute binary packages of kdeaccessibility with the
 gstreamer plugin, as this creates unwanted dependencies.  Instead,
 distribute the gstreamer plugin in a separate package, e.g.
 kde-accessibility-extras.  Thank you.
-
-To build KTTS with the gstreamer audio plugin add the following option
-to your configure command:
-
-  --enable-kttsd-gstreamer
 
 Support
 -------
@@ -113,6 +145,8 @@ libkttsd           Library for KTTSD.  Defines the interface for plugins for KTT
 players            Audio plugins for KTTSD.
   artsplayer         aRts audio plugin for KTTSD.
   gstplayer          GStreamer audio plugin for KTTSD.
+  alsaplayer         ALSA audio plugin for KTTSD.
+  akodeplayer        aKode audio plugin for KTTSD.
 plugins            Plugins for KTTSD.  You must have at least one plugin to use KTTSD.
   festivalint        Plugin for Festival using Festival Interactive mode (festival --interactive).
   flite              Plugin for Festival Lite.
@@ -128,4 +162,4 @@ kttsmgr            Application for managing KTTSD.  Wrapper for kcmkttsmgr plus 
 app-plugins        Plugins for other applications to speak text.
   kate               Embedded Kate plugin.
 compat             Copy of kdelibs/interfaces/kspeech.  Used when compiling for KDE less than 3.4.
-debian             Debian packaging files.
+debian             Debian packaging files. (possibly way out of date)
