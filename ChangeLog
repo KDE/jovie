@@ -1,3 +1,7 @@
+2005-07-01  Gary Cramblitt (PhantomsDad)
+        * Since ALSA plugin seems to work pretty well, enable building --without-arts and build
+          ALSA plugin by default (if headers found).
+
 2005-06-25  Gary Cramblitt (PhantomsDad)
         * The XML Transformer filter now applies itself when the root element OR doctype and appId match.
 

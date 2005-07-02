@@ -16,7 +16,6 @@ _ Audio Plugins:
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
       does not.  They are essentially the same. ??
     _ Add option to automatically turn down music player volume while speaking (via dcop).
-    _ Now that we have ALSA plugin, make "without-arts" work.
 _ Festival Interactive plugin:
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
