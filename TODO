@@ -11,6 +11,10 @@ _ Handbook:
       the same as "HTML".  It should stay this way, BTW.  Proper xhtml requires lowercase
       tags.
 _ Audio Plugins:
+    _ At least one user experiences a freeze-up using ALSA plugin.  Speak a web page,
+      pause the page, cause a knotify to speak, kttsd freezes.  This appears to be an
+      ALSA device contention problem?  In this situation, there are two alsaplayer objects;
+      one in pause state, and one attempting to speak notify.
     _ akodelib does not stop instantly when pause() or stop() is called.  See bug:107135.
     _ Popping noise at the end of each utterance when using ALSA audio plugin.
     _ Why must Player constructor take a 3rd "args" argument, while PluginProc constructor
