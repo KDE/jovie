@@ -35,6 +35,7 @@ _ Hadifix plugin:
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
 _ KTTSMgr:
+    _ Speech is paused when showing tooltip when mouse cursor is placed over tray icon.
     _ Give Talkers a Talker Name entered by user.  Show this name in Jobs tab, Change Talker screen,
       and in systray menu.
     _ Change the Current Sentence panel to show the current sentence of the selected job?  If selected
