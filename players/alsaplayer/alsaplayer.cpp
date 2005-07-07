@@ -501,7 +501,7 @@ size_t AlsaPlayer::test_wavefile_read(int fd, char *buffer, size_t *size, size_t
 #define check_wavefile_space(buffer, len, blimit) \
 	if (len > blimit) { \
 		blimit = len; \
-		if (((void*)buffer = realloc(buffer, blimit)) == NULL) { \
+		if ((buffer = (char*)realloc(buffer, blimit)) == NULL) { \
 			error("not enough memory"); \
 			stopAndExit(); \
 		} \
