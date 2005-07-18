@@ -27,6 +27,7 @@ Comment[sr@Latn]=KDE-ov menadžer poslova za tekst-u-govor
 Comment[sv]=KDE:s text-till-tal jobbhantering
 Comment[ta]=கேடியி உரையில் இருந்து பேச்சு பணி மேலாளர்
 Comment[tg]=Идоракунии фармоишҳо бо воситаи таҳлили овоз
+Comment[tr]=KDE Metinden Konuşmaya Görev Yöneticisi
 Comment[uk]=Менеджер завдань KDE для синтезу мовлення з тексту
 Comment[xx]=xxKDE Text-to-speech Job Managerxx
 ServiceTypes=KParts/ReadOnlyPart
