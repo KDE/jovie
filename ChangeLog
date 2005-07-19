@@ -1,3 +1,8 @@
+2005-07-19  Gary Cramblitt (PhantomsDad)
+        * Name kept .wav files in format kttsd-jjjjjjjj-ssssssss.wav where jjjjjjjj is the job 
+          number zero-filled to the left and ssssssss is the sentence sequence number zero-filled
+          to the left.
+
 2005-07-01  Gary Cramblitt (PhantomsDad)
         * Since ALSA plugin seems to work pretty well, enable building --without-arts and build
           ALSA plugin by default (if headers found).

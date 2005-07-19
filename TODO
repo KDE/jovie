@@ -6,6 +6,10 @@ _ Filters:
       filters with the standard set.  The standard set should probably include
       the Qt to Plain Text and Fix Festival Unspeakable Characters filters, but I'm not
       sure about the latter when desktop is not ISO 8859-1.
+    _ The SBD Filter configuration dialog can be shrunk smaller than the widgets on it.
+      This apparently due to a bug in the QLabel widget when it contains RichText.  If
+      forced to plain text, the problem won't happen (I am told).  However, the WARNING
+      in the dialog needs to be bolded.  What to do?
 _ Handbook:
     _ Mention that "Root element is" and "DOCTYPE" are case sensitive.  "html" is not
       the same as "HTML".  It should stay this way, BTW.  Proper xhtml requires lowercase
