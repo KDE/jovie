@@ -27,6 +27,7 @@
 // #include <sys/wait.h>
 // System includes.
 #include <sys/time.h>
+#include <time.h>
 
 // Qt includes.
 #include <qdir.h>
