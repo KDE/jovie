@@ -1,5 +1,6 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
+	$(akode_includes) \
 	$(all_includes)
 
 # Let automoc handle all of the metsource files (moc).
@@ -16,7 +17,7 @@ libkttsd_akodeplugin_la_SOURCES = \
 	akodeplugin.cpp \
 	akodeplayer.cpp
 libkttsd_akodeplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) -no-undefined
-libkttsd_akodeplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la -lakode
+libkttsd_akodeplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la $(akode_libs)
 
 # Header files that should not be installed.
 noinst_HEADERS = \

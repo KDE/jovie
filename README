@@ -96,9 +96,9 @@ The "Alternate" column gives the opposite configure option:
   System     Plugin        Default Configure Option  Alternate
   ------     ------------  ------------------------- ------------------------
   aRts       artsplayer    --with-arts               --without-arts
-  ALSA       alsaplayer    --enable-kttsd-alsa       --disable-kttsd-alsa
-  GStreamer  gstplayer     --disable-kttsd-gstreamer --enable-kttsd-gstreamer
-  aKode      akodeplayer   --disable-kttsd-akode     --enable-kttsd-akode
+  ALSA       alsaplayer    --with-alsa=check         --with-alsa=no
+  GStreamer  gstplayer     --with-gstreamer=no       --with-gstreamer=check
+  aKode      akodeplayer   --with-akode=no           --with-akode=check
 
 You *must* have at least one of these plugins for KTTS to work.
 
@@ -125,7 +125,8 @@ IMPORTANT NOTE TO BINARY PACKAGERS:
 Please do not distribute binary packages of kdeaccessibility with the
 gstreamer plugin, as this creates unwanted dependencies.  Instead,
 distribute the gstreamer plugin in a separate package, e.g.
-kde-accessibility-extras.  Thank you.
+kde-accessibility-extras.  The separate package should require
+gstreamer >= 0.8.7.  Thank you.
 
 Support
 -------

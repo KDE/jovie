@@ -16,7 +16,7 @@ kde_module_LTLIBRARIES = libkttsd_alsaplugin.la
 libkttsd_alsaplugin_la_SOURCES = \
     alsaplugin.cpp \
 	alsaplayer.cpp
-libkttsd_alsaplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) -lasound -no-undefined
+libkttsd_alsaplugin_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) $(LIBASOUND) -no-undefined
 libkttsd_alsaplugin_la_LIBADD = $(top_builddir)/kttsd/libkttsd/libkttsd.la
 
 # Header files that should not be installed.
