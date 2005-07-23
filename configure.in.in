@@ -235,12 +235,20 @@ if test "$KTTS_KSPEECH_DIR" = ""; then
     have_latest_kspeech=no
     if test "x$ktts_have_kspeech_h" = xyes; then
         AC_MSG_CHECKING([whether installed kspeech.h is latest version])
-        AC_EGREP_HEADER(
-            mtHtml,
-            ${prefix}/include/kspeech.h,
+        ktts_save_cppflags=$CPPFLAGS
+        AC_LANG_SAVE
+        CPPFLAGS="$all_includes $CPPFLAGS"
+        AC_LANG_CPLUSPLUS
+        AC_TRY_COMPILE(
+            [#include <kspeech.h>],
+            [
+            if (4 == KSpeech::mtHtml);
+            ],
             have_latest_kspeech=yes,
             have_latest_kspeech=no)
         AC_MSG_RESULT($have_latest_kspeech)
+        CPPFLAGS=$ktts_save_cppflags
+        AC_LANG_RESTORE
     fi
     if test "x$have_latest_kspeech" = xyes; then
         KTTS_KSPEECH_DIR='$(kde_includes)'
