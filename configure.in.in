@@ -218,20 +218,40 @@ AM_CONDITIONAL(include_kttsd_akodeplayer, [test "x$have_akode" = "xyes"])
 
 dnl ================================================================================
 
-dnl If compiling against KDE 3.4, use installed kspeech headers from kdelibs,
-dnl otherwise use kttsd/compat directory.
+dnl Check whether to include sys/time.h and time.h, or just sys/time.h.
+dnl Defines TIME_WITH_SYS_TIME and HAVE_SYS_TIME_H, which are used in
+dnl alsaplayer.cpp.
+
+AC_CHECK_HEADERS(sys/time.h)
+
+dnl ================================================================================
+
+dnl See if the latest kspeech.h is installed and if not, compile against
+dnl kttsd/compat directory.
 
 if test "$KTTS_KSPEECH_DIR" = ""; then
-    KDE_CHECK_HEADER(kspeech.h,
-        [
+    KDE_CHECK_HEADER(kspeech.h, ktts_have_kspeech_h=yes, ktts_have_kspeech_h=no)
+    have_latest_kspeech=no
+    if test "x$ktts_have_kspeech_h" = xyes; then
+        AC_MSG_CHECKING([whether installed kspeech.h is latest version])
+        AC_EGREP_HEADER(
+            mtHtml,
+            ${prefix}/include/kspeech.h,
+            have_latest_kspeech=yes,
+            have_latest_kspeech=no)
+        AC_MSG_RESULT($have_latest_kspeech)
+    fi
+    if test "x$have_latest_kspeech" = xyes; then
         KTTS_KSPEECH_DIR='$(kde_includes)'
         KTTS_KSPEECH_INCLUDE=""
         KTTS_INTERFACES_DIR=""
-        ],[
+    else
         KTTS_KSPEECH_DIR='$(top_srcdir)/kttsd/compat/interfaces/kspeech'
         KTTS_KSPEECH_INCLUDE='-I$(top_srcdir)/kttsd/compat/interfaces/kspeech'
         KTTS_INTERFACES_DIR="interfaces"
-        ])
+        AC_MSG_WARN([Latest kspeech.h not installed. Compiling using kttsd/compat directory.])
+    fi
+
     AC_SUBST(KTTS_KSPEECH_DIR)
     AC_SUBST(KTTS_KSPEECH_INCLUDE)
     AC_SUBST(KTTS_INTERFACES_DIR)
