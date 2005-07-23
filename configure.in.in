@@ -222,6 +222,7 @@ dnl Check whether to include sys/time.h and time.h, or just sys/time.h.
 dnl Defines TIME_WITH_SYS_TIME and HAVE_SYS_TIME_H, which are used in
 dnl alsaplayer.cpp.
 
+AC_HEADER_TIME
 AC_CHECK_HEADERS(sys/time.h)
 
 dnl ================================================================================
