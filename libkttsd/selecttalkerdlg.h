@@ -89,7 +89,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
             tlvcVoice,
             tlvcGender,
             tlvcVolume,
-            tlvcRate,
+            tlvcRate
         };
 
         void applyTalkerCodeToControls();
