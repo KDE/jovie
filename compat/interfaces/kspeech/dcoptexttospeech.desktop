@@ -5,6 +5,7 @@ X-KDE-ServiceType=DCOP/Text-to-Speech
 Comment=Text-to-Speech Service with a DCOP interface
 Comment[bg]=Модул за синтез на глас с интерфейс DCOP
 Comment[ca]=Servei de text a veu amb una interfície DCOP
+Comment[cs]=Služba hlasové syntézy s DCOP rozhraním
 Comment[cy]=Gwasanaeth Testun-i-Lafar efo rhyngwyneb DCOP
 Comment[da]=Tekst-til-tale tjeneste med en DCOP grænseflade
 Comment[de]=Sprachausgabe-Dienst mit DCOP-Schnittstelle

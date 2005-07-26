@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Epos TTS Synthesis System
 Name[ca]=Sistema de síntesi Epos TTS
+Name[cs]=Epos TTS
 Name[da]=Epos TTS Synthesis-system
 Name[de]=Epos TTS-Synthese-System
 Name[es]=Sistema de síntesis Epos TTS
@@ -25,6 +26,7 @@ Name[xx]=xxEpos TTS Synthesis Systemxx
 Comment=Epos TTS speech synthesizer
 Comment[bg]=Синтезатор на глас Epos TTS
 Comment[ca]=Sintetitzador de veu Epos TTS
+Comment[cs]=Hlasový syntetizér Epos TTS
 Comment[da]=Epos TTS tale-synthesizer
 Comment[de]=Epos TTS-Sprachsynthesizer
 Comment[es]=Sintetizador de texto a voz Epos TTS
