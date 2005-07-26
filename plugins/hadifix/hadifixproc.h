@@ -156,7 +156,7 @@ class HadifixProc : public PlugInProc{
     * @param pitch           Frequency. 100 = normal
     * @param waveFilename    Name of file to synthesize to.
     */
-    void HadifixProc::synth(QString text,
+    void synth(QString text,
                             QString hadifix, bool isMale,
                             QString mbrola,  QString voice,
                             int volume, int time, int pitch,
