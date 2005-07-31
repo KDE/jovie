@@ -96,8 +96,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-05-04</date>
-<releaseinfo>1.04.00</releaseinfo>
+<date>2005-07-31</date>
+<releaseinfo>1.05.00</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -169,7 +169,7 @@ nice capabilities for end users as well.</para>
 including instances where Kate is embedded in another KDE application.</para></listitem>
 <listitem><para>Long text is parsed into sentences.  User may backup by sentence
 or paragraph, replay, pause, and stop playing.</para></listitem>
-<listitem><para>Audio output via aRts or GStreamer (version 0.8.7 or later)</para></listitem>
+<listitem><para>Audio output via aRts, ALSA, GStreamer (version 0.8.7 or later), or aKode.</para></listitem>
 <listitem><para>User-configurable filters for substituting misspoken words, choosing
 speech synthesizers, and transforming XHMTL/XML documents.</para></listitem>
 </itemizedlist>
@@ -598,7 +598,7 @@ the jobs listing and <guilabel>Current sentence</guilabel> panels.</para></callo
 </note>
 
 <note><para>If you do not have the aRts audio subsystem installed, but you
-do have GStreamer installed, click the <guilabel>Audio</guilabel> tab.
+do have ALSA, GStreamer, or aKode installed, click the <guilabel>Audio</guilabel> tab.
 See <xref linkend="audio" />.</para></note>
 
 <note><para>Only Text jobs are listed and controlled on this screen.
@@ -641,13 +641,13 @@ the <guilabel>Audio</guilabel> screen appears.</para>
 <para>
 <calloutlist>
 <callout arearefs="pt-audio-1"><para>Select the method of audio output here.
-If <guilabel>GStreamer</guilabel> is grayed, either &kmyapplication; was compiled
-without GStreamer support, or &kmyapplication; was unable to load the
-necessary GStreamer libraries.
+If a component is is grayed, either &kmyapplication; was compiled
+without that support for that audio plugin, or &kmyapplication; was unable to load the
+necessary libraries.
 </para></callout>
-<callout arearefs="pt-audio-2"><para>If GStreamer is selected for audio output,
-choose the GStreamer audio sink method here.  If no sinks are listed, you need
-to install at least one.  See <xref linkend="requirements" />.
+<callout arearefs="pt-audio-2"><para>If GStreamer or aKode is selected for audio output,
+choose the audio sink method here.  If no sinks are listed, you need
+to install at least one.  If ALSA is selected, choose the PCM device here.  See <xref linkend="requirements" />.
 </para></callout>
 <callout arearefs="pt-audio-3"><para>Adjust the speed of talking here.
 50% is approximately twice as slow as normal while 200% is approximately
@@ -680,6 +680,11 @@ to work, you must have the <command>sox</command>
 utility installed on your system (Debian users: 
 <command>apt-get install sox</command>).  Also, this speed setting is ignored
 when speaking text containing SSML.  (See <xref linkend="ssml" />)</para></note>
+
+<note><para>The list of ALSA devices includes all the ALSA PCM devices and
+plugins configured in your system.  Many of the choices will not work.
+You must experiment to find a device that works for you.  If in doubt,
+choose <guilabel>default</guilabel>.</para></note>
 
 </sect1>
 
@@ -1379,7 +1384,6 @@ It can only be used on well-formed XML.  You must have the
                     <area id="pt-xmltransformer-3" coords="1 1"/>
                     <area id="pt-xmltransformer-4" coords="1 1"/>
                     <area id="pt-xmltransformer-5" coords="1 1"/>
-                    <area id="pt-xmltransformer-6" coords="1 1"/>
                 </areaspec>
                 <imageobject>
                     <imagedata fileref="xmltransformer.png" format="PNG"/>
@@ -1402,15 +1406,15 @@ to an existing XSLT file, which will perform the transformation.</para></callout
 <command>xsltproc</command> utility.  If xsltproc is in your environment
 PATH, simply enter <command><userinput>xsltproc</userinput></command>.</para></callout>
 <callout arearefs="pt-xmltransformer-4"><para>If not blank, the filter
-will apply itself only if the XML has the specified root element. This distinquishes one
-form of XML from another.</para></callout>
-<callout arearefs="pt-xmltransformer-5"><para>If not blank, the filter
-will apply itself only if the XML has a <command><![CDATA[<!DOCTYPE]]></command> specification
-beginning with the entered string.  For example,
-<command><userinput>html</userinput></command> will match
+will apply itself only if the XML has the specified root element
+or a <command><![CDATA[<!DOCTYPE]]></command> specification
+beginning with the entered string. This distinquishes one
+form of XML from another.  For example,
+<command><userinput>html</userinput></command> in the
+<guilabel>DOCTYPE</guilabel> box will match
 <command><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></command>.
 </para></callout>
-<callout arearefs="pt-xmltransformer-6"><para>If not blank, the filter will
+<callout arearefs="pt-xmltransformer-5"><para>If not blank, the filter will
 apply itself only if the text came from one of the applications listed.
 You may enter more than one application separated by commas.
 Example: <command><userinput>konversation,kmail</userinput></command></para>
@@ -1423,9 +1427,11 @@ enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 </para>
 
 <para>The XML Transformer filter will only apply itself to the text
-if all non-blank conditions are met in the 
-<guilabel>Apply This Filter When</guilabel> box.  If all the
-boxes are blank, it will apply to all text.  However,
+if the specified root element or DOCTYPE are met and if the 
+application ID is met in the 
+<guilabel>Apply This Filter When</guilabel> box.  If an item in this
+box is blank, the test is not performed, so if all the
+boxes are blank, the filter will apply itself to all text.  However,
 you should fill in at least one box, since many text jobs will not be in
 XML format.</para>
 
@@ -1868,7 +1874,20 @@ compiled with debug support and I don't even get a backtrace.</para>
 likely need to "register" GStreamer.  For GStreamer 0.8x, the command is
 <command>gst-register-0.8</command>.  If this doesn't solve the problem,
 you may have an incompatible version of GStreamer installed.  You could
-try uninstalling GStreamer.</para>
+try upgrading or uninstalling GStreamer.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>ALSA audio output is not working if I am playing music in another
+application at the same time.  When I pause a text job, &kmyapplication;
+freezes.  I notice "unable to open PCM" in the konsole output.</para>
+</question>
+<answer>
+<para>You have the ALSA device contention problem, which prevents opening
+more than one PCM device at one time.  See the ALSA website (dmix) for
+possible solutions. <ulink url="www.alsa-project.org">www.alsa-project.org</ulink>
+</para>
 </answer>
 </qandaentry>
 <qandaentry>
@@ -2082,9 +2101,9 @@ KDE Accessibility</ulink> web site (http://accessibility.kde.org).</para>
 <para>If you have access to the KDE code repository, you can download &kmyapplication;
 by checking out the <command>kdeaccessibility</command> module.  &kmyapplication;
 will be found in the <command>kttsd</command> directory.  You can also
-download a nightly tarball of all kdeaccessibility from
-<ulink url="ftp://ftp.kde.org/pub/kde/unstable/latest/kdeaccessibility.tar.bz2">
-ftp://ftp.kde.org/pub/kde/unstable/latest/kdeaccessibility.tar.bz2</ulink></para>
+download tarballs of the kdeaccessibility source code from
+<ulink url="ftp://ftp.kde.org/pub/kde/">
+ftp://ftp.kde.org/pub/kde/</ulink></para>
 </note>
 
 </sect1>
@@ -2121,7 +2140,7 @@ Italian, French Canadian, Kiswahili, Zulu, and Ibibio</entry>
 
 <row>
 <entry>Hadifix (MBROLA and txt2pho)</entry>
-<entry>German</entry>
+<entry>German, Hungarian</entry>
 </row>
 
 <row>
@@ -2165,6 +2184,37 @@ of these engines.
 </para>
 
 </listitem>
+
+<listitem>
+<para>At least one of the following audio subsystems:
+
+<itemizedlist>
+<listitem><para>KDE aRts Soundsystem.  aRts is usually installed with KDE.</para></listitem>
+<listitem><para>ALSA (Advanced &Linux; Sound Architecture).  ALSA is installed with
+most &Linux; systems.  (<ulink url="www.alsa-project.org">www.alsa-project.org</ulink>)</para></listitem>
+<listitem><para>GStreamer version 0.8.7 or greater.  <emphasis>Note</emphasis>:
+Be sure to register your GStreamer plugins by running the <command>gst-register</command> 
+command prior to using GStreamer in &kmyapplication;.  
+(<ulink url="http://gstreamer.freedesktop.org">
+http://gstreamer.freedesktop.org</ulink>)</para></listitem>
+<listitem><para>aKode library.  aKode is a decoder library that is part of KDE.
+</para></listitem>
+</itemizedlist>
+
+<note><para>The KDE project plans to drop aRts starting in version 4.</para></note>
+
+<note><para>Some users experience device contention with ALSA.  If your system
+has this problem, you will not be able to simultaneously play music while speaking.
+&kmyapplication; will also freeze if you pause a text job and then
+start another.  See the ALSA website (dmix) for possible solutions.</para></note>
+
+<note><para>As of July 2005, aKode does not support a true pause capability.
+When you pause a text job in &kmyapplication; it will finish speaking the
+current sentence.</para></note>
+
+</para>
+</listitem>
+
 </itemizedlist>
 </para>
 
@@ -2184,16 +2234,6 @@ Sox is included on most &Linux; distribution CDs.</para>
 <para>The <command>xsltproc</command> utility is needed for
 SSML support and for the XML Transformer filter, but not required.  Debian users can install
 xsltproc with the command <command>apt-get install xsltproc</command>.</para>
-</listitem>
-
-<listitem>
-<para>GStreamer version 0.8.7 or later.  By default,
-&kmyapplication; uses aRts for audio output, but if you install
-GStreamer, you can use it instead.  You can obtain GStreamer from
-</para>
-
-<para><ulink url="http://gstreamer.freedesktop.org/">
-http://gstreamer.freedesktop.org/</ulink></para>
 </listitem>
 
 </itemizedlist>
@@ -2226,14 +2266,69 @@ change to that directory, and enter the following commands.</para>
 make
 </programlisting>
 
-<para>If you have the GStreamer 0.8.7 or greater development
-files installed, and wish to build &kmyapplication; with support for
-GStreamer, enter the following commands instead.</para>
+<para>The following <command>configure</command> options are available:</para>
 
-<programlisting>
-./configure --enable-kttsd-gstreamer
-make
-</programlisting>
+<para>
+<informaltable id="configure-audio-options">
+<tgroup cols="3">
+<tbody>
+
+<row>
+<entry><emphasis>Default Option</emphasis></entry>
+<entry><emphasis>Description</emphasis></entry>
+<entry><emphasis>Alternate</emphasis></entry>
+</row>
+<row>
+<entry>--with-arts</entry>
+<entry>Builds the arts audio plugin.</entry>
+<entry>--without-arts</entry>
+</row>
+<row>
+<entry>--with-alsa=check</entry>
+<entry>Builds the ALSA audio plugin.</entry>
+<entry>--with-alsa=no</entry>
+</row>
+<row>
+<entry>--with-gstreamer=no</entry>
+<entry>Does not build the GStreamer audio plugin.</entry>
+<entry>--with-gstreamer=check</entry>
+</row>
+<row>
+<entry>--with-akode=no</entry>
+<entry>Does not build the aKode audio plugin.</entry>
+<entry>--with-akode=check</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</para>
+
+<note><para>
+In KDE 4, the aRts plugin will likely be removed or at least not built by default.
+</para></note>
+
+<para>The following speech synthesizer plugins are all built by default.
+Some of them are runtime only dependent upon non-free software.
+(Non-free according to Debian Policy). The "Configure Option to
+not build" column shows the configure command to not build the plugin:</para>
+
+<para>
+<informaltable id="configure-synth-options">
+<tgroup cols="3">
+<tbody>
+
+<row>
+<entry><emphasis>Synth</emphasis></entry>
+<entry><emphasis>License</emphasis></entry>
+<entry><emphasis>Configure Option to not build</emphasis></entry>
+</row>
+<row><entry>Festival</entry><entry>free</entry><entry>--disable-kttsd-festivalint</entry></row>
+<row><entry>Festival Lite</entry><entry>free</entry><entry>--disable-kttsd-flite</entry></row>
+<row><entry>Epos</entry><entry>free</entry><entry>--disable-kttsd-epos</entry></row>
+<row><entry>Command</entry><entry>free</entry><entry>--disable-kttsd-command</entry></row>
+<row><entry>Hadifix</entry><entry>non-free</entry><entry>--disable-kttsd-hadifix</entry></row>
+<row><entry>FreeTTS</entry><entry>non-free</entry><entry>--disable-kttsd-freetts</entry></row>
+</tbody></tgroup></informaltable></para>
 
 <para>By default, the commands above will install &kmyapplication; to
 <filename>/opt/kde3</filename>.  If this directory is not in your
@@ -2382,7 +2477,7 @@ in Festival.</para>
 distro CDs to see if it is included.</para>
 
 <note>
-<para>When using the Polish or Czech languages, be sure the <guilabel>Encoding</guilabel>
+<para>When using the Polish, Hungarian, or Czech languages, be sure the <guilabel>Encoding</guilabel>
 option is set to <userinput>ISO 8859-2</userinput>.
 </para>
 <para>When using the Russian voice, be sure the <guilabel>Encoding</guilabel>
@@ -2628,6 +2723,12 @@ Note that you drop the "rc" in file name.</para></step>
 configure a voice and the paths to &mbrola; and txt2pho.</para></step>
 <step><para>Click the <guibutton>Test</guibutton> button to test.</para></step>
 </procedure>
+
+<para>A Hungarian implementation for MBROLA and txt2pho is available at</para>
+
+<para>
+<ulink url="http://tkltrans.sourceforge.net/">http://tkltrans.sourceforge.net/</ulink>.
+</para>
 
 </sect2>
 
