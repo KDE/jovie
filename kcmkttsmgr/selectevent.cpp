@@ -36,7 +36,7 @@
 #include "utils.h"
 #include "selectevent.h"
 
-SelectEvent::SelectEvent(QWidget* parent, const char* name, WFlags fl, const QString& initEventSrc)
+SelectEvent::SelectEvent(QWidget* parent, const char* name, Qt::WFlags fl, const QString& initEventSrc)
     : SelectEventWidget(parent,name,fl)
 {
     // Load list of event sources (applications).
@@ -87,7 +87,7 @@ SelectEvent::~SelectEvent() { }
 void SelectEvent::slotEventSrcComboBox_activated(int index)
 {
     eventsListView->clear();
-    QListViewItem* item = 0;
+    Q3ListViewItem* item = 0;
     QString eventSrc = m_eventSrcNames[index];
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
@@ -125,7 +125,7 @@ QString SelectEvent::getEventSrc()
 
 QString SelectEvent::getEvent()
 {
-    QListViewItem* item = eventsListView->currentItem();
+    Q3ListViewItem* item = eventsListView->currentItem();
     if ( item )
         return item->text(1);
     else

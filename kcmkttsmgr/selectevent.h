@@ -37,7 +37,7 @@ public:
     * @param name               Inherited KDialog parameter.
     * @param initEventSrc       Event source to start with.
     */
-    SelectEvent(QWidget* parent = 0, const char* name = 0, WFlags fl = 0,
+    SelectEvent(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0,
         const QString& initEventSrc = QString::null );
 
     /**

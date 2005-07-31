@@ -1797,6 +1797,14 @@
     <include location="global" impldecl="in implementation">klocale.h</include>
     <include location="global" impldecl="in implementation">kdebug.h</include>
 </includes>
+<customwidgets>
+	<customwidget>
+		<class>KintSpinBox</class>
+		<header location="global">knuminput.h</header>
+		<container>0</container>
+	</customwidget>
+</customwidgets>
+
 <signals>
     <signal>configChanged()</signal>
 </signals>

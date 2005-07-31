@@ -23,7 +23,9 @@
 
 // Qt includes.
 #include <qmap.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 // KDE includes.
 #include <kcmodule.h>
@@ -42,7 +44,7 @@ class KttsFilterConf;
 class KListViewItem;
 class KAboutData;
 class KConfig;
-class QPopupMenu;
+class Q3PopupMenu;
 
 /**
 * @author José Pablo Ezequiel "Pupeno" Fernández
@@ -233,7 +235,7 @@ class KCMKttsMgr :
         * @param talkerItem       QListViewItem.
         * @param talkerCode       Talker Code.
         */
-        void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
+        void updateTalkerItem(Q3ListViewItem* talkerItem, const QString &talkerCode);
 
         /**
         * Loads the configuration plugin for a named Talker plugin.
@@ -310,7 +312,7 @@ class KCMKttsMgr :
          * Adds an item to the notify listview.
          * message is only needed if action = nactSpeakCustom.
          */
-        QListViewItem* addNotifyItem(
+        Q3ListViewItem* addNotifyItem(
             const QString& eventSrc,
             const QString& event,
             int action,
@@ -340,7 +342,7 @@ class KCMKttsMgr :
         /**
         * Sentence Boundary Detector button popup menu.
         */
-        QPopupMenu* m_sbdPopmenu;
+        Q3PopupMenu* m_sbdPopmenu;
 
         /**
         * Talker(synth) Plugin currently loaded into configuration dialog.
@@ -505,13 +507,13 @@ class KCMKttsMgr :
 
 /// This is a small helper class to detect when user checks/unchecks a Filter in Filters tab
 /// and emit changed() signal.
-class KttsCheckListItem : public QCheckListItem
+class KttsCheckListItem : public Q3CheckListItem
 {
     public:
-        KttsCheckListItem( QListView *parent,
+        KttsCheckListItem( Q3ListView *parent,
             const QString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
-        KttsCheckListItem( QListView *parent, QListViewItem *after,
+        KttsCheckListItem( Q3ListView *parent, Q3ListViewItem *after,
             const QString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
 

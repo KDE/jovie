@@ -27,13 +27,16 @@
 #include <qwidget.h>
 #include <qtabwidget.h>
 #include <qcheckbox.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qslider.h>
 #include <qlabel.h>
-#include <qpopupmenu.h>
-#include <qbuttongroup.h>
+#include <q3popupmenu.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <QGridLayout>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -107,7 +110,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kttsd") );
 KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kcmkttsmgr_kspeechsink"),
-    KCModule(KCMKttsMgrFactory::instance(), parent, name)
+    KCModule(KCMKttsMgrFactory::instance(), parent/*, name*/)
 {
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
 
@@ -161,7 +164,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
-    m_sbdPopmenu = new QPopupMenu( m_kttsmgrw, "SbdPopupMenu" );
+    m_sbdPopmenu = new Q3PopupMenu( m_kttsmgrw, "SbdPopupMenu" );
     m_sbdPopmenu->insertItem( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
     m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
                               i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
@@ -426,7 +429,7 @@ void KCMKttsMgr::load()
     loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
     slotNotifyEnableCheckBox_toggled( m_kttsmgrw->notifyEnableCheckBox->isChecked() );
     // Auto-expand and position on the Default item.
-    QListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
     if ( item )
         if ( item->childCount() > 0 ) item = item->firstChild();
     if ( item ) m_kttsmgrw->notifyListView->ensureItemVisible( item );
@@ -476,7 +479,7 @@ void KCMKttsMgr::load()
     QStringList talkerIDsList = m_config->readListEntry("TalkerIDs", ',');
     if (!talkerIDsList.isEmpty())
     {
-        QListViewItem* talkerItem = 0;
+        Q3ListViewItem* talkerItem = 0;
         QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
         for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
         {
@@ -523,7 +526,7 @@ void KCMKttsMgr::load()
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
 
     // Iterate thru the possible plug ins getting their language support codes.
-    for(unsigned int i=0; i < offers.count() ; ++i)
+    for(int i=0; i < offers.count() ; ++i)
     {
         QString synthName = offers[i]->name();
         QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
@@ -548,7 +551,7 @@ void KCMKttsMgr::load()
     m_languagesToCodes[i18n("Other")] = "other";
 
     // Load Filters.
-    QListViewItem* filterItem = 0;
+    Q3ListViewItem* filterItem = 0;
     m_kttsmgrw->filtersList->clear();
     m_kttsmgrw->sbdsList->clear();
     m_kttsmgrw->filtersList->setSortColumn(-1);
@@ -600,11 +603,11 @@ void KCMKttsMgr::load()
                     filterItem = m_kttsmgrw->filtersList->lastChild();
                     if (!filterItem)
                         filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
-                            userFilterName, QCheckListItem::CheckBox, this);
+                            userFilterName, Q3CheckListItem::CheckBox, this);
                     else
                         filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                            userFilterName, QCheckListItem::CheckBox, this);
-                    dynamic_cast<QCheckListItem*>(filterItem)->setOn(checked);
+                            userFilterName, Q3CheckListItem::CheckBox, this);
+                    dynamic_cast<Q3CheckListItem*>(filterItem)->setOn(checked);
                 }
                 filterItem->setText(flvcFilterID, filterID);
                 filterItem->setText(flvcPlugInName, filterPlugInName);
@@ -620,7 +623,7 @@ void KCMKttsMgr::load()
     // Add at least one unchecked instance of each available filter plugin if there is
     // not already at least one instance and the filter can autoconfig itself.
     offers = KTrader::self()->query("KTTSD/FilterPlugin");
-    for (unsigned int i=0; i < offers.count() ; ++i)
+    for (int i=0; i < offers.count() ; ++i)
     {
         QString filterPlugInName = offers[i]->name();
         QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
@@ -655,11 +658,11 @@ void KCMKttsMgr::load()
                         filterItem = m_kttsmgrw->filtersList->lastChild();
                         if (!filterItem)
                             filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
-                                userFilterName, QCheckListItem::CheckBox, this);
+                                userFilterName, Q3CheckListItem::CheckBox, this);
                         else
                             filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                                userFilterName, QCheckListItem::CheckBox, this);
-                        dynamic_cast<QCheckListItem*>(filterItem)->setOn(false);
+                                userFilterName, Q3CheckListItem::CheckBox, this);
+                        dynamic_cast<Q3CheckListItem*>(filterItem)->setOn(false);
                     }
                     filterItem->setText(flvcFilterID, filterID);
                     filterItem->setText(flvcPlugInName, filterPlugInName);
@@ -797,10 +800,10 @@ void KCMKttsMgr::save()
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
-    QListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
+    Q3ListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
     while (talkerItem)
     {
-        QListViewItem* nextTalkerItem = talkerItem->itemBelow();
+        Q3ListViewItem* nextTalkerItem = talkerItem->itemBelow();
         QString talkerID = talkerItem->text(tlvcTalkerID);
         talkerIDsList.append(talkerID);
         talkerItem = nextTalkerItem;
@@ -823,22 +826,22 @@ void KCMKttsMgr::save()
 
     // Get ordered list of all filter IDs.  Record enabled state of each filter.
     QStringList filterIDsList;
-    QListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
+    Q3ListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
     while (filterItem)
     {
-        QListViewItem* nextFilterItem = filterItem->itemBelow();
+        Q3ListViewItem* nextFilterItem = filterItem->itemBelow();
         QString filterID = filterItem->text(flvcFilterID);
         filterIDsList.append(filterID);
-        bool checked = dynamic_cast<QCheckListItem*>(filterItem)->isOn();
+        bool checked = dynamic_cast<Q3CheckListItem*>(filterItem)->isOn();
         m_config->setGroup("Filter_" + filterID);
         m_config->writeEntry("Enabled", checked);
         m_config->writeEntry("IsSBD", false);
         filterItem = nextFilterItem;
     }
-    QListViewItem* sbdItem = m_kttsmgrw->sbdsList->firstChild();
+    Q3ListViewItem* sbdItem = m_kttsmgrw->sbdsList->firstChild();
     while (sbdItem)
     {
-        QListViewItem* nextSbdItem = sbdItem->itemBelow();
+        Q3ListViewItem* nextSbdItem = sbdItem->itemBelow();
         QString filterID = sbdItem->text(slvcFilterID);
         filterIDsList.append(filterID);
         m_config->setGroup("Filter_" + filterID);
@@ -1173,7 +1176,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 * @param talkerItem       QListViewItem.
 * @param talkerCode       Talker Code.
 */
-void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode)
+void KCMKttsMgr::updateTalkerItem(Q3ListViewItem* talkerItem, const QString &talkerCode)
 {
     TalkerCode parsedTalkerCode(talkerCode);
     QString fullLanguageCode = parsedTalkerCode.fullLanguageCode();
@@ -1227,7 +1230,7 @@ void KCMKttsMgr::slot_addTalker()
     if(languageCode == "other")
     {
         // Create a  QHBox to host KListView.
-        QHBox* hBox = new QHBox(m_kttsmgrw, "SelectLanguage_hbox");
+        Q3HBox* hBox = new Q3HBox(m_kttsmgrw, "SelectLanguage_hbox");
         // Create a KListView and fill with all known languages.
         KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
         langLView->addColumn(i18n("Language"));
@@ -1330,7 +1333,7 @@ void KCMKttsMgr::slot_addTalker()
         m_config->sync();
 
         // Add listview item.
-        QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
+        Q3ListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
             talkerItem =  new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
                 QString::number(m_lastTalkerID), language, synthName);
@@ -1385,7 +1388,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     if (sbd) lView = m_kttsmgrw->sbdsList;
 
     QStringList filterPlugInNames;
-    QListViewItem* item = lView->firstChild();
+    Q3ListViewItem* item = lView->firstChild();
     while (item)
     {
         if (item->text(flvcMultiInstance) == "T")
@@ -1397,7 +1400,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     }
     // Append those available plugins not yet in the list at all.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
-    for (unsigned int i=0; i < offers.count() ; ++i)
+    for (int i=0; i < offers.count() ; ++i)
     {
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins(filterPlugInName) == 0)
@@ -1491,7 +1494,7 @@ void KCMKttsMgr::addFilter( bool sbd)
         m_config->sync();
 
         // Add listview item.
-        QListViewItem* filterItem = lView->lastChild();
+        Q3ListViewItem* filterItem = lView->lastChild();
         if (sbd)
         {
             if (filterItem)
@@ -1503,11 +1506,11 @@ void KCMKttsMgr::addFilter( bool sbd)
         {
             if (filterItem)
                 filterItem = new KttsCheckListItem(lView, filterItem,
-                    userFilterName, QCheckListItem::CheckBox, this);
+                    userFilterName, Q3CheckListItem::CheckBox, this);
             else
                 filterItem = new KttsCheckListItem(lView,
-                    userFilterName, QCheckListItem::CheckBox, this);
-            dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+                    userFilterName, Q3CheckListItem::CheckBox, this);
+            dynamic_cast<Q3CheckListItem*>(filterItem)->setOn(true);
         }
         filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
         filterItem->setText(flvcPlugInName, filterPlugInName);
@@ -1547,7 +1550,7 @@ void KCMKttsMgr::slot_removeTalker(){
     // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
 
     // Get the selected talker.
-    QListViewItem *itemToRemove = m_kttsmgrw->talkersList->selectedItem();
+    Q3ListViewItem *itemToRemove = m_kttsmgrw->talkersList->selectedItem();
     if (!itemToRemove) return;
 
     // Delete the talker from configuration file.
@@ -1583,7 +1586,7 @@ void KCMKttsMgr::removeFilter( bool sbd )
     KListView* lView = m_kttsmgrw->filtersList;
     if (sbd) lView = m_kttsmgrw->sbdsList;
     // Get the selected filter.
-    QListViewItem *itemToRemove = lView->selectedItem();
+    Q3ListViewItem *itemToRemove = lView->selectedItem();
     if (!itemToRemove) return;
 
     // Delete the filter from configuration file.
@@ -1625,9 +1628,9 @@ void KCMKttsMgr::slot_higherSbdFilterPriority()
 */
 void KCMKttsMgr::higherItemPriority( KListView* lView )
 {
-    QListViewItem* item = lView->selectedItem();
+    Q3ListViewItem* item = lView->selectedItem();
     if (!item) return;
-    QListViewItem* prevItem = item->itemAbove();
+    Q3ListViewItem* prevItem = item->itemAbove();
     if (!prevItem) return;
     prevItem->moveItem(item);
     lView->setSelected(item, true);
@@ -1658,9 +1661,9 @@ void KCMKttsMgr::slot_lowerSbdFilterPriority()
 */
 void KCMKttsMgr::lowerItemPriority( KListView* lView )
 {
-    QListViewItem* item = lView->selectedItem();
+    Q3ListViewItem* item = lView->selectedItem();
     if (!item) return;
-    QListViewItem* nextItem = item->itemBelow();
+    Q3ListViewItem* nextItem = item->itemBelow();
     if (!nextItem) return;
     item->moveItem(nextItem);
     lView->setSelected(item, true);
@@ -1694,7 +1697,7 @@ void KCMKttsMgr::updateTalkerButtons(){
 */
 void KCMKttsMgr::updateFilterButtons(){
     // kdDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
-    QListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
     if (item) {
         m_kttsmgrw->removeFilterButton->setEnabled(true);
         m_kttsmgrw->configureFilterButton->setEnabled(true);
@@ -1716,7 +1719,7 @@ void KCMKttsMgr::updateFilterButtons(){
  */
 void KCMKttsMgr::updateSbdButtons(){
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Running"<< endl;
-    QListViewItem* item = m_kttsmgrw->sbdsList->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->sbdsList->selectedItem();
     if (item) {
         m_sbdPopmenu->setItemEnabled( sbdBtnEdit, true );
         m_sbdPopmenu->setItemEnabled( sbdBtnUp,
@@ -1862,7 +1865,7 @@ void KCMKttsMgr::kttsdExiting()
 void KCMKttsMgr::slot_configureTalker()
 {
     // Get highlighted plugin from Talker ListView and load into memory.
-    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
+    Q3ListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
     if (!talkerItem) return;
     QString talkerID = talkerItem->text(tlvcTalkerID);
     QString synthName = talkerItem->text(tlvcSynthName);
@@ -1935,7 +1938,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     // Get highlighted plugin from Filter ListView and load into memory.
     KListView* lView = m_kttsmgrw->filtersList;
     if (sbd) lView = m_kttsmgrw->sbdsList;
-    QListViewItem* filterItem = lView->selectedItem();
+    Q3ListViewItem* filterItem = lView->selectedItem();
     if (!filterItem) return;
     QString filterID = filterItem->text(flvcFilterID);
     QString filterPlugInName = filterItem->text(flvcPlugInName);
@@ -1986,7 +1989,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
         // Update display.
         filterItem->setText(flvcUserName, userFilterName);
         if (!sbd)
-            dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+            dynamic_cast<Q3CheckListItem*>(filterItem)->setOn(true);
 
         // Inform Control Center that configuration has changed.
         configChanged();
@@ -2087,7 +2090,7 @@ void KCMKttsMgr::configureFilter()
 int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
 {
     int cnt = 0;
-    QListViewItem* item = m_kttsmgrw->filtersList->firstChild();
+    Q3ListViewItem* item = m_kttsmgrw->filtersList->firstChild();
     while (item)
     {
         if (item->text(flvcPlugInName) == filterPlugInName) ++cnt;
@@ -2215,7 +2218,7 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
 {
     // Open existing event list.
     QFile file( filename );
-    if ( !file.open( IO_ReadOnly ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
     {
         return i18n("Unable to open file.") + filename;
     }
@@ -2266,7 +2269,7 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
 QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
 {
     QFile file( filename );
-    if ( !file.open( IO_WriteOnly ) )
+    if ( !file.open( QIODevice::WriteOnly ) )
         return i18n("Unable to open file ") + filename;
 
     QDomDocument doc( "" );
@@ -2276,10 +2279,10 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
 
     // Events.
     KListView* lv = m_kttsmgrw->notifyListView;
-    QListViewItemIterator it(lv);
+    Q3ListViewItemIterator it(lv);
     while ( it.current() )
     {
-        QListViewItem* item = *it;
+        Q3ListViewItem* item = *it;
         if ( item->depth() > 0 )
         {
             QDomElement wordTag = doc.createElement( "notifyEvent" );
@@ -2338,7 +2341,7 @@ void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
 
 void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( !item ) return;        // should not happen
     item->setText( nlvcEvent, NotifyPresent::presentName( index ) );
     item->setText( nlvcEventName, NotifyPresent::presentDisplayName( index ) );
@@ -2359,7 +2362,7 @@ void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
 
 void KCMKttsMgr::slotNotifyListView_selectionChanged()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
     {
         bool topLevel = ( item->depth() == 0 );
@@ -2415,7 +2418,7 @@ void KCMKttsMgr::slotNotifyListView_selectionChanged()
 
 void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
@@ -2433,7 +2436,7 @@ void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
 
 void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
@@ -2446,7 +2449,7 @@ void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
 
 void KCMKttsMgr::slotNotifyTestButton_clicked()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (item)
     {
         QString msg;
@@ -2472,7 +2475,7 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
 
 void KCMKttsMgr::slotNotifyTalkerButton_clicked()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
@@ -2491,7 +2494,7 @@ void KCMKttsMgr::slotNotifyTalkerButton_clicked()
  * Adds an item to the notify listview.
  * message is only needed if action = naSpeakCustom.
  */
-QListViewItem* KCMKttsMgr::addNotifyItem(
+Q3ListViewItem* KCMKttsMgr::addNotifyItem(
     const QString& eventSrc,
     const QString& event,
     int action,
@@ -2499,7 +2502,7 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
     TalkerCode& talkerCode)
 {
     KListView* lv = m_kttsmgrw->notifyListView;
-    QListViewItem* item = 0;
+    Q3ListViewItem* item = 0;
     QString iconName;
     QString eventSrcName;
     if (eventSrc == "default")
@@ -2522,7 +2525,7 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
     QString talkerName = talkerCode.getTranslatedDescription();
     if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
     {
-        QListViewItem* parentItem = lv->findItem(eventSrcName, nlvcEventSrcName);
+        Q3ListViewItem* parentItem = lv->findItem(eventSrcName, nlvcEventSrcName);
         if (!parentItem)
         {
             item = lv->lastItem();
@@ -2550,8 +2553,8 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
 
 void KCMKttsMgr::slotNotifyAddButton_clicked()
 {
-    QListView* lv = m_kttsmgrw->notifyListView;
-    QListViewItem* item = lv->selectedItem();
+    Q3ListView* lv = m_kttsmgrw->notifyListView;
+    Q3ListViewItem* item = lv->selectedItem();
     QString eventSrc;
     if ( item ) eventSrc = item->text( nlvcEventSrc );
     SelectEvent* selectEventWidget = new SelectEvent( this, "SelectEvent_widget", 0, eventSrc );
@@ -2606,13 +2609,13 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 {
     m_kttsmgrw->notifyListView->clear();
     TalkerCode talkerCode( QString::null );
-    QListViewItem* item = addNotifyItem(
+    Q3ListViewItem* item = addNotifyItem(
         QString("default"),
         NotifyPresent::presentName(NotifyPresent::Passive),
         NotifyAction::SpeakEventName,
         QString::null,
         talkerCode );
-    QListView* lv = m_kttsmgrw->notifyListView;
+    Q3ListView* lv = m_kttsmgrw->notifyListView;
     lv->ensureItemVisible( item );
     lv->setSelected( item, true );
     slotNotifyListView_selectionChanged();
@@ -2621,9 +2624,9 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 
 void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (!item) return;
-    QListViewItem* parentItem = item->parent();
+    Q3ListViewItem* parentItem = item->parent();
     delete item;
     if (parentItem)
     {
@@ -2667,16 +2670,16 @@ void KCMKttsMgr::slotNotifySaveButton_clicked()
 
 // ----------------------------------------------------------------------------
 
-KttsCheckListItem::KttsCheckListItem( QListView *parent, QListViewItem *after,
+KttsCheckListItem::KttsCheckListItem( Q3ListView *parent, Q3ListViewItem *after,
     const QString &text, Type tt,
     KCMKttsMgr* kcmkttsmgr ) :
-        QCheckListItem(parent, after, text, tt),
+        Q3CheckListItem(parent, after, text, tt),
         m_kcmkttsmgr(kcmkttsmgr) { }
 
-KttsCheckListItem::KttsCheckListItem( QListView *parent,
+KttsCheckListItem::KttsCheckListItem( Q3ListView *parent,
     const QString &text, Type tt,
     KCMKttsMgr* kcmkttsmgr ) :
-        QCheckListItem(parent, text, tt),
+        Q3CheckListItem(parent, text, tt),
         m_kcmkttsmgr(kcmkttsmgr) { }
 
 /*virtual*/ void KttsCheckListItem::stateChange(bool)
