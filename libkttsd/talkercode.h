@@ -30,7 +30,7 @@
 #include <qstring.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 class KDE_EXPORT TalkerCode
 {
@@ -49,7 +49,7 @@ class KDE_EXPORT TalkerCode
          */
         ~TalkerCode();
 
-        typedef QValueList<TalkerCode> TalkerCodeList;
+        typedef Q3ValueList<TalkerCode> TalkerCodeList;
 
         /**
          * Properties.

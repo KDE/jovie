@@ -28,7 +28,7 @@
 #define _SELECTTALKERDLG_H_
 
 // Qt includes.
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // KDE includes.
 #include <kdialogbase.h>

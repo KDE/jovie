@@ -34,6 +34,9 @@
 #include <qslider.h>
 #include <qdom.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QVBoxLayout>
 
 // KDE includes.
 #include <kdialog.h>
@@ -466,7 +469,7 @@ void FestivalIntConf::scanVoices()
         QString voicesFilename = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices";
         QDomDocument voicesDoc("Festival Voices");
         QFile voicesFile(voicesFilename);
-        if (voicesFile.open(IO_ReadOnly)) voicesDoc.setContent(&voicesFile);
+        if (voicesFile.open(QIODevice::ReadOnly)) voicesDoc.setContent(&voicesFile);
         voicesFile.close();
         QDomNodeList voices = voicesDoc.elementsByTagName("voice");
         uint voicesCount = voices.count();

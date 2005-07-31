@@ -29,6 +29,8 @@
 #include <qstringlist.h>
 #include <qthread.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes.
 #include <kdebug.h>
@@ -397,7 +399,7 @@ bool FestivalIntProc::sendIfReady()
     if (!m_festProc->isRunning()) return false;
     QString text = m_outputQueue[0];
     text += "\n";
-    QCString encodedText;
+    Q3CString encodedText;
     if (m_codec)
         encodedText = m_codec->fromUnicode(text);
     else

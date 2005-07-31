@@ -18,6 +18,8 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
 
@@ -48,7 +50,7 @@ public:
     virtual void seek(int seekTime) = 0;
     virtual void seekPosition(int position) = 0;
 
-    virtual QStringList getPluginList( const QCString& classname ) = 0;
+    virtual QStringList getPluginList( const Q3CString& classname ) = 0;
     virtual void setSinkName(const QString &sinkName) = 0;
 
     virtual bool requireVersion(uint major, uint minor, uint micro) = 0;

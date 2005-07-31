@@ -27,8 +27,8 @@
 // Qt includes.
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qhbox.h>
-#include <qgroupbox.h>
+#include <q3hbox.h>
+#include <q3groupbox.h>
 
 // KDE includes.
 #include <kcombobox.h>
@@ -160,18 +160,18 @@ QString SelectTalkerDlg::getSelectedTranslatedDescription()
 void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 {
     // Create a  QHBox to host KListView.
-    QHBox* hBox = new QHBox(m_widget, "SelectLanguage_hbox");
+    Q3HBox* hBox = new Q3HBox(m_widget, "SelectLanguage_hbox");
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(QListView::Single);
+    langLView->setSelectionMode(Q3ListView::Single);
     QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
     QString locale;
     QString language;
     // Blank line so user can select no language.
     // Note: Don't use QString::null, which gets displayed at bottom of list, rather than top.
-    QListViewItem* item = new KListViewItem(langLView, "", "");
+    Q3ListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
@@ -217,7 +217,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 
 void SelectTalkerDlg::slotTalkersListView_selectionChanged()
 {
-    QListViewItem* item = m_widget->talkersListView->selectedItem();
+    Q3ListViewItem* item = m_widget->talkersListView->selectedItem();
     if ( !item ) return;
     if (!m_widget->useSpecificTalkerRadioButton->isChecked()) return;
     configChanged();
@@ -259,7 +259,7 @@ void SelectTalkerDlg::applyTalkerCodeToControls()
     // Select closest matching specific Talker.
     int talkerIndex = TalkerCode::findClosestMatchingTalker(m_talkers, m_talkerCode.getTalkerCode(), false);
     KListView* lv = m_widget->talkersListView;
-    QListViewItem* item = lv->firstChild();
+    Q3ListViewItem* item = lv->firstChild();
     if ( item )
     {
         while ( talkerIndex > 0 )
@@ -297,7 +297,7 @@ void SelectTalkerDlg::applyControlsToTalkerCode()
     }
     else if (m_widget->useSpecificTalkerRadioButton->isChecked() )
     {
-        QListViewItem* item = m_widget->talkersListView->selectedItem();
+        Q3ListViewItem* item = m_widget->talkersListView->selectedItem();
         if ( item )
         {
             int itemIndex = -1;
@@ -316,7 +316,7 @@ void SelectTalkerDlg::loadTalkers(bool /*runningTalkers*/)
     m_talkers.clear();
     KListView* lv = m_widget->talkersListView;
     lv->clear();
-    QListViewItem* item;
+    Q3ListViewItem* item;
     KConfig* config = new KConfig("kttsdrc");
     config->setGroup("General");
     QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');

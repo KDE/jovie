@@ -27,6 +27,8 @@
 
 // FilterProc includes.
 #include "filterproc.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 /**
  * Constructor.
@@ -88,7 +90,7 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString KttsFilterProc::convert(const QString& inputText, TalkerCode* /*talkerCode*/,
-    const QCString& /*appId*/)
+    const Q3CString& /*appId*/)
 {
     return inputText;
 }
@@ -108,7 +110,7 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  * program must call @ref ackFinished to acknowledge the conversion.
  */
 /*virtual*/ bool KttsFilterProc::asyncConvert(const QString& /*inputText*/,
-    TalkerCode* /*talkerCode*/, const QCString& /*appId*/) { return false; }
+    TalkerCode* /*talkerCode*/, const Q3CString& /*appId*/) { return false; }
 
 /**
  * Waits for a previous call to asyncConvert to finish.

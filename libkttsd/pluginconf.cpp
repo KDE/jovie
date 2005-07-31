@@ -23,6 +23,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 // KDE includes.
 #include <kglobal.h>
@@ -209,7 +211,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
     QString result;
     QString def;
     QFile file(locate("data", "kttsd/kcmkttsd_testmessage.desktop"));
-    if (file.open(IO_ReadOnly))
+    if (file.open(QIODevice::ReadOnly))
     {
         QTextStream stream(&file);
         stream.setEncoding(QTextStream::UnicodeUTF8);
