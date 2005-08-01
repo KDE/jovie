@@ -27,5 +27,5 @@
 #include "eposproc.h"
 
 typedef K_TYPELIST_2( EposProc, EposConf ) Epos;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_eposplugin, KGenericFactory<Epos>("kttsd") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_eposplugin, KGenericFactory<Epos>("kttsd") )
 

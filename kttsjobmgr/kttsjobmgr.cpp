@@ -46,18 +46,7 @@
 #include "kttsjobmgr.h"
 #include "kttsjobmgr.moc"
 
-extern "C"
-{
-    /**
-    * This function is the 'main' function of this part.  It takes
-    * the form 'void *init_lib<library name>()  It always returns a
-    * new factory object
-    */
-    KDE_EXPORT void *init_libkttsjobmgrpart()
-    {
-        return new KttsJobMgrFactory;
-    }
-};
+K_EXPORT_COMPONENT_FACTORY( libkttsjobmgrpart, KttsJobMgrFactory )
 
 /**
 * We need one static instance of the factory for our C 'main'
@@ -830,7 +819,7 @@ void KttsJobMgrPart::enableJobPartActions(bool enable)
 /**
 * This signal is emitted when KTTSD starts or restarts after a call to reinit.
 */
-ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
+ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); }
 
 /**
 * This signal is emitted when the speech engine/plugin encounters a marker in the text.

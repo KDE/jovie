@@ -181,7 +181,7 @@ class KCMKttsMgr :
             tlvcVoice,
             tlvcGender,
             tlvcVolume,
-            tlvcRate,
+            tlvcRate
         };
 
         enum FilterListViewColumn

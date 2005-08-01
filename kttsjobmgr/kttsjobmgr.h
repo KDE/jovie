@@ -231,7 +231,7 @@ private:
     * Enables or disables all the job part-related buttons.
     * @param enable        True to enable the job par-related butons.  False to disable.
     */
-    void KttsJobMgrPart::enableJobPartActions(bool enable);
+    void enableJobPartActions(bool enable);
 
     /**
     * Refresh display of a single job in the JobListView.

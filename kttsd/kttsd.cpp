@@ -1098,7 +1098,7 @@ kspeech::kspeech(const QCString& objId, QObject *parent, const char *name) :
 }
 
 // Destructor.
-kspeech::~kspeech() { };
+kspeech::~kspeech() { }
 
 // Delegate all DCOP methods to KTTSD object.
 /*virtual*/ bool kspeech::supportsMarkup(const QString &talker, uint markupType) const

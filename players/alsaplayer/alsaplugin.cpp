@@ -25,5 +25,5 @@
 
 #include "alsaplayer.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkttsd_alsaplugin, KGenericFactory<AlsaPlayer>("kttsd") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_alsaplugin, KGenericFactory<AlsaPlayer>("kttsd") )
 

@@ -28,5 +28,5 @@
 
 typedef K_TYPELIST_2( StringReplacerProc, StringReplacerConf ) StringReplacerPlugin;
 K_EXPORT_COMPONENT_FACTORY( libkttsd_stringreplacerplugin,
-    KGenericFactory<StringReplacerPlugin>("kttsd") );
+    KGenericFactory<StringReplacerPlugin>("kttsd") )
 

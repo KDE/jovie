@@ -231,7 +231,7 @@ void HadifixProc::synth(QString text,
 * be locked when this method is called.  The file will be deleted when
 * KTTSD is finished using it.
 */
-QString HadifixProc::getFilename() { return d->synthFilename; };
+QString HadifixProc::getFilename() { return d->synthFilename; }
 
 /**
 * Stop current operation (saying or synthesizing text).
