@@ -31,6 +31,9 @@
 #include <qtextcodec.h>
 #include <qfile.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 // KDE includes.
 #include <kdebug.h>
@@ -183,8 +186,8 @@ void EposProc::synth(
 
     // Encode the text.
     // 1.a) encode the text
-    m_encText = QCString();
-    QTextStream ts (m_encText, IO_WriteOnly);
+    m_encText = Q3CString();
+    QTextStream ts (m_encText, QIODevice::WriteOnly);
     ts.setCodec(codec);
     ts << text;
     ts << endl; // Some synths need this, eg. flite.
@@ -336,7 +339,7 @@ void EposProc::slotWroteStdin(KProcess*)
 {
     kdDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
     m_eposProc->closeStdin();
-    m_encText = QCString();
+    m_encText = Q3CString();
 }
 
 /**

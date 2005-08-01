@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QTextStream>
 
 /**
  * Tries to find hadifix and mbrola by looking onto the hard disk. This is
@@ -25,7 +27,7 @@ QString findHadifixDataPath () {
    for (it = files.begin(); it != files.end(); ++it) {
 
       QFile file(*it);
-      if ( file.open(IO_ReadOnly) ) {
+      if ( file.open(QIODevice::ReadOnly) ) {
          QTextStream stream(&file);
          
          while (!stream.atEnd()) {
@@ -123,7 +125,7 @@ QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
          // Voice files start with "MBROLA", but are afterwards binary files
 	 QString filename = *it + "/" + *iter;
          QFile file (filename);
-         if (file.open(IO_ReadOnly)) {
+         if (file.open(QIODevice::ReadOnly)) {
             QTextStream stream(&file);
             if (!stream.atEnd()) {
                QString s = stream.readLine();

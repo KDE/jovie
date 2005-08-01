@@ -25,13 +25,15 @@
 // KTTS includes.
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class KAboutData;
 class KInstance;
 class KttsJobMgrBrowserExtension;
 class KListView;
-class QListViewItem;
-class QVBox;
+class Q3ListViewItem;
+class Q3VBox;
 class KTextEdit;
 
 class KttsJobMgrFactory : public KLibFactory
@@ -78,7 +80,7 @@ protected:
     * @param markerName     The name of the marker seen.
     * @see markers
     */
-    ASYNC markerSeen(const QCString& appId, const QString& markerName);
+    ASYNC markerSeen(const Q3CString& appId, const QString& markerName);
     /**
     * This signal is emitted whenever a sentence begins speaking.
     * @param appId          DCOP application ID of the application that queued the text.
@@ -86,7 +88,7 @@ protected:
     * @param seq            Sequence number of the text.
     * @see getTextCount
     */
-    ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+    ASYNC sentenceStarted(const Q3CString& appId, const uint jobNum, const uint seq);
     /**
     * This signal is emitted when a sentence has finished speaking.
     * @param appId          DCOP application ID of the application that queued the text.
@@ -94,14 +96,14 @@ protected:
     * @param seq            Sequence number of the text.
     * @see getTextCount
     */
-    ASYNC sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
+    ASYNC sentenceFinished(const Q3CString& appId, const uint jobNum, const uint seq);
 
     /**
     * This signal is emitted whenever a new text job is added to the queue.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textSet(const QCString& appId, const uint jobNum);
+    ASYNC textSet(const Q3CString& appId, const uint jobNum);
 
     /**
     * This signal is emitted whenever a new part is appended to a text job.
@@ -110,14 +112,14 @@ protected:
     * @param partNum        Part number of the new part.  Parts are numbered starting
     *                       at 1.
     */
-    ASYNC textAppended(const QCString& appId, const uint jobNum, const int partNum);
+    ASYNC textAppended(const Q3CString& appId, const uint jobNum, const int partNum);
 
     /**
     * This signal is emitted whenever speaking of a text job begins.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textStarted(const QCString& appId, const uint jobNum);
+    ASYNC textStarted(const Q3CString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a text job is finished.  The job has
     * been marked for deletion from the queue and will be deleted when another
@@ -127,38 +129,38 @@ protected:
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textFinished(const QCString& appId, const uint jobNum);
+    ASYNC textFinished(const Q3CString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a speaking text job stops speaking.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textStopped(const QCString& appId, const uint jobNum);
+    ASYNC textStopped(const Q3CString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a speaking text job is paused.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textPaused(const QCString& appId, const uint jobNum);
+    ASYNC textPaused(const Q3CString& appId, const uint jobNum);
     /**
     * This signal is emitted when a text job, that was previously paused, resumes speaking.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textResumed(const QCString& appId, const uint jobNum);
+    ASYNC textResumed(const Q3CString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a text job is deleted from the queue.
     * The job is no longer in the queue when this signal is emitted.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textRemoved(const QCString& appId, const uint jobNum);
+    ASYNC textRemoved(const Q3CString& appId, const uint jobNum);
 
 private slots:
     /**
     * This slot is connected to the Job List View selectionChanged signal.
     */
-    void slot_selectionChanged(QListViewItem* item);
+    void slot_selectionChanged(Q3ListViewItem* item);
     /**
     * Slots connected to buttons.
     */
@@ -219,7 +221,7 @@ private:
     * @param jobNum         Job Number.
     * @return               QListViewItem containing the job or 0 if not found.
     */
-    QListViewItem* findItemByJobNum(const uint jobNum);
+    Q3ListViewItem* findItemByJobNum(const uint jobNum);
 
     /**
     * Enables or disables all the job-related buttons.
@@ -271,7 +273,7 @@ private:
     /**
     * Box containing buttons.
     */
-    QVBox* m_buttonBox;
+    Q3VBox* m_buttonBox;
 
     /**
     * This flag is set to True whenever we want to select the next job that

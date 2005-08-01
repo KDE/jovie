@@ -257,7 +257,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
         QString languageCode = m_languageCode;
         if (!m_countryCode.isNull()) languageCode += "_" + m_countryCode;
         // kdDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
-        uint index = 0;
+        int index = 0;
         // Prefer existing voice if it matches.
         if (currentVoiceIndex >= 0)
         {

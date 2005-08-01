@@ -641,6 +641,14 @@
     <include location="global" impldecl="in implementation">math.h</include>
     <include location="global" impldecl="in implementation">kiconloader.h</include>
 </includes>
+<customwidgets>
+	<customwidget>
+		<class>KIntSpinBox</class>
+		<header location="global">knuminput.h</header>
+		<container>0</container>
+	</customwidget>
+</customwidgets>
+
 <forwards>
     <forward>class QStringList;</forward>
 </forwards>

@@ -17,12 +17,14 @@
 // Qt includes. 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 // KDE includes.
 #include <ktempfile.h>

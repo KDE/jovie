@@ -18,11 +18,13 @@
 // Qt includes.
 #include <qfile.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 #include <qregexp.h>
 #include <qtextcodec.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 // KDE includes.
 #include <kdebug.h>
@@ -137,7 +139,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     // 1. prepare the text:
     // 1.a) encode the text
     QByteArray encText;
-    QTextStream ts (encText, IO_WriteOnly);
+    QTextStream ts (encText, QIODevice::WriteOnly);
     ts.setCodec(codec);
     ts << text;
     ts << endl; // Some synths need this, eg. flite.
@@ -158,7 +160,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     } else m_textFilename = QString::null;
 
     // 2. replace variables with values
-    QValueStack<bool> stack;
+    Q3ValueStack<bool> stack;
     bool issinglequote=false;
     bool isdoublequote=false;
     int noreplace=0;

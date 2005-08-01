@@ -28,6 +28,8 @@
 // Qt includes.
 #include <qstringlist.h>
 #include <qmutex.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KTTS includes.
 #include <pluginproc.h>
@@ -218,7 +220,7 @@ class EposProc : public PlugInProc{
         /**
         * Encoded buffer to be sent to Epos client.
          */
-        QCString m_encText;
+        Q3CString m_encText;
         
         /**
         * Synthesis filename.

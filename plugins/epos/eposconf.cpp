@@ -30,6 +30,8 @@
 #include <qtextcodec.h>
 #include <qlayout.h>
 #include <qslider.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 // KDE includes.
 #include <kdialog.h>

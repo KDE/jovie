@@ -19,6 +19,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -211,7 +213,7 @@ void HadifixProc::synth(QString text,
      kdDebug() << "HadifixProc::synth: start process failed." << endl;
      d->state = psIdle;
    } else {
-     QCString encodedText;
+     Q3CString encodedText;
      if (codec) {
        encodedText = codec->fromUnicode(text);
        // kdDebug() << "HadifixProc::synth: encoding using " << codec->name() << endl;
