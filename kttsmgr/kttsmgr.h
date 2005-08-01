@@ -16,6 +16,8 @@
 // Qt includes.
 #include <qevent.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes.
 #include <ksystemtray.h>
@@ -46,7 +48,7 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
 
     protected:
         // ASYNC textStarted(const QCString& appId, uint jobNum);
-        ASYNC textFinished(const QCString& appId, uint jobNum);
+        ASYNC textFinished(const Q3CString& appId, uint jobNum);
         virtual bool eventFilter( QObject* o, QEvent* e );
 
     private slots:

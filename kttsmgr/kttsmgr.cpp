@@ -18,6 +18,10 @@
 
 // Qt includes.
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
+#include <Q3CString>
 
 // KDE includes.
 #include <kconfig.h>
@@ -202,7 +206,7 @@ KttsMgrTray::~KttsMgrTray()
     delete m_toolTip;
 }
 
-void KttsMgrTray::textFinished(const QCString& /*appId*/, uint /*jobNum*/)
+void KttsMgrTray::textFinished(const Q3CString& /*appId*/, uint /*jobNum*/)
 {
     // kdDebug() << "KttsMgrTray::textFinished: running" << endl;
     exitWhenFinishedSpeaking();
