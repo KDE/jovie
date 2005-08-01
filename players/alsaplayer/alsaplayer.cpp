@@ -41,7 +41,7 @@
 // Qt includes.
 #include <qdir.h>
 #include <qapplication.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -109,7 +109,7 @@ void AlsaPlayer::startPlay(const QString &file)
         return;
     }
     audiofile.setName(file);
-    audiofile.open(IO_ReadOnly);
+    audiofile.open(QIODevice::ReadOnly);
     fd = audiofile.handle();
     // Start thread running.
     start();
@@ -328,7 +328,7 @@ void AlsaPlayer::seekPosition(int /*position*/)
 /*
  * Returns a list of PCM devices.
  */
-QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
+QStringList AlsaPlayer::getPluginList( const Q3CString& /*classname*/ )
 {
     QStringList assumed("default");
     snd_config_t *conf;

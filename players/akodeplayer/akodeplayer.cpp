@@ -17,6 +17,8 @@
 #include <kdebug.h>
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "akode/player.h"
 #include "akode/decoder.h"
@@ -169,7 +171,7 @@ void aKodePlayer::seekPosition(int position)
         m_player->decoder()->seek((position * m_player->decoder()->length())/1000);
 }
 
-QStringList aKodePlayer::getPluginList( const QCString& /*classname*/ )
+QStringList aKodePlayer::getPluginList( const Q3CString& /*classname*/ )
 {
     return QStringList::split("|", "auto|polyp|alsa|jack|oss");
 }

@@ -33,6 +33,8 @@
 #include <qthread.h>
 #include <qfile.h>
 #include <qmutex.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes.
 #include <config.h>
@@ -87,7 +89,7 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const QCString& classname );
+    virtual QStringList getPluginList( const Q3CString& classname );
     virtual void setSinkName(const QString &sinkName);
     virtual bool requireVersion(uint major, uint minor, uint micro);
 
