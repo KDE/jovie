@@ -31,7 +31,7 @@
 // TalkerCode includes.
 #include "talkercode.h"
 //Added by qt3to4:
-#include <Q3MemArray>
+#include <QVector>
 
 /**
  * Constructor.
@@ -358,7 +358,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     }
     // The talker that matches on the most priority attributes wins.
     int talkersCount = int(talkers.count());
-    Q3MemArray<int> priorityMatch(talkersCount);
+    QVector<int> priorityMatch(talkersCount);
     for (int ndx = 0; ndx < talkersCount; ++ndx)
     {
         priorityMatch[ndx] = 0;
@@ -414,7 +414,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     // (first configured) will be chosen.
     if (winnerCount > 1)
     {
-        Q3MemArray<int> preferredMatch(talkersCount);
+        QVector<int> preferredMatch(talkersCount);
         for (int ndx = 0; ndx < talkersCount; ++ndx)
         {
             preferredMatch[ndx] = 0;
