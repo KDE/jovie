@@ -25,6 +25,10 @@
 #include <qregexp.h>
 #include <qdom.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QEvent>
+#include <Q3CString>
 
 // KDE includes.
 #include <kdebug.h>
@@ -638,7 +642,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString SbdProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+/*virtual*/ QString SbdProc::convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
 {
     if ( asyncConvert( inputText, talkerCode, appId) )
     {
@@ -663,7 +667,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  * program must call @ref ackFinished to acknowledge the conversion.
  */
 /*virtual*/ bool SbdProc::asyncConvert(const QString& inputText, TalkerCode* talkerCode,
-    const QCString& appId)
+    const Q3CString& appId)
 {
     m_sbdThread->setWasModified( false );
     // If language doesn't match, return input unmolested.

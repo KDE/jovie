@@ -24,6 +24,9 @@
 // Qt includes.
 #include <qfile.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 // KDE includes.
 #include <kdeversion.h>
@@ -106,7 +109,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString XmlTransformerProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QCString& appId)
+    const Q3CString& appId)
 {
     // kdDebug() << "XmlTransformerProc::convert: Running." << endl;
     // If not properly configured, do nothing.
@@ -140,7 +143,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * program must call @ref ackFinished to acknowledge the conversion.
  */
 /*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
-    const QCString& appId)
+    const Q3CString& appId)
 {
     m_wasModified = false;
 
@@ -158,7 +161,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     if ( !m_rootElementList.isEmpty() )
     {
         // kdDebug() << "XmlTransformerProc::asyncConvert:: searching for root elements " << m_rootElementList << endl;
-        for ( uint ndx=0; ndx < m_rootElementList.count(); ++ndx )
+        for ( int ndx=0; ndx < m_rootElementList.count(); ++ndx )
         {
             if ( KttsUtils::hasRootElement( inputText, m_rootElementList[ndx] ) )
             {
@@ -174,7 +177,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     }
     if ( !found && !m_doctypeList.isEmpty() )
     {
-        for ( uint ndx=0; ndx < m_doctypeList.count(); ++ndx )
+        for ( int ndx=0; ndx < m_doctypeList.count(); ++ndx )
         {
             if ( KttsUtils::hasDoctype( inputText, m_doctypeList[ndx] ) )
             {
@@ -196,7 +199,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
         // kdDebug() << "XmlTransformrProc::convert: converting " << inputText << " if appId "
         //     << appId << " matches " << m_appIdList << endl;
         found = false;
-        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        for ( int ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
             {
@@ -291,7 +294,7 @@ void XmlTransformerProc::processOutput()
 
     /// Read back the data that was written to /tmp/fileName.output.
     QFile readfile(m_outFilename);
-    if(!readfile.open(IO_ReadOnly)) {
+    if(!readfile.open(QIODevice::ReadOnly)) {
         /// uhh yeah... Issues writing to the output file.
         kdDebug() << "XmlTransformerProc::processOutput: Could not read file " << m_outFilename << endl;
         m_state = fsFinished;

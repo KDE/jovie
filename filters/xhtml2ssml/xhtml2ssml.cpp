@@ -20,9 +20,11 @@
  ***************************************************************************/
 
 #include <qstring.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qxml.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QTextStream>
 #include <iostream>
 
 #include "xmlelement.h"
@@ -33,7 +35,7 @@
 bool XHTMLToSSMLParser::startDocument() {
     /// Read the file which maps xhtml tags -> ssml tags. Look at the file for more information.
     QFile file("tagmappingrc");
-    if(!file.open(IO_ReadOnly)) {
+    if(!file.open(QIODevice::ReadOnly)) {
         std::cerr << "Could not read config file 'tagmappingrc'. Please check that it exists and is readable.\n";
         // Kill further parsing
         return false;

@@ -24,7 +24,9 @@
 // Qt includes.
 #include <qdom.h>
 #include <qfile.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes.
 #include <kdebug.h>
@@ -78,7 +80,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
 
     // Open existing word list.
     QFile file( wordsFilename );
-    if ( !file.open( IO_ReadOnly ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
         return false;
     QDomDocument doc( "" );
     if ( !doc.setContent( &file ) ) {
@@ -100,7 +102,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     // or multiple elements.
     m_languageCodeList.clear();
     QDomNodeList languageList = doc.elementsByTagName( "language-code" );
-    for ( uint ndx=0; ndx < languageList.count(); ++ndx )
+    for ( int ndx=0; ndx < languageList.count(); ++ndx )
     {
         QDomNode languageNode = languageList.item( ndx );
         m_languageCodeList += QStringList::split(',', languageNode.toElement().text(), false);
@@ -111,7 +113,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     // or multiple elements.
     m_appIdList.clear();
     QDomNodeList appIdList = doc.elementsByTagName( "appid" );
-    for ( uint ndx=0; ndx < appIdList.count(); ++ndx )
+    for ( int ndx=0; ndx < appIdList.count(); ++ndx )
     {
         QDomNode appIdNode = appIdList.item( ndx );
         m_appIdList += QStringList::split(',', appIdNode.toElement().text(), false);
@@ -167,7 +169,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
 {
     m_wasModified = false;
     // If language doesn't match, return input unmolested.
@@ -194,7 +196,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
         //     << appId << " matches " << m_appIdList << endl;
         bool found = false;
         QString appIdStr = appId;
-        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        for ( int ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
             {

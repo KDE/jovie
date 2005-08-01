@@ -49,8 +49,10 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qthread.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -215,11 +217,11 @@ class SbdThread: public QObject, public QThread
         QString parsePlainText( const QString& inputText, const QString& re );
 
         // Context stacks.
-        QValueStack<SpeakElem> m_speakStack;
-        QValueStack<VoiceElem> m_voiceStack;
-        QValueStack<ProsodyElem> m_prosodyStack;
-        QValueStack<EmphasisElem> m_emphasisStack;
-        QValueStack<PSElem> m_psStack;
+        Q3ValueStack<SpeakElem> m_speakStack;
+        Q3ValueStack<VoiceElem> m_voiceStack;
+        Q3ValueStack<ProsodyElem> m_prosodyStack;
+        Q3ValueStack<EmphasisElem> m_emphasisStack;
+        Q3ValueStack<PSElem> m_psStack;
 
         // The text being processed.
         QString m_text;
@@ -291,7 +293,7 @@ class SbdProc : virtual public KttsFilterProc
          * @param appId             The DCOP appId of the application that queued the text.
          *                          Also useful for hints about how to do the filtering.
          */
-        virtual QString convert( const QString& inputText, TalkerCode* talkerCode, const QCString& appId );
+        virtual QString convert( const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId );
 
         /**
          * Convert input.  Runs asynchronously.
@@ -307,7 +309,7 @@ class SbdProc : virtual public KttsFilterProc
          * program may then call @ref getOutput to retrieve converted text.  Calling
          * program must call @ref ackFinished to acknowledge the conversion.
          */
-        virtual bool asyncConvert( const QString& inputText, TalkerCode* talkerCode, const QCString& appId );
+        virtual bool asyncConvert( const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId );
 
         /**
          * Waits for a previous call to asyncConvert to finish.

@@ -25,11 +25,13 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qstring.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 // KDE includes.
 #include <kglobal.h>
@@ -233,12 +235,12 @@ void SbdConf::slotReButton_clicked()
 void SbdConf::slotLanguageBrowseButton_clicked()
 {
     // Create a  QHBox to host KListView.
-    QHBox* hBox = new QHBox(m_widget, "SelectLanguage_hbox");
+    Q3HBox* hBox = new Q3HBox(m_widget, "SelectLanguage_hbox");
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(QListView::Extended);
+    langLView->setSelectionMode(Q3ListView::Extended);
     QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
     QString locale;
     QString languageCode;
@@ -246,7 +248,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     QString charSet;
     QString language;
     // Blank line so user can select no language.
-    QListViewItem* item = new KListViewItem(langLView, "", "");
+    Q3ListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_languageCodeList.isEmpty()) item->setSelected(true);
     const int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
@@ -256,7 +258,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        QListViewItem* item = new KListViewItem(langLView, language, locale);
+        Q3ListViewItem* item = new KListViewItem(langLView, language, locale);
         if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
@@ -280,7 +282,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     if (dlgResult == QDialog::Accepted)
     {
         m_languageCodeList.clear();
-        QListViewItem* item = langLView->firstChild();
+        Q3ListViewItem* item = langLView->firstChild();
         while (item)
         {
             if (item->isSelected()) m_languageCodeList += item->text(1);

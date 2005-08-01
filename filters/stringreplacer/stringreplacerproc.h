@@ -28,9 +28,11 @@
 // Qt includes.
 #include <qobject.h>
 #include <qtextstream.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -70,7 +72,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
 
     /**
      * Did this filter do anything?  If the filter returns the input as output
@@ -85,9 +87,9 @@ private:
     QStringList m_appIdList;
 
     // List of regular expressions to match.
-    QValueList<QRegExp> m_matchList;
+    Q3ValueList<QRegExp> m_matchList;
     // List of substitutions to replace matches.
-    QValueList<QString> m_substList;
+    Q3ValueList<QString> m_substList;
     // True if this filter did anything to the text.
     bool m_wasModified;
 };
