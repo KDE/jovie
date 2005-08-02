@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   A KPart to display running jobs in KTTSD and permit user to stop, rewind,
-  advance, change Talker, etc. 
+  advance, change Talker, etc.
   -------------------
   Copyright : (C) 2004,2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
@@ -494,7 +494,7 @@ void KttsJobMgrPart::slot_job_move()
         refreshJobListView();
         // Select the job we just moved.
         Q3ListViewItem* item = findItemByJobNum(jobNum);
-        if (item) m_jobListView->setSelected(item, true); 
+        if (item) m_jobListView->setSelected(item, true);
     }
 }
 
@@ -583,7 +583,7 @@ void KttsJobMgrPart::slot_refresh()
     if (jobNum)
     {
         Q3ListViewItem* item = findItemByJobNum(jobNum);
-        if (item) m_jobListView->setSelected(item, true); 
+        if (item) m_jobListView->setSelected(item, true);
     }
 }
 
@@ -723,7 +723,7 @@ void KttsJobMgrPart::refreshJobListView()
         QString talkerID = cachedTalkerCodeToTalkerID(talkerCode);
         // Append to list.
         if (lastItem)
-            lastItem = new Q3ListViewItem(m_jobListView, lastItem, jobNumStr, appId, talkerID, 
+            lastItem = new Q3ListViewItem(m_jobListView, lastItem, jobNumStr, appId, talkerID,
                 stateToStr(state), QString::number(seq), QString::number(sentenceCount),
                 QString::number(partNum), QString::number(partCount));
         else
@@ -779,16 +779,12 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
 void KttsJobMgrPart::enableJobActions(bool enable)
 {
     if (!m_buttonBox) return;
-    QObjectList *l = m_buttonBox->queryList( "QPushButton", "job_*", true, true );
-    QObjectListIt it( *l ); // iterate over the buttons
-    QObject *obj;
 
-    while ( (obj = it.current()) != 0 ) {
-        // for each found object...
-        ++it;
-        ((QPushButton*)obj)->setEnabled( enable );
-    }
-    delete l; // delete the list, not the objects
+    QList<QObject *> l = m_buttonBox->queryList( "QPushButton", "job_*", true, true );
+    QListIterator<QObject *> i(l);
+
+    while (i.hasNext())
+        ((QPushButton*)i.next())->setEnabled( enable );
 
     if (enable)
     {
@@ -799,12 +795,10 @@ void KttsJobMgrPart::enableJobActions(bool enable)
             bool enableLater = item->nextSibling();
 
             l = m_buttonBox->queryList( "QPushButton", "job_later", false, true );
-            it = QObjectListIt( *l ); // iterate over the buttons
-            if ( (obj = it.current()) != 0 ) {
+            QListIterator<QObject *> it(l); // iterate over the buttons
+            while (it.hasNext())
                 // for each found object...
-                ((QPushButton*)obj)->setEnabled( enableLater );
-            }
-            delete l; // delete the list, not the objects
+                ((QPushButton*)it.next())->setEnabled( enableLater );
         }
     }
 }
@@ -816,16 +810,12 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 void KttsJobMgrPart::enableJobPartActions(bool enable)
 {
     if (!m_buttonBox) return;
-    QObjectList *l = m_buttonBox->queryList( "QPushButton", "part_*", true, true );
-    QObjectListIt it( *l ); // iterate over the buttons
-    QObject *obj;
+    QList<QObject *> l = m_buttonBox->queryList( "QPushButton", "part_*", true, true );
+    QListIterator<QObject *> i(l);
 
-    while ( (obj = it.current()) != 0 ) {
-        // for each found object...
-        ++it;
-        ((QPushButton*)obj)->setEnabled( enable );
-    }
-    delete l; // delete the list, not the objects
+    while (i.hasNext())
+        ((QPushButton*)i.next())->setEnabled( enable );
+
 }
 
 /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
@@ -907,8 +897,8 @@ ASYNC KttsJobMgrPart::textSet(const Q3CString&, const uint jobNum)
     stream >> partNum;
     stream >> partCount;
     QString talkerID = cachedTalkerCodeToTalkerID(talkerCode);
-    Q3ListViewItem* item = new Q3ListViewItem(m_jobListView, m_jobListView->lastItem(), 
-        QString::number(jobNum), appId, talkerID, 
+    Q3ListViewItem* item = new Q3ListViewItem(m_jobListView, m_jobListView->lastItem(),
+        QString::number(jobNum), appId, talkerID,
         stateToStr(state), QString::number(seq), QString::number(sentenceCount),
         QString::number(partNum), QString::number(partCount));
     // Should we select this job?
