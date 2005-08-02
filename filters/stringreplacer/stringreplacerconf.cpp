@@ -668,8 +668,8 @@ void StringReplacerConf::slotMatchButton_clicked()
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
-        KRegExpEditorInterface *reEditor =
-        static_cast<KRegExpEditorInterface *>(editorDialog->qt_cast( "KRegExpEditorInterface" ) );
+        
+		KRegExpEditorInterface *reEditor = dynamic_cast<KRegExpEditorInterface*>( editorDialog );
 			Q_ASSERT( reEditor ); // This should not fail!// now use the editor.
         reEditor->setRegExp( m_editWidget->matchLineEdit->text() );
         int dlgResult = editorDialog->exec();
