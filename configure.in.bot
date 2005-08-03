@@ -1,4 +1,4 @@
-if test "x$have_gst" = xno && test "x$with_gstreamer" ! xno; then
+if test "x$have_gst" = xno && test "x$with_gstreamer" != xno; then
     echo "********************************************************"
     echo "*"
     echo "* You do not seem to have GStreamer >= 0.8.7 installed."
