@@ -64,39 +64,35 @@ static snd_pcm_sframes_t (*writei_func)(snd_pcm_t *handle, const void *buffer, s
 static snd_pcm_sframes_t (*readn_func)(snd_pcm_t *handle, void **bufs, snd_pcm_uframes_t size);
 static snd_pcm_sframes_t (*writen_func)(snd_pcm_t *handle, void **bufs, snd_pcm_uframes_t size);
 
-class KDE_EXPORT AlsaPlayer : public Player, QThread
+class KDE_EXPORT AlsaPlayerThread : private QThread
 {
-    Q_OBJECT
-
 public:
-    AlsaPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
-    ~AlsaPlayer();
+    AlsaPlayerThread(QObject* parent = 0);
+    ~AlsaPlayerThread();
 
-    virtual void startPlay(const QString& file);
-    virtual void pause();
-    virtual void stop();
+    void startPlay(const QString& file);
+    void pause();
+    void stop();
 
-    virtual void setVolume(float volume = 1.0);
-    virtual float volume() const;
+    void setVolume(float volume = 1.0);
+    float volume() const;
 
-    virtual bool playing() const;
-    virtual bool paused() const;
+    bool playing() const;
+    bool paused() const;
 
-    virtual int totalTime() const;
-    virtual int currentTime() const;
-    virtual int position() const; // in this case not really the percent
+    int totalTime() const;
+    int currentTime() const;
+    int position() const; // in this case not really the percent
 
-    virtual void seek(int seekTime);
-    virtual void seekPosition(int position);
+    void seek(int seekTime);
+    void seekPosition(int position);
 
-    virtual QStringList getPluginList( const Q3CString& classname );
-    virtual void setSinkName(const QString &sinkName);
-    virtual bool requireVersion(uint major, uint minor, uint micro);
+    QStringList getPluginList( const Q3CString& classname );
+    void setSinkName(const QString &sinkName);
+    bool requireVersion(uint major, uint minor, uint micro);
 
 protected:
     virtual void run();
-
-private slots:
 
 private:
     void init();
@@ -172,7 +168,39 @@ private:
     off64_t fdcount;
     int vocmajor;
     int vocminor;
+};
 
+
+class KDE_EXPORT AlsaPlayer : public Player
+{
+    Q_OBJECT
+public:
+    AlsaPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
+    ~AlsaPlayer();
+
+    virtual void startPlay(const QString& file);
+    virtual void pause();
+    virtual void stop();
+
+    virtual void setVolume(float volume = 1.0);
+    virtual float volume() const;
+
+    virtual bool playing() const;
+    virtual bool paused() const;
+
+    virtual int totalTime() const;
+    virtual int currentTime() const;
+    virtual int position() const; // in this case not really the percent
+
+    virtual void seek(int seekTime);
+    virtual void seekPosition(int position);
+
+    virtual QStringList getPluginList( const Q3CString& classname );
+    virtual void setSinkName(const QString &sinkName);
+    virtual bool requireVersion(uint major, uint minor, uint micro);
+
+private:
+    AlsaPlayerThread* m_AlsaPlayerThread;
 };
 
 #endif              // ALSAPLAYER_H

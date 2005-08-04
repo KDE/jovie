@@ -67,7 +67,7 @@
 } while (0)
 #endif	
 
-QString AlsaPlayer::timestamp() const
+QString AlsaPlayerThread::timestamp() const
 {
     time_t t;
     struct timeval tv;
@@ -85,15 +85,15 @@ QString AlsaPlayer::timestamp() const
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-AlsaPlayer::AlsaPlayer(QObject* parent, const char* name, const QStringList& args) : 
-    Player(parent, name, args),
+AlsaPlayerThread::AlsaPlayerThread(QObject* parent) :
+    QThread(parent),
     m_currentVolume(1.0),
     m_pcmName("default")
 {
     init();
 }
 
-AlsaPlayer::~AlsaPlayer()
+AlsaPlayerThread::~AlsaPlayerThread()
 {
     if (running()) {
         stop();
@@ -101,8 +101,8 @@ AlsaPlayer::~AlsaPlayer()
     }
 }
 
-//void AlsaPlayer::play(const FileHandle &file)
-void AlsaPlayer::startPlay(const QString &file)
+//void AlsaPlayerThread::play(const FileHandle &file)
+void AlsaPlayerThread::startPlay(const QString &file)
 {
     if (running()) {
         if (paused()) snd_pcm_pause(handle, false);
@@ -115,10 +115,10 @@ void AlsaPlayer::startPlay(const QString &file)
     start();
 }
 
-/*virtual*/ void AlsaPlayer::run()
+/*virtual*/ void AlsaPlayerThread::run()
 {
     QString pName = m_pcmName.section(" ", 0, 0);
-    // kdDebug() << timestamp() << "AlsaPlayer::run: pName = " << pName << endl;
+    // kdDebug() << timestamp() << "AlsaPlayerThread::run: pName = " << pName << endl;
 	pcm_name = qstrdup(pName.ascii());
 	int err;
 	snd_pcm_info_t *info;
@@ -188,7 +188,7 @@ void AlsaPlayer::startPlay(const QString &file)
 	return;
 }
 
-void AlsaPlayer::pause()
+void AlsaPlayerThread::pause()
 {
     if (running()) {
         m_mutex.lock();
@@ -207,12 +207,12 @@ void AlsaPlayer::pause()
     }
 }
 
-void AlsaPlayer::stop()
+void AlsaPlayerThread::stop()
 {
     if (running()) {
         m_mutex.lock();
         /* Stop PCM device and drop pending frames */
-        // kdDebug() << timestamp() << "AlsaPlayer::stop: calling snd_pcm_drop" << endl;
+        // kdDebug() << timestamp() << "AlsaPlayerThread::stop: calling snd_pcm_drop" << endl;
         if (handle) snd_pcm_drop(handle);
         m_mutex.unlock();
         /* Wait for thread to exit */
@@ -221,12 +221,12 @@ void AlsaPlayer::stop()
     cleanup();
 }
 
-void AlsaPlayer::setVolume(float volume)
+void AlsaPlayerThread::setVolume(float volume)
 {
     m_currentVolume = volume;
 }
 
-float AlsaPlayer::volume() const
+float AlsaPlayerThread::volume() const
 {
     return m_currentVolume;
 }
@@ -235,7 +235,7 @@ float AlsaPlayer::volume() const
 // player status functions
 /////////////////////////////////////////////////////////////////////////////////
 
-bool AlsaPlayer::playing() const
+bool AlsaPlayerThread::playing() const
 {
     bool result = false;
     if (running()) {
@@ -245,7 +245,7 @@ bool AlsaPlayer::playing() const
             snd_pcm_status_alloca(&status);
             int res;
             if ((res = snd_pcm_status(handle, status)) < 0)
-                kdDebug() << timestamp() << "AlsaPlayer::playing: status error: " << snd_strerror(res) << endl;
+                kdDebug() << timestamp() << "AlsaPlayerThread::playing: status error: " << snd_strerror(res) << endl;
             else {
                 result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_RUNNING)
                       || (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING);
@@ -257,7 +257,7 @@ bool AlsaPlayer::playing() const
     return result;
 }
 
-bool AlsaPlayer::paused() const
+bool AlsaPlayerThread::paused() const
 {
     bool result = false;
     if (running()) {
@@ -267,7 +267,7 @@ bool AlsaPlayer::paused() const
             snd_pcm_status_alloca(&status);
             int res;
             if ((res = snd_pcm_status(handle, status)) < 0)
-                kdDebug() << timestamp() << "AlsaPlayer::paused: status error: " << snd_strerror(res) << endl;
+                kdDebug() << timestamp() << "AlsaPlayerThread::paused: status error: " << snd_strerror(res) << endl;
             else {
                 result = (snd_pcm_status_get_state(status) == SND_PCM_STATE_PAUSED);
                 // kdDebug() << timestamp() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
@@ -278,33 +278,33 @@ bool AlsaPlayer::paused() const
     return result;
 }
 
-int AlsaPlayer::totalTime() const
+int AlsaPlayerThread::totalTime() const
 {
     int total = 0;
     int rate = hwparams.rate;
     int channels = hwparams.channels;
     if (rate > 0 && channels > 0) {
         total = int((double(pbrec_count) / rate) / channels);
-        // kdDebug() << timestamp() << "AlsaPlayer::totalTime: pbrec_count = " << pbrec_count << " rate = " << rate << " channels = " << channels << endl;
+        // kdDebug() << timestamp() << "AlsaPlayerThread::totalTime: pbrec_count = " << pbrec_count << " rate = " << rate << " channels = " << channels << endl;
         // kdDebug() << timestamp() << "AlsaPlayer: totalTime = " << total << endl;
     }
     return total;
 }
 
-int AlsaPlayer::currentTime() const
+int AlsaPlayerThread::currentTime() const
 {
     int current = 0;
     int rate = hwparams.rate;
     int channels = hwparams.channels;
     if (rate > 0 && channels > 0) {
         current = int((double(fdcount) / rate) / channels);
-        // kdDebug() << timestamp() << "AlsaPlayer::currentTime: fdcount = " << fdcount << " rate = " << rate << " channels = " << channels << endl;
-        // kdDebug() << timestamp() << "AlsaPlayer:: currentTime = " << current << endl;
+        // kdDebug() << timestamp() << "AlsaPlayerThread::currentTime: fdcount = " << fdcount << " rate = " << rate << " channels = " << channels << endl;
+        // kdDebug() << timestamp() << "AlsaPlayerThread:: currentTime = " << current << endl;
     }
     return current;
 }
 
-int AlsaPlayer::position() const
+int AlsaPlayerThread::position() const
 {
     // TODO: Make this more accurate by adding frames that have been so-far
     // played within the Alsa ring buffer.
@@ -315,12 +315,12 @@ int AlsaPlayer::position() const
 // player seek functions
 /////////////////////////////////////////////////////////////////////////////////
 
-void AlsaPlayer::seek(int /*seekTime*/)
+void AlsaPlayerThread::seek(int /*seekTime*/)
 {
     // TODO:
 }
 
-void AlsaPlayer::seekPosition(int /*position*/)
+void AlsaPlayerThread::seekPosition(int /*position*/)
 {
     // TODO:
 }
@@ -328,7 +328,7 @@ void AlsaPlayer::seekPosition(int /*position*/)
 /*
  * Returns a list of PCM devices.
  */
-QStringList AlsaPlayer::getPluginList( const Q3CString& /*classname*/ )
+QStringList AlsaPlayerThread::getPluginList( const Q3CString& /*classname*/ )
 {
     QStringList assumed("default");
     snd_config_t *conf;
@@ -394,14 +394,14 @@ QStringList AlsaPlayer::getPluginList( const Q3CString& /*classname*/ )
     return result;
 }
 
-void AlsaPlayer::setSinkName(const QString& sinkName) { m_pcmName = sinkName; }
-bool AlsaPlayer::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
+void AlsaPlayerThread::setSinkName(const QString& sinkName) { m_pcmName = sinkName; }
+bool AlsaPlayerThread::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
 
 /////////////////////////////////////////////////////////////////////////////////
 // private
 /////////////////////////////////////////////////////////////////////////////////
 
-void AlsaPlayer::init()
+void AlsaPlayerThread::init()
 {
     pcm_name = 0;
     handle = 0;
@@ -431,7 +431,7 @@ void AlsaPlayer::init()
     pbrec_count = LLONG_MAX;
 }
 
-void AlsaPlayer::cleanup()
+void AlsaPlayerThread::cleanup()
 {
     m_mutex.lock();
     if (pcm_name) delete pcm_name;
@@ -447,7 +447,7 @@ void AlsaPlayer::cleanup()
 /*
  * Stop playback, cleanup and exit thread.
  */
-void AlsaPlayer::stopAndExit()
+void AlsaPlayerThread::stopAndExit()
 {
     if (handle) snd_pcm_drop(handle);
     cleanup();
@@ -458,7 +458,7 @@ void AlsaPlayer::stopAndExit()
  * Safe read (for pipes)
  */
  
-ssize_t AlsaPlayer::safe_read(int fd, void *buf, size_t count)
+ssize_t AlsaPlayerThread::safe_read(int fd, void *buf, size_t count)
 {
 	ssize_t result = 0;
     ssize_t res;
@@ -479,7 +479,7 @@ ssize_t AlsaPlayer::safe_read(int fd, void *buf, size_t count)
  * Test, if it is a .VOC file and return >=0 if ok (this is the length of rest)
  *                                       < 0 if not 
  */
-int AlsaPlayer::test_vocfile(void *buffer)
+int AlsaPlayerThread::test_vocfile(void *buffer)
 {
 	VocHeader *vp = (VocHeader*)buffer;
 
@@ -497,7 +497,7 @@ int AlsaPlayer::test_vocfile(void *buffer)
  * helper for test_wavefile
  */
 
-size_t AlsaPlayer::test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line)
+size_t AlsaPlayerThread::test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line)
 {
 	if (*size >= reqsize)
 		return *size;
@@ -522,7 +522,7 @@ size_t AlsaPlayer::test_wavefile_read(int fd, char *buffer, size_t *size, size_t
  *                            == 0 if not
  * Value returned is bytes to be discarded.
  */
-ssize_t AlsaPlayer::test_wavefile(int fd, char *_buffer, size_t size)
+ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 {
 	WaveHeader *h = (WaveHeader *)_buffer;
 	char *buffer = NULL;
@@ -656,7 +656,7 @@ ssize_t AlsaPlayer::test_wavefile(int fd, char *_buffer, size_t size)
 
  */
 
-int AlsaPlayer::test_au(int fd, char *buffer)
+int AlsaPlayerThread::test_au(int fd, char *buffer)
 {
 	AuHeader *ap = (AuHeader*)buffer;
 
@@ -700,7 +700,7 @@ int AlsaPlayer::test_au(int fd, char *buffer)
 	return 0;
 }
 
-void AlsaPlayer::set_params(void)
+void AlsaPlayerThread::set_params(void)
 {
 	snd_pcm_hw_params_t *params;
 	snd_pcm_sw_params_t *swparams;
@@ -874,7 +874,7 @@ do { \
 #endif
 
 /* I/O error handler */
-void AlsaPlayer::xrun(void)
+void AlsaPlayerThread::xrun(void)
 {
 	snd_pcm_status_t *status;
 	int res;
@@ -924,7 +924,7 @@ void AlsaPlayer::xrun(void)
 }
 
 /* I/O suspend handler */
-void AlsaPlayer::suspend(void)
+void AlsaPlayerThread::suspend(void)
 {
 	int res;
 
@@ -945,7 +945,7 @@ void AlsaPlayer::suspend(void)
 }
 
 /* peak handler */
-void AlsaPlayer::compute_max_peak(char *data, size_t count)
+void AlsaPlayerThread::compute_max_peak(char *data, size_t count)
 {
 	signed int val, max, max_peak = 0, perc;
 	size_t ocount = count;
@@ -1009,21 +1009,21 @@ void AlsaPlayer::compute_max_peak(char *data, size_t count)
  *  write function
  */
 
-ssize_t AlsaPlayer::pcm_write(char *data, size_t count)
+ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
 {
 	ssize_t r;
 	ssize_t result = 0;
 
 	if (sleep_min == 0 && count < chunk_size) {
-        // kdDebug() << timestamp() << "AlsaPlayer::pcm_write: calling snd_pcm_format_set_silence" << endl;
+        // kdDebug() << timestamp() << "AlsaPlayerThread::pcm_write: calling snd_pcm_format_set_silence" << endl;
 		snd_pcm_format_set_silence(hwparams.format, data + count * bits_per_frame / 8, (chunk_size - count) * hwparams.channels);
 		count = chunk_size;
 	}
 	while (count > 0) {
-        // kdDebug() << timestamp() << "AlsaPlayer::pcm_write: calling writei_func, count = " << count << endl;
+        // kdDebug() << timestamp() << "AlsaPlayerThread::pcm_write: calling writei_func, count = " << count << endl;
 		r = writei_func(handle, data, count);
 		if (r == -EAGAIN || (r >= 0 && (size_t)r < count)) {
-            kdDebug() << timestamp() << "AlsaPlayer::pcm_write: r = " << r << " calling snd_pcm_wait" << endl;
+            kdDebug() << timestamp() << "AlsaPlayerThread::pcm_write: r = " << r << " calling snd_pcm_wait" << endl;
 			snd_pcm_wait(handle, 1000);
 		} else if (r == -EPIPE) {
 			xrun();
@@ -1048,7 +1048,7 @@ ssize_t AlsaPlayer::pcm_write(char *data, size_t count)
  *  ok, let's play a .voc file
  */
 
-ssize_t AlsaPlayer::voc_pcm_write(u_char *data, size_t count)
+ssize_t AlsaPlayerThread::voc_pcm_write(u_char *data, size_t count)
 {
 	ssize_t result = count, r;
 	size_t size;
@@ -1070,7 +1070,7 @@ ssize_t AlsaPlayer::voc_pcm_write(u_char *data, size_t count)
 	return result;
 }
 
-void AlsaPlayer::voc_write_silence(unsigned x)
+void AlsaPlayerThread::voc_write_silence(unsigned x)
 {
 	unsigned l;
 	char *buf;
@@ -1096,7 +1096,7 @@ void AlsaPlayer::voc_write_silence(unsigned x)
 	// free(buf);
 }
 
-void AlsaPlayer::voc_pcm_flush(void)
+void AlsaPlayerThread::voc_pcm_flush(void)
 {
 	if (buffer_pos > 0) {
 		size_t b;
@@ -1113,7 +1113,7 @@ void AlsaPlayer::voc_pcm_flush(void)
 	snd_pcm_drain(handle);
 }
 
-void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
+void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 {
 	int l;
 	VocBlockType *bp;
@@ -1337,13 +1337,13 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 /* that was a big one, perhaps somebody split it :-) */
 
 /* setting the globals for playing raw data */
-void AlsaPlayer::init_raw_data(void)
+void AlsaPlayerThread::init_raw_data(void)
 {
 	hwparams = rhwparams;
 }
 
 /* calculate the data count to read from/to dsp */
-off64_t AlsaPlayer::calc_count(void)
+off64_t AlsaPlayerThread::calc_count(void)
 {
 	off64_t count;
 
@@ -1356,7 +1356,7 @@ off64_t AlsaPlayer::calc_count(void)
 	return count < pbrec_count ? count : pbrec_count;
 }
 
-void AlsaPlayer::header(int /*rtype*/, const char* /*name*/)
+void AlsaPlayerThread::header(int /*rtype*/, const char* /*name*/)
 {
 	if (!quiet_mode) {
 //		fprintf(stderr, "%s %s '%s' : ",
@@ -1377,7 +1377,7 @@ void AlsaPlayer::header(int /*rtype*/, const char* /*name*/)
 
 /* playing raw data */
 
-void AlsaPlayer::playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name)
+void AlsaPlayerThread::playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name)
 {
 	int l, r;
 	off64_t written = 0;
@@ -1431,7 +1431,7 @@ void AlsaPlayer::playback_go(int fd, size_t loaded, off64_t count, int rtype, co
  *  let's play or capture it (capture_type says VOC/WAVE/raw)
  */
 
-void AlsaPlayer::playback(int fd)
+void AlsaPlayerThread::playback(int fd)
 {
 	int ofs;
 	size_t dta;
@@ -1476,6 +1476,48 @@ void AlsaPlayer::playback(int fd)
       __end:
         return;
 }
+
+// ====================================================================
+// AlsaPlayer
+//
+// AlsaPlayer is nothing more than a container for AlsaPlayerThread
+// in order to avoid ambiguous QObject, since both Player and QThread
+// derive from QObject.  Is there a better solution?
+
+AlsaPlayer::AlsaPlayer(QObject* parent, const char* name, const QStringList& args):
+    Player(parent, name, args)
+{
+    m_AlsaPlayerThread = new AlsaPlayerThread(this);
+}
+
+AlsaPlayer::~AlsaPlayer()
+{
+    delete m_AlsaPlayerThread;
+}
+
+/*virtual*/ void AlsaPlayer::startPlay(const QString& file) { m_AlsaPlayerThread->startPlay(file); }
+/*virtual*/ void AlsaPlayer::pause() { m_AlsaPlayerThread->pause(); }
+/*virtual*/ void AlsaPlayer::stop() { m_AlsaPlayerThread->stop(); }
+
+/*virtual*/ void AlsaPlayer::setVolume(float volume) { m_AlsaPlayerThread->setVolume(volume); }
+/*virtual*/ float AlsaPlayer::volume() const { return m_AlsaPlayerThread->volume(); }
+
+/*virtual*/ bool AlsaPlayer::playing() const { return m_AlsaPlayerThread->playing(); }
+/*virtual*/ bool AlsaPlayer::paused() const { return m_AlsaPlayerThread->paused(); }
+
+/*virtual*/ int AlsaPlayer::totalTime() const { return m_AlsaPlayerThread->totalTime(); }
+/*virtual*/ int AlsaPlayer::currentTime() const { return m_AlsaPlayerThread->currentTime(); }
+/*virtual*/ int AlsaPlayer::position() const { return m_AlsaPlayerThread->position(); } // in this case not really the percent
+
+/*virtual*/ void AlsaPlayer::seek(int seekTime) { m_AlsaPlayerThread->seek(seekTime); }
+/*virtual*/ void AlsaPlayer::seekPosition(int position) { m_AlsaPlayerThread->seekPosition(position); }
+
+/*virtual*/ QStringList AlsaPlayer::getPluginList( const Q3CString& classname )
+    { return m_AlsaPlayerThread->getPluginList(classname); }
+/*virtual*/ void AlsaPlayer::setSinkName(const QString &sinkName)
+    { m_AlsaPlayerThread->setSinkName(sinkName); }
+/*virtual*/ bool AlsaPlayer::requireVersion(uint major, uint minor, uint micro)
+    { return m_AlsaPlayerThread->requireVersion(major, minor, micro); }
 
 #include "alsaplayer.moc"
 
