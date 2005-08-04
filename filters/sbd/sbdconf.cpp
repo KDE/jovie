@@ -131,7 +131,7 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
     if (!langCodeList.isEmpty())
         m_languageCodeList = langCodeList;
     QString language = "";
-    for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
+    for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
         if (!language.isEmpty()) language += ",";
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
@@ -218,7 +218,7 @@ void SbdConf::slotReButton_clicked()
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
         KRegExpEditorInterface *reEditor =
-                static_cast<KRegExpEditorInterface *>(editorDialog->qt_cast( "KRegExpEditorInterface" ) );
+            static_cast<KRegExpEditorInterface *>(editorDialog->qt_cast( "KRegExpEditorInterface" ) );
         Q_ASSERT( reEditor ); // This should not fail!// now use the editor.
         reEditor->setRegExp( m_widget->reLineEdit->text() );
         int dlgResult = editorDialog->exec();
@@ -293,7 +293,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     // TODO: Also delete KListView and QHBox?
     if (dlgResult != QDialog::Accepted) return;
     language = "";
-    for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
+    for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
         if (!language.isEmpty()) language += ",";
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
