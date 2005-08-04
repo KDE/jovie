@@ -45,9 +45,8 @@
 /**
  * Constructor.
  */
-SbdThread::SbdThread( QObject *parent, const char *name ) :
-    QObject( parent, name ),
-    QThread()
+SbdThread::SbdThread( QObject *parent) :
+    QThread( parent)
 {
 }
 
@@ -570,7 +569,7 @@ SbdProc::SbdProc( QObject *parent, const char *name, const QStringList& /*args*/
     KttsFilterProc(parent, name) 
 {
     // kdDebug() << "SbdProc::SbdProc: Running" << endl;
-    m_sbdThread = new SbdThread( parent, *name + "_thread" );
+    m_sbdThread = new SbdThread(this);
     connect( m_sbdThread, SIGNAL(filteringFinished()), this, SLOT(slotSbdThreadFilteringFinished()) );
 }
 
@@ -694,7 +693,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
         //     << appId << " matches " << m_appIdList << endl;
         bool found = false;
         QString appIdStr = appId;
-        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        for ( int ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
             {
@@ -755,7 +754,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
         m_sbdThread->terminate();
         m_sbdThread->wait();
         delete m_sbdThread;
-        m_sbdThread = new SbdThread();
+        m_sbdThread = new SbdThread(this);
         m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
         connect( m_sbdThread, SIGNAL(filteringFinished()), this, SLOT(slotSbdThreadFilteringFinished()) );
         m_state = fsIdle;

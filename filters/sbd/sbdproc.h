@@ -62,7 +62,7 @@ class KConfig;
 class QDomElement;
 class QDomNode;
 
-class SbdThread: public QObject, public QThread
+class SbdThread: public QThread
 {
     Q_OBJECT
 
@@ -70,7 +70,7 @@ class SbdThread: public QObject, public QThread
         /**
          * Constructor.
          */
-        SbdThread( QObject *parent = 0, const char *name = 0);
+        SbdThread( QObject *parent = 0);
 
         /**
          * Destructor.
