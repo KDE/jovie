@@ -28,11 +28,13 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
-#include <qptrlist.h>
+#include <QList>
 
 // KTTS includes.
 #include "talkercode.h"
 #include "pluginproc.h"
+
+typedef QList<PlugInProc*> PlugInList;
 
 class TalkerMgr: public QObject
 {
@@ -63,7 +65,7 @@ public:
     /**
      * Returns a list of all the loaded plugins.
      */
-    QPtrList<PlugInProc> getLoadedPlugIns();
+    PlugInList getLoadedPlugIns();
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.
@@ -146,7 +148,7 @@ private:
      * Array of the loaded plug ins for different Talkers.
      * Array of parsed Talker Codes for the plugins.
      */
-    QPtrList<PlugInProc> m_loadedPlugIns;
+    PlugInList m_loadedPlugIns;
     QStringList m_loadedTalkerIds;
     TalkerCode::TalkerCodeList m_loadedTalkerCodes;
 

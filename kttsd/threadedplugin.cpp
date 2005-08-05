@@ -32,23 +32,21 @@
 /**
 * Constructor.
 */
-ThreadedPlugIn::ThreadedPlugIn(PlugInProc* plugin, 
-    QObject *parent /*= 0*/, const char *name /*= 0*/):
-    PlugInProc(parent, name),
-    QThread(),
+ThreadedPlugInThread::ThreadedPlugInThread(PlugInProc* plugin, QObject *parent) :
+    QThread(parent),
     m_plugin(plugin),
-    m_filename(QString::null),
     m_requestExit(false),
-    m_supportsSynth(false)
+    m_supportsSynth(false),
+    m_filename(QString::null),
+    m_waitingStop(false)
 {
-    m_waitingStop = false;
     m_state = psIdle;
 }
 
 /**
 * Destructor.
 */
-ThreadedPlugIn::~ThreadedPlugIn()
+ThreadedPlugInThread::~ThreadedPlugInThread()
 {
     if (running())
     {
@@ -71,7 +69,7 @@ ThreadedPlugIn::~ThreadedPlugIn()
 /**
 * Initialize the speech plugin.
 */
-bool ThreadedPlugIn::init(KConfig *config, const QString &configGroup)
+bool ThreadedPlugInThread::init(KConfig *config, const QString &configGroup)
 {
     bool stat = m_plugin->init(config, configGroup);
     m_supportsSynth = m_plugin->supportsSynth();
@@ -87,9 +85,9 @@ bool ThreadedPlugIn::init(KConfig *config, const QString &configGroup)
 * If the plugin supports asynchronous operation, it should return immediately
 * and emit sayFinished signal when synthesis and audibilizing is finished.
 */
-void ThreadedPlugIn::sayText(const QString &text)
+void ThreadedPlugInThread::sayText(const QString &text)
 {
-    kdDebug() << "ThreadedPlugin::sayText running with text " << text << endl;
+    kdDebug() << "ThreadedPlugInThread::sayText running with text " << text << endl;
     waitThreadNotBusy();
     m_action = paSayText;
     m_text = text;
@@ -108,7 +106,7 @@ void ThreadedPlugIn::sayText(const QString &text)
 * If the plugin supports asynchronous operation, it should return immediately
 * and emit synthFinished signal when synthesis is completed.
 */
-void ThreadedPlugIn::synthText(const QString &text, const QString &suggestedFilename)
+void ThreadedPlugInThread::synthText(const QString &text, const QString &suggestedFilename)
 {
     waitThreadNotBusy();
     m_action = paSynthText;
@@ -125,7 +123,7 @@ void ThreadedPlugIn::synthText(const QString &text, const QString &suggestedFile
 *
 * The plugin must not re-use the filename.
 */
-QString ThreadedPlugIn::getFilename()
+QString ThreadedPlugInThread::getFilename()
 {
     return m_filename;
 }
@@ -135,12 +133,12 @@ QString ThreadedPlugIn::getFilename()
 * This function only makes sense in asynchronus modes.
 * The plugin should return to the psIdle state.
 */
-void ThreadedPlugIn::stopText()
+void ThreadedPlugInThread::stopText()
 {
     // If thread is busy, call stopText and wait for thread to stop being busy.
     if (m_threadRunningMutex.locked())
     {
-        kdDebug() << "ThreadedPlugIn::stopText:: calling m_plugin->stopText" << endl;
+        kdDebug() << "ThreadedPlugInThread::stopText:: calling m_plugin->stopText" << endl;
         m_plugin->stopText();
         // Set flag that will force state to idle once the plugin finishes.
         m_waitingStop = true;
@@ -155,7 +153,7 @@ void ThreadedPlugIn::stopText()
 *
 * @ref pluginState
 */
-pluginState ThreadedPlugIn::getState()
+pluginState ThreadedPlugInThread::getState()
 {
     m_stateMutex.unlock();
     bool emitStopped = false;
@@ -184,7 +182,7 @@ pluginState ThreadedPlugIn::getState()
 * for example, blanking the stored filename (but do not delete the file).
 * Calling program should call getFilename prior to ackFinished.
 */
-void ThreadedPlugIn::ackFinished()
+void ThreadedPlugInThread::ackFinished()
 {
     // Since plugin should not be running, don't bother with Mutex here.
     if (m_state == psFinished) m_state = psIdle;
@@ -198,7 +196,7 @@ void ThreadedPlugIn::ackFinished()
 *
 * Since this is a threaded wrapper, return True.
 */
-bool ThreadedPlugIn::supportsAsync() { return true; }
+bool ThreadedPlugInThread::supportsAsync() { return true; }
 
 /**
 * Returns True if the plugin supports synthText method,
@@ -206,12 +204,12 @@ bool ThreadedPlugIn::supportsAsync() { return true; }
 * audibilizing the text.
 * @return                        True if this plugin supports synthText method.
 */
-bool ThreadedPlugIn::supportsSynth() { return m_supportsSynth; }
+bool ThreadedPlugInThread::supportsSynth() { return m_supportsSynth; }
 
 /**
 * Waits for the thread to go to sleep.
 */
-void ThreadedPlugIn::waitThreadNotBusy()
+void ThreadedPlugInThread::waitThreadNotBusy()
 {
     m_threadRunningMutex.lock();
     m_threadRunningMutex.unlock();
@@ -220,7 +218,7 @@ void ThreadedPlugIn::waitThreadNotBusy()
 /**
 * Base function, where the thread will start.
 */
-void ThreadedPlugIn::run()
+void ThreadedPlugInThread::run()
 {
     while (!m_requestExit)
     {
@@ -228,9 +226,9 @@ void ThreadedPlugIn::run()
         if (!m_threadRunningMutex.locked()) m_threadRunningMutex.lock();
         // Go to sleep until asked to do something.
         // Mutex unlocks as we go to sleep and locks as we wake up.
-        kdDebug() << "ThreadedPlugIn::run going to sleep." << endl;
+        kdDebug() << "ThreadedPlugInThread::run going to sleep." << endl;
         m_waitCondition.wait(&m_threadRunningMutex);
-        kdDebug() << "ThreadedPlugIn::run waking up." << endl;
+        kdDebug() << "ThreadedPlugInThread::run waking up." << endl;
         // Woken up.
         // See if we've been told to exit.
         if (m_requestExit) 
@@ -249,9 +247,9 @@ void ThreadedPlugIn::run()
                     m_stateMutex.lock();
                     m_state = psSaying;
                     m_stateMutex.unlock();
-                    kdDebug() << "ThreadedPlugIn::run calling sayText" << endl;
+                    kdDebug() << "ThreadedPlugInThread::run calling sayText" << endl;
                     m_plugin->sayText(m_text);
-                    kdDebug() << "ThreadedPlugIn::run back from sayText" << endl;
+                    kdDebug() << "ThreadedPlugInThread::run back from sayText" << endl;
                     m_stateMutex.lock();
                     if (m_state == psSaying) m_state = psFinished;
                     m_stateMutex.unlock();
@@ -266,9 +264,9 @@ void ThreadedPlugIn::run()
                     m_stateMutex.unlock();
                     QString filename = m_filename;
                     m_filename = QString::null;
-                    kdDebug() << "ThreadedPlugIn::run calling synthText" << endl;
+                    kdDebug() << "ThreadedPlugInThread::run calling synthText" << endl;
                     m_plugin->synthText(m_text, filename);
-                    kdDebug() << "ThreadedPlugIn::run back from synthText" << endl;
+                    kdDebug() << "ThreadedPlugInThread::run back from synthText" << endl;
                     m_filename = m_plugin->getFilename();
                     m_stateMutex.lock();
                     if (m_state == psSynthing) m_state = psFinished;
@@ -280,3 +278,43 @@ void ThreadedPlugIn::run()
     }
     if (m_threadRunningMutex.locked()) m_threadRunningMutex.unlock();
 }
+
+// ====================================================================
+
+ThreadedPlugIn(PlugInProc* plugin, QObject *parent = 0, const char *name = 0) :
+    PlugInProc(plugin, parent, name)
+{
+    m_ThreadedPluginThread = new ThreadedPlugInThread(plugin, this);
+}
+
+/*virtual*/ ThreadedPlugIn::~ThreadedPlugIn()
+{
+    delete m_ThreadedPluginThread;
+}
+
+/*virtual*/ bool ThreadedPlugIn::init(KConfig *config, const QString &configGroup)
+    { return m_ThreadedPluginThread->init(config, configGroup); }
+
+/*virtual*/ void ThreadedPlugIn::sayText(const QString &text)
+    { m_ThreadedPluginThread->sayText(text); }
+
+/*virtual*/ void ThreadedPlugIn::synthText(const QString &text, const QString &suggestedFilename)
+    { m_ThreadedPluginThread->synthText(text, suggestedFilename); }
+
+/*virtual*/ QString ThreadedPlugIn::getFilename()
+    { return m_ThreadedPluginThread->getFilename(); }
+
+/*virtual*/ void ThreadedPlugIn::stopText()
+    { m_ThreadedPluginThread->stopText(); }
+
+/*virtual*/ pluginState ThreadedPlugIn::getState()
+    { return m_ThreadedPluginThread->getState(); }
+
+/*virtual*/ void ThreadedPlugIn::ackFinished()
+    { m_ThreadedPluginThread->ackFinished(); }
+
+/*virtual*/ bool ThreadedPlugIn::supportsAsync()
+    { return m_ThreadedPluginThread->supportsAsync(); }
+
+/*virtual*/ bool ThreadedPlugIn::supportsSynth()
+    { return m_ThreadedPluginThread->supportsSynth(); }

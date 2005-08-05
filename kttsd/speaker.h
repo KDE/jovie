@@ -25,8 +25,9 @@
 
 // Qt includes.
 #include <qobject.h>
-#include <qvaluevector.h>
+#include <QVector>
 #include <qevent.h>
+#include <Q3CString>
 
 // KTTSD includes.
 #include <speechdata.h>
@@ -100,7 +101,7 @@ struct Utt{
 /**
 * Iterator for queue of utterances.
 */
-typedef QValueVector<Utt>::iterator uttIterator;
+typedef QVector<Utt>::iterator uttIterator;
 
 // Timer interval for checking whether audio playback is finished.
 const int timerInterval = 500;
@@ -296,7 +297,7 @@ class Speaker : public QObject{
         * @param markerName     The name of the marker seen.
         * @see markers
         */
-        void markerSeen(const QCString& appId, const QString& markerName);
+        void markerSeen(const Q3CString& appId, const QString& markerName);
 
         /**
         * This signal is emitted whenever a sentence begins speaking.
@@ -304,7 +305,7 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         * @param seq            Sequence number of the text.
         */
-        void sentenceStarted(QString text, QString language, const QCString& appId,
+        void sentenceStarted(QString text, QString language, const Q3CString& appId,
             const uint jobNum, const uint seq);
 
         /**
@@ -313,14 +314,14 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         * @param seq            Sequence number of the text.
         */        
-        void sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
+        void sentenceFinished(const Q3CString& appId, const uint jobNum, const uint seq);
 
         /**
         * This signal is emitted whenever speaking of a text job begins.
         * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
         * @param jobNum         Job number of the text job.
         */
-        void textStarted(const QCString& appId, const uint jobNum);
+        void textStarted(const Q3CString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a text job is finished.  The job has
@@ -331,26 +332,26 @@ class Speaker : public QObject{
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textFinished(const QCString& appId, const uint jobNum);
+        void textFinished(const Q3CString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a speaking text job stops speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textStopped(const QCString& appId, const uint jobNum);
+        void textStopped(const Q3CString& appId, const uint jobNum);
         /**
         * This signal is emitted whenever a speaking text job is paused.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textPaused(const QCString& appId, const uint jobNum);
+        void textPaused(const Q3CString& appId, const uint jobNum);
         /**
         * This signal is emitted when a text job, that was previously paused, resumes speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textResumed(const QCString& appId, const uint jobNum);
+        void textResumed(const Q3CString& appId, const uint jobNum);
 
     protected:
         /**
@@ -540,7 +541,7 @@ class Speaker : public QObject{
         /**
         * Queue of utterances we are currently processing.
         */
-        QValueVector<Utt> m_uttQueue;
+        QVector<Utt> m_uttQueue;
 
         /**
         * True when text job reading has been interrupted.
@@ -584,7 +585,7 @@ class Speaker : public QObject{
         * Job Number, appId, and sequence number of the last text sentence queued.
         */
         uint m_lastJobNum;
-        QCString m_lastAppId;
+        Q3CString m_lastAppId;
         uint m_lastSeq;
 
 };

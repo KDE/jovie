@@ -40,7 +40,6 @@
 TalkerMgr::TalkerMgr(QObject *parent, const char *name) :
     QObject( parent, name )
 {
-    m_loadedPlugIns.setAutoDelete(true);
 }
 
 /**
@@ -48,7 +47,7 @@ TalkerMgr::TalkerMgr(QObject *parent, const char *name) :
  */
 TalkerMgr::~TalkerMgr()
 {
-    m_loadedPlugIns.clear();
+    while (!m_loadedPlugIns.isEmpty()) delete m_loadedPlugIns.takeFirst();
 }
 
 /**
@@ -61,7 +60,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
     int bad = 0;
 
     m_talkerToPlugInCache.clear();
-    m_loadedPlugIns.clear();
+    while (!m_loadedPlugIns.isEmpty()) delete m_loadedPlugIns.takeFirst();
     m_loadedTalkerCodes.clear();
     m_loadedTalkerIds.clear();
 
@@ -188,7 +187,7 @@ QStringList TalkerMgr::getTalkers()
 /**
  * Returns a list of all the loaded plugins.
  */
-QPtrList<PlugInProc> TalkerMgr::getLoadedPlugIns()
+PlugInList TalkerMgr::getLoadedPlugIns()
 {
     return m_loadedPlugIns;
 }
@@ -231,7 +230,7 @@ int TalkerMgr::talkerToPluginIndex(const QString& talker) const
 PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker) const
 {
     int talkerNdx = talkerToPluginIndex(talker);
-    return const_cast< QPtrList<PlugInProc>* >(&m_loadedPlugIns)->at(talkerNdx);
+    return const_cast< PlugInList* >(&m_loadedPlugIns)->at(talkerNdx);
 }
 
 /**

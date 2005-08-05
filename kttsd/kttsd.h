@@ -20,6 +20,8 @@
 #ifndef _KTTSD_H_
 #define _KTTSD_H_
 
+#include <Q3CString>
+
 #include "speechdata.h"
 #include "talkermgr.h"
 #include "speaker.h"
@@ -48,7 +50,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Create objects, speechData and speaker.
         * Start thread
         */
-        KTTSD(const QCString& objId, QObject *parent=0, const char *name=0);
+        KTTSD(const Q3CString& objId, QObject *parent=0, const char *name=0);
 
         /**
         * Destructor.
@@ -290,7 +292,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *
         * The stream contains the following elements:
         *   - int state         Job state.
-        *   - QCString appId    DCOP senderId of the application that requested the speech job.
+        *   - Q3CString appId   DCOP senderId of the application that requested the speech job.
         *   - QString talker    Language code in which to speak the text.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
@@ -305,7 +307,7 @@ class KTTSD : public QObject, virtual public KSpeech
                     QByteArray jobInfo = getTextJobInfo(jobNum);
                     QDataStream stream(jobInfo, IO_ReadOnly);
                     int state;
-                    QCString appId;
+                    Q3CString appId;
                     QString talker;
                     int seq;
                     int sentenceCount;
@@ -543,21 +545,21 @@ class KTTSD : public QObject, virtual public KSpeech
          * the status of the speaker object has changed
          */
         void slotSentenceStarted(QString text, QString language, 
-            const QCString& appId, const uint jobNum, const uint seq);
-        void slotSentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
+            const Q3CString& appId, const uint jobNum, const uint seq);
+        void slotSentenceFinished(const Q3CString& appId, const uint jobNum, const uint seq);
 
         /*
          * These functions are called whenever
          * the status of the speechData object has changed
          */
-        void slotTextSet(const QCString& appId, const uint jobNum);
-        void slotTextAppended(const QCString& appId, const uint jobNum, const int appId);
-        void slotTextStarted(const QCString& appId, const uint jobNum);
-        void slotTextFinished(const QCString& appId, const uint jobNum);
-        void slotTextStopped(const QCString& appId, const uint jobNum);
-        void slotTextPaused(const QCString& appId, const uint jobNum);
-        void slotTextResumed(const QCString& appId, const uint jobNum);
-        void slotTextRemoved(const QCString& appId, const uint jobNum);
+        void slotTextSet(const Q3CString& appId, const uint jobNum);
+        void slotTextAppended(const Q3CString& appId, const uint jobNum, const int appId);
+        void slotTextStarted(const Q3CString& appId, const uint jobNum);
+        void slotTextFinished(const Q3CString& appId, const uint jobNum);
+        void slotTextStopped(const Q3CString& appId, const uint jobNum);
+        void slotTextPaused(const Q3CString& appId, const uint jobNum);
+        void slotTextResumed(const Q3CString& appId, const uint jobNum);
+        void slotTextRemoved(const Q3CString& appId, const uint jobNum);
 
         /*
          * Fires whenever user clicks Apply or OK buttons in Settings dialog.
@@ -590,7 +592,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Returns the senderId (appId) of the DCOP application that called us.
         * @return appId         The DCOP sendId of calling application.  NULL if called internally by kttsd itself.
         */
-        const QCString getAppId();
+        const Q3CString getAppId();
 
         /*
         * If a job number is 0, returns the default job number for a command.
@@ -630,7 +632,7 @@ class kspeech : public QObject, virtual public KSpeech
 
     public:
         // Constructor.
-        kspeech(const QCString& objId, QObject *parent=0, const char *name=0);
+        kspeech(const Q3CString& objId, QObject *parent=0, const char *name=0);
 
         // Destructor.
         ~kspeech();

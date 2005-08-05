@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qcstring.h>
 #include <qclipboard.h>
 #include <qtextstream.h>
 #include <qtextcodec.h>
@@ -48,7 +47,7 @@
 * Note that most of the real tts work occurs in Speaker.
 */
 
-KTTSD::KTTSD(const QCString& objId, QObject *parent, const char *name) :
+KTTSD::KTTSD(const Q3CString& objId, QObject *parent, const char *name) :
     DCOPObject(objId),
     QObject(parent, name)
 {
@@ -68,12 +67,12 @@ bool KTTSD::initializeSpeechData()
     if (!m_speechData)
     {
         m_speechData = new SpeechData();
-        connect (m_speechData, SIGNAL(textSet(const QCString&, const uint)), 
-            this, SLOT(slotTextSet(const QCString&, const uint)));
-        connect (m_speechData, SIGNAL(textAppended(const QCString&, const uint, const int)),
-            this, SLOT(slotTextAppended(const QCString&, const uint, const int)));
-        connect (m_speechData, SIGNAL(textRemoved(const QCString&, const uint)), 
-            this, SLOT(slotTextRemoved(const QCString&, const uint)));
+        connect (m_speechData, SIGNAL(textSet(const Q3CString&, const uint)), 
+            this, SLOT(slotTextSet(const Q3CString&, const uint)));
+        connect (m_speechData, SIGNAL(textAppended(const Q3CString&, const uint, const int)),
+            this, SLOT(slotTextAppended(const Q3CString&, const uint, const int)));
+        connect (m_speechData, SIGNAL(textRemoved(const Q3CString&, const uint)), 
+            this, SLOT(slotTextRemoved(const Q3CString&, const uint)));
 
         // Hook KNotify signal.
         if (!connectDCOPSignal(0, 0, 
@@ -155,20 +154,20 @@ bool KTTSD::initializeSpeaker()
 
     // Create speaker object and load plug ins, checking for the return
     m_speaker = new Speaker(m_speechData, m_talkerMgr);
-    connect (m_speaker, SIGNAL(textStarted(const QCString&, const uint)), 
-        this, SLOT(slotTextStarted(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(textFinished(const QCString&, const uint)), 
-        this, SLOT(slotTextFinished(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(textResumed(const QCString&, const uint)), 
-        this, SLOT(slotTextResumed(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(sentenceStarted(QString, QString, const QCString&, const uint, const uint)),
-        this, SLOT(slotSentenceStarted(QString, QString, const QCString&, const uint, const uint)));
-    connect (m_speaker, SIGNAL(sentenceFinished(const QCString&, const uint, const uint)), this,
-        SLOT(slotSentenceFinished(const QCString&, const uint, const uint)));
-    connect (m_speaker, SIGNAL(textStopped(const QCString&, const uint)), 
-        this, SLOT(slotTextStopped(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(textPaused(const QCString&, const uint)), 
-        this, SLOT(slotTextPaused(const QCString&, const uint)));
+    connect (m_speaker, SIGNAL(textStarted(const Q3CString&, const uint)), 
+        this, SLOT(slotTextStarted(const Q3CString&, const uint)));
+    connect (m_speaker, SIGNAL(textFinished(const Q3CString&, const uint)), 
+        this, SLOT(slotTextFinished(const Q3CString&, const uint)));
+    connect (m_speaker, SIGNAL(textResumed(const Q3CString&, const uint)), 
+        this, SLOT(slotTextResumed(const Q3CString&, const uint)));
+    connect (m_speaker, SIGNAL(sentenceStarted(QString, QString, const Q3CString&, const uint, const uint)),
+        this, SLOT(slotSentenceStarted(QString, QString, const Q3CString&, const uint, const uint)));
+    connect (m_speaker, SIGNAL(sentenceFinished(const Q3CString&, const uint, const uint)), this,
+        SLOT(slotSentenceFinished(const Q3CString&, const uint, const uint)));
+    connect (m_speaker, SIGNAL(textStopped(const Q3CString&, const uint)), 
+        this, SLOT(slotTextStopped(const Q3CString&, const uint)));
+    connect (m_speaker, SIGNAL(textPaused(const Q3CString&, const uint)), 
+        this, SLOT(slotTextPaused(const Q3CString&, const uint)));
 
     return true;
 }
@@ -505,7 +504,7 @@ int KTTSD::getTextJobState(const uint jobNum /*=0*/)
 *
 * The stream contains the following elements:
 *   - int state         Job state.
-*   - QCString appId    DCOP senderId of the application that requested the speech job.
+*   - Q3CString appId   DCOP senderId of the application that requested the speech job.
 *   - QString talker    Language code in which to speak the text.
 *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
 *   - int sentenceCount Total number of sentences in the job.
@@ -515,7 +514,7 @@ int KTTSD::getTextJobState(const uint jobNum /*=0*/)
     QByteArray jobInfo = getTextJobInfo(jobNum);
     QDataStream stream(jobInfo, IO_ReadOnly);
     int state;
-    QCString appId;
+    Q3CString appId;
     QString talker;
     int seq;
     int sentenceCount;
@@ -982,65 +981,65 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
 }
 
 // Slots for the speaker object
-void KTTSD::slotSentenceStarted(QString, QString, const QCString& appId, 
+void KTTSD::slotSentenceStarted(QString, QString, const Q3CString& appId, 
     const uint jobNum, const uint seq) {
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotSentenceStarted: Emitting DCOP signal sentenceStarted with appId " << appId << " job number " << jobNum << "  seq number " << seq << endl;
     sentenceStarted(appId, jobNum, seq);
 }
 
-void KTTSD::slotSentenceFinished(const QCString& appId, const uint jobNum, const uint seq){
+void KTTSD::slotSentenceFinished(const Q3CString& appId, const uint jobNum, const uint seq){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotSentenceFinished: Emitting DCOP signal sentenceFinished with appId " << appId << " job number " << jobNum << "  seq number " << seq << endl;
     sentenceFinished(appId, jobNum, seq);
 }
 
 // Slots for the speechData and speaker objects.
-void KTTSD::slotTextStarted(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextStarted(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextStarted: Emitting DCOP signal textStarted with appId " << appId << " job number " << jobNum << endl;
     textStarted(appId, jobNum);
 }
 
-void KTTSD::slotTextFinished(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextFinished(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextFinished: Emitting DCOP signal textFinished with appId " << appId << " job number " << jobNum << endl;
     textFinished(appId, jobNum);
 }
 
-void KTTSD::slotTextStopped(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextStopped(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextStopped: Emitting DCOP signal textStopped with appId " << appId << " job number " << jobNum << endl;
     textStopped(appId, jobNum);
 }
 
-void KTTSD::slotTextPaused(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextPaused(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextPaused: Emitting DCOP signal textPaused with appId " << appId << " job number " << jobNum << endl;
     textPaused(appId, jobNum);
 }
 
-void KTTSD::slotTextResumed(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextResumed(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextResumed: Emitting DCOP signal textResumed with appId " << appId << " job number " << jobNum << endl;
     textResumed(appId, jobNum);
 }
 
-//void KTTSD::slotTextSet(const QCString& appId, const uint jobNum){
-void KTTSD::slotTextSet(const QCString& appId, const uint jobNum){
+//void KTTSD::slotTextSet(const Q3CString& appId, const uint jobNum){
+void KTTSD::slotTextSet(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextSet: Emitting DCOP signal textSet with appId " << appId << " job number " << jobNum << endl;
     textSet(appId, jobNum);
 }
 
-void KTTSD::slotTextAppended(const QCString& appId, const uint jobNum, const int partNum){
+void KTTSD::slotTextAppended(const Q3CString& appId, const uint jobNum, const int partNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextAppended: Emitting DCOP signal textAppended with appId " <<
         appId << " job number " << jobNum << " part number " << partNum << endl;
     textAppended(appId, jobNum, partNum);
 }
 
-void KTTSD::slotTextRemoved(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextRemoved(const Q3CString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextRemoved: Emitting DCOP signal textRemoved with appId " << appId << " job number " << jobNum << endl;
     textRemoved(appId, jobNum);
@@ -1050,10 +1049,10 @@ void KTTSD::slotTextRemoved(const QCString& appId, const uint jobNum){
  * Returns the senderId (appId) of the DCOP application that called us.
  * @return              The DCOP sendId of calling application.
  */
-const QCString KTTSD::getAppId()
+const Q3CString KTTSD::getAppId()
 {
     DCOPClient* client = callingDcopClient();
-    QCString appId;
+    Q3CString appId;
     if (client) appId = client->senderId();
     return appId;
 }
@@ -1082,7 +1081,7 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
 */
 QString KTTSD::fixNullString(const QString &talker) const
 {
-    if (!talker) return QString::null;
+    if (talker == 0) return QString::null;
     if (talker == "0") return QString::null;
     return talker;
 }
@@ -1090,7 +1089,7 @@ QString KTTSD::fixNullString(const QString &talker) const
 // kspeech is obsolete.  Applications should use KSpeech instead.
 
 // Constructor.
-kspeech::kspeech(const QCString& objId, QObject *parent, const char *name) :
+kspeech::kspeech(const Q3CString& objId, QObject *parent, const char *name) :
     DCOPObject(objId),
     QObject(parent, name),
     m_kttsd("KSpeech")

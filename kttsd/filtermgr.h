@@ -27,7 +27,8 @@
 #define _FILTERMGR_H_
 
 // Qt includes.
-#include <qptrlist.h>
+#include <QList>
+#include <Q3CString>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -35,7 +36,7 @@
 class KConfig;
 class TalkerCode;
 
-typedef QPtrList<KttsFilterProc> FilterList;
+typedef QList<KttsFilterProc*> FilterList;
 
 class FilterMgr : public KttsFilterProc
 {
@@ -92,7 +93,7 @@ class FilterMgr : public KttsFilterProc
          *                          Also useful for hints about how to do the filtering.
          * @return                  Converted text.
          */
-        virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+        virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
 
         /**
          * Asynchronously convert input.
@@ -106,7 +107,7 @@ class FilterMgr : public KttsFilterProc
          * When the input text has been converted, filteringFinished signal will be emitted
          * and caller can retrieve using getOutput();
          */
-        virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+        virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
 
         /**
          * Waits for filtering to finish.
@@ -183,7 +184,7 @@ class FilterMgr : public KttsFilterProc
         // Talker Code.
         TalkerCode* m_talkerCode;
         // AppId.
-        QCString m_appId;
+        Q3CString m_appId;
         // Sentence Boundary regular expression (if app overrode the default).
         QString m_re;
         // True if any of the filters modified the text.

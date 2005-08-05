@@ -19,6 +19,8 @@
  *                                                                            *
  ******************************************************************************/
 
+#include <config.h>
+
 // Qt includes. 
 #include <qfile.h>
 #include <qtimer.h>
@@ -144,7 +146,7 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 
     // Connect plugins to slots.
-    QPtrList<PlugInProc> plugins = m_talkerMgr->getLoadedPlugIns();
+    PlugInList plugins = m_talkerMgr->getLoadedPlugIns();
     const int pluginsCount = plugins.count();
     for (int ndx = 0; ndx < pluginsCount; ++ndx)
     {
@@ -1296,9 +1298,9 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
         {
             if (m_speechData->keepAudio)
             {
-                QCString seqStr;
+                QString seqStr;
                 seqStr.sprintf("%08i", it->sentence->seq);    // Zero-fill to 8 chars.
-                QCString jobStr;
+                QString jobStr;
                 jobStr.sprintf("%08i", it->sentence->jobNum);
                 QString dest = m_speechData->keepAudioPath + "/kttsd-" +
                     QString("%1-%2").arg(jobStr).arg(seqStr) + ".wav";
@@ -1500,7 +1502,7 @@ QString Speaker::makeSuggestedFilename()
  */
 QString Speaker::getRealFilePath(const QString filename)
 {
-    char real[PATH_MAX];
+    char real[KDEMAXPATHLEN];
     realpath(QFile::encodeName(filename),real);
     return QFile::decodeName(real);
 }
