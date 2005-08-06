@@ -89,7 +89,7 @@ SelectTalkerDlg::SelectTalkerDlg(
     cb = m_widget->synthComboBox;
     cb->insertItem( QString::null );
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
-    for(unsigned int i=0; i < offers.count() ; ++i)
+    for(int i=0; i < offers.count() ; ++i)
         cb->insertItem(offers[i]->name());
 
     // Fill List View with list of Talkers.

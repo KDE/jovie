@@ -119,7 +119,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
         //      << appId << " matches " << m_appIdList << endl;
         bool found = false;
         QString appIdStr = appId;
-        for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
+        for (int ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
             {
