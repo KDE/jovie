@@ -526,11 +526,11 @@ mlJob* SpeechData::findLastJobByAppId(const Q3CString& appId)
     else {
         QList<mlJob*>::const_iterator it = textJobs.constEnd();
         QList<mlJob*>::const_iterator itBegin = textJobs.constBegin();
-        do {
+        while (it != itBegin) {
             --it;
             mlJob* job = *it;
             if (job->appId == appId) return job;
-        } while (it != itBegin);
+        }
         return 0;
     }
 }
@@ -691,16 +691,15 @@ void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
         {
             removedJobs.append(removedJob(job->appId, job->jobNum));
             it = textJobs.remove(it);
+            delete job;
         } else
             ++it;
     }
     // Emit signals for removed jobs.
-    removedJobsList::const_iterator rit = removedJobs.constBegin();
-    removedJobsList::const_iterator endRemovedJobsList = removedJobs.constEnd();
-    for (; rit != endRemovedJobsList ; ++rit)
+    for (int i = 0; i < removedJobs.size(); ++i)
     {
-        Q3CString appId = (*rit).first;
-        uint jobNum = (*rit).second;
+        Q3CString appId = removedJobs.at(i).first;
+        uint jobNum = removedJobs.at(i).second;
         textRemoved(appId, jobNum);
     }
 }
@@ -1109,8 +1108,8 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
 {
     // If filtering is already in progress for this job, do nothing.
     uint jobNum = job->jobNum;
-    PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[jobNum];
-    if (pooledFilterMgr) return;
+    PooledFilterMgr* pooledFilterMgr = 0;
+    if (m_pooledFilterMgrs.contains(jobNum)) return;
     // Find an idle FilterMgr, if any.
     QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
     while (it != m_pooledFilterMgrs.end()) {
