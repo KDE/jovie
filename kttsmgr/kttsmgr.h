@@ -26,14 +26,14 @@
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
-class KttsToolTip: public QToolTip
-{
-    public:
-        KttsToolTip ( QWidget* parent );
-
-    protected:
-        virtual void maybeTip ( const QPoint & p );
-};
+// class KttsToolTip: public QToolTip
+// {
+//     public:
+//         KttsToolTip ( QWidget* parent );
+// 
+//     protected:
+//         virtual void maybeTip ( const QPoint & p );
+// };
 
 class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
 {
@@ -70,7 +70,7 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
 
         bool isKttsdRunning();
         void exitWhenFinishedSpeaking();
-        KttsToolTip* m_toolTip;
+        // KttsToolTip* m_toolTip;
 };
 
 #endif    // KTTSMGR_H

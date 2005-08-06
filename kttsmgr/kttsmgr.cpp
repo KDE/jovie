@@ -132,31 +132,31 @@ int main (int argc, char *argv[])
 
 /*  KttsToolTip class */
 
-KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
-{
-}
-
-/*virtual*/ void KttsToolTip::maybeTip ( const QPoint & p )
-{
-    Q_UNUSED(p);
-
-    if (!parentWidget()->inherits("KttsMgrTray"))
-        return;
-
-    KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
-
-    QRect r(kttsMgrTray->geometry());
-    if ( !r.isValid() )
-        return;
-
-    QString status = "<qt><b>KTTSMgr</b> - ";
-    status += i18n("<qt>Text-to-Speech Manager");
-    status += "<br/><br/>";
-    status += kttsMgrTray->getStatus();
-    status += "</qt>";
-
-    tip(r, status);
-}
+// KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
+// {
+// }
+// 
+// /*virtual*/ void KttsToolTip::maybeTip ( const QPoint & p )
+// {
+//     Q_UNUSED(p);
+// 
+//     if (!parentWidget()->inherits("KttsMgrTray"))
+//         return;
+// 
+//     KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
+// 
+//     QRect r(kttsMgrTray->geometry());
+//     if ( !r.isValid() )
+//         return;
+// 
+//     QString status = "<qt><b>KTTSMgr</b> - ";
+//     status += i18n("<qt>Text-to-Speech Manager");
+//     status += "<br/><br/>";
+//     status += kttsMgrTray->getStatus();
+//     status += "</qt>";
+// 
+//     tip(r, status);
+// }
 
 /*  KttsMgrTray class */
 
@@ -169,7 +169,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     setPixmap (icon);
 
     // QToolTip::add(this, i18n("Text-to-Speech Manager"));
-    m_toolTip = new KttsToolTip(this);
+    // m_toolTip = new KttsToolTip(this);
 
     int id;
     id = contextMenu()->idAt(0);
@@ -203,7 +203,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
 KttsMgrTray::~KttsMgrTray()
 {
-    delete m_toolTip;
+    // delete m_toolTip;
 }
 
 void KttsMgrTray::textFinished(const Q3CString& /*appId*/, uint /*jobNum*/)
@@ -215,6 +215,15 @@ void KttsMgrTray::textFinished(const Q3CString& /*appId*/, uint /*jobNum*/)
 /*virtual*/ bool KttsMgrTray::eventFilter( QObject* /*o*/, QEvent* e )
 {
     if ( e->type() == QEvent::Hide ) exitWhenFinishedSpeaking();
+    if ( e->type() == QEvent::ToolTip ) {
+        QString status = "<qt><b>KTTSMgr</b> - ";
+        status += i18n("<qt>Text-to-Speech Manager");
+        status += "<br/><br/>";
+        status += getStatus();
+        status += "</qt>";
+        setToolTip(status);
+        return true;
+    }
     return false;
 }
 

@@ -1319,7 +1319,7 @@
                                     <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
                                 </property>
                             </widget>
-                            <widget class="KIntSpinBox">
+                            <widget class="QSpinBox">
                                 <property name="name">
                                     <cstring>timeBox</cstring>
                                 </property>
@@ -1797,13 +1797,6 @@
     <include location="global" impldecl="in implementation">klocale.h</include>
     <include location="global" impldecl="in implementation">kdebug.h</include>
 </includes>
-<customwidgets>
-	<customwidget>
-		<class>KintSpinBox</class>
-		<header location="global">knuminput.h</header>
-		<container>0</container>
-	</customwidget>
-</customwidgets>
 
 <signals>
     <signal>configChanged()</signal>
