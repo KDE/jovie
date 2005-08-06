@@ -279,7 +279,7 @@ QString PlugInProc::getSsmlXsltFilename()
             codecName = "Unicode";
             break;
         default:
-            if ((uint)codecNum < codecList.count())
+            if (codecNum < codecList.count())
                 codecName = codecList[codecNum];
             else
             {

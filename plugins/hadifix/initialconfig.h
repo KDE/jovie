@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <QTextStream>
-
 /**
  * Tries to find hadifix and mbrola by looking onto the hard disk. This is
  * neccessary because both hadifix and mbrola do not have standard
@@ -9,7 +6,7 @@
 void findInitialConfig() {
    QString hadifixDataPath = findHadifixDataPath();
    
-   defaultHadifixExec = findExecutable("txt2pho", hadifixDataPath+"/../");
+   defaultHadifixExec = findExecutable(QStringList("txt2pho"), hadifixDataPath+"/../");
    
    QStringList list; list += "mbrola"; list += "mbrola-linux-i386";
    defaultMbrolaExec = findExecutable(list, hadifixDataPath+"/../../mbrola/");

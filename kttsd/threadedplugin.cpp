@@ -26,8 +26,8 @@
 
 #include <kdebug.h>
 
-#include "speaker.h"
 #include "threadedplugin.h"
+#include "threadedplugin.moc"
 
 /**
 * Constructor.
@@ -35,10 +35,10 @@
 ThreadedPlugInThread::ThreadedPlugInThread(PlugInProc* plugin, QObject *parent) :
     QThread(parent),
     m_plugin(plugin),
-    m_requestExit(false),
-    m_supportsSynth(false),
+    m_waitingStop(false),
     m_filename(QString::null),
-    m_waitingStop(false)
+    m_requestExit(false),
+    m_supportsSynth(false)
 {
     m_state = psIdle;
 }
@@ -281,10 +281,17 @@ void ThreadedPlugInThread::run()
 
 // ====================================================================
 
-ThreadedPlugIn(PlugInProc* plugin, QObject *parent = 0, const char *name = 0) :
-    PlugInProc(plugin, parent, name)
+ThreadedPlugIn::ThreadedPlugIn(PlugInProc* plugin, QObject *parent, const char *name) :
+    PlugInProc(parent, name)
 {
+    // Created contained QThread.
     m_ThreadedPluginThread = new ThreadedPlugInThread(plugin, this);
+
+    // Re-emit signals emitted by the thread.
+    connect(m_ThreadedPluginThread, SIGNAL(synthFinished()), this, SIGNAL(synthFinished()));
+    connect(m_ThreadedPluginThread, SIGNAL(sayFinished()), this, SIGNAL(sayFinished()));
+    connect(m_ThreadedPluginThread, SIGNAL(stopped()), this, SIGNAL(stopped()));
+    connect(m_ThreadedPluginThread, SIGNAL(error(bool, const QString)), this, SIGNAL(error(bool, const QString)));
 }
 
 /*virtual*/ ThreadedPlugIn::~ThreadedPlugIn()

@@ -307,7 +307,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     // Get last TalkerID from config.
     QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
     int lastTalkerID = 0;
-    for (uint talkerIdNdx = 0; talkerIdNdx < talkerIDsList.count(); ++talkerIdNdx)
+    for (int talkerIdNdx = 0; talkerIdNdx < talkerIDsList.count(); ++talkerIdNdx)
     {
         int id = talkerIDsList[talkerIdNdx].toInt();
         if (id > lastTalkerID) lastTalkerID = id;
@@ -320,7 +320,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
 
     // Iterate thru the possible plug ins.
-    for(unsigned int i=0; i < offers.count() ; ++i)
+    for(int i=0; i < offers.count() ; ++i)
     {
         // See if this plugin supports the desired language.
         QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();

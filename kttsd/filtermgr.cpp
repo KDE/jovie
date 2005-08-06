@@ -23,6 +23,9 @@
   Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Qt includes
+#include <QCoreApplication>
+
 // KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
@@ -55,7 +58,7 @@ FilterMgr::~FilterMgr()
     // kdDebug() << "FilterMgr::~FilterMgr: Running" << endl;
     if ( m_state == fsFiltering )
         stopFiltering();
-    m_filterList.setAutoDelete( TRUE );
+    qDeleteAll(m_filterList);
     m_filterList.clear();
 }
 
@@ -154,7 +157,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
  *                          Also useful for hints about how to do the filtering.
  * @return                  Converted text.
  */
-QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
 {
     m_text = inputText;
     m_talkerCode = talkerCode;
@@ -180,7 +183,7 @@ QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, con
  * When the input text has been converted, filteringFinished signal will be emitted
  * and caller can retrieve using getOutput();
 */
-bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
 {
     m_text = inputText;
     m_talkerCode = talkerCode;
@@ -211,7 +214,7 @@ void FilterMgr::nextFilter()
             m_state = fsFinished;
             // Post an event which will be later emitted as a signal.
             QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-            QApplication::postEvent(this, ev);
+            QCoreApplication::postEvent(this, ev);
             return;
         }
     }
@@ -221,7 +224,7 @@ void FilterMgr::nextFilter()
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
         QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-        QApplication::postEvent(this, ev);
+        QCoreApplication::postEvent(this, ev);
         return;
     }
     m_filterProc = m_filterList.at(m_filterIndex);
@@ -230,7 +233,7 @@ void FilterMgr::nextFilter()
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
         QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-        QApplication::postEvent(this, ev);
+        QCoreApplication::postEvent(this, ev);
         return;
     }
     m_filterProc->setSbRegExp( m_re );
@@ -325,7 +328,7 @@ void FilterMgr::stopFiltering()
     m_filterProc->stopFiltering();
     m_state = fsIdle;
     QCustomEvent* ev = new QCustomEvent(QEvent::User + 302);
-    QApplication::postEvent(this, ev);
+    QCoreApplication::postEvent(this, ev);
 }
 
 /**

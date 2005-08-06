@@ -30,10 +30,10 @@
 
 #include "pluginproc.h"
 
-class Speaker;
-
-class ThreadedPlugInThread : private QThread 
+class ThreadedPlugInThread : public QThread 
 {
+    Q_OBJECT
+
     public:
         enum pluginAction
         {
@@ -134,6 +134,36 @@ class ThreadedPlugInThread : private QThread
          * Base function, where the thread will start.
          */
         virtual void run();
+
+    signals:
+        /**
+        * Emitted when synthText() finishes and plugin supports asynchronous mode.
+        */
+        void synthFinished();
+        /**
+        * Emitted when sayText() finishes and plugin supports asynchronous mode.
+        */
+        void sayFinished();
+        /**
+        * Emitted when stopText() has been called and plugin stops asynchronously.
+        */
+        void stopped();
+        /**
+        * Emitted if an error occurs.
+        * @param keepGoing               True if the plugin can continue processing.
+        *                                False if the plugin cannot continue, for example,
+        *                                the speech engine could not be started.
+        * @param msg                     Error message.
+        *
+        * When an error occurs, plugins should attempt to recover as best they can
+        * and continue accepting @ref sayText or @ref synthText calls.  For example,
+        * if the speech engine emits an error while synthesizing text, the plugin
+        * should return True along with error message.
+        *
+        * @see Error-handling
+        *
+        */
+        void error(bool keepGoing, const QString &msg);
 
     private:
         /**
@@ -296,6 +326,6 @@ class ThreadedPlugIn : public PlugInProc
 
     private:
         ThreadedPlugInThread* m_ThreadedPluginThread;
-}
+};
 
 #endif // _THREADEDPLUGIN_H_

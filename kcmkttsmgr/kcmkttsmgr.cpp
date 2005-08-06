@@ -112,6 +112,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     DCOPObject("kcmkttsmgr_kspeechsink"),
     KCModule(KCMKttsMgrFactory::instance(), parent/*, name*/)
 {
+    Q_UNUSED(name);
+
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
 
     // Initialize some variables.
