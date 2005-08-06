@@ -131,12 +131,8 @@ FestivalIntConf::~FestivalIntConf(){
 */
 int FestivalIntConf::voiceCodeToListIndex(const QString& voiceCode) const
 {
-    const int voiceListCount = m_voiceList.count();
-    for(int index = 0; index < voiceListCount; ++index){
-        // kdDebug() << "Testing: " << voiceCode << " == " << m_voiceList[index].code << endl;
-        if(voiceCode == m_voiceList[index].code)
-            return index;
-    }
+    for (int i = 0; i < m_voiceList.size(); ++i)
+        if (m_voiceList[i].code == voiceCode) return i;
     return -1;
 }
 
@@ -402,7 +398,7 @@ void FestivalIntConf::scanVoices()
     // Get existing voice code (if any).
     QString currentVoiceCode;
     int index = m_widget->selectVoiceCombo->currentItem();
-    if (index < (int)m_voiceList.count()) currentVoiceCode = m_voiceList[index].code;
+    if (index >= 0 && index < m_voiceList.count()) currentVoiceCode = m_voiceList[index].code;
 
     m_voiceList.clear();
     m_widget->selectVoiceCombo->clear();

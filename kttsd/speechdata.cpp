@@ -1175,7 +1175,8 @@ void SpeechData::waitJobFiltering(const mlJob* job)
 */
 void SpeechData::doFiltering()
 {
-    // kdDebug() << "SpeechData::doFiltering: Running." << endl;
+    kdDebug() << "SpeechData::doFiltering: Running." << endl;
+    kdDebug() << "SpeechData::doFiltering: Scanning " << m_pooledFilterMgrs.count() << " pooled filter managers." << endl;
     bool again = true;
     while (again)
     {

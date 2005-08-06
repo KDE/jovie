@@ -187,8 +187,9 @@ QString PlugInProc::getSsmlXsltFilename()
     codecList.append(local);
     codecList.append(i18n("Latin1"));
     codecList.append(i18n("Unicode"));
-    for (int i = 0; (QTextCodec::codecForIndex(i)); ++i )
-        codecList.append(QTextCodec::codecForIndex(i)->name());
+    QList<QByteArray> availableCodecs = QTextCodec::availableCodecs();
+    for (int i = 0; i < availableCodecs.size(); ++i )
+        codecList.append(availableCodecs.at(i));
     return codecList;
 }
 

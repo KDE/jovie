@@ -25,8 +25,8 @@
 #define _FESTIVALINTCONF_H_
 
 // Qt includes.
-#include <qstringlist.h>
-#include <q3valuelist.h>
+#include <QList>
+#include <QStringList>
 
 // KDE includes.
 #include <kconfig.h>
@@ -170,7 +170,7 @@ class FestivalIntConf : public PlugInConf {
         // Language country code (if any).
         QString m_countryCode;
         // List of voices */
-        Q3ValueList<voice> m_voiceList;
+        QList<voice> m_voiceList;
         // Festival synthesizer.
         FestivalIntProc* m_festProc;
         // Synthesized wave file name.

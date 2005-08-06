@@ -1493,7 +1493,7 @@ QString Speaker::makeSuggestedFilename()
     QString waveFile = tempFile.file()->name();
     tempFile.close();
     QFile::remove(waveFile);
-    // kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
+    kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return getRealFilePath(waveFile);
 }
 
