@@ -177,11 +177,6 @@
                     <property name="name">
                         <cstring>showAllLabel</cstring>
                     </property>
-                    <property name="font">
-                        <font>
-                            <underline>1</underline>
-                        </font>
-                    </property>
                     <property name="text">
                         <string>Show All</string>
                     </property>
