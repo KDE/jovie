@@ -17,11 +17,9 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <QPixmap>
-#include <QEvent>
-#include <Q3CString>
 
 // KDE includes.
 #include <kconfig.h>

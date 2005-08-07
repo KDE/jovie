@@ -20,8 +20,10 @@
 #ifndef _KTTSD_H_
 #define _KTTSD_H_
 
+// Qt includes
 #include <Q3CString>
 
+// KTTS includes
 #include "speechdata.h"
 #include "talkermgr.h"
 #include "speaker.h"
@@ -50,7 +52,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Create objects, speechData and speaker.
         * Start thread
         */
-        KTTSD(const Q3CString& objId, QObject *parent=0, const char *name=0);
+        KTTSD(const DCOPCString& objId, QObject *parent=0, const char *name=0);
 
         /**
         * Destructor.
@@ -307,7 +309,7 @@ class KTTSD : public QObject, virtual public KSpeech
                     QByteArray jobInfo = getTextJobInfo(jobNum);
                     QDataStream stream(jobInfo, IO_ReadOnly);
                     int state;
-                    Q3CString appId;
+                    DCOPCString appId;
                     QString talker;
                     int seq;
                     int sentenceCount;
@@ -545,21 +547,21 @@ class KTTSD : public QObject, virtual public KSpeech
          * the status of the speaker object has changed
          */
         void slotSentenceStarted(QString text, QString language, 
-            const Q3CString& appId, const uint jobNum, const uint seq);
-        void slotSentenceFinished(const Q3CString& appId, const uint jobNum, const uint seq);
+            const QByteArray& appId, const uint jobNum, const uint seq);
+        void slotSentenceFinished(const QByteArray& appId, const uint jobNum, const uint seq);
+        void slotTextStarted(const QByteArray& appId, const uint jobNum);
+        void slotTextFinished(const QByteArray& appId, const uint jobNum);
+        void slotTextStopped(const QByteArray& appId, const uint jobNum);
+        void slotTextPaused(const QByteArray& appId, const uint jobNum);
+        void slotTextResumed(const QByteArray& appId, const uint jobNum);
 
         /*
          * These functions are called whenever
-         * the status of the speechData object has changed
+         * the status of the speechData or speaker objects has changed
          */
-        void slotTextSet(const Q3CString& appId, const uint jobNum);
-        void slotTextAppended(const Q3CString& appId, const uint jobNum, const int appId);
-        void slotTextStarted(const Q3CString& appId, const uint jobNum);
-        void slotTextFinished(const Q3CString& appId, const uint jobNum);
-        void slotTextStopped(const Q3CString& appId, const uint jobNum);
-        void slotTextPaused(const Q3CString& appId, const uint jobNum);
-        void slotTextResumed(const Q3CString& appId, const uint jobNum);
-        void slotTextRemoved(const Q3CString& appId, const uint jobNum);
+        void slotTextSet(const QByteArray& appId, const uint jobNum);
+        void slotTextAppended(const QByteArray& appId, const uint jobNum, const int appId);
+        void slotTextRemoved(const QByteArray& appId, const uint jobNum);
 
         /*
          * Fires whenever user clicks Apply or OK buttons in Settings dialog.
@@ -592,7 +594,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Returns the senderId (appId) of the DCOP application that called us.
         * @return appId         The DCOP sendId of calling application.  NULL if called internally by kttsd itself.
         */
-        const Q3CString getAppId();
+        const DCOPCString getAppId();
 
         /*
         * If a job number is 0, returns the default job number for a command.
@@ -632,7 +634,7 @@ class kspeech : public QObject, virtual public KSpeech
 
     public:
         // Constructor.
-        kspeech(const Q3CString& objId, QObject *parent=0, const char *name=0);
+        kspeech(const DCOPCString& objId, QObject *parent=0, const char *name=0);
 
         // Destructor.
         ~kspeech();

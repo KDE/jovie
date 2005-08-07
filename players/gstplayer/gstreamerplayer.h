@@ -18,8 +18,8 @@
 #include "config.h"
 
 #include <glib.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
+
 extern "C" {
 #include <gst/gstversion.h>
 }
@@ -51,7 +51,7 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const Q3CString& classname );
+    virtual QStringList getPluginList( const QByteArray& classname );
     virtual void setSinkName(const QString &sinkName);
 
     virtual bool requireVersion(uint major, uint minor, uint micro);

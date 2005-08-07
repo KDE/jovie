@@ -21,10 +21,9 @@
 #ifndef _KSPEECH_H_
 #define _KSPEECH_H_
 
+#include <Q3CString>
 #include <dcopobject.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 /**
  * @interface KSpeech
@@ -316,8 +315,8 @@
      }
      // Connect KTTSD DCOP signals to our slots.
      connectDCOPSignal("kttsd", "KSpeech",
-         "sentenceStarted(Q3CString,uint,uint)",
-         "sentenceStarted(Q3CString,uint,uint)",
+         "sentenceStarted(QCString,uint,uint)",
+         "sentenceStarted(QCString,uint,uint)",
          false);
    @endverbatim
  *
@@ -331,7 +330,7 @@
  *     becomes
  *
    @verbatim
-       "sentenceStarted(Q3CString,uint,uint)",
+       "sentenceStarted(QCString,uint,uint)",
    @endverbatim
  *
  *     in the connectDCOPSignal call.

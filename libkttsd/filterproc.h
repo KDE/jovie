@@ -26,10 +26,9 @@
 #define _FILTERPROC_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QObject>
+#include <QStringList>
+#include <QByteArray>
 
 // KDE includes.
 #include <kdemacros.h>
@@ -99,7 +98,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -115,7 +114,7 @@ public:
      * program may then call @ref getOutput to retrieve converted text.  Calling
      * program must call @ref ackFinished to acknowledge the conversion.
      */
-    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
+    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
 
     /**
      * Waits for a previous call to asyncConvert to finish.

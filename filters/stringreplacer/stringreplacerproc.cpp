@@ -23,10 +23,8 @@
 
 // Qt includes.
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 #include <q3listview.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 // KDE includes.
 #include <kdebug.h>
@@ -169,7 +167,8 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
+/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode,
+    const QByteArray& appId)
 {
     m_wasModified = false;
     // If language doesn't match, return input unmolested.

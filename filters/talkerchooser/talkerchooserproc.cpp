@@ -22,9 +22,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qregexp.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QRegExp>
 
 // KDE includes.
 #include <kdebug.h>
@@ -105,7 +103,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString TalkerChooserProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const Q3CString& appId)
+    const QByteArray& appId)
 {
     if ( !m_re.isEmpty() )
     {

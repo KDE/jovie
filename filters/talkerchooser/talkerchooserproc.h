@@ -24,11 +24,12 @@
 #ifndef _TALKERCHOOSERPROC_H_
 #define _TALKERCHOOSERPROC_H_
 
+// Qt includes.
+#include <QByteArray>
+
 // KTTS includes.
 #include "filterproc.h"
 #include "talkercode.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class TalkerChooserProc : virtual public KttsFilterProc
 {
@@ -77,7 +78,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
 
 private:
 

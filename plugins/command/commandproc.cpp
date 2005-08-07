@@ -16,14 +16,12 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
-#include <qstring.h>
-#include <q3valuelist.h>
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <qtextcodec.h>
-#include <q3valuestack.h>
-//Added by qt3to4:
+#include <QFile>
+#include <QString>
+#include <QStringList>
+#include <QRegExp>
+#include <QTextCodec>
+#include <QStack>
 #include <QTextStream>
 
 // KDE includes.
@@ -160,7 +158,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     } else m_textFilename = QString::null;
 
     // 2. replace variables with values
-    Q3ValueStack<bool> stack;
+    QStack<bool> stack;
     bool issinglequote=false;
     bool isdoublequote=false;
     int noreplace=0;

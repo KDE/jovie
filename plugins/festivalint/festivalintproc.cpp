@@ -25,12 +25,11 @@
 #include <math.h>
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qthread.h>
-#include <qtextcodec.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QString>
+#include <QStringList>
+#include <QThread>
+#include <QTextCodec>
+#include <QByteArray>
 
 // KDE includes.
 #include <kdebug.h>
@@ -399,7 +398,7 @@ bool FestivalIntProc::sendIfReady()
     if (!m_festProc->isRunning()) return false;
     QString text = m_outputQueue[0];
     text += "\n";
-    Q3CString encodedText;
+    QByteArray encodedText;
     if (m_codec)
         encodedText = m_codec->fromUnicode(text);
     else

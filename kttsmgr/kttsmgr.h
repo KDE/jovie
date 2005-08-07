@@ -14,10 +14,8 @@
 #define KTTSMGR_H
 
 // Qt includes.
-#include <qevent.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QEvent>
+#include <QToolTip>
 
 // KDE includes.
 #include <ksystemtray.h>
@@ -47,7 +45,6 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
         QString getStatus();
 
     protected:
-        // ASYNC textStarted(const QCString& appId, uint jobNum);
         ASYNC textFinished(const Q3CString& appId, uint jobNum);
         virtual bool eventFilter( QObject* o, QEvent* e );
 

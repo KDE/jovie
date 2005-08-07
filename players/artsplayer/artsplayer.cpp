@@ -24,8 +24,6 @@
 
 #include <qdir.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
@@ -219,7 +217,7 @@ void ArtsPlayer::seekPosition(int position)
 }
 
 // These are GStreamer functions.  aRts ignores them.
-QStringList ArtsPlayer::getPluginList( const Q3CString& /*classname*/ ) { return QStringList(); }
+QStringList ArtsPlayer::getPluginList( const QByteArray& /*classname*/ ) { return QStringList(); }
 void ArtsPlayer::setSinkName(const QString& /*sinkName*/) { }
 bool ArtsPlayer::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
 

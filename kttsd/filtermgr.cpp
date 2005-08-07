@@ -157,7 +157,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
  *                          Also useful for hints about how to do the filtering.
  * @return                  Converted text.
  */
-QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
+QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId)
 {
     m_text = inputText;
     m_talkerCode = talkerCode;
@@ -183,7 +183,7 @@ QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, con
  * When the input text has been converted, filteringFinished signal will be emitted
  * and caller can retrieve using getOutput();
 */
-bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId)
+bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId)
 {
     m_text = inputText;
     m_talkerCode = talkerCode;

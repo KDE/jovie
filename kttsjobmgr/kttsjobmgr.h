@@ -18,6 +18,9 @@
 #ifndef _KTTSJOBMGRPART_H_
 #define _KTTSJOBMGRPART_H_
 
+// Qt includes
+#include <Q3CString>
+
 // KDE includes.
 #include <kparts/browserextension.h>
 #include <klibloader.h>
@@ -25,8 +28,6 @@
 // KTTS includes.
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class KAboutData;
 class KInstance;

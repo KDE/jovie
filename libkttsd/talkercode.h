@@ -27,10 +27,12 @@
 #define _TALKERCODE_H_
 
 // Qt includes.
-#include <qstring.h>
+#include <QString>
+#include <QList>
+
+// KDE includes.
 #include <kdemacros.h>
 #include "kdeexportfix.h"
-#include <q3valuelist.h>
 
 class KDE_EXPORT TalkerCode
 {
@@ -49,7 +51,7 @@ class KDE_EXPORT TalkerCode
          */
         ~TalkerCode();
 
-        typedef Q3ValueList<TalkerCode> TalkerCodeList;
+        typedef QList<TalkerCode> TalkerCodeList;
 
         /**
          * Properties.

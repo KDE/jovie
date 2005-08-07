@@ -26,13 +26,12 @@
 #define _STRINGREPLACERPROC_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qtextstream.h>
-#include <q3valuelist.h>
-#include <qregexp.h>
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QObject>
+#include <QTextStream>
+#include <QRegExp>
+#include <QStringList>
+#include <QList>
+#include <QByteArray>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -72,7 +71,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const Q3CString& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
 
     /**
      * Did this filter do anything?  If the filter returns the input as output
@@ -87,9 +86,9 @@ private:
     QStringList m_appIdList;
 
     // List of regular expressions to match.
-    Q3ValueList<QRegExp> m_matchList;
+    QList<QRegExp> m_matchList;
     // List of substitutions to replace matches.
-    Q3ValueList<QString> m_substList;
+    QList<QString> m_substList;
     // True if this filter did anything to the text.
     bool m_wasModified;
 };

@@ -17,11 +17,13 @@
 #define AKODEPLAYER_H
 
 #include <config.h>
-#include "kdeexportfix.h"
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
+// Qt includes
+#include <QByteArray>
+#include <QString>
+
+// KDE includes
+#include "kdeexportfix.h"
 
 #include "player.h"
 #include <kdemacros.h>
@@ -54,7 +56,7 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const Q3CString& classname );
+    virtual QStringList getPluginList( const QByteArray& classname );
     virtual void setSinkName(const QString &sinkName);
     virtual bool requireVersion(uint major, uint minor, uint micro);
 

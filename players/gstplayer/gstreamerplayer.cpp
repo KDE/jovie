@@ -14,8 +14,6 @@
 
 // Qt includes.
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 // KDE includes.
 #include <kapplication.h>
@@ -129,7 +127,7 @@ void GStreamerPlayer::seekPosition(int position)
  * @param classname             Desired class.  Use "Sink/Audio" for sinks.
  * @return                      List of plugin names.
  */
-QStringList GStreamerPlayer::getPluginList( const Q3CString& classname )
+QStringList GStreamerPlayer::getPluginList( const QByteArray& classname )
 {
     GList * pool_registries = NULL;
     GList* registries = NULL;

@@ -37,9 +37,8 @@
 #ifndef _KSPEECHSINK_H_
 #define _KSPEECHSINK_H_
 
-#include <dcopobject.h>
-//Added by qt3to4:
 #include <Q3CString>
+#include <dcopobject.h>
 
 class KSpeechSink : virtual public DCOPObject {
     K_DCOP

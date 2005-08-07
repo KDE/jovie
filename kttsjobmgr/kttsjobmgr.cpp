@@ -26,9 +26,7 @@
 
 
 #include <qmime.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QList>
 
 // KDE includes.
 #include <kinstance.h>
@@ -322,10 +320,10 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
         "markerSeen(Q3CString,QString)",
         "markerSeen(Q3CString,QString)",
         false);
-    connectDCOPSignal("kttsd", "KSpeech",
+    if (!connectDCOPSignal("kttsd", "KSpeech",
         "sentenceStarted(Q3CString,uint,uint)",
         "sentenceStarted(Q3CString,uint,uint)",
-        false);
+        false)) kdDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal sentenceStarted" << endl;
     connectDCOPSignal(0, 0,
         "sentenceFinished(Q3CString,uint,uint)",
         "sentenceFinished(Q3CString,uint,uint)",
@@ -365,7 +363,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
     // Divide splitter in half.  ListView gets half.  Buttons and Current Sentence get half.
     int halfSplitterSize = splitter->height()/2;
-    Q3ValueList<int> splitterSizes;
+    QList<int> splitterSizes;
     splitterSizes.append(halfSplitterSize);
     splitterSizes.append(halfSplitterSize);
     splitter->setSizes(splitterSizes);
@@ -659,7 +657,7 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
     QByteArray jobInfo = getTextJobInfo(jobNum);
     QDataStream stream(&jobInfo, QIODevice::ReadOnly);
     int state;
-    Q3CString appId;
+    DCOPCString appId;
     QString talker;
     int seq;
     int sentenceCount;
@@ -707,7 +705,7 @@ void KttsJobMgrPart::refreshJobListView()
         QByteArray jobInfo = getTextJobInfo(jobNum);
         QDataStream stream(&jobInfo, QIODevice::ReadOnly);
         int state;
-        Q3CString appId;
+        DCOPCString appId;
         QString talkerCode;
         int seq;
         int sentenceCount;
@@ -883,7 +881,7 @@ ASYNC KttsJobMgrPart::textSet(const Q3CString&, const uint jobNum)
     QByteArray jobInfo = getTextJobInfo(jobNum);
     QDataStream stream(&jobInfo, QIODevice::ReadOnly);
     int state;
-    Q3CString appId;
+    DCOPCString appId;
     QString talkerCode;
     int seq;
     int sentenceCount;

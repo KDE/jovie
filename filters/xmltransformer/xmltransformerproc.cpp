@@ -22,11 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
-#include <qregexp.h>
-//Added by qt3to4:
+#include <QFile>
+#include <QRegExp>
 #include <QTextStream>
-#include <Q3CString>
 
 // KDE includes.
 #include <kdeversion.h>
@@ -109,7 +107,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString XmlTransformerProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const Q3CString& appId)
+    const QByteArray& appId)
 {
     // kdDebug() << "XmlTransformerProc::convert: Running." << endl;
     // If not properly configured, do nothing.
@@ -143,7 +141,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * program must call @ref ackFinished to acknowledge the conversion.
  */
 /*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
-    const Q3CString& appId)
+    const QByteArray& appId)
 {
     m_wasModified = false;
 

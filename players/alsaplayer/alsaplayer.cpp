@@ -328,7 +328,7 @@ void AlsaPlayerThread::seekPosition(int /*position*/)
 /*
  * Returns a list of PCM devices.
  */
-QStringList AlsaPlayerThread::getPluginList( const Q3CString& /*classname*/ )
+QStringList AlsaPlayerThread::getPluginList( const QByteArray& /*classname*/ )
 {
     QStringList assumed("default");
     snd_config_t *conf;
@@ -1512,7 +1512,7 @@ AlsaPlayer::~AlsaPlayer()
 /*virtual*/ void AlsaPlayer::seek(int seekTime) { m_AlsaPlayerThread->seek(seekTime); }
 /*virtual*/ void AlsaPlayer::seekPosition(int position) { m_AlsaPlayerThread->seekPosition(position); }
 
-/*virtual*/ QStringList AlsaPlayer::getPluginList( const Q3CString& classname )
+/*virtual*/ QStringList AlsaPlayer::getPluginList( const QByteArray& classname )
     { return m_AlsaPlayerThread->getPluginList(classname); }
 /*virtual*/ void AlsaPlayer::setSinkName(const QString &sinkName)
     { m_AlsaPlayerThread->setSinkName(sinkName); }

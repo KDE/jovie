@@ -27,9 +27,6 @@
 #ifndef _SELECTTALKERDLG_H_
 #define _SELECTTALKERDLG_H_
 
-// Qt includes.
-#include <q3valuelist.h>
-
 // KDE includes.
 #include <kdialogbase.h>
 #include <klocale.h>

@@ -14,12 +14,11 @@
 
 #include <config.h>
 
+// Qt includes
+#include <QFile>
+
+// KDE includes
 #include <kdebug.h>
-
-#include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
-
 #include "akode/player.h"
 #include "akode/decoder.h"
 
@@ -171,7 +170,7 @@ void aKodePlayer::seekPosition(int position)
         m_player->decoder()->seek((position * m_player->decoder()->length())/1000);
 }
 
-QStringList aKodePlayer::getPluginList( const Q3CString& /*classname*/ )
+QStringList aKodePlayer::getPluginList( const QByteArray& /*classname*/ )
 {
     return QStringList::split("|", "auto|polyp|alsa|jack|oss");
 }

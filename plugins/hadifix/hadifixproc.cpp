@@ -15,13 +15,14 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-//Added by qt3to4:
-#include <Q3CString>
 
+// Qt includes
+#include <QString>
+#include <QStringList>
+#include <QTextCodec>
+#include <QByteArray>
+
+// KDE includes
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kprocess.h>
@@ -213,7 +214,7 @@ void HadifixProc::synth(QString text,
      kdDebug() << "HadifixProc::synth: start process failed." << endl;
      d->state = psIdle;
    } else {
-     Q3CString encodedText;
+     QByteArray encodedText;
      if (codec) {
        encodedText = codec->fromUnicode(text);
        // kdDebug() << "HadifixProc::synth: encoding using " << codec->name() << endl;
