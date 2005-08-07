@@ -1489,9 +1489,14 @@ void Speaker::postPlaySignals(uttIterator it)
  */
 QString Speaker::makeSuggestedFilename()
 {
-    KTempFile tempFile (locateLocal("tmp", "kttsd-"), ".wav");
-    QString waveFile = tempFile.file()->name();
-    tempFile.close();
+    QString tmpDir = locateLocal("tmp", "kttsd-");
+    kdDebug() << "Speaker::makeSuggestedFilename: tmpDir = " << tmpDir << endl;
+    KTempFile tempFile (tmpDir, ".wav");
+    // TODO: This not working.  Why?
+    // QString waveFile = tempFile.file()->name();
+    // QString waveFile = mFile.name();
+    // tempFile.close();
+    QString waveFile = tempFile.name();
     QFile::remove(waveFile);
     kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return getRealFilePath(waveFile);

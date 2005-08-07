@@ -628,12 +628,13 @@ void SpeechData::removeText(const uint jobNum)
         removeAppId = removeJob->appId;
         removeJobNum = removeJob->jobNum;
         // If filtering on the job, cancel it.
-        if (m_pooledFilterMgrs[removeJobNum])
+        if (m_pooledFilterMgrs.contains(removeJobNum))
         {
-            PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[removeJobNum];
+            PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs.take(removeJobNum);
             pooledFilterMgr->busy = false;
             pooledFilterMgr->job = 0;
             pooledFilterMgr->filterMgr->stopFiltering();
+            m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
         }
         // Delete the job.
         textJobs.removeAll(removeJob);
@@ -1157,8 +1158,9 @@ void SpeechData::waitJobFiltering(const mlJob* job)
 #if NO_FILTERS
     return;
 #endif
-    PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[job->jobNum];
-    if (!pooledFilterMgr) return;
+    uint jobNum = job->jobNum;
+    if (!m_pooledFilterMgrs.contains(jobNum)) return;
+    PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[jobNum];
     if (pooledFilterMgr->busy)
     {
         if (!pooledFilterMgr->filterMgr->noSBD())
@@ -1175,16 +1177,20 @@ void SpeechData::waitJobFiltering(const mlJob* job)
 */
 void SpeechData::doFiltering()
 {
-    kdDebug() << "SpeechData::doFiltering: Running." << endl;
-    kdDebug() << "SpeechData::doFiltering: Scanning " << m_pooledFilterMgrs.count() << " pooled filter managers." << endl;
+    // kdDebug() << "SpeechData::doFiltering: Running." << endl;
+    // kdDebug() << "SpeechData::doFiltering: Scanning " << m_pooledFilterMgrs.count() << " pooled filter managers." << endl;
     bool again = true;
     while (again)
     {
         again = false;
         QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
+        QHash<int, PooledFilterMgr*>::iterator nextIt;
         while (it != m_pooledFilterMgrs.end()) {
+            nextIt = it;
+            ++nextIt;
             PooledFilterMgr* pooledFilterMgr = it.value();
             // If FilterMgr is busy, see if it is now finished.
+            Q_ASSERT(pooledFilterMgr);
             if (pooledFilterMgr->busy)
             {
                 FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
@@ -1217,6 +1223,9 @@ void SpeechData::doFiltering()
                     int partNum = job->partSeqNums.count();
                     // Clean up.
                     pooledFilterMgr->job = 0;
+                    // Re-index pool of FilterMgrs;
+                    m_pooledFilterMgrs.erase(it);
+                    m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
                     // Emit signal.
                     if (!filterMgr->noSBD())
                     {
@@ -1227,7 +1236,7 @@ void SpeechData::doFiltering()
                     }
                 }
             }
-            ++it;
+            it = nextIt;
         }
     }
 }
