@@ -319,44 +319,44 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
         "kttsdStarted()",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "markerSeen(QCString,QString)",
-        "markerSeen(QCString,QString)",
+        "markerSeen(Q3CString,QString)",
+        "markerSeen(Q3CString,QString)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "sentenceStarted(QCString,uint,uint)",
-        "sentenceStarted(QCString,uint,uint)",
+        "sentenceStarted(Q3CString,uint,uint)",
+        "sentenceStarted(Q3CString,uint,uint)",
         false);
     connectDCOPSignal(0, 0,
-        "sentenceFinished(QCString,uint,uint)",
-        "sentenceFinished(QCString,uint,uint)",
+        "sentenceFinished(Q3CString,uint,uint)",
+        "sentenceFinished(Q3CString,uint,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textSet(QCString,uint)",
-        "textSet(QCString,uint)",
+        "textSet(Q3CString,uint)",
+        "textSet(Q3CString,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textStarted(QCString,uint)",
-        "textStarted(QCString,uint)",
+        "textStarted(Q3CString,uint)",
+        "textStarted(Q3CString,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textFinished(QCString,uint)",
-        "textFinished(QCString,uint)",
+        "textFinished(Q3CString,uint)",
+        "textFinished(Q3CString,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textStopped(QCString,uint)",
-        "textStopped(QCString,uint)",
+        "textStopped(Q3CString,uint)",
+        "textStopped(Q3CString,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textPaused(QCString,uint)",
-        "textPaused(QCString,uint)",
+        "textPaused(Q3CString,uint)",
+        "textPaused(Q3CString,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textResumed(QCString,uint)",
-        "textResumed(QCString,uint)",
+        "textResumed(Q3CString,uint)",
+        "textResumed(Q3CString,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textRemoved(QCString,uint)",
-        "textRemoved(QCString,uint)",
+        "textRemoved(Q3CString,uint)",
+        "textRemoved(Q3CString,uint)",
         false);
 
     m_extension = new KttsJobMgrBrowserExtension(this);

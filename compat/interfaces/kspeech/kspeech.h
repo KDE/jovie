@@ -316,8 +316,8 @@
      }
      // Connect KTTSD DCOP signals to our slots.
      connectDCOPSignal("kttsd", "KSpeech",
-         "sentenceStarted(QCString,uint,uint)",
-         "sentenceStarted(QCString,uint,uint)",
+         "sentenceStarted(Q3CString,uint,uint)",
+         "sentenceStarted(Q3CString,uint,uint)",
          false);
    @endverbatim
  *
@@ -331,7 +331,7 @@
  *     becomes
  *
    @verbatim
-       "sentenceStarted(QCString,uint,uint)",
+       "sentenceStarted(Q3CString,uint,uint)",
    @endverbatim
  *
  *     in the connectDCOPSignal call.

@@ -193,8 +193,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     if (args->isSet("autoexit"))
     {
         connectDCOPSignal("kttsd", "KSpeech",
-            "textFinished(QCString,uint)",
-            "textFinished(QCString,uint)",
+            "textFinished(Q3CString,uint)",
+            "textFinished(Q3CString,uint)",
             false);
         // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
         parent->installEventFilter(this);
