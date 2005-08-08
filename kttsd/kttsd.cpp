@@ -182,7 +182,7 @@ KTTSD::~KTTSD(){
     delete m_speaker;
     delete m_talkerMgr;
     delete m_speechData;
-    kdDebug() << "KTTSD::~KTTSD: Emitting DCOP signal kttsdExiting()" << endl;
+    announceEvent("~KTTS", "kttsdExiting");
     kttsdExiting();
 }
 
@@ -817,7 +817,7 @@ void KTTSD::showDialog()
 void KTTSD::kttsdExit()
 {
     stopText();
-    kdDebug() << "KTTSD::kttsdExit: Emitting DCOP signal kttsdExiting()" << endl;
+    announceEvent("kttsdExit", "kttsdExiting");
     kttsdExiting();
     kapp->quit();
 }
@@ -854,7 +854,7 @@ bool KTTSD::ready()
     if (!initializeTalkerMgr()) return false;
     if (!initializeSpeaker()) return false;
     m_speaker->doUtterances();
-    kdDebug() << "KTTSD::ready: Emitting DCOP signal kttsdStarted()" << endl;
+    announceEvent("ready", "kttsdStarted");
     kttsdStarted();
     return true;
 }
@@ -984,63 +984,62 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
 void KTTSD::slotSentenceStarted(QString, QString, const QByteArray& appId, 
     const uint jobNum, const uint seq) {
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotSentenceStarted: Emitting DCOP signal sentenceStarted with appId " << appId << " job number " << jobNum << "  seq number " << seq << endl;
+    announceEvent("slotSentenceStarted", "sentenceStarted", appId, jobNum, seq);
     sentenceStarted(appId, jobNum, seq);
 }
 
 void KTTSD::slotSentenceFinished(const QByteArray& appId, const uint jobNum, const uint seq){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotSentenceFinished: Emitting DCOP signal sentenceFinished with appId " << appId << " job number " << jobNum << "  seq number " << seq << endl;
+    announceEvent("slotSentenceFinished", "sentenceFinished", appId, jobNum, seq);
     sentenceFinished(appId, jobNum, seq);
 }
 
 // Slots for the speechData and speaker objects.
 void KTTSD::slotTextStarted(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextStarted: Emitting DCOP signal textStarted with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextStarted", "textStarted", appId, jobNum);
     textStarted(appId, jobNum);
 }
 
 void KTTSD::slotTextFinished(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextFinished: Emitting DCOP signal textFinished with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextFinished", "textFinished", appId, jobNum);
     textFinished(appId, jobNum);
 }
 
 void KTTSD::slotTextStopped(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextStopped: Emitting DCOP signal textStopped with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextStopped", "textStopped", appId, jobNum);
     textStopped(appId, jobNum);
 }
 
 void KTTSD::slotTextPaused(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextPaused: Emitting DCOP signal textPaused with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextPaused", "textPaused", appId, jobNum);
     textPaused(appId, jobNum);
 }
 
 void KTTSD::slotTextResumed(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextResumed: Emitting DCOP signal textResumed with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextResumed", "textResumed", appId, jobNum);
     textResumed(appId, jobNum);
 }
 
 void KTTSD::slotTextSet(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextSet: Emitting DCOP signal textSet with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextSet", "textSet", appId, jobNum);
     textSet(appId, jobNum);
 }
 
 void KTTSD::slotTextAppended(const QByteArray& appId, const uint jobNum, const int partNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextAppended: Emitting DCOP signal textAppended with appId " <<
-        appId << " job number " << jobNum << " part number " << partNum << endl;
+    announceEvent("slotTextAppended", "textAppended", appId, jobNum, partNum);
     textAppended(appId, jobNum, partNum);
 }
 
 void KTTSD::slotTextRemoved(const QByteArray& appId, const uint jobNum){
     // Emit DCOP signal.
-    kdDebug() << "KTTSD::slotTextRemoved: Emitting DCOP signal textRemoved with appId " << appId << " job number " << jobNum << endl;
+    announceEvent("slotTextRemoved", "textRemoved", appId, jobNum);
     textRemoved(appId, jobNum);
 }
 
@@ -1083,6 +1082,30 @@ QString KTTSD::fixNullString(const QString &talker) const
     if (talker == 0) return QString::null;
     if (talker == "0") return QString::null;
     return talker;
+}
+
+void KTTSD::announceEvent(const QString& slotName, const QString& eventName) {
+    kdDebug() << "KTTSD::" << slotName << ": emitting DCOP signal " << eventName << endl;
+}
+
+void KTTSD::announceEvent(const QString& slotName, const QString& eventName, const QByteArray appId) {
+    QString appIdStr(appId);
+    kdDebug() << "KTTSD::" << slotName << ": emitting DCOP signal " << eventName <<
+        " with appId " << appIdStr << endl;
+}
+
+void KTTSD::announceEvent(const QString& slotName, const QString& eventName, const QByteArray appId,
+    uint jobNum) {
+    QString appIdStr(appId);
+    kdDebug() << "KTTSD::" << slotName << ": emitting DCOP signal " << eventName <<
+        " with appId " << appIdStr << " and job number " << jobNum << endl;
+}
+
+void KTTSD::announceEvent(const QString& slotName, const QString& eventName, const QByteArray appId,
+    uint jobNum, uint seq) {
+    QString appIdStr(appId);
+    kdDebug() << "KTTSD::" << slotName << ": emitting DCOP signal " << eventName <<
+        " with appId " << appIdStr << " job number " << jobNum << " and seq/part number " << seq << endl;
 }
 
 // kspeech is obsolete.  Applications should use KSpeech instead.

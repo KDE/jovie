@@ -611,6 +611,16 @@ class KTTSD : public QObject, virtual public KSpeech
         QString fixNullString(const QString &talker) const;
 
         /*
+        * Announces an event.
+        */
+        void announceEvent(const QString& slotName, const QString& eventName);
+        void announceEvent(const QString& slotName, const QString& eventName, const QByteArray appId);
+        void announceEvent(const QString& slotName, const QString& eventName, const QByteArray appId,
+            uint jobNum);
+        void announceEvent(const QString& slotName, const QString& eventName, const QByteArray appId,
+            uint jobNum, uint seq);
+
+        /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD
          */
         SpeechData* m_speechData;
