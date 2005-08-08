@@ -28,10 +28,10 @@
 #include <alsa/asoundlib.h>
 
 // Qt includes.
-#include <qstring.h>
-#include <qobject.h>
-#include <qthread.h>
-#include <qfile.h>
+#include <QString>
+#include <QObject>
+#include <QThread>
+#include <QFile>
 #include <qmutex.h>
 #include <QByteArray>
 
@@ -102,23 +102,23 @@ private:
 
     ssize_t safe_read(int fd, void *buf, size_t count);
     int test_vocfile(void *buffer);
-    size_t test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line);
+    ssize_t test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line);
     ssize_t test_wavefile(int fd, char *_buffer, size_t size);
     int test_au(int fd, char *buffer);
-    void set_params(void);
-    void xrun(void);
+    bool set_params(void);
+    bool xrun(void);
     void suspend(void);
     void compute_max_peak(char *data, size_t count);
     ssize_t pcm_write(char *data, size_t count);
     ssize_t voc_pcm_write(u_char *data, size_t count);
     void voc_write_silence(unsigned x);
-    void voc_pcm_flush(void);
-    void voc_play(int fd, int ofs, const char *name);
+    bool voc_pcm_flush(void);
+    bool voc_play(int fd, int ofs, const char *name);
     void init_raw_data(void);
     off64_t calc_count(void);
     void header(int rtype, const char *name);
-    void playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name);
-    void playback(int fd);
+    bool playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name);
+    bool playback(int fd);
 
     KURL m_currentURL;
     float m_currentVolume;

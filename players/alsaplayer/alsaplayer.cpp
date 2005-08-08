@@ -41,7 +41,7 @@
 // Qt includes.
 #include <qdir.h>
 #include <qapplication.h>
-#include <q3cstring.h>
+#include <QMutexLocker>
 
 // KDE includes.
 #include <kdebug.h>
@@ -95,7 +95,7 @@ AlsaPlayerThread::AlsaPlayerThread(QObject* parent) :
 
 AlsaPlayerThread::~AlsaPlayerThread()
 {
-    if (running()) {
+    if (isRunning()) {
         stop();
         wait();
     }
@@ -104,7 +104,7 @@ AlsaPlayerThread::~AlsaPlayerThread()
 //void AlsaPlayerThread::play(const FileHandle &file)
 void AlsaPlayerThread::startPlay(const QString &file)
 {
-    if (running()) {
+    if (isRunning()) {
         if (paused()) snd_pcm_pause(handle, false);
         return;
     }
@@ -190,17 +190,16 @@ void AlsaPlayerThread::startPlay(const QString &file)
 
 void AlsaPlayerThread::pause()
 {
-    if (running()) {
-        m_mutex.lock();
+    if (isRunning()) {
+        QMutexLocker locker(&m_mutex);
         if (handle) {
             // Some hardware can pause; some can't.  canPause is set in set_params.
             if (canPause) {
                 snd_pcm_pause(handle, true);
-                m_mutex.unlock();
             } else {
                 // TODO: Need to support pausing for hardware that does not support it.
                 // Perhaps by setting a flag and causing pcm_write routine to sleep?
-                m_mutex.unlock();
+                locker.unlock();
                 stop();
             }
         }
@@ -209,12 +208,10 @@ void AlsaPlayerThread::pause()
 
 void AlsaPlayerThread::stop()
 {
-    if (running()) {
-        m_mutex.lock();
+    if (isRunning()) {
         /* Stop PCM device and drop pending frames */
         // kdDebug() << timestamp() << "AlsaPlayerThread::stop: calling snd_pcm_drop" << endl;
         if (handle) snd_pcm_drop(handle);
-        m_mutex.unlock();
         /* Wait for thread to exit */
         wait();
     }
@@ -238,8 +235,8 @@ float AlsaPlayerThread::volume() const
 bool AlsaPlayerThread::playing() const
 {
     bool result = false;
-    if (running()) {
-        m_mutex.lock();
+    if (isRunning()) {
+        QMutexLocker locker(&m_mutex);
         if (handle) {
             snd_pcm_status_t *status;
             snd_pcm_status_alloca(&status);
@@ -252,7 +249,6 @@ bool AlsaPlayerThread::playing() const
                 // kdDebug() << timestamp() << "AlsaPlayer:playing: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
         }
-        m_mutex.unlock();
     }
     return result;
 }
@@ -260,8 +256,8 @@ bool AlsaPlayerThread::playing() const
 bool AlsaPlayerThread::paused() const
 {
     bool result = false;
-    if (running()) {
-        m_mutex.lock();
+    if (isRunning()) {
+        QMutexLocker locker(&m_mutex);
         if (handle) {
             snd_pcm_status_t *status;
             snd_pcm_status_alloca(&status);
@@ -273,7 +269,6 @@ bool AlsaPlayerThread::paused() const
                 // kdDebug() << timestamp() << "AlsaPlayer:paused: state = " << snd_pcm_state_name(snd_pcm_status_get_state(status)) << endl;
             }
         }
-        m_mutex.unlock();
     }
     return result;
 }
@@ -433,15 +428,17 @@ void AlsaPlayerThread::init()
 
 void AlsaPlayerThread::cleanup()
 {
-    m_mutex.lock();
+    QMutexLocker locker(&m_mutex);
     if (pcm_name) delete pcm_name;
     if (fd >= 0) audiofile.close();
-    if (handle) snd_pcm_close(handle);
+    if (handle) {
+        snd_pcm_drop(handle);
+        snd_pcm_close(handle);
+    }
     if (audiobuf) audioBuffer.resize(0);
     if (log) snd_output_close(log);
     snd_config_update_free_global();
     init();
-    m_mutex.unlock();
 }
 
 /*
@@ -451,7 +448,9 @@ void AlsaPlayerThread::stopAndExit()
 {
     if (handle) snd_pcm_drop(handle);
     cleanup();
+    kdDebug() << "AlsaPlayerThread::stopAndExit: about to call exit()" << endl;
     exit();
+    kdDebug() << "AlsaPlayerThread::stopAndExit: back from exit()" << endl;
 }
 
 /*
@@ -497,13 +496,13 @@ int AlsaPlayerThread::test_vocfile(void *buffer)
  * helper for test_wavefile
  */
 
-size_t AlsaPlayerThread::test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line)
+ssize_t AlsaPlayerThread::test_wavefile_read(int fd, char *buffer, size_t *size, size_t reqsize, int line)
 {
 	if (*size >= reqsize)
 		return *size;
 	if ((size_t)safe_read(fd, buffer + *size, reqsize - *size) != reqsize - *size) {
 		error("read error (called from line %i)", line);
-		stopAndExit();
+        return -1;
 	}
 	return *size = reqsize;
 }
@@ -543,7 +542,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 	size -= sizeof(WaveHeader);
 	while (1) {
 		check_wavefile_space(buffer, sizeof(WaveChunkHeader), blimit);
-		test_wavefile_read(fd, buffer, &size, sizeof(WaveChunkHeader), __LINE__);
+		if (test_wavefile_read(fd, buffer, &size, sizeof(WaveChunkHeader), __LINE__) < 0)
+            return -1;
 		c = (WaveChunkHeader*)buffer;
 		type = c->type;
 		len = LE_INT(c->length);
@@ -554,7 +554,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 		if (type == WAV_FMT)
 			break;
 		check_wavefile_space(buffer, len, blimit);
-		test_wavefile_read(fd, buffer, &size, len, __LINE__);
+		if (test_wavefile_read(fd, buffer, &size, len, __LINE__) < 0)
+            return -1;
 		if (size > len)
 			memmove(buffer, buffer + len, size - len);
 		size -= len;
@@ -562,18 +563,19 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 
 	if (len < sizeof(WaveFmtBody)) {
 		error("unknown length of 'fmt ' chunk (read %u, should be %u at least)", len, (u_int)sizeof(WaveFmtBody));
-		stopAndExit();
+        return -1;
 	}
 	check_wavefile_space(buffer, len, blimit);
-	test_wavefile_read(fd, buffer, &size, len, __LINE__);
+	if (test_wavefile_read(fd, buffer, &size, len, __LINE__) < 0)
+        return -1;
 	f = (WaveFmtBody*) buffer;
 	if (LE_SHORT(f->format) != WAV_PCM_CODE) {
 		error("can't play not PCM-coded WAVE-files");
-		stopAndExit();
+        return -1;
 	}
 	if (LE_SHORT(f->modus) < 1) {
 		error("can't play WAVE-files with %d tracks", LE_SHORT(f->modus));
-		stopAndExit();
+        return -1;
 	}
 	hwparams.channels = LE_SHORT(f->modus);
 	switch (LE_SHORT(f->bit_p_spl)) {
@@ -605,7 +607,7 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 			break;
 		default:
 			error(" can't play WAVE-files with sample %d bits in %d bytes wide (%d channels)", LE_SHORT(f->bit_p_spl), LE_SHORT(f->byte_p_spl), hwparams.channels);
-			stopAndExit();
+            return -1;
 		}
 		break;
 	case 32:
@@ -613,7 +615,7 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 		break;
 	default:
 		error(" can't play WAVE-files with sample %d bits wide", LE_SHORT(f->bit_p_spl));
-		stopAndExit();
+        return -1;
 	}
 	hwparams.rate = LE_INT(f->sample_fq);
 	
@@ -625,7 +627,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 		u_int type, len;
 
 		check_wavefile_space(buffer, sizeof(WaveChunkHeader), blimit);
-		test_wavefile_read(fd, buffer, &size, sizeof(WaveChunkHeader), __LINE__);
+		if (test_wavefile_read(fd, buffer, &size, sizeof(WaveChunkHeader), __LINE__) < 0)
+            return -1;
 		c = (WaveChunkHeader*)buffer;
 		type = c->type;
 		len = LE_INT(c->length);
@@ -642,7 +645,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 		}
 		len += len % 2;
 		check_wavefile_space(buffer, len, blimit);
-		test_wavefile_read(fd, buffer, &size, len, __LINE__);
+		if (test_wavefile_read(fd, buffer, &size, len, __LINE__) < 0)
+            return -1;
 		if (size > len)
 			memmove(buffer, buffer + len, size - len);
 		size -= len;
@@ -695,12 +699,12 @@ int AlsaPlayerThread::test_au(int fd, char *buffer)
 		return -1;
 	if ((size_t)safe_read(fd, buffer + sizeof(AuHeader), BE_INT(ap->hdr_size) - sizeof(AuHeader)) != BE_INT(ap->hdr_size) - sizeof(AuHeader)) {
 		error("read error");
-		stopAndExit();
+        return -1;
 	}
 	return 0;
 }
 
-void AlsaPlayerThread::set_params(void)
+bool AlsaPlayerThread::set_params(void)
 {
 	snd_pcm_hw_params_t *params;
 	snd_pcm_sw_params_t *swparams;
@@ -716,7 +720,7 @@ void AlsaPlayerThread::set_params(void)
 	err = snd_pcm_hw_params_any(handle, params);
 	if (err < 0) {
 		error("Broken configuration for this PCM: no configurations available");
-		stopAndExit();
+        return false;
 	}
 	if (mmap_flag) {
 		snd_pcm_access_mask_t *mask = (snd_pcm_access_mask_t *)alloca(snd_pcm_access_mask_sizeof());
@@ -733,17 +737,17 @@ void AlsaPlayerThread::set_params(void)
 						   SND_PCM_ACCESS_RW_NONINTERLEAVED);
 	if (err < 0) {
 		error("Error setting access type.");
-		stopAndExit();
+        return false;
 	}
 	err = snd_pcm_hw_params_set_format(handle, params, hwparams.format);
 	if (err < 0) {
 		error("Error setting sample format to %i", hwparams.format);
-		stopAndExit();
+        return false;
 	}
 	err = snd_pcm_hw_params_set_channels(handle, params, hwparams.channels);
 	if (err < 0) {
 		error("Error setting channel count to %i", hwparams.channels);
-		stopAndExit();
+        return false;
 	}
 
 #if 0
@@ -792,20 +796,20 @@ void AlsaPlayerThread::set_params(void)
 	if (err < 0) {
 		error("Unable to install hw params:");
 		snd_pcm_hw_params_dump(params, log);
-		stopAndExit();
+        return false;
 	}
     canPause = snd_pcm_hw_params_can_pause(params);
 	snd_pcm_hw_params_get_period_size(params, &chunk_size, 0);
 	snd_pcm_hw_params_get_buffer_size(params, &buffer_size);
 	if (chunk_size == buffer_size) {
 		error("Can't use period equal to buffer size (%lu == %lu)", chunk_size, buffer_size);
-		stopAndExit();
+        return false;
 	}
 	snd_pcm_sw_params_current(handle, swparams);
 	err = snd_pcm_sw_params_get_xfer_align(swparams, &xfer_align);
 	if (err < 0) {
 		error("Unable to obtain xfer align\n");
-		stopAndExit();
+        return false;
 	}
 	if (sleep_min)
 		xfer_align = 1;
@@ -843,7 +847,7 @@ void AlsaPlayerThread::set_params(void)
 	if (snd_pcm_sw_params(handle, swparams) < 0) {
 		error("unable to install sw params:");
 		snd_pcm_sw_params_dump(swparams, log);
-		stopAndExit();
+        return false;
 	}
 
 	if (verbose)
@@ -856,9 +860,10 @@ void AlsaPlayerThread::set_params(void)
     audiobuf = audioBuffer.data();
 	if (audiobuf == NULL) {
 		error("not enough memory");
-		stopAndExit();
+        return false;
 	}
 	// fprintf(stderr, "real chunk_size = %i, frags = %i, total = %i\n", chunk_size, setup.buf.block.frags, setup.buf.block.frags * chunk_size);
+    return true;
 }
 
 #ifndef timersub
@@ -874,7 +879,7 @@ do { \
 #endif
 
 /* I/O error handler */
-void AlsaPlayerThread::xrun(void)
+bool AlsaPlayerThread::xrun(void)
 {
 	snd_pcm_status_t *status;
 	int res;
@@ -882,7 +887,7 @@ void AlsaPlayerThread::xrun(void)
 	snd_pcm_status_alloca(&status);
 	if ((res = snd_pcm_status(handle, status))<0) {
 		error("status error: %s", snd_strerror(res));
-		stopAndExit();
+        return false;
 	}
 	if (snd_pcm_status_get_state(status) == SND_PCM_STATE_XRUN) {
 		struct timeval now, diff, tstamp;
@@ -898,9 +903,9 @@ void AlsaPlayerThread::xrun(void)
 		}
 		if ((res = snd_pcm_prepare(handle))<0) {
 			error("xrun: prepare error: %s", snd_strerror(res));
-			stopAndExit();
+            return false;
 		}
-		return;		/* ok, data should be accepted again */
+		return true;		/* ok, data should be accepted again */
 	} if (snd_pcm_status_get_state(status) == SND_PCM_STATE_DRAINING) {
 		if (verbose) {
 			kdDebug() << timestamp() << dbgStr.sprintf( "Status(DRAINING):") << endl;
@@ -910,9 +915,9 @@ void AlsaPlayerThread::xrun(void)
 			kdDebug() << timestamp() << dbgStr.sprintf( "capture stream format change? attempting recover...") << endl;
 			if ((res = snd_pcm_prepare(handle))<0) {
 				error("xrun(DRAINING): prepare error: %s", snd_strerror(res));
-				stopAndExit();
+                return false;
 			}
-			return;
+			return true;
 		}
 	}
 	if (verbose) {
@@ -920,7 +925,7 @@ void AlsaPlayerThread::xrun(void)
 		snd_pcm_status_dump(status, log);
 	}
 	error("read/write error, state = %s", snd_pcm_state_name(snd_pcm_status_get_state(status)));
-	stopAndExit();
+    return false;
 }
 
 /* I/O suspend handler */
@@ -1026,12 +1031,13 @@ ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
             kdDebug() << timestamp() << "AlsaPlayerThread::pcm_write: r = " << r << " calling snd_pcm_wait" << endl;
 			snd_pcm_wait(handle, 1000);
 		} else if (r == -EPIPE) {
-			xrun();
+			if (!xrun())
+                return -1;
 		} else if (r == -ESTRPIPE) {
 			suspend();
 		} else if (r < 0) {
 			error("write error: %s", snd_strerror(r));
-			stopAndExit();
+            return -1;
 		}
 		if (r > 0) {
 			if (verbose > 1)
@@ -1096,7 +1102,7 @@ void AlsaPlayerThread::voc_write_silence(unsigned x)
 	// free(buf);
 }
 
-void AlsaPlayerThread::voc_pcm_flush(void)
+bool AlsaPlayerThread::voc_pcm_flush(void)
 {
 	if (buffer_pos > 0) {
 		size_t b;
@@ -1107,13 +1113,16 @@ void AlsaPlayerThread::voc_pcm_flush(void)
 		} else {
 			b = buffer_pos * 8 / bits_per_frame;
 		}
-		if (pcm_write(audiobuf, b) != (ssize_t)b)
+		if (pcm_write(audiobuf, b) != (ssize_t)b) {
 			error("voc_pcm_flush error");
+            return false;
+        }
 	}
 	snd_pcm_drain(handle);
+    return true;
 }
 
-void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
+bool AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 {
 	int l;
 	VocBlockType *bp;
@@ -1135,7 +1144,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 	buffer_pos = 0;
 	if (data == NULL) {
 		error("malloc error");
-		stopAndExit();
+        return false;
 	}
 	if (!quiet_mode) {
 		kdDebug() << timestamp() << dbgStr.sprintf( "Playing Creative Labs Channel file '%s'...", name) << endl;
@@ -1144,20 +1153,20 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 	while (ofs > (ssize_t)chunk_bytes) {
 		if ((size_t)safe_read(fd, buf, chunk_bytes) != chunk_bytes) {
 			error("read error");
-			stopAndExit();
+            return false;
 		}
 		ofs -= chunk_bytes;
 	}
 	if (ofs) {
 		if (safe_read(fd, buf, ofs) != ofs) {
 			error("read error");
-			stopAndExit();
+            return false;
 		}
 	}
 	hwparams.format = DEFAULT_FORMAT;
 	hwparams.channels = 1;
 	hwparams.rate = DEFAULT_SPEED;
-	set_params();
+	if (!set_params()) return false;
 
 	in_buffer = nextblock = 0;
 	while (1) {
@@ -1175,7 +1184,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 				nextblock = buf[0] = 0;
 				if (l == -1) {
 //					perror(name);
-					stopAndExit();
+                    return false;
 				}
 			}
 		}
@@ -1193,7 +1202,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 #if 0
 				kdDebug() << "Terminator" << endl;
 #endif
-				return;		/* VOC-file stop */
+				return true;		/* VOC-file stop */
 			case 1:
 				vd = (VocVoiceData *) data;
 				COUNT1(sizeof(VocVoiceData));
@@ -1207,7 +1216,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 #endif
 					if (vd->pack) {		/* /dev/dsp can't it */
 						error("can't play packed .voc files");
-						return;
+						return false;
 					}
 					if (hwparams.channels == 2)		/* if we are in Stereo-Mode, switch back */
 						hwparams.channels = 1;
@@ -1215,7 +1224,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 					hwparams.channels = 2;
 					was_extended = 0;
 				}
-				set_params();
+				if (!set_params()) return false;
 				break;
 			case 2:	/* nothing to do, pure data */
 #if 0
@@ -1228,7 +1237,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 				hwparams.rate = (int) (*data);
 				COUNT1(1);
 				hwparams.rate = 1000000 / (256 - hwparams.rate);
-				set_params();
+				if (!set_params()) return false;
 				silence = (((size_t) * sp) * 1000) / hwparams.rate;
 #if 0
 				kdDebug() << timestamp() << dbgStr.sprintf("Silence for %d ms", (int) silence) << endl;
@@ -1299,7 +1308,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 					hwparams.rate = hwparams.rate >> 1;
 				if (eb->pack) {		/* /dev/dsp can't it */
 					error("can't play packed .voc files");
-					return;
+					return false;
 				}
 #if 0
 				kdDebug() << timestamp() << dbgStr.sprintf("Extended block %s %d Hz",
@@ -1308,7 +1317,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 				break;
 			default:
 				error("unknown blocktype %d. terminate.", bp->type);
-				return;
+				return false;
 			}	/* switch (bp->type) */
 		}		/* while (! nextblock)  */
 		/* put nextblock data bytes to dsp */
@@ -1319,19 +1328,19 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 			if (output && !quiet_mode) {
 				if (write(2, data, l) != l) {	/* to stderr */
 					error("write error");
-					stopAndExit();
+                    return false;
 				}
 			} else {
 				if (voc_pcm_write(data, l) != l) {
 					error("write error");
-					stopAndExit();
+                    return false;
 				}
 			}
 			COUNT(l);
 		}
 	}			/* while(1) */
       __end:
-        voc_pcm_flush();
+        return voc_pcm_flush();
         // free(buf);
 }
 /* that was a big one, perhaps somebody split it :-) */
@@ -1377,18 +1386,18 @@ void AlsaPlayerThread::header(int /*rtype*/, const char* /*name*/)
 
 /* playing raw data */
 
-void AlsaPlayerThread::playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name)
+bool AlsaPlayerThread::playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name)
 {
 	int l, r;
 	off64_t written = 0;
 	off64_t c;
 
 	header(rtype, name);
-	set_params();
+	if (!set_params()) return false;
 
 	while (loaded > chunk_bytes && written < count) {
 		if (pcm_write(audiobuf + written, chunk_size) <= 0)
-			return;
+			return false;
 		written += chunk_bytes;
 		loaded -= chunk_bytes;
 	}
@@ -1408,7 +1417,7 @@ void AlsaPlayerThread::playback_go(int fd, size_t loaded, off64_t count, int rty
 			r = safe_read(fd, audiobuf + l, c);
 			if (r < 0) {
 //				perror(name);
-				stopAndExit();
+                return false;
 			}
 			fdcount += r;
 			if (r == 0)
@@ -1425,13 +1434,14 @@ void AlsaPlayerThread::playback_go(int fd, size_t loaded, off64_t count, int rty
 	}
 	snd_pcm_drain(handle);
     // kdDebug() << timestamp() << "Exiting playback_go" << endl;
+    return true;
 }
 
 /*
  *  let's play or capture it (capture_type says VOC/WAVE/raw)
  */
 
-void AlsaPlayerThread::playback(int fd)
+bool AlsaPlayerThread::playback(int fd)
 {
 	int ofs;
 	size_t dta;
@@ -1444,37 +1454,41 @@ void AlsaPlayerThread::playback(int fd)
 	dta = sizeof(AuHeader);
 	if ((size_t)safe_read(fd, audiobuf, dta) != dta) {
 		error("read error");
-		stopAndExit();
+        return false;
 	}
 	if (test_au(fd, audiobuf) >= 0) {
 		rhwparams.format = hwparams.format;
 		pbrec_count = calc_count();
-		playback_go(fd, 0, pbrec_count, FORMAT_AU, name.ascii());
+		if (!playback_go(fd, 0, pbrec_count, FORMAT_AU, name.ascii()))
+            return false;
 		goto __end;
 	}
 	dta = sizeof(VocHeader);
 	if ((size_t)safe_read(fd, audiobuf + sizeof(AuHeader),
 		 dta - sizeof(AuHeader)) != dta - sizeof(AuHeader)) {
 		error("read error");
-		stopAndExit();
+        return false;
 	}
 	if ((ofs = test_vocfile(audiobuf)) >= 0) {
 		pbrec_count = calc_count();
-		voc_play(fd, ofs, name.ascii());
+		if (!voc_play(fd, ofs, name.ascii()))
+            return false;
 		goto __end;
 	}
 	/* read bytes for WAVE-header */
 	if ((dtawave = test_wavefile(fd, audiobuf, dta)) >= 0) {
 		pbrec_count = calc_count();
-		playback_go(fd, dtawave, pbrec_count, FORMAT_WAVE, name.ascii());
+		if (!playback_go(fd, dtawave, pbrec_count, FORMAT_WAVE, name.ascii()))
+            return false;
 	} else {
 		/* should be raw data */
 		init_raw_data();
 		pbrec_count = calc_count();
-		playback_go(fd, dta, pbrec_count, FORMAT_RAW, name.ascii());
+		if (!playback_go(fd, dta, pbrec_count, FORMAT_RAW, name.ascii()))
+            return false;
 	}
       __end:
-        return;
+        return true;
 }
 
 // ====================================================================
