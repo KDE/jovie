@@ -555,8 +555,13 @@ void FestivalIntConf::slotTest_clicked()
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "festivalintplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->name();
-    tempFile.close();
+    // FIXME: Temporary workaround for KTempFile problem.
+    // QString tmpWaveFile = tempFile.file()->name();
+    // tempFile.close();
+    QString tmpWaveFile = tempFile.name();
+    QFile::remove(tmpWaveFile);
+
+    kdDebug() << "FestivalIntConf::slotTest_clicked: tmpWaveFile = " << tmpWaveFile << endl;
 
     // Get the code for the selected voice.
     QString voiceCode = m_voiceList[m_widget->selectVoiceCombo->currentItem()].code;
