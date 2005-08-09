@@ -101,7 +101,7 @@ void KateKttsdPluginView::slotReadOut()
     }
     QByteArray  data;
     QByteArray  data2;
-    QCString    replyType;
+    DCOPCString    replyType;
     QByteArray  replyData;
     QDataStream arg( &data,IO_WriteOnly);
     arg.setVersion(QDataStream::Qt_3_1);
