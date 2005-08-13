@@ -24,6 +24,7 @@
 
 // Qt includes.
 #include <qradiobutton.h>
+#include <QDialog>
 
 // KDE includes.
 #include <kcombobox.h>
@@ -35,8 +36,13 @@
 #include "addtalker.h"
 
 AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char* name, Qt::WFlags fl)
-    : AddTalkerWidget(parent,name,fl)
+    : QDialog(parent)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(fl);
+
+    setupUi(this);
+
     // Build maps.
     setSynthToLangMap(synthToLangMap);
 
