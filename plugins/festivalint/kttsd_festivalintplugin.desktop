@@ -36,7 +36,6 @@ Comment[sv]=Festival talsyntes
 Comment[ta]=பெஸ்டிவல் பேச்சு கூட்டிணைப்பான்
 Comment[tg]=Таҳлилгари овози Festival
 Comment[tr]=Festival konuşma bireştirici
-Comment[uk]=Синтезатор мовлення Festival
 Comment[xx]=xxFestival speech synthetizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

@@ -47,7 +47,6 @@ Comment[sr@Latn]=Sintetizator govora Epos TTS
 Comment[sv]=Epos TTS talsyntes
 Comment[ta]=Epos TTS பேச்சு கூட்டிணைப்பான்
 Comment[tg]=Таҳлилгари овози Epos TTS
-Comment[uk]=Синтезатор мовлення Epos TTS
 Comment[xx]=xxEpos TTS speech synthesizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

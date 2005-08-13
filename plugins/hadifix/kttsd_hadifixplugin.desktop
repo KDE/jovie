@@ -28,7 +28,6 @@ Comment[sv]=Tyska Hadifix text-till-tal system
 Comment[ta]=ஜெர்மன் ஹாடிஃபிக்ஸ் உரையில் இருந்து பேச்சு அமைப்பு
 Comment[tg]=Системаи олмонии таҳлили овози hadifix
 Comment[tr]=Alman hadifix metinden konuşmaya sistemi
-Comment[uk]=Німецька система синтезу мовлення hadifix
 Comment[xx]=xxGerman hadifix text-to-speech systemxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

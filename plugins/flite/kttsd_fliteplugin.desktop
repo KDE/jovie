@@ -31,7 +31,6 @@ Comment[sv]=Festival Lite (flite) talsyntes
 Comment[ta]=பெஸ்டிவல் லைட் (flite) பேச்சு கூட்டிணைப்பான்
 Comment[tg]=Таҳлилгари овози Festival Lite (flite)
 Comment[tr]=Festival Lite(flite) konuşma bireştirici
-Comment[uk]=Синтезатор мовлення Festival Lite (flite)
 Comment[xx]=xxFestival Lite (flite) speech synthesizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
