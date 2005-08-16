@@ -36,11 +36,12 @@ if test "x$with_gstreamer" != xno; then
 fi
 
 if test "x$have_gst" = "xno"; then
-  GST_CFLAGS=""
+  INCLUDES_GST=""
   LDADD_GST=""
   LDFLAGS_GST=""
   AC_DEFINE(HAVE_GSTREAMER, 0, [have GStreamer])
 else
+  INCLUDES_GST=`$PKG_CONFIG --cflags-only-I gstreamer-$GST_MAJORMINOR`
   LDADD_GST=`$PKG_CONFIG --libs-only-l gstreamer-$GST_MAJORMINOR`
   LDFLAGS_GST=`$PKG_CONFIG --libs-only-other gstreamer-$GST_MAJORMINOR`
 
@@ -57,7 +58,7 @@ else
   fi
 fi
 
-AC_SUBST(GST_CFLAGS)
+AC_SUBST(INCLUDES_GST)
 AC_SUBST(LDADD_GST)
 AC_SUBST(LDFLAGS_GST)
 

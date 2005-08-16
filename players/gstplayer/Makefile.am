@@ -1,7 +1,7 @@
 # Include paths.  INCLUDES is maintained by KDevelop, AM_CPPFLAGS is the preferred variable,
 # so keep them synchronized.
 INCLUDES = \
-	$(GST_CFLAGS) \
+	$(INCLUDES_GST) \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
 
