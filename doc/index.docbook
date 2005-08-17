@@ -654,7 +654,7 @@ to install at least one.  If ALSA is selected, choose the PCM device here.  See 
 twice as fast.  You must have the <command>sox</command> utility installed for this setting
 to work.
 </para></callout>
-<callout arearefs="pt-audio-3"><para>When this box is checked, &kmyapplication; will 
+<callout arearefs="pt-audio-4"><para>When this box is checked, &kmyapplication; will 
 copy temporary audio files (.wav files) into the indicated directory.  Choose
 any directory on your hard drive you like, but you must have write access to it.
 This can be useful for creating audio files of speech for other purposes.
