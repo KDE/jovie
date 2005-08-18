@@ -553,9 +553,9 @@ bool SbdThread::event ( QEvent * e )
     {
         // kdDebug() << "SbdThread::event: emitting filteringFinished signal." << endl;
         emit filteringFinished();
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 // ----------------------------------------------------------------------------
