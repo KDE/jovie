@@ -130,7 +130,7 @@ void EposProc::synthText(const QString& text, const QString& suggestedFilename)
     synth(text, suggestedFilename, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
         m_codec, m_eposLanguage, m_time, m_pitch);
-};
+}
 
 /**
 * Say or Synthesize text.

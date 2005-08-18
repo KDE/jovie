@@ -89,7 +89,7 @@ void FliteProc::sayText(const QString &text)
 void FliteProc::synthText(const QString& text, const QString& suggestedFilename)
 {
     synth(text, suggestedFilename, m_fliteExePath);
-};
+}
 
 /**
 * Say or Synthesize text.
