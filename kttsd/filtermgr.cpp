@@ -267,15 +267,15 @@ bool FilterMgr::event ( QEvent * e )
     {
         // kdDebug() << "FilterMgr::event: emitting filteringFinished signal." << endl;
         emit filteringFinished();
-        return TRUE;
+        return true;
     }
     if ( e->type() == (QEvent::User + 302) )
     {
         // kdDebug() << "FilterMgr::event: emitting filteringStopped signal." << endl;
         emit filteringStopped();
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 /**

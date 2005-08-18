@@ -279,7 +279,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
     // Create a box to contain the current sentence.
     m_currentSentence = new KTextEdit(sentenceVBox);
-    m_currentSentence->setReadOnly(TRUE);
+    m_currentSentence->setReadOnly(true);
     m_currentSentence->setWordWrap(QTextEdit::WidgetWidth);
     m_currentSentence->setWrapPolicy(QTextEdit::AtWordOrDocumentBoundary);
     m_currentSentence->setHScrollBarMode(QScrollView::AlwaysOff);
