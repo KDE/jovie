@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Festival Lite (flite)
+Name[el]=Festival ελαφρύ (flite)
 Name[fi]=Festival Lite (kevytversio)
 Name[pt_BR]=Festival Lite
 Name[ta]=பெஸ்டிவல் லைட் (flite)
@@ -12,6 +13,7 @@ Comment[ca]=Sintetitzador de veu Festival Lite (flite)
 Comment[cs]=Hlasový syntetizér Festival Lite (flite)
 Comment[da]=Festival Lite (flite) tale-synthesizer
 Comment[de]=Festival Lite (flite) Sprachsynthesizer
+Comment[el]=Συνθέτης ομιλίας Festival ελαφρύ (flite)
 Comment[es]=Sintetizador de texto a voz Festival (flite)
 Comment[et]=Kõnesüntesaator Festival lite (flite)
 Comment[fi]=Festival Lite (kevytversio) puhesyntetisaattori
@@ -31,6 +33,7 @@ Comment[sv]=Festival Lite (flite) talsyntes
 Comment[ta]=பெஸ்டிவல் லைட் (flite) பேச்சு கூட்டிணைப்பான்
 Comment[tg]=Таҳлилгари овози Festival Lite (flite)
 Comment[tr]=Festival Lite(flite) konuşma bireştirici
+Comment[uk]=Синтезатор мовлення Festival Lite (flite)
 Comment[xx]=xxFestival Lite (flite) speech synthesizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
