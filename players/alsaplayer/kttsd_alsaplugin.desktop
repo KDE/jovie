@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KTTSD ALSA Plugin
 Name[br]=Lugent ALSA evit KTTSD
+Name[cs]=KTTSD ALSA modul
 Name[da]=KTTSD ALSA plugin
 Name[de]=KTTSD ALSA-Plugin
 Name[el]=KTTSD πρόσθετο ALSA
@@ -18,6 +19,7 @@ Name[tr]=KTTSD ALSA Eklentisi
 Comment=KTTSD ALSA audio plugin
 Comment[bg]=Аудио приставка на KTTSD за ALSA
 Comment[br]=Lugent klevet ALSA evit KTTSD
+Comment[cs]=KTTSD ALSA zvukový modul
 Comment[da]=KTTSD ALSA lyd-plugin
 Comment[de]=KTTSD ALSA-Audio-Plugin
 Comment[el]=KTTSD πρόσθετο ήχου ALSA

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KTTSD aKode Plugin
 Name[br]=Lugent aKode evit KTTSD
+Name[cs]=KTTSD aKode modul
 Name[da]=KTTSD aKode-plugin
 Name[de]=KTTSD aKode-Plugin
 Name[el]=KTTSD πρόσθετο aKode
@@ -18,6 +19,7 @@ Name[tr]=KTTSD aKode Eklentisi
 Comment=KTTSD aKode audio plugin
 Comment[bg]=Аудио приставка на KTTSD за aKode
 Comment[br]=Lugent klevet aKode evit KTTSD
+Comment[cs]=KTTSD aKode zvukový modul
 Comment[da]=KTTSD aKode lyd-plugin
 Comment[de]=KTTSD aKode-Audio-Plugin
 Comment[el]=KTTSD πρόσθετο ήχου aKode
