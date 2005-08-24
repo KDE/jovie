@@ -26,7 +26,6 @@ Name[sr]=Детектор граница реченице
 Name[sr@Latn]=Detektor granica rečenice
 Name[sv]=Meningsgränsdetektering
 Name[ta]=வாக்கிய பவுண்டரி கண்டுபிடிப்பான்
-Name[tg]=Детектори қаламрави ҷумла
 Name[uk]=Виявлення меж речень
 Comment=Sentence Boundary Detection Filter Plugin for KTTS
 Comment[bg]=Приставка филтър за определяне границите на изречението

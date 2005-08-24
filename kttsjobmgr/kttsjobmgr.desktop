@@ -29,6 +29,5 @@ Comment[sr]=KDE-ов менаџер послова за текст-у-говор
 Comment[sr@Latn]=KDE-ov menadžer poslova za tekst-u-govor
 Comment[sv]=KDE:s text-till-tal jobbhantering
 Comment[ta]=கேடியி உரையில் இருந்து பேச்சு பணி மேலாளர்
-Comment[tg]=KDE Матн-барои-сухани Менеҷери кор
 Comment[uk]=Менеджер завдань KDE для синтезу мовлення з тексту
 ServiceTypes=KParts/ReadOnlyPart

@@ -53,7 +53,6 @@ Comment[sr]=Генерички филтерски прикључак KTTS-а з�
 Comment[sr@Latn]=Generički filterski priključak KTTS-a za birač govornika
 Comment[sv]=Insticksprogram för KTTS med generellt urvalsfilter för talare
 Comment[ta]=KTTS க்கான ஜெனரிக் பேச்சாளர் தேர்ந்தெடுப்பான அலங்கார சொருகுப்பொருள்
-Comment[tg]=Интихоби филтери гуйянда барои KTTS
 Comment[uk]=Загальний втулок Фільтра вибору диктора для KTTS
 Type=Service
 ServiceTypes=KTTSD/FilterPlugin

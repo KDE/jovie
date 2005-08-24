@@ -27,7 +27,6 @@ Comment[sr]=Синтетизатор говора FreeTTS
 Comment[sr@Latn]=Sintetizator govora FreeTTS
 Comment[sv]=FreeTTS talsyntes
 Comment[ta]=FreeTTS பேச்சு கூட்டிணைப்பான்
-Comment[tg]=FreeTTS сухани синтезатор
 Comment[uk]=Синтезатор мовлення FreeTTS
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
