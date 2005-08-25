@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD Arts Plugin
+Name[br]=Lugent KTTSD Arts
 Name[bs]=KTTSD Arts dodatak
 Name[ca]=Connector Arts per KTTSD
 Name[cs]=KTTSD Arts modul
@@ -26,9 +27,11 @@ Name[sr]=Arts као прикључак за KTTSD
 Name[sr@Latn]=Arts kao priključak za KTTSD
 Name[sv]=KTTSD-insticksprogram för aRts
 Name[ta]=KTTSD ஆர்ட்ஸ் சொருகுப்பொருள்
+Name[tg]=KTTSD модули фарҳанг
 Name[uk]=Втулок Arts для KTTSD
 Comment=KTTSD aRts audio plugin
 Comment[bg]=Аудио приставка на KTTSD за aRts
+Comment[br]=Lugent klevet Arts evit KTTSD
 Comment[ca]=Connector d'àudio aRts per KTTSD
 Comment[cs]=KTTSD aRts zvukový modul
 Comment[da]=KTTSD aRts lyd-plugin
@@ -53,6 +56,7 @@ Comment[sr]=Arts као аудио прикључак за KTTSD
 Comment[sr@Latn]=Arts kao audio priključak za KTTSD
 Comment[sv]=KTTSD-ljudinsticksprogram för aRts
 Comment[ta]=KTTSD aRts கேட்பொலி சொருகுப்பொருள்
+Comment[tg]=KTTSD фарҳанги модули аудио
 Comment[uk]=Звуковий втулок aRts для KTTSD
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
