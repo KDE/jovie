@@ -1,1 +1,1 @@
-SUBDIRS = kate
+SUBDIRS = 
