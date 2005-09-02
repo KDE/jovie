@@ -114,7 +114,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 {
     Q_UNUSED(name);
 
-    kdDebug() << "KCMKttsMgr constructor running." << endl;
+    // kdDebug() << "KCMKttsMgr contructor running." << endl;
 
     // Initialize some variables.
     m_config = 0;
@@ -124,51 +124,49 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_suppressConfigChanged = false;
 
     // Add the KTTS Manager widget
-    setupUi(this);
-
-//     QGridLayout *layout = new QGridLayout(this, 0, 0);
-//     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
-//     layout->addWidget(m_kttsmgrw, 0, 0);
+    QGridLayout *layout = new QGridLayout(this, 0, 0);
+    m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
+    layout->addWidget(m_kttsmgrw, 0, 0);
 
     // Give buttons icons.
     // Talkers tab.
-    higherTalkerPriorityButton->setIconSet(
+    m_kttsmgrw->higherTalkerPriorityButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
-    lowerTalkerPriorityButton->setIconSet(
+    m_kttsmgrw->lowerTalkerPriorityButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
-    removeTalkerButton->setIconSet(
+    m_kttsmgrw->removeTalkerButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
-    configureTalkerButton->setIconSet(
+    m_kttsmgrw->configureTalkerButton->setIconSet(
         KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
     // Filters tab.
-    higherFilterPriorityButton->setIconSet(
+    m_kttsmgrw->higherFilterPriorityButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
-    lowerFilterPriorityButton->setIconSet(
+    m_kttsmgrw->lowerFilterPriorityButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
-    removeFilterButton->setIconSet(
+    m_kttsmgrw->removeFilterButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
-    configureFilterButton->setIconSet(
+    m_kttsmgrw->configureFilterButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
 
     // Notify tab.
-    notifyActionComboBox->clear();
+    m_kttsmgrw->notifyActionComboBox->clear();
     for (int ndx = 0; ndx < NotifyAction::count(); ++ndx)
-        notifyActionComboBox->insertItem( NotifyAction::actionDisplayName( ndx ) );
-    notifyPresentComboBox->clear();
+        m_kttsmgrw->notifyActionComboBox->insertItem( NotifyAction::actionDisplayName( ndx ) );
+    m_kttsmgrw->notifyPresentComboBox->clear();
     for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
-        notifyPresentComboBox->insertItem( NotifyPresent::presentDisplayName( ndx ) );
+        m_kttsmgrw->notifyPresentComboBox->insertItem( NotifyPresent::presentDisplayName( ndx ) );
 
-    notifyRemoveButton->setIconSet(
+    m_kttsmgrw->notifyRemoveButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
-    notifyTestButton->setIconSet(
+    m_kttsmgrw->notifyTestButton->setIconSet(
             KGlobal::iconLoader()->loadIconSet("speak", KIcon::Small));
 
-    sinkComboBox->setEditable(false);
-    pcmComboBox->setEditable(false);
+    m_kttsmgrw->sinkComboBox->setEditable(false);
+    m_kttsmgrw->pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
-    m_sbdPopmenu = new Q3PopupMenu( this, "SbdPopupMenu" );
+    m_sbdPopmenu = new Q3PopupMenu( m_kttsmgrw, "SbdPopupMenu" );
     m_sbdPopmenu->insertItem( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
     m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
                               i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
@@ -176,16 +174,16 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
                               i18n("Do&wn"), this, SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
     m_sbdPopmenu->insertItem( i18n("&Add..."), this, SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
     m_sbdPopmenu->insertItem( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
-    sbdButton->setPopup( m_sbdPopmenu );
+    m_kttsmgrw->sbdButton->setPopup( m_sbdPopmenu );
 
     // If aRts is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
     TestPlayer* testPlayer = new TestPlayer();
     Player* player = testPlayer->createPlayerObject(0);
     if (player)
-        artsRadioButton->setEnabled(true);
+        m_kttsmgrw->artsRadioButton->setEnabled(true);
     else
-        artsRadioButton->setEnabled(false);
+        m_kttsmgrw->artsRadioButton->setEnabled(false);
     delete player;
     delete testPlayer;
 
@@ -195,13 +193,13 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     player = testPlayer->createPlayerObject(1);
     if (player)
     {
-        gstreamerRadioButton->setEnabled(true);
-        sinkLabel->setEnabled(true);
-        sinkComboBox->setEnabled(true);
+        m_kttsmgrw->gstreamerRadioButton->setEnabled(true);
+        m_kttsmgrw->sinkLabel->setEnabled(true);
+        m_kttsmgrw->sinkComboBox->setEnabled(true);
         QStringList sinkList = player->getPluginList("Sink/Audio");
         // kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer Sink List = " << sinkList << endl;
-        sinkComboBox->clear();
-        sinkComboBox->insertStringList(sinkList);
+        m_kttsmgrw->sinkComboBox->clear();
+        m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
     }
     delete player;
     delete testPlayer;
@@ -212,13 +210,13 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     player = testPlayer->createPlayerObject(2);
     if (player)
     {
-        alsaRadioButton->setEnabled(true);
-        pcmLabel->setEnabled(true);
-        pcmComboBox->setEnabled(true);
+        m_kttsmgrw->alsaRadioButton->setEnabled(true);
+        m_kttsmgrw->pcmLabel->setEnabled(true);
+        m_kttsmgrw->pcmComboBox->setEnabled(true);
         QStringList pcmList = player->getPluginList("");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
-        pcmComboBox->clear();
-        pcmComboBox->insertStringList(pcmList);
+        m_kttsmgrw->pcmComboBox->clear();
+        m_kttsmgrw->pcmComboBox->insertStringList(pcmList);
     }
     delete player;
     delete testPlayer;
@@ -229,20 +227,20 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     player = testPlayer->createPlayerObject(3);
     if (player)
     {
-        akodeRadioButton->setEnabled(true);
-        akodeSinkLabel->setEnabled(true);
-        akodeComboBox->setEnabled(true);
+        m_kttsmgrw->akodeRadioButton->setEnabled(true);
+        m_kttsmgrw->akodeSinkLabel->setEnabled(true);
+        m_kttsmgrw->akodeComboBox->setEnabled(true);
         QStringList pcmList = player->getPluginList("");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: aKode Sink List = " << pcmList << endl;
-        akodeComboBox->clear();
-        akodeComboBox->insertStringList(pcmList);
+        m_kttsmgrw->akodeComboBox->clear();
+        m_kttsmgrw->akodeComboBox->insertStringList(pcmList);
     }
     delete player;
     delete testPlayer;
 
     // Set up Keep Audio Path KURLRequestor.
-    keepAudioPath->setMode(KFile::Directory);
-    keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
+    m_kttsmgrw->keepAudioPath->setMode(KFile::Directory);
+    m_kttsmgrw->keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
 
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
@@ -253,91 +251,91 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
     // Talker tab.
-    connect(addTalkerButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
             this, SLOT(slot_addTalker()));
-    connect(higherTalkerPriorityButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->higherTalkerPriorityButton, SIGNAL(clicked()),
             this, SLOT(slot_higherTalkerPriority()));
-    connect(lowerTalkerPriorityButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
             this, SLOT(slot_lowerTalkerPriority()));
-    connect(removeTalkerButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
             this, SLOT(slot_removeTalker()));
-    connect(configureTalkerButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->configureTalkerButton, SIGNAL(clicked()),
             this, SLOT(slot_configureTalker()));
-    connect(talkersList, SIGNAL(selectionChanged()),
+    connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
             this, SLOT(updateTalkerButtons()));
 
     // Filter tab.
-    connect(addFilterButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->addFilterButton, SIGNAL(clicked()),
             this, SLOT(slot_addNormalFilter()));
-    connect(higherFilterPriorityButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->higherFilterPriorityButton, SIGNAL(clicked()),
             this, SLOT(slot_higherNormalFilterPriority()));
-    connect(lowerFilterPriorityButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->lowerFilterPriorityButton, SIGNAL(clicked()),
             this, SLOT(slot_lowerNormalFilterPriority()));
-    connect(removeFilterButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->removeFilterButton, SIGNAL(clicked()),
             this, SLOT(slot_removeNormalFilter()));
-    connect(configureFilterButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->configureFilterButton, SIGNAL(clicked()),
             this, SLOT(slot_configureNormalFilter()));
-    connect(filtersList, SIGNAL(selectionChanged()),
+    connect(m_kttsmgrw->filtersList, SIGNAL(selectionChanged()),
             this, SLOT(updateFilterButtons()));
-    //connect(filtersList, SIGNAL(stateChanged()),
+    //connect(m_kttsmgrw->filtersList, SIGNAL(stateChanged()),
     //        this, SLOT(configChanged()));
-    connect(sbdsList, SIGNAL(selectionChanged()),
+    connect(m_kttsmgrw->sbdsList, SIGNAL(selectionChanged()),
             this, SLOT(updateSbdButtons()));
 
     // Audio tab.
-    connect(gstreamerRadioButton, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotGstreamerRadioButton_toggled(bool)));
-    connect(alsaRadioButton, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->alsaRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAlsaRadioButton_toggled(bool)));
-    connect(akodeRadioButton, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->akodeRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAkodeRadioButton_toggled(bool)));
-    connect(timeBox, SIGNAL(valueChanged(int)),
+    connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
-    connect(timeSlider, SIGNAL(valueChanged(int)),
+    connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(timeSlider_valueChanged(int)));
-    connect(timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(keepAudioCheckBox, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(m_kttsmgrw->keepAudioCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(keepAudioCheckBox_toggled(bool)));
-    connect(keepAudioPath, SIGNAL(textChanged(const QString&)),
+    connect(m_kttsmgrw->keepAudioPath, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
 
     // General tab.
-    connect(enableKttsdCheckBox, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(enableKttsdToggled(bool)));
 
     // Notify tab.
-    connect(notifyEnableCheckBox, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->notifyEnableCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotNotifyEnableCheckBox_toggled(bool)));
-    connect(notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
+    connect(m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(configChanged()));
-    connect(notifyAddButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifyAddButton, SIGNAL(clicked()),
             this, SLOT(slotNotifyAddButton_clicked()));
-    connect(notifyRemoveButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifyRemoveButton, SIGNAL(clicked()),
             this, SLOT(slotNotifyRemoveButton_clicked()));
-    connect(notifyClearButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifyClearButton, SIGNAL(clicked()),
             this, SLOT(slotNotifyClearButton_clicked()));
-    connect(notifyLoadButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifyLoadButton, SIGNAL(clicked()),
             this, SLOT(slotNotifyLoadButton_clicked()));
-    connect(notifySaveButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifySaveButton, SIGNAL(clicked()),
             this, SLOT(slotNotifySaveButton_clicked()));
-    connect(notifyListView, SIGNAL(selectionChanged()),
+    connect(m_kttsmgrw->notifyListView, SIGNAL(selectionChanged()),
             this, SLOT(slotNotifyListView_selectionChanged()));
-    connect(notifyPresentComboBox, SIGNAL(activated(int)),
+    connect(m_kttsmgrw->notifyPresentComboBox, SIGNAL(activated(int)),
             this, SLOT(slotNotifyPresentComboBox_activated(int)));
-    connect(notifyActionComboBox, SIGNAL(activated(int)),
+    connect(m_kttsmgrw->notifyActionComboBox, SIGNAL(activated(int)),
             this, SLOT(slotNotifyActionComboBox_activated(int)));
-    connect(notifyTestButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifyTestButton, SIGNAL(clicked()),
             this, SLOT(slotNotifyTestButton_clicked()));
-    connect(notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(m_kttsmgrw->notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotNotifyMsgLineEdit_textChanged(const QString&)));
-    connect(notifyTalkerButton, SIGNAL(clicked()),
+    connect(m_kttsmgrw->notifyTalkerButton, SIGNAL(clicked()),
             this, SLOT(slotNotifyTalkerButton_clicked()));
 
     // Others.
-    connect(this, SIGNAL( configChanged() ),
+    connect(m_kttsmgrw, SIGNAL( configChanged() ),
             this, SLOT( configChanged() ) );
-    connect(mainTab, SIGNAL(currentChanged(QWidget*)),
+    connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
 
     // Connect KTTSD DCOP signals to our slots.
@@ -355,14 +353,14 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         kttsdStarted();
     else
         // Start KTTSD if check box is checked.
-        enableKttsdToggled(enableKttsdCheckBox->isChecked());
+        enableKttsdToggled(m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
     // Switch to Talkers tab if none configured,
     // otherwise switch to Jobs tab if it is active.
-    if (talkersList->childCount() == 0)
-        mainTab->setCurrentPage(wpTalkers);
-    else if (enableKttsdCheckBox->isChecked())
-        mainTab->setCurrentPage(wpJobs);
+    if (m_kttsmgrw->talkersList->childCount() == 0)
+        m_kttsmgrw->mainTab->setCurrentPage(wpTalkers);
+    else if (m_kttsmgrw->enableKttsdCheckBox->isChecked())
+        m_kttsmgrw->mainTab->setCurrentPage(wpJobs);
 } 
 
 /**
@@ -393,80 +391,80 @@ void KCMKttsMgr::load()
     m_config->setGroup("General");
 
     // Load the configuration of the text interruption messages and sound
-    textPreMsgCheck->setChecked(m_config->readBoolEntry("TextPreMsgEnabled", textPreMsgCheckValue));
-    textPreMsg->setText(m_config->readEntry("TextPreMsg", textPreMsgValue));
-    textPreMsg->setEnabled(textPreMsgCheck->isChecked());
+    m_kttsmgrw->textPreMsgCheck->setChecked(m_config->readBoolEntry("TextPreMsgEnabled", textPreMsgCheckValue));
+    m_kttsmgrw->textPreMsg->setText(m_config->readEntry("TextPreMsg", textPreMsgValue));
+    m_kttsmgrw->textPreMsg->setEnabled(m_kttsmgrw->textPreMsgCheck->isChecked());
 
-    textPreSndCheck->setChecked(m_config->readBoolEntry("TextPreSndEnabled", textPreSndCheckValue));
-    textPreSnd->setURL(m_config->readEntry("TextPreSnd", textPreSndValue));
-    textPreSnd->setEnabled(textPreSndCheck->isChecked());
+    m_kttsmgrw->textPreSndCheck->setChecked(m_config->readBoolEntry("TextPreSndEnabled", textPreSndCheckValue));
+    m_kttsmgrw->textPreSnd->setURL(m_config->readEntry("TextPreSnd", textPreSndValue));
+    m_kttsmgrw->textPreSnd->setEnabled(m_kttsmgrw->textPreSndCheck->isChecked());
 
-    textPostMsgCheck->setChecked(m_config->readBoolEntry("TextPostMsgEnabled", textPostMsgCheckValue));
-    textPostMsg->setText(m_config->readEntry("TextPostMsg", textPostMsgValue));
-    textPostMsg->setEnabled(textPostMsgCheck->isChecked());
+    m_kttsmgrw->textPostMsgCheck->setChecked(m_config->readBoolEntry("TextPostMsgEnabled", textPostMsgCheckValue));
+    m_kttsmgrw->textPostMsg->setText(m_config->readEntry("TextPostMsg", textPostMsgValue));
+    m_kttsmgrw->textPostMsg->setEnabled(m_kttsmgrw->textPostMsgCheck->isChecked());
 
-    textPostSndCheck->setChecked(m_config->readBoolEntry("TextPostSndEnabled", textPostSndCheckValue));
-    textPostSnd->setURL(m_config->readEntry("TextPostSnd", textPostSndValue));
-    textPostSnd->setEnabled(textPostSndCheck->isChecked());
+    m_kttsmgrw->textPostSndCheck->setChecked(m_config->readBoolEntry("TextPostSndEnabled", textPostSndCheckValue));
+    m_kttsmgrw->textPostSnd->setURL(m_config->readEntry("TextPostSnd", textPostSndValue));
+    m_kttsmgrw->textPostSnd->setEnabled(m_kttsmgrw->textPostSndCheck->isChecked());
 
     // Overall settings.
-    embedInSysTrayCheckBox->setChecked(m_config->readBoolEntry("EmbedInSysTray",
-        embedInSysTrayCheckBox->isChecked()));
-    showMainWindowOnStartupCheckBox->setChecked(m_config->readBoolEntry(
-        "ShowMainWindowOnStartup", showMainWindowOnStartupCheckBox->isChecked()));
-    showMainWindowOnStartupCheckBox->setEnabled(
-        embedInSysTrayCheckBox->isChecked());
+    m_kttsmgrw->embedInSysTrayCheckBox->setChecked(m_config->readBoolEntry("EmbedInSysTray",
+        m_kttsmgrw->embedInSysTrayCheckBox->isChecked()));
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setChecked(m_config->readBoolEntry(
+        "ShowMainWindowOnStartup", m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked()));
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(
+        m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
 
-    enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
-        enableKttsdCheckBox->isChecked()));
+    m_kttsmgrw->enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
+        m_kttsmgrw->enableKttsdCheckBox->isChecked()));
 
-    autostartMgrCheckBox->setChecked(m_config->readBoolEntry("AutoStartManager", true));
-    autoexitMgrCheckBox->setChecked(m_config->readBoolEntry("AutoExitManager", true));
+    m_kttsmgrw->autostartMgrCheckBox->setChecked(m_config->readBoolEntry("AutoStartManager", true));
+    m_kttsmgrw->autoexitMgrCheckBox->setChecked(m_config->readBoolEntry("AutoExitManager", true));
 
     // Notification settings.
-    notifyEnableCheckBox->setChecked(m_config->readBoolEntry("Notify",
-        notifyEnableCheckBox->isChecked()));
-    notifyExcludeEventsWithSoundCheckBox->setChecked(
+    m_kttsmgrw->notifyEnableCheckBox->setChecked(m_config->readBoolEntry("Notify",
+        m_kttsmgrw->notifyEnableCheckBox->isChecked()));
+    m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->setChecked(
         m_config->readBoolEntry("ExcludeEventsWithSound",
-        notifyExcludeEventsWithSoundCheckBox->isChecked()));
+        m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->isChecked()));
     slotNotifyClearButton_clicked();
     loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
-    slotNotifyEnableCheckBox_toggled( notifyEnableCheckBox->isChecked() );
+    slotNotifyEnableCheckBox_toggled( m_kttsmgrw->notifyEnableCheckBox->isChecked() );
     // Auto-expand and position on the Default item.
-    Q3ListViewItem* item = notifyListView->findItem( "default", nlvcEventSrc );
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
     if ( item )
         if ( item->childCount() > 0 ) item = item->firstChild();
-    if ( item ) notifyListView->ensureItemVisible( item );
+    if ( item ) m_kttsmgrw->notifyListView->ensureItemVisible( item );
 
     // Audio Output.
     int audioOutputMethod = 0;
-    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
-    if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    if (m_kttsmgrw->alsaRadioButton->isChecked()) audioOutputMethod = 2;
+    if (m_kttsmgrw->akodeRadioButton->isChecked()) audioOutputMethod = 3;
     audioOutputMethod = m_config->readNumEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
         case 0:
-            artsRadioButton->setChecked(true);
+            m_kttsmgrw->artsRadioButton->setChecked(true);
             break;
         case 1:
-            gstreamerRadioButton->setChecked(true);
+            m_kttsmgrw->gstreamerRadioButton->setChecked(true);
             break;
         case 2:
-            alsaRadioButton->setChecked(true);
+            m_kttsmgrw->alsaRadioButton->setChecked(true);
             break;
         case 3:
-            akodeRadioButton->setChecked(true);
+            m_kttsmgrw->akodeRadioButton->setChecked(true);
             break;
     }
-    timeBox->setValue(m_config->readNumEntry("AudioStretchFactor", timeBoxValue));
-    timeBox_valueChanged(timeBox->value());
-    keepAudioCheckBox->setChecked(
-        m_config->readBoolEntry("KeepAudio",                                             keepAudioCheckBox->isChecked()));
-    keepAudioPath->setURL(
+    m_kttsmgrw->timeBox->setValue(m_config->readNumEntry("AudioStretchFactor", timeBoxValue));
+    timeBox_valueChanged(m_kttsmgrw->timeBox->value());
+    m_kttsmgrw->keepAudioCheckBox->setChecked(
+        m_config->readBoolEntry("KeepAudio",                                             m_kttsmgrw->keepAudioCheckBox->isChecked()));
+    m_kttsmgrw->keepAudioPath->setURL(
         m_config->readEntry("KeepAudioPath",
-        keepAudioPath->url()));
-    keepAudioPath->setEnabled(keepAudioCheckBox->isChecked());
+        m_kttsmgrw->keepAudioPath->url()));
+    m_kttsmgrw->keepAudioPath->setEnabled(m_kttsmgrw->keepAudioCheckBox->isChecked());
 
     // Last plugin ID.  Used to generate a new ID for an added talker.
     m_lastTalkerID = 0;
@@ -478,8 +476,8 @@ void KCMKttsMgr::load()
     m_languagesToCodes.clear();
 
     // Load existing Talkers into the listview.
-    talkersList->clear();
-    talkersList->setSortColumn(-1);
+    m_kttsmgrw->talkersList->clear();
+    m_kttsmgrw->talkersList->setSortColumn(-1);
     QStringList talkerIDsList = m_config->readListEntry("TalkerIDs", ',');
     if (!talkerIDsList.isEmpty())
     {
@@ -514,10 +512,10 @@ void KCMKttsMgr::load()
             {
                 // kdDebug() << "KCMKttsMgr::load: talkerCode = " << talkerCode << endl;
                 if (talkerItem)
-                    talkerItem = new KListViewItem(talkersList, talkerItem,
+                    talkerItem = new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
                         talkerID, language, synthName);
                 else
-                    talkerItem = new KListViewItem(talkersList,
+                    talkerItem = new KListViewItem(m_kttsmgrw->talkersList,
                         talkerID, language, synthName);
                 updateTalkerItem(talkerItem, talkerCode);
                 m_languagesToCodes[language] = fullLanguageCode;
@@ -556,10 +554,10 @@ void KCMKttsMgr::load()
 
     // Load Filters.
     Q3ListViewItem* filterItem = 0;
-    filtersList->clear();
-    sbdsList->clear();
-    filtersList->setSortColumn(-1);
-    sbdsList->setSortColumn(-1);
+    m_kttsmgrw->filtersList->clear();
+    m_kttsmgrw->sbdsList->clear();
+    m_kttsmgrw->filtersList->setSortColumn(-1);
+    m_kttsmgrw->sbdsList->setSortColumn(-1);
     m_config->setGroup("General");
     QStringList filterIDsList = m_config->readListEntry("FilterIDs", ',');
     // kdDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList << endl;
@@ -596,20 +594,20 @@ void KCMKttsMgr::load()
                 bool checked = m_config->readBoolEntry("Enabled", false);
                 if (isSbd)
                 {
-                    filterItem = sbdsList->lastChild();
+                    filterItem = m_kttsmgrw->sbdsList->lastChild();
                     if (!filterItem)
-                        filterItem = new KListViewItem(sbdsList,
+                        filterItem = new KListViewItem(m_kttsmgrw->sbdsList,
                             userFilterName, filterID, filterPlugInName);
                     else
-                        filterItem = new KListViewItem(sbdsList, filterItem,
+                        filterItem = new KListViewItem(m_kttsmgrw->sbdsList, filterItem,
                             userFilterName, filterID, filterPlugInName);
                 } else {
-                    filterItem = filtersList->lastChild();
+                    filterItem = m_kttsmgrw->filtersList->lastChild();
                     if (!filterItem)
-                        filterItem = new KttsCheckListItem(filtersList,
+                        filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
                             userFilterName, Q3CheckListItem::CheckBox, this);
                     else
-                        filterItem = new KttsCheckListItem(filtersList, filterItem,
+                        filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
                             userFilterName, Q3CheckListItem::CheckBox, this);
                     dynamic_cast<Q3CheckListItem*>(filterItem)->setOn(checked);
                 }
@@ -651,20 +649,20 @@ void KCMKttsMgr::load()
                     bool isSbd = filterPlugIn->isSBD();
                     if (isSbd)
                     {
-                        filterItem = sbdsList->lastChild();
+                        filterItem = m_kttsmgrw->sbdsList->lastChild();
                         if (!filterItem)
-                            filterItem = new KListViewItem(sbdsList,
+                            filterItem = new KListViewItem(m_kttsmgrw->sbdsList,
                                 userFilterName, filterID, filterPlugInName);
                         else
-                            filterItem = new KListViewItem(sbdsList, filterItem,
+                            filterItem = new KListViewItem(m_kttsmgrw->sbdsList, filterItem,
                                 userFilterName, filterID, filterPlugInName);
                     } else {
-                        filterItem = filtersList->lastChild();
+                        filterItem = m_kttsmgrw->filtersList->lastChild();
                         if (!filterItem)
-                            filterItem = new KttsCheckListItem(filtersList,
+                            filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
                                 userFilterName, Q3CheckListItem::CheckBox, this);
                         else
-                            filterItem = new KttsCheckListItem(filtersList, filterItem,
+                            filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
                                 userFilterName, Q3CheckListItem::CheckBox, this);
                         dynamic_cast<Q3CheckListItem*>(filterItem)->setOn(false);
                     }
@@ -697,37 +695,37 @@ void KCMKttsMgr::load()
     m_config->sync();
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
-    if (talkersList->childCount() == 0)
+    if (m_kttsmgrw->talkersList->childCount() == 0)
     {
-        enableKttsdCheckBox->setChecked(false);
-        enableKttsdCheckBox->setEnabled(false);
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
         enableKttsdToggled(false);
     }
 
     // Enable ShowMainWindowOnStartup checkbox based on EmbedInSysTray checkbox.
-    showMainWindowOnStartupCheckBox->setEnabled(
-        embedInSysTrayCheckBox->isChecked());
+    m_kttsmgrw->showMainWindowOnStartupCheckBox->setEnabled(
+        m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
 
     // GStreamer settings.
     m_config->setGroup("GStreamerPlayer");
-    KttsUtils::setCbItemFromText(sinkComboBox, m_config->readEntry("SinkName", "osssink"));
+    KttsUtils::setCbItemFromText(m_kttsmgrw->sinkComboBox, m_config->readEntry("SinkName", "osssink"));
 
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
-    KttsUtils::setCbItemFromText(pcmComboBox, m_config->readEntry("PcmName", "default"));
+    KttsUtils::setCbItemFromText(m_kttsmgrw->pcmComboBox, m_config->readEntry("PcmName", "default"));
 
     // aKode settings.
     m_config->setGroup("aKodePlayer");
-    KttsUtils::setCbItemFromText(akodeComboBox, m_config->readEntry("SinkName", "auto"));
+    KttsUtils::setCbItemFromText(m_kttsmgrw->akodeComboBox, m_config->readEntry("SinkName", "auto"));
 
     // Update controls based on new states.
     slotNotifyListView_selectionChanged();
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
-    slotGstreamerRadioButton_toggled(gstreamerRadioButton->isChecked());
-    slotAlsaRadioButton_toggled(alsaRadioButton->isChecked());
-    slotAkodeRadioButton_toggled(akodeRadioButton->isChecked());
+    slotGstreamerRadioButton_toggled(m_kttsmgrw->gstreamerRadioButton->isChecked());
+    slotAlsaRadioButton_toggled(m_kttsmgrw->alsaRadioButton->isChecked());
+    slotAkodeRadioButton_toggled(m_kttsmgrw->akodeRadioButton->isChecked());
 
     m_changed = false;
     m_suppressConfigChanged = false;
@@ -751,60 +749,60 @@ void KCMKttsMgr::save()
     m_config->setGroup("General");
 
     // Set text interrumption messages and paths
-    m_config->writeEntry("TextPreMsgEnabled", textPreMsgCheck->isChecked());
-    m_config->writeEntry("TextPreMsg", textPreMsg->text());
+    m_config->writeEntry("TextPreMsgEnabled", m_kttsmgrw->textPreMsgCheck->isChecked());
+    m_config->writeEntry("TextPreMsg", m_kttsmgrw->textPreMsg->text());
 
-    m_config->writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked()); 
-    m_config->writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url()));
+    m_config->writeEntry("TextPreSndEnabled", m_kttsmgrw->textPreSndCheck->isChecked()); 
+    m_config->writeEntry("TextPreSnd", PlugInConf::realFilePath(m_kttsmgrw->textPreSnd->url()));
 
-    m_config->writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
-    m_config->writeEntry("TextPostMsg", textPostMsg->text());
+    m_config->writeEntry("TextPostMsgEnabled", m_kttsmgrw->textPostMsgCheck->isChecked());
+    m_config->writeEntry("TextPostMsg", m_kttsmgrw->textPostMsg->text());
 
-    m_config->writeEntry("TextPostSndEnabled", textPostSndCheck->isChecked());
-    m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url()));
+    m_config->writeEntry("TextPostSndEnabled", m_kttsmgrw->textPostSndCheck->isChecked());
+    m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(m_kttsmgrw->textPostSnd->url()));
 
     // Overall settings.
-    m_config->writeEntry("EmbedInSysTray", embedInSysTrayCheckBox->isChecked());
+    m_config->writeEntry("EmbedInSysTray", m_kttsmgrw->embedInSysTrayCheckBox->isChecked());
     m_config->writeEntry("ShowMainWindowOnStartup",
-        showMainWindowOnStartupCheckBox->isChecked());
-    m_config->writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
-    m_config->writeEntry("AutoExitManager", autoexitMgrCheckBox->isChecked());
+        m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked());
+    m_config->writeEntry("AutoStartManager", m_kttsmgrw->autostartMgrCheckBox->isChecked());
+    m_config->writeEntry("AutoExitManager", m_kttsmgrw->autoexitMgrCheckBox->isChecked());
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     // Enable checkbox if at least one Talker is configured.
     bool enableKttsdWasToggled = false;
-    if (talkersList->childCount() == 0)
+    if (m_kttsmgrw->talkersList->childCount() == 0)
     {
-        enableKttsdWasToggled = enableKttsdCheckBox->isChecked();
-        enableKttsdCheckBox->setChecked(false);
-        enableKttsdCheckBox->setEnabled(false);
+        enableKttsdWasToggled = m_kttsmgrw->enableKttsdCheckBox->isChecked();
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(false);
         // Might as well zero LastTalkerID as well.
         m_lastTalkerID = 0;
     }
     else
-        enableKttsdCheckBox->setEnabled(true);
+        m_kttsmgrw->enableKttsdCheckBox->setEnabled(true);
 
-    m_config->writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
+    m_config->writeEntry("EnableKttsd", m_kttsmgrw->enableKttsdCheckBox->isChecked());
 
     // Notification settings.
-    m_config->writeEntry("Notify", notifyEnableCheckBox->isChecked());
+    m_config->writeEntry("Notify", m_kttsmgrw->notifyEnableCheckBox->isChecked());
     m_config->writeEntry("ExcludeEventsWithSound",
-        notifyExcludeEventsWithSoundCheckBox->isChecked());
+        m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->isChecked());
     saveNotifyEventsToFile( locateLocal("config", "kttsd_notifyevents.xml") );
 
     // Audio Output.
     int audioOutputMethod = 0;
-    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
-    if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    if (m_kttsmgrw->alsaRadioButton->isChecked()) audioOutputMethod = 2;
+    if (m_kttsmgrw->akodeRadioButton->isChecked()) audioOutputMethod = 3;
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
-    m_config->writeEntry("AudioStretchFactor", timeBox->value());
-    m_config->writeEntry("KeepAudio", keepAudioCheckBox->isChecked());
-    m_config->writeEntry("KeepAudioPath", keepAudioPath->url());
+    m_config->writeEntry("AudioStretchFactor", m_kttsmgrw->timeBox->value());
+    m_config->writeEntry("KeepAudio", m_kttsmgrw->keepAudioCheckBox->isChecked());
+    m_config->writeEntry("KeepAudioPath", m_kttsmgrw->keepAudioPath->url());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
-    Q3ListViewItem* talkerItem = talkersList->firstChild();
+    Q3ListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
     while (talkerItem)
     {
         Q3ListViewItem* nextTalkerItem = talkerItem->itemBelow();
@@ -830,7 +828,7 @@ void KCMKttsMgr::save()
 
     // Get ordered list of all filter IDs.  Record enabled state of each filter.
     QStringList filterIDsList;
-    Q3ListViewItem* filterItem = filtersList->firstChild();
+    Q3ListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
     while (filterItem)
     {
         Q3ListViewItem* nextFilterItem = filterItem->itemBelow();
@@ -842,7 +840,7 @@ void KCMKttsMgr::save()
         m_config->writeEntry("IsSBD", false);
         filterItem = nextFilterItem;
     }
-    Q3ListViewItem* sbdItem = sbdsList->firstChild();
+    Q3ListViewItem* sbdItem = m_kttsmgrw->sbdsList->firstChild();
     while (sbdItem)
     {
         Q3ListViewItem* nextSbdItem = sbdItem->itemBelow();
@@ -870,15 +868,15 @@ void KCMKttsMgr::save()
 
     // GStreamer settings.
     m_config->setGroup("GStreamerPlayer");
-    m_config->writeEntry("SinkName", sinkComboBox->currentText());
+    m_config->writeEntry("SinkName", m_kttsmgrw->sinkComboBox->currentText());
 
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
-    m_config->writeEntry("PcmName", pcmComboBox->currentText());
+    m_config->writeEntry("PcmName", m_kttsmgrw->pcmComboBox->currentText());
 
     // aKode settings.
     m_config->setGroup("aKodePlayer");
-    m_config->writeEntry("SinkName", akodeComboBox->currentText());
+    m_config->writeEntry("SinkName", m_kttsmgrw->akodeComboBox->currentText());
 
     m_config->sync();
 
@@ -902,12 +900,12 @@ void KCMKttsMgr::save()
 void KCMKttsMgr::slotTabChanged()
 {
     setButtons(buttons());
-    int currentPageIndex = mainTab->currentPageIndex();
+    int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
     if (currentPageIndex == wpJobs)
     {
         if (m_changed)
         {
-            KMessageBox::information(this,
+            KMessageBox::information(m_kttsmgrw,
                 i18n("You have made changes to the configuration but have not saved them yet.  "
                      "Click Apply to save the changes or Cancel to abandon the changes."));
         }
@@ -923,119 +921,119 @@ void KCMKttsMgr::slotTabChanged()
 void KCMKttsMgr::defaults() {
     // kdDebug() << "Running: KCMKttsMgr::defaults: Running"<< endl;
 
-    int currentPageIndex = mainTab->currentPageIndex();
+    int currentPageIndex = m_kttsmgrw->mainTab->currentPageIndex();
     bool changed = false;
     switch (currentPageIndex)
     {
         case wpGeneral:
-            if (embedInSysTrayCheckBox->isChecked() != embedInSysTrayCheckBoxValue)
+            if (m_kttsmgrw->embedInSysTrayCheckBox->isChecked() != embedInSysTrayCheckBoxValue)
             {
                 changed = true;
-                embedInSysTrayCheckBox->setChecked(embedInSysTrayCheckBoxValue);
+                m_kttsmgrw->embedInSysTrayCheckBox->setChecked(embedInSysTrayCheckBoxValue);
             }
-            if (showMainWindowOnStartupCheckBox->isChecked() !=
+            if (m_kttsmgrw->showMainWindowOnStartupCheckBox->isChecked() !=
                 showMainWindowOnStartupCheckBoxValue)
             {
                 changed = true;
-                showMainWindowOnStartupCheckBox->setChecked(
+                m_kttsmgrw->showMainWindowOnStartupCheckBox->setChecked(
                     showMainWindowOnStartupCheckBoxValue);
             }
-            if (autostartMgrCheckBox->isChecked() != autostartMgrCheckBoxValue)
+            if (m_kttsmgrw->autostartMgrCheckBox->isChecked() != autostartMgrCheckBoxValue)
             {
                 changed = true;
-                autostartMgrCheckBox->setChecked(
+                m_kttsmgrw->autostartMgrCheckBox->setChecked(
                     autostartMgrCheckBoxValue);
             }
-            if (autoexitMgrCheckBox->isChecked() != autoexitMgrCheckBoxValue)
+            if (m_kttsmgrw->autoexitMgrCheckBox->isChecked() != autoexitMgrCheckBoxValue)
             {
                 changed = true;
-                autoexitMgrCheckBox->setChecked(
+                m_kttsmgrw->autoexitMgrCheckBox->setChecked(
                     autoexitMgrCheckBoxValue);
             }
             break;
 
         case wpNotify:
-            if (notifyEnableCheckBox->isChecked() != notifyEnableCheckBoxValue)
+            if (m_kttsmgrw->notifyEnableCheckBox->isChecked() != notifyEnableCheckBoxValue)
             {
                 changed = true;
-                notifyEnableCheckBox->setChecked(notifyEnableCheckBoxValue);
-                notifyGroup->setChecked( notifyEnableCheckBoxValue );
+                m_kttsmgrw->notifyEnableCheckBox->setChecked(notifyEnableCheckBoxValue);
+                m_kttsmgrw->notifyGroup->setChecked( notifyEnableCheckBoxValue );
             }
-            if (notifyExcludeEventsWithSoundCheckBox->isChecked() !=
+            if (m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->isChecked() !=
                 notifyExcludeEventsWithSoundCheckBoxValue )
             {
                 changed = true;
-                notifyExcludeEventsWithSoundCheckBox->setChecked(
+                m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->setChecked(
                     notifyExcludeEventsWithSoundCheckBoxValue );
             }
             break;
 
         case wpInterruption:
-            if (textPreMsgCheck->isChecked() != textPreMsgCheckValue)
+            if (m_kttsmgrw->textPreMsgCheck->isChecked() != textPreMsgCheckValue)
             {
                 changed = true;
-                textPreMsgCheck->setChecked(textPreMsgCheckValue);
+                m_kttsmgrw->textPreMsgCheck->setChecked(textPreMsgCheckValue);
             }
-            if (textPreMsg->text() != i18n(textPreMsgValue.utf8()))
+            if (m_kttsmgrw->textPreMsg->text() != i18n(textPreMsgValue.utf8()))
             {
                 changed = true;
-                textPreMsg->setText(i18n(textPreMsgValue.utf8()));
+                m_kttsmgrw->textPreMsg->setText(i18n(textPreMsgValue.utf8()));
             }
-            if (textPreSndCheck->isChecked() != textPreSndCheckValue)
+            if (m_kttsmgrw->textPreSndCheck->isChecked() != textPreSndCheckValue)
             {
                 changed = true;
-                textPreSndCheck->setChecked(textPreSndCheckValue);
+                m_kttsmgrw->textPreSndCheck->setChecked(textPreSndCheckValue);
             }
-            if (textPreSnd->url() != textPreSndValue)
+            if (m_kttsmgrw->textPreSnd->url() != textPreSndValue)
             {
                 changed = true;
-                textPreSnd->setURL(textPreSndValue);
+                m_kttsmgrw->textPreSnd->setURL(textPreSndValue);
             }
-            if (textPostMsgCheck->isChecked() != textPostMsgCheckValue)
+            if (m_kttsmgrw->textPostMsgCheck->isChecked() != textPostMsgCheckValue)
             {
                 changed = true;
-                textPostMsgCheck->setChecked(textPostMsgCheckValue);
+                m_kttsmgrw->textPostMsgCheck->setChecked(textPostMsgCheckValue);
             }
-            if (textPostMsg->text() != i18n(textPostMsgValue.utf8()))
+            if (m_kttsmgrw->textPostMsg->text() != i18n(textPostMsgValue.utf8()))
             {
                 changed = true;
-                textPostMsg->setText(i18n(textPostMsgValue.utf8()));
+                m_kttsmgrw->textPostMsg->setText(i18n(textPostMsgValue.utf8()));
             }
-            if (textPostSndCheck->isChecked() != textPostSndCheckValue)
+            if (m_kttsmgrw->textPostSndCheck->isChecked() != textPostSndCheckValue)
             {
                 changed = true;
-                textPostSndCheck->setChecked(textPostSndCheckValue);
+                m_kttsmgrw->textPostSndCheck->setChecked(textPostSndCheckValue);
             }
-            if (textPostSnd->url() != textPostSndValue)
+            if (m_kttsmgrw->textPostSnd->url() != textPostSndValue)
             {
                 changed = true;
-                textPostSnd->setURL(textPostSndValue);
+                m_kttsmgrw->textPostSnd->setURL(textPostSndValue);
             }
             break;
 
         case wpAudio:
-            if (!artsRadioButton->isChecked())
+            if (!m_kttsmgrw->artsRadioButton->isChecked())
             {
                 changed = true;
-                artsRadioButton->setChecked(true);
+                m_kttsmgrw->artsRadioButton->setChecked(true);
             }
-            if (timeBox->value() != timeBoxValue)
+            if (m_kttsmgrw->timeBox->value() != timeBoxValue)
             {
                 changed = true;
-                timeBox->setValue(timeBoxValue);
+                m_kttsmgrw->timeBox->setValue(timeBoxValue);
             }
-            if (keepAudioCheckBox->isChecked() !=
+            if (m_kttsmgrw->keepAudioCheckBox->isChecked() !=
                  keepAudioCheckBoxValue)
             {
                 changed = true;
-                keepAudioCheckBox->setChecked(keepAudioCheckBoxValue);
+                m_kttsmgrw->keepAudioCheckBox->setChecked(keepAudioCheckBoxValue);
             }
-            if (keepAudioPath->url() != locateLocal("data", "kttsd/audio/"))
+            if (m_kttsmgrw->keepAudioPath->url() != locateLocal("data", "kttsd/audio/"))
             {
                 changed = true;
-                keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
+                m_kttsmgrw->keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
             }
-            keepAudioPath->setEnabled(keepAudioCheckBox->isEnabled());
+            m_kttsmgrw->keepAudioPath->setEnabled(m_kttsmgrw->keepAudioCheckBox->isEnabled());
     }
     if (changed) configChanged();
 }
@@ -1217,7 +1215,7 @@ void KCMKttsMgr::slot_addTalker()
         i18n("Add Talker"),
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
         KDialogBase::Cancel,
-        this,
+        m_kttsmgrw,
         "AddTalker_dlg",
         true,
         true);
@@ -1234,7 +1232,7 @@ void KCMKttsMgr::slot_addTalker()
     if(languageCode == "other")
     {
         // Create a  QHBox to host KListView.
-        Q3HBox* hBox = new Q3HBox(this, "SelectLanguage_hbox");
+        Q3HBox* hBox = new Q3HBox(m_kttsmgrw, "SelectLanguage_hbox");
         // Create a KListView and fill with all known languages.
         KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
         langLView->addColumn(i18n("Language"));
@@ -1260,7 +1258,7 @@ void KCMKttsMgr::slot_addTalker()
             i18n("Select Language"),
             KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
             KDialogBase::Cancel,
-            this,
+            m_kttsmgrw,
             "SelectLanguage_dlg",
             true,
             true);
@@ -1337,22 +1335,22 @@ void KCMKttsMgr::slot_addTalker()
         m_config->sync();
 
         // Add listview item.
-        Q3ListViewItem* talkerItem = talkersList->lastChild();
+        Q3ListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
-            talkerItem =  new KListViewItem(talkersList, talkerItem,
+            talkerItem =  new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
                 QString::number(m_lastTalkerID), language, synthName);
         else
-            talkerItem = new KListViewItem(talkersList,
+            talkerItem = new KListViewItem(m_kttsmgrw->talkersList,
                 QString::number(m_lastTalkerID), language, synthName);
 
         // Set additional columns of the listview item.
         updateTalkerItem(talkerItem, talkerCode);
 
         // Make sure visible.
-        talkersList->ensureItemVisible(talkerItem);
+        m_kttsmgrw->talkersList->ensureItemVisible(talkerItem);
 
         // Select the new item, update buttons.
-        talkersList->setSelected(talkerItem, true);
+        m_kttsmgrw->talkersList->setSelected(talkerItem, true);
         updateTalkerButtons();
 
         // Inform Control Center that change has been made.
@@ -1388,8 +1386,8 @@ void KCMKttsMgr:: slot_addSbdFilter()
 void KCMKttsMgr::addFilter( bool sbd)
 {
     // Build a list of filters that support multiple instances and let user choose.
-    KListView* lView = filtersList;
-    if (sbd) lView = sbdsList;
+    KListView* lView = m_kttsmgrw->filtersList;
+    if (sbd) lView = m_kttsmgrw->sbdsList;
 
     QStringList filterPlugInNames;
     Q3ListViewItem* item = lView->firstChild();
@@ -1435,7 +1433,7 @@ void KCMKttsMgr::addFilter( bool sbd)
             0,
             false,
             &okChosen,
-            this,
+            m_kttsmgrw,
             "selectfilter_kttsd");
         if (!okChosen) return;
     } else
@@ -1554,7 +1552,7 @@ void KCMKttsMgr::slot_removeTalker(){
     // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
 
     // Get the selected talker.
-    Q3ListViewItem *itemToRemove = talkersList->selectedItem();
+    Q3ListViewItem *itemToRemove = m_kttsmgrw->talkersList->selectedItem();
     if (!itemToRemove) return;
 
     // Delete the talker from configuration file.
@@ -1587,8 +1585,8 @@ void KCMKttsMgr::removeFilter( bool sbd )
 {
     // kdDebug() << "KCMKttsMgr::removeFilter: Running"<< endl;
 
-    KListView* lView = filtersList;
-    if (sbd) lView = sbdsList;
+    KListView* lView = m_kttsmgrw->filtersList;
+    if (sbd) lView = m_kttsmgrw->sbdsList;
     // Get the selected filter.
     Q3ListViewItem *itemToRemove = lView->selectedItem();
     if (!itemToRemove) return;
@@ -1611,19 +1609,19 @@ void KCMKttsMgr::removeFilter( bool sbd )
 
 void KCMKttsMgr::slot_higherTalkerPriority()
 {
-    higherItemPriority( talkersList );
+    higherItemPriority( m_kttsmgrw->talkersList );
     updateTalkerButtons();
 }
 
 void KCMKttsMgr::slot_higherNormalFilterPriority()
 {
-    higherItemPriority( filtersList );
+    higherItemPriority( m_kttsmgrw->filtersList );
     updateFilterButtons();
 }
 
 void KCMKttsMgr::slot_higherSbdFilterPriority()
 {
-    higherItemPriority( sbdsList );
+    higherItemPriority( m_kttsmgrw->sbdsList );
     updateSbdButtons();
 }
 
@@ -1644,19 +1642,19 @@ void KCMKttsMgr::higherItemPriority( KListView* lView )
 
 void KCMKttsMgr::slot_lowerTalkerPriority()
 {
-    lowerItemPriority( talkersList );
+    lowerItemPriority( m_kttsmgrw->talkersList );
     updateTalkerButtons();
 }
 
 void KCMKttsMgr::slot_lowerNormalFilterPriority()
 {
-    lowerItemPriority( filtersList );
+    lowerItemPriority( m_kttsmgrw->filtersList );
     updateFilterButtons();
 }
 
 void KCMKttsMgr::slot_lowerSbdFilterPriority()
 {
-    lowerItemPriority( sbdsList );
+    lowerItemPriority( m_kttsmgrw->sbdsList );
     updateSbdButtons();
 }
 
@@ -1680,18 +1678,18 @@ void KCMKttsMgr::lowerItemPriority( KListView* lView )
 */
 void KCMKttsMgr::updateTalkerButtons(){
     // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Running"<< endl;
-    if(talkersList->selectedItem()){
-        removeTalkerButton->setEnabled(true);
-        configureTalkerButton->setEnabled(true);
-        higherTalkerPriorityButton->setEnabled(
-            talkersList->selectedItem()->itemAbove() != 0);
-        lowerTalkerPriorityButton->setEnabled(
-            talkersList->selectedItem()->itemBelow() != 0);
+    if(m_kttsmgrw->talkersList->selectedItem()){
+        m_kttsmgrw->removeTalkerButton->setEnabled(true);
+        m_kttsmgrw->configureTalkerButton->setEnabled(true);
+        m_kttsmgrw->higherTalkerPriorityButton->setEnabled(
+            m_kttsmgrw->talkersList->selectedItem()->itemAbove() != 0);
+        m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(
+            m_kttsmgrw->talkersList->selectedItem()->itemBelow() != 0);
     } else {
-        removeTalkerButton->setEnabled(false);
-        configureTalkerButton->setEnabled(false);
-        higherTalkerPriorityButton->setEnabled(false);
-        lowerTalkerPriorityButton->setEnabled(false);
+        m_kttsmgrw->removeTalkerButton->setEnabled(false);
+        m_kttsmgrw->configureTalkerButton->setEnabled(false);
+        m_kttsmgrw->higherTalkerPriorityButton->setEnabled(false);
+        m_kttsmgrw->lowerTalkerPriorityButton->setEnabled(false);
     }
     // kdDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting"<< endl;
 }
@@ -1701,19 +1699,19 @@ void KCMKttsMgr::updateTalkerButtons(){
 */
 void KCMKttsMgr::updateFilterButtons(){
     // kdDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
-    Q3ListViewItem* item = filtersList->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
     if (item) {
-        removeFilterButton->setEnabled(true);
-        configureFilterButton->setEnabled(true);
-        higherFilterPriorityButton->setEnabled(
-                filtersList->selectedItem()->itemAbove() != 0);
-        lowerFilterPriorityButton->setEnabled(
-                filtersList->selectedItem()->itemBelow() != 0);
+        m_kttsmgrw->removeFilterButton->setEnabled(true);
+        m_kttsmgrw->configureFilterButton->setEnabled(true);
+        m_kttsmgrw->higherFilterPriorityButton->setEnabled(
+                m_kttsmgrw->filtersList->selectedItem()->itemAbove() != 0);
+        m_kttsmgrw->lowerFilterPriorityButton->setEnabled(
+                m_kttsmgrw->filtersList->selectedItem()->itemBelow() != 0);
     } else {
-        removeFilterButton->setEnabled(false);
-        configureFilterButton->setEnabled(false);
-        higherFilterPriorityButton->setEnabled(false);
-        lowerFilterPriorityButton->setEnabled(false);
+        m_kttsmgrw->removeFilterButton->setEnabled(false);
+        m_kttsmgrw->configureFilterButton->setEnabled(false);
+        m_kttsmgrw->higherFilterPriorityButton->setEnabled(false);
+        m_kttsmgrw->lowerFilterPriorityButton->setEnabled(false);
     }
     // kdDebug() << "KCMKttsMgr::updateFilterButtons: Exiting"<< endl;
 }
@@ -1723,13 +1721,13 @@ void KCMKttsMgr::updateFilterButtons(){
  */
 void KCMKttsMgr::updateSbdButtons(){
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Running"<< endl;
-    Q3ListViewItem* item = sbdsList->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->sbdsList->selectedItem();
     if (item) {
         m_sbdPopmenu->setItemEnabled( sbdBtnEdit, true );
         m_sbdPopmenu->setItemEnabled( sbdBtnUp,
-            sbdsList->selectedItem()->itemAbove() != 0 );
+            m_kttsmgrw->sbdsList->selectedItem()->itemAbove() != 0 );
         m_sbdPopmenu->setItemEnabled( sbdBtnDown,
-            sbdsList->selectedItem()->itemBelow() != 0 );
+            m_kttsmgrw->sbdsList->selectedItem()->itemBelow() != 0 );
         m_sbdPopmenu->setItemEnabled( sbdBtnRemove, true );
     } else {
         m_sbdPopmenu->setItemEnabled( sbdBtnEdit, false );
@@ -1754,7 +1752,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
     // kdDebug() << "KCMKttsMgr::enableKttsdToggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
-    if (enableKttsdCheckBox->isChecked())
+    if (m_kttsmgrw->enableKttsdCheckBox->isChecked())
     {
         if (!kttsdRunning)
         {
@@ -1763,8 +1761,8 @@ void KCMKttsMgr::enableKttsdToggled(bool)
             if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
             {
                 kdDebug() << "Starting KTTSD failed with message " << error << endl;
-                enableKttsdCheckBox->setChecked(false);
-                notifyTestButton->setEnabled(false);
+                m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+                m_kttsmgrw->notifyTestButton->setEnabled(false);
             }
         }
     }
@@ -1786,8 +1784,8 @@ void KCMKttsMgr::enableKttsdToggled(bool)
 */
 void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
 {
-    sinkLabel->setEnabled(state);
-    sinkComboBox->setEnabled(state);
+    m_kttsmgrw->sinkLabel->setEnabled(state);
+    m_kttsmgrw->sinkComboBox->setEnabled(state);
 }
 
 /**
@@ -1795,8 +1793,8 @@ void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
 */
 void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
 {
-    pcmLabel->setEnabled(state);
-    pcmComboBox->setEnabled(state);
+    m_kttsmgrw->pcmLabel->setEnabled(state);
+    m_kttsmgrw->pcmComboBox->setEnabled(state);
 }
 
 /**
@@ -1804,8 +1802,8 @@ void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
 */
 void KCMKttsMgr::slotAkodeRadioButton_toggled(bool state)
 {
-    akodeSinkLabel->setEnabled(state);
-    akodeComboBox->setEnabled(state);
+    m_kttsmgrw->akodeSinkLabel->setEnabled(state);
+    m_kttsmgrw->akodeComboBox->setEnabled(state);
 }
 
 /**
@@ -1822,12 +1820,12 @@ void KCMKttsMgr::kttsdStarted()
         if (factory)
         {
             // Create the Job Manager part
-            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( mainTab, "kttsjobmgr",
+            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( m_kttsmgrw->mainTab, "kttsjobmgr",
                 "KParts::ReadOnlyPart" );
             if (m_jobMgrPart)
             {
                 // Add the Job Manager part as a new tab.
-                mainTab->addTab(m_jobMgrPart->widget(), i18n("&Jobs"));
+                m_kttsmgrw->mainTab->addTab(m_jobMgrPart->widget(), i18n("&Jobs"));
                 kttsdLoaded = true;
             }
             else
@@ -1838,12 +1836,12 @@ void KCMKttsMgr::kttsdStarted()
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded)
     {
-        enableKttsdCheckBox->setChecked(true);
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(true);
         // Enable/disable notify Test button.
         slotNotifyListView_selectionChanged();
     } else {
-        enableKttsdCheckBox->setChecked(false);
-        notifyTestButton->setEnabled(false);
+        m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+        m_kttsmgrw->notifyTestButton->setEnabled(false);
     }
 }
 
@@ -1855,12 +1853,12 @@ void KCMKttsMgr::kttsdExiting()
     // kdDebug() << "KCMKttsMgr::kttsdExiting: Running" << endl;
     if (m_jobMgrPart)
     {
-        mainTab->removePage(m_jobMgrPart->widget());
+        m_kttsmgrw->mainTab->removePage(m_jobMgrPart->widget());
         delete m_jobMgrPart;
         m_jobMgrPart = 0;
     }
-    enableKttsdCheckBox->setChecked(false);
-    notifyTestButton->setEnabled(false);
+    m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
+    m_kttsmgrw->notifyTestButton->setEnabled(false);
 }
 
 /**
@@ -1869,7 +1867,7 @@ void KCMKttsMgr::kttsdExiting()
 void KCMKttsMgr::slot_configureTalker()
 {
     // Get highlighted plugin from Talker ListView and load into memory.
-    Q3ListViewItem* talkerItem = talkersList->selectedItem();
+    Q3ListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
     if (!talkerItem) return;
     QString talkerID = talkerItem->text(tlvcTalkerID);
     QString synthName = talkerItem->text(tlvcSynthName);
@@ -1940,8 +1938,8 @@ void KCMKttsMgr::slot_configureSbdFilter()
 void KCMKttsMgr::configureFilterItem( bool sbd )
 {
     // Get highlighted plugin from Filter ListView and load into memory.
-    KListView* lView = filtersList;
-    if (sbd) lView = sbdsList;
+    KListView* lView = m_kttsmgrw->filtersList;
+    if (sbd) lView = m_kttsmgrw->sbdsList;
     Q3ListViewItem* filterItem = lView->selectedItem();
     if (!filterItem) return;
     QString filterID = filterItem->text(flvcFilterID);
@@ -2018,7 +2016,7 @@ void KCMKttsMgr::configureTalker()
         i18n("Talker Configuration"),
         KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Cancel,
         KDialogBase::Cancel,
-        this,
+        m_kttsmgrw,
         "configureTalker_dlg",
         true,
         true);
@@ -2032,19 +2030,19 @@ void KCMKttsMgr::configureTalker()
     // Create a Player object for the plugin to use for testing.
     int playerOption = 0;
     QString sinkName;
-    if (gstreamerRadioButton->isChecked()) {
+    if (m_kttsmgrw->gstreamerRadioButton->isChecked()) {
         playerOption = 1;
-        sinkName = sinkComboBox->currentText();
+        sinkName = m_kttsmgrw->sinkComboBox->currentText();
     }
-    if (alsaRadioButton->isChecked()) {
+    if (m_kttsmgrw->alsaRadioButton->isChecked()) {
         playerOption = 2;
-        sinkName = pcmComboBox->currentText();
+        sinkName = m_kttsmgrw->pcmComboBox->currentText();
     }
-    if (akodeRadioButton->isChecked()) {
+    if (m_kttsmgrw->akodeRadioButton->isChecked()) {
         playerOption = 3;
-        sinkName = akodeComboBox->currentText();
+        sinkName = m_kttsmgrw->akodeComboBox->currentText();
     }
-    float audioStretchFactor = 1.0/(float(timeBox->value())/100.0);
+    float audioStretchFactor = 1.0/(float(m_kttsmgrw->timeBox->value())/100.0);
     // kdDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;
     TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", 
         playerOption, audioStretchFactor, sinkName);
@@ -2071,7 +2069,7 @@ void KCMKttsMgr::configureFilter()
         i18n("Filter Configuration"),
         KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Cancel,
         KDialogBase::Cancel,
-        this,
+        m_kttsmgrw,
         "configureFilter_dlg",
         true,
         true);
@@ -2094,13 +2092,13 @@ void KCMKttsMgr::configureFilter()
 int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
 {
     int cnt = 0;
-    Q3ListViewItem* item = filtersList->firstChild();
+    Q3ListViewItem* item = m_kttsmgrw->filtersList->firstChild();
     while (item)
     {
         if (item->text(flvcPlugInName) == filterPlugInName) ++cnt;
         item = item->nextSibling();
     }
-    item = sbdsList->firstChild();
+    item = m_kttsmgrw->sbdsList->firstChild();
     while (item)
     {
         if (item->text(slvcPlugInName) == filterPlugInName) ++cnt;
@@ -2111,7 +2109,7 @@ int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
 
 void KCMKttsMgr::keepAudioCheckBox_toggled(bool checked)
 {
-    keepAudioPath->setEnabled(checked);
+    m_kttsmgrw->keepAudioPath->setEnabled(checked);
     configChanged();
 }
 
@@ -2132,11 +2130,11 @@ int KCMKttsMgr::sliderToPercent(int sliderValue) {
 }
 
 void KCMKttsMgr::timeBox_valueChanged(int percentValue) {
-    timeSlider->setValue (percentToSlider (percentValue));
+    m_kttsmgrw->timeSlider->setValue (percentToSlider (percentValue));
 }
 
 void KCMKttsMgr::timeSlider_valueChanged(int sliderValue) {
-    timeBox->setValue (sliderToPercent (sliderValue));
+    m_kttsmgrw->timeBox->setValue (sliderToPercent (sliderValue));
 }
 
 void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
@@ -2236,7 +2234,7 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
     file.close();
 
     // Clear list view.
-    if ( clear ) notifyListView->clear();
+    if ( clear ) m_kttsmgrw->notifyListView->clear();
 
     // Event list.
     QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
@@ -2282,7 +2280,7 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
     doc.appendChild( root );
 
     // Events.
-    KListView* lv = notifyListView;
+    KListView* lv = m_kttsmgrw->notifyListView;
     Q3ListViewItemIterator it(lv);
     while ( it.current() )
     {
@@ -2338,27 +2336,27 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
 
 void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
 {
-    notifyExcludeEventsWithSoundCheckBox->setEnabled( checked );
-    notifyGroup->setEnabled( checked );
+    m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox->setEnabled( checked );
+    m_kttsmgrw->notifyGroup->setEnabled( checked );
     configChanged();
 }
 
 void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( !item ) return;        // should not happen
     item->setText( nlvcEvent, NotifyPresent::presentName( index ) );
     item->setText( nlvcEventName, NotifyPresent::presentDisplayName( index ) );
     bool enableIt = ( index != NotifyPresent::None);
-    notifyActionComboBox->setEnabled( enableIt );
-    notifyTalkerButton->setEnabled( enableIt );
+    m_kttsmgrw->notifyActionComboBox->setEnabled( enableIt );
+    m_kttsmgrw->notifyTalkerButton->setEnabled( enableIt );
     if (!enableIt)
     {
-        notifyTalkerLineEdit->clear();
+        m_kttsmgrw->notifyTalkerLineEdit->clear();
     } else {
-        if ( notifyTalkerLineEdit->text().isEmpty() )
+        if ( m_kttsmgrw->notifyTalkerLineEdit->text().isEmpty() )
         {
-            notifyTalkerLineEdit->setText( i18n("default") );
+            m_kttsmgrw->notifyTalkerLineEdit->setText( i18n("default") );
         }
     }
     configChanged();
@@ -2366,70 +2364,70 @@ void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
 
 void KCMKttsMgr::slotNotifyListView_selectionChanged()
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
     {
         bool topLevel = ( item->depth() == 0 );
         if ( topLevel )
         {
-            notifyPresentComboBox->setEnabled( false );
-            notifyActionComboBox->setEnabled( false );
-            notifyTestButton->setEnabled( false );
-            notifyMsgLineEdit->setEnabled( false );
-            notifyMsgLineEdit->clear();
-            notifyTalkerButton->setEnabled( false );
-            notifyTalkerLineEdit->clear();
+            m_kttsmgrw->notifyPresentComboBox->setEnabled( false );
+            m_kttsmgrw->notifyActionComboBox->setEnabled( false );
+            m_kttsmgrw->notifyTestButton->setEnabled( false );
+            m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
+            m_kttsmgrw->notifyMsgLineEdit->clear();
+            m_kttsmgrw->notifyTalkerButton->setEnabled( false );
+            m_kttsmgrw->notifyTalkerLineEdit->clear();
             bool defaultItem = ( item->text(nlvcEventSrc) == "default" );
-            notifyRemoveButton->setEnabled( !defaultItem );
+            m_kttsmgrw->notifyRemoveButton->setEnabled( !defaultItem );
         } else {
             bool defaultItem = ( item->parent()->text(nlvcEventSrc) == "default" );
-            notifyPresentComboBox->setEnabled( defaultItem );
+            m_kttsmgrw->notifyPresentComboBox->setEnabled( defaultItem );
             if ( defaultItem )
-                notifyPresentComboBox->setCurrentItem( NotifyPresent::present( item->text( nlvcEvent ) ) );
-            notifyActionComboBox->setEnabled( true );
+                m_kttsmgrw->notifyPresentComboBox->setCurrentItem( NotifyPresent::present( item->text( nlvcEvent ) ) );
+            m_kttsmgrw->notifyActionComboBox->setEnabled( true );
             int action = NotifyAction::action( item->text( nlvcAction ) );
-            notifyActionComboBox->setCurrentItem( action );
-            notifyTalkerButton->setEnabled( true );
+            m_kttsmgrw->notifyActionComboBox->setCurrentItem( action );
+            m_kttsmgrw->notifyTalkerButton->setEnabled( true );
             TalkerCode talkerCode( item->text( nlvcTalker ) );
-            notifyTalkerLineEdit->setText( talkerCode.getTranslatedDescription() );
+            m_kttsmgrw->notifyTalkerLineEdit->setText( talkerCode.getTranslatedDescription() );
             if ( action == NotifyAction::SpeakCustom )
             {
-                notifyMsgLineEdit->setEnabled( true );
+                m_kttsmgrw->notifyMsgLineEdit->setEnabled( true );
                 QString msg = item->text( nlvcActionName );
                 int msglen = msg.length();
                 msg = msg.mid( 1, msglen-2 );
-                notifyMsgLineEdit->setText( msg );
+                m_kttsmgrw->notifyMsgLineEdit->setText( msg );
             } else {
-                notifyMsgLineEdit->setEnabled( false );
-                notifyMsgLineEdit->clear();
+                m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
+                m_kttsmgrw->notifyMsgLineEdit->clear();
             }
-            notifyRemoveButton->setEnabled( !defaultItem );
-            notifyTestButton->setEnabled(
+            m_kttsmgrw->notifyRemoveButton->setEnabled( !defaultItem );
+            m_kttsmgrw->notifyTestButton->setEnabled(
                 action != NotifyAction::DoNotSpeak &&
-                enableKttsdCheckBox->isChecked());
+                m_kttsmgrw->enableKttsdCheckBox->isChecked());
         }
     } else {
-        notifyPresentComboBox->setEnabled( false );
-        notifyActionComboBox->setEnabled( false );
-        notifyTestButton->setEnabled( false );
-        notifyMsgLineEdit->setEnabled( false );
-        notifyMsgLineEdit->clear();
-        notifyTalkerButton->setEnabled( false );
-        notifyTalkerLineEdit->clear();
-        notifyRemoveButton->setEnabled( false );
+        m_kttsmgrw->notifyPresentComboBox->setEnabled( false );
+        m_kttsmgrw->notifyActionComboBox->setEnabled( false );
+        m_kttsmgrw->notifyTestButton->setEnabled( false );
+        m_kttsmgrw->notifyMsgLineEdit->setEnabled( false );
+        m_kttsmgrw->notifyMsgLineEdit->clear();
+        m_kttsmgrw->notifyTalkerButton->setEnabled( false );
+        m_kttsmgrw->notifyTalkerLineEdit->clear();
+        m_kttsmgrw->notifyRemoveButton->setEnabled( false );
     }
 }
 
 void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
     item->setText( nlvcAction, NotifyAction::actionName( index ) );
     item->setText( nlvcActionName, NotifyAction::actionDisplayName( index ) );
     if ( index == NotifyAction::SpeakCustom )
-        item->setText( nlvcActionName, "\"" + notifyMsgLineEdit->text() + "\"" );
+        item->setText( nlvcActionName, "\"" + m_kttsmgrw->notifyMsgLineEdit->text() + "\"" );
     if ( index == NotifyAction::DoNotSpeak )
         item->setPixmap( nlvcActionName, SmallIcon( "nospeak" ) );
     else
@@ -2440,20 +2438,20 @@ void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
 
 void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
-    if ( notifyActionComboBox->currentItem() != NotifyAction::SpeakCustom) return;
+    if ( m_kttsmgrw->notifyActionComboBox->currentItem() != NotifyAction::SpeakCustom) return;
     item->setText( nlvcActionName, "\"" + text + "\"" );
-    notifyTestButton->setEnabled(
-        !text.isEmpty() && enableKttsdCheckBox->isChecked());
+    m_kttsmgrw->notifyTestButton->setEnabled(
+        !text.isEmpty() && m_kttsmgrw->enableKttsdCheckBox->isChecked());
     configChanged();
 }
 
 void KCMKttsMgr::slotNotifyTestButton_clicked()
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (item)
     {
         QString msg;
@@ -2467,7 +2465,7 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
                 msg = i18n("sample notification message");
                 break;
             case NotifyAction::SpeakCustom:
-                msg = notifyMsgLineEdit->text();
+                msg = m_kttsmgrw->notifyMsgLineEdit->text();
                 msg.replace("%a", i18n("sample application"));
                 msg.replace("%e", i18n("sample event"));
                 msg.replace("%m", i18n("sample notification message"));
@@ -2479,18 +2477,18 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
 
 void KCMKttsMgr::slotNotifyTalkerButton_clicked()
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
     QString talkerCode = item->text( nlvcTalker );
-    SelectTalkerDlg dlg( this, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
+    SelectTalkerDlg dlg( m_kttsmgrw, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
     int dlgResult = dlg.exec();
     if ( dlgResult != KDialogBase::Accepted ) return;
     item->setText( nlvcTalker, dlg.getSelectedTalkerCode() );
     QString talkerName = dlg.getSelectedTranslatedDescription();
     item->setText( nlvcTalkerName, talkerName );
-    notifyTalkerLineEdit->setText( talkerName );
+    m_kttsmgrw->notifyTalkerLineEdit->setText( talkerName );
     configChanged();
 }
 
@@ -2505,7 +2503,7 @@ Q3ListViewItem* KCMKttsMgr::addNotifyItem(
     const QString& message,
     TalkerCode& talkerCode)
 {
-    KListView* lv = notifyListView;
+    KListView* lv = m_kttsmgrw->notifyListView;
     Q3ListViewItem* item = 0;
     QString iconName;
     QString eventSrcName;
@@ -2557,7 +2555,7 @@ Q3ListViewItem* KCMKttsMgr::addNotifyItem(
 
 void KCMKttsMgr::slotNotifyAddButton_clicked()
 {
-    Q3ListView* lv = notifyListView;
+    Q3ListView* lv = m_kttsmgrw->notifyListView;
     Q3ListViewItem* item = lv->selectedItem();
     QString eventSrc;
     if ( item ) eventSrc = item->text( nlvcEventSrc );
@@ -2567,7 +2565,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
         i18n("Select Event"),
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
         KDialogBase::Cancel,
-        this,
+        m_kttsmgrw,
         "SelectEvent_dlg",
         true,
         true);
@@ -2611,7 +2609,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
 
 void KCMKttsMgr::slotNotifyClearButton_clicked()
 {
-    notifyListView->clear();
+    m_kttsmgrw->notifyListView->clear();
     TalkerCode talkerCode( QString::null );
     Q3ListViewItem* item = addNotifyItem(
         QString("default"),
@@ -2619,7 +2617,7 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
         NotifyAction::SpeakEventName,
         QString::null,
         talkerCode );
-    Q3ListView* lv = notifyListView;
+    Q3ListView* lv = m_kttsmgrw->notifyListView;
     lv->ensureItemVisible( item );
     lv->setSelected( item, true );
     slotNotifyListView_selectionChanged();
@@ -2628,7 +2626,7 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 
 void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 {
-    Q3ListViewItem* item = notifyListView->selectedItem();
+    Q3ListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (!item) return;
     Q3ListViewItem* parentItem = item->parent();
     delete item;
@@ -2647,13 +2645,13 @@ void KCMKttsMgr::slotNotifyLoadButton_clicked()
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
-        this,
+        m_kttsmgrw,
         "event_loadfile");
     if ( filename.isEmpty() ) return;
     QString errMsg = loadNotifyEventsFromFile( filename, true );
     slotNotifyListView_selectionChanged();
     if ( !errMsg.isEmpty() )
-        KMessageBox::sorry( this, errMsg, i18n("Error Opening File") );
+        KMessageBox::sorry( m_kttsmgrw, errMsg, i18n("Error Opening File") );
     else
         configChanged();
 }
@@ -2663,13 +2661,13 @@ void KCMKttsMgr::slotNotifySaveButton_clicked()
     QString filename = KFileDialog::getSaveFileName(
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/notify/", false ),
         "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
-        this,
+        m_kttsmgrw,
         "event_savefile");
     if ( filename.isEmpty() ) return;
     QString errMsg = saveNotifyEventsToFile( filename );
     slotNotifyListView_selectionChanged();
     if ( !errMsg.isEmpty() )
-        KMessageBox::sorry( this, errMsg, i18n("Error Opening File") );
+        KMessageBox::sorry( m_kttsmgrw, errMsg, i18n("Error Opening File") );
 }
 
 // ----------------------------------------------------------------------------
