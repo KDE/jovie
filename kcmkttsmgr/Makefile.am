@@ -28,7 +28,8 @@ kcm_kttsd_la_SOURCES = \
 	addtalker.cpp \
 	addtalkerwidget.ui \
 	selectevent.cpp \
-	selecteventwidget.ui
+	selecteventwidget.ui \
+	kwidgetprobe.cpp
 
 kcm_kttsd_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
 kcm_kttsd_la_LIBADD = \

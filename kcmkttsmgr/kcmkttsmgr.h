@@ -54,7 +54,8 @@ class Q3PopupMenu;
 class KCMKttsMgr :
     public KCModule,
     public KSpeech_stub,
-    virtual public KSpeechSink
+    virtual public KSpeechSink,
+    private Ui::KCMKttsMgrWidget
 {
     Q_OBJECT
 
@@ -318,11 +319,6 @@ class KCMKttsMgr :
             int action,
             const QString& message,
             TalkerCode& talkerCode);
-
-        /**
-        * Main widget
-        */
-        KCMKttsMgrWidget *m_kttsmgrw;
 
         /**
         * Object holding all the configuration
