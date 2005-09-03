@@ -164,7 +164,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
 
-    // QToolTip::add(this, i18n("Text-to-Speech Manager"));
+    // QToolTip::add(this, i18n("Text-to-speech manager"));
     m_toolTip = new KttsToolTip(this);
 
     int id;
