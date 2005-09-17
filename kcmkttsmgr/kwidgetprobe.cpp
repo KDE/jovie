@@ -28,25 +28,27 @@
 KWidgetProbe::KWidgetProbe( QObject *parent, const char *name )
  : DCOPStub("kttsd", "KSpeech"), QObject(parent)
 {
-  Q_UNUSED(name);
-  timeout = 2000;
-  timer = new QTimer( this );
-  queryFlags = QueryFocusWidget | QueryPointerWidget | QueryWidgetItem;
-	
-  connect( timer, SIGNAL(timeout()), this, SLOT(probe()) );
-  timer->start( timeout );
+    prevWidget = 0;
+    Q_UNUSED(name);
+    timeout = 200;
+    timer = new QTimer( this );
+    queryFlags = QueryFocusWidget | QueryPointerWidget | QueryWidgetItem;
+
+    connect( timer, SIGNAL(timeout()), this, SLOT(probe()) );
+    timer->start( timeout );
 }
 
 KWidgetProbe::KWidgetProbe( int millis, uint flags, QObject *parent, const char *name )
   : DCOPStub("kttsd", "KSpeech"), QObject(parent)
 {
-  Q_UNUSED(name);
-  queryFlags = flags;
-  timeout = millis;
+    Q_UNUSED(name);
+    queryFlags = flags;
+    timeout = millis;
+    prevWidget = 0;
 
-  timer = new QTimer( this );
-  connect( timer, SIGNAL(timeout()), this, SLOT(probe()) );
-  timer->start( timeout );
+    timer = new QTimer( this );
+    connect( timer, SIGNAL(timeout()), this, SLOT(probe()) );
+    timer->start( timeout );
 }
 
 KWidgetProbe::~KWidgetProbe()
@@ -60,72 +62,65 @@ KWidgetProbe::~KWidgetProbe()
  */
 void KWidgetProbe::probe()
 {
-  if ( queryFlags & QueryFocusWidget ) {
-    QWidget *focus = kapp->focusWidget();
-    if ( focus ) {
-      //      warning( "Focus: %s", focus->className() );
+    if ( queryFlags & QueryFocusWidget ) {
+        QWidget *focus = kapp->focusWidget();
+        if ( focus ) {
+            //      warning( "Focus: %s", focus->className() );
+        }
+
+        emit focusWidget( focus );
     }
-    
-    emit focusWidget( focus );
-  }
 
-  QPoint pos = QCursor::pos();
-	
-  if ( queryFlags & QueryPointerWidget ) {
-    QWidget *pointed = kapp->widgetAt( pos, true );
-    
-    if ( pointed ) {
-      //      warning( "Pointer: %s", pointed->className() );
-      // FIXME This should be a method
-      if ( queryFlags & QueryWidgetItem ) {
-	if ( pointed->inherits("QMenu") ) {
-	  QMenu *menuItem = qobject_cast<QMenu *>(pointed);
-/*	  int id = menuItem->idAt( menuItem->mapFromGlobal( pos ) );
+    QPoint pos = QCursor::pos();
 
-      if ( id != -1 ) {
-        sayText(menuItem->text(id), 0);
-
-	    warning( "MenuItem: %s", menuItem->text( id ).data() );
-	  }*/
-	}
-	else if ( pointed->inherits("QAbstractButton") ) {
-	  QAbstractButton *button = qobject_cast<QAbstractButton *>(pointed);
-	  
-      sayText(button->text(), 0);
-
-	}
-	else if ( pointed->inherits("QLabel") ) {
-	  QLabel *label = (QLabel *) pointed;
-	  
-	  sayText(label->text(), 0);
-
-	}
-      }
-      emit pointerWidget( pointed );
+    if ( queryFlags & QueryPointerWidget ) {
+        QWidget *pointed = kapp->widgetAt( pos, true );
+        if ( pointed ) {
+            if ( pointed != prevWidget ) {
+                prevWidget = pointed;
+                //      warning( "Pointer: %s", pointed->className() );
+                // FIXME This should be a method
+                if ( queryFlags & QueryWidgetItem ) {
+                    if ( pointed->inherits("QMenu") ) {
+                        QMenu *menuItem = qobject_cast<QMenu *>(pointed);
+                        /*  int id = menuItem->idAt( menuItem->mapFromGlobal( pos ) );
+                        if ( id != -1 ) {
+                            sayScreenReaderOutput(menuItem->text(id), 0);
+                            warning( "MenuItem: %s", menuItem->text( id ).data() );
+                        }*/
+                    }
+                    else if ( pointed->inherits("QAbstractButton") ) {
+                        QAbstractButton *button = qobject_cast<QAbstractButton *>(pointed);
+                        sayScreenReaderOutput(button->text(), 0);
+                    }
+                    else if ( pointed->inherits("QLabel") ) {
+                        QLabel *label = (QLabel *) pointed;
+                        sayScreenReaderOutput(label->text(), 0);
+                    }
+                }
+                emit pointerWidget( pointed );
+            }
+        }
     }
-  }
 }
 
 void KWidgetProbe::setQuery( uint flags )
 {
-	queryFlags = flags;
+    queryFlags = flags;
 }
 
 uint KWidgetProbe::query()
 {
-	return queryFlags;
+    return queryFlags;
 }
 
 void KWidgetProbe::setRefreshInterval( int millis )
 {
-	timeout = millis;
-	timer->changeInterval( timeout );
+    timeout = millis;
+    timer->changeInterval( timeout );
 }
 
 int KWidgetProbe::refreshInterval()
 {
-	return timeout;
+    return timeout;
 }
-
-
-

@@ -34,7 +34,6 @@
 // KTTS includes.
 #include "filterconf.h"
 #include "talkercode.h"
-#include "selecttalkerdlg.h"
 
 // TalkerChooser includes.
 #include "talkerchooserconfwidget.h"

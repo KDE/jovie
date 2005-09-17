@@ -16,16 +16,20 @@
  *                                                                         *
  ***************************************************************************/
 
+/**
+* @author José Pablo Ezequiel "Pupeno" Fernández
+* @author Gary Cramblitt
+*/
+
 #ifndef KCMKTTSMGR_H
 #define KCMKTTSMGR_H
 
 #include "config.h"
 
 // Qt includes.
-#include <qmap.h>
-#include <q3listview.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <QMap>
+#include <QAbstractListModel>
+#include <QModelIndex>
 
 // KDE includes.
 #include <kcmodule.h>
@@ -34,6 +38,8 @@
 #include <kparts/part.h>
 
 // KTTS includes.
+#include "talkercode.h"
+#include "talkerlistmodel.h"
 #include "addtalker.h"
 #include "kcmkttsmgrwidget.h"
 #include "kspeech_stub.h"
@@ -41,20 +47,72 @@
 
 class PlugInConf;
 class KttsFilterConf;
-class KListViewItem;
+class QListWidgetItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class KAboutData;
 class KConfig;
 class Q3PopupMenu;
+class KWidgetProbe;
 
-/**
-* @author José Pablo Ezequiel "Pupeno" Fernández
-* @author Gary Cramblitt
-*/
+class FilterItem
+{
+public:
+    QString id;
+    QString userFilterName;
+    QString plugInName;
+    QString desktopEntryName;
+    bool enabled;
+    bool multiInstance;
+};
+
+typedef QList<FilterItem> FilterList;
+
+class FilterListModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    FilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
+
+    FilterList datastore() { return m_filters; }
+    void setDatastore(FilterList filters = FilterList()) { m_filters = filters; }
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex & index ) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation,
+        int role = Qt::DisplayRole) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool removeRow(int row, const QModelIndex & parent = QModelIndex());
+
+    FilterItem getRow(int row) const;
+    bool appendRow(FilterItem& filter);
+    bool updateRow(int row, FilterItem& filter);
+    bool swap(int i, int j);
+    void clear();
+protected:
+    FilterList m_filters;
+};
+
+class SbdFilterListModel : public FilterListModel
+{
+    Q_OBJECT
+public:
+    SbdFilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
+
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation,
+        int role = Qt::DisplayRole) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+};
 
 class KCMKttsMgr :
     public KCModule,
     public KSpeech_stub,
-    virtual public KSpeechSink
+    virtual public KSpeechSink,
+    private Ui::KCMKttsMgrWidget
 {
     Q_OBJECT
 
@@ -134,7 +192,7 @@ class KCMKttsMgr :
         /**
         * This slot is called whenever user checks/unchecks item in Filters list.
         */
-        void slotFiltersList_stateChanged();
+        void slotFiltersView_stateChanged();
 
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
@@ -175,33 +233,6 @@ class KCMKttsMgr :
             nlvcTalker = 6         // hidden
         };
 
-        enum TalkerListViewColumn
-        {
-            tlvcTalkerID,
-            tlvcLanguage,
-            tlvcSynthName,
-            tlvcVoice,
-            tlvcGender,
-            tlvcVolume,
-            tlvcRate,
-        };
-
-        enum FilterListViewColumn
-        {
-            flvcUserName,           // Name of filter as set by user and displayed.
-            flvcFilterID,           // Internal ID assigned to the filter (hidden).
-            flvcPlugInName,         // Name of the filter plugin (from .desktop file, hidden).
-            flvcMultiInstance       // True if multiple instances of this plugin are possible. (hidden)
-        };
-
-        enum SbdListViewColumn
-        {
-            slvcUserName,           // Name of filter as set by user and displayed.
-            slvcFilterID,           // Internal ID assigned to the filter (hidden).
-            slvcPlugInName,         // Name of the filter plugin (from .desktop file, hidden).
-            slvcMultiInstance       // True if multiple instances of this plugin are possible. (hidden)
-        };
-
         enum SbdButtonIDs
         {
             sbdBtnEdit = 1,
@@ -229,13 +260,6 @@ class KCMKttsMgr :
         *   <kttsd synthesizer="Festival" />
         */
         QString defaultTalkerCode(const QString &languageCode, const QString &plugInName);
-
-        /**
-        * Given an item in the talker listview and a talker code, sets the columns of the item.
-        * @param talkerItem       QListViewItem.
-        * @param talkerCode       Talker Code.
-        */
-        void updateTalkerItem(Q3ListViewItem* talkerItem, const QString &talkerCode);
 
         /**
         * Loads the configuration plugin for a named Talker plugin.
@@ -273,12 +297,6 @@ class KCMKttsMgr :
         void removeFilter( bool sbd );
 
         /**
-        * Move an item in a KListView up or down.
-        */
-        void lowerItemPriority( KListView* lView );
-        void higherItemPriority( KListView* lView );
-
-        /**
         * Count number of configured Filters with the specified plugin name.
         */
         int countFilterPlugins(const QString& filterPlugInName);
@@ -309,10 +327,10 @@ class KCMKttsMgr :
         QString saveNotifyEventsToFile(const QString& filename);
 
         /**
-         * Adds an item to the notify listview.
+         * Adds an item to the notify treeview.
          * message is only needed if action = nactSpeakCustom.
          */
-        Q3ListViewItem* addNotifyItem(
+        QTreeWidgetItem* addNotifyItem(
             const QString& eventSrc,
             const QString& event,
             int action,
@@ -320,9 +338,16 @@ class KCMKttsMgr :
             TalkerCode& talkerCode);
 
         /**
-        * Main widget
+        * A convenience method that finds an item in a TreeViewWidget, assuming there is at most
+        * one occurrence of the item.  Returns 0 if not found.
+        * @param tw                     The TreeViewWidget to search.
+        * @param sought                 The string sought.
+        * @param col                    Column of the TreeViewWidget to search.
+        * @return                       The item of the TreeViewWidget found or null if not found.
+        *
+        * An exact match is performed.
         */
-        KCMKttsMgrWidget *m_kttsmgrw;
+        QTreeWidgetItem* findTreeWidgetItem(QTreeWidget* tw, const QString& sought, int col);
 
         /**
         * Object holding all the configuration
@@ -355,9 +380,20 @@ class KCMKttsMgr :
         KttsFilterConf *m_loadedFilterPlugIn;
 
         /**
+        * Model containing list of Talker Codes.
+        */
+        TalkerListModel m_talkerListModel;
+
+        /**
         * Last talker ID.  Used to generate a new ID.
         */
         int m_lastTalkerID;
+
+        /**
+        * Models containing normal and SBD filters.
+        */
+        FilterListModel m_filterListModel;
+        SbdFilterListModel m_sbdFilterListModel;
 
         /**
         * Last filter ID.  Used to generate a new ID.
@@ -394,6 +430,11 @@ class KCMKttsMgr :
         * Default Talker Code for notifications.
         */
         QString m_defaultNotifyTalkerCode;
+
+        /**
+        * Screen Reader.
+        */
+        KWidgetProbe* m_screenReader;
 
     private slots:
         /**
@@ -492,7 +533,7 @@ class KCMKttsMgr :
         void slotNotifyClearButton_clicked();
         void slotNotifyLoadButton_clicked();
         void slotNotifySaveButton_clicked();
-        void slotNotifyListView_selectionChanged();
+        void slotNotifyListView_currentItemChanged();
         void slotNotifyPresentComboBox_activated(int index);
         void slotNotifyActionComboBox_activated(int index);
         void slotNotifyTestButton_clicked();
@@ -503,25 +544,8 @@ class KCMKttsMgr :
         * Other slots.
         */
         void slotTabChanged();
-};
 
-/// This is a small helper class to detect when user checks/unchecks a Filter in Filters tab
-/// and emit changed() signal.
-class KttsCheckListItem : public Q3CheckListItem
-{
-    public:
-        KttsCheckListItem( Q3ListView *parent,
-            const QString &text, Type tt = RadioButtonController,
-            KCMKttsMgr* kcmkttsmgr = 0);
-        KttsCheckListItem( Q3ListView *parent, Q3ListViewItem *after,
-            const QString &text, Type tt = RadioButtonController,
-            KCMKttsMgr* kcmkttsmgr = 0);
-
-    protected:
-        virtual void stateChange(bool);
-
-    private:
-        KCMKttsMgr* m_kcmkttsmgr;
+        void enableScreenReaderToggled(bool);
 };
 
 #endif

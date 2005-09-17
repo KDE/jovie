@@ -56,6 +56,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Properties.
          */
+        QString id() const;                 /* ID */
         QString languageCode() const;       /* lang="xx" */
         QString countryCode() const;        /* lang="yy_xx */
         QString voice() const;              /* name="xxx" */
@@ -63,12 +64,14 @@ class KDE_EXPORT TalkerCode
         QString volume() const;             /* volume="xxx" */
         QString rate() const;               /* rate="xxx" */
         QString plugInName() const;         /* synthesizer="xxx" */
+        QString desktopEntryName() const;
 
         /**
          * Returns the language code plus country code (if any).
          */
         QString fullLanguageCode() const;
 
+        void setId(const QString& id);
         void setLanguageCode(const QString &languageCode);
         void setCountryCode(const QString &countryCode);
         void setVoice(const QString &voice);
@@ -76,6 +79,7 @@ class KDE_EXPORT TalkerCode
         void setVolume(const QString &volume);
         void setRate(const QString &rate);
         void setPlugInName(const QString plugInName);
+        void setDesktopEntryName(const QString &desktopEntryName);
 
         /**
          * Sets the language code and country code (if given).
@@ -85,6 +89,7 @@ class KDE_EXPORT TalkerCode
         /**
          * The Talker Code returned in XML format.
          */
+        void setTalkerCode(const QString& code);
         QString getTalkerCode() const;
 
         /**
@@ -187,6 +192,7 @@ class KDE_EXPORT TalkerCode
          */
         void parseTalkerCode(const QString &talkerCode);
 
+        QString m_id;
         QString m_languageCode;       /* lang="xx" */
         QString m_countryCode;        /* lang="yy_xx */
         QString m_voice;              /* name="xxx" */
@@ -194,6 +200,7 @@ class KDE_EXPORT TalkerCode
         QString m_volume;             /* volume="xxx" */
         QString m_rate;               /* rate="xxx" */
         QString m_plugInName;         /* synthesizer="xxx" */
+        QString m_desktopEntryName;
 };
 
 #endif      // _TALKERCODE_H_

@@ -685,8 +685,9 @@ void StringReplacerConf::slotMatchButton_clicked()
 
 void StringReplacerConf::slotLoadButton_clicked()
 {
-    // QString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
-    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/stringreplacer/").last();
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/stringreplacer/");
+    QString dataDir;
+    if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*.xml|String Replacer Word List (*.xml)",

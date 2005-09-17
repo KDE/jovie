@@ -25,10 +25,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <q3hbox.h>
-#include <q3groupbox.h>
+#include <QCheckBox>
+#include <QRadioButton>
 
 // KDE includes.
 #include <kcombobox.h>
@@ -41,6 +39,7 @@
 
 // KTTS includes.
 #include "utils.h"
+#include "talkerlistmodel.h"
 #include "selecttalkerdlg.h"
 #include "selecttalkerdlg.moc"
 
@@ -59,11 +58,15 @@ SelectTalkerDlg::SelectTalkerDlg(
         KDialogBase::Ok|KDialogBase::Cancel,
         KDialogBase::Ok)
 {
-    m_widget = new SelectTalkerWidget( this );
+    m_widget = new Ui::SelectTalkerWidget();
+    QWidget* w = new QWidget();
+    m_widget->setupUi( w );
+    m_talkerListModel = new TalkerListModel();
+    m_widget->talkersView->setModel(m_talkerListModel);
+
     // TODO: How do I do this in a general way and still get KDialogBase to properly resize?
-    m_widget->setMinimumSize( QSize(700,500) );
-    // setInitialSize( QSize(700,600) );
-    setMainWidget( m_widget );
+    //w->setMinimumSize( QSize(700,500) );
+    setMainWidget( w );
     m_runningTalkers = runningTalkers;
     m_talkerCode = TalkerCode( talkerCode, false );
 
@@ -93,8 +96,8 @@ SelectTalkerDlg::SelectTalkerDlg(
         cb->insertItem(offers[i]->name());
 
     // Fill List View with list of Talkers.
-    m_widget->talkersListView->setSorting( -1 );
-    loadTalkers( m_runningTalkers );
+    KConfig config("kttsdrc");
+    m_talkerListModel->loadTalkerCodesFromConfig(&config);
 
     // Set initial radio button state.
     if ( talkerCode.isEmpty() )
@@ -139,10 +142,10 @@ SelectTalkerDlg::SelectTalkerDlg(
     connect(m_widget->rateCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(configChanged()));
 
-    connect(m_widget->talkersListView, SIGNAL(selectionChanged()),
-            this, SLOT(slotTalkersListView_selectionChanged()));
+    connect(m_widget->talkersView, SIGNAL(clicked()),
+            this, SLOT(slotTalkersView_clicked()));
 
-    m_widget->talkersListView->setMinimumHeight( 120 );
+    m_widget->talkersView->setMinimumHeight( 120 );
 }
 
 SelectTalkerDlg::~SelectTalkerDlg() { }
@@ -160,7 +163,10 @@ QString SelectTalkerDlg::getSelectedTranslatedDescription()
 void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 {
     // Create a  QHBox to host KListView.
-    Q3HBox* hBox = new Q3HBox(m_widget, "SelectLanguage_hbox");
+    QWidget* hBox = new QWidget;
+    hBox->setObjectName("SelectLanguage_hbox");
+    QHBoxLayout* hBoxLayout = new QHBoxLayout;
+    hBoxLayout->setMargin(0);
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));
@@ -190,10 +196,12 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
         i18n("Select Languages"),
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
         KDialogBase::Cancel,
-        m_widget,
+        this,
         "SelectLanguage_dlg",
         true,
         true);
+    hBoxLayout->addWidget(langLView);
+    hBox->setLayout(hBoxLayout);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
     dlg->setInitialSize(QSize(300, 500), false);
@@ -210,15 +218,15 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
         }
     }
     delete dlg;
-    m_widget->languageLineEdit->setText(language);
+    m_widget->languageLabel->setText(language);
     m_widget->languageCheckBox->setChecked( !language.isEmpty() );
     configChanged();
 }
 
-void SelectTalkerDlg::slotTalkersListView_selectionChanged()
+void SelectTalkerDlg::slotTalkersView_clicked()
 {
-    Q3ListViewItem* item = m_widget->talkersListView->selectedItem();
-    if ( !item ) return;
+    QModelIndex modelIndex = m_widget->talkersView->currentIndex();
+    if (!modelIndex.isValid()) return;
     if (!m_widget->useSpecificTalkerRadioButton->isChecked()) return;
     configChanged();
 }
@@ -257,18 +265,9 @@ void SelectTalkerDlg::applyTalkerCodeToControls()
     m_widget->rateCheckBox->setChecked( preferred );
 
     // Select closest matching specific Talker.
-    int talkerIndex = TalkerCode::findClosestMatchingTalker(m_talkers, m_talkerCode.getTalkerCode(), false);
-    KListView* lv = m_widget->talkersListView;
-    Q3ListViewItem* item = lv->firstChild();
-    if ( item )
-    {
-        while ( talkerIndex > 0 )
-        {
-            item = item->nextSibling();
-            --talkerIndex;
-        }
-        lv->setSelected( item, true );
-    }
+    const TalkerCode::TalkerCodeList talkers = m_talkerListModel->datastore();
+    int talkerIndex = TalkerCode::findClosestMatchingTalker(talkers, m_talkerCode.getTalkerCode(), false);
+    m_widget->talkersView->setCurrentIndex(m_talkerListModel->index(talkerIndex, 0));
 }
 
 void SelectTalkerDlg::applyControlsToTalkerCode()
@@ -297,63 +296,10 @@ void SelectTalkerDlg::applyControlsToTalkerCode()
     }
     else if (m_widget->useSpecificTalkerRadioButton->isChecked() )
     {
-        Q3ListViewItem* item = m_widget->talkersListView->selectedItem();
-        if ( item )
-        {
-            int itemIndex = -1;
-            while ( item )
-            {
-                item = item->itemAbove();
-                itemIndex++;
-            }
-            m_talkerCode = TalkerCode( &(m_talkers[itemIndex]), false );
-        }
+        QModelIndex talkerIndex = m_widget->talkersView->currentIndex();
+        if (talkerIndex.isValid())
+            m_talkerCode = m_talkerListModel->getRow(talkerIndex.row());
     }
-}
-
-void SelectTalkerDlg::loadTalkers(bool /*runningTalkers*/)
-{
-    m_talkers.clear();
-    KListView* lv = m_widget->talkersListView;
-    lv->clear();
-    Q3ListViewItem* item;
-    KConfig* config = new KConfig("kttsdrc");
-    config->setGroup("General");
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
-    if (!talkerIDsList.isEmpty())
-    {
-        QStringList::ConstIterator itEnd(talkerIDsList.constEnd());
-        for( QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
-        {
-            QString talkerID = *it;
-            config->setGroup("Talker_" + talkerID);
-            QString talkerCode = config->readEntry("TalkerCode", QString::null);
-            // Parse and normalize the talker code.
-            TalkerCode talker = TalkerCode(talkerCode, true);
-            m_talkers.append(talker);
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString::null);
-            QString synthName = TalkerCode::TalkerDesktopEntryNameToName(desktopEntryName);
-            // Display in List View using translated strings.
-            item = new KListViewItem(lv, item);
-            QString fullLanguageCode = talker.fullLanguageCode();
-            QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
-            item->setText(tlvcLanguage, language);
-            // Don't update the Synthesizer name with plugInName.  The former is a translated
-            // name; the latter an English name.
-            // if (!plugInName.isEmpty()) talkerItem->setText(tlvcSynthName, plugInName);
-            if (!synthName.isEmpty())
-                item->setText(tlvcSynthName, synthName);
-            if (!talker.voice().isEmpty())
-                item->setText(tlvcVoice, talker.voice());
-            if (!talker.gender().isEmpty())
-                item->setText(tlvcGender, TalkerCode::translatedGender(talker.gender()));
-            if (!talker.volume().isEmpty())
-                item->setText(tlvcVolume, TalkerCode::translatedVolume(talker.volume()));
-            if (!talker.rate().isEmpty())
-                item->setText(tlvcRate, TalkerCode::translatedRate(talker.rate()));
-        }
-    }
-    delete config;
 }
 
 void SelectTalkerDlg::enableDisableControls()
@@ -361,5 +307,5 @@ void SelectTalkerDlg::enableDisableControls()
     bool enableClosest = ( m_widget->useClosestMatchRadioButton->isChecked() );
     bool enableSpecific = ( m_widget->useSpecificTalkerRadioButton->isChecked() );
     m_widget->closestMatchGroupBox->setEnabled( enableClosest );
-    m_widget->talkersListView->setEnabled( enableSpecific );
+    m_widget->talkersView->setEnabled( enableSpecific );
 }

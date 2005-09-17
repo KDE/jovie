@@ -48,6 +48,7 @@ TalkerCode::TalkerCode(const QString &code/*=QString::null*/, bool normal /*=fal
  */
 TalkerCode::TalkerCode(TalkerCode* talker, bool normal /*=false*/)
 {
+    m_id = talker->id();
     m_languageCode = talker->languageCode();
     m_countryCode = talker->countryCode();
     m_voice = talker->voice();
@@ -55,6 +56,7 @@ TalkerCode::TalkerCode(TalkerCode* talker, bool normal /*=false*/)
     m_volume = talker->volume();
     m_rate = talker->rate();
     m_plugInName = talker->plugInName();
+    m_desktopEntryName = talker->desktopEntryName();
     if (normal) normalize();
 }
 
@@ -66,6 +68,7 @@ TalkerCode::~TalkerCode() { }
 /**
  * Properties.
  */
+QString TalkerCode::id() const { return m_id; }
 QString TalkerCode::languageCode() const { return m_languageCode; }
 QString TalkerCode::countryCode() const { return m_countryCode; }
 QString TalkerCode::voice() const { return m_voice; }
@@ -73,7 +76,9 @@ QString TalkerCode::gender() const { return m_gender; }
 QString TalkerCode::volume() const { return m_volume; }
 QString TalkerCode::rate() const { return m_rate; }
 QString TalkerCode::plugInName() const { return m_plugInName; }
+QString TalkerCode::desktopEntryName() const { return m_desktopEntryName; }
 
+void TalkerCode::setId(const QString &id) { m_id = id; }
 void TalkerCode::setLanguageCode(const QString &languageCode) { m_languageCode = languageCode; }
 void TalkerCode::setCountryCode(const QString &countryCode) { m_countryCode = countryCode; }
 void TalkerCode::setVoice(const QString &voice) { m_voice = voice; }
@@ -81,6 +86,7 @@ void TalkerCode::setGender(const QString &gender) { m_gender = gender; }
 void TalkerCode::setVolume(const QString &volume) { m_volume = volume; }
 void TalkerCode::setRate(const QString &rate) { m_rate = rate; }
 void TalkerCode::setPlugInName(const QString plugInName) { m_plugInName = plugInName; }
+void TalkerCode::setDesktopEntryName(const QString &desktopEntryName) { m_desktopEntryName = desktopEntryName; }
 
 /**
  * Sets the language code and country code (if given).
@@ -104,6 +110,11 @@ QString TalkerCode::fullLanguageCode() const
 /**
  * The Talker Code returned in XML format.
  */
+void TalkerCode::setTalkerCode(const QString& code)
+{
+    parseTalkerCode(code);
+}
+
 QString TalkerCode::getTalkerCode() const
 {
     QString code;

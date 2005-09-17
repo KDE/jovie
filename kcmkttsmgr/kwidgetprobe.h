@@ -31,41 +31,42 @@ class QTimer;
 class KWidgetProbe : public QObject, public KSpeech_stub
 {
    Q_OBJECT
-public: 
-	KWidgetProbe(QObject *parent=0, const char *name=0);
-	KWidgetProbe( int millis, uint flags, QObject *parent=0, const char *name=0);
-	~KWidgetProbe();
+public:
+    KWidgetProbe(QObject *parent=0, const char *name=0);
+    KWidgetProbe( int millis, uint flags, QObject *parent=0, const char *name=0);
+    ~KWidgetProbe();
 
-	enum QueryFlags {
-		QueryFocusWidget = 1,
-		QueryPointerWidget = 2,
-		QueryWhatsThis = 4,
-		QueryTooltip = 8,
-		QueryWidgetItem = 16
-	};
-	
-	void setQuery( uint flags );
-	uint query();
-	
-	void setRefreshInterval( int millis );
-	int refreshInterval();
-	
+    enum QueryFlags {
+        QueryFocusWidget = 1,
+        QueryPointerWidget = 2,
+        QueryWhatsThis = 4,
+        QueryTooltip = 8,
+        QueryWidgetItem = 16
+    };
+
+    void setQuery( uint flags );
+    uint query();
+
+    void setRefreshInterval( int millis );
+    int refreshInterval();
+
 public slots: // Public slots
-	/**
-	 * Tells the class to do it's stuff - ie. figure out
-	 * which widget is under the mouse pointer and
-	 *report it.
-	 */
-	void probe();
+    /**
+     * Tells the class to do it's stuff - ie. figure out
+     * which widget is under the mouse pointer and
+     * report it.
+     */
+    void probe();
 
 signals:
-	void focusWidget( QWidget * );	
-	void pointerWidget( QWidget * );
+    void focusWidget( QWidget * );	
+    void pointerWidget( QWidget * );
 
 private:
-	uint queryFlags;
-	int timeout;
-	QTimer *timer;
+    uint queryFlags;
+    int timeout;
+    QTimer *timer;
+    QWidget* prevWidget;
 };
 
 #endif

@@ -21,6 +21,7 @@ libkttsd_la_SOURCES = \
 	filterproc.cpp \
 	filterconf.cpp \
 	utils.cpp \
+	talkerlistmodel.cpp \
 	selecttalkerdlg.cpp \
 	selecttalkerwidget.ui \
 	notify.cpp
@@ -36,6 +37,7 @@ noinst_HEADERS = \
 	testplayer.h \
 	stretcher.h \
 	talkercode.h \
+	talkerlistmodel.h \
 	utils.h \
 	kdeexportfix.h \
 	selecttalkerdlg.h

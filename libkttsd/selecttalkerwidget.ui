@@ -1,560 +1,493 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>SelectTalkerWidget</class>
-<author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>SelectTalkerWidget</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>567</width>
-            <height>455</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>3</hsizetype>
-            <vsizetype>3</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="caption">
-        <string>Select Talker</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<ui version="4.0" >
+ <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SelectTalkerWidget</class>
+ <widget class="QWidget" name="SelectTalkerWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>584</width>
+    <height>472</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>3</hsizetype>
+    <vsizetype>3</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Select Talker</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>8</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string/>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>8</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="2" column="1" >
+       <widget class="QGroupBox" name="closestMatchGroupBox" >
+        <property name="title" >
+         <string/>
         </property>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup1</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string></string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useDefaultRadioButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Use default Talker</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>When checked, will use the default Talker, which is the topmost Talker listed in the Talkers tab.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useClosestMatchRadioButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use closest &amp;matching Talker having</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>When checked, will use a configured Talker most closely matching the attributes you choose.  Attributes with checks next to them will be preferred over unchecked attributes.  Language is always preferred.</string>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer15</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Fixed</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>30</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QGroupBox">
-                            <property name="name">
-                                <cstring>closestMatchGroupBox</cstring>
-                            </property>
-                            <property name="title">
-                                <string></string>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <property name="margin">
-                                    <number>0</number>
-                                </property>
-                                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
-                                    <property name="name">
-                                        <cstring>preferredLabel</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Checked items are preferred over unchecked items.</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLayoutWidget" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>layout11_2</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>synthLabel</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Synthesizer:</string>
-                                            </property>
-                                            <property name="alignment">
-                                                <set>AlignVCenter|AlignLeft</set>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>synthComboBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KComboBox">
-                                            <property name="name">
-                                                <cstring>synthComboBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="QCheckBox">
-                                            <property name="name">
-                                                <cstring>synthCheckBox</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy>
-                                                    <hsizetype>0</hsizetype>
-                                                    <vsizetype>0</vsizetype>
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="text">
-                                                <string></string>
-                                            </property>
-                                            <property name="accel">
-                                                <string></string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                                <widget class="QLayoutWidget" row="0" column="2">
-                                    <property name="name">
-                                        <cstring>layout12</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>genderLabel</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Gender:</string>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>genderCheckBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KComboBox">
-                                            <property name="name">
-                                                <cstring>genderComboBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="QCheckBox">
-                                            <property name="name">
-                                                <cstring>genderCheckBox</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy>
-                                                    <hsizetype>0</hsizetype>
-                                                    <vsizetype>0</vsizetype>
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="text">
-                                                <string></string>
-                                            </property>
-                                            <property name="accel">
-                                                <string></string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                                <widget class="Line" row="0" column="1" rowspan="2" colspan="1">
-                                    <property name="name">
-                                        <cstring>line1</cstring>
-                                    </property>
-                                    <property name="frameShape">
-                                        <enum>VLine</enum>
-                                    </property>
-                                    <property name="frameShadow">
-                                        <enum>Plain</enum>
-                                    </property>
-                                    <property name="lineWidth">
-                                        <number>2</number>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Vertical</enum>
-                                    </property>
-                                </widget>
-                                <widget class="QLayoutWidget" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>layout14</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>volumeLabel</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Volume:</string>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>volumeCheckBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KComboBox">
-                                            <property name="name">
-                                                <cstring>volumeComboBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="QCheckBox">
-                                            <property name="name">
-                                                <cstring>volumeCheckBox</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy>
-                                                    <hsizetype>0</hsizetype>
-                                                    <vsizetype>0</vsizetype>
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="text">
-                                                <string></string>
-                                            </property>
-                                            <property name="accel">
-                                                <string></string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                                <widget class="QLayoutWidget" row="1" column="2">
-                                    <property name="name">
-                                        <cstring>layout13</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>rateLabel</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Rate:</string>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>rateCheckBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KComboBox">
-                                            <property name="name">
-                                                <cstring>rateComboBox</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="QCheckBox">
-                                            <property name="name">
-                                                <cstring>rateCheckBox</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy>
-                                                    <hsizetype>0</hsizetype>
-                                                    <vsizetype>0</vsizetype>
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="text">
-                                                <string></string>
-                                            </property>
-                                            <property name="accel">
-                                                <string></string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                                <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
-                                    <property name="name">
-                                        <cstring>layout10</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>languageLabel</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Language:</string>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>languageLineEdit</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KLineEdit">
-                                            <property name="name">
-                                                <cstring>languageLineEdit</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank, the filter applies to all text jobs of any language.</string>
-                                            </property>
-                                        </widget>
-                                        <widget class="KPushButton">
-                                            <property name="name">
-                                                <cstring>languageBrowseButton</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>...</string>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
-                                            </property>
-                                        </widget>
-                                        <widget class="QCheckBox">
-                                            <property name="name">
-                                                <cstring>languageCheckBox</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy>
-                                                    <hsizetype>0</hsizetype>
-                                                    <vsizetype>0</vsizetype>
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="text">
-                                                <string></string>
-                                            </property>
-                                            <property name="accel">
-                                                <string></string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                            </grid>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useSpecificTalkerRadioButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use specific &amp;Talker</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>When checked, will use the specific Talker (if it is still configured), otherwise the Talker most closely matching.</string>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout10</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer15_2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Fixed</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>30</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="KListView">
-                            <column>
-                                <property name="text">
-                                    <string>Language</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <column>
-                                <property name="text">
-                                    <string>Speech Synthesizer</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <column>
-                                <property name="text">
-                                    <string>Voice</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <column>
-                                <property name="text">
-                                    <string>Gender</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <column>
-                                <property name="text">
-                                    <string>Volume</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <column>
-                                <property name="text">
-                                    <string>Rate</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <property name="name">
-                                <cstring>talkersListView</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>3</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="resizeMode">
-                                <enum>LastColumn</enum>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>This is a list of all the configured Talkers.  A Talker is a speech synthesizer that has been configured with a language, voice, gender, speaking rate, and volume.  Talkers higher in the list have higher priority.  The topmost Talker will be used when no talker attributes have been specified by an application.</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
-        </widget>
-    </vbox>
-</widget>
-<tabstops>
-    <tabstop>useDefaultRadioButton</tabstop>
-    <tabstop>useClosestMatchRadioButton</tabstop>
-    <tabstop>synthComboBox</tabstop>
-    <tabstop>synthCheckBox</tabstop>
-    <tabstop>genderComboBox</tabstop>
-    <tabstop>genderCheckBox</tabstop>
-    <tabstop>volumeComboBox</tabstop>
-    <tabstop>volumeCheckBox</tabstop>
-    <tabstop>rateComboBox</tabstop>
-    <tabstop>rateCheckBox</tabstop>
-    <tabstop>languageLineEdit</tabstop>
-    <tabstop>languageBrowseButton</tabstop>
-    <tabstop>languageCheckBox</tabstop>
-    <tabstop>useSpecificTalkerRadioButton</tabstop>
-    <tabstop>talkersListView</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="0"/>
-<includehints>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klistview.h</includehint>
-</includehints>
-</UI>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>8</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="0" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="languageLabelLabel" >
+             <property name="text" >
+              <string>&amp;Language:</string>
+             </property>
+             <property name="buddy" >
+              <cstring>languageLabel</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="languageLabel" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape" >
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow" >
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="languageBrowseButton" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="languageCheckBox" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="shortcut" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0" colspan="3" >
+          <widget class="QLabel" name="preferredLabel" >
+           <property name="text" >
+            <string>Checked items are preferred over unchecked items.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="3" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="synthLabel" >
+             <property name="text" >
+              <string>&amp;Synthesizer:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="buddy" >
+              <cstring>synthComboBox</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KComboBox" name="synthComboBox" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="synthCheckBox" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="shortcut" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="2" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="rateLabel" >
+             <property name="text" >
+              <string>&amp;Rate:</string>
+             </property>
+             <property name="buddy" >
+              <cstring>rateCheckBox</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KComboBox" name="rateComboBox" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="rateCheckBox" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="shortcut" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="2" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="genderLabel" >
+             <property name="text" >
+              <string>&amp;Gender:</string>
+             </property>
+             <property name="buddy" >
+              <cstring>genderCheckBox</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KComboBox" name="genderComboBox" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="genderCheckBox" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="shortcut" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item rowspan="2" row="0" column="1" >
+          <widget class="Line" name="line1" >
+           <property name="frameShape" >
+            <enum>QFrame::VLine</enum>
+           </property>
+           <property name="frameShadow" >
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="lineWidth" >
+            <number>2</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="volumeLabel" >
+             <property name="text" >
+              <string>&amp;Volume:</string>
+             </property>
+             <property name="buddy" >
+              <cstring>volumeComboBox</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KComboBox" name="volumeComboBox" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="volumeCheckBox" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="shortcut" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>30</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QTreeView" name="talkersView" />
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>30</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0" colspan="2" >
+       <widget class="QRadioButton" name="useClosestMatchRadioButton" >
+        <property name="whatsThis" >
+         <string>When checked, will use a configured Talker most closely matching the attributes you choose.  Attributes with checks next to them will be preferred over unchecked attributes.  Language is always preferred.</string>
+        </property>
+        <property name="text" >
+         <string>Use closest &amp;matching Talker having</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2" >
+       <widget class="QRadioButton" name="useDefaultRadioButton" >
+        <property name="whatsThis" >
+         <string>When checked, will use the default Talker, which is the topmost Talker listed in the Talkers tab.</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Use default Talker</string>
+        </property>
+        <property name="shortcut" >
+         <string>Alt+U</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2" >
+       <widget class="QRadioButton" name="useSpecificTalkerRadioButton" >
+        <property name="whatsThis" >
+         <string>When checked, will use the specific Talker (if it is still configured), otherwise the Talker most closely matching.</string>
+        </property>
+        <property name="text" >
+         <string>Use specific &amp;Talker</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="0" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>useDefaultRadioButton</tabstop>
+  <tabstop>useClosestMatchRadioButton</tabstop>
+  <tabstop>languageBrowseButton</tabstop>
+  <tabstop>languageCheckBox</tabstop>
+  <tabstop>genderComboBox</tabstop>
+  <tabstop>genderCheckBox</tabstop>
+  <tabstop>volumeComboBox</tabstop>
+  <tabstop>volumeCheckBox</tabstop>
+  <tabstop>rateComboBox</tabstop>
+  <tabstop>rateCheckBox</tabstop>
+  <tabstop>synthComboBox</tabstop>
+  <tabstop>synthCheckBox</tabstop>
+  <tabstop>useSpecificTalkerRadioButton</tabstop>
+  <tabstop>talkersView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

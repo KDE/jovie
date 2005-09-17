@@ -304,8 +304,9 @@ void SbdConf::slotLanguageBrowseButton_clicked()
 
 void SbdConf::slotLoadButton_clicked()
 {
-    // QString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
-    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/sbd/").last();
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/sbd/");
+    QString dataDir;
+    if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*rc|SBD Config (*rc)",

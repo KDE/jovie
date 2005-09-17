@@ -43,6 +43,7 @@
 #include <kfiledialog.h>
 
 // KTTS includes.
+#include "selecttalkerdlg.h"
 
 // TalkerChooser includes.
 #include "talkerchooserconf.h"
@@ -234,7 +235,9 @@ void TalkerChooserConf::slotTalkerButton_clicked()
 
 void TalkerChooserConf::slotLoadButton_clicked()
 {
-    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/talkerchooser/").last();
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/talkerchooser/");
+    QString dataDir;
+    if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*rc|Talker Chooser Config (*rc)",

@@ -36,6 +36,8 @@
 #include "talkercode.h"
 #include "selecttalkerwidget.h"
 
+class TalkerListModel;
+
 class KDE_EXPORT SelectTalkerDlg : public KDialogBase
 {
     Q_OBJECT
@@ -75,7 +77,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
 
     private slots:
         void slotLanguageBrowseButton_clicked();
-        void slotTalkersListView_selectionChanged();
+        void slotTalkersView_clicked();
         void configChanged();
 
     private:
@@ -91,17 +93,16 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
 
         void applyTalkerCodeToControls();
         void applyControlsToTalkerCode();
-        void loadTalkers(bool runningTalkers);
         void enableDisableControls();
 
         // Main dialog widget.
-        SelectTalkerWidget* m_widget;
+        Ui::SelectTalkerWidget* m_widget;
+        // Model containing list of Talker Codes.
+        TalkerListModel* m_talkerListModel;
         // True if list of Talkers should be taken from config file.
         bool m_runningTalkers;
         // Current Talker Code.
         TalkerCode m_talkerCode;
-        // List of parsed talker codes for the configured Talkers.
-        TalkerCode::TalkerCodeList m_talkers;
 };
 
 #endif                      // _SELECTTALKERDLG_H_
