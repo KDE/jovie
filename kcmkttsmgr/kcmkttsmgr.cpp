@@ -371,13 +371,14 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
     QMenu* sbdPopmenu = new QMenu( this );
     sbdPopmenu->setObjectName( "SbdPopupMenu" );
-    m_sbdBtnEdit = sbdPopmenu->addAction( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0 );
+    m_sbdBtnEdit = sbdPopmenu->addAction( i18n("&Edit..."),
+        this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
     m_sbdBtnUp = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
-                              i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0 );
+        i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
     m_sbdBtnDown = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("down", KIcon::Small),
-                              i18n("Do&wn"), this, SLOT(slot_lowerSbdFilterPriority()), 0 );
-    m_sbdBtnAdd = sbdPopmenu->addAction( i18n("&Add..."), this, SLOT(slot_addSbdFilter()), 0 );
-    m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0 );
+        i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
+    m_sbdBtnAdd = sbdPopmenu->addAction( i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
+    m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
     sbdButton->setPopup( sbdPopmenu );
 
     // If aRts is available, enable its radio button.
@@ -454,63 +455,98 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
 
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
+    // General tab.
+    connect(enableKttsdCheckBox, SIGNAL(toggled(bool)),
+            SLOT(slotEnableKttsd_toggled(bool)));
+    connect(embedInSysTrayCheckBox, SIGNAL(toggled(bool)),
+            SLOT(slotEmbedInSysTrayCheckBox_toggled(bool)));
+    connect(showMainWindowOnStartupCheckBox, SIGNAL(toggled(bool)),
+            SLOT(configChanged()));
+    connect(autostartMgrCheckBox, SIGNAL(toggled(bool)),
+            SLOT(slotAutoStartMgrCheckBox_toggled(bool)));
+    connect(autoexitMgrCheckBox, SIGNAL(toggled(bool)),
+            SLOT(configChanged()));
+    // TODO: Experimental.
+    connect(screenReaderCheckBox, SIGNAL(toggled(bool)),
+            SLOT(enableScreenReaderToggled(bool)));
+
     // Talker tab.
     connect(addTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slot_addTalker()));
+            this, SLOT(slotAddTalkerButton_clicked()));
     connect(higherTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_higherTalkerPriority()));
+            this, SLOT(slotHigherTalkerPriorityButton_clicked()));
     connect(lowerTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_lowerTalkerPriority()));
+            this, SLOT(slotLowerTalkerPriorityButton_clicked()));
     connect(removeTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slot_removeTalker()));
+            this, SLOT(slotRemoveTalkerButton_clicked()));
     connect(configureTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slot_configureTalker()));
+            this, SLOT(slotConfigureTalkerButton_clicked()));
     connect(talkersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(updateTalkerButtons()));
 
     // Filter tab.
     connect(addFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_addNormalFilter()));
+            this, SLOT(slotAddNormalFilterButton_clicked()));
     connect(higherFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_higherNormalFilterPriority()));
+            this, SLOT(slotHigherNormalFilterPriorityButton_clicked()));
     connect(lowerFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_lowerNormalFilterPriority()));
+            this, SLOT(slotLowerNormalFilterPriorityButton_clicked()));
     connect(removeFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_removeNormalFilter()));
+            this, SLOT(slotRemoveNormalFilterButton_clicked()));
     connect(configureFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_configureNormalFilter()));
+            this, SLOT(slotConfigureNormalFilterButton_clicked()));
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(updateFilterButtons()));
-    //connect(filtersView, SIGNAL(stateChanged()),
-    //        this, SLOT(configChanged()));
     connect(sbdsView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(updateSbdButtons()));
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
 
+    // Interruption tab.
+    connect(textPreMsgCheck, SIGNAL(toggled(bool)),
+            this, SLOT(slotTextPreMsgCheck_toggled(bool)));
+    connect(textPreMsg, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
+    connect(textPreSndCheck, SIGNAL(toggled(bool)),
+            this, SLOT(slotTextPreSndCheck_toggled(bool)));
+    connect(textPreSnd, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
+    connect(textPostMsgCheck, SIGNAL(toggled(bool)),
+            this, SLOT(slotTextPostMsgCheck_toggled(bool)));
+    connect(textPostMsg, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
+    connect(textPostSndCheck, SIGNAL(toggled(bool)),
+            this, SLOT(slotTextPreSndCheck_toggled(bool)));
+    connect(textPostSnd, SIGNAL(textChanged(const QString&)),
+            this, SLOT(configChanged()));
+
     // Audio tab.
+    connect(artsRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(configChanged()));
     connect(gstreamerRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotGstreamerRadioButton_toggled(bool)));
+    connect(sinkComboBox, SIGNAL(activated(int)),
+            this, SLOT(configChanged()));
     connect(alsaRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAlsaRadioButton_toggled(bool)));
+    connect(pcmComboBox, SIGNAL(activated(int)),
+            this, SLOT(configChanged()));
     connect(akodeRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAkodeRadioButton_toggled(bool)));
+    connect(akodeComboBox, SIGNAL(activated(int)),
+            this, SLOT(configChanged()));
     connect(timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
     connect(timeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(timeSlider_valueChanged(int)));
-    connect(timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(timeBox, SIGNAL(valueChanged(int)),
+            this, SLOT(configChanged()));
+    connect(timeSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(configChanged()));
     connect(keepAudioCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(keepAudioCheckBox_toggled(bool)));
     connect(keepAudioPath, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-
-    // General tab.
-    connect(enableKttsdCheckBox, SIGNAL(toggled(bool)),
-            SLOT(enableKttsdToggled(bool)));
-    connect(screenReaderCheckBox, SIGNAL(toggled(bool)),
-            SLOT(enableScreenReaderToggled(bool)));
 
     // Notify tab.
     connect(notifyEnableCheckBox, SIGNAL(toggled(bool)),
@@ -541,8 +577,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slotNotifyTalkerButton_clicked()));
 
     // Others.
-    connect(this, SIGNAL( configChanged() ),
-            this, SLOT( configChanged() ) );
     connect(mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
 
@@ -561,7 +595,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         kttsdStarted();
     else
         // Start KTTSD if check box is checked.
-        enableKttsdToggled(enableKttsdCheckBox->isChecked());
+        slotEnableKttsd_toggled(enableKttsdCheckBox->isChecked());
 
     // Switch to Talkers tab if none configured,
     // otherwise switch to Jobs tab if it is active.
@@ -620,8 +654,6 @@ void KCMKttsMgr::load()
         embedInSysTrayCheckBox->isChecked()));
     showMainWindowOnStartupCheckBox->setChecked(m_config->readBoolEntry(
         "ShowMainWindowOnStartup", showMainWindowOnStartupCheckBox->isChecked()));
-    showMainWindowOnStartupCheckBox->setEnabled(
-        embedInSysTrayCheckBox->isChecked());
 
     enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
         enableKttsdCheckBox->isChecked()));
@@ -827,7 +859,7 @@ void KCMKttsMgr::load()
     {
         enableKttsdCheckBox->setChecked(false);
         enableKttsdCheckBox->setEnabled(false);
-        enableKttsdToggled(false);
+        slotEnableKttsd_toggled(false);
     }
 
     // Enable ShowMainWindowOnStartup checkbox based on EmbedInSysTray checkbox.
@@ -995,7 +1027,7 @@ void KCMKttsMgr::save()
 
     // If we automatically unchecked the Enable KTTSD checkbox, stop KTTSD.
     if (enableKttsdWasToggled)
-        enableKttsdToggled(false);
+        slotEnableKttsd_toggled(false);
     else
     {
         // If KTTSD is running, reinitialize it.
@@ -1299,7 +1331,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 /**
  * Add a talker.
  */
-void KCMKttsMgr::slot_addTalker()
+void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
     AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, this, "AddTalker_widget");
     KDialogBase* dlg = new KDialogBase(
@@ -1463,12 +1495,12 @@ void KCMKttsMgr::slot_addTalker()
     // kdDebug() << "KCMKttsMgr::addTalker: done." << endl;
 }
 
-void KCMKttsMgr::slot_addNormalFilter()
+void KCMKttsMgr::slotAddNormalFilterButton_clicked()
 {
     addFilter( false );
 }
 
-void KCMKttsMgr:: slot_addSbdFilter()
+void KCMKttsMgr:: slotAddSbdFilterButton_clicked()
 {
     addFilter( true );
 }
@@ -1627,7 +1659,7 @@ void KCMKttsMgr::addFilter( bool sbd)
 /**
 * Remove talker.
 */
-void KCMKttsMgr::slot_removeTalker(){
+void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
     // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
 
     // Get the selected talker.
@@ -1647,12 +1679,12 @@ void KCMKttsMgr::slot_removeTalker(){
     configChanged();
 }
 
-void KCMKttsMgr::slot_removeNormalFilter()
+void KCMKttsMgr::slotRemoveNormalFilterButton_clicked()
 {
     removeFilter( false );
 }
 
-void KCMKttsMgr::slot_removeSbdFilter()
+void KCMKttsMgr::slotRemoveSbdFilterButton_clicked()
 {
     removeFilter( true );
 }
@@ -1685,7 +1717,7 @@ void KCMKttsMgr::removeFilter( bool sbd )
     configChanged();
 }
 
-void KCMKttsMgr::slot_higherTalkerPriority()
+void KCMKttsMgr::slotHigherTalkerPriorityButton_clicked()
 {
     QModelIndex modelIndex = talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1697,7 +1729,7 @@ void KCMKttsMgr::slot_higherTalkerPriority()
     configChanged();
 }
 
-void KCMKttsMgr::slot_higherNormalFilterPriority()
+void KCMKttsMgr::slotHigherNormalFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = filtersView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1709,7 +1741,7 @@ void KCMKttsMgr::slot_higherNormalFilterPriority()
     configChanged();
 }
 
-void KCMKttsMgr::slot_higherSbdFilterPriority()
+void KCMKttsMgr::slotHigherSbdFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = sbdsView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1721,7 +1753,7 @@ void KCMKttsMgr::slot_higherSbdFilterPriority()
     configChanged();
 }
 
-void KCMKttsMgr::slot_lowerTalkerPriority()
+void KCMKttsMgr::slotLowerTalkerPriorityButton_clicked()
 {
     QModelIndex modelIndex = talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1733,7 +1765,7 @@ void KCMKttsMgr::slot_lowerTalkerPriority()
     configChanged();
 }
 
-void KCMKttsMgr::slot_lowerNormalFilterPriority()
+void KCMKttsMgr::slotLowerNormalFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = filtersView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1745,7 +1777,7 @@ void KCMKttsMgr::slot_lowerNormalFilterPriority()
     configChanged();
 }
 
-void KCMKttsMgr::slot_lowerSbdFilterPriority()
+void KCMKttsMgr::slotLowerSbdFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = sbdsView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1820,7 +1852,7 @@ void KCMKttsMgr::updateSbdButtons(){
 /**
 * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
 */
-void KCMKttsMgr::enableKttsdToggled(bool)
+void KCMKttsMgr::slotEnableKttsd_toggled(bool)
 {
     // Prevent re-entrancy.
     static bool reenter;
@@ -1829,33 +1861,71 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     // See if KTTSD is running.
     DCOPClient *client = kapp->dcopClient();
     bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
-    // kdDebug() << "KCMKttsMgr::enableKttsdToggled: kttsdRunning = " << kttsdRunning << endl;
+    // kdDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
     if (enableKttsdCheckBox->isChecked())
     {
         if (!kttsdRunning)
         {
-            // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Starting KTTSD" << endl;
+            // kdDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting KTTSD" << endl;
             QString error;
             if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
             {
                 kdDebug() << "Starting KTTSD failed with message " << error << endl;
                 enableKttsdCheckBox->setChecked(false);
                 notifyTestButton->setEnabled(false);
-            }
+            } else
+                configChanged();
         }
     }
     else
     // If check box is not checked and it is running, then stop KTTSD.
     {
-    if (kttsdRunning)
-        {
-            // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Stopping KTTSD" << endl;
-            QByteArray data;
-            client->send("kttsd", "KSpeech", "kttsdExit()", data);
-        }
+        if (kttsdRunning)
+            {
+                // kdDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping KTTSD" << endl;
+                QByteArray data;
+                client->send("kttsd", "KSpeech", "kttsdExit()", data);
+                configChanged();
+            }
     }
     reenter = false;
+}
+
+void KCMKttsMgr::slotEmbedInSysTrayCheckBox_toggled(bool checked)
+{
+    showMainWindowOnStartupCheckBox->setEnabled(checked);
+    configChanged();
+}
+
+void KCMKttsMgr::slotAutoStartMgrCheckBox_toggled(bool checked)
+{
+    autoexitMgrCheckBox->setEnabled(checked);
+    configChanged();
+}
+
+void KCMKttsMgr::slotTextPreMsgCheck_toggled(bool checked)
+{
+    textPreMsg->setEnabled(checked);
+    configChanged();
+}
+
+void KCMKttsMgr::slotTextPreSndCheck_toggled(bool checked)
+{
+    textPreSnd->setEnabled(checked);
+    configChanged();
+}
+
+void KCMKttsMgr::slotTextPostMsgCheck_toggled(bool checked)
+{
+    textPostMsg->setEnabled(checked);
+    configChanged();
+}
+
+void KCMKttsMgr::slotTextPostSndCheck_toggled(bool checked)
+{
+    textPostSnd->setEnabled(checked);
+    configChanged();
 }
 
 /**
@@ -1865,6 +1935,7 @@ void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
 {
     sinkLabel->setEnabled(state);
     sinkComboBox->setEnabled(state);
+    configChanged();
 }
 
 /**
@@ -1874,6 +1945,7 @@ void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
 {
     pcmLabel->setEnabled(state);
     pcmComboBox->setEnabled(state);
+    configChanged();
 }
 
 /**
@@ -1883,6 +1955,7 @@ void KCMKttsMgr::slotAkodeRadioButton_toggled(bool state)
 {
     akodeSinkLabel->setEnabled(state);
     akodeComboBox->setEnabled(state);
+    configChanged();
 }
 
 /**
@@ -1943,7 +2016,7 @@ void KCMKttsMgr::kttsdExiting()
 /**
 * User has requested display of talker configuration dialog.
 */
-void KCMKttsMgr::slot_configureTalker()
+void KCMKttsMgr::slotConfigureTalkerButton_clicked()
 {
     // Get highlighted plugin from Talker ListView and load into memory.
     QModelIndex modelIndex = talkersView->currentIndex();
@@ -1954,12 +2027,12 @@ void KCMKttsMgr::slot_configureTalker()
     QString languageCode = tc.fullLanguageCode();
     m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
     if (!m_loadedTalkerPlugIn) return;
-    // kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << synthName << " loaded successfully." << endl;
+    // kdDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
     m_config->setGroup(QString("Talker_")+talkerID);
     m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    // kdDebug() << "KCMKttsMgr::slot_configureTalker: about to call plugin load() method with Talker ID = " << talkerID << endl;
+    // kdDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID << endl;
     m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
 
     // Display configuration dialog.
@@ -2001,12 +2074,12 @@ void KCMKttsMgr::slot_configureTalker()
     m_configDlg = 0;
 }
 
-void KCMKttsMgr::slot_configureNormalFilter()
+void KCMKttsMgr::slotConfigureNormalFilterButton_clicked()
 {
     configureFilterItem( false );
 }
 
-void KCMKttsMgr::slot_configureSbdFilter()
+void KCMKttsMgr::slotConfigureSbdFilterButton_clicked()
 {
     configureFilterItem( true );
 }
@@ -2253,15 +2326,6 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 {
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
-}
-
-/**
-* This slot is called whenever user checks/unchecks item in Filters list.
-*/
-void KCMKttsMgr::slotFiltersView_stateChanged()
-{
-    // kdDebug() << "KCMKttsMgr::slotFiltersView_stateChanged: calling configChanged" << endl;
-    configChanged();
 }
 
 /**

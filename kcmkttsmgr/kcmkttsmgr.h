@@ -2,7 +2,7 @@
   KControl module for KTTSD configuration and job management
   -------------------
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
-  Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Current Maintainer: 2004 by Gary Cramblitt <garycramblitt@comcast.net>
@@ -189,10 +189,6 @@ class KCMKttsMgr :
                 emit changed(true);
             }
         };
-        /**
-        * This slot is called whenever user checks/unchecks item in Filters list.
-        */
-        void slotFiltersView_stateChanged();
 
     protected:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
@@ -433,70 +429,11 @@ class KCMKttsMgr :
 
     private slots:
         /**
-        * Add a talker/filter.
-        * This is a wrapper function that takes the parameters for the real talker from the
-        * widgets to later call it.
-        */
-        void slot_addTalker();
-        void slot_addNormalFilter();
-        void slot_addSbdFilter();
-
-        /**
-        * Remove talker/filter.
-        * This is a wrapper function that takes the parameters for the real removeTalker from the
-        * widgets to later call it.
-        */
-        void slot_removeTalker();
-        void slot_removeNormalFilter();
-        void slot_removeSbdFilter();
-
-        /**
-        * This slot is called whenever user clicks the higher*Priority button (up).
-        */
-        void slot_higherTalkerPriority();
-        void slot_higherNormalFilterPriority();
-        void slot_higherSbdFilterPriority();
-
-        /**
-        * This slot is called whenever user clicks the lower*Priority button (down).
-        */
-        void slot_lowerTalkerPriority();
-        void slot_lowerNormalFilterPriority();
-        void slot_lowerSbdFilterPriority();
-
-        /**
         * Update the status of the Talker/Filter buttons.
         */
         void updateTalkerButtons();
         void updateFilterButtons();
         void updateSbdButtons();
-
-        /**
-        * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
-        */
-        void enableKttsdToggled(bool checked);
-
-        /**
-        * This signal is emitted whenever user checks/unchecks the GStreamer radio button.
-        */
-        void slotGstreamerRadioButton_toggled(bool state);
-
-        /**
-        * This signal is emitted whenever user checks/unchecks the ALSA radio button.
-        */
-        void slotAlsaRadioButton_toggled(bool state);
-
-        /**
-        * This signal is emitted whenever user checks/unchecks the aKode radio button.
-        */
-        void slotAkodeRadioButton_toggled(bool state);
-
-        /**
-        * User has requested to display the Talker/Filter Configuration Dialog.
-        */
-        void slot_configureTalker();
-        void slot_configureNormalFilter();
-        void slot_configureSbdFilter();
 
         /**
         * Slots for the Talker/Filter Configuration dialogs.
@@ -509,15 +446,22 @@ class KCMKttsMgr :
         void slotConfigFilterDlg_CancelClicked();
 
         /**
-        * Slots for Speed setting.
+        * General tab slots.
         */
-        void timeBox_valueChanged(int percentValue);
-        void timeSlider_valueChanged(int sliderValue);
+        void slotEnableKttsd_toggled(bool checked);
+        void slotEmbedInSysTrayCheckBox_toggled(bool checked);
+        void slotAutoStartMgrCheckBox_toggled(bool checked);
+        // TODO: Experimental.
+        void enableScreenReaderToggled(bool);
 
         /**
-        * Keep Audio CheckBox slot.
+        * Talker tab slots.
         */
-        void keepAudioCheckBox_toggled(bool checked);
+        void slotAddTalkerButton_clicked();
+        void slotRemoveTalkerButton_clicked();
+        void slotHigherTalkerPriorityButton_clicked();
+        void slotLowerTalkerPriorityButton_clicked();
+        void slotConfigureTalkerButton_clicked();
 
         /**
         * Notify tab slots.
@@ -539,13 +483,39 @@ class KCMKttsMgr :
         * Filters tab slots.
         */
         void slotFilterListView_clicked(const QModelIndex & index);
+        void slotAddNormalFilterButton_clicked();
+        void slotAddSbdFilterButton_clicked();
+        void slotRemoveNormalFilterButton_clicked();
+        void slotRemoveSbdFilterButton_clicked();
+        void slotHigherNormalFilterPriorityButton_clicked();
+        void slotHigherSbdFilterPriorityButton_clicked();
+        void slotLowerNormalFilterPriorityButton_clicked();
+        void slotLowerSbdFilterPriorityButton_clicked();
+        void slotConfigureNormalFilterButton_clicked();
+        void slotConfigureSbdFilterButton_clicked();
+
+        /**
+        * Interruption tab slots.
+        */
+        void slotTextPreMsgCheck_toggled(bool checked);
+        void slotTextPreSndCheck_toggled(bool checked);
+        void slotTextPostMsgCheck_toggled(bool checked);
+        void slotTextPostSndCheck_toggled(bool checked);
+
+        /**
+        * Audio tab slots.
+        */
+        void timeBox_valueChanged(int percentValue);
+        void timeSlider_valueChanged(int sliderValue);
+        void keepAudioCheckBox_toggled(bool checked);
+        void slotGstreamerRadioButton_toggled(bool state);
+        void slotAlsaRadioButton_toggled(bool state);
+        void slotAkodeRadioButton_toggled(bool state);
 
         /**
         * Other slots.
         */
         void slotTabChanged();
-
-        void enableScreenReaderToggled(bool);
 };
 
 #endif
