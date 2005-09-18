@@ -1510,13 +1510,14 @@ void KCMKttsMgr:: slotAddSbdFilterButton_clicked()
 */
 void KCMKttsMgr::addFilter( bool sbd)
 {
-    // Build a list of filters that support multiple instances and let user choose.
     QTreeView* lView = filtersView;
     if (sbd) lView = sbdsView;
+    FilterListModel* model = qobject_cast<FilterListModel *>(lView->model());
 
+    // Build a list of filters that support multiple instances and let user choose.
     QStringList filterPlugInNames;
-    for (int i = 0; i < m_filterListModel.rowCount(); ++i) {
-        FilterItem fi = m_filterListModel.getRow(i);
+    for (int i = 0; i < model->rowCount(); ++i) {
+        FilterItem fi = model->getRow(i);
         if (fi.multiInstance)
         {
             if (!filterPlugInNames.contains(fi.plugInName))
@@ -1561,6 +1562,8 @@ void KCMKttsMgr::addFilter( bool sbd)
         if (!okChosen) return;
     } else
         filterPlugInName = filterPlugInNames[0];
+
+    // kdDebug() << "KCMKttsMgr::addFilter: filterPlugInName = " << filterPlugInName << endl;
 
     // Assign a new Filter ID for the filter.  Wraps around to 1.
     QString filterID = QString::number(m_lastFilterID + 1);
@@ -1626,13 +1629,10 @@ void KCMKttsMgr::addFilter( bool sbd)
         fi.desktopEntryName = desktopEntryName;
         fi.multiInstance = multiInstance;
         fi.enabled = true;
-        if (sbd)
-            m_sbdFilterListModel.appendRow(fi);
-        else
-            m_filterListModel.appendRow(fi);
+        model->appendRow(fi);
 
         // Make sure visible.
-        QModelIndex modelIndex = m_filterListModel.index(m_filterListModel.rowCount() - 1, 0, QModelIndex());
+        QModelIndex modelIndex = model->index(model->rowCount() - 1, 0, QModelIndex());
         lView->scrollTo(modelIndex);
 
         // Select the new item, update buttons.
