@@ -149,8 +149,18 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
         switch (index.column()) {
-            case 0: return m_filters.at(index.row()).enabled; break;
+            case 0: return QVariant(); break;
             case 1: return m_filters.at(index.row()).userFilterName; break;
+        }
+
+    if (role == Qt::CheckStateRole)
+        switch (index.column()) {
+            case 0: if (m_filters.at(index.row()).enabled)
+                        return Qt::Checked;
+                    else
+                        return Qt::Unchecked;
+                    break;
+            case 1: return QVariant(); break;
         }
 
     return QVariant();
@@ -165,7 +175,7 @@ Qt::ItemFlags FilterListModel::flags(const QModelIndex &index) const
         // TODO: ItemIsUserCheckable should be displaying the boolean as a checkbox, but instead
         // it displays as string "true" or "false".
         case 0: return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled |
-                    Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEditable; break;
+                    Qt::ItemIsSelectable | Qt::ItemIsUserCheckable; break;
         case 1: return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsSelectable; break;
     }
     return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
@@ -477,6 +487,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     //        this, SLOT(configChanged()));
     connect(sbdsView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(updateSbdButtons()));
+    connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
+            this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
 
     // Audio tab.
     connect(gstreamerRadioButton, SIGNAL(toggled(bool)),
@@ -2777,4 +2789,15 @@ void KCMKttsMgr::slotNotifySaveButton_clicked()
     slotNotifyListView_currentItemChanged();
     if ( !errMsg.isEmpty() )
         KMessageBox::sorry( this, errMsg, i18n("Error Opening File") );
+}
+
+void KCMKttsMgr::slotFilterListView_clicked(const QModelIndex & index)
+{
+    if (!index.isValid()) return;
+    if (index.column() != 0) return;
+    if (index.row() < 0 || index.row() >= m_filterListModel.rowCount()) return;
+    FilterItem fi = m_filterListModel.getRow(index.row());
+    fi.enabled = !fi.enabled;
+    m_filterListModel.updateRow(index.row(), fi);
+    configChanged();
 }

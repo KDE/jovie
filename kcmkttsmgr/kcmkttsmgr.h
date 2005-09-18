@@ -536,6 +536,11 @@ class KCMKttsMgr :
         void slotNotifyTalkerButton_clicked();
 
         /**
+        * Filters tab slots.
+        */
+        void slotFilterListView_clicked(const QModelIndex & index);
+
+        /**
         * Other slots.
         */
         void slotTabChanged();
