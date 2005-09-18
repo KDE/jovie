@@ -34,8 +34,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QTextStream>
-
-#include <Q3PopupMenu>
+#include <QMenu>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -362,15 +361,16 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
-    m_sbdPopmenu = new Q3PopupMenu( this, "SbdPopupMenu" );
-    m_sbdPopmenu->insertItem( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
-    m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
-                              i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
-    m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("down", KIcon::Small),
-                              i18n("Do&wn"), this, SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
-    m_sbdPopmenu->insertItem( i18n("&Add..."), this, SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
-    m_sbdPopmenu->insertItem( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
-    sbdButton->setPopup( m_sbdPopmenu );
+    QMenu* sbdPopmenu = new QMenu( this );
+    sbdPopmenu->setObjectName( "SbdPopupMenu" );
+    m_sbdBtnEdit = sbdPopmenu->addAction( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0 );
+    m_sbdBtnUp = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
+                              i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0 );
+    m_sbdBtnDown = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("down", KIcon::Small),
+                              i18n("Do&wn"), this, SLOT(slot_lowerSbdFilterPriority()), 0 );
+    m_sbdBtnAdd = sbdPopmenu->addAction( i18n("&Add..."), this, SLOT(slot_addSbdFilter()), 0 );
+    m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0 );
+    sbdButton->setPopup( sbdPopmenu );
 
     // If aRts is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
@@ -1789,15 +1789,15 @@ void KCMKttsMgr::updateSbdButtons(){
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Running"<< endl;
     QModelIndex modelIndex = sbdsView->currentIndex();
     if (modelIndex.isValid()) {
-        m_sbdPopmenu->setItemEnabled( sbdBtnEdit, true );
-        m_sbdPopmenu->setItemEnabled( sbdBtnUp, modelIndex.row() != 0 );
-        m_sbdPopmenu->setItemEnabled( sbdBtnDown, modelIndex.row() < (m_sbdFilterListModel.rowCount() -1));
-        m_sbdPopmenu->setItemEnabled( sbdBtnRemove, true );
+        m_sbdBtnEdit->setEnabled( true );
+        m_sbdBtnUp->setEnabled( modelIndex.row() != 0 );
+        m_sbdBtnDown->setEnabled( modelIndex.row() < (m_sbdFilterListModel.rowCount() -1));
+        m_sbdBtnRemove->setEnabled( true );
     } else {
-        m_sbdPopmenu->setItemEnabled( sbdBtnEdit, false );
-        m_sbdPopmenu->setItemEnabled( sbdBtnUp, false );
-        m_sbdPopmenu->setItemEnabled( sbdBtnDown, false );
-        m_sbdPopmenu->setItemEnabled( sbdBtnRemove, false );
+        m_sbdBtnEdit->setEnabled( false );
+        m_sbdBtnUp->setEnabled( false );
+        m_sbdBtnDown->setEnabled( false );
+        m_sbdBtnRemove->setEnabled( false );
     }
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Exiting"<< endl;
 }

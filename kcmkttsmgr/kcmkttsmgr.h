@@ -52,7 +52,7 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class KAboutData;
 class KConfig;
-class Q3PopupMenu;
+class QAction;
 class KWidgetProbe;
 
 class FilterItem
@@ -233,15 +233,6 @@ class KCMKttsMgr :
             nlvcTalker = 6         // hidden
         };
 
-        enum SbdButtonIDs
-        {
-            sbdBtnEdit = 1,
-            sbdBtnUp = 2,
-            sbdBtnDown = 3,
-            sbdBtnAdd = 4,
-            sbdBtnRemove = 5
-        };
-
         /**
         * Conversion functions for percent boxes to/from sliders.
         */
@@ -365,9 +356,13 @@ class KCMKttsMgr :
         KDialogBase* m_configDlg;
 
         /**
-        * Sentence Boundary Detector button popup menu.
+        * Sentence Boundary Detector button popup menu actions.
         */
-        Q3PopupMenu* m_sbdPopmenu;
+        QAction* m_sbdBtnEdit;
+        QAction* m_sbdBtnUp;
+        QAction* m_sbdBtnDown;
+        QAction* m_sbdBtnAdd;
+        QAction* m_sbdBtnRemove;
 
         /**
         * Talker(synth) Plugin currently loaded into configuration dialog.
