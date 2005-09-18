@@ -331,7 +331,7 @@
         <number>6</number>
        </property>
        <item row="1" column="0" >
-        <widget class="Q3GroupBox" name="notifyGroup" >
+        <widget class="QGroupBox" name="notifyGroup" >
          <property name="title" >
           <string/>
          </property>
@@ -1026,7 +1026,7 @@
         </spacer>
        </item>
        <item row="0" column="0" >
-        <widget class="Q3ButtonGroup" name="audioButtonGroup" >
+        <widget class="QGroupBox" name="audioButtonGroup" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>3</hsizetype>
@@ -1390,20 +1390,6 @@
  <layoutdefault spacing="6" margin="6" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends></extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends></extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
