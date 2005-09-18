@@ -207,7 +207,7 @@
           <number>6</number>
          </property>
          <item>
-          <widget class="KPushButton" name="addTalkerButton" >
+          <widget class="QPushButton" name="addTalkerButton" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>1</hsizetype>
@@ -218,6 +218,9 @@
            </property>
            <property name="whatsThis" >
             <string>Click to add and configure a new Talker (speech synthesizer).</string>
+           </property>
+           <property name="text" >
+            <string>Add...</string>
            </property>
           </widget>
          </item>
@@ -252,7 +255,7 @@
           </widget>
          </item>
          <item>
-          <widget class="KPushButton" name="configureTalkerButton" >
+          <widget class="QPushButton" name="configureTalkerButton" >
            <property name="enabled" >
             <bool>false</bool>
            </property>
@@ -267,10 +270,13 @@
            <property name="whatsThis" >
             <string>Click to configure options for the highlighted Talker.</string>
            </property>
+           <property name="text" >
+            <string>&amp;Edit...</string>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="KPushButton" name="removeTalkerButton" >
+          <widget class="QPushButton" name="removeTalkerButton" >
            <property name="enabled" >
             <bool>false</bool>
            </property>
@@ -284,6 +290,9 @@
            </property>
            <property name="whatsThis" >
             <string>Click to remove the highlighted Talker.</string>
+           </property>
+           <property name="text" >
+            <string>&amp;Remove</string>
            </property>
           </widget>
          </item>
@@ -381,7 +390,7 @@
              </widget>
             </item>
             <item>
-             <widget class="KPushButton" name="notifyTalkerButton" >
+             <widget class="QPushButton" name="notifyTalkerButton" >
               <property name="whatsThis" >
                <string>Click to select the Talker to speak the notification.</string>
               </property>
@@ -660,7 +669,7 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="KPushButton" name="addFilterButton" >
+            <widget class="QPushButton" name="addFilterButton" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>1</hsizetype>
@@ -671,6 +680,9 @@
              </property>
              <property name="whatsThis" >
               <string>Click to add and configure a new Filter.</string>
+             </property>
+             <property name="text" >
+              <string>Add...</string>
              </property>
             </widget>
            </item>
@@ -711,7 +723,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KPushButton" name="configureFilterButton" >
+            <widget class="QPushButton" name="configureFilterButton" >
              <property name="enabled" >
               <bool>false</bool>
              </property>
@@ -726,10 +738,13 @@
              <property name="whatsThis" >
               <string>Click to configure options for the highlighted Filter.</string>
              </property>
+             <property name="text" >
+              <string>&amp;Edit...</string>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="KPushButton" name="removeFilterButton" >
+            <widget class="QPushButton" name="removeFilterButton" >
              <property name="enabled" >
               <bool>false</bool>
              </property>
@@ -743,6 +758,9 @@
              </property>
              <property name="whatsThis" >
               <string>Click to remove the highlighted Filter.</string>
+             </property>
+             <property name="text" >
+              <string>&amp;Remove</string>
              </property>
             </widget>
            </item>
@@ -1376,13 +1394,6 @@
    <class>Q3ButtonGroup</class>
    <extends></extends>
    <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QWidget</extends>
-   <header>kpushbutton.h</header>
    <container>1</container>
    <pixmap></pixmap>
   </customwidget>

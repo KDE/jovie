@@ -172,8 +172,6 @@ Qt::ItemFlags FilterListModel::flags(const QModelIndex &index) const
         return Qt::ItemIsEnabled;
 
     switch (index.column()) {
-        // TODO: ItemIsUserCheckable should be displaying the boolean as a checkbox, but instead
-        // it displays as string "true" or "false".
         case 0: return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled |
                     Qt::ItemIsSelectable | Qt::ItemIsUserCheckable; break;
         case 1: return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsSelectable; break;
@@ -1991,9 +1989,7 @@ void KCMKttsMgr::slot_configureTalker()
 
         // Update display.
         tc.setTalkerCode(talkerCode);
-        // TODO
-        // updateTalkerItem(talkerItem, talkerCode);
-
+        m_talkerListModel.updateRow(modelIndex.row(), tc);
         // Inform Control Center that configuration has changed.
         configChanged();
     }
@@ -2086,9 +2082,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
         fi.userFilterName = userFilterName;
         fi.enabled = true;
         fi.multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
-        // TODO
-        // filterList->append(fi);
-
+        model->updateRow(modelIndex.row(), fi);
         // Inform Control Center that configuration has changed.
         configChanged();
     }
@@ -2355,7 +2349,7 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
     }
     // TODO: Need a way to get QTreeView to automatically adjust column widths to contents.
     // Setting QHeaderView::Stretch sorta works, but then user cannot manually resize columns,
-    // and when QHeadeerView::Interactive is set, resizes to narrow columns. :/
+    // and when QHeaderView::Interactive is set, resizes to narrow columns. :/
     // notifyListView->header()->setResizeMode( QHeaderView::Stretch );
     // notifyListView->adjustSize();
     // notifyListView->header()->setResizeMode( QHeaderView::Interactive );
@@ -2720,8 +2714,6 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     item = addNotifyItem( eventSrc, event, action, msg, talkerCode );
     lv->scrollToItem( item );
     lv->setCurrentItem( item );
-    // TODO: This this needed?
-    // slotNotifyListView_currentItemChanged();
     configChanged();
 }
 
@@ -2738,8 +2730,6 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
         talkerCode );
     lv->scrollToItem( item );
     lv->setCurrentItem( item );
-    // TODO: Is this needed?
-    // slotNotifyListView_currentItemChanged();
     configChanged();
 }
 
@@ -2753,7 +2743,7 @@ void KCMKttsMgr::slotNotifyRemoveButton_clicked()
     {
         if (parentItem->childCount() == 0) delete parentItem;
     }
-    // TODO: Is this needed?
+    // Update display.
     slotNotifyListView_currentItemChanged();
     configChanged();
 }
