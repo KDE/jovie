@@ -1314,7 +1314,10 @@ void KCMKttsMgr::slot_addTalker()
     if(languageCode == "other")
     {
         // Create a  QHBox to host KListView.
-        Q3HBox* hBox = new Q3HBox(this, "SelectLanguage_hbox");
+        QWidget* hBox = new QWidget;
+        hBox->setObjectName("SelectLanguage_hbox");
+        QHBoxLayout* hBoxLayout = new QHBoxLayout;
+        hBoxLayout->setMargin(0);
         // Create a KListView and fill with all known languages.
         KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
         langLView->addColumn(i18n("Language"));
@@ -1344,6 +1347,8 @@ void KCMKttsMgr::slot_addTalker()
             "SelectLanguage_dlg",
             true,
             true);
+        hBoxLayout->addWidget(langLView);
+        hBox->setLayout(hBoxLayout);
         dlg->setMainWidget(hBox);
         dlg->setHelp("select-plugin", "kttsd");
         dlg->setInitialSize(QSize(200, 500), false);
@@ -1351,7 +1356,7 @@ void KCMKttsMgr::slot_addTalker()
         languageCode = QString::null;
         if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
         delete dlg;
-        // TODO: Also delete KListView and QHBox?
+        // TODO: Also delete KListView and hBox?
         if (dlgResult != QDialog::Accepted) return;
     }
 
