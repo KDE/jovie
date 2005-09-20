@@ -502,6 +502,34 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
 
+    // Notify tab.
+    connect(notifyEnableCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotNotifyEnableCheckBox_toggled(bool)));
+    connect(notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(configChanged()));
+    connect(notifyAddButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyAddButton_clicked()));
+    connect(notifyRemoveButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyRemoveButton_clicked()));
+    connect(notifyClearButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyClearButton_clicked()));
+    connect(notifyLoadButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyLoadButton_clicked()));
+    connect(notifySaveButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifySaveButton_clicked()));
+    connect(notifyListView, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+            this, SLOT(slotNotifyListView_currentItemChanged()));
+    connect(notifyPresentComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotNotifyPresentComboBox_activated(int)));
+    connect(notifyActionComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotNotifyActionComboBox_activated(int)));
+    connect(notifyTestButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyTestButton_clicked()));
+    connect(notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotNotifyMsgLineEdit_textChanged(const QString&)));
+    connect(notifyTalkerButton, SIGNAL(clicked()),
+            this, SLOT(slotNotifyTalkerButton_clicked()));
+
     // Interruption tab.
     connect(textPreMsgCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotTextPreMsgCheck_toggled(bool)));
@@ -548,34 +576,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     connect(keepAudioPath, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
 
-    // Notify tab.
-    connect(notifyEnableCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNotifyEnableCheckBox_toggled(bool)));
-    connect(notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(notifyAddButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyAddButton_clicked()));
-    connect(notifyRemoveButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyRemoveButton_clicked()));
-    connect(notifyClearButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyClearButton_clicked()));
-    connect(notifyLoadButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyLoadButton_clicked()));
-    connect(notifySaveButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifySaveButton_clicked()));
-    connect(notifyListView, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
-            this, SLOT(slotNotifyListView_currentItemChanged()));
-    connect(notifyPresentComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNotifyPresentComboBox_activated(int)));
-    connect(notifyActionComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNotifyActionComboBox_activated(int)));
-    connect(notifyTestButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyTestButton_clicked()));
-    connect(notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotNotifyMsgLineEdit_textChanged(const QString&)));
-    connect(notifyTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyTalkerButton_clicked()));
-
     // Others.
     connect(mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
@@ -596,6 +596,16 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     else
         // Start KTTSD if check box is checked.
         slotEnableKttsd_toggled(enableKttsdCheckBox->isChecked());
+
+    // Adjust view column sizes.
+    // TODO: To work properly, this needs to be done after the widgets are shown.
+    // Possibly in Resize event?
+    for (int i = 0; i < m_filterListModel.columnCount(); ++i)
+        filtersView->resizeColumnToContents(i);
+    for (int i = 0; i < m_talkerListModel.columnCount(); ++i)
+        talkersView->resizeColumnToContents(i);
+    for (int i = 0; i < (notifyListView->model()->columnCount() - 1); ++i)
+        notifyListView->resizeColumnToContents(i);
 
     // Switch to Talkers tab if none configured,
     // otherwise switch to Jobs tab if it is active.
@@ -1666,7 +1676,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
     QModelIndex modelIndex = talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
 
-    // Delete the talker from configuration file.
+    // TODO: Delete the talker from configuration file?
 //    QString talkerID = itemToRemove->text(tlvcTalkerID);
 //    m_config->deleteGroup("Talker_"+talkerID, true, false);
 
@@ -1712,6 +1722,8 @@ void KCMKttsMgr::removeFilter( bool sbd )
         m_filterListModel.removeRow(modelIndex.row());
         updateFilterButtons();
     }
+
+    // TODO: Delete the filter from the configuration file?
 
     // Emit configuraton changed.
     configChanged();
@@ -2411,12 +2423,6 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
         }
         addNotifyItem(eventSrc, event, NotifyAction::action( actionName ), message, talkerCode);
     }
-    // TODO: Need a way to get QTreeView to automatically adjust column widths to contents.
-    // Setting QHeaderView::Stretch sorta works, but then user cannot manually resize columns,
-    // and when QHeaderView::Interactive is set, resizes to narrow columns. :/
-    // notifyListView->header()->setResizeMode( QHeaderView::Stretch );
-    // notifyListView->adjustSize();
-    // notifyListView->header()->setResizeMode( QHeaderView::Interactive );
     return QString::null;
 }
 

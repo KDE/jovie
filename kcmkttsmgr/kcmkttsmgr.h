@@ -53,7 +53,7 @@ class QTreeWidgetItem;
 class KAboutData;
 class KConfig;
 class QAction;
-class KWidgetProbe;
+class KWidgetProbe;     // experimental
 
 class FilterItem
 {
@@ -423,7 +423,7 @@ class KCMKttsMgr :
         QString m_defaultNotifyTalkerCode;
 
         /**
-        * Screen Reader.
+        * Screen Reader.  Experimental.
         */
         KWidgetProbe* m_screenReader;
 
