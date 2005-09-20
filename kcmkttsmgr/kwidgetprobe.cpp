@@ -16,7 +16,7 @@
  */
 
 #include "kwidgetprobe.h"
-#include <kapp.h>
+#include <kapplication.h>
 #include <qtimer.h>
 #include <qcursor.h>
 #include <QMenu>
