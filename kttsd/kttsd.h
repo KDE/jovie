@@ -21,7 +21,7 @@
 #define _KTTSD_H_
 
 // Qt includes
-#include <Q3CString>
+#include <QByteArray>
 
 // KTTS includes
 #include "speechdata.h"
@@ -294,7 +294,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *
         * The stream contains the following elements:
         *   - int state         Job state.
-        *   - Q3CString appId   DCOP senderId of the application that requested the speech job.
+        *   - QByteArray appId   DCOP senderId of the application that requested the speech job.
         *   - QString talker    Language code in which to speak the text.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.

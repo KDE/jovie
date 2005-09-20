@@ -191,8 +191,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     if (args->isSet("autoexit"))
     {
         connectDCOPSignal("kttsd", "KSpeech",
-            "textFinished(Q3CString,uint)",
-            "textFinished(Q3CString,uint)",
+            "textFinished(QByteArray,uint)",
+            "textFinished(QByteArray,uint)",
             false);
         // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
         parent->installEventFilter(this);
@@ -204,7 +204,7 @@ KttsMgrTray::~KttsMgrTray()
     // delete m_toolTip;
 }
 
-void KttsMgrTray::textFinished(const Q3CString& /*appId*/, uint /*jobNum*/)
+void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
 {
     // kdDebug() << "KttsMgrTray::textFinished: running" << endl;
     exitWhenFinishedSpeaking();

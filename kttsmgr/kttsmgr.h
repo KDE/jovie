@@ -45,7 +45,7 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
         QString getStatus();
 
     protected:
-        ASYNC textFinished(const Q3CString& appId, uint jobNum);
+        ASYNC textFinished(const QByteArray& appId, uint jobNum);
         virtual bool eventFilter( QObject* o, QEvent* e );
 
     private slots:

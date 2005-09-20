@@ -317,44 +317,44 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
         "kttsdStarted()",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "markerSeen(Q3CString,QString)",
-        "markerSeen(Q3CString,QString)",
+        "markerSeen(QByteArray,QString)",
+        "markerSeen(QByteArray,QString)",
         false);
     if (!connectDCOPSignal("kttsd", "KSpeech",
-        "sentenceStarted(Q3CString,uint,uint)",
-        "sentenceStarted(Q3CString,uint,uint)",
+        "sentenceStarted(QByteArray,uint,uint)",
+        "sentenceStarted(QByteArray,uint,uint)",
         false)) kdDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal sentenceStarted" << endl;
     connectDCOPSignal(0, 0,
-        "sentenceFinished(Q3CString,uint,uint)",
-        "sentenceFinished(Q3CString,uint,uint)",
+        "sentenceFinished(QByteArray,uint,uint)",
+        "sentenceFinished(QByteArray,uint,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textSet(Q3CString,uint)",
-        "textSet(Q3CString,uint)",
+        "textSet(QByteArray,uint)",
+        "textSet(QByteArray,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textStarted(Q3CString,uint)",
-        "textStarted(Q3CString,uint)",
+        "textStarted(QByteArray,uint)",
+        "textStarted(QByteArray,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textFinished(Q3CString,uint)",
-        "textFinished(Q3CString,uint)",
+        "textFinished(QByteArray,uint)",
+        "textFinished(QByteArray,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textStopped(Q3CString,uint)",
-        "textStopped(Q3CString,uint)",
+        "textStopped(QByteArray,uint)",
+        "textStopped(QByteArray,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textPaused(Q3CString,uint)",
-        "textPaused(Q3CString,uint)",
+        "textPaused(QByteArray,uint)",
+        "textPaused(QByteArray,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textResumed(Q3CString,uint)",
-        "textResumed(Q3CString,uint)",
+        "textResumed(QByteArray,uint)",
+        "textResumed(QByteArray,uint)",
         false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textRemoved(Q3CString,uint)",
-        "textRemoved(Q3CString,uint)",
+        "textRemoved(QByteArray,uint)",
+        "textRemoved(QByteArray,uint)",
         false);
 
     m_extension = new KttsJobMgrBrowserExtension(this);
@@ -829,7 +829,7 @@ ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
 * @param markerName     The name of the marker seen.
 * @see markers
 */
-ASYNC KttsJobMgrPart::markerSeen(const Q3CString&, const QString&)
+ASYNC KttsJobMgrPart::markerSeen(const QByteArray&, const QString&)
 {
 }
 
@@ -840,7 +840,7 @@ ASYNC KttsJobMgrPart::markerSeen(const Q3CString&, const QString&)
  * @param seq            Sequence number of the text.
  * @see getTextCount
  */
-ASYNC KttsJobMgrPart::sentenceStarted(const Q3CString&, const uint jobNum, const uint seq)
+ASYNC KttsJobMgrPart::sentenceStarted(const QByteArray&, const uint jobNum, const uint seq)
 {
     // kdDebug() << "KttsJobMgrPart::sentencedStarted: jobNum = " << jobNum << " seq = " << seq << endl;
     Q3ListViewItem* item = findItemByJobNum(jobNum);
@@ -859,7 +859,7 @@ ASYNC KttsJobMgrPart::sentenceStarted(const Q3CString&, const uint jobNum, const
 * @param seq            Sequence number of the text.
 * @see getTextCount
 */
-ASYNC KttsJobMgrPart::sentenceFinished(const Q3CString& /*appId*/, const uint /*jobNum*/, const uint /*seq*/)
+ASYNC KttsJobMgrPart::sentenceFinished(const QByteArray& /*appId*/, const uint /*jobNum*/, const uint /*seq*/)
 {
     // kdDebug() << "KttsJobMgrPart::sentencedFinished: jobNum = " << jobNum << endl;
 /*
@@ -876,7 +876,7 @@ ASYNC KttsJobMgrPart::sentenceFinished(const Q3CString& /*appId*/, const uint /*
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textSet(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textSet(const QByteArray&, const uint jobNum)
 {
     QByteArray jobInfo = getTextJobInfo(jobNum);
     QDataStream stream(&jobInfo, QIODevice::ReadOnly);
@@ -916,7 +916,7 @@ ASYNC KttsJobMgrPart::textSet(const Q3CString&, const uint jobNum)
 * @param partNum        Part number of the new part.  Parts are numbered starting
 *                       at 1.
 */
-ASYNC KttsJobMgrPart::textAppended(const Q3CString& appId, const uint jobNum, const int /*partNum*/)
+ASYNC KttsJobMgrPart::textAppended(const QByteArray& appId, const uint jobNum, const int /*partNum*/)
 {
     textSet(appId, jobNum);
 }
@@ -926,7 +926,7 @@ ASYNC KttsJobMgrPart::textAppended(const Q3CString& appId, const uint jobNum, co
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textStarted(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textStarted(const QByteArray&, const uint jobNum)
 {
     Q3ListViewItem* item = findItemByJobNum(jobNum);
     if (item)
@@ -945,7 +945,7 @@ ASYNC KttsJobMgrPart::textStarted(const Q3CString&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textFinished(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textFinished(const QByteArray&, const uint jobNum)
 {
     // kdDebug() << "KttsJobMgrPart::textFinished: jobNum = " << jobNum << endl;
     Q3ListViewItem* item = findItemByJobNum(jobNum);
@@ -963,7 +963,7 @@ ASYNC KttsJobMgrPart::textFinished(const Q3CString&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textStopped(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textStopped(const QByteArray&, const uint jobNum)
 {
     // kdDebug() << "KttsJobMgrPart::textStopped: jobNum = " << jobNum << endl;
     Q3ListViewItem* item = findItemByJobNum(jobNum);
@@ -979,7 +979,7 @@ ASYNC KttsJobMgrPart::textStopped(const Q3CString&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textPaused(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textPaused(const QByteArray&, const uint jobNum)
 {
     // kdDebug() << "KttsJobMgrPart::textPaused: jobNum = " << jobNum << endl;
     Q3ListViewItem* item = findItemByJobNum(jobNum);
@@ -994,7 +994,7 @@ ASYNC KttsJobMgrPart::textPaused(const Q3CString&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textResumed(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textResumed(const QByteArray&, const uint jobNum)
 {
     Q3ListViewItem* item = findItemByJobNum(jobNum);
     if (item)
@@ -1009,7 +1009,7 @@ ASYNC KttsJobMgrPart::textResumed(const Q3CString&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textRemoved(const Q3CString&, const uint jobNum)
+ASYNC KttsJobMgrPart::textRemoved(const QByteArray&, const uint jobNum)
 {
     Q3ListViewItem* item = findItemByJobNum(jobNum);
     delete item;
