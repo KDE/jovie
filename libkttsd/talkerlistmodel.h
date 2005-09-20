@@ -29,7 +29,7 @@
 // Qt includes.
 #include <QAbstractListModel>
 #include <QModelIndex>
-
+#include <kdemacros.h>
 // KTTS includes.
 #include "talkercode.h"
 
@@ -40,7 +40,7 @@ class KConfig;
  * Intended for use with talkerList QTreeView.
  * Each row of the displayed view corresponds to a TalkerCode in the model.
  */
-class TalkerListModel : public QAbstractListModel
+class KDE_EXPORT TalkerListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
