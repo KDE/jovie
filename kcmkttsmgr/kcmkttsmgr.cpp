@@ -790,6 +790,7 @@ void KCMKttsMgr::load()
             if (!filterPlugInName.isEmpty())
             {
                 FilterItem fi;
+                fi.id = filterID;
                 fi.plugInName = filterPlugInName;
                 fi.desktopEntryName = desktopEntryName;
                 fi.userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
@@ -1676,9 +1677,9 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
     QModelIndex modelIndex = talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
 
-    // TODO: Delete the talker from configuration file?
-//    QString talkerID = itemToRemove->text(tlvcTalkerID);
-//    m_config->deleteGroup("Talker_"+talkerID, true, false);
+    // Delete the talker from configuration file?
+    QString talkerID = m_talkerListModel.getRow(modelIndex.row()).id();
+    m_config->deleteGroup("Talker_"+talkerID, true, false);
 
     // Delete the talker from the list of Talkers.
     m_talkerListModel.removeRow(modelIndex.row());
@@ -1706,24 +1707,26 @@ void KCMKttsMgr::removeFilter( bool sbd )
 {
     // kdDebug() << "KCMKttsMgr::removeFilter: Running"<< endl;
 
-    QModelIndex modelIndex;
-    if (sbd) {
-        // Get currently-selected filter.
-        modelIndex = sbdsView->currentIndex();
-        if (!modelIndex.isValid()) return;
-        // Delete the filter from list view.
-        m_sbdFilterListModel.removeRow(modelIndex.row());
+    FilterListModel* model;
+    QTreeView* lView;
+    if (sbd)
+        lView = sbdsView;
+    else
+        lView = filtersView;
+    model = qobject_cast<FilterListModel *>(lView->model());
+    QModelIndex modelIndex = lView->currentIndex();
+    if (!modelIndex.isValid()) return;
+    QString filterID = model->getRow(modelIndex.row()).id;
+    // Delete the filter from list view.
+    model->removeRow(modelIndex.row());
+    if (sbd)
         updateSbdButtons();
-    } else {
-        // Get currently-selected filter.
-        modelIndex = filtersView->currentIndex();
-        if (!modelIndex.isValid()) return;
-        // Delete the filter from list view.
-        m_filterListModel.removeRow(modelIndex.row());
+    else
         updateFilterButtons();
-    }
 
-    // TODO: Delete the filter from the configuration file?
+    // Delete the filter from the configuration file?
+    kdDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file." << endl;
+    m_config->deleteGroup("Filter_"+filterID, true, false);
 
     // Emit configuraton changed.
     configChanged();
