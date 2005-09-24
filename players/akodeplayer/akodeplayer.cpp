@@ -54,7 +54,7 @@ void aKodePlayer::startPlay(const QString &file)
         return;
     }
 
-    // QString filename = file.absFilePath();
+    // QString filename = file.absoluteFilePath();
 
     kdDebug() << "Opening: " << file << endl;
 

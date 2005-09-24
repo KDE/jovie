@@ -53,7 +53,7 @@ void GStreamerPlayer::startPlay(const QString &file)
 {
     if(!file.isNull()) {
         stop();
-        // g_object_set(G_OBJECT(m_source), "location", file.absFilePath().toLocal8Bit().data(), 0);
+        // g_object_set(G_OBJECT(m_source), "location", file.absoluteFilePath().toLocal8Bit().data(), 0);
         g_object_set(G_OBJECT(m_source), "location", file.toLocal8Bit().data(), 0);
     }
 

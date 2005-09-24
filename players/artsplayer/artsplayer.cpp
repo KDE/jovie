@@ -70,7 +70,7 @@ void ArtsPlayer::startPlay(const QString &file)
     // be started automatically and the factory and amanPlay are created again.
 
     if(!file.isNull())
-//        m_currentURL.setPath(file.absFilePath());
+//        m_currentURL.setPath(file.absoluteFilePath());
         m_currentURL.setPath(file);
 
     if(m_server->server().isNull()) {

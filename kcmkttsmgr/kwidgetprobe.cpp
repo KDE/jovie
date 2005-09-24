@@ -117,7 +117,7 @@ uint KWidgetProbe::query()
 void KWidgetProbe::setRefreshInterval( int millis )
 {
     timeout = millis;
-    timer->changeInterval( timeout );
+    timer->start( timeout );
 }
 
 int KWidgetProbe::refreshInterval()

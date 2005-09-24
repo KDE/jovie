@@ -18,7 +18,7 @@ void findInitialConfig() {
 QString findHadifixDataPath () {
    QStringList files;
    files += "/etc/txt2pho";
-   files += QDir::homeDirPath()+"/.txt2phorc";
+   files += QDir::homePath()+"/.txt2phorc";
    
    QStringList::iterator it;
    for (it = files.begin(); it != files.end(); ++it) {
@@ -38,8 +38,8 @@ QString findHadifixDataPath () {
 		  if (s.startsWith("/"))
 		     return s;
 		  else {
-		     QFileInfo info (QFileInfo(*it).dirPath() + "/" + s);
-		     return info.absFilePath();
+		     QFileInfo info (QFileInfo(*it).path() + "/" + s);
+		     return info.absoluteFilePath();
 		  }
 	       }
 	    }
@@ -65,7 +65,7 @@ QString findExecutable (const QStringList &names, const QString &possiblePath) {
    for (it = names.constBegin(); it != itEnd; ++it) {
       QFileInfo info (possiblePath+*it);
       if (info.exists() && info.isExecutable() && info.isFile()) {
-         return info.absFilePath();
+         return info.absoluteFilePath();
       }
    }
 
@@ -92,13 +92,13 @@ QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
    // 2a) search near the mbrola executable
    QFileInfo info (mbrolaExec);
    if (info.exists() && info.isFile() && info.isExecutable()) {
-      QString mbrolaPath = info.dirPath (true);
+      QString mbrolaPath = info.absolutePath();
       list += mbrolaPath;
    }
 
    // 2b) search near the hadifix data path
    info.setFile(hadifixDataPath + "../../mbrola");
-   QString mbrolaPath = info.dirPath (true) + "/mbrola";
+   QString mbrolaPath = info.absolutePath() + "/mbrola";
    if (!list.contains(mbrolaPath))
       list += mbrolaPath;
 
