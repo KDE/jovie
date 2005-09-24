@@ -69,7 +69,7 @@ void aKodePlayer::startPlay(const QString &file)
         }
     }
 
-    if (m_player->load(file.local8Bit().data()))
+    if (m_player->load(file.toLocal8Bit().data()))
         m_player->play();
 
 }

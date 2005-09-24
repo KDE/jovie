@@ -1140,10 +1140,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 textPreMsgCheck->setChecked(textPreMsgCheckValue);
             }
-            if (textPreMsg->text() != i18n(textPreMsgValue.utf8()))
+            if (textPreMsg->text() != i18n(textPreMsgValue.toUtf8()))
             {
                 changed = true;
-                textPreMsg->setText(i18n(textPreMsgValue.utf8()));
+                textPreMsg->setText(i18n(textPreMsgValue.toUtf8()));
             }
             if (textPreSndCheck->isChecked() != textPreSndCheckValue)
             {
@@ -1160,10 +1160,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 textPostMsgCheck->setChecked(textPostMsgCheckValue);
             }
-            if (textPostMsg->text() != i18n(textPostMsgValue.utf8()))
+            if (textPostMsg->text() != i18n(textPostMsgValue.toUtf8()))
             {
                 changed = true;
-                textPostMsg->setText(i18n(textPostMsgValue.utf8()));
+                textPostMsg->setText(i18n(textPostMsgValue.toUtf8()));
             }
             if (textPostSndCheck->isChecked() != textPostSndCheckValue)
             {

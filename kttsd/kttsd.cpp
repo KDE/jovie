@@ -974,7 +974,7 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
             if ( !msg.isEmpty() )
             {
                 QString fromApps = fromApp + ",knotify";
-                m_speechData->enqueueMessage( msg, talker, fromApps.utf8() );
+                m_speechData->enqueueMessage( msg, talker, fromApps.toUtf8() );
                 m_speaker->doUtterances();
             }
         }

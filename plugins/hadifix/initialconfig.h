@@ -28,13 +28,13 @@ QString findHadifixDataPath () {
          QTextStream stream(&file);
          
          while (!stream.atEnd()) {
-            QString s = stream.readLine().stripWhiteSpace();
+            QString s = stream.readLine().trimmed();
 	    // look for a line "DATAPATH=..."
 	    
 	    if (s.startsWith("DATAPATH")) {
-	       s = s.mid(8, s.length()-8).stripWhiteSpace();
+	       s = s.mid(8, s.length()-8).trimmed();
 	       if (s.startsWith("=")) {
-	          s = s.mid(1, s.length()-1).stripWhiteSpace();
+	          s = s.mid(1, s.length()-1).trimmed();
 		  if (s.startsWith("/"))
 		     return s;
 		  else {

@@ -84,7 +84,7 @@ bool XHTMLToSSMLParser::characters(const QString &characters) {
 
 
 QString XHTMLToSSMLParser::convertedText() {
-    return m_output.simplifyWhiteSpace();
+    return m_output.simplified();
 }
 
 /// Parse a line from the configuration file which maps xhtml : ssml equivalent.
@@ -93,13 +93,13 @@ QString XHTMLToSSMLParser::convertedText() {
 /// @returns                     true if the syntax of the line was okay and the parsing succeeded - false otherwise.
 bool XHTMLToSSMLParser::readFileConfigEntry(const QString &line) {
     // comments
-    if(line.stripWhiteSpace().startsWith("#")) {
+    if(line.trimmed().startsWith("#")) {
         return true;
     }
     // break into QStringList
     // the second parameter to split is the string, with all space simplified and all space around the : removed, i.e
     //  "something     :      somethingelse"   ->  "something:somethingelse"
-    QStringList keyvalue = QString( ":").replace(":").split( ":", line.simplifyWhiteSpace().replace(" :", ":"));
+    QStringList keyvalue = QString( ":").replace(":").split( ":", line.simplified().replace(" :", ":"));
     if(keyvalue.count() != 2)
         return false;
     m_xhtml2ssml[keyvalue[0]] = keyvalue[1];

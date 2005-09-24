@@ -132,7 +132,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         m_textFilename = QString::null;
     }
     QString command = userCmd;
-    QString text = inputText.stripWhiteSpace();
+    QString text = inputText.trimmed();
     if (text.isEmpty()) return;
     // 1. prepare the text:
     // 1.a) encode the text

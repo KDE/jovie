@@ -149,7 +149,7 @@ QString TalkerCode::getTranslatedDescription() const
     if (!m_gender.isEmpty()) code += " " + translatedGender(stripPrefer(m_gender, prefer));
     if (!m_volume.isEmpty()) code += " " + translatedVolume(stripPrefer(m_volume, prefer));
     if (!m_rate.isEmpty()) code += " " + translatedRate(stripPrefer(m_rate, prefer));
-    code = code.stripWhiteSpace();
+    code = code.trimmed();
     if (code.isEmpty()) code = i18n("default");
     return code;
 }

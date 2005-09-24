@@ -305,7 +305,7 @@ void FestivalIntProc::synth(
     int len = saidText.length();
     while (len > c_tooLong)
     {
-        len = saidText.findRev(", ", len - (c_tooLong * 2 / 3), true);
+        len = saidText.lastIndexOf( ", ", len - (c_tooLong * 2 / 3), Qt::CaseSensitive );
         if (len != -1)
         {
             QString c = saidText.mid(len+2, 1);
@@ -509,7 +509,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     if (m_waitingQueryVoices && m_outputQueue.isEmpty())
     {
         // Look for opening ( and closing ).
-        buf.simplifyWhiteSpace();
+        buf.simplified();
 		if (buf.left(3) == "nil") {
 			emitQueryVoicesFinished = true;
 			m_waitingQueryVoices = false;

@@ -53,8 +53,8 @@ void GStreamerPlayer::startPlay(const QString &file)
 {
     if(!file.isNull()) {
         stop();
-        // g_object_set(G_OBJECT(m_source), "location", file.absFilePath().local8Bit().data(), 0);
-        g_object_set(G_OBJECT(m_source), "location", file.local8Bit().data(), 0);
+        // g_object_set(G_OBJECT(m_source), "location", file.absFilePath().toLocal8Bit().data(), 0);
+        g_object_set(G_OBJECT(m_source), "location", file.toLocal8Bit().data(), 0);
     }
 
     gst_element_set_state(m_pipeline, GST_STATE_PLAYING);
@@ -225,7 +225,7 @@ void GStreamerPlayer::setupPipeline()
     m_volume   = gst_element_factory_make("volume", "volume");
 
     if(!m_sinkName.isNull())
-        m_sink = gst_element_factory_make(m_sinkName.utf8().data(), "sink");
+        m_sink = gst_element_factory_make(m_sinkName.toUtf8().data(), "sink");
     if (!m_sink)
     {
         // m_sink = gst_element_factory_make("alsasink", "sink");

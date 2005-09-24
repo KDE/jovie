@@ -136,8 +136,8 @@ QString SelectEvent::getEvent()
 // "/opt/kde3/share/apps/kwin/eventsrc"
 QString SelectEvent::makeRelative( const QString& fullPath )
 {
-    int slash = fullPath.findRev( '/' ) - 1;
-    slash = fullPath.findRev( '/', slash );
+    int slash = fullPath.lastIndexOf( '/' ) - 1;
+    slash = fullPath.lastIndexOf( '/', slash );
 
     if ( slash < 0 )
         return QString::null;

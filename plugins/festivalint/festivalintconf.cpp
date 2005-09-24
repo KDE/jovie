@@ -492,7 +492,7 @@ void FestivalIntConf::scanVoices()
                     voiceStruct voiceTemp;
                     voiceTemp.code = code;
                     voiceTemp.name = i18n("FestivalVoiceName",
-                        readXmlString(voiceNode, "name", "Unknown").utf8());
+                        readXmlString(voiceNode, "name", "Unknown").toUtf8());
                     voiceTemp.languageCode = readXmlString(voiceNode, "language", m_languageCode);
                     voiceTemp.codecName = readXmlString(voiceNode, "codec", "ISO 8859-1");
                     voiceTemp.gender = readXmlString(voiceNode, "gender", "neutral");
