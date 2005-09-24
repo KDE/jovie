@@ -172,7 +172,7 @@ void aKodePlayer::seekPosition(int position)
 
 QStringList aKodePlayer::getPluginList( const QByteArray& /*classname*/ )
 {
-    return QStringList::split("|", "auto|polyp|alsa|jack|oss");
+    return QString( "auto|polyp|alsa|jack|oss").split( "|");
 }
 
 void aKodePlayer::setSinkName(const QString& sinkName) { m_sinkName = sinkName; }

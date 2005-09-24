@@ -523,7 +523,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 					// Extract contents between parens.
 					buf = buf.mid(1, rightParen - 1);
 					// Space separated list.
-					voiceCodesList = QStringList::split(" ", buf, false);
+					voiceCodesList = buf.split( " ", QString::SkipEmptyParts);
 					emitQueryVoicesFinished = true;
 				}
 			}

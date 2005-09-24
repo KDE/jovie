@@ -354,7 +354,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             // QString d = s;
             // d.replace("\t", "\\t");
             // kdDebug() << "SbdThread::parseSsmlNode: parsedPlainText = [" << d << "]" << endl;
-            QStringList sentenceList = QStringList::split( '\t', s, false );
+            QStringList sentenceList = s.split( '\t', QString::SkipEmptyParts);
             int lastNdx = sentenceList.count() - 1;
             for ( int ndx=0; ndx < lastNdx; ++ndx )
             {
@@ -372,7 +372,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             break; }
         case QDomNode::CDATASectionNode: {          // = 4
             QString s = parsePlainText( n.toCDATASection().data(), re );
-            QStringList sentenceList = QStringList::split( '\t', s, false );
+            QStringList sentenceList = s.split( '\t', QString::SkipEmptyParts);
             int lastNdx = sentenceList.count() - 1;
             for ( int ndx=0; ndx < lastNdx; ++ndx )
             {

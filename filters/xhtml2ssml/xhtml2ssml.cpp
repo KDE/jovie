@@ -99,7 +99,7 @@ bool XHTMLToSSMLParser::readFileConfigEntry(const QString &line) {
     // break into QStringList
     // the second parameter to split is the string, with all space simplified and all space around the : removed, i.e
     //  "something     :      somethingelse"   ->  "something:somethingelse"
-    QStringList keyvalue = QStringList::split(":", line.simplifyWhiteSpace().replace(" :", ":").replace(": ", ":"));
+    QStringList keyvalue = QString( ":").replace(":").split( ":", line.simplifyWhiteSpace().replace(" :", ":"));
     if(keyvalue.count() != 2)
         return false;
     m_xhtml2ssml[keyvalue[0]] = keyvalue[1];

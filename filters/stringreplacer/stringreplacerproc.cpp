@@ -103,7 +103,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     for ( int ndx=0; ndx < languageList.count(); ++ndx )
     {
         QDomNode languageNode = languageList.item( ndx );
-        m_languageCodeList += QStringList::split(',', languageNode.toElement().text(), false);
+        m_languageCodeList += languageNode.toElement().text().split( ',', QString::SkipEmptyParts);
     }
 
     // AppId.  Apply this filter only if DCOP appId of application that queued
@@ -114,7 +114,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     for ( int ndx=0; ndx < appIdList.count(); ++ndx )
     {
         QDomNode appIdNode = appIdList.item( ndx );
-        m_appIdList += QStringList::split(',', appIdNode.toElement().text(), false);
+        m_appIdList += appIdNode.toElement().text().split( ',', QString::SkipEmptyParts);
     }
 
     // Word list.

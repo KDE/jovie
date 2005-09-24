@@ -42,7 +42,7 @@ PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, nam
     kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
     QString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
-    m_path = QStringList::split(":", systemPath);
+    m_path = systemPath.split( ":");
     m_player = 0;
 }
 
@@ -217,7 +217,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
         stream.setEncoding(QTextStream::UnicodeUTF8);
         while ( !stream.atEnd() ) {
             QString line = stream.readLine(); // line of text excluding '\n'
-            QStringList keyAndValue = QStringList::split("=", line);
+            QStringList keyAndValue = line.split( "=");
             if (keyAndValue.count() == 2)
             {
                 if (keyAndValue[0] == key)

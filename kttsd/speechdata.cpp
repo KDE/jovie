@@ -434,7 +434,7 @@ QStringList SpeechData::parseText(const QString &text, const QByteArray &appId /
     // Remove blank lines.
     temp.replace(QRegExp("\t\t+"),"\t");
     // Split into sentences.
-    QStringList tempList = QStringList::split("\t", temp, false);
+    QStringList tempList = temp.split( "\t", QString::SkipEmptyParts);
 
 //    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
 //        kdDebug() << "'" << *it << "'" << endl;
@@ -1215,7 +1215,7 @@ void SpeechData::doFiltering()
                         // Split the text into sentences and store in the job.
                         // The SBD plugin does all the real sentence parsing, inserting tabs at each
                         // sentence boundary.
-                        QStringList sentences = QStringList::split("\t", text, false);
+                        QStringList sentences = text.split( "\t", QString::SkipEmptyParts);
                         int sentenceCount = job->sentences.count();
                         job->sentences += sentences;
                         job->partSeqNums.append(sentenceCount + sentences.count());
