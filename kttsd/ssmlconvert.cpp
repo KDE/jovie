@@ -69,7 +69,7 @@ QString SSMLConvert::extractTalker(const QString &talkercode) {
     if(t.contains("flite"))
         return "flite";
     else
-        return t.left(t.find(" ")).lower();
+        return t.left(t.find(" ")).toLower();
 }
 
 /**

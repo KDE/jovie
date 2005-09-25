@@ -459,7 +459,7 @@ void FestivalIntConf::scanVoices()
         QString countryCode;
         QString charSet;
         KGlobal::locale()->splitLocale(desktopLanguageCode, twoAlpha, countryCode, charSet);
-        desktopLanguageCode = twoAlpha.lower();
+        desktopLanguageCode = twoAlpha.toLower();
 
         // Festival known voices list.
         QString voicesFilename = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/festivalint/voices";

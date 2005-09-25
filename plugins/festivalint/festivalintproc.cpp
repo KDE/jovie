@@ -309,10 +309,10 @@ void FestivalIntProc::synth(
         if (len != -1)
         {
             QString c = saidText.mid(len+2, 1);
-            if (c != c.upper())
+            if (c != c.toUpper())
             {
                 saidText.replace(len, 2, ". ");
-                saidText.replace(len+2, 1, c.upper());
+                saidText.replace(len+2, 1, c.toUpper());
                 kdDebug() << "FestivalIntProc::synth: Splitting long sentence at " << len << endl;
                 // kdDebug() << saidText << endl;
             }
