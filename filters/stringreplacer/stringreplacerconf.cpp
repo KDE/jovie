@@ -25,7 +25,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qstring.h>
-#include <q3hbox.h>
+
 #include <qlayout.h>
 #include <qdom.h>
 #include <qfile.h>
@@ -49,6 +49,7 @@
 #include <kparts/componentfactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kvbox.h>
 
 // KTTS includes.
 #include "filterconf.h"
@@ -420,7 +421,7 @@ QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
 void StringReplacerConf::slotLanguageBrowseButton_clicked()
 {
     // Create a  QHBox to host KListView.
-    Q3HBox* hBox = new Q3HBox(m_widget, "SelectLanguage_hbox");
+    KHBox* hBox = new KHBox(m_widget/*, "SelectLanguage_hbox"*/);
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));
@@ -566,7 +567,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         if (!item) return;
     }
     // Create a QHBox to host widget.
-    Q3HBox* hBox = new Q3HBox(m_widget, "AddOrEditSubstitution_hbox" );
+    KHBox* hBox = new KHBox(m_widget/*, "AddOrEditSubstitution_hbox"*/ );
     // Create widget.
     m_editWidget = new EditReplacementWidget( hBox, "AddOrEditSubstitution_widget" );
     // Set controls if editing existing.

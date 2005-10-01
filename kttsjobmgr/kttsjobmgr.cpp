@@ -16,8 +16,8 @@
  ***************************************************************************/
 
 // QT includes.
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 #include <qlabel.h>
 #include <qsplitter.h>
 #include <qclipboard.h>
@@ -39,6 +39,7 @@
 #include <kapplication.h>
 #include <kinputdialog.h>
 #include <ktextedit.h>
+#include <kvbox.h>
 
 // KTTS includes.
 #include "kspeech.h"
@@ -113,8 +114,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     KGlobal::locale()->insertCatalogue("kttsd");
 
     // Create a QVBox to host everything.
-    Q3VBox* vBox = new Q3VBox(parent);
-    vBox->setMargin(6);
+    KVBox* vBox = new KVBox(parent);
+    //vBox->setMargin(6);
 
     // Create a splitter to contain the Job List View and the current sentence.
     QSplitter* splitter = new QSplitter(vBox);
@@ -160,18 +161,18 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     // splitter->setResizeMode(m_jobListView, QSplitter::Stretch);
 
     // Create a VBox to hold buttons and current sentence.
-    Q3VBox* bottomBox = new Q3VBox(splitter);
+    KVBox* bottomBox = new KVBox(splitter);
 
     // Create a box to hold buttons.
-    m_buttonBox = new Q3VBox(bottomBox);
+    m_buttonBox = new KVBox(bottomBox);
     m_buttonBox->setSpacing(6);
 
     // Create 3 HBoxes to host buttons.
-    Q3HBox* hbox1 = new Q3HBox(m_buttonBox);
+    KHBox* hbox1 = new KHBox(m_buttonBox);
     hbox1->setSpacing(6);
-    Q3HBox* hbox2 = new Q3HBox(m_buttonBox);
+    KHBox* hbox2 = new KHBox(m_buttonBox);
     hbox2->setSpacing(6);
-    Q3HBox* hbox3 = new Q3HBox(m_buttonBox);
+    KHBox* hbox3 = new KHBox(m_buttonBox);
     hbox3->setSpacing(6);
 
     // Do not let button box stretch vertically.
@@ -282,7 +283,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     enableJobPartActions(false);
 
     // Create a VBox for the current sentence and sentence label.
-    Q3VBox* sentenceVBox = new Q3VBox(bottomBox);
+    KVBox* sentenceVBox = new KVBox(bottomBox);
 
     // Create a label for current sentence.
     QLabel* currentSentenceLabel = new QLabel(sentenceVBox);

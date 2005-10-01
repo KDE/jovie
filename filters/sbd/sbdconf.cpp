@@ -25,7 +25,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qstring.h>
-#include <q3hbox.h>
+
 #include <qlayout.h>
 #include <qdom.h>
 #include <qfile.h>
@@ -47,6 +47,7 @@
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kfiledialog.h>
+#include <kvbox.h>
 
 // KTTS includes.
 #include "filterconf.h"
@@ -235,7 +236,7 @@ void SbdConf::slotReButton_clicked()
 void SbdConf::slotLanguageBrowseButton_clicked()
 {
     // Create a  QHBox to host KListView.
-    Q3HBox* hBox = new Q3HBox(m_widget, "SelectLanguage_hbox");
+    KHBox* hBox = new KHBox(m_widget/*, "SelectLanguage_hbox"*/);
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));

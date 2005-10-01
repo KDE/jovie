@@ -24,6 +24,7 @@
 // KDE includes.
 #include <kparts/browserextension.h>
 #include <klibloader.h>
+#include <kvbox.h>
 
 // KTTS includes.
 #include "kspeech_stub.h"
@@ -34,7 +35,7 @@ class KInstance;
 class KttsJobMgrBrowserExtension;
 class KListView;
 class Q3ListViewItem;
-class Q3VBox;
+class KVBox;
 class KTextEdit;
 
 class KttsJobMgrFactory : public KLibFactory
@@ -274,7 +275,7 @@ private:
     /**
     * Box containing buttons.
     */
-    Q3VBox* m_buttonBox;
+    KVBox* m_buttonBox;
 
     /**
     * This flag is set to True whenever we want to select the next job that
