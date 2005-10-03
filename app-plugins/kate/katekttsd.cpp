@@ -51,7 +51,7 @@ KateKttsdPlugin::~KateKttsdPlugin()
 void KateKttsdPlugin::addView(KTextEditor::View *view)
 {
     KateKttsdPluginView *nview = new KateKttsdPluginView (view, "KTTSD Plugin");
-    KGlobal::locale()->insertCatalogue("kttsd");
+    KGlobal::locale()->insertCatalog("kttsd");
     m_views.append (nview);
 }
 

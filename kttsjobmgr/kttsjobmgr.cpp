@@ -111,7 +111,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     setInstance(KttsJobMgrFactory::instance());
 
     // All the ktts components use the same catalogue.
-    KGlobal::locale()->insertCatalogue("kttsd");
+    KGlobal::locale()->insertCatalog("kttsd");
 
     // Create a QVBox to host everything.
     KVBox* vBox = new KVBox(parent);

@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <ksystemtray.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaboutapplication.h>
 #include <dcopclient.h>
 #include <kdeversion.h>
@@ -49,7 +49,7 @@ static const KCmdLineOptions options[] =
 
 int main (int argc, char *argv[])
 {
-    KGlobal::locale()->setMainCatalogue("kttsd");
+    KGlobal::locale()->setMainCatalog("kttsd");
 
     KAboutData aboutdata("kttsmgr", I18N_NOOP("KTTSMgr"),
         "0.4.0", I18N_NOOP("Text-to-Speech Manager"),
