@@ -31,6 +31,7 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kgenericfactory.h>
+#include <ktoolinvocation.h>
 
 // KateKttsdPlugin includes.
 #include "katekttsd.h"
@@ -96,7 +97,7 @@ void KateKttsdPluginView::slotReadOut()
     if (!client->isApplicationRegistered("kttsd"))
     {
         QString error;
-        if (kapp->startServiceByDesktopName("kttsd", QStringList(), &error))
+        if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
             QMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
     }
     QByteArray  data;

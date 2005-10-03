@@ -34,6 +34,7 @@
 #include <kaboutapplication.h>
 #include <dcopclient.h>
 #include <kdeversion.h>
+#include <ktoolinvocation.h>
 
 // KTTSMgr includes.
 #include "kspeech.h"
@@ -302,7 +303,7 @@ void KttsMgrTray::aboutSelected()
 
 void KttsMgrTray::helpSelected()
 {
-    kapp->invokeHelp(QString::null,"kttsd");
+    KToolInvocation::invokeHelp(QString::null,"kttsd");
 }
 
 void KttsMgrTray::quitSelected()
