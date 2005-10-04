@@ -18,6 +18,8 @@
 #ifndef _NOTIFYACTION_H
 #define _NOTIFYACTION_H
 
+#include <kdemacros.h>
+
 class QString;
 
 class KDE_EXPORT NotifyAction
