@@ -25,5 +25,5 @@
 
 #include "artsplayer.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkttsd_artsplugin, KGenericFactory<ArtsPlayer>("kttsd") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_artsplugin, KGenericFactory<ArtsPlayer>("kttsd") )
 
