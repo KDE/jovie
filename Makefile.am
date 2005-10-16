@@ -9,7 +9,8 @@ SUBDIRS = \
         kttsjobmgr \
         kcmkttsmgr \
         kttsmgr \
-        app-plugins
+        app-plugins \
+	icons
 
 messages: rc.cpp
 	$(EXTRACTRC) */*.rc */*/*.rc >> rc.cpp
