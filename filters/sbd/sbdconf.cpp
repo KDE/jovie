@@ -238,7 +238,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     // Create a  QHBox to host KListView.
     KHBox* hBox = new KHBox(m_widget/*, "SelectLanguage_hbox"*/);
     // Create a KListView and fill with all known languages.
-    KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
+    KListView* langLView = new KListView(hBox);
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
     langLView->setSelectionMode(Q3ListView::Extended);
