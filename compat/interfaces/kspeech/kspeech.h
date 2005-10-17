@@ -220,7 +220,7 @@
      client->attach();
      if (!client->isApplicationRegistered("kttsd")) {
          QString error;
-         if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
+         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
              cout << "Starting KTTSD failed with message " << error << endl;
      }
    @endverbatim
@@ -279,6 +279,7 @@
  *
    @verbatim
      #include <kspeechsink.h>
+#include <ktoolinvocation.h>
      class MyPart:
          public KParts::ReadOnlyPart,
          public KSpeech_stub,

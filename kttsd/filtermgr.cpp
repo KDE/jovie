@@ -367,7 +367,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
             // specific plug in to get the plug in configuration object.
             int errorNo;
             KttsFilterProc *plugIn =
-                    KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterProc>(
+                    KLibLoader::createInstance<KttsFilterProc>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
             QStringList(), &errorNo);
             if(plugIn){

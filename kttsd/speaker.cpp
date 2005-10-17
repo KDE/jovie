@@ -1551,7 +1551,7 @@ Player* Speaker::createPlayerObject()
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
-                KParts::ComponentFactory::createInstanceFromLibrary<Player>(
+                KLibLoader::createInstance<Player>(
                     offers[0]->library().latin1(), this, offers[0]->library().latin1());
     }
     if (player == 0)

@@ -53,6 +53,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <ktoolinvocation.h>
 
 // KTTS includes.
 #include "talkercode.h"
@@ -1273,7 +1274,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
         if(factory){
             // If the factory is created successfully, instantiate the PlugInConf class for the
             // specific plug in to get the plug in configuration object.
-            PlugInConf *plugIn = KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
+            PlugInConf *plugIn = KLibLoader::createInstance<PlugInConf>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1());
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
@@ -1317,7 +1318,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
             // specific plug in to get the plug in configuration object.
             int errorNo;
             KttsFilterConf *plugIn =
-                KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterConf>(
+                KLibLoader::createInstance<KttsFilterConf>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
                     QStringList(), &errorNo);
             if(plugIn){
@@ -1884,7 +1885,7 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
         {
             // kdDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting KTTSD" << endl;
             QString error;
-            if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
+            if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
             {
                 kdDebug() << "Starting KTTSD failed with message " << error << endl;
                 enableKttsdCheckBox->setChecked(false);

@@ -289,7 +289,7 @@ void KttsMgrTray::speakClipboardSelected()
     if (!isKttsdRunning())
     {
         QString error;
-        if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
+        if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
             kdError() << "Starting KTTSD failed with message " << error << endl;
     }
     speakClipboard();

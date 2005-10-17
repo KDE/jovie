@@ -119,7 +119,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                 factory = KLibLoader::self()->factory(offers[0]->library().latin1());
                 if(factory){
                     PlugInProc *speech = 
-                            KParts::ComponentFactory::createInstanceFromLibrary<PlugInProc>(
+                            KLibLoader::createInstance<PlugInProc>(
                             offers[0]->library().latin1(), this, offers[0]->library().latin1());
                     if(!speech){
                         kdDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
@@ -335,7 +335,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
                 // If the factory is created successfully, instantiate the PlugInConf class for the
                 // specific plug in to get the plug in configuration object.
                 PlugInConf* loadedTalkerPlugIn =
-                    KParts::ComponentFactory::createInstanceFromLibrary<PlugInConf>(
+                    KLibLoader::createInstance<PlugInConf>(
                         offers[0]->library().latin1(), NULL, offers[0]->library().latin1());
                 if (loadedTalkerPlugIn)
                 {

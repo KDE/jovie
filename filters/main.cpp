@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
                 // specific plug in to get the plug in configuration object.
                 int errorNo;
                 KttsFilterProc *plugIn =
-                    KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterProc>(
+                    KLibLoader::createInstance<KttsFilterProc>(
                     offers[ndx]->library().latin1(), NULL, offers[ndx]->library().latin1(),
                         QStringList(), &errorNo);
                     if(plugIn)
