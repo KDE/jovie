@@ -29,6 +29,7 @@ Name[tg]=Муайянсозии ҳудуди ҷумлаҳо
 Name[tr]=Cümle Sınırlama Algılayıcı
 Name[uk]=Виявлення меж речень
 Name[xx]=xxSentence Boundary Detectorxx
+Name[zh_CN]=语句分界检测器
 Comment=Sentence Boundary Detection Filter Plugin for KTTS
 Comment[bg]=Приставка филтър за определяне границите на изречението
 Comment[ca]=Connector del filtre detector de límit de frase pel KTTS
