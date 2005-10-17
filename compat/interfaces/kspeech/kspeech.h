@@ -25,6 +25,7 @@
 #include <dcopobject.h>
 #include <qstringlist.h>
 
+
 /**
  * @interface KSpeech
  *
@@ -279,7 +280,6 @@
  *
    @verbatim
      #include <kspeechsink.h>
-#include <ktoolinvocation.h>
      class MyPart:
          public KParts::ReadOnlyPart,
          public KSpeech_stub,
