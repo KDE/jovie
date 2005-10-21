@@ -142,6 +142,6 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  *
  * @param re            The sentence delimiter regular expression.
  */
-/*virtual*/ void KttsFilterProc::setSbRegExp(const QString& /*re*/) { };
+/*virtual*/ void KttsFilterProc::setSbRegExp(const QString& /*re*/) { }
 
 #include "filterproc.moc"

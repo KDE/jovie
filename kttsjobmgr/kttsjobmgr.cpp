@@ -54,7 +54,7 @@ extern "C"
     {
         return new KttsJobMgrFactory;
     }
-};
+}
 
 /**
 * We need one static instance of the factory for our C 'main'
@@ -902,7 +902,7 @@ void KttsJobMgrPart::enableJobPartActions(bool enable)
 /**
 * This signal is emitted when KTTSD starts or restarts after a call to reinit.
 */
-ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
+ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); }
 
 /**
 * This signal is emitted when the speech engine/plugin encounters a marker in the text.

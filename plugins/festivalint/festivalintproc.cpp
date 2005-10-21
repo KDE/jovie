@@ -123,7 +123,7 @@ void FestivalIntProc::synthText(const QString& text, const QString& suggestedFil
 {
     synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch, m_volume,
         m_languageCode, m_codec);
-};
+}
 
 /**
 * Sends command to Festival to query for a list of supported voice codes.

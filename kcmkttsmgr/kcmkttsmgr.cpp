@@ -89,7 +89,7 @@ const bool keepAudioCheckBoxValue = false;
 
 // Make this a plug in.
 typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kcmkttsd") );
+K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kcmkttsd") )
 
 /**
 * Constructor.

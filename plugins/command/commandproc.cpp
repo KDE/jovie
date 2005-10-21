@@ -107,7 +107,7 @@ void CommandProc::synthText(const QString& text, const QString& suggestedFilenam
 {
     synth(text, suggestedFilename,
         m_ttsCommand, m_stdin, m_codec, m_language);
-};
+}
 
 /**
 * Say or Synthesize text.
