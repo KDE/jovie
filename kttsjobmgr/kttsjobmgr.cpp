@@ -122,7 +122,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     splitter->setOrientation(Qt::Vertical);
 
     // Create Job List View widget.
-    m_jobListView = new KListView(splitter, "joblistview");
+    m_jobListView = new KListView( splitter );
+    m_jobListView->setObjectName( "joblistview" );
     m_jobListView->setSelectionModeExt(KListView::Single);
     m_jobListView->addColumn(i18n("Job Num"));
     m_jobListView->addColumn(i18n("Owner"));

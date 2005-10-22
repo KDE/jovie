@@ -1373,7 +1373,8 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         QHBoxLayout* hBoxLayout = new QHBoxLayout;
         hBoxLayout->setMargin(0);
         // Create a KListView and fill with all known languages.
-        KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
+        KListView* langLView = new KListView( hBox );
+        langLView->setObjectName( "SelectLanguage_lview" );
         langLView->addColumn(i18n("Language"));
         langLView->addColumn(i18n("Code"));
         QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
