@@ -65,7 +65,7 @@ void KateKttsdPlugin::removeView(KTextEditor::View *view)
         m_views.remove (nview);
         delete nview;
     }
-    KGlobal::locale()->removeCatalogue("kttsd");
+    KGlobal::locale()->removeCatalog("kttsd");
 }
 
 

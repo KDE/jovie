@@ -373,7 +373,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
 KttsJobMgrPart::~KttsJobMgrPart()
 {
-    KGlobal::locale()->removeCatalogue("kttsd");
+    KGlobal::locale()->removeCatalog("kttsd");
     closeURL();
 }
 
