@@ -102,8 +102,9 @@ KAboutData *KttsJobMgrFactory::aboutData()
 KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kttsjobmgr_kspeechsink"),
-    KParts::ReadOnlyPart(parent, name)
+    KParts::ReadOnlyPart(parent)
 {
+	setObjectName(name);
     // Initialize some variables.
     m_selectOnTextSet = false;
     m_buttonBox = 0;
@@ -1019,7 +1020,7 @@ ASYNC KttsJobMgrPart::textRemoved(const QByteArray&, const uint jobNum)
 }
 
 KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
-    : KParts::BrowserExtension(parent, "KttsJobMgrBrowserExtension")
+    : KParts::BrowserExtension(parent)
 {
 }
 
