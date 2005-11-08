@@ -270,7 +270,7 @@ QString SSMLConvert::getOutput()
 {
     /// Read back the data that was written to /tmp/fileName.output.
     QFile readfile(m_outFilename);
-    if(!readfile.open(IO_ReadOnly)) {
+    if(!readfile.open(QIODevice::ReadOnly)) {
         /// uhh yeah... Issues writing to the SSML file.
         kdDebug() << "SSMLConvert::slotProcessExited: Could not read file " << m_outFilename << endl;
         return QString::null;

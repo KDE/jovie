@@ -104,14 +104,14 @@ void KateKttsdPluginView::slotReadOut()
     QByteArray  data2;
     DCOPCString    replyType;
     QByteArray  replyData;
-    QDataStream arg( &data,IO_WriteOnly);
+    QDataStream arg( &data,QIODevice::WriteOnly);
     arg.setVersion(QDataStream::Qt_3_1);
     arg << text << "";
     if ( !client->call("kttsd", "KSpeech", "setText(QString,QString)",
                        data, replyType, replyData, true) )
        QMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
                                  i18n( "The DCOP call setText failed." ));
-    QDataStream arg2( &data2,IO_WriteOnly);
+    QDataStream arg2( &data2,QIODevice::WriteOnly);
     arg2.setVersion(QDataStream::Qt_3_1);
 
     arg2 << 0;

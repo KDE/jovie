@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
                         KConfig* config = new KConfig("kttsdrc");
                         config->setGroup( "General" );
                         plugIn->init( config, groupName );
-                        QTextStream inp ( stdin,  IO_ReadOnly );
+                        QTextStream inp ( stdin,  QIODevice::ReadOnly );
                         QString text;
                         text = inp.read();
                         TalkerCode* talkerCode = new TalkerCode( talker );

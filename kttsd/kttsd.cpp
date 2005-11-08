@@ -416,7 +416,7 @@ uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/,
     if (!m_speaker) return 0;
     QFile file(filename);
     uint jobNum = 0;
-    if ( file.open(IO_ReadOnly) )
+    if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream(&file);
         QString enc = fixNullString(encoding);
@@ -512,7 +512,7 @@ int KTTSD::getTextJobState(const uint jobNum /*=0*/)
 * The following sample code will decode the stream:
     @verbatim
     QByteArray jobInfo = getTextJobInfo(jobNum);
-    QDataStream stream(jobInfo, IO_ReadOnly);
+    QDataStream stream(jobInfo, QIODevice::ReadOnly);
     int state;
     DCOPCString appId;
     QString talker;

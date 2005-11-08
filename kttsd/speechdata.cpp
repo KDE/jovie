@@ -129,7 +129,7 @@ void SpeechData::loadNotifyEventsFromFile( const QString& filename, bool clear)
 {
     // Open existing event list.
     QFile file( filename );
-    if ( !file.open( IO_ReadOnly ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
     {
         kdDebug() << "SpeechData::loadNotifyEventsFromFile: Unable to open file " << filename << endl;
     }
@@ -944,7 +944,7 @@ void SpeechData::setTextJobState(const uint jobNum, const KSpeech::kttsdJobState
 * The following sample code will decode the stream:
           @verbatim
             QByteArray jobInfo = getTextJobInfo(jobNum);
-            QDataStream stream(jobInfo, IO_ReadOnly);
+            QDataStream stream(jobInfo, QIODevice::ReadOnly);
             int state;
             QByteArray appId;
             QString talker;
@@ -968,7 +968,7 @@ QByteArray SpeechData::getTextJobInfo(const uint jobNum)
     if (job)
     {
         waitJobFiltering(job);
-        QDataStream stream(&temp, IO_WriteOnly);
+        QDataStream stream(&temp, QIODevice::WriteOnly);
         stream << job->state;
         stream << job->appId;
         stream << job->talker;

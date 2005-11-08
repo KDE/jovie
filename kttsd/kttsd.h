@@ -307,7 +307,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * The following sample code will decode the stream:
                 @verbatim
                     QByteArray jobInfo = getTextJobInfo(jobNum);
-                    QDataStream stream(jobInfo, IO_ReadOnly);
+                    QDataStream stream(jobInfo, QIODevice::ReadOnly);
                     int state;
                     DCOPCString appId;
                     QString talker;
