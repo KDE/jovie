@@ -28,7 +28,6 @@
 // Qt includes.
 #include <qptrqueue.h>
 #include <qptrlist.h>
-#include <qintdict.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
@@ -67,6 +66,7 @@ struct mlJob {
     int seq;                     /* Current sentence being spoken. */
     QValueList<int> partSeqNums; /* List containing last sequence number for each part of a job. */
     QStringList sentences;       /* List of sentences in the job. */
+    int partCount;               /* Number of parts in the job. */
 };
 
 /**
@@ -76,6 +76,7 @@ struct PooledFilterMgr {
     FilterMgr* filterMgr;       /* The FilterMgr object. */
     bool busy;                  /* True if the FilterMgr is busy. */
     mlJob* job;                 /* The job the FilterMgr is filtering. */
+    int partNum;                /* The part number of the job that is filtering. */
     TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 };
 
@@ -628,7 +629,7 @@ class SpeechData : public QObject {
         /**
         * Pool of FilterMgrs.
         */
-        QIntDict<PooledFilterMgr> m_pooledFilterMgrs;
+        QPtrList<PooledFilterMgr> m_pooledFilterMgrs;
 
         /**
         * Job counter.  Each new job increments this counter.
