@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=FreeTTS
-Name[xx]=xxFreeTTSxx
 Comment=FreeTTS speech synthesizer
 Comment[bg]=Синтезатор на глас FreeTTS
 Comment[ca]=Sintetitzador de veu FreeTTS
@@ -33,7 +32,6 @@ Comment[ta]=FreeTTS பேச்சு கூட்டிணைப்பான�
 Comment[tg]=Таҳлилгари овози FreeTTS
 Comment[tr]=FreeTTS konuşma bireştirici
 Comment[uk]=Синтезатор мовлення FreeTTS
-Comment[xx]=xxFreeTTS speech synthesizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_freettsplugin

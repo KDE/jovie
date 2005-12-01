@@ -8,7 +8,6 @@ X-DCOP-ServiceType=Unique
 X-DCOP-ServiceName=kttsd
 X-KDE-StartupNotify=false
 Name=KTTSD
-Name[xx]=xxKTTSDxx
 Comment=KDE Text To Speech Daemon
 Comment[bg]=Демон за управление на модула за синтез на глас
 Comment[ca]=Dimoni de text a veu de KDE
@@ -40,5 +39,4 @@ Comment[ta]=கேடியி உரையில் இருந்து ப�
 Comment[tg]=Демон таҳлили овоз
 Comment[tr]=KDE Metinden Konuşmaya Artalan Süreci
 Comment[uk]=Даемон KDE синтезу мовлення з тексту
-Comment[xx]=xxKDE Text To Speech Daemonxx
 

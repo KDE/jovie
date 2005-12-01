@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Hadifix
-Name[xx]=xxHadifixxx
 Comment=German hadifix text-to-speech system
 Comment[bg]=Синтезатор на глас за немски език Hadifix
 Comment[ca]=Sistema de text a veu alemany hadifix
@@ -34,7 +33,6 @@ Comment[ta]=ஜெர்மன் ஹாடிஃபிக்ஸ் உரைய
 Comment[tg]=Системаи олмонии таҳлили овози hadifix
 Comment[tr]=Alman hadifix metinden konuşmaya sistemi
 Comment[uk]=Німецька система синтезу мовлення hadifix
-Comment[xx]=xxGerman hadifix text-to-speech systemxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_hadifixplugin
