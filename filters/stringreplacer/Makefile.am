@@ -23,6 +23,7 @@ stringreplacerdatadir = $(kde_datadir)/kttsd/stringreplacer/
 stringreplacerdata_DATA = \
 	abbreviations.xml \
 	chat.xml \
+	chat-de.xml \
 	emoticons.xml \
 	polish_festival_fixes.xml \
 	polish_festival_unspeakables.xml \
