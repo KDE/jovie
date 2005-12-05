@@ -172,7 +172,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     int id;
     id = contextMenu()->idAt(0);
-    if (id != -1) contextMenu()->changeTitle(id, icon, "KTTSMgr");
+    if (id != -1) contextMenu()->addTitle(icon, "KTTSMgr");
 
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
         i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
