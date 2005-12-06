@@ -56,20 +56,20 @@ $LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libkttsjobmgr
 # on or about 19 Oct 2004:
 #  In $KDEDIR/share/services/:
 #    festival.desktop         -> kttsd_festivalplugin.desktop
-#    festivalint.desktop      -> kttsd_festivalintplugin.desktop
-#    command.desktop          -> kttsd_commandplugin.desktop
-#    hadifix.desktop          -> kttsd_hadifixplugin.desktop
-#    flite.desktop            -> kttsd_fliteplugin.desktop
-#    epos-kttsdplugin.desktop -> kttsd_eposplugin.desktop
-#    freetts.desktop          -> kttsd_freettsplugin.desktop
-#  In $KDEDIR/lib/kde3/:
+#Â  Â  festivalint.desktop Â  Â  Â -> kttsd_festivalintplugin.desktop
+#Â  Â  command.desktop Â  Â  Â  Â  Â -> kttsd_commandplugin.desktop
+#Â  Â  hadifix.desktop Â  Â  Â  Â  Â -> kttsd_hadifixplugin.desktop
+#Â  Â  flite.desktop Â  Â  Â  Â  Â  Â -> kttsd_fliteplugin.desktop
+#Â  Â  epos-kttsdplugin.desktop -> kttsd_eposplugin.desktop
+#Â  Â  freetts.desktop Â  Â  Â  Â  Â -> kttsd_freettsplugin.desktop
+#Â  In $KDEDIR/lib/kde3/:
 #    libfestivalplugin        -> libkttsd_festivalplugin
-#    libfestivalintplugin     -> libkttsd_festivalintplugin
-#    libcommandplugin         -> libkttsd_commandplugin
-#    libhadifixplugin         -> libkttsd_hadifixplugin
-#    libfliteplugin           -> libkttsd_fliteplugin
-#    libeposkttsdplugin       -> libkttsd_eposplugin
-#    libfreettsplugin         -> libkttsd_freettsplugin
+#Â  Â  libfestivalintplugin Â  Â  -> libkttsd_festivalintplugin
+#Â  Â  libcommandplugin Â  Â  Â  Â  -> libkttsd_commandplugin
+#Â  Â  libhadifixplugin Â  Â  Â  Â  -> libkttsd_hadifixplugin
+#Â  Â  libfliteplugin Â  Â  Â  Â  Â  -> libkttsd_fliteplugin
+#Â  Â  libeposkttsdplugin    Â  Â -> libkttsd_eposplugin
+#Â  Â  libfreettsplugin Â  Â  Â  Â  -> libkttsd_freettsplugin
 
 rm -f $PREFIX/share/services/festival.desktop
 rm -f $PREFIX/share/services/festivalint.desktop

@@ -29,7 +29,7 @@ khmtl-plugin
   A plugin for Konqueror that permits you to speak all or any portion of an
 HTML web page.  (Note: this component is in kdebase/konqueror/kttsplugin)
 
-Original Author: JosÈ Pablo Ezequiel "Pupeno" Fern·ndez <pupeno@kde.org>
+Original Author: Jos√© Pablo Ezequiel "Pupeno" Fern√°ndez <pupeno@kde.org>
 Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 Contributors:
   Olaf Schmidt <ojschmidt@kde.org>
