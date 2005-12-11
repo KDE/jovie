@@ -27,7 +27,7 @@
 
 #include <qmime.h>
 #include <QList>
-
+#include <Q3TextEdit>
 // KDE includes.
 #include <kinstance.h>
 #include <klocale.h>
@@ -295,10 +295,11 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     // Create a box to contain the current sentence.
     m_currentSentence = new KTextEdit(sentenceVBox);
     m_currentSentence->setReadOnly(true);
-    m_currentSentence->setWordWrap(Q3TextEdit::WidgetWidth);
-    m_currentSentence->setWrapPolicy(Q3TextEdit::AtWordOrDocumentBoundary);
-    m_currentSentence->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    m_currentSentence->setVScrollBarMode(Q3ScrollView::Auto);
+#warning "kde4: port them"
+    //m_currentSentence->setWordWrap(Q3TextEdit::WidgetWidth);
+    //m_currentSentence->setWrapPolicy(Q3TextEdit::AtWordOrDocumentBoundary);
+    //m_currentSentence->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    //m_currentSentence->setVScrollBarMode(Q3ScrollView::Auto);
     wt = i18n(
             "<p>The text of the sentence currently speaking.</p>");
     m_currentSentence->setWhatsThis( wt);
