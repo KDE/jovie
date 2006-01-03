@@ -100,7 +100,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
         {
             config->setGroup( eventName );
             QString eventDesc = config->readEntry( QString::fromLatin1( "Comment" ),
-                config->readEntry( QString::fromLatin1( "Name" )));
+                config->readEntry( QString::fromLatin1( "Name" ),QString()));
             if ( !item )
                 item = new KListViewItem( eventsListView, eventDesc, eventName );
             else

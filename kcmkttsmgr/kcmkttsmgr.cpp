@@ -2796,7 +2796,7 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 {
     QTreeWidget* lv = notifyListView;
     lv->clear();
-    TalkerCode talkerCode( QString() );
+    TalkerCode talkerCode = QString();
     QTreeWidgetItem* item = addNotifyItem(
         QString("default"),
         NotifyPresent::presentName(NotifyPresent::Passive),
