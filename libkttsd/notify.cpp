@@ -169,7 +169,7 @@ static void notifypresent_init()
     {
         config->setGroup( event );
         eventName = config->readEntry( QString::fromLatin1( "Comment" ),
-            config->readEntry( QString::fromLatin1( "Name" )));
+            config->readEntry( QString::fromLatin1( "Name" ),QString()));
     }
     delete config;
     return eventName;
