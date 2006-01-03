@@ -206,7 +206,7 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* config)
             TalkerCode tc = TalkerCode(talkerCode, true);
             kdDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode << endl;
             tc.setId(talkerID);
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString::null);
+            QString desktopEntryName = config->readEntry("DesktopEntryName", QString());
             tc.setDesktopEntryName(desktopEntryName);
             appendRow(tc);
         }

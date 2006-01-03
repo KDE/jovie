@@ -303,7 +303,7 @@ void KttsMgrTray::aboutSelected()
 
 void KttsMgrTray::helpSelected()
 {
-    KToolInvocation::invokeHelp(QString::null,"kttsd");
+    KToolInvocation::invokeHelp(QString(),"kttsd");
 }
 
 void KttsMgrTray::quitSelected()

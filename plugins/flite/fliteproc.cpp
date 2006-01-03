@@ -73,7 +73,7 @@ bool FliteProc::init(KConfig* config, const QString& configGroup){
 */
 void FliteProc::sayText(const QString &text)
 {
-    synth(text, QString::null, m_fliteExePath);
+    synth(text, QString(), m_fliteExePath);
 }
 
 /**
@@ -256,7 +256,7 @@ void FliteProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename.clear();
     }
 }
 

@@ -79,7 +79,7 @@ void PlugInProc::synthText(const QString& /*text*/, const QString& /*suggestedFi
 *
 * The plugin must not re-use the filename.
 */
-QString PlugInProc::getFilename() { return QString::null; };
+QString PlugInProc::getFilename() { return QString(); };
 
 /**
 * Stop current operation (saying or synthesizing text).

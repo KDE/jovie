@@ -40,7 +40,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Constructor.
          */
-        TalkerCode(const QString &code=QString::null, bool normal=false);
+        TalkerCode(const QString &code=QString(), bool normal=false);
         /**
          * Copy Constructor.
          */
@@ -174,7 +174,7 @@ class KDE_EXPORT TalkerCode
         * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
         * @param name                   The translated plugin name.  From Name= line in .desktop file.
         * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        *                               QString::null if not found.
+        *                               QString() if not found.
         */
         static QString TalkerNameToDesktopEntryName(const QString& name);
 

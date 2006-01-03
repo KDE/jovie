@@ -146,8 +146,8 @@ void SpeechData::loadNotifyEventsFromFile( const QString& filename, bool clear)
     {
         notifyDefaultPresent = NotifyPresent::Passive;
         notifyDefaultOptions.action = NotifyAction::SpeakMsg;
-        notifyDefaultOptions.talker = QString::null;
-        notifyDefaultOptions.customMsg = QString::null;
+        notifyDefaultOptions.talker.clear();
+        notifyDefaultOptions.customMsg.clear();
         notifyAppMap.clear();
     }
 
@@ -185,7 +185,7 @@ void SpeechData::loadNotifyEventsFromFile( const QString& filename, bool clear)
             notifyEventMap[ event ] = notifyOptions;
             notifyAppMap[ eventSrc ] = notifyEventMap;
         } else {
-            notifyOptions.eventName = QString::null;
+            notifyOptions.eventName.clear();
             notifyDefaultPresent = NotifyPresent::present( event );
             notifyDefaultOptions = notifyOptions;
         }

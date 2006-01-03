@@ -38,7 +38,7 @@ class HadifixProcPrivate {
          hadifixProc = 0;
          waitingStop = false;
          state = psIdle;
-         synthFilename = QString::null;
+         synthFilename.clear();
          gender = false;
          volume = 100;
          time = 100;
@@ -52,9 +52,9 @@ class HadifixProcPrivate {
 
       void load(KConfig *config, const QString &configGroup) {
          config->setGroup(configGroup);
-         hadifix  = config->readEntry ("hadifixExec",   QString::null);
-         mbrola   = config->readEntry ("mbrolaExec",    QString::null);
-         voice    = config->readEntry ("voice",         QString::null);
+         hadifix  = config->readEntry ("hadifixExec",   QString());
+         mbrola   = config->readEntry ("mbrolaExec",    QString());
+         voice    = config->readEntry ("voice",         QString());
          gender   = config->readBoolEntry("gender",     false);
          volume   = config->readNumEntry ("volume",     100);
          time     = config->readNumEntry ("time",       100);
@@ -288,7 +288,7 @@ void HadifixProc::ackFinished()
     if (d->state == psFinished)
     {
         d->state = psIdle;
-        d->synthFilename = QString::null;
+        d->synthFilename.clear();
     }
 }
 
@@ -367,8 +367,8 @@ HadifixProc::VoiceGender HadifixProc::determineGender(QString mbrola, QString vo
    connect(&proc, SIGNAL(receivedStderr(KProcess *, char *, int)),
      &speech, SLOT(receivedStderr(KProcess *, char *, int)));
 
-   speech.stdOut = QString::null;
-   speech.stdErr = QString::null;
+   speech.stdOut.clear();
+   speech.stdErr.clear();
    proc.start (KProcess::Block, KProcess::AllOutput);
 
    VoiceGender result;

@@ -780,7 +780,7 @@ void KCMKttsMgr::load()
             QString filterID = *it;
             // kdDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
             m_config->setGroup("Filter_" + filterID);
-            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString::null);
+            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString());
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
@@ -1408,7 +1408,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         dlg->setHelp("select-plugin", "kttsd");
         dlg->setInitialSize(QSize(200, 500), false);
         dlgResult = dlg->exec();
-        languageCode = QString::null;
+        languageCode.clear();
         if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
         delete dlg;
         // TODO: Also delete KListView and hBox?
@@ -2349,18 +2349,18 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
  * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
  * @param name                   The translated plugin name.  From Name= line in .desktop file.
  * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
- *                               QString::null if not found.
+ *                               QString() if not found.
  */
 QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 {
-    if (name.isEmpty()) return QString::null;
+    if (name.isEmpty()) return QString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
         QString("Name == '%1'").arg(name));
 
     if (offers.count() == 1)
         return offers[0]->desktopEntryName();
     else
-        return QString::null;
+        return QString();
 }
 
 /**
@@ -2370,14 +2370,14 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
  */
 QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName)
 {
-    if (desktopEntryName.isEmpty()) return QString::null;
+    if (desktopEntryName.isEmpty()) return QString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
         QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();
     else
-        return QString::null;
+        return QString();
 }
 
 /**
@@ -2428,7 +2428,7 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
         }
         addNotifyItem(eventSrc, event, NotifyAction::action( actionName ), message, talkerCode);
     }
-    return QString::null;
+    return QString();
 }
 
 /**
@@ -2497,7 +2497,7 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
     ts << doc.toString();
     file.close();
 
-    return QString::null;
+    return QString();
 }
 
 void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
@@ -2796,12 +2796,12 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 {
     QTreeWidget* lv = notifyListView;
     lv->clear();
-    TalkerCode talkerCode( QString::null );
+    TalkerCode talkerCode( QString() );
     QTreeWidgetItem* item = addNotifyItem(
         QString("default"),
         NotifyPresent::presentName(NotifyPresent::Passive),
         NotifyAction::SpeakEventName,
-        QString::null,
+        QString(),
         talkerCode );
     lv->scrollToItem( item );
     lv->setCurrentItem( item );

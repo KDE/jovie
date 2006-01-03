@@ -72,25 +72,25 @@ SelectTalkerDlg::SelectTalkerDlg(
 
     // Fill combo boxes.
     KComboBox* cb = m_widget->genderComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( QString() );
     cb->insertItem( TalkerCode::translatedGender("male") );
     cb->insertItem( TalkerCode::translatedGender("female") );
     cb->insertItem( TalkerCode::translatedGender("neutral") );
 
     cb = m_widget->volumeComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( QString() );
     cb->insertItem( TalkerCode::translatedVolume("medium") );
     cb->insertItem( TalkerCode::translatedVolume("loud") );
     cb->insertItem( TalkerCode::translatedVolume("soft") );
 
     cb = m_widget->rateComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( QString() );
     cb->insertItem( TalkerCode::translatedRate("medium") );
     cb->insertItem( TalkerCode::translatedRate("fast") );
     cb->insertItem( TalkerCode::translatedRate("slow") );
 
     cb = m_widget->synthComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( QString() );
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
     for(int i=0; i < offers.count() ; ++i)
         cb->insertItem(offers[i]->name());
@@ -176,7 +176,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     QString locale;
     QString language;
     // Blank line so user can select no language.
-    // Note: Don't use QString::null, which gets displayed at bottom of list, rather than top.
+    // Note: Don't use QString(), which gets displayed at bottom of list, rather than top.
     Q3ListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
@@ -208,7 +208,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     // TODO: This isn't working.  Furthermore, item appears selected but is not.
     langLView->ensureItemVisible(langLView->selectedItem());
     int dlgResult = dlg->exec();
-    language = QString::null;
+    language.clear();
     if (dlgResult == QDialog::Accepted)
     {
         if (langLView->selectedItem())
@@ -273,7 +273,7 @@ void SelectTalkerDlg::applyTalkerCodeToControls()
 void SelectTalkerDlg::applyControlsToTalkerCode()
 {
     if ( m_widget->useDefaultRadioButton->isChecked() )
-        m_talkerCode = TalkerCode(QString::null, false);
+        m_talkerCode = TalkerCode(QString(), false);
     else if ( m_widget->useClosestMatchRadioButton->isChecked() )
     {
         // Language already stored in talker code.

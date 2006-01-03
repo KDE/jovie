@@ -57,7 +57,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
             QWidget* parent = 0,
             const char* name = "selecttalkerdialog",
             const QString& caption = i18n("Select Talker"),
-            const QString& talkerCode = QString::null,
+            const QString& talkerCode = QString(),
             bool runningTalkers = false);
 
         /**
@@ -66,7 +66,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
         ~SelectTalkerDlg();
 
         /**
-         * Returns the Talker Code user chose.  QString::null if default Talker chosen.
+         * Returns the Talker Code user chose.  QString() if default Talker chosen.
          * Note that if user did not choose a specific Talker, this will be a partial Talker Code.
          */
         QString getSelectedTalkerCode();

@@ -76,9 +76,9 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
 /** 
  * Check if an XML document has a certain DOCTYPE.
  * @param xmldoc             The document to check for the doctype.
- * @param name               The doctype name to check for. Pass QString::null to not check the name.
- * @param publicId           The public ID to check for. Pass QString::null to not check the ID.
- * @param systemId           The system ID to check for. Pass QString::null to not check the ID.
+ * @param name               The doctype name to check for. Pass QString() to not check the name.
+ * @param publicId           The public ID to check for. Pass QString() to not check the ID.
+ * @param systemId           The system ID to check for. Pass QString() to not check the ID.
  * @returns                  True if the parameters match the doctype, false otherwise.
 */
 bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const QString &publicId, const QString &systemId*/) {

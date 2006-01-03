@@ -207,7 +207,7 @@ void GStreamerPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkNa
 void GStreamerPlayer::readConfig()
 {
     KConfigGroup config(KGlobal::config(), "GStreamerPlayer");
-    m_sinkName = config.readEntry("SinkName", QString::null);
+    m_sinkName = config.readEntry("SinkName", QString());
 }
 
 void GStreamerPlayer::setupPipeline()

@@ -113,7 +113,7 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     QDomElement root = ssml.documentElement();
     if(root.tagName() != "speak") {
         // Not SSML.
-        return QString::null;
+        return QString();
     }
 
     /** 
@@ -273,7 +273,7 @@ QString SSMLConvert::getOutput()
     if(!readfile.open(QIODevice::ReadOnly)) {
         /// uhh yeah... Issues writing to the SSML file.
         kdDebug() << "SSMLConvert::slotProcessExited: Could not read file " << m_outFilename << endl;
-        return QString::null;
+        return QString();
     }
     QTextStream rstream(&readfile);
     QString convertedData = rstream.read();
@@ -283,9 +283,9 @@ QString SSMLConvert::getOutput()
 
     // Clean up.
     QFile::remove(m_inFilename);
-    m_inFilename = QString::null;
+    m_inFilename.clear();
     QFile::remove(m_outFilename);
-    m_outFilename = QString::null;
+    m_outFilename.clear();
 
     // Ready for another transform.
     m_state = tsIdle;

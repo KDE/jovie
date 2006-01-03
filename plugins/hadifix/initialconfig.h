@@ -70,7 +70,7 @@ QString findExecutable (const QStringList &names, const QString &possiblePath) {
    }
 
    // Both tries failed, so the user has to locate the executable.
-   return QString::null;
+   return QString();
 }
 
 /** Tries to find the voice files by looking onto the hard disk. */
@@ -113,7 +113,7 @@ QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
    QStringList result;
    QStringList::iterator it;
    for (it = list.begin(); it != list.end(); ++it) {
-      QDir baseDir (*it, QString::null,
+      QDir baseDir (*it, QString(),
                     QDir::Name|QDir::IgnoreCase, QDir::Files);
       QStringList files = baseDir.entryList();
 
@@ -147,7 +147,7 @@ QStringList findSubdirs (const QStringList &baseDirs) {
    QStringList::ConstIterator itEnd = baseDirs.constEnd();
    for (it = baseDirs.constBegin(); it != itEnd; ++it) {
       // a) get a list of directory names
-      QDir baseDir (*it, QString::null,
+      QDir baseDir (*it, QString(),
                     QDir::Name|QDir::IgnoreCase, QDir::Dirs);
       QStringList list = baseDir.entryList();
 

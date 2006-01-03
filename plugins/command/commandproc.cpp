@@ -89,7 +89,7 @@ bool CommandProc::init(KConfig *config, const QString &configGroup){
 */
 void CommandProc::sayText(const QString &text)
 {
-    synth(text, QString::null,
+    synth(text, QString(),
         m_ttsCommand, m_stdin, m_codec, m_language);
 }
 
@@ -127,9 +127,9 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         if (m_commandProc->isRunning()) m_commandProc->kill();
         delete m_commandProc;
         m_commandProc = 0;
-        m_synthFilename = QString::null;
+        m_synthFilename.clear();
         if (!m_textFilename.isNull()) QFile::remove(m_textFilename);
-        m_textFilename = QString::null;
+        m_textFilename.clear();
     }
     QString command = userCmd;
     QString text = inputText.trimmed();
@@ -155,7 +155,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         *fs << endl;
         m_textFilename = tempFile.file()->name();
         tempFile.close();
-    } else m_textFilename = QString::null;
+    } else m_textFilename.clear();
 
     // 2. replace variables with values
     QStack<bool> stack;
@@ -419,9 +419,9 @@ void CommandProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename.clear();
         if (!m_textFilename.isNull()) QFile::remove(m_textFilename);
-        m_textFilename = QString::null;
+        m_textFilename.clear();
     }
 }
 

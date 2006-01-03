@@ -295,7 +295,7 @@ QString HadifixConf::getTalkerCode()
                     .arg("Hadifix");
         }
     }
-    return QString::null;
+    return QString();
 }
 
 void HadifixConf::voiceButton_clicked () {
@@ -396,7 +396,7 @@ void HadifixConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(d->waveFile);
     QFile::remove(d->waveFile);
-    d->waveFile = QString::null;
+    d->waveFile.clear();
     if (d->progressDlg) d->progressDlg->close();
 }
 

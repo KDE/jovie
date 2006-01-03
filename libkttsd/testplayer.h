@@ -42,7 +42,7 @@ class KDE_EXPORT TestPlayer : public QObject{
          */
         TestPlayer(QObject *parent = 0, const char *name = 0,
             const int playerOption = 0, const float audioStretchFactor = 1.0,
-            const QString &sinkName = QString::null);
+            const QString &sinkName = QString());
 
         /**
          * Destructor.

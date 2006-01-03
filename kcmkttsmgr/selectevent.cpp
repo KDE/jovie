@@ -129,7 +129,7 @@ QString SelectEvent::getEvent()
     if ( item )
         return item->text(1);
     else
-        return QString::null;
+        return QString();
 }
 
 // returns e.g. "kwin/eventsrc" from a given path
@@ -140,7 +140,7 @@ QString SelectEvent::makeRelative( const QString& fullPath )
     slash = fullPath.lastIndexOf( '/', slash );
 
     if ( slash < 0 )
-        return QString::null;
+        return QString();
 
     return fullPath.mid( slash+1 );
 }

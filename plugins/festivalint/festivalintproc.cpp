@@ -114,7 +114,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
 */
 void FestivalIntProc::sayText(const QString &text)
 {
-    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch, m_volume,
+    synth(m_festivalExePath, text, QString(), m_voiceCode, m_time, m_pitch, m_volume,
         m_languageCode, m_codec);
 }
 
@@ -145,7 +145,7 @@ bool FestivalIntProc::queryVoices(const QString &festivalExePath)
     // kdDebug() << "FestivalIntProc::queryVoices: Running" << endl;
     if (m_state != psIdle && m_waitingQueryVoices && m_waitingStop) return false;
     // Start Festival if not already running.
-    startEngine(festivalExePath, QString::null, m_languageCode, m_codec);
+    startEngine(festivalExePath, QString(), m_languageCode, m_codec);
     // Set state, waiting for voice codes list from Festival.
     m_waitingQueryVoices = true;
     // Voice rab_diphone is needed in order to support SSML.
@@ -197,7 +197,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
     if (!m_festProc->isRunning())
     {
         // kdDebug() << "FestivalIntProc::startEngine: Starting Festival process" << endl;
-        m_runningVoiceCode = QString::null;
+        m_runningVoiceCode.clear();
         m_runningTime = 100;
         m_runningPitch = 100;
         m_ready = false;
@@ -330,7 +330,7 @@ void FestivalIntProc::synth(
     if (synthFilename.isNull())
     {
         m_state = psSaying;
-        m_synthFilename = QString::null;
+        m_synthFilename.clear();
         // kdDebug() << "FestivalIntProc::synth: Saying text: '" << saidText << "' using Festival plug in with voice "
         //    << voiceCode << endl;
         saidText = "(SayText \"" + saidText + "\")";
@@ -621,7 +621,7 @@ void FestivalIntProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename.clear();
     }
 }
 

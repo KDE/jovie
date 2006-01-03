@@ -209,11 +209,11 @@ void FestivalIntConf::setDesiredLanguage(const QString &lang)
 
 QString FestivalIntConf::getTalkerCode()
 {
-    if (!m_widget->selectVoiceCombo->isEnabled()) return QString::null;
+    if (!m_widget->selectVoiceCombo->isEnabled()) return QString();
     QString exePath = realFilePath(m_widget->festivalPath->url());
-    if (exePath.isEmpty()) return QString::null;
-    if (getLocation(exePath).isEmpty()) return QString::null;
-    if (m_voiceList.count() == 0) return QString::null;
+    if (exePath.isEmpty()) return QString();
+    if (getLocation(exePath).isEmpty()) return QString();
+    if (m_voiceList.count() == 0) return QString();
     QString normalTalkerCode;
     voiceStruct voiceTemp = m_voiceList[m_widget->selectVoiceCombo->currentItem()];
     // Determine volume attribute.  soft < 75% <= medium <= 125% < loud.
@@ -484,7 +484,7 @@ void FestivalIntConf::scanVoices()
             for (uint index=0; index < voicesCount; ++index)
             {
                 QDomNode voiceNode = voices.item(index);
-                QString voiceCode = readXmlString(voiceNode, "code", QString::null);
+                QString voiceCode = readXmlString(voiceNode, "code", QString());
                 // kdDebug() << "FestivalIntConf::scanVoices: Comparing code " << code << " to " << voiceCode << endl;
                 if (voiceCode == code)
                 {
@@ -625,7 +625,7 @@ void FestivalIntConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     QFile::remove(m_waveFile);
-    m_waveFile = QString::null;
+    m_waveFile.clear();
     if (m_progressDlg) m_progressDlg->close();
 }
 

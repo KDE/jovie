@@ -176,7 +176,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
 // i.e., name="value".
 QString SbdThread::makeAttr( const QString& name, const QString& value )
 {
-    if ( value.isEmpty() ) return QString::null;
+    if ( value.isEmpty() ) return QString();
     return " " + name + "=\"" + value + "\"";
 }
 
@@ -290,7 +290,7 @@ QString SbdThread::makeSentence( const QString& text )
 // Starts a sentence by returning a speak tag.
 QString SbdThread::startSentence()
 {
-    if ( m_sentenceStarted ) return QString::null;
+    if ( m_sentenceStarted ) return QString();
     QString s;
     s += makeSsmlElem( etSpeak );
     m_sentenceStarted = true;
@@ -300,7 +300,7 @@ QString SbdThread::startSentence()
 // Ends a sentence and appends a Tab.
 QString SbdThread::endSentence()
 {
-    if ( !m_sentenceStarted ) return QString::null;
+    if ( !m_sentenceStarted ) return QString();
     QString s = "</speak>";
     s += "\t";
     m_sentenceStarted = false;
@@ -535,7 +535,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     }
 
     // Clear app-specified sentence delimiter.  App must call setSbRegExp for each conversion.
-    m_re = QString::null;
+    m_re.clear();
 
     // kdDebug() << "SbdThread::run: filtered text = " << m_text << endl;
 
@@ -739,7 +739,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 /*virtual*/ void SbdProc::ackFinished()
 {
      m_state = fsIdle;
-     m_sbdThread->setText( QString::null );
+     m_sbdThread->setText( QString() );
 }
 
 /**

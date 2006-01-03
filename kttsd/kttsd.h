@@ -606,7 +606,7 @@ class KTTSD : public QObject, virtual public KSpeech
 
         /*
         * Fixes a talker argument passed in via dcop.
-        * If NULL or "0" return QString::null.
+        * If NULL or "0" return QString().
         */
         QString fixNullString(const QString &talker) const;
 

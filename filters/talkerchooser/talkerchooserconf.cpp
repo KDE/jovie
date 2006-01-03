@@ -170,7 +170,7 @@ void TalkerChooserConf::defaults(){
     // Default App ID is blank.
     m_widget->appIdLineEdit->setText( "" );
     // Default to using default Talker.
-    m_talkerCode = TalkerCode( QString::null, false );
+    m_talkerCode = TalkerCode( QString(), false );
     m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
 }
 
@@ -191,11 +191,11 @@ bool TalkerChooserConf::supportsMultiInstance() { return true; }
  */
 QString TalkerChooserConf::userPlugInName()
 {
-    if (m_widget->talkerLineEdit->text().isEmpty()) return QString::null;
+    if (m_widget->talkerLineEdit->text().isEmpty()) return QString();
     if (m_widget->appIdLineEdit->text().isEmpty() &&
-        m_widget->reLineEdit->text().isEmpty()) return QString::null;
+        m_widget->reLineEdit->text().isEmpty()) return QString();
     QString instName = m_widget->nameLineEdit->text();
-    if (instName.isEmpty()) return QString::null;
+    if (instName.isEmpty()) return QString();
     return instName;
 }
 
@@ -265,10 +265,10 @@ void TalkerChooserConf::slotSaveButton_clicked()
 
 void TalkerChooserConf::slotClearButton_clicked()
 {
-    m_widget->nameLineEdit->setText( QString::null );
-    m_widget->reLineEdit->setText( QString::null );
-    m_widget->appIdLineEdit->setText( QString::null );
-    m_talkerCode = TalkerCode( QString::null, false );
+    m_widget->nameLineEdit->setText( QString() );
+    m_widget->reLineEdit->setText( QString() );
+    m_widget->appIdLineEdit->setText( QString() );
+    m_talkerCode = TalkerCode( QString(), false );
     m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
 }

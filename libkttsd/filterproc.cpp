@@ -123,7 +123,7 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
 /**
  * Returns the filtered output.
  */
-/*virtual*/ QString KttsFilterProc::getOutput() { return QString::null; }
+/*virtual*/ QString KttsFilterProc::getOutput() { return QString(); }
 
 /**
  * Acknowledges the finished filtering.

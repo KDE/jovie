@@ -36,7 +36,7 @@ ThreadedPlugInThread::ThreadedPlugInThread(PlugInProc* plugin, QObject *parent) 
     QThread(parent),
     m_plugin(plugin),
     m_waitingStop(false),
-    m_filename(QString::null),
+    m_filename(QString()),
     m_requestExit(false),
     m_supportsSynth(false)
 {
@@ -186,7 +186,7 @@ void ThreadedPlugInThread::ackFinished()
 {
     // Since plugin should not be running, don't bother with Mutex here.
     if (m_state == psFinished) m_state = psIdle;
-    m_filename = QString::null;
+    m_filename.clear();
 }
 
 /**
@@ -263,7 +263,7 @@ void ThreadedPlugInThread::run()
                     m_state = psSynthing;
                     m_stateMutex.unlock();
                     QString filename = m_filename;
-                    m_filename = QString::null;
+                    m_filename.clear();
                     kdDebug() << "ThreadedPlugInThread::run calling synthText" << endl;
                     m_plugin->synthText(m_text, filename);
                     kdDebug() << "ThreadedPlugInThread::run back from synthText" << endl;

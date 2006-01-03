@@ -125,7 +125,7 @@
 * Next, @ref getTalkerCode
 * will be called.  If your plugin can automatically configure itself to the desired
 * language, it should do so and return a fully-specified talker code.  If your
-* plugin is not yet ready and requires user help, return QString::null. Note that
+* plugin is not yet ready and requires user help, return QString(). Note that
 * @ref setDesiredLanguage may be Null, in which case, you should allow the
 * user to configure your plugin to any of your supported languages.
 *
@@ -138,7 +138,7 @@
 * - @e lang.         If user has completed configuring your plugin, i.e., it is
 *                    ready to begin synthesizing, return the ISO 639-1 language code
 *                    for the language it can synthesize.  If your plugin is not yet 
-*                    fully configured, you should return QString::null for the entire
+*                    fully configured, you should return QString() for the entire
 *                    talker code.  If your plugin supports a specific national version
 *                    of a language, that should also be included using the ISO 3166
 *                    country code separated from the language code by underscore (_).
@@ -281,7 +281,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
         * specified language code, choosing sensible defaults if necessary.
-        * If the passed-in code is QString::null, no specific language has
+        * If the passed-in code is QString(), no specific language has
         * been chosen.
         * @param lang        The desired language code or Null if none.
         *
@@ -299,7 +299,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
         * one instance from another.  If the plugin has not been fully configured,
-        * i.e., cannot yet synthesize, return QString::null.
+        * i.e., cannot yet synthesize, return QString().
         * @return            Fully-specified talker code.
         */
         virtual QString getTalkerCode();

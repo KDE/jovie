@@ -194,7 +194,7 @@ QString EposConf::getTalkerCode()
                     .arg("Epos TTS Synthesis System");
         }
     }
-    return QString::null;
+    return QString();
 }
 
 void EposConf::slotEposTest_clicked()
@@ -267,7 +267,7 @@ void EposConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     QFile::remove(m_waveFile);
-    m_waveFile = QString::null;
+    m_waveFile.clear();
     if (m_progressDlg) m_progressDlg->close();
 }
 

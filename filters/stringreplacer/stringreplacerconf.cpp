@@ -241,7 +241,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             item = new KListViewItem(m_widget->substLView, item, wordType, match, subst);
     }
 
-    return QString::null;
+    return QString();
 }
 
 /**
@@ -351,7 +351,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     // kdDebug() << "StringReplacerConf::saveToFile: writing out " << doc.toString() << endl;
     file.close();
 
-    return QString::null;
+    return QString();
 }
 
 /** 
@@ -392,7 +392,7 @@ bool StringReplacerConf::supportsMultiInstance() { return true; }
  */
 QString StringReplacerConf::userPlugInName()
 {
-    if ( m_widget->substLView->childCount() == 0 ) return QString::null;
+    if ( m_widget->substLView->childCount() == 0 ) return QString();
     QString instName = m_widget->nameLineEdit->text();
     if ( instName.isEmpty() )
     {
@@ -464,7 +464,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     dlg->setHelp("", "kttsd");
     dlg->setInitialSize(QSize(300, 500), false);
     int dlgResult = dlg->exec();
-    languageCode = QString::null;
+    languageCode.clear();
     if (dlgResult == QDialog::Accepted)
     {
         m_languageCodeList.clear();

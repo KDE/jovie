@@ -38,7 +38,7 @@ public:
     * @param initEventSrc       Event source to start with.
     */
     SelectEvent(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0,
-        const QString& initEventSrc = QString::null );
+        const QString& initEventSrc = QString() );
 
     /**
     * Destructor.

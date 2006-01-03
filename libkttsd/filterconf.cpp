@@ -113,7 +113,7 @@ bool KttsFilterConf::supportsMultiInstance() { return false; }
  * return an empty string.
  * @return           Filter instance name.
  */
-QString KttsFilterConf::userPlugInName() { return QString::null; }
+QString KttsFilterConf::userPlugInName() { return QString(); }
 
 /**
  * Returns True if this filter is a Sentence Boundary Detector.

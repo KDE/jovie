@@ -74,11 +74,11 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
 	// kdDebug() << "FreeTTSConf::load: Running" << endl;
 
 	config->setGroup(configGroup);
-        QString freeTTSJar = config->readEntry("FreeTTSJarPath", QString::null);
+        QString freeTTSJar = config->readEntry("FreeTTSJarPath", QString());
         if (freeTTSJar.isEmpty())
         {
             config->setGroup("FreeTTS");
-            freeTTSJar = config->readEntry("FreeTTSJarPath", QString::null);
+            freeTTSJar = config->readEntry("FreeTTSJarPath", QString());
         }
 	if (freeTTSJar.isEmpty())
 	    freeTTSJar = getLocation("freetts.jar");
@@ -129,7 +129,7 @@ QString FreeTTSConf::getTalkerCode()
                     .arg("FreeTTS");
         }
     }
-    return QString::null;
+    return QString();
 }
 
 // QString FreeTTSConf::getLocation(const QString &name) {
@@ -218,7 +218,7 @@ void FreeTTSConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     QFile::remove(m_waveFile);
-    m_waveFile = QString::null;
+    m_waveFile.clear();
     if (m_progressDlg) m_progressDlg->close();
 }
 

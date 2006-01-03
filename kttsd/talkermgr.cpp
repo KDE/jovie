@@ -81,7 +81,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             config->setGroup("Talker_" + talkerID);
 
             // Get the DesktopEntryName of the plugin we will try to load.
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString::null);
+            QString desktopEntryName = config->readEntry("DesktopEntryName", QString());
 
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
@@ -90,7 +90,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString synthName = config->readEntry("PlugIn", QString::null);
+                QString synthName = config->readEntry("PlugIn", QString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
@@ -98,7 +98,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             }
 
             // Get the talker code.
-            QString talkerCode = config->readEntry("TalkerCode", QString::null);
+            QString talkerCode = config->readEntry("TalkerCode", QString());
 
             // Normalize the talker code.
             QString fullLanguageCode;

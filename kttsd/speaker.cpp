@@ -793,7 +793,7 @@ QString Speaker::uttStateToStr(uttState state)
         case usPreempted:           return "usPreempted";
         case usFinished:            return "usFinished";
     }
-    return QString::null;
+    return QString();
 }
 
 /**
@@ -816,7 +816,7 @@ QString Speaker::uttTypeToStr(uttType utType)
         case utStartOfJob:   return "utStartOfJob";
         case utEndOfJob:     return "utEndOfJob";
     }
-    return QString::null;
+    return QString();
 }
 
 /**
@@ -833,7 +833,7 @@ QString Speaker::pluginStateToStr(pluginState state)
         case psSynthing:     return "psSynthing";
         case psFinished:     return "psFinished";
     }
-    return QString::null;
+    return QString();
 }
 
 /**
@@ -851,7 +851,7 @@ QString Speaker::jobStateToStr(int state)
         case KSpeech::jsPaused:      return "jsPaused";
         case KSpeech::jsFinished:    return "jsFinished";
     }
-    return QString::null;
+    return QString();
 }
 
 /**
@@ -1006,7 +1006,7 @@ bool Speaker::getNextUtterance()
         utt->state = usNone;
         utt->audioPlayer = 0;
         utt->audioStretcher = 0;
-        utt->audioUrl = QString::null;
+        utt->audioUrl.clear();
         utt->plugin = m_talkerMgr->talkerToPlugin(utt->sentence->talker);
         // Save some time by setting initial state now.
         setInitialUtteranceState(*utt);
@@ -1066,7 +1066,7 @@ bool Speaker::getNextUtterance()
                     {
                         Utt intrUtt;
                         intrUtt.sentence = new mlText;
-                        intrUtt.sentence->text = QString::null;
+                        intrUtt.sentence->text.clear();
                         intrUtt.sentence->talker = utt->sentence->talker;
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
@@ -1086,11 +1086,11 @@ bool Speaker::getNextUtterance()
                         intrUtt.sentence = new mlText;
                         intrUtt.sentence->text = m_speechData->textPreMsg;
                         // Interruptions are spoken using default Talker.
-                        intrUtt.sentence->talker = QString::null;
+                        intrUtt.sentence->talker.clear();
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
                         intrUtt.sentence->seq = 0;
-                        intrUtt.audioUrl = QString::null;
+                        intrUtt.audioUrl.clear();
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptMsg;
                         intrUtt.isSSML = isSsml(intrUtt.sentence->text);
@@ -1112,7 +1112,7 @@ bool Speaker::getNextUtterance()
                 {
                     Utt resUtt;
                     resUtt.sentence = new mlText;
-                    resUtt.sentence->text = QString::null;
+                    resUtt.sentence->text.clear();
                     resUtt.sentence->talker = utt->sentence->talker;
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
@@ -1131,11 +1131,11 @@ bool Speaker::getNextUtterance()
                     Utt resUtt;
                     resUtt.sentence = new mlText;
                     resUtt.sentence->text = m_speechData->textPostMsg;
-                    resUtt.sentence->talker = QString::null;
+                    resUtt.sentence->talker.clear();
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
                     resUtt.sentence->seq = 0;
-                    resUtt.audioUrl = QString::null;
+                    resUtt.audioUrl.clear();
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeMsg;
                     resUtt.isSSML = isSsml(resUtt.sentence->text);
@@ -1160,12 +1160,12 @@ bool Speaker::getNextUtterance()
                     {
                         Utt jobUtt;
                         jobUtt.sentence = new mlText;
-                        jobUtt.sentence->text = QString::null;
-                        jobUtt.sentence->talker = QString::null;
+                        jobUtt.sentence->text.clear();
+                        jobUtt.sentence->talker.clear();
                         jobUtt.sentence->appId = m_lastAppId;
                         jobUtt.sentence->jobNum = m_lastJobNum;
                         jobUtt.sentence->seq = 0;
-                        jobUtt.audioUrl = QString::null;
+                        jobUtt.audioUrl.clear();
                         jobUtt.utType = utEndOfJob;
                         jobUtt.isSSML = false;
                         jobUtt.plugin = 0;
@@ -1181,12 +1181,12 @@ bool Speaker::getNextUtterance()
                 {
                     Utt jobUtt;
                     jobUtt.sentence = new mlText;
-                    jobUtt.sentence->text = QString::null;
-                    jobUtt.sentence->talker = QString::null;
+                    jobUtt.sentence->text.clear();
+                    jobUtt.sentence->talker.clear();
                     jobUtt.sentence->appId = m_lastAppId;
                     jobUtt.sentence->jobNum = m_lastJobNum;
                     jobUtt.sentence->seq = utt->sentence->seq;
-                    jobUtt.audioUrl = QString::null;
+                    jobUtt.audioUrl.clear();
                     jobUtt.utType = utStartOfJob;
                     jobUtt.isSSML = false;
                     jobUtt.plugin = 0;
@@ -1207,12 +1207,12 @@ bool Speaker::getNextUtterance()
             {
                 Utt jobUtt;
                 jobUtt.sentence = new mlText;
-                jobUtt.sentence->text = QString::null;
-                jobUtt.sentence->talker = QString::null;
+                jobUtt.sentence->text.clear();
+                jobUtt.sentence->talker.clear();
                 jobUtt.sentence->appId = m_lastAppId;
                 jobUtt.sentence->jobNum = m_lastJobNum;
                 jobUtt.sentence->seq = 0;
-                jobUtt.audioUrl = QString::null;
+                jobUtt.audioUrl.clear();
                 jobUtt.utType = utEndOfJob;
                 jobUtt.isSSML = false;
                 jobUtt.plugin = 0;
@@ -1405,7 +1405,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                  (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
                 // kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
-                it->audioPlayer->startPlay(QString::null);  // resume
+                it->audioPlayer->startPlay(QString());  // resume
                 it->state = usPlaying;
                 if (!m_timer->start(timerInterval, FALSE))
                     kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
@@ -1418,7 +1418,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         {
                 // Preempted playback automatically resumes.
                 // Note: Must call stop(), even if player not currently playing.  Why?
-            it->audioPlayer->startPlay(QString::null);  // resume
+            it->audioPlayer->startPlay(QString());  // resume
             it->state = usPlaying;
             if (!m_timer->start(timerInterval, FALSE))
                 kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;

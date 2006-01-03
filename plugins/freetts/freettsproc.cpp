@@ -61,7 +61,7 @@ bool FreeTTSProc::init(KConfig *config, const QString &configGroup) {
  * If the plugin supports asynchronous operation, it should return immediately.
  */
 void FreeTTSProc::sayText(const QString &text) {
-	synth(text, QString::null, m_freettsJarPath);
+	synth(text, QString(), m_freettsJarPath);
 }
 
 /**
@@ -233,7 +233,7 @@ pluginState FreeTTSProc::getState() {
 void FreeTTSProc::ackFinished() {
 	if (m_state == psFinished) {
 		m_state = psIdle;
-		m_synthFilename = QString::null;
+		m_synthFilename.clear();
 	}
 }
 

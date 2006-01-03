@@ -172,13 +172,13 @@ bool XmlTransformerConf::supportsMultiInstance() { return true; }
 QString XmlTransformerConf::userPlugInName()
 {
     QString filePath = realFilePath(m_widget->xsltprocPath->url());
-    if (filePath.isEmpty()) return QString::null;
-    if (getLocation(filePath).isEmpty()) return QString::null;
+    if (filePath.isEmpty()) return QString();
+    if (getLocation(filePath).isEmpty()) return QString();
 
     filePath = realFilePath(m_widget->xsltPath->url());
-    if (filePath.isEmpty()) return QString::null;
-    if (getLocation(filePath).isEmpty()) return QString::null;
-    if (!QFileInfo(filePath).isFile()) return QString::null;
+    if (filePath.isEmpty()) return QString();
+    if (getLocation(filePath).isEmpty()) return QString();
+    if (!QFileInfo(filePath).isFile()) return QString();
 
     return m_widget->nameLineEdit->text();
 }

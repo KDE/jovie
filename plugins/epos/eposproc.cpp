@@ -73,11 +73,11 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     config->setGroup(configGroup);
     m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readEntry("EposClientExePath", "say");
-    m_eposLanguage = config->readEntry("Language", QString::null);
+    m_eposLanguage = config->readEntry("Language", QString());
     m_time = config->readNumEntry("time", 100);
     m_pitch = config->readNumEntry("pitch", 100);
-    m_eposServerOptions = config->readEntry("EposServerOptions", QString::null);
-    m_eposClientOptions = config->readEntry("EposClientOptions", QString::null);
+    m_eposServerOptions = config->readEntry("EposServerOptions", QString());
+    m_eposClientOptions = config->readEntry("EposClientOptions", QString());
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
     kdDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
 
@@ -110,7 +110,7 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
 */
 void EposProc::sayText(const QString &text)
 {
-    synth(text, QString::null, m_eposServerExePath, m_eposClientExePath,
+    synth(text, QString(), m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
         m_codec, m_eposLanguage, m_time, m_pitch);
 }
@@ -361,7 +361,7 @@ void EposProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename.clear();
     }
 }
 

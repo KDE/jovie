@@ -198,7 +198,7 @@ bool SbdConf::supportsMultiInstance() { return true; }
 QString SbdConf::userPlugInName()
 {
     if ( m_widget->reLineEdit->text().isEmpty() )
-        return QString::null;
+        return QString();
     else
         return m_widget->nameLineEdit->text();
 }
@@ -279,7 +279,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     dlg->setHelp("", "kttsd");
     dlg->setInitialSize(QSize(300, 500), false);
     int dlgResult = dlg->exec();
-    languageCode = QString::null;
+    languageCode.clear();
     if (dlgResult == QDialog::Accepted)
     {
         m_languageCodeList.clear();
@@ -335,11 +335,11 @@ void SbdConf::slotSaveButton_clicked()
 
 void SbdConf::slotClearButton_clicked()
 {
-    m_widget->nameLineEdit->setText( QString::null );
-    m_widget->reLineEdit->setText( QString::null );
-    m_widget->sbLineEdit->setText( QString::null );
+    m_widget->nameLineEdit->setText( QString() );
+    m_widget->reLineEdit->setText( QString() );
+    m_widget->sbLineEdit->setText( QString() );
     m_languageCodeList.clear();
-    m_widget->languageLineEdit->setText( QString::null );
-    m_widget->appIdLineEdit->setText( QString::null );
+    m_widget->languageLineEdit->setText( QString() );
+    m_widget->appIdLineEdit->setText( QString() );
     configChanged();
 }

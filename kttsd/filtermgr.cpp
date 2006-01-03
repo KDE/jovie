@@ -104,7 +104,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString filterPlugInName = config->readEntry("PlugInName", QString::null);
+                QString filterPlugInName = config->readEntry("PlugInName", QString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
@@ -313,7 +313,7 @@ QString FilterMgr::getOutput()
 void FilterMgr::ackFinished()
 {
     m_state = fsIdle;
-    m_text = QString::null;
+    m_text.clear();
 }
 
 /**
@@ -395,17 +395,17 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
  * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
  * @param name                   The translated plugin name.  From Name= line in .desktop file.
  * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
- *                               QString::null if not found.
+ *                               QString() if not found.
  */
 QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
 {
-    if (name.isEmpty()) return QString::null;
+    if (name.isEmpty()) return QString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
     QString("Name == '%1'").arg(name));
 
     if (offers.count() == 1)
         return offers[0]->desktopEntryName();
     else
-        return QString::null;
+        return QString();
 }
 

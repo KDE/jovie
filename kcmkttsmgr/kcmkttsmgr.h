@@ -292,7 +292,7 @@ class KCMKttsMgr :
          * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
          * @param name                   The translated plugin name.  From Name= line in .desktop file.
          * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-         *                               QString::null if not found.
+         *                               QString() if not found.
          */
         QString FilterNameToDesktopEntryName(const QString& name);
 

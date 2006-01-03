@@ -347,7 +347,7 @@ void XmlTransformerProc::processOutput()
 /*virtual*/ void XmlTransformerProc::ackFinished()
 {
     m_state = fsIdle;
-    m_text = QString::null;
+    m_text.clear();
 }
 
 /**

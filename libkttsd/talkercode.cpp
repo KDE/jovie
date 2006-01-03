@@ -35,7 +35,7 @@
 /**
  * Constructor.
  */
-TalkerCode::TalkerCode(const QString &code/*=QString::null*/, bool normal /*=false*/)
+TalkerCode::TalkerCode(const QString &code/*=QString()*/, bool normal /*=false*/)
 {
     if (!code.isEmpty())
         parseTalkerCode(code);
@@ -499,18 +499,18 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
 * @param name                   The translated plugin name.  From Name= line in .desktop file.
 * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-*                               QString::null if not found.
+*                               QString() if not found.
 */
 /*static*/ QString TalkerCode::TalkerNameToDesktopEntryName(const QString& name)
 {
-    if (name.isEmpty()) return QString::null;
+    if (name.isEmpty()) return QString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
         QString("Name == '%1'").arg(name));
 
     if (offers.count() == 1)
         return offers[0]->desktopEntryName();
     else
-        return QString::null;
+        return QString();
 }
 
 /**
@@ -520,13 +520,13 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 */
 /*static*/ QString TalkerCode::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
 {
-    if (desktopEntryName.isEmpty()) return QString::null;
+    if (desktopEntryName.isEmpty()) return QString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
     QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();
     else
-        return QString::null;
+        return QString();
 }
 

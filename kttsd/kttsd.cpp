@@ -477,7 +477,7 @@ uint KTTSD::getTextJobCount()
 */
 QString KTTSD::getTextJobNumbers()
 {
-    if (!m_speaker) return QString::null;
+    if (!m_speaker) return QString();
     return m_speechData->getTextJobNumbers();
 }
 
@@ -538,7 +538,7 @@ QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 */
 QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
 {
-    if (!m_talkerMgr) return QString::null;
+    if (!m_talkerMgr) return QString();
     return m_talkerMgr->talkerCodeToTalkerId(fixNullString(talkerCode));
 }
 
@@ -726,7 +726,7 @@ void KTTSD::changeTextTalker(const QString &talker, uint jobNum)
 */
 QString KTTSD::userDefaultTalker()
 {
-    if (!m_talkerMgr) return QString::null;
+    if (!m_talkerMgr) return QString();
     return m_talkerMgr->userDefaultTalker();
 }
 
@@ -899,7 +899,7 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
                     {
                         found = true;
                         notifyOptions = notifyEventMap[ "default" ];
-                        notifyOptions.eventName = QString::null;
+                        notifyOptions.eventName.clear();
                     }
                 }
             }
@@ -1075,12 +1075,12 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
 
 /*
 * Fixes a string argument passed in via dcop.
-* If NULL or "0" return QString::null.
+* If NULL or "0" return QString().
 */
 QString KTTSD::fixNullString(const QString &talker) const
 {
-    if (talker == 0) return QString::null;
-    if (talker == "0") return QString::null;
+    if (talker == 0) return QString();
+    if (talker == "0") return QString();
     return talker;
 }
 
