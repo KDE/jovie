@@ -97,7 +97,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_pitch = config->readNumEntry("pitch", 100);
     m_volume = config->readNumEntry("volume", 100);
     // If voice should be pre-loaded, start Festival and load the voice.
-    m_preload = config->readBoolEntry("Preload", false);
+    m_preload = config->readEntry("Preload", QVariant(false)).toBool();
     m_languageCode = config->readEntry("LanguageCode", "en");
     m_supportsSSML = static_cast<SupportsSSML>(config->readNumEntry("SupportsSSML", ssUnknown));
     QString codecName = config->readEntry("Codec", "Latin1");

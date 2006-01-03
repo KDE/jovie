@@ -168,7 +168,7 @@ class HadifixConfPrivate {
                config->readEntry ("hadifixExec",defaultHadifixExec),
                config->readEntry ("mbrolaExec", defaultMbrolaExec),
                config->readEntry ("voice",      voice),
-               config->readBoolEntry("gender",  isMale),
+               config->readEntry("gender", QVariant(isMale)).toBool(),
                config->readNumEntry ("volume",  100),
                config->readNumEntry ("time",    100),
                config->readNumEntry ("pitch",   100),

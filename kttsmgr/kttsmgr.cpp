@@ -90,12 +90,12 @@ int main (int argc, char *argv[])
     // Get SysTray and ShowMainWindow options.
     KConfig* config = new KConfig("kttsdrc");
     config->setGroup("General");
-    bool embedInSysTray = config->readBoolEntry("EmbedInSysTray", true);
+    bool embedInSysTray = config->readEntry("EmbedInSysTray", QVariant(true)).toBool();
     // Can only hide main window if we are in the system tray, otherwise, no way
     // for user to do anything.
     bool showMainWindowOnStartup = true;
     if (embedInSysTray)
-        showMainWindowOnStartup = config->readBoolEntry("ShowMainWindowOnStartup", true);
+        showMainWindowOnStartup = config->readEntry("ShowMainWindowOnStartup", QVariant(true)).toBool();
 
     // If --systray option specified, start minimized in system tray.
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

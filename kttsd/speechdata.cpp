@@ -73,28 +73,28 @@ bool SpeechData::readConfig(){
     config->setGroup("General");
 
     // Load the configuration of the text interruption messages and sound
-    textPreMsgEnabled = config->readBoolEntry("TextPreMsgEnabled", false);
+    textPreMsgEnabled = config->readEntry("TextPreMsgEnabled", QVariant(false)).toBool();
     textPreMsg = config->readEntry("TextPreMsg");
 
-    textPreSndEnabled = config->readBoolEntry("TextPreSndEnabled", false);
+    textPreSndEnabled = config->readEntry("TextPreSndEnabled", QVariant(false)).toBool();
     textPreSnd = config->readEntry("TextPreSnd");
 
-    textPostMsgEnabled = config->readBoolEntry("TextPostMsgEnabled", false);
+    textPostMsgEnabled = config->readEntry("TextPostMsgEnabled", QVariant(false)).toBool();
     textPostMsg = config->readEntry("TextPostMsg");
 
-    textPostSndEnabled = config->readBoolEntry("TextPostSndEnabled", false);
+    textPostSndEnabled = config->readEntry("TextPostSndEnabled", QVariant(false)).toBool();
     textPostSnd = config->readEntry("TextPostSnd");
-    keepAudio = config->readBoolEntry("KeepAudio", false);
+    keepAudio = config->readEntry("KeepAudio", QVariant(false)).toBool();
     keepAudioPath = config->readEntry("KeepAudioPath", locateLocal("data", "kttsd/audio/"));
 
     // Notification (KNotify).
-    notify = config->readBoolEntry("Notify", false);
-    notifyExcludeEventsWithSound = config->readBoolEntry("ExcludeEventsWithSound", true);
+    notify = config->readEntry("Notify", QVariant(false)).toBool();
+    notifyExcludeEventsWithSound = config->readEntry("ExcludeEventsWithSound", QVariant(true)).toBool();
     loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
 
     // KTTSMgr auto start and auto exit.
-    autoStartManager = config->readBoolEntry("AutoStartManager", false);
-    autoExitManager = config->readBoolEntry("AutoExitManager", false);
+    autoStartManager = config->readEntry("AutoStartManager", QVariant(false)).toBool();
+    autoExitManager = config->readEntry("AutoExitManager", QVariant(false)).toBool();
 
     // Clear the pool of filter managers so that filters re-init themselves.
     QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();

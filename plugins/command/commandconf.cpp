@@ -87,7 +87,7 @@ void CommandConf::load(KConfig *config, const QString &configGroup) {
     // kdDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(configGroup);
     m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
-    m_widget->stdInButton->setChecked(config->readBoolEntry("StdIn", false));
+    m_widget->stdInButton->setChecked(config->readEntry("StdIn", QVariant(false)).toBool());
     QString codecString = config->readEntry("Codec", "Local");
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);

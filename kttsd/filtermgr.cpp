@@ -110,7 +110,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
                 // Record the DesktopEntryName from now on.
                 if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
             }
-            if (config->readBoolEntry("Enabled")  || config->readBoolEntry("IsSBD"))
+            if (config->readEntry("Enabled",QVariant(false)).toBool()  || config->readEntry("IsSBD",QVariant(false)).toBool())
             {
                 // kdDebug() << "FilterMgr::init: filterID = " << filterID << endl;
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );

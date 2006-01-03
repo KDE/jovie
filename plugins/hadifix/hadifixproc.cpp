@@ -55,7 +55,7 @@ class HadifixProcPrivate {
          hadifix  = config->readEntry ("hadifixExec",   QString());
          mbrola   = config->readEntry ("mbrolaExec",    QString());
          voice    = config->readEntry ("voice",         QString());
-         gender   = config->readBoolEntry("gender",     false);
+         gender   = config->readEntry("gender", QVariant(false)).toBool();
          volume   = config->readNumEntry ("volume",     100);
          time     = config->readNumEntry ("time",       100);
          pitch    = config->readNumEntry ("pitch",      100);

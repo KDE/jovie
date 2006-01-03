@@ -69,7 +69,7 @@ bool CommandProc::init(KConfig *config, const QString &configGroup){
 
     config->setGroup(configGroup);
     m_ttsCommand = config->readEntry("Command", "cat -");
-    m_stdin = config->readBoolEntry("StdIn", true);
+    m_stdin = config->readEntry("StdIn", QVariant(true)).toBool();
     m_language = config->readEntry("LanguageCode", "en");
 
     // Support separate synthesis if the TTS command contains %w macro.
