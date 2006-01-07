@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD
-Name[xx]=xxKTTSDxx
+Name[x-test]=xxKTTSDxx
 Type=ServiceType
 X-KDE-ServiceType=KTTSD/SynthPlugin
 
