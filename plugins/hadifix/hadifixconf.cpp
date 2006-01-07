@@ -352,7 +352,7 @@ void HadifixConf::testButton_clicked () {
    // italian, and a few others, written in perl, but they have many issues.
    // Go to the mbrola website and click on "TTS" to learn more.
 
-   // QString testMsg = "K D E ist eine moderne grafische Arbeitsumgebung für UNIX-Computer.";
+   // QString testMsg = "K D E ist eine moderne grafische Arbeitsumgebung fÃ¼r UNIX-Computer.";
    QString testMsg = testMessage(d->languageCode);
    connect (d->hadifixProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
    d->hadifixProc->synth (testMsg,

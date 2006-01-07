@@ -628,7 +628,7 @@ void KCMKttsMgr::load()
         {
             // Must load plugin to determine if it supports multiple instances
             // and to see if it can autoconfigure itself.
-            KttsFilterConf* filterPlugIn = loadFilterPlugin(filterPlugInName);
+            KttsFilterConf* filterPlugIn = loadFilterPlugin(desktopEntryName);
             if (filterPlugIn)
             {
                 ++m_lastFilterID;
@@ -1085,6 +1085,8 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 
 /**
 * Loads the configuration plug in for a named talker plug in and type.
+* @param name             DesktopEntryName of the Synthesizer.
+* @return                 Pointer to the configuration plugin for the Talker.
 */
 PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 {
@@ -1092,7 +1094,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-        QString("Name == '%1'").arg(name));
+        QString("DesktopEntryName == '%1'").arg(name));
 
     if (offers.count() == 1)
     {
@@ -1127,6 +1129,8 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 
 /**
  * Loads the configuration plug in for a named filter plug in.
+ * @param plugInName       DesktopEntryName of the plugin.
+ * @return                 Pointer to the configuration plugin for the Filter.
  */
 KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 {
@@ -1134,7 +1138,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("Name == '%1'").arg(plugInName));
+        QString("DesktopEntryName == '%1'").arg(plugInName));
 
     if (offers.count() == 1)
     {
@@ -1144,7 +1148,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
         if(factory){
             // If the factory is created successfully, instantiate the KttsFilterConf class for the
             // specific plug in to get the plug in configuration object.
-            int errorNo;
+            int errorNo = 0;
             KttsFilterConf *plugIn =
                 KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterConf>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
@@ -1287,7 +1291,7 @@ void KCMKttsMgr::slot_addTalker()
     if (desktopEntryName.isEmpty()) return;
 
     // Load the plugin.
-    m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
+    m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     if (!m_loadedTalkerPlugIn) return;
 
     // Give plugin the user's language code and permit plugin to autoconfigure itself.
@@ -1402,7 +1406,8 @@ void KCMKttsMgr::addFilter( bool sbd)
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins(filterPlugInName) == 0)
         {
-            KttsFilterConf* filterConf = loadFilterPlugin( filterPlugInName );
+            QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+            KttsFilterConf* filterConf = loadFilterPlugin(desktopEntryName);
             if (filterConf)
             {
                 if (filterConf->isSBD() == sbd)
@@ -1447,7 +1452,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     if (desktopEntryName.isEmpty()) return;
 
     // Load the plugin.
-    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
+    m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
 
     // Permit plugin to autoconfigure itself.
@@ -1868,7 +1873,8 @@ void KCMKttsMgr::slot_configureTalker()
     QString synthName = talkerItem->text(tlvcSynthName);
     QString language = talkerItem->text(tlvcLanguage);
     QString languageCode = m_languagesToCodes[language];
-    m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
+    QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
+    m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     if (!m_loadedTalkerPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << synthName << " loaded successfully." << endl;
 
@@ -1941,7 +1947,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     QString filterPlugInName = filterItem->text(flvcPlugInName);
     QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
     if (desktopEntryName.isEmpty()) return;
-    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
+    m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
 
@@ -2182,13 +2188,10 @@ void KCMKttsMgr::slotFiltersList_stateChanged()
 QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString::null;
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("Name == '%1'").arg(name));
-
-    if (offers.count() == 1)
-        return offers[0]->desktopEntryName();
-    else
-        return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    for (uint ndx = 0; ndx < offers.count(); ++ndx)
+        if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
+    return QString::null;
 }
 
 /**
@@ -2575,7 +2578,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     if ( eventSrc.isEmpty() || event.isEmpty() ) return;
     // Use Default action, message, and talker.
     QString actionName;
-    int action;
+    int action = NotifyAction::DoNotSpeak;
     QString msg;
     TalkerCode talkerCode;
     item = lv->findItem( "default", nlvcEventSrc );

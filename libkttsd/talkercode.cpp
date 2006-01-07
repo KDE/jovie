@@ -492,13 +492,10 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 /*static*/ QString TalkerCode::TalkerNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString::null;
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-        QString("Name == '%1'").arg(name));
-
-    if (offers.count() == 1)
-        return offers[0]->desktopEntryName();
-    else
-        return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+    for (uint ndx = 0; ndx < offers.count(); ++ndx)
+        if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
+    return QString::null;
 }
 
 /**

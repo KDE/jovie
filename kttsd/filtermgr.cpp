@@ -397,12 +397,9 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString::null;
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-    QString("Name == '%1'").arg(name));
-
-    if (offers.count() == 1)
-        return offers[0]->desktopEntryName();
-    else
-        return QString::null;
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    for (uint ndx = 0; ndx < offers.count(); ++ndx)
+        if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
+    return QString::null;
 }
 

@@ -15,6 +15,7 @@ _ Handbook:
       the same as "HTML".  It should stay this way, BTW.  Proper xhtml requires lowercase
       tags.
 _ Audio Plugins:
+    _ BUG:116542.  Apply patch and resolve compile issue.
     _ At least one user experiences a freeze-up using ALSA plugin.  Speak a web page,
       pause the page, cause a knotify to speak, kttsd freezes.  This appears to be an
       ALSA device contention problem?  In this situation, there are two alsaplayer objects;
@@ -27,6 +28,19 @@ _ Audio Plugins:
 _ Festival Interactive plugin:
     _ Need someone who can read czech to try integrating this into KTTS: 
       http://www.freebsoft.org/festival-czech
+    _ New Italian voice for Festival. http://www.pd.istc.cnr.it/FESTIVAL/home/default.htm
+_ EPOS plugin:
+    _ Epos server command changed from epos to eposd.  Epos client command changed from
+      say to say-epos.  These changes appeared around Epos v2.5.35.  Enhance to try for these
+      automatically.
+    _ BUG:115795 Don't try to start the Epos server for every utterance.
+    _ A user claims that with Epos 2.5.36 under SuSE9.3, the generated spoken sentences
+      contain in some cases additional random letters and/or numbers.  User claims
+      changing in eposproc.cpp
+        if (!m_eposProc->writeStdin(m_encText, m_encText.length()))
+      to
+        if (!m_eposProc->writeStdin(m_encText, text.length()))
+      fixes the problem.  This doesn't make sense, so something else is probably going on.
 _ Command plugin:
     _ Command plugin encodes text on command line using %t in user's chosen encoding, but
       if this differs from user's desktop default encoding, doesn't work.  KProcess always
@@ -35,6 +49,7 @@ _ Command plugin:
       KProcess, I see no way around this.  But perhaps a warning to user advising to use %f instead?
     _ Command plugin crashes when using command 'flite -t "%t"' and flite can't get write access to /dev/dsp*.
 _ Hadifix plugin:
+    _ BUG:116151 Add options for using the new prepoc capability in Hadifix.
     _ When stopText() is called, and Hadifix process is killed, the temporary wav file is not deleted,
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
@@ -70,6 +85,11 @@ _ KTTSD:
     _ Add method for apps to play a sound file, including in the middle of a job.
       Could be done with SSML or with special Talker Code = "sound".
 _ Other/General:
+    _ kttsd/kttsmgr hang when Removing a text job while it is speaking.
+    _ As pointed out by NOKUBI Takatsugu on Planet Debian, there exists an 
+      open-source synthesis + recognition engine for Japanese.
+        http://aniki.daionet.gr.jp/~knok/blog/blosxom.cgi/2005/11/24
+        http://hil.t.u-tokyo.ac.jp/~galatea/index.html
     _ Save buttons should confirm if user chooses an existing file.  KFileDialog doesn't seem to
       offer this option, but shouldn't it?
     _ .desktop files must have a Type keyword, but what to use for kcmkttsd_testmessage.desktop?
@@ -82,6 +102,5 @@ _ Other/General:
       Currently written in c, but it looks like future versions will require Java VM.
       Main problem at the moment is that dhvani sends audio directly to /dev/dsp with no option
       to send to a wav file.
-    _ Investigate what is involved in getting Gnopernicus screen reader to use KTTSD.
     _ IBM ViaVoice plugin?
     _ Add KTTS plugin to aKregator.
