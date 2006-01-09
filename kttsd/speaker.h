@@ -514,11 +514,6 @@ class Speaker : public QObject{
         QString makeSuggestedFilename();
 
         /**
-        * Get the real path of a filename and convert it to local encoding.
-        */
-        QString getRealFilePath(const QString filename);
-
-        /**
         * Creates and returns a player object based on user option.
         */
         Player* createPlayerObject();
