@@ -487,7 +487,7 @@ void Speaker::doUtterances()
                         // See if synthesis is completed.
                         if (it->plugin->getState() == psFinished)
                         {
-                            it->audioUrl = getRealFilePath(it->plugin->getFilename());
+                            it->audioUrl = KStandardDirs::realFilePath(it->plugin->getFilename());
                             // kdDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl << endl;
                             it->plugin->ackFinished();
                             it->state = usSynthed;
@@ -1492,17 +1492,7 @@ QString Speaker::makeSuggestedFilename()
     tempFile.close();
     QFile::remove(waveFile);
     // kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
-    return getRealFilePath(waveFile);
-}
-
-/**
- * Get the real path of a filename and convert it to local encoding.
- */
-QString Speaker::getRealFilePath(const QString filename)
-{
-    char real[PATH_MAX];
-    realpath(QFile::encodeName(filename),real);
-    return QFile::decodeName(real);
+    return KStandardDirs::realFilePath(waveFile);
 }
 
 /**
