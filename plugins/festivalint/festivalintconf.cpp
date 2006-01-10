@@ -181,7 +181,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     config->writeEntry("pitch", m_widget->frequencyBox->value());
     config->writeEntry("Preload", m_widget->preloadCheckBox->isChecked());
     config->writeEntry("LanguageCode", m_voiceList[m_widget->selectVoiceCombo->currentItem()].languageCode);
-    config->writeEntry("SupportsSSML", m_supportsSSML);
+    config->writeEntry("SupportsSSML", int(m_supportsSSML));
     int codec = m_widget->characterCodingBox->currentItem();
     config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }

@@ -162,8 +162,9 @@ int main (int argc, char *argv[])
 KttsMgrTray::KttsMgrTray(QWidget *parent):
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kkttsmgr_kspeechsink"),
-    KSystemTray(parent, "kttsmgrsystemtray")
+    KSystemTray(parent)
 {
+	setObjectName("kttsmgrsystemtray");
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
 
@@ -297,7 +298,7 @@ void KttsMgrTray::speakClipboardSelected()
 
 void KttsMgrTray::aboutSelected()
 {
-    KAboutApplication aboutDlg(kapp->aboutData(), 0, "kttsmgraboutdlg", true);
+    KAboutApplication aboutDlg(kapp->aboutData(), 0, true);
     aboutDlg.exec();
 }
 

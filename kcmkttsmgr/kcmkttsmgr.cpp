@@ -1406,7 +1406,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         hBox->setLayout(hBoxLayout);
         dlg->setMainWidget(hBox);
         dlg->setHelp("select-plugin", "kttsd");
-        dlg->setInitialSize(QSize(200, 500), false);
+        dlg->setInitialSize(QSize(200, 500));
         dlgResult = dlg->exec();
         languageCode.clear();
         if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
@@ -1570,8 +1570,7 @@ void KCMKttsMgr::addFilter( bool sbd)
             0,
             false,
             &okChosen,
-            this,
-            "selectfilter_kttsd");
+            this);
         if (!okChosen) return;
     } else
         filterPlugInName = filterPlugInNames[0];
@@ -1681,7 +1680,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
 
     // Delete the talker from configuration file?
     QString talkerID = m_talkerListModel.getRow(modelIndex.row()).id();
-    m_config->deleteGroup("Talker_"+talkerID, true, false);
+    m_config->deleteGroup("Talker_"+talkerID);
 
     // Delete the talker from the list of Talkers.
     m_talkerListModel.removeRow(modelIndex.row());
@@ -1728,7 +1727,7 @@ void KCMKttsMgr::removeFilter( bool sbd )
 
     // Delete the filter from the configuration file?
     kdDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file." << endl;
-    m_config->deleteGroup("Filter_"+filterID, true, false);
+    m_config->deleteGroup("Filter_"+filterID);
 
     // Emit configuraton changed.
     configChanged();
@@ -2200,7 +2199,7 @@ void KCMKttsMgr::configureTalker()
         "configureTalker_dlg",
         true,
         true);
-    m_configDlg->setInitialSize(QSize(700, 300), false);
+    m_configDlg->setInitialSize(QSize(700, 300));
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
     m_configDlg->enableButtonOK(false);
@@ -2253,7 +2252,7 @@ void KCMKttsMgr::configureFilter()
         "configureFilter_dlg",
         true,
         true);
-    m_configDlg->setInitialSize(QSize(600, 450), false);
+    m_configDlg->setInitialSize(QSize(600, 450));
     m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);

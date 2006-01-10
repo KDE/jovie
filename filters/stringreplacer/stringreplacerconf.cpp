@@ -462,7 +462,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         true);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500), false);
+    dlg->setInitialSize(QSize(300, 500));
     int dlgResult = dlg->exec();
     languageCode.clear();
     if (dlgResult == QDialog::Accepted)

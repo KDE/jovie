@@ -204,7 +204,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     hBox->setLayout(hBoxLayout);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500), false);
+    dlg->setInitialSize(QSize(300, 500));
     // TODO: This isn't working.  Furthermore, item appears selected but is not.
     langLView->ensureItemVisible(langLView->selectedItem());
     int dlgResult = dlg->exec();
