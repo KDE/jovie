@@ -176,7 +176,4 @@ QStringList aKodePlayer::getPluginList( const QCString& /*classname*/ )
 
 void aKodePlayer::setSinkName(const QString& sinkName) { m_sinkName = sinkName; }
 
-// This is a GStreamer function.  aKode ignores it.
-bool aKodePlayer::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
-
 #include "akodeplayer.moc"

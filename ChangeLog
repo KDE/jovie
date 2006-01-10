@@ -1,3 +1,25 @@
+2006-01-09  Gary Cramblitt (PhantomsDad)
+        * Fix BUG:119753 Freezing when removing a speaking text job speaking on AlsaPlayer.
+          AlsaPlayer now uses non-blocking pcm open and polling.
+        * The ALSA device list pickable by user is now restricted to "default" and available
+          "plughw" devices.
+        * The following parameters may be placed in the [ALSAPlayer] section of
+          ~/.kde/share/config/kttsdrc:
+            PcmName=default    (Any valid alsa pcm device, but your on your own.  Examples:
+                                dmix, hw:1,0)
+            DebugLevel=1       (0 = errors only; 1 = messages; 2 = verbose debug)
+            PeriodSize=128     (Number of frames in the ALSA buffer between interrupts.
+                                If you have trouble, try adjusting up or down.)
+            Periods=8          (Same)
+        * If the ALSA pcm does not support pausing, simulates by not writing to the
+          pcm anymore, which will cause a slight delay, and underruns,
+          but that's the best we can do, I suppose.
+        * Fix bug.  When starting KTTSMgr, it loaded the aRts plugin to determine if aRts is
+          available.  But this started the aRts server and if user's machine does not have
+          proper audio sharing enabled, caused "device busy" errors.  Now it starts the aRts
+          server only when playback begins the first time.
+        * Bump version from 0.3.5 to 0.3.5.1.
+
 2006-01-06  Gary Cramblitt (PhantomsDad)
         * Fix BUG:118016 Not loading plugins when desktop language is not ISO-8859-1.
 
@@ -6,6 +28,9 @@
 
 2005-11-13  Gary Cramblitt (PhantomsDad)
         * BUG:116031 Fix appendText method.  Add version method to dcop interface.
+          This change did not make it into the KDE 3.5 release.
+
+2005-11-29  ======== Release v0.3.5 with KDE 3.5
 
 2005-10-16  J. Riddell
         * Make install error.  Install the Hadifix icons.

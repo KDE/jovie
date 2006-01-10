@@ -50,7 +50,6 @@ ArtsPlayer::ArtsPlayer(QObject* parent, const char* name, const QStringList& arg
     m_volumeControl(Arts::StereoVolumeControl::null()),
     m_currentVolume(1.0)
 {
-    setupPlayer();
 }
 
 ArtsPlayer::~ArtsPlayer()
@@ -65,6 +64,9 @@ ArtsPlayer::~ArtsPlayer()
 //void ArtsPlayer::play(const FileHandle &file)
 void ArtsPlayer::startPlay(const QString &file)
 {
+    if (!m_dispatcher)
+        setupPlayer();
+
     // kdDebug(65432) << k_funcinfo << endl;
     // Make sure that the server still exists, if it doesn't a new one should
     // be started automatically and the factory and amanPlay are created again.
@@ -215,11 +217,6 @@ void ArtsPlayer::seekPosition(int position)
         m_playobject->object().seek(poSeekTime);
     }
 }
-
-// These are GStreamer functions.  aRts ignores them.
-QStringList ArtsPlayer::getPluginList( const QCString& /*classname*/ ) { return QStringList(); }
-void ArtsPlayer::setSinkName(const QString& /*sinkName*/) { }
-bool ArtsPlayer::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
 
 /////////////////////////////////////////////////////////////////////////////////
 // private

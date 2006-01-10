@@ -66,10 +66,6 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const QCString& classname );
-    virtual void setSinkName(const QString &sinkName);
-    virtual bool requireVersion(uint major, uint minor, uint micro);
-
 private slots:
     void setupArtsObjects();
     void playObjectCreated();

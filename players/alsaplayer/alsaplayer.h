@@ -26,6 +26,7 @@
 
 // System includes.
 #include <alsa/asoundlib.h>
+#include <sys/poll.h>
 
 // Qt includes.
 #include <qstring.h>
@@ -89,7 +90,10 @@ public:
 
     virtual QStringList getPluginList( const QCString& classname );
     virtual void setSinkName(const QString &sinkName);
-    virtual bool requireVersion(uint major, uint minor, uint micro);
+
+    virtual void setDebugLevel(uint level) { m_debugLevel = level; }
+    virtual void setPeriodSize(uint periodSize) { m_defPeriodSize = periodSize; }
+    virtual void setPeriods(uint periods) { m_defPeriods = periods; }
 
 protected:
     virtual void run();
@@ -100,6 +104,7 @@ private:
     void init();
     void cleanup();
     void stopAndExit();
+    int wait_for_poll(int draining);
 
     QString timestamp() const;
 
@@ -109,7 +114,7 @@ private:
     ssize_t test_wavefile(int fd, char *_buffer, size_t size);
     int test_au(int fd, char *buffer);
     void set_params(void);
-    void xrun(void);
+    void xrun();
     void suspend(void);
     void compute_max_peak(char *data, size_t count);
     ssize_t pcm_write(char *data, size_t count);
@@ -131,7 +136,6 @@ private:
 
     QFile audiofile;
     QString name;
-    QString dbgStr;
     bool canPause;
 
     snd_pcm_t *handle;
@@ -139,27 +143,24 @@ private:
         snd_pcm_format_t format;
         unsigned int channels;
         unsigned int rate;
-    } hwparams, rhwparams;
+    } hwdata, rhwdata;
     int timelimit;
-    int quiet_mode;
     int file_type;
     unsigned int sleep_min;
     int open_mode;
     snd_pcm_stream_t stream;
     int mmap_flag;
     int interleaved;
-    int nonblock;
     QByteArray audioBuffer;
     char *audiobuf;
     snd_pcm_uframes_t chunk_size;
+    snd_pcm_uframes_t period_frames;
     unsigned period_time;
     unsigned buffer_time;
-    snd_pcm_uframes_t period_frames;
-    snd_pcm_uframes_t buffer_frames;
+    snd_pcm_uframes_t buffer_size;
     int avail_min;
     int start_delay;
     int stop_delay;
-    int verbose;
     int buffer_pos;
     size_t bits_per_sample;
     size_t bits_per_frame;
@@ -171,6 +172,14 @@ private:
     int vocmajor;
     int vocminor;
 
+    int alsa_stop_pipe[2];          /* Pipe for communication about stop requests*/
+    int alsa_fd_count;              /* Counter of descriptors to poll */
+    QByteArray alsa_poll_fds_barray;
+    struct pollfd *alsa_poll_fds;   /* Descriptors to poll */
+    unsigned int m_defPeriodSize;
+    unsigned int m_defPeriods;
+    unsigned int m_debugLevel;
+    bool m_simulatedPause;
 };
 
 #endif              // ALSAPLAYER_H

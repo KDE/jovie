@@ -130,14 +130,23 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
         case 1:
             m_speechData->config->setGroup("GStreamerPlayer");
             m_sinkName = m_speechData->config->readEntry("SinkName", "osssink");
+            m_periodSize = m_speechData->config->readNumEntry("PeriodSize", 128);
+            m_periods = m_speechData->config->readNumEntry("Periods", 8);
+            m_playerDebugLevel = m_speechData->config->readNumEntry("DebugLevel", 1);
             break;
         case 2:
             m_speechData->config->setGroup("ALSAPlayer");
             m_sinkName = m_speechData->config->readEntry("PcmName", "default");
+            m_periodSize = m_speechData->config->readNumEntry("PeriodSize", 128);
+            m_periods = m_speechData->config->readNumEntry("Periods", 8);
+            m_playerDebugLevel = m_speechData->config->readNumEntry("DebugLevel", 1);
             break;
         case 3:
             m_speechData->config->setGroup("aKodePlayer");
             m_sinkName = m_speechData->config->readEntry("SinkName", "auto");
+            m_periodSize = m_speechData->config->readNumEntry("PeriodSize", 128);
+            m_periods = m_speechData->config->readNumEntry("Periods", 8);
+            m_playerDebugLevel = m_speechData->config->readNumEntry("DebugLevel", 1);
             break;
     }
     // Connect timer timeout signal.
@@ -1378,7 +1387,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 if (it->audioPlayer)
                 {
                     it->audioPlayer->startPlay(it->audioUrl);
-                        // Set job to speaking state and set sequence number.
+                    // Set job to speaking state and set sequence number.
                     mlText* sentence = it->sentence;
                     m_currentJobNum = sentence->jobNum;
                     m_speechData->setTextJobState(m_currentJobNum, KSpeech::jsSpeaking);
@@ -1560,7 +1569,12 @@ Player* Speaker::createPlayerObject()
                 return createPlayerObject();
             }
         }
-    if (player) player->setSinkName(m_sinkName);
+    if (player) {
+        player->setSinkName(m_sinkName);
+        player->setPeriodSize(m_periodSize);
+        player->setPeriods(m_periodSize);
+        player->setDebugLevel(m_playerDebugLevel);
+    }
     return player;
 }
 

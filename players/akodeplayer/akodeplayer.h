@@ -54,7 +54,6 @@ public:
 
     virtual QStringList getPluginList( const QCString& classname );
     virtual void setSinkName(const QString &sinkName);
-    virtual bool requireVersion(uint major, uint minor, uint micro);
 
 public slots:
     void pause();
