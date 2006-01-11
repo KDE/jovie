@@ -120,6 +120,7 @@ QString AlsaPlayer::timestamp() const
     gettimeofday(&tv,NULL);
     QString ts;
     ts.sprintf(" %s [%d] ",tstr, (int) tv.tv_usec);
+    free(tstr);
     return ts;
 }
 
@@ -551,7 +552,7 @@ void AlsaPlayer::cleanup()
 {
     DBG("cleaning up");
     m_mutex.lock();
-    if (pcm_name) delete pcm_name;
+    if (pcm_name) free(pcm_name);
     if (fd >= 0) audiofile.close();
     if (handle) {
         snd_pcm_drop(handle);
