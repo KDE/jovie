@@ -157,7 +157,7 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     m_widget->volumeBox->setValue(config->readNumEntry("volume", 100));
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
     m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
-    m_widget->preloadCheckBox->setChecked(config->readBoolEntry(
+    m_widget->preloadCheckBox->setChecked(config->readEntry(
         "Preload", m_widget->preloadCheckBox->isChecked()));
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
     m_supportsSSML = static_cast<FestivalIntProc::SupportsSSML>(

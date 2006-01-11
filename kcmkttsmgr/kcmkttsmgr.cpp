@@ -661,22 +661,22 @@ void KCMKttsMgr::load()
     textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
     // Overall settings.
-    embedInSysTrayCheckBox->setChecked(m_config->readBoolEntry("EmbedInSysTray",
+    embedInSysTrayCheckBox->setChecked(m_config->readEntry("EmbedInSysTray",
         embedInSysTrayCheckBox->isChecked()));
-    showMainWindowOnStartupCheckBox->setChecked(m_config->readBoolEntry(
+    showMainWindowOnStartupCheckBox->setChecked(m_config->readEntry(
         "ShowMainWindowOnStartup", showMainWindowOnStartupCheckBox->isChecked()));
 
-    enableKttsdCheckBox->setChecked(m_config->readBoolEntry("EnableKttsd",
+    enableKttsdCheckBox->setChecked(m_config->readEntry("EnableKttsd",
         enableKttsdCheckBox->isChecked()));
 
     autostartMgrCheckBox->setChecked(m_config->readEntry("AutoStartManager", QVariant(true)).toBool());
     autoexitMgrCheckBox->setChecked(m_config->readEntry("AutoExitManager", QVariant(true)).toBool());
 
     // Notification settings.
-    notifyEnableCheckBox->setChecked(m_config->readBoolEntry("Notify",
+    notifyEnableCheckBox->setChecked(m_config->readEntry("Notify",
         notifyEnableCheckBox->isChecked()));
     notifyExcludeEventsWithSoundCheckBox->setChecked(
-        m_config->readBoolEntry("ExcludeEventsWithSound",
+        m_config->readEntry("ExcludeEventsWithSound",
         notifyExcludeEventsWithSoundCheckBox->isChecked()));
     slotNotifyClearButton_clicked();
     loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
