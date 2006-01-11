@@ -137,6 +137,8 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
         case 2:
             m_speechData->config->setGroup("ALSAPlayer");
             m_sinkName = m_speechData->config->readEntry("PcmName", "default");
+            if ("custom" == m_sinkName)
+                m_sinkName = m_speechData->config->readEntry("CustomPcmName", "default");
             m_periodSize = m_speechData->config->readNumEntry("PeriodSize", 128);
             m_periods = m_speechData->config->readNumEntry("Periods", 8);
             m_playerDebugLevel = m_speechData->config->readNumEntry("DebugLevel", 1);

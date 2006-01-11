@@ -209,6 +209,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         m_kttsmgrw->pcmLabel->setEnabled(true);
         m_kttsmgrw->pcmComboBox->setEnabled(true);
         QStringList pcmList = player->getPluginList("");
+        pcmList.append("custom");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
         m_kttsmgrw->pcmComboBox->clear();
         m_kttsmgrw->pcmComboBox->insertStringList(pcmList);
@@ -282,6 +283,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(slotGstreamerRadioButton_toggled(bool)));
     connect(m_kttsmgrw->alsaRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAlsaRadioButton_toggled(bool)));
+    connect(m_kttsmgrw->pcmComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotPcmComboBox_activated()));
     connect(m_kttsmgrw->akodeRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAkodeRadioButton_toggled(bool)));
     connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
@@ -708,6 +711,7 @@ void KCMKttsMgr::load()
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
     KttsUtils::setCbItemFromText(m_kttsmgrw->pcmComboBox, m_config->readEntry("PcmName", "default"));
+    m_kttsmgrw->pcmCustom->setText(m_config->readEntry("CustomPcmName", ""));
 
     // aKode settings.
     m_config->setGroup("aKodePlayer");
@@ -868,6 +872,7 @@ void KCMKttsMgr::save()
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
     m_config->writeEntry("PcmName", m_kttsmgrw->pcmComboBox->currentText());
+    m_config->writeEntry("CustomPcmName", m_kttsmgrw->pcmCustom->text());
 
     // aKode settings.
     m_config->setGroup("aKodePlayer");
@@ -1795,6 +1800,15 @@ void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
 {
     m_kttsmgrw->pcmLabel->setEnabled(state);
     m_kttsmgrw->pcmComboBox->setEnabled(state);
+    m_kttsmgrw->pcmCustom->setEnabled(state && m_kttsmgrw->pcmComboBox->currentText() == "custom");
+}
+
+/**
+* This is emitted whenever user activates the ALSA pcm combobox.
+*/
+void KCMKttsMgr::slotPcmComboBox_activated()
+{
+    m_kttsmgrw->pcmCustom->setEnabled(m_kttsmgrw->pcmComboBox->currentText() == "custom");
 }
 
 /**
@@ -2037,7 +2051,10 @@ void KCMKttsMgr::configureTalker()
     }
     if (m_kttsmgrw->alsaRadioButton->isChecked()) {
         playerOption = 2;
-        sinkName = m_kttsmgrw->pcmComboBox->currentText();
+        if (m_kttsmgrw->pcmComboBox->currentText() == "custom")
+            sinkName = m_kttsmgrw->pcmCustom->text();
+        else
+            sinkName = m_kttsmgrw->pcmComboBox->currentText();
     }
     if (m_kttsmgrw->akodeRadioButton->isChecked()) {
         playerOption = 3;

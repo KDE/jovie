@@ -72,6 +72,8 @@ _ KTTSMgr:
     _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
     _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ KTTSD:
+    _ Support IBM TTS, which is a proprietary runtime product with opensource API.
+      http://ibmtts-sdk.sourceforge.net/
     _ I am told that when kttsd crashes, it can take knotify down with it.  See about
       "disconnecting" knotify from kttsd (using post to Qt event queue).
     _ Strange msg being produced by KIO::move, but it works fine. ??

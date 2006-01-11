@@ -958,11 +958,11 @@ void AlsaPlayer::set_params(void)
     }
 
     /* Prepare device for output. */
-    err = snd_pcm_prepare(handle);
-    if (err < 0) {
-        MSG("Unable to prepare audio interface for playback: %s", snd_strerror(err));
-        stopAndExit();
-    }
+//     err = snd_pcm_prepare(handle);
+//     if (err < 0) {
+//         MSG("Unable to prepare audio interface for playback: %s", snd_strerror(err));
+//         stopAndExit();
+//     }
 
     /* Determine if device can pause. */
     canPause = (1 == snd_pcm_hw_params_can_pause(hwparams));
@@ -971,17 +971,16 @@ void AlsaPlayer::set_params(void)
     snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size);
     chunk_size = periods * period_size;
 
-    DBG("Final buffer_size = %lu, chunk_size = %lu, periods = %i, period_size = %lu, canPause = %i",
-        buffer_size, chunk_size, periods, period_size, canPause);
-
     if (0 == chunk_size) {
         ERR("Invalid periods or period_size.  Cannot continue.");
         stopAndExit();
     }
 
-    if (chunk_size == buffer_size) {
-         MSG("WARNING: Shouldn't use period equal to buffer size (%lu) because it generates buffer underruns.  Continuing anyway.", chunk_size);
-    }
+    if (chunk_size == buffer_size)
+        MSG("WARNING: Shouldn't use chunk_size equal to buffer_size (%lu).  Continuing anyway.", chunk_size);
+
+    DBG("Final buffer_size = %lu, chunk_size = %lu, periods = %i, period_size = %lu, canPause = %i",
+        buffer_size, chunk_size, periods, period_size, canPause);
 
 //    snd_pcm_sw_params_current(handle, swparams);
 //     err = snd_pcm_sw_params_get_xfer_align(swparams, &xfer_align);
@@ -1564,16 +1563,17 @@ void AlsaPlayer::header(int /*rtype*/, const char* /*name*/)
 //            (stream == SND_PCM_STREAM_PLAYBACK) ? "Playing" : "Recording",
 //            fmt_rec_table[rtype].what,
 //            name);
-    QString dbgStr;
-    QString s = dbgStr.sprintf( "%s, ", snd_pcm_format_description(hwdata.format));
-    s += dbgStr.sprintf( "Rate %d Hz, ", hwdata.rate);
+    QString channels;
     if (hwdata.channels == 1)
-        s += dbgStr.sprintf( "Mono");
+        channels = "Mono";
     else if (hwdata.channels == 2)
-        s += dbgStr.sprintf( "Stereo");
+        channels = "Stereo";
     else
-        s += dbgStr.sprintf( "Channels %i", hwdata.channels);
-    MSG("%s", s.ascii());
+        channels = QString("Channels %1").arg(hwdata.channels);
+    DBG("Format: %s, Rate %d Hz, %s",
+        snd_pcm_format_description(hwdata.format),
+        hwdata.rate,
+        channels.ascii());
 }
 
 /* playing raw data */

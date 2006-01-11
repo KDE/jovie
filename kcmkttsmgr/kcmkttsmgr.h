@@ -449,6 +449,11 @@ class KCMKttsMgr :
         void slotAlsaRadioButton_toggled(bool state);
 
         /**
+        * This is emitted whenever user activates the ALSA pcm combobox.
+        */
+        void slotPcmComboBox_activated();
+
+        /**
         * This signal is emitted whenever user checks/unchecks the aKode radio button.
         */
         void slotAkodeRadioButton_toggled(bool state);
