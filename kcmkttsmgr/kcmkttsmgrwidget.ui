@@ -1653,8 +1653,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>enableKttsdCheckBox</sender>
@@ -1737,6 +1735,78 @@
     <connection>
         <sender>akodeComboBox</sender>
         <signal>activated(int)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPreMsg</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPreMsgCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textPreMsg</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>textPreMsgCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPreSndCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textPreSnd</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>textPreSndCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPreSnd</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPostMsgCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textPostMsg</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>textPostMsgCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPostMsg</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPostSndCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textPostSnd</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>textPostSndCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KCMKttsMgrWidget</receiver>
+        <slot>slotConfigChanged()</slot>
+    </connection>
+    <connection>
+        <sender>textPostSnd</sender>
+        <signal>textChanged(const QString&amp;)</signal>
         <receiver>KCMKttsMgrWidget</receiver>
         <slot>slotConfigChanged()</slot>
     </connection>
