@@ -418,7 +418,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
                 snd_ctl_close(handle);
                 continue;
             }
-            for (;;) {
+            for (int devCnt=0;;++devCnt) {
                 err = snd_ctl_pcm_next_device(handle, &device);
                 if (err < 0 || device < 0) break;
 
@@ -426,13 +426,17 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
                 snd_pcm_info_set_subdevice(pcminfo, 0);
                 snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_PLAYBACK);
                 if ((err = snd_ctl_pcm_info(handle, pcminfo)) < 0) continue;
-                QString pluginName = QString("plughw:%1,%2").arg(card).arg(device);
-                pluginName += " ";
-                pluginName += snd_ctl_card_info_get_name(info);
-                pluginName += " (";
-                pluginName += snd_pcm_info_get_name(pcminfo);
-                pluginName += ")";
-                result.append(pluginName);
+                QString infoName = " ";
+                infoName += snd_ctl_card_info_get_name(info);
+                infoName += " (";
+                infoName += snd_pcm_info_get_name(pcminfo);
+                infoName += ")";
+                if (0 == devCnt) {
+                    QString pcmName = QString("default:%1").arg(card);
+                    result.append(pcmName + infoName);
+                }
+                QString pcmName = QString("plughw:%1,%2").arg(card).arg(device);
+                result.append(pcmName + infoName);
             }
             snd_ctl_close(handle);
         }
