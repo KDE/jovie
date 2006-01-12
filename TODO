@@ -55,7 +55,6 @@ _ Hadifix plugin:
       despite QFile::remove call.  Possibly still locked by exiting mbrola process?  This only seems
       to happen in the configuration dialog when canceling Tests.
 _ KTTSMgr:
-    _ Speech is paused when showing tooltip when mouse cursor is placed over tray icon.
     _ Give Talkers a Talker Name entered by user.  Show this name in Jobs tab, Change Talker screen,
       and in systray menu.
     _ Change the Current Sentence panel to show the current sentence of the selected job?  If selected
@@ -72,8 +71,6 @@ _ KTTSMgr:
     _ In kcmkttsmgr, use setHelp() to set help anchor based on current tab.
     _ Add playback controls to kttsmgr.  Volume, pause.  Maybe rewind?
 _ KTTSD:
-    _ Support IBM TTS, which is a proprietary runtime product with opensource API.
-      http://ibmtts-sdk.sourceforge.net/
     _ I am told that when kttsd crashes, it can take knotify down with it.  See about
       "disconnecting" knotify from kttsd (using post to Qt event queue).
     _ Strange msg being produced by KIO::move, but it works fine. ??
@@ -104,5 +101,6 @@ _ Other/General:
       Currently written in c, but it looks like future versions will require Java VM.
       Main problem at the moment is that dhvani sends audio directly to /dev/dsp with no option
       to send to a wav file.
-    _ IBM ViaVoice plugin?
+    _ IBM ViaVoice plugin?  IBM TTS is a proprietary runtime product with opensource API.
+      http://ibmtts-sdk.sourceforge.net/
     _ Add KTTS plugin to aKregator.
