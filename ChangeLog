@@ -1,3 +1,7 @@
+2006-01-10  Gary Cramblitt (PhantomsDad)
+        * Bug fix.  Pausing when popping up status in systray.
+        * Plug small memory leak.
+
 2006-01-09  Gary Cramblitt (PhantomsDad)
         * Fix BUG:119753 Freezing when removing a speaking text job speaking on AlsaPlayer.
           AlsaPlayer now uses non-blocking pcm open and polling.
