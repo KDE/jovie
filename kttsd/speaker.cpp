@@ -752,28 +752,32 @@ int Speaker::jumpToTextPart(const int partNum, const uint jobNum)
  */
 uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
 {
-    deleteUtteranceByJobNum(jobNum);
-    // TODO: More efficient way to advance one or two sentences, since there is a
-    // good chance those utterances are already in the queue and synthesized.
-    uint seq = m_speechData->moveRelTextSentence(n, jobNum);
-    kdDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
-    if (jobNum == m_lastJobNum)
-    {
-        if (seq == 0)
-            m_lastSeq = seq;
-        else
-            m_lastSeq = seq - 1;
+    if (0 == n)
+        return m_speechData->getJobSequenceNum(jobNum);
+    else {
+        deleteUtteranceByJobNum(jobNum);
+        // TODO: More efficient way to advance one or two sentences, since there is a
+        // good chance those utterances are already in the queue and synthesized.
+        uint seq = m_speechData->moveRelTextSentence(n, jobNum);
+        kdDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
+        if (jobNum == m_lastJobNum)
+        {
+            if (seq == 0)
+                m_lastSeq = seq;
+            else
+                m_lastSeq = seq - 1;
+        }
+        if (jobNum == m_currentJobNum)
+        {
+            m_lastJobNum = jobNum;
+            if (seq == 0)
+                m_lastSeq = 0;
+            else
+                m_lastSeq = seq - 1;
+            doUtterances();
+        }
+        return seq;
     }
-    if (jobNum == m_currentJobNum)
-    {
-        m_lastJobNum = jobNum;
-        if (seq == 0)
-            m_lastSeq = 0;
-        else
-            m_lastSeq = seq - 1;
-        doUtterances();
-    }
-    return seq;
 }
 
 /* Private Methods ==========================================================*/
