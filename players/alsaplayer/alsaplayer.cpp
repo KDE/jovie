@@ -220,10 +220,6 @@ void AlsaPlayer::startPlay(const QString &file)
         readn_func = snd_pcm_readn;
     }
 
-
-    // signal(SIGINT, signal_handler);
-    // signal(SIGTERM, signal_handler);
-    // signal(SIGABRT, signal_handler);
     playback(fd);
     cleanup();
     return;
@@ -241,8 +237,8 @@ void AlsaPlayer::pause()
                 snd_pcm_pause(handle, true);
                 m_mutex.unlock();
             } else {
-                // TODO: Need to support pausing for hardware that does not support it.
-                // Perhaps by setting a flag and causing pcm_write routine to sleep?
+                // Set a flag and cause wait_for_poll to sleep.  When resumed, will get
+                // an underrun.
                 m_simulatedPause = true;
                 m_mutex.unlock();
             }
@@ -256,9 +252,6 @@ void AlsaPlayer::stop()
         DBG("STOP! Locking mutex");
         m_mutex.lock();
         m_simulatedPause = false;
-        /* Stop PCM device and drop pending frames */
-        // DBG("calling snd_pcm_drop");
-        // if (handle) snd_pcm_drop(handle);
         if (handle) {
             /* This constant is arbitrary */
             char buf = 42;
@@ -767,7 +760,7 @@ ssize_t AlsaPlayer::test_wavefile(int fd, char *_buffer, size_t size)
 }
 
 /*
-
+ * Test for AU file.
  */
 
 int AlsaPlayer::test_au(int fd, char *buffer)
@@ -817,19 +810,13 @@ int AlsaPlayer::test_au(int fd, char *buffer)
 void AlsaPlayer::set_params(void)
 {
     snd_pcm_hw_params_t *hwparams;
-    // snd_pcm_sw_params_t *swparams;
     snd_pcm_uframes_t period_size;
-    // snd_pcm_uframes_t buffer_frames;
     int err;
     int dir;
-    // size_t n;
-    // snd_pcm_uframes_t xfer_align;
     unsigned int rate;
     unsigned int periods;
-    // snd_pcm_uframes_t start_threshold;
-    // snd_pcm_uframes_t stop_threshold;
+
     snd_pcm_hw_params_alloca(&hwparams);
-    // snd_pcm_sw_params_alloca(&swparams);
     err = snd_pcm_hw_params_any(handle, hwparams);
     if (err < 0) {
         ERR("Broken configuration for this PCM: no configurations available");
@@ -908,34 +895,6 @@ void AlsaPlayer::set_params(void)
         MSG("Warning: rate is not accurate (requested = %iHz, got = %iHz)", rate, hwdata.rate);
         MSG("         please, try the plug plugin (-Dplug:%s)", snd_pcm_name(handle));
     }
-/*    rate = hwdata.rate;
-    if (buffer_time == 0 && buffer_frames == 0) {
-        err = snd_pcm_hw_params_get_buffer_time_max(hwparams, &buffer_time, 0);
-        assert(err >= 0);
-        if (buffer_time > 500000)
-            buffer_time = 500000;
-    }
-    if (period_time == 0 && period_frames == 0) {
-        if (buffer_time > 0)
-            period_time = buffer_time / 4;
-        else
-            period_frames = buffer_frames / 4;
-    }
-    if (period_time > 0)
-        err = snd_pcm_hw_params_set_period_time_near(handle, hwparams,
-                                 &period_time, 0);
-    else
-        err = snd_pcm_hw_params_set_period_size_near(handle, hwparams,
-                                 &period_frames, 0);
-    assert(err >= 0);
-    if (buffer_time > 0) {
-        err = snd_pcm_hw_params_set_buffer_time_near(handle, hwparams,
-                                 &buffer_time, 0);
-    } else {
-        err = snd_pcm_hw_params_set_buffer_size_near(handle, hwparams,
-                                 &buffer_frames);
-    }
-    assert(err >= 0);*/
 
     period_size = m_defPeriodSize;
     dir = 1;
@@ -958,13 +917,6 @@ void AlsaPlayer::set_params(void)
         stopAndExit();
     }
 
-    /* Prepare device for output. */
-//     err = snd_pcm_prepare(handle);
-//     if (err < 0) {
-//         MSG("Unable to prepare audio interface for playback: %s", snd_strerror(err));
-//         stopAndExit();
-//     }
-
     /* Determine if device can pause. */
     canPause = (1 == snd_pcm_hw_params_can_pause(hwparams));
 
@@ -982,52 +934,6 @@ void AlsaPlayer::set_params(void)
 
     DBG("Final buffer_size = %lu, chunk_size = %lu, periods = %i, period_size = %lu, canPause = %i",
         buffer_size, chunk_size, periods, period_size, canPause);
-
-//    snd_pcm_sw_params_current(handle, swparams);
-//     err = snd_pcm_sw_params_get_xfer_align(swparams, &xfer_align);
-//     if (err < 0) {
-//         ERR("Unable to obtain xfer align");
-//         stopAndExit();
-//     }
-//     if (sleep_min)
-//         xfer_align = 1;
-//     err = snd_pcm_sw_params_set_sleep_min(handle, swparams, sleep_min);
-//     assert(err >= 0);
-//     if (avail_min < 0)
-//         n = chunk_size;
-//     else
-//         n = (unsigned int)((double) rate * avail_min / 1000000);
-//     /* This is probably better left for the device driver to decide */
-//     /* allow the transfer when at least n samples can be processed */
-//     // err = snd_pcm_sw_params_set_avail_min(handle, swparams, n);
-// 
-//     /* round up to closest transfer boundary */
-//     n = (buffer_size / xfer_align) * xfer_align;
-//     if (start_delay <= 0) {
-//         start_threshold = (long unsigned int)(n + (double) rate * start_delay / 1000000);
-//     } else
-//         start_threshold = (long unsigned int)((double) rate * start_delay / 1000000);
-//     if (start_threshold < 1)
-//         start_threshold = 1;
-//     if (start_threshold > n)
-//         start_threshold = n;
-//     err = snd_pcm_sw_params_set_start_threshold(handle, swparams, start_threshold);
-//     assert(err >= 0);
-//     if (stop_delay <= 0) 
-//         stop_threshold = (long unsigned int)(buffer_size + (double) rate * stop_delay / 1000000);
-//     else
-//         stop_threshold = (long unsigned int)((double) rate * stop_delay / 1000000);
-//     err = snd_pcm_sw_params_set_stop_threshold(handle, swparams, stop_threshold);
-//     assert(err >= 0);
-// 
-//     err = snd_pcm_sw_params_set_xfer_align(handle, swparams, xfer_align);
-//     assert(err >= 0);
-// 
-//     if (snd_pcm_sw_params(handle, swparams) < 0) {
-//         ERR("unable to install sw params:");
-//         snd_pcm_sw_params_dump(swparams, log);
-//         stopAndExit();
-//     }
 
     if (m_debugLevel >= 2)
         snd_pcm_dump(handle, log);
@@ -1185,7 +1091,7 @@ void AlsaPlayer::compute_max_peak(char *data, size_t count)
 }
 
 /*
- *  write function
+ *  Write to the ALSA pcm.
  */
 
 ssize_t AlsaPlayer::pcm_write(char *data, size_t count)
