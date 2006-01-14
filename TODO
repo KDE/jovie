@@ -31,17 +31,6 @@ _ Festival Interactive plugin:
       http://www.freebsoft.org/festival-czech
     _ New Italian voice for Festival. http://www.pd.istc.cnr.it/FESTIVAL/home/default.htm
 _ EPOS plugin:
-    _ Epos server command changed from epos to eposd.  Epos client command changed from
-      say to say-epos.  These changes appeared around Epos v2.5.35.  Enhance to try for these
-      automatically.
-    _ BUG:115795 Don't try to start the Epos server for every utterance.
-    _ A user claims that with Epos 2.5.36 under SuSE9.3, the generated spoken sentences
-      contain in some cases additional random letters and/or numbers.  User claims
-      changing in eposproc.cpp
-        if (!m_eposProc->writeStdin(m_encText, m_encText.length()))
-      to
-        if (!m_eposProc->writeStdin(m_encText, text.length()))
-      fixes the problem.  This doesn't make sense, so something else is probably going on.
 _ Command plugin:
     _ Command plugin encodes text on command line using %t in user's chosen encoding, but
       if this differs from user's desktop default encoding, doesn't work.  KProcess always

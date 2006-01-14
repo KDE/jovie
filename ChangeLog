@@ -1,3 +1,10 @@
+2006-01-13  Gary Cramblitt (PhantomsDad)
+        * Fix BUG:120083 buffer length problem in Epos plugin.
+        * Fix BUG:115795 Don't try to start the Epos server for every utterance.
+        * Epos server command changed from epos to eposd.  Epos client command changed from
+          say to say-epos.  These changes appeared around Epos v2.5.35.  Enhance to try for these
+          automatically.
+
 2006-01-10  Gary Cramblitt (PhantomsDad)
         * Bug fix.  Pausing when popping up status in systray.
         * Plug small memory leak.

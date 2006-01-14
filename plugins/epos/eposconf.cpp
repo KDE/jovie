@@ -106,8 +106,8 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     // kdDebug() << "EposConf::load: Running " << endl;
 
     config->setGroup(configGroup);
-    m_widget->eposServerPath->setURL(config->readEntry("EposServerExePath", "epos"));
-    m_widget->eposClientPath->setURL(config->readEntry("EposClientExePath", "say"));
+    m_widget->eposServerPath->setURL(config->readEntry("EposServerExePath", "eposd"));
+    m_widget->eposClientPath->setURL(config->readEntry("EposClientExePath", "say-epos"));
     m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
     m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "ISO 8859-2");
@@ -152,8 +152,18 @@ void EposConf::save(KConfig *config, const QString &configGroup){
 
 void EposConf::defaults(){
     // kdDebug() << "EposConf::defaults: Running" << endl;
-    m_widget->eposServerPath->setURL("epos");
-    m_widget->eposClientPath->setURL("say");
+    // Epos server command changed from epos to eposd.  Epos client command changed from
+    // say to say-epos.  These changes appeared around Epos v2.5.35.  Try for these automatically.
+    QString exeName = "eposd";
+    if (realFilePath(exeName).isEmpty())
+        if (!realFilePath("epos").isEmpty())
+            exeName = "epos";
+    m_widget->eposServerPath->setURL(exeName);
+    exeName = "say-epos";
+    if (realFilePath(exeName).isEmpty())
+        if (!realFilePath("say").isEmpty())
+            exeName = "say";
+    m_widget->eposClientPath->setURL(exeName);
     m_widget->eposServerOptions->setText("");
     m_widget->eposClientOptions->setText("");
     m_widget->timeBox->setValue(100);

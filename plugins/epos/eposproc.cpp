@@ -30,7 +30,6 @@
 #include <qstringlist.h>
 #include <qtextcodec.h>
 #include <qfile.h>
-#include <qtextcodec.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -42,7 +41,7 @@
 // Epos Plugin includes.
 #include "eposproc.h"
 #include "eposproc.moc"
- 
+
 /** Constructor */
 EposProc::EposProc( QObject* parent, const char* name, const QStringList& ) : 
     PlugInProc( parent, name ){
@@ -86,7 +85,7 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     // Start the Epos server if not already started.
     if (!m_eposServerProc)
     {
-        KProcess* m_eposServerProc = new KProcess;
+        m_eposServerProc = new KProcess;
         *m_eposServerProc << m_eposServerExePath;
         if (!m_eposServerOptions.isEmpty())
             *m_eposServerProc << m_eposServerOptions;
@@ -170,7 +169,7 @@ void EposProc::synth(
     // Start the Epos server if not already started.
     if (!m_eposServerProc)
     {
-        KProcess* m_eposServerProc = new KProcess;
+        m_eposServerProc = new KProcess;
         *m_eposServerProc << eposServerExePath;
         if (!eposServerOptions.isEmpty())
             *m_eposServerProc << eposServerOptions;
@@ -179,18 +178,21 @@ void EposProc::synth(
         connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
             this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
         m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
+        kdDebug() << "EposProc:: Epos server process started" << endl;
     }
 
-    // Encode the text.
-    // 1.a) encode the text
-    m_encText = QCString();
-    QTextStream ts (m_encText, IO_WriteOnly);
-    ts.setCodec(codec);
-    ts << text;
-    ts << endl; // Some synths need this, eg. flite.
+//     // Encode the text.
+//     // 1.a) encode the text
+//     m_encText = QCString();
+//     QTextStream ts (m_encText, IO_WriteOnly);
+//     ts.setCodec(codec);
+//     ts << text;
+//     ts << endl; // Some synths need this, eg. flite.
 
-    // Quote the text as one parameter.
-    // QString escText = KShellProcess::quote(encText);
+    if (codec)
+        m_encText = codec->fromUnicode(text);
+    else
+        m_encText = text.latin1();  // Should not happen, but just in case.
 
     // kdDebug()<< "EposProc::synth: Creating Epos object" << endl;
     m_eposProc = new KProcess;
@@ -247,14 +249,16 @@ void EposProc::synth(
 
     // Ok, let's rock.
     m_synthFilename = suggestedFilename;
-    kdDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
+    // kdDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
     if (!m_eposProc->start(KProcess::NotifyOnExit, KProcess::All))
     {
         kdDebug() << "EposProc::synth: Error starting Epos process.  Is epos in the PATH?" << endl;
         m_state = psIdle;
         return;
     }
-    kdDebug()<< "EposProc:synth: Epos initialized" << endl;
+    // kdDebug() << "EposProc:synth: Epos initialized" << endl;
+    // kdDebug() << "EposProc::synth: m_encText.length() = " << m_encText.length() << " text.length() = "
+    //     << text.length() << endl;
     if (!m_eposProc->writeStdin(m_encText, m_encText.length()))
         kdDebug() << "EposProc::synth: Error writing to Epos client StdIn." << endl;
 }
@@ -303,7 +307,7 @@ void EposProc::stopText(){
 
 void EposProc::slotProcessExited(KProcess*)
 {
-    kdDebug() << "EposProc:slotProcessExited: Epos process has exited." << endl;
+    // kdDebug() << "EposProc:slotProcessExited: Epos process has exited." << endl;
     pluginState prevState = m_state;
     if (m_waitingStop)
     {
@@ -334,7 +338,7 @@ void EposProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 
 void EposProc::slotWroteStdin(KProcess*)
 {
-    kdDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
+    // kdDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
     m_eposProc->closeStdin();
     m_encText = QCString();
 }
