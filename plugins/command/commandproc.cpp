@@ -134,13 +134,14 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     QString command = userCmd;
     QString text = inputText.stripWhiteSpace();
     if (text.isEmpty()) return;
-    // 1. prepare the text:
-    // 1.a) encode the text
-    QByteArray encText;
-    QTextStream ts (encText, IO_WriteOnly);
-    ts.setCodec(codec);
-    ts << text;
-    ts << endl; // Some synths need this, eg. flite.
+     // 1. prepare the text:
+     // 1.a) encode the text
+    text += "\n";
+    QCString encodedText;
+    if (codec)
+        encodedText = m_codec->fromUnicode(text);
+    else
+        encodedText = text.latin1();  // Should not happen, but just in case.
 
     // 1.b) quote the text as one parameter
     QString escText = KShellProcess::quote(text);
@@ -309,8 +310,8 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     }
     if (stdIn) {
         m_commandProc->start(KProcess::NotifyOnExit, KProcess::All);
-        if (encText.size() > 0)
-            m_commandProc->writeStdin(encText, encText.size());
+        if (encodedText.length() > 0)
+            m_commandProc->writeStdin(encodedText, encodedText.length());
         else
             m_commandProc->closeStdin();
     }
