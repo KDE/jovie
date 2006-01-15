@@ -139,7 +139,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     text += "\n";
     QCString encodedText;
     if (codec)
-        encodedText = m_codec->fromUnicode(text);
+        encodedText = codec->fromUnicode(text);
     else
         encodedText = text.latin1();  // Should not happen, but just in case.
 
