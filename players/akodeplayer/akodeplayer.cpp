@@ -68,7 +68,8 @@ void aKodePlayer::startPlay(const QString &file)
         }
     }
 
-    if (m_player->load(file.local8Bit().data()))
+    // if (m_player->load(file.local8Bit().data()))
+    if (m_player->load(QFile::encodeName(file)))
         m_player->play();
 
 }
