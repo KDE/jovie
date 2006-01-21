@@ -93,13 +93,13 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_voiceCode = config->readEntry("Voice");
     m_festivalExePath = config->readEntry("FestivalExecutablePath", "festival");
     // kdDebug() << "---- The code for the selected voice " << config->readEntry("Voice") << " is " << voiceCode << endl;
-    m_time = config->readNumEntry("time", 100);
-    m_pitch = config->readNumEntry("pitch", 100);
-    m_volume = config->readNumEntry("volume", 100);
+    m_time = config->readEntry("time", 100);
+    m_pitch = config->readEntry("pitch", 100);
+    m_volume = config->readEntry("volume", 100);
     // If voice should be pre-loaded, start Festival and load the voice.
     m_preload = config->readEntry("Preload", QVariant(false)).toBool();
     m_languageCode = config->readEntry("LanguageCode", "en");
-    m_supportsSSML = static_cast<SupportsSSML>(config->readNumEntry("SupportsSSML", ssUnknown));
+    m_supportsSSML = static_cast<SupportsSSML>(config->readEntry("SupportsSSML", int(ssUnknown)));
     QString codecName = config->readEntry("Codec", "Latin1");
     m_codec = codecNameToCodec(codecName);
     if (m_preload) startEngine(m_festivalExePath, m_voiceCode, m_languageCode, m_codec);

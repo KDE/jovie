@@ -696,7 +696,7 @@ void KCMKttsMgr::load()
     if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
     if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
-    audioOutputMethod = m_config->readNumEntry("AudioOutputMethod", audioOutputMethod);
+    audioOutputMethod = m_config->readEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
         case 0:
@@ -712,7 +712,7 @@ void KCMKttsMgr::load()
             akodeRadioButton->setChecked(true);
             break;
     }
-    timeBox->setValue(m_config->readNumEntry("AudioStretchFactor", timeBoxValue));
+    timeBox->setValue(m_config->readEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(timeBox->value());
     keepAudioCheckBox->setChecked(
         m_config->readEntry("KeepAudio", QVariant(keepAudioCheckBox->isChecked())).toBool());

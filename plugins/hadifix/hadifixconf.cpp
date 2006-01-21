@@ -169,9 +169,9 @@ class HadifixConfPrivate {
                config->readEntry ("mbrolaExec", defaultMbrolaExec),
                config->readEntry ("voice",      voice),
                config->readEntry("gender", QVariant(isMale)).toBool(),
-               config->readNumEntry ("volume",  100),
-               config->readNumEntry ("time",    100),
-               config->readNumEntry ("pitch",   100),
+               config->readEntry ("volume",  100),
+               config->readEntry ("time",    100),
+               config->readEntry ("pitch",   100),
                config->readEntry ("codec",      defaultCodecName)
          );
       };

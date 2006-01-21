@@ -56,9 +56,9 @@ class HadifixProcPrivate {
          mbrola   = config->readEntry ("mbrolaExec",    QString());
          voice    = config->readEntry ("voice",         QString());
          gender   = config->readEntry("gender", QVariant(false)).toBool();
-         volume   = config->readNumEntry ("volume",     100);
-         time     = config->readNumEntry ("time",       100);
-         pitch    = config->readNumEntry ("pitch",      100);
+         volume   = config->readEntry ("volume",     100);
+         time     = config->readEntry ("time",       100);
+         pitch    = config->readEntry ("pitch",      100);
          codec    = PlugInProc::codecNameToCodec(config->readEntry ("codec", "Local"));
       };
 

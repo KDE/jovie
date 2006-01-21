@@ -154,14 +154,14 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
         m_widget->selectVoiceCombo->setCurrentItem(index);
         m_widget->preloadCheckBox->setChecked(m_voiceList[index].preload);
     }
-    m_widget->volumeBox->setValue(config->readNumEntry("volume", 100));
-    m_widget->timeBox->setValue(config->readNumEntry("time", 100));
-    m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
+    m_widget->volumeBox->setValue(config->readEntry("volume", 100));
+    m_widget->timeBox->setValue(config->readEntry("time", 100));
+    m_widget->frequencyBox->setValue(config->readEntry("pitch", 100));
     m_widget->preloadCheckBox->setChecked(config->readEntry(
         "Preload", m_widget->preloadCheckBox->isChecked()));
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
     m_supportsSSML = static_cast<FestivalIntProc::SupportsSSML>(
-        config->readNumEntry("SupportsSSML", FestivalIntProc::ssUnknown));
+        config->readEntry("SupportsSSML", int(FestivalIntProc::ssUnknown)));
     QString codecName = PlugInProc::codecIndexToCodecName(
         m_widget->characterCodingBox->currentItem(), m_codecList);
     codecName = config->readEntry("Codec", codecName);

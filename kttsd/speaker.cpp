@@ -123,9 +123,9 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_lastSeq = 0;
     m_timer = new QTimer(this, "kttsdAudioTimer");
     m_speechData->config->setGroup("General");
-    m_playerOption = m_speechData->config->readNumEntry("AudioOutputMethod", 0);  // default to aRts.
+    m_playerOption = m_speechData->config->readEntry("AudioOutputMethod", 0);  // default to aRts.
     // Map 50% to 100% onto 2.0 to 0.5.
-    m_audioStretchFactor = 1.0/(float(m_speechData->config->readNumEntry("AudioStretchFactor", 100))/100.0);
+    m_audioStretchFactor = 1.0/(float(m_speechData->config->readEntry("AudioStretchFactor", 100))/100.0);
     switch (m_playerOption)
     {
         case 0: break;

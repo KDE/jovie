@@ -74,8 +74,8 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readEntry("EposClientExePath", "say");
     m_eposLanguage = config->readEntry("Language", QString());
-    m_time = config->readNumEntry("time", 100);
-    m_pitch = config->readNumEntry("pitch", 100);
+    m_time = config->readEntry("time", 100);
+    m_pitch = config->readEntry("pitch", 100);
     m_eposServerOptions = config->readEntry("EposServerOptions", QString());
     m_eposClientOptions = config->readEntry("EposClientOptions", QString());
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;

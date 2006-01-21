@@ -114,8 +114,8 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "ISO 8859-2");
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
-    m_widget->timeBox->setValue(config->readNumEntry("time", 100));
-    m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
+    m_widget->timeBox->setValue(config->readEntry("time", 100));
+    m_widget->frequencyBox->setValue(config->readEntry("pitch", 100));
     m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
