@@ -217,7 +217,7 @@ void EposConf::slotEposTest_clicked()
     QString testMsg = testMessage(m_languageCode);
 
     // Tell user to wait.
-    m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_epos_testdlg",
+    m_progressDlg = new KProgressDialog(m_widget,
         i18n("Testing"),
         i18n("Testing."),
         true);

@@ -417,7 +417,7 @@ void FestivalIntConf::scanVoices()
     if (!getLocation(exePath).isEmpty())
     {
         // Set up a progress dialog.
-        m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_queryvoices",
+        m_progressDlg = new KProgressDialog(m_widget,
             i18n("Query Voices"),
             i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
             true);
@@ -578,7 +578,7 @@ void FestivalIntConf::slotTest_clicked()
         m_widget->characterCodingBox->currentItem(), m_codecList);
 
     // Tell user to wait.
-    m_progressDlg = new KProgressDialog(m_widget, "ktts_festivalint_testdlg",
+    m_progressDlg = new KProgressDialog(m_widget,
         i18n("Testing"),
         i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
         true);

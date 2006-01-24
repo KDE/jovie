@@ -41,7 +41,7 @@
 #include <klineedit.h>
 #include <knuminput.h>
 #include <kprogressbar.h>
-
+#include <kprogressdialog.h>
 // KTTS includes.
 #include <pluginconf.h>
 #include <testplayer.h>
@@ -341,7 +341,7 @@ void HadifixConf::testButton_clicked () {
    tempFile.close();
 
     // Tell user to wait.
-   d->progressDlg = new KProgressDialog(d->configWidget, "ktts_hadifix_testdlg",
+   d->progressDlg = new KProgressDialog(d->configWidget, 
       i18n("Testing"),
       i18n("Testing."),
       true);
