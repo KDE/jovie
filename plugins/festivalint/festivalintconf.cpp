@@ -48,7 +48,7 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kprocio.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kiconloader.h>
 
 // KTTS includes.

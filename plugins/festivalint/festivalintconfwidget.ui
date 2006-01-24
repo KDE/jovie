@@ -104,7 +104,7 @@
                                 <string>If Festival is in your PATH environment variable, just enter "festival", otherwise specify the full path to the Festival executable program.</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="KUrlRequester">
                             <property name="name">
                                 <cstring>festivalPath</cstring>
                             </property>

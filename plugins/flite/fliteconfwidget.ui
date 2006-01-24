@@ -121,7 +121,7 @@
                                 <string>If Flite is in your PATH environment variable, simply enter "flite", otherwise specify the complete path to the Flite executable program.</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="KUrlRequester">
                             <property name="name">
                                 <cstring>flitePath</cstring>
                             </property>

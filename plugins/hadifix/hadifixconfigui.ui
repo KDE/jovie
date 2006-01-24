@@ -422,7 +422,7 @@
                                 <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester" row="0" column="1">
+                        <widget class="KUrlRequester" row="0" column="1">
                             <property name="name">
                                 <cstring>hadifixURL</cstring>
                             </property>
@@ -452,7 +452,7 @@
                                 <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester" row="1" column="1">
+                        <widget class="KUrlRequester" row="1" column="1">
                             <property name="name">
                                 <cstring>mbrolaURL</cstring>
                             </property>

@@ -64,7 +64,7 @@
                         <cstring>urlReq</cstring>
                     </property>
                 </widget>
-                <widget class="KURLRequester" row="3" column="0">
+                <widget class="KUrlRequester" row="3" column="0">
                     <property name="name">
                         <cstring>urlReq</cstring>
                     </property>

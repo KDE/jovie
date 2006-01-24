@@ -36,7 +36,7 @@
                         <string>Enter any descriptive name you like for this filter.</string>
                     </property>
                 </widget>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>xsltPath</cstring>
                     </property>
@@ -44,7 +44,7 @@
                         <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
                     </property>
                 </widget>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>xsltprocPath</cstring>
                     </property>

@@ -40,7 +40,7 @@
 #include <kdialogbase.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 // KTTS includes.
 #include <pluginconf.h>

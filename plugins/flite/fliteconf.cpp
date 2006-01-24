@@ -31,7 +31,7 @@
 #include <kdialog.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 // KTTS includes.
 #include <testplayer.h>

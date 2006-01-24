@@ -390,7 +390,7 @@
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="KURLRequester">
+                                <widget class="KUrlRequester">
                                     <property name="name">
                                         <cstring>eposServerPath</cstring>
                                     </property>
@@ -409,7 +409,7 @@
                                         <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
                                     </property>
                                 </widget>
-                                <widget class="KURLRequester">
+                                <widget class="KUrlRequester">
                                     <property name="name">
                                         <cstring>eposClientPath</cstring>
                                     </property>

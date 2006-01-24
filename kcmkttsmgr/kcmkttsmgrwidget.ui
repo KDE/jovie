@@ -863,7 +863,7 @@
           <number>6</number>
          </property>
          <item row="1" column="1" >
-          <widget class="KURLRequester" name="textPreSnd" >
+          <widget class="KUrlRequester" name="textPreSnd" >
            <property name="enabled" >
             <bool>true</bool>
            </property>
@@ -938,7 +938,7 @@
           </widget>
          </item>
          <item row="3" column="1" >
-          <widget class="KURLRequester" name="textPostSnd" >
+          <widget class="KUrlRequester" name="textPostSnd" >
            <property name="enabled" >
             <bool>true</bool>
            </property>
@@ -1362,7 +1362,7 @@
           </widget>
          </item>
          <item>
-          <widget class="KURLRequester" name="keepAudioPath" >
+          <widget class="KUrlRequester" name="keepAudioPath" >
            <property name="enabled" >
             <bool>true</bool>
            </property>
@@ -1405,7 +1405,7 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KURLRequester</class>
+   <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
    <container>1</container>

@@ -115,7 +115,7 @@
                                 <cstring>freettsPath</cstring>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="KUrlRequester">
                             <property name="name">
                                 <cstring>freettsPath</cstring>
                             </property>

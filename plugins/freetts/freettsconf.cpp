@@ -31,7 +31,7 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 // KTTS includes.
 #include <pluginconf.h>
