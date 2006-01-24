@@ -32,7 +32,7 @@
 #include <ktempfile.h>
 #include <kstandarddirs.h>
 #include <kprogressbar.h>
-
+#include <kprogressdialog.h>
 // KTTS includes.
 #include <testplayer.h>
 

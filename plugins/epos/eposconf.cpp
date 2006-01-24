@@ -40,7 +40,7 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <knuminput.h>
-
+#include <kprogressdialog.h>
 // KTTS includes.
 #include <testplayer.h>
 

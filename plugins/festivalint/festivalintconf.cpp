@@ -34,6 +34,7 @@
 #include <qslider.h>
 #include <qdom.h>
 #include <qtextcodec.h>
+#include <kprogressdialog.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QVBoxLayout>
