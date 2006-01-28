@@ -120,7 +120,7 @@ private:
     bool playback_go(int fd, size_t loaded, off64_t count, int rtype, const char *name);
     bool playback(int fd);
 
-    KURL m_currentURL;
+    KUrl m_currentURL;
     float m_currentVolume;
     QString m_pcmName;
     char* pcm_name;
