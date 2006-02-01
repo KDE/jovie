@@ -1,24 +1,29 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KTTSD main class
+  KTTSMgr Application
   -------------------
   Copyright:
   (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
- ******************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; version 2 of the License or later.      *
- *                                                                         *
- ***************************************************************************/
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ ******************************************************************************/
 
 // Qt includes.
 #include <QImage>
-//Added by qt3to4:
 #include <QPixmap>
 
 // KDE includes.
@@ -45,7 +50,8 @@ static const KCmdLineOptions options[] =
     { "s", 0, 0 },
     { "systray", I18N_NOOP("Start minimized in system tray."), 0 },
     { "a", 0, 0 },
-    { "autoexit", I18N_NOOP("Exit when speaking is finished and minimized in system tray."), 0 }
+    { "autoexit", I18N_NOOP("Exit when speaking is finished and minimized in system tray."), 0 },
+    KCmdLineLastOption
 };
 
 int main (int argc, char *argv[])
@@ -62,6 +68,7 @@ int main (int argc, char *argv[])
     aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
     aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
     aboutdata.addCredit("David Powell", I18N_NOOP("Testing"), "achiestdragon@gmail.com");
+
     KCmdLineArgs::init( argc, argv, &aboutdata );
 
     KCmdLineArgs::addCmdLineOptions( options );
