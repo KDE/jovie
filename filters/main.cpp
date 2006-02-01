@@ -1,8 +1,25 @@
-/**********************
-  #FILENAME: #FILEDESC
-  #COPYRIGHTNOTICE
-  #LICENSE
-***********************/
+/***************************************************** vim:set ts=4 sw=4 sts=4:
+  KTTSD Filter Test Program
+  -------------------------
+  Copyright:
+  (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  -------------------
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ ******************************************************************************/
 
 #include <qstring.h>
 #include <iostream>
@@ -36,7 +53,8 @@ static const KCmdLineOptions options[] =
     { "list", I18N_NOOP("Display list of available Filter PlugIns and exit"), 0 },
     { "b", 0, 0 },
     { "break", I18N_NOOP("Display tabs as \\t, otherwise they are removed"), 0 },
-    { "list", I18N_NOOP("Display list of available filter plugins and exit"), 0 }
+    { "list", I18N_NOOP("Display list of available filter plugins and exit"), 0 },
+    KCmdLineLastOption
 };
 
 int main(int argc, char *argv[])
