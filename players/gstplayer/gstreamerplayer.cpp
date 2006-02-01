@@ -54,7 +54,7 @@ void GStreamerPlayer::startPlay(const QString &file)
     if(!file.isNull()) {
         stop();
         // g_object_set(G_OBJECT(m_source), "location", file.absoluteFilePath().toLocal8Bit().data(), 0);
-        g_object_set(G_OBJECT(m_source), "location", file.toLocal8Bit().data(), 0);
+        g_object_set(G_OBJECT(m_source), "location", file.toLocal8Bit().data(), NULL);
     }
 
     gst_element_set_state(m_pipeline, GST_STATE_PLAYING);
@@ -72,13 +72,13 @@ void GStreamerPlayer::stop()
 
 void GStreamerPlayer::setVolume(float volume)
 {
-    g_object_set(G_OBJECT(m_volume), "volume", volume, 0);
+    g_object_set(G_OBJECT(m_volume), "volume", volume, NULL);
 }
 
 float GStreamerPlayer::volume() const
 {
     gfloat value;
-    g_object_get(G_OBJECT(m_volume), "volume", &value, 0);
+    g_object_get(G_OBJECT(m_volume), "volume", &value, NULL);
     return value;
 }
 
