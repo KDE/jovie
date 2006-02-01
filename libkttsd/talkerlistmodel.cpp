@@ -193,7 +193,7 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* config)
     // Clear the model and view.
     clear();
     // Iterate through list of the TalkerCode IDs.
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    QStringList talkerIDsList = config->readEntry("TalkerIDs", QStringList(), ',');
     if (!talkerIDsList.isEmpty())
     {
         QStringList::ConstIterator itEnd = talkerIDsList.constEnd();

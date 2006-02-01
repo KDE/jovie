@@ -65,7 +65,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
     m_loadedTalkerIds.clear();
 
     config->setGroup("General");
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    QStringList talkerIDsList = config->readEntry("TalkerIDs", QStringList(), ',');
     if (!talkerIDsList.isEmpty())
     {
         KLibFactory *factory;
@@ -305,7 +305,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     QString languageCode = langCode;
 
     // Get last TalkerID from config.
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    QStringList talkerIDsList = config->readEntry("TalkerIDs", QStringList(), ',');
     int lastTalkerID = 0;
     for (int talkerIdNdx = 0; talkerIdNdx < talkerIDsList.count(); ++talkerIdNdx)
     {

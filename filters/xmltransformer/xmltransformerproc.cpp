@@ -77,9 +77,9 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     m_UserFilterName = config->readEntry( "UserFilterName" );
     m_xsltFilePath = config->readEntry( "XsltFilePath" );
     m_xsltprocPath = config->readEntry( "XsltprocPath" );
-    m_rootElementList = config->readListEntry( "RootElement", ',' );
-    m_doctypeList = config->readListEntry( "DocType", ',' );
-    m_appIdList = config->readListEntry( "AppID", ',' );
+    m_rootElementList = config->readEntry( "RootElement", QStringList(), ',' );
+    m_doctypeList = config->readEntry( "DocType", QStringList(), ',' );
+    m_appIdList = config->readEntry( "AppID", QStringList(), ',' );
     kdDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath << endl;
     kdDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath << endl;
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );

@@ -770,7 +770,7 @@ void KCMKttsMgr::load()
     m_filterListModel.clear();
     m_sbdFilterListModel.clear();
     m_config->setGroup("General");
-    QStringList filterIDsList = m_config->readListEntry("FilterIDs", ',');
+    QStringList filterIDsList = m_config->readEntry("FilterIDs", QStringList(), ',');
     // kdDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList << endl;
     if (!filterIDsList.isEmpty())
     {

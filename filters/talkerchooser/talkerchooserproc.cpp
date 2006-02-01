@@ -65,7 +65,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
     // kdDebug() << "PlugInProc::init: Running" << endl;
     config->setGroup( configGroup );
     m_re = config->readEntry( "MatchRegExp" );
-    m_appIdList = config->readListEntry( "AppIDs" );
+    m_appIdList = config->readEntry( "AppIDs", QStringList(), ',' );
     m_chosenTalkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
     // Legacy settings.
     QString s = config->readEntry( "LanguageCode" );
