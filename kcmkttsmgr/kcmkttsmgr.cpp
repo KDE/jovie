@@ -419,7 +419,9 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         alsaRadioButton->setEnabled(true);
         pcmLabel->setEnabled(true);
         pcmComboBox->setEnabled(true);
+        pcmCustom->setEnabled(pcmComboBox->currentText() == "custom");
         QStringList pcmList = player->getPluginList("");
+        pcmList.append("custom");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
         pcmComboBox->clear();
         pcmComboBox->insertStringList(pcmList);
@@ -558,6 +560,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
             this, SLOT(configChanged()));
     connect(alsaRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAlsaRadioButton_toggled(bool)));
+    connect(pcmComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotPcmComboBox_activated()));
     connect(pcmComboBox, SIGNAL(activated(int)),
             this, SLOT(configChanged()));
     connect(akodeRadioButton, SIGNAL(toggled(bool)),
@@ -819,7 +823,7 @@ void KCMKttsMgr::load()
         {
             // Must load plugin to determine if it supports multiple instances
             // and to see if it can autoconfigure itself.
-            KttsFilterConf* filterPlugIn = loadFilterPlugin(filterPlugInName);
+            KttsFilterConf* filterPlugIn = loadFilterPlugin(desktopEntryName);
             if (filterPlugIn)
             {
                 ++m_lastFilterID;
@@ -885,6 +889,7 @@ void KCMKttsMgr::load()
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
     KttsUtils::setCbItemFromText(pcmComboBox, m_config->readEntry("PcmName", "default"));
+    pcmCustom->setText(m_config->readEntry("CustomPcmName", ""));
 
     // aKode settings.
     m_config->setGroup("aKodePlayer");
@@ -1030,6 +1035,7 @@ void KCMKttsMgr::save()
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
     m_config->writeEntry("PcmName", pcmComboBox->currentText());
+    m_config->writeEntry("CustomPcmName", pcmCustom->text());
 
     // aKode settings.
     m_config->setGroup("aKodePlayer");
@@ -1257,6 +1263,8 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 
 /**
 * Loads the configuration plug in for a named talker plug in and type.
+* @param name             DesktopEntryName of the Synthesizer.
+* @return                 Pointer to the configuration plugin for the Talker.
 */
 PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 {
@@ -1264,7 +1272,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-        QString("Name == '%1'").arg(name));
+        QString("DesktopEntryName == '%1'").arg(name));
 
     if (offers.count() == 1)
     {
@@ -1299,6 +1307,8 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 
 /**
  * Loads the configuration plug in for a named filter plug in.
+ * @param plugInName       DesktopEntryName of the plugin.
+ * @return                 Pointer to the configuration plugin for the Filter.
  */
 KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 {
@@ -1306,7 +1316,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("Name == '%1'").arg(plugInName));
+        QString("DesktopEntryName == '%1'").arg(plugInName));
 
     if (offers.count() == 1)
     {
@@ -1316,7 +1326,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
         if(factory){
             // If the factory is created successfully, instantiate the KttsFilterConf class for the
             // specific plug in to get the plug in configuration object.
-            int errorNo;
+            int errorNo = 0;
             KttsFilterConf *plugIn =
                 KLibLoader::createInstance<KttsFilterConf>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
@@ -1434,7 +1444,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     if (desktopEntryName.isEmpty()) return;
 
     // Load the plugin.
-    m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
+    m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     if (!m_loadedTalkerPlugIn) return;
 
     // Give plugin the user's language code and permit plugin to autoconfigure itself.
@@ -1544,7 +1554,8 @@ void KCMKttsMgr::addFilter( bool sbd)
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins(filterPlugInName) == 0)
         {
-            KttsFilterConf* filterConf = loadFilterPlugin( filterPlugInName );
+            QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+            KttsFilterConf* filterConf = loadFilterPlugin( desktopEntryName );
             if (filterConf)
             {
                 if (filterConf->isSBD() == sbd)
@@ -1590,7 +1601,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     if (desktopEntryName.isEmpty()) return;
 
     // Load the plugin.
-    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
+    m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
 
     // Permit plugin to autoconfigure itself.
@@ -1961,7 +1972,16 @@ void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
 {
     pcmLabel->setEnabled(state);
     pcmComboBox->setEnabled(state);
+    pcmCustom->setEnabled(state && pcmComboBox->currentText() == "custom");
     configChanged();
+}
+
+/**
+ * This is emitted whenever user activates the ALSA pcm combobox.
+ */
+void KCMKttsMgr::slotPcmComboBox_activated()
+{
+    pcmCustom->setEnabled(pcmComboBox->currentText() == "custom");
 }
 
 /**
@@ -2040,8 +2060,9 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
     TalkerCode tc = m_talkerListModel.getRow(modelIndex.row());
     QString talkerID = tc.id();
     QString synthName = tc.plugInName();
+    QString desktopEntryName = tc.desktopEntryName();
     QString languageCode = tc.fullLanguageCode();
-    m_loadedTalkerPlugIn = loadTalkerPlugin(synthName);
+    m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     if (!m_loadedTalkerPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully." << endl;
 
@@ -2122,7 +2143,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     QString filterPlugInName = fi.plugInName;
     QString desktopEntryName = fi.desktopEntryName;
     if (desktopEntryName.isEmpty()) return;
-    m_loadedFilterPlugIn = loadFilterPlugin(filterPlugInName);
+    m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
 
@@ -2211,7 +2232,10 @@ void KCMKttsMgr::configureTalker()
     QString sinkName;
     if (gstreamerRadioButton->isChecked()) {
         playerOption = 1;
-        sinkName = sinkComboBox->currentText();
+        if (pcmComboBox->currentText() == "custom")
+            sinkName = pcmCustom->text();
+        else
+            sinkName = pcmComboBox->currentText();
     }
     if (alsaRadioButton->isChecked()) {
         playerOption = 2;
@@ -2353,13 +2377,10 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("Name == '%1'").arg(name));
-
-    if (offers.count() == 1)
-        return offers[0]->desktopEntryName();
-    else
-        return QString();
+    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    for (int ndx = 0; ndx < offers.count(); ++ndx)
+        if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
+    return QString::null;
 }
 
 /**
@@ -2765,7 +2786,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     if ( eventSrc.isEmpty() || event.isEmpty() ) return;
     // Use Default action, message, and talker.
     QString actionName;
-    int action;
+    int action = NotifyAction::DoNotSpeak;
     QString msg;
     TalkerCode talkerCode;
     item = findTreeWidgetItem( lv, "default", nlvcEventSrc );

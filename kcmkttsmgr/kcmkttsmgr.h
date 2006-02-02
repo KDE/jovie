@@ -250,15 +250,15 @@ class KCMKttsMgr :
 
         /**
         * Loads the configuration plugin for a named Talker plugin.
-        * @param name             Name of the Synthesizer.  This is a translated name, and not
-        *                         necessarily the same as the plugIn name.
-        *                         Example, "Festival Interactivo".
+        * @param name             DesktopEntryName of the Synthesizer.
+        * @return                 Pointer to the configuration plugin for the Talker.
         */
         PlugInConf* loadTalkerPlugin(const QString& name);
 
         /**
         * Loads the configuration plugin for a named Filter plugin.
-        * @param plugInName       Name of the plugin.
+        * @param plugInName       DesktopEntryName of the plugin.
+        * @return                 Pointer to the configuration plugin for the Filter.
         */
         KttsFilterConf* loadFilterPlugin(const QString& plugInName);
 
@@ -510,6 +510,7 @@ class KCMKttsMgr :
         void keepAudioCheckBox_toggled(bool checked);
         void slotGstreamerRadioButton_toggled(bool state);
         void slotAlsaRadioButton_toggled(bool state);
+        void slotPcmComboBox_activated();
         void slotAkodeRadioButton_toggled(bool state);
 
         /**

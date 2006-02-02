@@ -22,7 +22,7 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>8</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -337,7 +337,7 @@
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
-           <number>-1</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -361,7 +361,7 @@
                </sizepolicy>
               </property>
               <property name="whatsThis" >
-               <string>The Talker that will speak the notification.  The &quot;default&quot; Talker is the topmost talker listed on the Talkers tab.</string>
+               <string>The Talker that will speak the notification.  The "default" Talker is the topmost talker listed on the Talkers tab.</string>
               </property>
               <property name="text" >
                <string>Talke&amp;r:</string>
@@ -547,7 +547,7 @@
                </sizepolicy>
               </property>
               <property name="whatsThis" >
-               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select &quot;Speak custom text&quot;, enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
+               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
               </property>
               <property name="text" >
                <string>Ac&amp;tion:</string>
@@ -560,7 +560,7 @@
             <item row="0" column="3" >
              <widget class="QLineEdit" name="notifyMsgLineEdit" >
               <property name="whatsThis" >
-               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select &quot;Speak custom text&quot;, enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
+               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
               </property>
              </widget>
             </item>
@@ -575,7 +575,7 @@
                </sizepolicy>
               </property>
               <property name="whatsThis" >
-               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select &quot;Speak custom text&quot;, enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
+               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
               </property>
              </widget>
             </item>
@@ -1004,7 +1004,7 @@
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
-        <number>8</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
@@ -1021,6 +1021,149 @@
           <size>
            <width>20</width>
            <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="timeLabel" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="whatsThis" >
+            <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+           </property>
+           <property name="text" >
+            <string>&amp;Speed:</string>
+           </property>
+           <property name="buddy" >
+            <cstring>timeBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="timeBox" >
+           <property name="enabled" >
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="whatsThis" >
+            <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+           </property>
+           <property name="suffix" >
+            <string> %</string>
+           </property>
+           <property name="maximum" >
+            <number>200</number>
+           </property>
+           <property name="minimum" >
+            <number>50</number>
+           </property>
+           <property name="value" >
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="timeSlider" >
+           <property name="enabled" >
+            <bool>true</bool>
+           </property>
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="whatsThis" >
+            <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
+           </property>
+           <property name="maximum" >
+            <number>1000</number>
+           </property>
+           <property name="singleStep" >
+            <number>10</number>
+           </property>
+           <property name="pageStep" >
+            <number>100</number>
+           </property>
+           <property name="value" >
+            <number>500</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="keepAudioCheckBox" >
+           <property name="whatsThis" >
+            <string>Check this if you want to keep the generated audio (wav) files.  You will find them in the indicated directory.</string>
+           </property>
+           <property name="text" >
+            <string>&amp;Keep audio files:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KUrlRequester" name="keepAudioPath" >
+           <property name="enabled" >
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="whatsThis" >
+            <string>Specify the directory in which the audio files will be copied.</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>140</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -1043,7 +1186,7 @@
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
-           <number>-1</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -1102,7 +1245,7 @@
                </sizepolicy>
               </property>
               <property name="whatsThis" >
-               <string>Select the sink to be used for aKode output.  Select &quot;auto&quot; to let aKode pick the best output method.</string>
+               <string>Select the sink to be used for aKode output.  Select "auto" to let aKode pick the best output method.</string>
               </property>
              </widget>
             </item>
@@ -1126,47 +1269,6 @@
              <bool>false</bool>
             </property>
            </widget>
-          </item>
-          <item row="2" column="1" >
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="pcmLabel" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="whatsThis" >
-               <string>Select the sound sink to be used for GStreamer output.</string>
-              </property>
-              <property name="text" >
-               <string>Device:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KComboBox" name="pcmComboBox" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>Select the PCM device to be used for ALSA output.  Select &quot;default&quot; to use the default ALSA device.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
           <item row="1" column="0" >
            <widget class="QRadioButton" name="gstreamerRadioButton" >
@@ -1235,151 +1337,52 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="1" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="pcmLabel" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="whatsThis" >
+               <string>Select the sound sink to be used for GStreamer output.</string>
+              </property>
+              <property name="text" >
+               <string>Device:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KComboBox" name="pcmComboBox" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="whatsThis" >
+               <string>Select the PCM device to be used for ALSA output.  Select "default" to use the default ALSA device.</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="pcmCustom" />
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
-       </item>
-       <item row="0" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>140</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" colspan="2" >
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="timeLabel" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>5</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis" >
-            <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered &quot;slow&quot;, and anything greater than 125 percent is considered &quot;fast&quot;.  You cannot change the speed of MultiSyn voices.</string>
-           </property>
-           <property name="text" >
-            <string>&amp;Speed:</string>
-           </property>
-           <property name="buddy" >
-            <cstring>timeBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="timeBox" >
-           <property name="enabled" >
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis" >
-            <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered &quot;slow&quot;, and anything greater than 125 percent is considered &quot;fast&quot;.  You cannot change the speed of MultiSyn voices.</string>
-           </property>
-           <property name="suffix" >
-            <string> %</string>
-           </property>
-           <property name="maximum" >
-            <number>200</number>
-           </property>
-           <property name="minimum" >
-            <number>50</number>
-           </property>
-           <property name="value" >
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="timeSlider" >
-           <property name="enabled" >
-            <bool>true</bool>
-           </property>
-           <property name="focusPolicy" >
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="whatsThis" >
-            <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered &quot;slow&quot;, and anything greater than 125 percent is considered &quot;fast&quot;.  You cannot change the speed of MultiSyn voices.</string>
-           </property>
-           <property name="maximum" >
-            <number>1000</number>
-           </property>
-           <property name="singleStep" >
-            <number>10</number>
-           </property>
-           <property name="pageStep" >
-            <number>100</number>
-           </property>
-           <property name="value" >
-            <number>500</number>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0" colspan="2" >
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QCheckBox" name="keepAudioCheckBox" >
-           <property name="whatsThis" >
-            <string>Check this if you want to keep the generated audio (wav) files.  You will find them in the indicated directory.</string>
-           </property>
-           <property name="text" >
-            <string>&amp;Keep audio files:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KUrlRequester" name="keepAudioPath" >
-           <property name="enabled" >
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis" >
-            <string>Specify the directory in which the audio files will be copied.</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -1391,20 +1394,6 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>KCModule</class>
-   <extends>QWidget</extends>
-   <header>kcmodule.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
@@ -1415,6 +1404,20 @@
    <class>KLineEdit</class>
    <extends>QWidget</extends>
    <header>klineedit.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KCModule</class>
+   <extends>QWidget</extends>
+   <header>kcmodule.h</header>
    <container>1</container>
    <pixmap></pixmap>
   </customwidget>
