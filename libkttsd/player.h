@@ -49,10 +49,20 @@ public:
     virtual void seek(int seekTime) = 0;
     virtual void seekPosition(int position) = 0;
 
-    virtual QStringList getPluginList( const QByteArray& classname ) = 0;
-    virtual void setSinkName(const QString &sinkName) = 0;
-
-    virtual bool requireVersion(uint major, uint minor, uint micro) = 0;
+    virtual QStringList getPluginList( const QByteArray& classname ) {
+        Q_UNUSED(classname);
+        return QStringList();
+    }
+    virtual void setSinkName(const QString &sinkName) { Q_UNUSED(sinkName); }
+    virtual bool requireVersion(uint major, uint minor, uint micro) {
+        Q_UNUSED(major);
+        Q_UNUSED(minor);
+        Q_UNUSED(micro);
+        return true;
+    }
+    virtual void setDebugLevel(uint level) { Q_UNUSED(level); }
+    virtual void setPeriodSize(uint periodSize) { Q_UNUSED(periodSize); }
+    virtual void setPeriods(uint periods) {Q_UNUSED(periods); }
 
 protected:
     Player(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList() ) :

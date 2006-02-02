@@ -583,6 +583,18 @@ class Speaker : public QObject{
         QByteArray m_lastAppId;
         uint m_lastSeq;
 
+        /**
+        * Some parameters used by ALSA plugin.
+        * Size of buffer interrupt period (in frames)
+        * Number of periods in buffer.
+        */
+        uint m_periodSize;
+        uint m_periods;
+
+        /**
+        * Debug level in players.
+        */
+        uint m_playerDebugLevel;
 };
 
 #endif // _SPEAKER_H_

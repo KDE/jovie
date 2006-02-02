@@ -132,14 +132,25 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
         case 1:
             m_speechData->config->setGroup("GStreamerPlayer");
             m_sinkName = m_speechData->config->readEntry("SinkName", "osssink");
+            m_periodSize = m_speechData->config->readEntry("PeriodSize", 128);
+            m_periods = m_speechData->config->readEntry("Periods", 8);
+            m_playerDebugLevel = m_speechData->config->readEntry("DebugLevel", 1);
             break;
         case 2:
             m_speechData->config->setGroup("ALSAPlayer");
             m_sinkName = m_speechData->config->readEntry("PcmName", "default");
+            if ("custom" == m_sinkName)
+                m_sinkName = m_speechData->config->readEntry("CustomPcmName", "default");
+            m_periodSize = m_speechData->config->readEntry("PeriodSize", 128);
+            m_periods = m_speechData->config->readEntry("Periods", 8);
+            m_playerDebugLevel = m_speechData->config->readEntry("DebugLevel", 1);
             break;
         case 3:
             m_speechData->config->setGroup("aKodePlayer");
             m_sinkName = m_speechData->config->readEntry("SinkName", "auto");
+            m_periodSize = m_speechData->config->readEntry("PeriodSize", 128);
+            m_periods = m_speechData->config->readEntry("Periods", 8);
+            m_playerDebugLevel = m_speechData->config->readEntry("DebugLevel", 1);
             break;
     }
     // Connect timer timeout signal.
@@ -743,28 +754,32 @@ int Speaker::jumpToTextPart(const int partNum, const uint jobNum)
  */
 uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
 {
-    deleteUtteranceByJobNum(jobNum);
-    // TODO: More efficient way to advance one or two sentences, since there is a
-    // good chance those utterances are already in the queue and synthesized.
-    uint seq = m_speechData->moveRelTextSentence(n, jobNum);
-    kdDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
-    if (jobNum == m_lastJobNum)
-    {
-        if (seq == 0)
-            m_lastSeq = seq;
-        else
-            m_lastSeq = seq - 1;
+    if (0 == n)
+        return m_speechData->getJobSequenceNum(jobNum);
+    else {
+        deleteUtteranceByJobNum(jobNum);
+        // TODO: More efficient way to advance one or two sentences, since there is a
+        // good chance those utterances are already in the queue and synthesized.
+        uint seq = m_speechData->moveRelTextSentence(n, jobNum);
+        kdDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
+        if (jobNum == m_lastJobNum)
+        {
+            if (seq == 0)
+                m_lastSeq = seq;
+            else
+                m_lastSeq = seq - 1;
+        }
+        if (jobNum == m_currentJobNum)
+        {
+            m_lastJobNum = jobNum;
+            if (seq == 0)
+                m_lastSeq = 0;
+            else
+                m_lastSeq = seq - 1;
+            doUtterances();
+        }
+        return seq;
     }
-    if (jobNum == m_currentJobNum)
-    {
-        m_lastJobNum = jobNum;
-        if (seq == 0)
-            m_lastSeq = 0;
-        else
-            m_lastSeq = seq - 1;
-        doUtterances();
-    }
-    return seq;
 }
 
 /* Private Methods ==========================================================*/
@@ -1380,7 +1395,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 if (it->audioPlayer)
                 {
                     it->audioPlayer->startPlay(it->audioUrl);
-                        // Set job to speaking state and set sequence number.
+                    // Set job to speaking state and set sequence number.
                     mlText* sentence = it->sentence;
                     m_currentJobNum = sentence->jobNum;
                     m_speechData->setTextJobState(m_currentJobNum, KSpeech::jsSpeaking);
@@ -1567,7 +1582,12 @@ Player* Speaker::createPlayerObject()
                 return createPlayerObject();
             }
         }
-    if (player) player->setSinkName(m_sinkName);
+    if (player) {
+        player->setSinkName(m_sinkName);
+        player->setPeriodSize(m_periodSize);
+        player->setPeriods(m_periodSize);
+        player->setDebugLevel(m_playerDebugLevel);
+    }
     return player;
 }
 

@@ -9,17 +9,23 @@
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
-  (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
- ******************************************************************************/
 
-/******************************************************************************
- *                                                                            *
- *    This program is free software; you can redistribute it and/or modify    *
- *    it under the terms of the GNU General Public License as published by    *
- *    the Free Software Foundation; either version 2 of the License.          *
- *                                                                            *
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
 #ifndef _SPEECHDATA_H_
@@ -68,6 +74,7 @@ struct mlJob {
     int seq;                     /* Current sentence being spoken. */
     QList<int> partSeqNums;      /* List containing last sequence number for each part of a job. */
     QStringList sentences;       /* List of sentences in the job. */
+    int partCount;               /* Number of parts in the job. */
 };
 
 /**
@@ -77,6 +84,7 @@ struct PooledFilterMgr {
     FilterMgr* filterMgr;       /* The FilterMgr object. */
     bool busy;                  /* True if the FilterMgr is busy. */
     mlJob* job;                 /* The job the FilterMgr is filtering. */
+    int partNum;                /* The part number of the job that is filtering. */
     TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 };
 

@@ -12,14 +12,20 @@
   (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
- ******************************************************************************/
 
-/******************************************************************************
- *                                                                            *
- *    This program is free software; you can redistribute it and/or modify    *
- *    it under the terms of the GNU General Public License as published by    *
- *    the Free Software Foundation; either version 2 of the License.          *
- *                                                                            *
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
 // C++ includes.
@@ -101,6 +107,7 @@ bool SpeechData::readConfig(){
     while (it != m_pooledFilterMgrs.end()) {
         PooledFilterMgr* pooledFilterMgr = it.value();
         delete pooledFilterMgr->filterMgr;
+        delete pooledFilterMgr->talkerCode;
         delete pooledFilterMgr;
         ++it;
     }
@@ -114,6 +121,7 @@ bool SpeechData::readConfig(){
     pooledFilterMgr->filterMgr = filterMgr;
     pooledFilterMgr->busy = false;
     pooledFilterMgr->job = 0;
+    pooledFilterMgr->partNum = 0;
     // Connect signals from FilterMgr.
     connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
     connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
@@ -213,6 +221,7 @@ SpeechData::~SpeechData(){
         PooledFilterMgr* pooledFilterMgr = *m_pooledFilterMgrs.begin();
         m_pooledFilterMgrs.erase(m_pooledFilterMgrs.begin());
         delete pooledFilterMgr->filterMgr;
+        delete pooledFilterMgr->talkerCode;
         delete pooledFilterMgr;
     }
 
@@ -277,6 +286,7 @@ void SpeechData::enqueueWarning( const QString &warning, const QString &talker, 
     job->talker = talker;
     job->appId = appId;
     job->seq = 1;
+    job->partCount = 1;
     warnings.enqueue( job );
     job->sentences = QStringList();
     // Do not apply Sentence Boundary Detection filters to warnings.
@@ -457,6 +467,7 @@ uint SpeechData::setText( const QString &text, const QString &talker, const QByt
     job->talker = talker;
     job->state = KSpeech::jsQueued;
     job->seq = 0;
+    job->partCount = 1;
 #if NO_FILTERS
     QStringList tempList = parseText(text, appId);
     job->sentences = tempList;
@@ -495,6 +506,7 @@ int SpeechData::appendText(const QString &text, const uint jobNum, const QByteAr
     mlJob* job = findJobByJobNum(jobNum);
     if (job)
     {
+        job->partCount++;
 #if NO_FILTERS
         QStringList tempList = parseText(text, appId);
         int sentenceCount = job->sentences.count();
@@ -633,6 +645,9 @@ void SpeechData::removeText(const uint jobNum)
             PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs.take(removeJobNum);
             pooledFilterMgr->busy = false;
             pooledFilterMgr->job = 0;
+            pooledFilterMgr->partNum = 0;
+            delete pooledFilterMgr->talkerCode;
+            pooledFilterMgr->talkerCode = 0;
             pooledFilterMgr->filterMgr->stopFiltering();
             m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
         }
@@ -787,7 +802,7 @@ mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSe
         temp->talker = job->talker;
         temp->jobNum = job->jobNum;
         temp->seq = seq;
-        // kdDebug() << "SpeechData::getNextSentenceText: return job number " << temp->jobNum << " seq " << temp->seq << endl;
+        // kdDebug() << "SpeechData::getNextSentenceText: return job number " << temp->jobNum << " seq " << temp->seq << " sentence count = " << job->sentences.count() << endl;
     } // else kdDebug() << "SpeechData::getNextSentenceText: no more sentences in queue" << endl;
     return temp;
 }
@@ -1107,26 +1122,29 @@ uint SpeechData::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
 */
 void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
 {
-    // If filtering is already in progress for this job, do nothing.
     uint jobNum = job->jobNum;
+    int partNum = job->partCount;
+    // kdDebug() << "SpeechData::startJobFiltering: jobNum = " << jobNum << " partNum = " << partNum << " text.left(500) = " << text.left(500) << endl;
     PooledFilterMgr* pooledFilterMgr = 0;
     if (m_pooledFilterMgrs.contains(jobNum)) return;
     // Find an idle FilterMgr, if any.
+    // If filtering is already in progress for this job and part, do nothing.
     QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
     while (it != m_pooledFilterMgrs.end()) {
         if (!it.value()->busy)
         {
-            // Reindex the pooled FilterMgr on the new job number.
-            int oldJobNum = it.key();
-            pooledFilterMgr = m_pooledFilterMgrs.take(oldJobNum);
-            m_pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
-            break;
+            if ((it.value()->job && it.value()->job->jobNum == jobNum) && (it.value()->partNum == partNum))
+                return;
+        } else {
+            if (!it.value()->job && !pooledFilterMgr)
+                pooledFilterMgr = it.value();
         }
         ++it;
     }
     // Create a new FilterMgr if needed and add to pool.
     if (!pooledFilterMgr)
     {
+         // kdDebug() << "SpeechData::startJobFiltering: adding new pooledFilterMgr for job " << jobNum << " part " << partNum << endl;
         pooledFilterMgr = new PooledFilterMgr();
         FilterMgr* filterMgr = new FilterMgr();
         filterMgr->init(config, "General");
@@ -1136,9 +1154,11 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
         connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
         m_pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
     }
+    // else kdDebug() << "SpeechData::startJobFiltering: re-using idle pooledFilterMgr for job " << jobNum << " part " << partNum << endl;
     // Flag the FilterMgr as busy and set it going.
     pooledFilterMgr->busy = true;
     pooledFilterMgr->job = job;
+    pooledFilterMgr->partNum = partNum;
     pooledFilterMgr->filterMgr->setNoSBD( noSBD );
     // Get TalkerCode structure of closest matching Talker.
     pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
@@ -1196,46 +1216,60 @@ void SpeechData::doFiltering()
                 FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
                 if (filterMgr->getState() == FilterMgr::fsFinished)
                 {
-                    pooledFilterMgr->busy = false;
                     mlJob* job = pooledFilterMgr->job;
-                    // Retrieve text from FilterMgr.
-                    QString text = filterMgr->getOutput();
-                    // kdDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
-                    // kdDebug() << "SpeechData::doFiltering: filtered text: " << text << endl;
-                    filterMgr->ackFinished();
-                    // Convert the TalkerCode back into string.
-                    job->talker = pooledFilterMgr->talkerCode->getTalkerCode();
-                    // TalkerCode object no longer needed.
-                    delete pooledFilterMgr->talkerCode;
-                    pooledFilterMgr->talkerCode = 0;
-                    if (filterMgr->noSBD()) {
-                        job->sentences.clear();
-                        job->sentences.append(text);
-                    } else {
-                        // Split the text into sentences and store in the job.
-                        // The SBD plugin does all the real sentence parsing, inserting tabs at each
-                        // sentence boundary.
-                        QStringList sentences = text.split( "\t", QString::SkipEmptyParts);
-                        int sentenceCount = job->sentences.count();
-                        job->sentences += sentences;
-                        job->partSeqNums.append(sentenceCount + sentences.count());
-                    }
-                    int partNum = job->partSeqNums.count();
-                    // Clean up.
-                    pooledFilterMgr->job = 0;
-                    // Re-index pool of FilterMgrs;
-                    m_pooledFilterMgrs.erase(it);
-                    m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
-                    // Emit signal.
-                    if (!filterMgr->noSBD())
+                    // kdDebug() << "SpeechData::doFiltering: filter finished, jobNum = " << job->jobNum << " partNum = " << pooledFilterMgr->partNum << endl;
+                    // We have to retrieve parts in order, but parts may not be completed in order.
+                    // See if this is the next part we need.
+                    if ((int)job->partSeqNums.count() == (pooledFilterMgr->partNum - 1))
                     {
-                        if (partNum == 1)
-                            emit textSet(job->appId, job->jobNum);
-                        else
-                            emit textAppended(job->appId, job->jobNum, partNum);
+                        pooledFilterMgr->busy = false;
+                        // Retrieve text from FilterMgr.
+                        QString text = filterMgr->getOutput();
+                        // kdDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
+                        // kdDebug() << "SpeechData::doFiltering: filtered text: " << text << endl;
+                        filterMgr->ackFinished();
+                        // Convert the TalkerCode back into string.
+                        job->talker = pooledFilterMgr->talkerCode->getTalkerCode();
+                        // TalkerCode object no longer needed.
+                        delete pooledFilterMgr->talkerCode;
+                        pooledFilterMgr->talkerCode = 0;
+                        if (filterMgr->noSBD()) {
+                            job->sentences.clear();
+                            job->sentences.append(text);
+                        } else {
+                            // Split the text into sentences and store in the job.
+                            // The SBD plugin does all the real sentence parsing, inserting tabs at each
+                            // sentence boundary.
+                            QStringList sentences = text.split( "\t", QString::SkipEmptyParts);
+                            int sentenceCount = job->sentences.count();
+                            job->sentences += sentences;
+                            job->partSeqNums.append(sentenceCount + sentences.count());
+                        }
+                        int partNum = job->partSeqNums.count();
+                        // Clean up.
+                        pooledFilterMgr->job = 0;
+                        pooledFilterMgr->partNum = 0;
+                        // Re-index pool of FilterMgrs;
+                        m_pooledFilterMgrs.erase(it);
+                        m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
+                        // Emit signal.
+                        if (!filterMgr->noSBD())
+                        {
+                            if (partNum == 1)
+                                emit textSet(job->appId, job->jobNum);
+                            else
+                                emit textAppended(job->appId, job->jobNum, partNum);
+                        }
+                    } else {
+                        // A part is ready, but need to first process a finished preceeding part
+                        // that follows this one in the pool of filter managers.
+                        again = true;
+                        // kdDebug() << "SpeechData::doFiltering: filter is finished, but must wait for earlier part to finish filter, job = " << pooledFilterMgr->job->jobNum << endl;
                     }
                 }
+                // else kdDebug() << "SpeechData::doFiltering: filter for job " << pooledFilterMgr->job->jobNum << " is busy." << endl;
             }
+            // else kdDebug() << "SpeechData::doFiltering: filter is idle" << endl;
             it = nextIt;
         }
     }

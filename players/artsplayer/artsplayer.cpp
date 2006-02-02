@@ -5,16 +5,21 @@
 
     copyright            : (C) 2003 by Matthias Kretz
     email                : kretz@kde.org
-***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ ******************************************************************************/
 
 #include "artsplayer.h"
 
@@ -50,7 +55,6 @@ ArtsPlayer::ArtsPlayer(QObject* parent, const char* name, const QStringList& arg
     m_volumeControl(Arts::StereoVolumeControl::null()),
     m_currentVolume(1.0)
 {
-    setupPlayer();
 }
 
 ArtsPlayer::~ArtsPlayer()
@@ -65,6 +69,9 @@ ArtsPlayer::~ArtsPlayer()
 //void ArtsPlayer::play(const FileHandle &file)
 void ArtsPlayer::startPlay(const QString &file)
 {
+    if (!m_dispatcher)
+        setupPlayer();
+
     // kdDebug(65432) << k_funcinfo << endl;
     // Make sure that the server still exists, if it doesn't a new one should
     // be started automatically and the factory and amanPlay are created again.
@@ -215,11 +222,6 @@ void ArtsPlayer::seekPosition(int position)
         m_playobject->object().seek(poSeekTime);
     }
 }
-
-// These are GStreamer functions.  aRts ignores them.
-QStringList ArtsPlayer::getPluginList( const QByteArray& /*classname*/ ) { return QStringList(); }
-void ArtsPlayer::setSinkName(const QString& /*sinkName*/) { }
-bool ArtsPlayer::requireVersion(uint /*major*/, uint /*minor*/, uint /*micro*/) { return true; }
 
 /////////////////////////////////////////////////////////////////////////////////
 // private
