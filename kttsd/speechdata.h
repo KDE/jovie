@@ -35,7 +35,7 @@
 #include <QQueue>
 #include <QList>
 #include <QByteArray>
-#include <QHash>
+#include <QMultiHash>
 #include <QString>
 #include <QStringList>
 #include <QMap>
@@ -637,7 +637,7 @@ class SpeechData : public QObject {
         /**
         * Pool of FilterMgrs.
         */
-        QHash<int, PooledFilterMgr*> m_pooledFilterMgrs;
+        QMultiHash<int, PooledFilterMgr*> m_pooledFilterMgrs;
 
         /**
         * Job counter.  Each new job increments this counter.

@@ -764,7 +764,7 @@ uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
         kdDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
         if (jobNum == m_lastJobNum)
         {
-            if (seq == 0)
+            if (0 == seq)
                 m_lastSeq = seq;
             else
                 m_lastSeq = seq - 1;
@@ -772,7 +772,7 @@ uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
         if (jobNum == m_currentJobNum)
         {
             m_lastJobNum = jobNum;
-            if (seq == 0)
+            if (0 == seq)
                 m_lastSeq = 0;
             else
                 m_lastSeq = seq - 1;

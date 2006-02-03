@@ -273,7 +273,7 @@
          virtual public KSpeechSink
      {
          protected:
-            ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+            ASYNC sentenceStarted(const QByteArray& appId, const uint jobNum, const uint seq);
    @endverbatim
  *
  *     You can combine sending and receiving in one object.
@@ -286,7 +286,7 @@
          virtual public KSpeechSink
      {
          protected:
-            ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+            ASYNC sentenceStarted(const QByteArray& appId, const uint jobNum, const uint seq);
    @endverbatim
  *
  *     See below for the signals you can declare.
@@ -316,8 +316,8 @@
      }
      // Connect KTTSD DCOP signals to our slots.
      connectDCOPSignal("kttsd", "KSpeech",
-         "sentenceStarted(QCString,uint,uint)",
-         "sentenceStarted(QCString,uint,uint)",
+         "sentenceStarted(QByteArray,uint,uint)",
+         "sentenceStarted(QByteArray,uint,uint)",
          false);
    @endverbatim
  *
@@ -325,13 +325,13 @@
  *     example
  *
    @verbatim
-     ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+     ASYNC sentenceStarted(const QByteArray& appId, const uint jobNum, const uint seq);
    @endverbatim
  *
  *     becomes
  *
    @verbatim
-       "sentenceStarted(QCString,uint,uint)",
+       "sentenceStarted(QByteArray,uint,uint)",
    @endverbatim
  *
  *     in the connectDCOPSignal call.
@@ -340,7 +340,7 @@
  *     is intended for your application.
  *
    @verbatim
-     ASYNC MyPart::sentenceStarted(const QCString& appId, const uint jobNum, const uint seq)
+     ASYNC MyPart::sentenceStarted(const QByteArray& appId, const uint jobNum, const uint seq)
      {
          // Check appId to determine if this is our signal.
          if (appId != dcopClient()->appId()) return;
@@ -925,7 +925,7 @@ class KSpeech : virtual public DCOPObject {
         *
         * The stream contains the following elements:
         *   - int state        - Job state.
-        *   - QCString appId   - DCOP senderId of the application that requested the speech job.
+        *   - QByteArray appId - DCOP senderId of the application that requested the speech job.
         *   - QString talker   - Talker Code requested by application.
         *   - int seq          - Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount - Total number of sentences in the job.
@@ -940,7 +940,7 @@ class KSpeech : virtual public DCOPObject {
                     QByteArray jobInfo = getTextJobInfo(jobNum);
                     QDataStream stream(jobInfo, QIODevice::ReadOnly);
                     int state;
-                    QCString appId;
+                    QByteArray appId;
                     QString talker;
                     int seq;
                     int sentenceCount;
@@ -1172,6 +1172,12 @@ class KSpeech : virtual public DCOPObject {
         * Re-start %KTTSD.
         */
         virtual void reinit() = 0;
+
+        /**
+        * Return the KTTSD deamon version number.
+        * @since KDE 3.5.1
+        */
+        virtual QString version() = 0;
         //@}
 
     k_dcop_signals:

@@ -48,9 +48,9 @@
 static const KCmdLineOptions options[] =
 {
     { "s", 0, 0 },
-    { "systray", I18N_NOOP("Start minimized in system tray."), 0 },
+    { "systray", I18N_NOOP("Start minimized in system tray"), 0 },
     { "a", 0, 0 },
-    { "autoexit", I18N_NOOP("Exit when speaking is finished and minimized in system tray."), 0 },
+    { "autoexit", I18N_NOOP("Exit when speaking is finished and minimized in system tray"), 0 },
     KCmdLineLastOption
 };
 

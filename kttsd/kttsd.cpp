@@ -33,6 +33,7 @@
 #include <dcopclient.h>
 #include <knotifyclient.h>
 #include <krun.h>
+#include <kaboutdata.h>
 
 // KTTS includes.
 #include "notify.h"
@@ -842,6 +843,11 @@ void KTTSD::reinit()
     ready();
 }
 
+/**
+ * Return KTTSD daemon version number.
+ */
+QString KTTSD::version() { return kapp->aboutData()->version(); }
+
 /*
 * Checks if KTTSD is ready to speak and at least one talker is configured.
 * If not, user is prompted to display the configuration dialog.
@@ -1119,7 +1125,7 @@ kspeech::kspeech(const DCOPCString& objId, QObject *parent, const char *name) :
 }
 
 // Destructor.
-kspeech::~kspeech() { };
+kspeech::~kspeech() { }
 
 // Delegate all DCOP methods to KTTSD object.
 /*virtual*/ bool kspeech::supportsMarkup(const QString &talker, uint markupType) const
@@ -1191,6 +1197,8 @@ kspeech::~kspeech() { };
             { m_kttsd.kttsdExit(); }
 /*virtual*/ void kspeech::reinit()
             { m_kttsd.reinit(); }
+/*virtual*/ QString kspeech::version()
+            { return m_kttsd.version(); }
 
 #include "kttsd.moc"
 

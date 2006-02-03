@@ -531,6 +531,12 @@ class KTTSD : public QObject, virtual public KSpeech
         */
         virtual void reinit();
 
+        /**
+        * Return the KTTSD deamon version number.
+        * @since KDE 3.5.1
+        */
+        virtual QString version();
+
     protected:
 
     k_dcop:
@@ -685,6 +691,7 @@ class kspeech : public QObject, virtual public KSpeech
         virtual void showDialog();
         virtual void kttsdExit();
         virtual void reinit();
+        virtual QString version();
 
     private:
         KTTSD m_kttsd;

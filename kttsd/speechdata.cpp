@@ -103,7 +103,7 @@ bool SpeechData::readConfig(){
     autoExitManager = config->readEntry("AutoExitManager", QVariant(false)).toBool();
 
     // Clear the pool of filter managers so that filters re-init themselves.
-    QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
+    QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
     while (it != m_pooledFilterMgrs.end()) {
         PooledFilterMgr* pooledFilterMgr = it.value();
         delete pooledFilterMgr->filterMgr;
@@ -122,6 +122,7 @@ bool SpeechData::readConfig(){
     pooledFilterMgr->busy = false;
     pooledFilterMgr->job = 0;
     pooledFilterMgr->partNum = 0;
+    pooledFilterMgr->talkerCode = 0;
     // Connect signals from FilterMgr.
     connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
     connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
@@ -639,17 +640,18 @@ void SpeechData::removeText(const uint jobNum)
     {
         removeAppId = removeJob->appId;
         removeJobNum = removeJob->jobNum;
-        // If filtering on the job, cancel it.
+        // If filtering on the job, cancel it (all parts).
         if (m_pooledFilterMgrs.contains(removeJobNum))
         {
-            PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs.take(removeJobNum);
-            pooledFilterMgr->busy = false;
-            pooledFilterMgr->job = 0;
-            pooledFilterMgr->partNum = 0;
-            delete pooledFilterMgr->talkerCode;
-            pooledFilterMgr->talkerCode = 0;
-            pooledFilterMgr->filterMgr->stopFiltering();
-            m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
+            while (PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs.take(removeJobNum)) {
+                pooledFilterMgr->busy = false;
+                pooledFilterMgr->job = 0;
+                pooledFilterMgr->partNum = 0;
+                delete pooledFilterMgr->talkerCode;
+                pooledFilterMgr->talkerCode = 0;
+                pooledFilterMgr->filterMgr->stopFiltering();
+                m_pooledFilterMgrs.insert(0, pooledFilterMgr);
+            }
         }
         // Delete the job.
         textJobs.removeAll(removeJob);
@@ -1129,7 +1131,7 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
     if (m_pooledFilterMgrs.contains(jobNum)) return;
     // Find an idle FilterMgr, if any.
     // If filtering is already in progress for this job and part, do nothing.
-    QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
+    QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
     while (it != m_pooledFilterMgrs.end()) {
         if (!it.value()->busy)
         {
@@ -1178,15 +1180,27 @@ void SpeechData::waitJobFiltering(const mlJob* job)
 #if NO_FILTERS
     return;
 #endif
-    uint jobNum = job->jobNum;
+    int jobNum = job->jobNum;
+    bool waited = false;
+    bool notOptimum = false;
     if (!m_pooledFilterMgrs.contains(jobNum)) return;
-    PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs[jobNum];
-    if (pooledFilterMgr->busy)
-    {
-        if (!pooledFilterMgr->filterMgr->noSBD())
-            kdDebug() << "SpeechData::waitJobFiltering: Waiting for filter to finish.  Not optimium.  " <<
-                "Try waiting for textSet signal before querying for job information." << endl;
-        pooledFilterMgr->filterMgr->waitForFinished();
+    QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.find(jobNum);
+    while (it != m_pooledFilterMgrs.end() && it.key() == jobNum) {
+        PooledFilterMgr* pooledFilterMgr = it.value();
+        if (pooledFilterMgr->busy)
+        {
+            if (!pooledFilterMgr->filterMgr->noSBD())
+                notOptimum = true;
+            pooledFilterMgr->filterMgr->waitForFinished();
+            waited = true;
+        }
+        ++it;
+    }
+    if (waited) {
+        if (notOptimum)
+            kdDebug() << "SpeechData::waitJobFiltering: Waited for filtering to finish on job "
+                << jobNum << ".  Not optimium.  "
+                << "Try waiting for textSet signal before querying for job information." << endl;
         doFiltering();
     }
 }
@@ -1203,8 +1217,8 @@ void SpeechData::doFiltering()
     while (again)
     {
         again = false;
-        QHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
-        QHash<int, PooledFilterMgr*>::iterator nextIt;
+        QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
+        QMultiHash<int, PooledFilterMgr*>::iterator nextIt;
         while (it != m_pooledFilterMgrs.end()) {
             nextIt = it;
             ++nextIt;
@@ -1251,7 +1265,7 @@ void SpeechData::doFiltering()
                         pooledFilterMgr->partNum = 0;
                         // Re-index pool of FilterMgrs;
                         m_pooledFilterMgrs.erase(it);
-                        m_pooledFilterMgrs.insertMulti(0, pooledFilterMgr);
+                        m_pooledFilterMgrs.insert(0, pooledFilterMgr);
                         // Emit signal.
                         if (!filterMgr->noSBD())
                         {
