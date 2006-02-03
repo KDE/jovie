@@ -19,7 +19,6 @@
 #define UTILS_H
 
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 
 class QString;
 class QComboBox;

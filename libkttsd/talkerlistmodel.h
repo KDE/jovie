@@ -5,9 +5,7 @@
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
- ******************************************************************************/
 
-/******************************************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -29,7 +27,10 @@
 // Qt includes.
 #include <QAbstractListModel>
 #include <QModelIndex>
+
+// KDE includes.
 #include <kdemacros.h>
+
 // KTTS includes.
 #include "talkercode.h"
 

@@ -27,7 +27,7 @@
 #include <QString>
 
 // KDE includes
-#include "kdeexportfix.h"
+#include <kdemacros.h>
 
 #include "player.h"
 #include <kdemacros.h>

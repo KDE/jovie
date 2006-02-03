@@ -25,8 +25,8 @@
 #ifndef _TESTPLAYER_H_
 #define _TESTPLAYER_H_
 
+// KDE includes.
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 
 class Player;
 class Stretcher;

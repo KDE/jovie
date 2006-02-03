@@ -26,13 +26,12 @@
 #define _FILTERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <QWidget>
 
 // KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 
 class KDE_EXPORT KttsFilterConf : public QWidget{
     Q_OBJECT

@@ -19,10 +19,12 @@
 #ifndef _PLUGINPROC_H_
 #define _PLUGINPROC_H_
 
-#include <qobject.h>
-#include <qstring.h>
+// Qt includes.
+#include <QObject>
+#include <QString>
+
+// KDE includes.
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 #include <kconfig.h>
 
 /**

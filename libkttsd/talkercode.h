@@ -32,7 +32,6 @@
 
 // KDE includes.
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 
 class KDE_EXPORT TalkerCode
 {

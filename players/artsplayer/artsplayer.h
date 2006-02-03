@@ -24,18 +24,19 @@
 #ifndef ARTSPLAYER_H
 #define ARTSPLAYER_H
 
+// Qt includes.
+#include <QObject>
+#include <QString>
+#include <QByteArray>
+
+// KDE includes.
 #include <config.h>
 #include <kdemacros.h>
-#include "kdeexportfix.h"
-
-#include "player.h"
-
 #include <kurl.h>
-
-#include <qstring.h>
-#include <qobject.h>
-#include <QByteArray>
 #include <artsflow.h>
+
+// ArtsPlayer includes.
+#include "player.h"
 
 class KArtsDispatcher;
 class KArtsServer;

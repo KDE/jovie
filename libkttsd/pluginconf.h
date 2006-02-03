@@ -19,13 +19,12 @@
 #define _PLUGINCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <QWidget>
 
 // KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 
 // KTTS includes.
 #include "testplayer.h"

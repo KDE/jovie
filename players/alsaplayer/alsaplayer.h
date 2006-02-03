@@ -33,13 +33,12 @@
 #include <QObject>
 #include <QThread>
 #include <QFile>
-#include <qmutex.h>
+#include <QMutex>
 #include <QByteArray>
 
 // KDE includes.
 #include <config.h>
 #include <kdemacros.h>
-#include "kdeexportfix.h"
 #include <kurl.h>
 
 // AlsaPlayer includes.
