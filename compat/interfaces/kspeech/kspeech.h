@@ -22,9 +22,8 @@
 #define _KSPEECH_H_
 
 #include <QByteArray>
+#include <QStringList>
 #include <dcopobject.h>
-#include <qstringlist.h>
-
 
 /**
  * @interface KSpeech
