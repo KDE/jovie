@@ -38,6 +38,7 @@
 */
 PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, name){
     kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
+    KGlobal::locale()->insertCatalogue("kttsd");
     QString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
     m_path = QStringList::split(":", systemPath);

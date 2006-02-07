@@ -46,6 +46,7 @@ KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(par
     // kdDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
     QString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
+    KGlobal::locale()->insertCatalogue("kttsd");
     m_path = QStringList::split(":", systemPath);
 }
 

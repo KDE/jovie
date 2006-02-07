@@ -121,6 +121,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Add the KTTS Manager widget
     QGridLayout *layout = new QGridLayout(this, 0, 0);
     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
+    // m_kttsmgrw = new KCMKttsMgrWidget(this);
     layout->addWidget(m_kttsmgrw, 0, 0);
 
     // Give buttons icons.

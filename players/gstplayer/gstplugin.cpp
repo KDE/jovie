@@ -25,5 +25,5 @@
 
 #include "gstreamerplayer.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkttsd_gstplugin, KGenericFactory<GStreamerPlayer>("kttsd") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_gstplugin, KGenericFactory<GStreamerPlayer>("kttsd_gst") );
 

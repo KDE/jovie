@@ -25,5 +25,5 @@
 
 #include "akodeplayer.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkttsd_akodeplugin, KGenericFactory<aKodePlayer>("kttsd") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_akodeplugin, KGenericFactory<aKodePlayer>("kttsd_akode") );
 

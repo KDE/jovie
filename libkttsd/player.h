@@ -20,6 +20,8 @@
 #include <qstringlist.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
+#include "kglobal.h"
+#include "klocale.h"
 
 // #include "filehandle.h"
 
@@ -65,7 +67,9 @@ public:
 
 protected:
     Player(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList() ) :
-        QObject(parent, name) { (void)args; }
+        QObject(parent, name) {
+        Q_UNUSED(args);
+    }
 
 };
 
