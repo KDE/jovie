@@ -51,7 +51,6 @@ KateKttsdPlugin::~KateKttsdPlugin()
 void KateKttsdPlugin::addView(KTextEditor::View *view)
 {
     KateKttsdPluginView *nview = new KateKttsdPluginView (view, "KTTSD Plugin");
-    KGlobal::locale()->insertCatalogue("kttsd");
     m_views.append (nview);
 }
 
@@ -74,6 +73,7 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
 {
     view->insertChildClient( this );
     setInstance( KGenericFactory<KateKttsdPlugin>::instance() );
+    KGlobal::locale()->insertCatalogue("kttsd");
     (void) new KAction( i18n("Speak Text"), "kttsd", 0, this, SLOT(slotReadOut()), actionCollection(), "tools_kttsd" );
     setXMLFile( "ktexteditor_kttsdui.rc" );
 }

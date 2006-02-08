@@ -1,3 +1,6 @@
+2006-02-07  Stephan Johach
+        * Fix translation of "Speak Text" in kate/ktextedit.
+
 2006-02-06  Gary Cramblitt (PhantomsDad)
         * Bump version to 0.3.5.2.
         * Fix BUG:121427 Translations sometimes not working due to incorrect catalog
