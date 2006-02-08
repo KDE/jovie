@@ -43,7 +43,7 @@ int main (int argc, char *argv[]){
    KUniqueApplication::addCmdLineOptions();
 
    if(!KUniqueApplication::start()){
-      kdDebug() << "KTTSD is already running" << endl;
+      kDebug() << "KTTSD is already running" << endl;
       return (0);
    }
 
@@ -56,7 +56,7 @@ int main (int argc, char *argv[]){
    //     KTTSD *service = new KTTSD("KSpeech");
    kspeech *service = new kspeech("kspeech");
 
-   // kdDebug() << "Entering event loop." << endl;
+   // kDebug() << "Entering event loop." << endl;
    return app.exec();
    delete service;
 }

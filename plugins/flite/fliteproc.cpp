@@ -38,7 +38,7 @@
 /** Constructor */
 FliteProc::FliteProc( QObject* parent, const char* name, const QStringList& ) : 
     PlugInProc( parent, name ){
-    kdDebug() << "FliteProc::FliteProc: Running" << endl;
+    kDebug() << "FliteProc::FliteProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;
     m_fliteProc = 0;
@@ -46,7 +46,7 @@ FliteProc::FliteProc( QObject* parent, const char* name, const QStringList& ) :
 
 /** Destructor */
 FliteProc::~FliteProc(){
-    kdDebug() << "FliteProc::~FliteProc:: Running" << endl;
+    kDebug() << "FliteProc::~FliteProc:: Running" << endl;
     if (m_fliteProc)
     {
         stopText();
@@ -56,12 +56,12 @@ FliteProc::~FliteProc(){
 
 /** Initialize the speech */
 bool FliteProc::init(KConfig* config, const QString& configGroup){
-    // kdDebug() << "Running: FliteProc::init(const QString &lang)" << endl;
-    // kdDebug() << "Initializing plug in: Flite" << endl;
+    // kDebug() << "Running: FliteProc::init(const QString &lang)" << endl;
+    // kDebug() << "Initializing plug in: Flite" << endl;
     // Retrieve path to flite executable.
     config->setGroup(configGroup);
     m_fliteExePath = config->readEntry("FliteExePath", "flite");
-    kdDebug() << "FliteProc::init: path to flite: " << m_fliteExePath << endl;
+    kDebug() << "FliteProc::init: path to flite: " << m_fliteExePath << endl;
     return true;
 }
 
@@ -102,7 +102,7 @@ void FliteProc::synth(
     const QString &synthFilename,
     const QString& fliteExePath)
 {
-    // kdDebug() << "Running: FliteProc::synth(const QString &text)" << endl;
+    // kDebug() << "Running: FliteProc::synth(const QString &text)" << endl;
 
     if (m_fliteProc)
     {
@@ -110,7 +110,7 @@ void FliteProc::synth(
         delete m_fliteProc;
         m_fliteProc = 0;
     }
-    // kdDebug()<< "FliteProc::synth: Creating Flite object" << endl;
+    // kDebug()<< "FliteProc::synth: Creating Flite object" << endl;
     m_fliteProc = new KProcess;
     connect(m_fliteProc, SIGNAL(processExited(KProcess*)),
         this, SLOT(slotProcessExited(KProcess*)));
@@ -144,14 +144,14 @@ void FliteProc::synth(
     
     // Ok, let's rock.
     m_synthFilename = synthFilename;
-    kdDebug() << "FliteProc::synth: Synthing text: '" << saidText << "' using Flite plug in" << endl;
+    kDebug() << "FliteProc::synth: Synthing text: '" << saidText << "' using Flite plug in" << endl;
     if (!m_fliteProc->start(KProcess::NotifyOnExit, KProcess::All))
     {
-        kdDebug() << "FliteProc::synth: Error starting Flite process.  Is flite in the PATH?" << endl;
+        kDebug() << "FliteProc::synth: Error starting Flite process.  Is flite in the PATH?" << endl;
         m_state = psIdle;
         return;
     }
-    kdDebug()<< "FliteProc:synth: Flite initialized" << endl;
+    kDebug()<< "FliteProc:synth: Flite initialized" << endl;
     m_fliteProc->writeStdin(saidText.latin1(), saidText.length());
 }
         
@@ -164,7 +164,7 @@ void FliteProc::synth(
 */
 QString FliteProc::getFilename()
 {
-    kdDebug() << "FliteProc::getFilename: returning " << m_synthFilename << endl;
+    kDebug() << "FliteProc::getFilename: returning " << m_synthFilename << endl;
     return m_synthFilename;
 }
 
@@ -184,22 +184,22 @@ QString FliteProc::getFilename()
 * operation.
 */
 void FliteProc::stopText(){
-    kdDebug() << "FliteProc::stopText:: Running" << endl;
+    kDebug() << "FliteProc::stopText:: Running" << endl;
     if (m_fliteProc)
     {
         if (m_fliteProc->isRunning())
         {
-            kdDebug() << "FliteProc::stopText: killing Flite." << endl;
+            kDebug() << "FliteProc::stopText: killing Flite." << endl;
             m_waitingStop = true;
             m_fliteProc->kill();
         } else m_state = psIdle;
     }else m_state = psIdle;
-    kdDebug() << "FliteProc::stopText: Flite stopped." << endl;
+    kDebug() << "FliteProc::stopText: Flite stopped." << endl;
 }
 
 void FliteProc::slotProcessExited(KProcess*)
 {
-    kdDebug() << "FliteProc:slotProcessExited: Flite process has exited." << endl;
+    kDebug() << "FliteProc:slotProcessExited: Flite process has exited." << endl;
     pluginState prevState = m_state;
     if (m_waitingStop)
     {
@@ -219,18 +219,18 @@ void FliteProc::slotProcessExited(KProcess*)
 void FliteProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kdDebug() << "FliteProc::slotReceivedStdout: Received output from Flite: " << buf << endl;
+    kDebug() << "FliteProc::slotReceivedStdout: Received output from Flite: " << buf << endl;
 }
 
 void FliteProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kdDebug() << "FliteProc::slotReceivedStderr: Received error from Flite: " << buf << endl;
+    kDebug() << "FliteProc::slotReceivedStderr: Received error from Flite: " << buf << endl;
 }
 
 void FliteProc::slotWroteStdin(KProcess*)
 {
-    kdDebug() << "FliteProc::slotWroteStdin: closing Stdin" << endl;
+    kDebug() << "FliteProc::slotWroteStdin: closing Stdin" << endl;
     m_fliteProc->closeStdin();
 }
 

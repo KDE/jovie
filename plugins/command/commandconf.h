@@ -96,7 +96,7 @@ class CommandConf : public PlugInConf {
 
     private slots:
         void configChanged(){
-            // kdDebug() << "CommandConf::configChanged: Running" << endl;
+            // kDebug() << "CommandConf::configChanged: Running" << endl;
             emit changed(true);
         };
         void slotCommandTest_clicked();

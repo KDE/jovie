@@ -91,14 +91,14 @@ void TestPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkName; }
  */
 void TestPlayer::play(const QString &waveFile)
 {
-    // kdDebug() << "TestPlayer::play: running" << endl;
+    // kDebug() << "TestPlayer::play: running" << endl;
     // Create a Stretcher object to adjust the audio Speed.
     QString playFile = waveFile;
     QString tmpFile;
     if (m_audioStretchFactor != 1.0)
     {
         tmpFile = makeSuggestedFilename();
-        // kdDebug() << "TestPlayer::play: stretching file " << playFile << " by " << m_audioStretchFactor
+        // kDebug() << "TestPlayer::play: stretching file " << playFile << " by " << m_audioStretchFactor
         //     << " to file " << tmpFile << endl;
         m_stretcher = new Stretcher();
         if (m_stretcher->stretch(playFile, tmpFile, m_audioStretchFactor))
@@ -111,11 +111,11 @@ void TestPlayer::play(const QString &waveFile)
     }
 
     // Create player object based on player option.
-    // kdDebug() << "TestPlayer::play: creating Player object with playerOption " << m_playerOption << endl;
+    // kDebug() << "TestPlayer::play: creating Player object with playerOption " << m_playerOption << endl;
     m_player = createPlayerObject(m_playerOption);
     // If player object could not be created, avoid crash is the best we can do!
     if (!m_player) return;
-    // kdDebug() << "TestPlayer::play: starting playback." << endl;
+    // kDebug() << "TestPlayer::play: starting playback." << endl;
     m_player->startPlay(playFile);
 
     // TODO: The following hunk of code would ideally be unnecessary.  We would just
@@ -124,7 +124,7 @@ void TestPlayer::play(const QString &waveFile)
     // this seems to be necessary.  The call to processEvents is problematic because
     // it can cause re-entrancy.
     while (m_player->playing()) qApp->processEvents();
-    // kdDebug() << "TestPlayer::play: stopping playback." << endl;
+    // kDebug() << "TestPlayer::play: stopping playback." << endl;
     m_player->stop();
     delete m_player;
     m_player = 0;
@@ -166,17 +166,17 @@ Player* TestPlayer::createPlayerObject(int playerOption)
 
     if(offers.count() == 1)
     {
-        // kdDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
+        // kDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
                 KLibLoader::createInstance<Player>(
                     offers[0]->library().latin1(), this, offers[0]->library().latin1());
         else
-            kdDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
+            kDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
     }
     if (player == 0)
-        kdDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
+        kDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
             ".  Is KDEDIRS set correctly?" << endl;
     else
         // Must have GStreamer >= 0.8.7.
@@ -203,7 +203,7 @@ QString TestPlayer::makeSuggestedFilename()
     QString waveFile = tempFile.file()->name();
     tempFile.close();
     QFile::remove(waveFile);
-    // kdDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
+    // kDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return PlugInConf::realFilePath(waveFile);
 }
 

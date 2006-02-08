@@ -32,21 +32,21 @@
 * Constructor
 */
 PlugInProc::PlugInProc( QObject *parent, const char *name) : QObject(parent, name){
-    // kdDebug() << "PlugInProc::PlugInProc: Running" << endl;
+    // kDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 
 /**
 * Destructor
 */
 PlugInProc::~PlugInProc(){
-    // kdDebug() << "PlugInProc::~PlugInProc: Running" << endl;
+    // kDebug() << "PlugInProc::~PlugInProc: Running" << endl;
 }
 
 /**
 * Initializate the speech plugin.
 */
 bool PlugInProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
-    // kdDebug() << "PlugInProc::init: Running" << endl;
+    // kDebug() << "PlugInProc::init: Running" << endl;
     return false;
 }
 
@@ -57,7 +57,7 @@ bool PlugInProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
 * If the plugin supports asynchronous operation, it should return immediately.
 */
 void PlugInProc::sayText(const QString& /*text*/){
-    // kdDebug() << "PlugInProc::sayText: Running" << endl;
+    // kDebug() << "PlugInProc::sayText: Running" << endl;
 }
 
 /**
@@ -87,7 +87,7 @@ QString PlugInProc::getFilename() { return QString(); };
 * The plugin should return to the psIdle state.
 */
 void PlugInProc::stopText(){
-    // kdDebug() << "PlugInProc::stopText: Running" << endl;
+    // kDebug() << "PlugInProc::stopText: Running" << endl;
 }
 
 /**
@@ -163,8 +163,8 @@ QString PlugInProc::getSsmlXsltFilename()
         codec = QTextCodec::codecForName(codecName.latin1());
     if (!codec)
     {
-        kdDebug() << "PluginProc::codecNameToCodec: Invalid codec name " << codecName << endl;
-        kdDebug() << "PluginProc::codecNameToCodec: Defaulting to ISO 8859-1" << endl;
+        kDebug() << "PluginProc::codecNameToCodec: Invalid codec name " << codecName << endl;
+        kDebug() << "PluginProc::codecNameToCodec: Defaulting to ISO 8859-1" << endl;
         codec = QTextCodec::codecForName("ISO8859-1");
     }
     return codec;
@@ -179,7 +179,7 @@ QString PlugInProc::getSsmlXsltFilename()
 */
 /*static*/ QStringList PlugInProc::buildCodecList()
 {
-    // kdDebug() << "PlugInConf::buildCodecList: Running" << endl;
+    // kDebug() << "PlugInConf::buildCodecList: Running" << endl;
     QStringList codecList;
     QString local = i18n("Local")+" (";
     local += QTextCodec::codecForLocale()->name();
@@ -249,8 +249,8 @@ QString PlugInProc::getSsmlXsltFilename()
     }
     if (!codec)
     {
-        kdDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
-        kdDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
+        kDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
+        kDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
         codec = QTextCodec::codecForName("ISO8859-1");
     }
     return codec;
@@ -284,8 +284,8 @@ QString PlugInProc::getSsmlXsltFilename()
                 codecName = codecList[codecNum];
             else
             {
-                kdDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
-                kdDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
+                kDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
+                kDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
                 codecName = "ISO8859-1";
             }
     }

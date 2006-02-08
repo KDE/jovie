@@ -55,7 +55,7 @@
 TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
     KttsFilterConf(parent, name)
 {
-    // kdDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
+    // kDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
 
     // Create configuration widget.
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
@@ -94,7 +94,7 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const Q
 * Destructor.
 */
 TalkerChooserConf::~TalkerChooserConf(){
-    // kdDebug() << "TalkerChooserConf::~TalkerChooserConf: Running" << endl;
+    // kDebug() << "TalkerChooserConf::~TalkerChooserConf: Running" << endl;
 }
 
 /**
@@ -111,7 +111,7 @@ TalkerChooserConf::~TalkerChooserConf(){
 *                    loading your configuration.
 */
 void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
-    // kdDebug() << "TalkerChooserConf::load: Running" << endl;
+    // kDebug() << "TalkerChooserConf::load: Running" << endl;
     config->setGroup( configGroup );
     m_widget->nameLineEdit->setText( config->readEntry( "UserFilterName", m_widget->nameLineEdit->text() ) );
     m_widget->reLineEdit->setText(
@@ -146,7 +146,7 @@ void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
 *                    saving your configuration.
 */
 void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
-    // kdDebug() << "TalkerChooserConf::save: Running" << endl;
+    // kDebug() << "TalkerChooserConf::save: Running" << endl;
     config->setGroup( configGroup );
     config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry( "MatchRegExp", m_widget->reLineEdit->text() );
@@ -162,7 +162,7 @@ void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
 * be applied to the on-screen widgets; not to the config file.
 */
 void TalkerChooserConf::defaults(){
-    // kdDebug() << "TalkerChooserConf::defaults: Running" << endl;
+    // kDebug() << "TalkerChooserConf::defaults: Running" << endl;
     // Default name.
     m_widget->nameLineEdit->setText( i18n("Talker Chooser") );
     // Default regular expression is blank.

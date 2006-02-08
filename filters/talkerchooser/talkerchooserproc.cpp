@@ -41,7 +41,7 @@
 TalkerChooserProc::TalkerChooserProc( QObject *parent, const char *name, const QStringList& /*args*/ ) :
     KttsFilterProc(parent, name) 
 {
-    // kdDebug() << "TalkerChooserProc::TalkerChooserProc: Running" << endl;
+    // kDebug() << "TalkerChooserProc::TalkerChooserProc: Running" << endl;
 }
 
 /**
@@ -49,7 +49,7 @@ TalkerChooserProc::TalkerChooserProc( QObject *parent, const char *name, const Q
  */
 TalkerChooserProc::~TalkerChooserProc()
 {
-    // kdDebug() << "TalkerChooserProc::~TalkerChooserProc: Running" << endl;
+    // kDebug() << "TalkerChooserProc::~TalkerChooserProc: Running" << endl;
 }
 
 /**
@@ -62,7 +62,7 @@ TalkerChooserProc::~TalkerChooserProc()
  * separate configuration files of their own.
  */
 bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
-    // kdDebug() << "PlugInProc::init: Running" << endl;
+    // kDebug() << "PlugInProc::init: Running" << endl;
     config->setGroup( configGroup );
     m_re = config->readEntry( "MatchRegExp" );
     m_appIdList = config->readEntry( "AppIDs", QStringList(), ',' );
@@ -113,7 +113,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
     // If appId doesn't match, return input unmolested.
     if ( !m_appIdList.isEmpty() )
     {
-        // kdDebug() << "TalkerChooserProc::convert: converting " << inputText << " if appId "
+        // kDebug() << "TalkerChooserProc::convert: converting " << inputText << " if appId "
         //      << appId << " matches " << m_appIdList << endl;
         bool found = false;
         QString appIdStr = appId;
@@ -127,13 +127,13 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
         }
         if ( !found )
         {
-            // kdDebug() << "TalkerChooserProc::convert: appId not found" << endl;
+            // kDebug() << "TalkerChooserProc::convert: appId not found" << endl;
             return inputText;
         }
     }
 
     // Set the talker.
-    // kdDebug() << "TalkerChooserProc::convert: setting lang " << m_languageCode <<
+    // kDebug() << "TalkerChooserProc::convert: setting lang " << m_languageCode <<
     //         " gender " << m_gender << " synth " << m_synth <<
     //         " volume " << m_volume << " rate " << m_rate << endl;
     // Only override the language if user specified a language code.

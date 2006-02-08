@@ -184,7 +184,7 @@ class KCMKttsMgr :
         {
             if (!m_suppressConfigChanged)
             {
-                // kdDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
+                // kDebug() << "KCMKttsMgr::configChanged: Running"<< endl;
                 m_changed = true;
                 emit changed(true);
             }

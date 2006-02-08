@@ -77,7 +77,7 @@ int main (int argc, char *argv[])
 
     if(!KUniqueApplication::start())
     {
-        kdDebug() << "kttsmgr is already running" << endl;
+        kDebug() << "kttsmgr is already running" << endl;
         return (0);
     }
 
@@ -215,7 +215,7 @@ KttsMgrTray::~KttsMgrTray()
 
 void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
 {
-    // kdDebug() << "KttsMgrTray::textFinished: running" << endl;
+    // kDebug() << "KttsMgrTray::textFinished: running" << endl;
     exitWhenFinishedSpeaking();
 }
 
@@ -236,7 +236,7 @@ void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
 
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
-    // kdDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
+    // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
     if ( parentWidget()->isShown() ) return;
     QString jobNums = getTextJobNumbers();
     QStringList jobNumsList = QStringList::split(jobNums, ",");
@@ -281,7 +281,7 @@ QString KttsMgrTray::getStatus()
         int jobState = 0;
         if (job != 0)
         {
-            // kdDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
+            // kDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
             jobState = getTextJobState(job);
             int sentenceCount = getTextCount(job);
             uint seq = moveRelTextSentence(0, job);
@@ -298,7 +298,7 @@ void KttsMgrTray::speakClipboardSelected()
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
-            kdError() << "Starting KTTSD failed with message " << error << endl;
+            kError() << "Starting KTTSD failed with message " << error << endl;
     }
     speakClipboard();
 }
@@ -316,7 +316,7 @@ void KttsMgrTray::helpSelected()
 
 void KttsMgrTray::quitSelected()
 {
-    // kdDebug() << "Running KttsMgrTray::quitSelected" << endl;
+    // kDebug() << "Running KttsMgrTray::quitSelected" << endl;
     kapp->quit();
 }
 

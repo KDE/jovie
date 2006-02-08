@@ -8,7 +8,7 @@
 *****************************************************************************/
 
 void KCMKttsMgrWidget::slotConfigChanged(){
-    // kdDebug() << "Running: KCMKttsMgrWidget:slotConfigChanged():" << endl;
+    // kDebug() << "Running: KCMKttsMgrWidget:slotConfigChanged():" << endl;
     emit configChanged();
 }
 

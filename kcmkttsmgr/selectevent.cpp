@@ -72,7 +72,7 @@ SelectEvent::SelectEvent(QWidget* parent, const char* name, Qt::WFlags fl, const
             if ( index >= 0 )
                 appname = relativePath.left( index );
             else
-                kdDebug() << "Cannot determine application name from path: " << relativePath << endl;
+                kDebug() << "Cannot determine application name from path: " << relativePath << endl;
             eventSrcComboBox->insertItem( SmallIcon( icon ), description );
             m_eventSrcNames.append( appname );
             if ( appname == initEventSrc ) KttsUtils::setCbItemFromText(eventSrcComboBox, description);

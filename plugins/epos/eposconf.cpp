@@ -53,7 +53,7 @@
 EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    // kdDebug() << "EposConf::EposConf: Running" << endl;
+    // kDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;
     m_progressDlg = 0;
 
@@ -98,14 +98,14 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
 
 /** Destructor */
 EposConf::~EposConf(){
-    // kdDebug() << "Running: EposConf::~EposConf()" << endl;
+    // kDebug() << "Running: EposConf::~EposConf()" << endl;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_eposProc;
     delete m_progressDlg;
 }
 
 void EposConf::load(KConfig *config, const QString &configGroup){
-    // kdDebug() << "EposConf::load: Running " << endl;
+    // kDebug() << "EposConf::load: Running " << endl;
 
     config->setGroup(configGroup);
     m_widget->eposServerPath->setURL(config->readEntry("EposServerExePath", "epos"));
@@ -131,7 +131,7 @@ QString EposConf::languageCodeToEposLanguage(const QString &languageCode)
 }
 
 void EposConf::save(KConfig *config, const QString &configGroup){
-    // kdDebug() << "EposConf::save: Running" << endl;
+    // kDebug() << "EposConf::save: Running" << endl;
 
     config->setGroup("Epos");
     config->writeEntry("EposServerExePath",
@@ -153,7 +153,7 @@ void EposConf::save(KConfig *config, const QString &configGroup){
 }
 
 void EposConf::defaults(){
-    // kdDebug() << "EposConf::defaults: Running" << endl;
+    // kDebug() << "EposConf::defaults: Running" << endl;
     m_widget->eposServerPath->setURL("epos");
     m_widget->eposClientPath->setURL("say");
     m_widget->eposServerOptions->setText("");
@@ -199,7 +199,7 @@ QString EposConf::getTalkerCode()
 
 void EposConf::slotEposTest_clicked()
 {
-    // kdDebug() << "EposConf::slotEposTest_clicked(): Running" << endl;
+    // kDebug() << "EposConf::slotEposTest_clicked(): Running" << endl;
     // If currently synthesizing, stop it.
     if (m_eposProc)
         m_eposProc->stopText();

@@ -43,7 +43,7 @@
 FilterMgr::FilterMgr( QObject *parent, const char *name) :
     KttsFilterProc(parent, name) 
 {
-    // kdDebug() << "FilterMgr::FilterMgr: Running" << endl;
+    // kDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;
     m_noSBD = false;
     m_supportsHTML = false;
@@ -55,7 +55,7 @@ FilterMgr::FilterMgr( QObject *parent, const char *name) :
  */
 FilterMgr::~FilterMgr()
 {
-    // kdDebug() << "FilterMgr::~FilterMgr: Running" << endl;
+    // kDebug() << "FilterMgr::~FilterMgr: Running" << endl;
     if ( m_state == fsFiltering )
         stopFiltering();
     qDeleteAll(m_filterList);
@@ -72,7 +72,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
     // Load each of the filters and initialize.
     config->setGroup("General");
     QStringList filterIDsList = config->readEntry("FilterIDs", QStringList(), ',');
-    // kdDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
+    // kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
     {
@@ -112,7 +112,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
             }
             if (config->readEntry("Enabled",QVariant(false)).toBool()  || config->readEntry("IsSBD",QVariant(false)).toBool())
             {
-                // kdDebug() << "FilterMgr::init: filterID = " << filterID << endl;
+                // kDebug() << "FilterMgr::init: filterID = " << filterID << endl;
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
                 if ( filterProc )
                 {
@@ -208,7 +208,7 @@ void FilterMgr::nextFilter()
             disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
         }
         // if ( m_filterProc->wasModified() )
-        //     kdDebug() << "FilterMgr::nextFilter: Filter# " << m_filterIndex << " modified the text." << endl;
+        //     kDebug() << "FilterMgr::nextFilter: Filter# " << m_filterIndex << " modified the text." << endl;
         if ( m_filterProc->wasModified() && m_filterProc->isSBD() )
         {
             m_state = fsFinished;
@@ -241,7 +241,7 @@ void FilterMgr::nextFilter()
     {
         if ( m_filterProc->supportsAsync() )
         {
-            // kdDebug() << "FilterMgr::nextFilter: calling asyncConvert on filter " << m_filterIndex << endl;
+            // kDebug() << "FilterMgr::nextFilter: calling asyncConvert on filter " << m_filterIndex << endl;
             connect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
             if ( !m_filterProc->asyncConvert( m_text, m_talkerCode, m_appId ) )
             {
@@ -260,7 +260,7 @@ void FilterMgr::nextFilter()
 // Received when each filter finishes.
 void FilterMgr::slotFilteringFinished()
 {
-    // kdDebug() << "FilterMgr::slotFilteringFinished: received signal from filter " << m_filterIndex << endl;
+    // kDebug() << "FilterMgr::slotFilteringFinished: received signal from filter " << m_filterIndex << endl;
     nextFilter();
 }
 
@@ -268,13 +268,13 @@ bool FilterMgr::event ( QEvent * e )
 {
     if ( e->type() == (QEvent::User + 301) )
     {
-        // kdDebug() << "FilterMgr::event: emitting filteringFinished signal." << endl;
+        // kDebug() << "FilterMgr::event: emitting filteringFinished signal." << endl;
         emit filteringFinished();
         return true;
     }
     if ( e->type() == (QEvent::User + 302) )
     {
-        // kdDebug() << "FilterMgr::event: emitting filteringStopped signal." << endl;
+        // kDebug() << "FilterMgr::event: emitting filteringStopped signal." << endl;
         emit filteringStopped();
         return true;
     }
@@ -351,7 +351,7 @@ bool FilterMgr::noSBD() { return m_noSBD; }
 // Loads the processing plug in for a filter plug in given its DesktopEntryName.
 KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 {
-    // kdDebug() << "FilterMgr::loadFilterPlugin: Running"<< endl;
+    // kDebug() << "FilterMgr::loadFilterPlugin: Running"<< endl;
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
@@ -375,18 +375,18 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
                 return plugIn;
             } else {
                 // Something went wrong, returning null.
-                kdDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << desktopEntryName << " error: " << errorNo << endl;
+                kDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << desktopEntryName << " error: " << errorNo << endl;
                 return NULL;
             }
         } else {
             // Something went wrong, returning null.
-            kdDebug() << "FilterMgr::loadFilterPlugin: Unable to create Factory object for plugin "
+            kDebug() << "FilterMgr::loadFilterPlugin: Unable to create Factory object for plugin "
                 << desktopEntryName << endl;
             return NULL;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
-    kdDebug() << "FilterMgr::loadFilterPlugin: KTrader did not return an offer for plugin "
+    kDebug() << "FilterMgr::loadFilterPlugin: KTrader did not return an offer for plugin "
          << desktopEntryName << endl;
     return NULL;
 }

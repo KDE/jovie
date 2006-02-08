@@ -117,7 +117,7 @@ class FestivalIntConf : public PlugInConf {
         /** Scan for the different voices in festivalPath/lib */
         void scanVoices();
         void configChanged(){
-            // kdDebug() << "FestivalIntConf::configChanged: Running" << endl;
+            // kDebug() << "FestivalIntConf::configChanged: Running" << endl;
             emit changed(true);
         };
         void slotTest_clicked();

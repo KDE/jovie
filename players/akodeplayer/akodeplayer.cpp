@@ -48,7 +48,7 @@ aKodePlayer::~aKodePlayer()
 //void aKodePlayer::play(const FileHandle &file)
 void aKodePlayer::startPlay(const QString &file)
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 
     if (file.isNull()) { // null FileHandle file means unpause
         if (paused())
@@ -61,14 +61,14 @@ void aKodePlayer::startPlay(const QString &file)
 
     // QString filename = file.absoluteFilePath();
 
-    kdDebug() << "Opening: " << file << endl;
+    kDebug() << "Opening: " << file << endl;
 
     if (m_player)
         m_player->stop();
     else {
         m_player = new aKode::Player();
         if (!m_player->open(m_sinkName.ascii())) {
-            kdDebug() << k_funcinfo << "Unable to open aKode " << m_sinkName << " sink. "
+            kDebug() << k_funcinfo << "Unable to open aKode " << m_sinkName << " sink. "
                 << "Falling back to auto." << endl;
             m_player->open("auto");
         }

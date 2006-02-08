@@ -208,7 +208,7 @@ class HadifixConfPrivate {
 /** Constructor */
 HadifixConf::HadifixConf( QWidget* parent, const char* name, const QStringList &) : 
    PlugInConf( parent, name ){
-   // kdDebug() << "HadifixConf::HadifixConf: Running" << endl;
+   // kDebug() << "HadifixConf::HadifixConf: Running" << endl;
    QVBoxLayout *layout = new QVBoxLayout (this, KDialog::marginHint(), KDialog::spacingHint(), "CommandConfigWidgetLayout");
    layout->setAlignment (Qt::AlignTop); 
 
@@ -232,23 +232,23 @@ HadifixConf::HadifixConf( QWidget* parent, const char* name, const QStringList &
 
 /** Destructor */
 HadifixConf::~HadifixConf(){
-   // kdDebug() << "HadifixConf::~HadifixConf: Running" << endl;
+   // kDebug() << "HadifixConf::~HadifixConf: Running" << endl;
    delete d;
 }
 
 void HadifixConf::load(KConfig *config, const QString &configGroup) {
-   // kdDebug() << "HadifixConf::load: Running" << endl;
+   // kDebug() << "HadifixConf::load: Running" << endl;
    d->setDefaults();
    d->load (config, configGroup);
 }
 
 void HadifixConf::save(KConfig *config, const QString &configGroup) {
-   // kdDebug() << "HadifixConf::save: Running" << endl;
+   // kDebug() << "HadifixConf::save: Running" << endl;
    d->save (config, configGroup);
 }
 
 void HadifixConf::defaults() {
-   // kdDebug() << "HadifixConf::defaults: Running" << endl;
+   // kDebug() << "HadifixConf::defaults: Running" << endl;
    d->setDefaults();
 }
 
@@ -404,6 +404,6 @@ void HadifixConf::slotSynthStopped()
 {
     // Clean up after canceling test.
     QString filename = d->hadifixProc->getFilename();
-    // kdDebug() << "HadifixConf::slotSynthStopped: filename = " << filename << endl;
+    // kDebug() << "HadifixConf::slotSynthStopped: filename = " << filename << endl;
     if (!filename.isNull()) QFile::remove(filename);
 }

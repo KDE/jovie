@@ -39,9 +39,9 @@
 * Constructor 
 */
 PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, name){
-    kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
+    kDebug() << "PlugInConf::PlugInConf: Running" << endl;
     QString systemPath(getenv("PATH"));
-    // kdDebug() << "Path is " << systemPath << endl;
+    // kDebug() << "Path is " << systemPath << endl;
     m_path = systemPath.split( ":");
     m_player = 0;
 }
@@ -50,7 +50,7 @@ PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, nam
 * Destructor.
 */
 PlugInConf::~PlugInConf(){
-    kdDebug() << "PlugInConf::~PlugInConf: Running" << endl;
+    kDebug() << "PlugInConf::~PlugInConf: Running" << endl;
     delete m_player;
 }
 
@@ -68,7 +68,7 @@ PlugInConf::~PlugInConf(){
 *                    loading your configuration.
 */
 void PlugInConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
-    kdDebug() << "PlugInConf::load: Running" << endl;
+    kDebug() << "PlugInConf::load: Running" << endl;
 }
 
 /**
@@ -82,7 +82,7 @@ void PlugInConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
 *                    saving your configuration.
 */
 void PlugInConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
-    kdDebug() << "PlugInConf::save: Running" << endl;
+    kDebug() << "PlugInConf::save: Running" << endl;
 }
 
 /** 
@@ -93,7 +93,7 @@ void PlugInConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
 * be applied to the on-screen widgets; not to the config file.
 */
 void PlugInConf::defaults(){
-    kdDebug() << "PlugInConf::defaults: Running" << endl;
+    kDebug() << "PlugInConf::defaults: Running" << endl;
 }
 
 /**
@@ -155,8 +155,8 @@ QString PlugInConf::getLocation(const QString &name) {
     QFileInfo fileinfo(name);
     if (fileinfo.isFile() || (fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile()))
         return name;
-    kdDebug() << "PluginConf::getLocation: Searching for " << name << " in the path.." << endl;
-    kdDebug() << m_path << endl;
+    kDebug() << "PluginConf::getLocation: Searching for " << name << " in the path.." << endl;
+    kDebug() << m_path << endl;
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
         QString fullName = *it;
 
@@ -166,12 +166,12 @@ QString PlugInConf::getLocation(const QString &name) {
         // The user either has the directory of the file in the path...
         if(fileinfo.isFile() || fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile()) {
             return fullName;
-//             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
+//             kDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
         // ....Or the file itself in the path (slightly freaky but hey.)
         else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
             return fullName;
-//             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
+//             kDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
     }
     return "";

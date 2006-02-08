@@ -103,7 +103,7 @@ class EposConf : public PlugInConf {
 
     private slots:
         void configChanged(){
-            kdDebug() << "EposConf::configChanged: Running" << endl;
+            kDebug() << "EposConf::configChanged: Running" << endl;
             emit changed(true);
         };
         void slotEposTest_clicked();

@@ -261,7 +261,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
           @verbatim
             config->setGroup(configGroup);
             m_fliteExePath = config->readEntry("FliteExePath", "flite");
-            kdDebug() << "FliteProc::init: path to flite: " << m_fliteExePath << endl;
+            kDebug() << "FliteProc::init: path to flite: " << m_fliteExePath << endl;
             config->setGroup(configGroup);
           @endverbatim
         */

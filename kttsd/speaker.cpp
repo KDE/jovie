@@ -114,7 +114,7 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_speechData(speechData),
     m_talkerMgr(talkerMgr)
 {
-    // kdDebug() << "Running: Speaker::Speaker()" << endl;
+    // kDebug() << "Running: Speaker::Speaker()" << endl;
     m_exitRequested = false;
     m_textInterrupted = false;
     m_currentJobNum = 0;
@@ -177,7 +177,7 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
 * Destructor.
 */
 Speaker::~Speaker(){
-    // kdDebug() << "Running: Speaker::~Speaker()" << endl;
+    // kDebug() << "Running: Speaker::~Speaker()" << endl;
     m_timer->stop();
     delete m_timer;
     if (!m_uttQueue.isEmpty())
@@ -193,7 +193,7 @@ Speaker::~Speaker(){
  * TODO: I don't think this actually accomplishes anything.
  */
 void Speaker::requestExit(){
-    // kdDebug() << "Speaker::requestExit: Running" << endl;
+    // kDebug() << "Speaker::requestExit: Running" << endl;
     m_exitRequested = true;
 }
 
@@ -203,7 +203,7 @@ void Speaker::requestExit(){
  */
 void Speaker::doUtterances()
 {
-    // kdDebug() << "Running: Speaker::doUtterances()" << endl;
+    // kDebug() << "Running: Speaker::doUtterances()" << endl;
 
     // Used to prevent exiting prematurely.
     m_again = true;
@@ -214,7 +214,7 @@ void Speaker::doUtterances()
 
         if (m_exitRequested)
         {
-            // kdDebug() << "Speaker::run: exiting due to request 1." << endl;
+            // kDebug() << "Speaker::run: exiting due to request 1." << endl;
             return;
         }
 
@@ -227,14 +227,14 @@ void Speaker::doUtterances()
         {
             m_again = getNextUtterance();
         }
-//         kdDebug() << "Speaker::doUtterances: queue dump:" << endl;
+//         kDebug() << "Speaker::doUtterances: queue dump:" << endl;
 //         for (it = m_uttQueue.begin(); it != m_uttQueue.end(); ++it)
 //         {
 //             QString pluginState = "no plugin";
 //             if (it->plugin) pluginState = pluginStateToStr(it->plugin->getState());
 //             QString jobState =
 //                     jobStateToStr(m_speechData->getTextJobState(it->sentence->jobNum));
-//             kdDebug() << 
+//             kDebug() << 
 //                     "  State: " << uttStateToStr(it->state) << 
 //                     "," << pluginState <<
 //                     "," << jobState <<
@@ -442,7 +442,7 @@ void Speaker::doUtterances()
                                     m_speechData->setTextJobState(m_currentJobNum, KSpeech::jsSpeaking);
                                     m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
                                     prePlaySignals(it);
-                                    // kdDebug() << "Async synthesis and audibilizing." << endl;
+                                    // kDebug() << "Async synthesis and audibilizing." << endl;
                                     it->state = usSaying;
                                     playing = true;
                                     it->plugin->sayText(it->sentence->text);
@@ -469,7 +469,7 @@ void Speaker::doUtterances()
                         // have horrible startup times, so we won't do that for now.
                         if (it->plugin->getState() == psIdle)
                         {
-                            // kdDebug() << "Async synthesis." << endl;
+                            // kDebug() << "Async synthesis." << endl;
                             it->state = usSynthing;
                             ++synthingCnt;
                             it->plugin->synthText(it->sentence->text,
@@ -501,7 +501,7 @@ void Speaker::doUtterances()
                         if (it->plugin->getState() == psFinished)
                         {
                             it->audioUrl = KStandardDirs::realFilePath(it->plugin->getFilename());
-                            // kdDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl << endl;
+                            // kDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl << endl;
                             it->plugin->ackFinished();
                             it->state = usSynthed;
                             m_again = true;
@@ -533,7 +533,7 @@ void Speaker::doUtterances()
             m_again = getNextUtterance();
         }
     }
-    // kdDebug() << "Speaker::doUtterances: exiting." << endl;
+    // kDebug() << "Speaker::doUtterances: exiting." << endl;
 }
 
 /**
@@ -591,7 +591,7 @@ void Speaker::startText(const uint jobNum)
     m_speechData->setTextJobState(jobNum, KSpeech::jsSpeakable);
     if (m_lastJobNum == jobNum)
     {
-        // kdDebug() << "Speaker::startText: startText called on speaking job " << jobNum << endl;
+        // kDebug() << "Speaker::startText: startText called on speaking job " << jobNum << endl;
         m_lastJobNum = 0;
         m_lastAppId = 0;
         m_lastSeq = 0;
@@ -639,7 +639,7 @@ void Speaker::pauseText(const uint jobNum)
 {
     bool emitSignal = (m_speechData->getTextJobState(jobNum) == KSpeech::jsSpeaking);
     pauseUtteranceByJobNum(jobNum);
-    kdDebug() << "Speaker::pauseText: setting Job State of job " << jobNum << " to jsPaused" << endl;
+    kDebug() << "Speaker::pauseText: setting Job State of job " << jobNum << " to jsPaused" << endl;
     m_speechData->setTextJobState(jobNum, KSpeech::jsPaused);
     if (emitSignal) textPaused(m_speechData->getAppIdByJobNum(jobNum),jobNum);
 }
@@ -761,7 +761,7 @@ uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
         // TODO: More efficient way to advance one or two sentences, since there is a
         // good chance those utterances are already in the queue and synthesized.
         uint seq = m_speechData->moveRelTextSentence(n, jobNum);
-        kdDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
+        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
         if (jobNum == m_lastJobNum)
         {
             if (0 == seq)
@@ -907,9 +907,9 @@ void Speaker::pauseUtteranceByJobNum(const uint jobNum)
                 if (it->audioPlayer->playing())
             {
                 m_timer->stop();
-                kdDebug() << "Speaker::pauseUtteranceByJobNum: pausing audio player" << endl;
+                kDebug() << "Speaker::pauseUtteranceByJobNum: pausing audio player" << endl;
                 it->audioPlayer->pause();
-                kdDebug() << "Speaker::pauseUtteranceByJobNum: Setting utterance state to usPaused" << endl;
+                kDebug() << "Speaker::pauseUtteranceByJobNum: Setting utterance state to usPaused" << endl;
                 it->state = usPaused;
                 return;
             }
@@ -1279,7 +1279,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
             if (it->plugin->supportsAsync())
                 if ((plugin->getState() == psSaying) || (plugin->getState() == psSynthing))
             {
-                kdDebug() << "Speaker::deleteUtterance calling stopText" << endl;
+                kDebug() << "Speaker::deleteUtterance calling stopText" << endl;
                 plugin->stopText();
             }
             break;
@@ -1349,7 +1349,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
  */
 bool Speaker::startPlayingUtterance(uttIterator it)
 {
-    // kdDebug() << "Speaker::startPlayingUtterance running" << endl;
+    // kDebug() << "Speaker::startPlayingUtterance running" << endl;
     if (it->state == usPlaying) return false;
     if (it->audioUrl.isNull()) return false;
     bool started = false;
@@ -1403,7 +1403,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                     prePlaySignals(it);
                     it->state = usPlaying;
                     if (!m_timer->start(timerInterval, FALSE))
-                        kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
+                        kDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
                     started = true;
                 } else {
                     // If could not create audio player object, best we can do is silence.
@@ -1415,15 +1415,15 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         case usPaused:
         {
             // Unpause playback only if user has resumed.
-            // kdDebug() << "Speaker::startPlayingUtterance: checking whether to resume play" << endl;
+            // kDebug() << "Speaker::startPlayingUtterance: checking whether to resume play" << endl;
             if ((it->utType != utText) ||
                  (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
-                // kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
+                // kDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
                 it->audioPlayer->startPlay(QString());  // resume
                 it->state = usPlaying;
                 if (!m_timer->start(timerInterval, FALSE))
-                    kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
+                    kDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
                 started = true;
             }
             break;
@@ -1436,7 +1436,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
             it->audioPlayer->startPlay(QString());  // resume
             it->state = usPlaying;
             if (!m_timer->start(timerInterval, FALSE))
-                kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
+                kDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
             started = true;
             break;
         }
@@ -1505,7 +1505,7 @@ void Speaker::postPlaySignals(uttIterator it)
 QString Speaker::makeSuggestedFilename()
 {
     QString tmpDir = locateLocal("tmp", "kttsd-");
-    kdDebug() << "Speaker::makeSuggestedFilename: tmpDir = " << tmpDir << endl;
+    kDebug() << "Speaker::makeSuggestedFilename: tmpDir = " << tmpDir << endl;
     KTempFile tempFile (tmpDir, ".wav");
     // TODO: This not working.  Why?
     // QString waveFile = tempFile.file()->name();
@@ -1513,7 +1513,7 @@ QString Speaker::makeSuggestedFilename()
     // tempFile.close();
     QString waveFile = tempFile.name();
     QFile::remove(waveFile);
-    kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
+    kDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return KStandardDirs::realFilePath(waveFile);
 }
 
@@ -1552,7 +1552,7 @@ Player* Speaker::createPlayerObject()
 
     if(offers.count() == 1)
     {
-        kdDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
+        kDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
         if (factory)
             player = 
@@ -1564,13 +1564,13 @@ Player* Speaker::createPlayerObject()
         // If we tried for GStreamer or ALSA plugin and failed, fall back to aRts plugin.
         if (m_playerOption != 0)
         {
-            kdDebug() << "Speaker::createPlayerObject: Could not load " + plugInName + 
+            kDebug() << "Speaker::createPlayerObject: Could not load " + plugInName + 
                 " plugin.  Falling back to aRts." << endl;
             m_playerOption = 0;
             return createPlayerObject();
         }
         else
-            kdDebug() << "Speaker::createPlayerObject: Could not load aRts plugin.  Is KDEDIRS set  correctly?" << endl;
+            kDebug() << "Speaker::createPlayerObject: Could not load aRts plugin.  Is KDEDIRS set  correctly?" << endl;
     } else
         // Must have GStreamer >= 0.8.7.  If not, use aRts.
         if (m_playerOption == 1)
@@ -1699,7 +1699,7 @@ bool Speaker::event ( QEvent * e )
     // and 107 (error; keepGoing=False).
     if ((e->type() >= (QEvent::User + 101)) && (e->type() <= (QEvent::User + 105)))
     {
-        // kdDebug() << "Speaker::event: received event." << endl;
+        // kDebug() << "Speaker::event: received event." << endl;
         doUtterances();
         return TRUE;
     }

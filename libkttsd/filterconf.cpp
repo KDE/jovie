@@ -43,9 +43,9 @@
 * Constructor 
 */
 KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent, name){
-    // kdDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
+    // kDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
     QString systemPath(getenv("PATH"));
-    // kdDebug() << "Path is " << systemPath << endl;
+    // kDebug() << "Path is " << systemPath << endl;
     m_path = systemPath.split( ":");
 }
 
@@ -53,7 +53,7 @@ KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(par
 * Destructor.
 */
 KttsFilterConf::~KttsFilterConf(){
-    // kdDebug() << "KttsFilterConf::~KttsFilterConf: Running" << endl;
+    // kDebug() << "KttsFilterConf::~KttsFilterConf: Running" << endl;
 }
 
 /**
@@ -70,7 +70,7 @@ KttsFilterConf::~KttsFilterConf(){
 *                    loading your configuration.
 */
 void KttsFilterConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
-    // kdDebug() << "KttsFilterConf::load: Running" << endl;
+    // kDebug() << "KttsFilterConf::load: Running" << endl;
 }
 
 /**
@@ -84,7 +84,7 @@ void KttsFilterConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
 *                    saving your configuration.
 */
 void KttsFilterConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
-    // kdDebug() << "KttsFilterConf::save: Running" << endl;
+    // kDebug() << "KttsFilterConf::save: Running" << endl;
 }
 
 /** 
@@ -95,7 +95,7 @@ void KttsFilterConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
 * be applied to the on-screen widgets; not to the config file.
 */
 void KttsFilterConf::defaults(){
-    // kdDebug() << "KttsFilterConf::defaults: Running" << endl;
+    // kDebug() << "KttsFilterConf::defaults: Running" << endl;
 }
 
 /**
@@ -131,20 +131,20 @@ QString KttsFilterConf::getLocation(const QString &name) {
     // Iterate over the path and see if 'name' exists in it. Return the
     // full path to it if it does. Else return an empty QString.
     if (QFile::exists(name)) return name;
-    // kdDebug() << "KttsFilterConf::getLocation: Searching for " << name << " in the path.." << endl;
-    // kdDebug() << m_path << endl;
+    // kDebug() << "KttsFilterConf::getLocation: Searching for " << name << " in the path.." << endl;
+    // kDebug() << m_path << endl;
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
         QString fullName = *it;
         fullName += "/";
         fullName += name;
         // The user either has the directory of the file in the path...
         if(QFile::exists(fullName)) {
-            // kdDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
+            // kDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
             return fullName;
         }
         // ....Or the file itself
         else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
-            // kdDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
+            // kDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
             return fullName;
         }
     }

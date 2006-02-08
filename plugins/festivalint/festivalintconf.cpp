@@ -64,7 +64,7 @@
 FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    // kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
+    // kDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
     m_festProc = 0;
     m_progressDlg = 0;
     m_supportsSSML = FestivalIntProc::ssUnknown;
@@ -120,7 +120,7 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const char* name, const QStri
 
 /** Destructor */
 FestivalIntConf::~FestivalIntConf(){
-    // kdDebug() << "FestivalIntConf::~FestivalIntConf: Running" << endl;
+    // kDebug() << "FestivalIntConf::~FestivalIntConf: Running" << endl;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_festProc;
     delete m_progressDlg;
@@ -138,7 +138,7 @@ int FestivalIntConf::voiceCodeToListIndex(const QString& voiceCode) const
 }
 
 void FestivalIntConf::load(KConfig *config, const QString &configGroup){
-    //kdDebug() << "FestivalIntConf::load: Running" << endl;
+    //kDebug() << "FestivalIntConf::load: Running" << endl;
     config->setGroup("FestivalInt");
     QString exePath = config->readEntry("FestivalExecutablePath", "festival");
     QString exeLocation = getLocation(exePath);
@@ -171,7 +171,7 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
 }
 
 void FestivalIntConf::save(KConfig *config, const QString &configGroup){
-    // kdDebug() << "FestivalIntConf::save: Running" << endl;
+    // kDebug() << "FestivalIntConf::save: Running" << endl;
     config->setGroup("FestivalInt");
     config->writeEntry("FestivalExecutablePath", realFilePath(m_widget->festivalPath->url()));
     config->setGroup(configGroup);
@@ -188,7 +188,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
 }
 
 void FestivalIntConf::defaults(){
-    // kdDebug() << "FestivalIntConf::defaults: Running" << endl;
+    // kDebug() << "FestivalIntConf::defaults: Running" << endl;
     m_widget->festivalPath->setURL("festival");
     m_widget->timeBox->setValue(100);
     timeBox_valueChanged(100);
@@ -204,7 +204,7 @@ void FestivalIntConf::defaults(){
 
 void FestivalIntConf::setDesiredLanguage(const QString &lang)
 {
-    // kdDebug() << "FestivalIntConf::setDesiredLanguage: Running" << endl;
+    // kDebug() << "FestivalIntConf::setDesiredLanguage: Running" << endl;
     m_languageCode = splitLanguageCode(lang, m_countryCode);
 }
 
@@ -245,7 +245,7 @@ QString FestivalIntConf::getTalkerCode()
  */
 void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
 {
-    // kdDebug() << "FestivalIntCont::setDefaultVoice: Running" << endl;
+    // kDebug() << "FestivalIntCont::setDefaultVoice: Running" << endl;
     // If language code is known, auto pick first voice that matches the language code.
     if (!m_languageCode.isEmpty())
     {
@@ -253,7 +253,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
         // First search for a match on both language code and country code.
         QString languageCode = m_languageCode;
         if (!m_countryCode.isNull()) languageCode += "_" + m_countryCode;
-        // kdDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
+        // kDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
         int index = 0;
         // Prefer existing voice if it matches.
         if (currentVoiceIndex >= 0)
@@ -270,7 +270,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
             for(index = 0 ; index < m_voiceList.count(); ++index)
             {
                 QString vlCode = m_voiceList[index].languageCode.left(languageCode.length());
-                // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
+                // kDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
                 if(languageCode == vlCode)
                 {
                     found = true;
@@ -297,7 +297,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
                 for(index = 0 ; index < m_voiceList.count(); ++index)
                 {
                     QString vlCode = m_voiceList[index].languageCode.left(languageCode.length());
-                    // kdDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
+                    // kDebug() << "FestivalIntConf::setDefaultVoice: testing " << vlCode << endl;
                     if(languageCode == vlCode)
                     {
                         found = true;
@@ -320,7 +320,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
         }
         if (found)
         {
-            // kdDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << m_voiceList[index].code << endl;
+            // kDebug() << "FestivalIntConf::setDefaultVoice: auto picking voice code " << m_voiceList[index].code << endl;
             m_widget->selectVoiceCombo->setCurrentItem(index);
             m_widget->preloadCheckBox->setChecked(m_voiceList[index].preload);
             QString codecName = m_voiceList[index].codecName;
@@ -395,7 +395,7 @@ bool FestivalIntConf::readXmlBool(QDomNode &node, const QString &elementName, bo
 
 void FestivalIntConf::scanVoices()
 {
-    // kdDebug() << "FestivalIntConf::scanVoices: Running" << endl;
+    // kDebug() << "FestivalIntConf::scanVoices: Running" << endl;
     // Get existing voice code (if any).
     QString currentVoiceCode;
     int index = m_widget->selectVoiceCombo->currentItem();
@@ -438,7 +438,7 @@ void FestivalIntConf::scanVoices()
 
         // Display progress dialog modally.
         m_progressDlg->exec();
-        // kdDebug() << "FestivalIntConf::scanVoices: back from progressDlg->exec()" << endl;
+        // kDebug() << "FestivalIntConf::scanVoices: back from progressDlg->exec()" << endl;
 
         // Processing continues until either user clicks Cancel button, or until
         // Festival responds with the list.  When Festival responds with list,
@@ -471,7 +471,7 @@ void FestivalIntConf::scanVoices()
         QDomNodeList voices = voicesDoc.elementsByTagName("voice");
         uint voicesCount = voices.count();
         if (voicesCount == 0)
-            kdDebug() << "FestivalIntConf::scanVoices: Unable to open " << voicesFilename << ".  Is KDEDIR defined?" << endl;
+            kDebug() << "FestivalIntConf::scanVoices: Unable to open " << voicesFilename << ".  Is KDEDIR defined?" << endl;
 
         // Iterate thru list of voice codes returned by Festival,
         // find matching entry in voices.xml file, and add to list of supported voices.
@@ -486,7 +486,7 @@ void FestivalIntConf::scanVoices()
             {
                 QDomNode voiceNode = voices.item(index);
                 QString voiceCode = readXmlString(voiceNode, "code", QString());
-                // kdDebug() << "FestivalIntConf::scanVoices: Comparing code " << code << " to " << voiceCode << endl;
+                // kDebug() << "FestivalIntConf::scanVoices: Comparing code " << code << " to " << voiceCode << endl;
                 if (voiceCode == code)
                 {
                     found = true;
@@ -529,7 +529,7 @@ void FestivalIntConf::scanVoices()
             }
         }
         m_widget->selectVoiceCombo->setEnabled(true);
-    } else kdDebug() << "FestivalIntConf::scanVoices: No voices found" << endl;
+    } else kDebug() << "FestivalIntConf::scanVoices: No voices found" << endl;
     setDefaultVoice(voiceCodeToListIndex(currentVoiceCode));
     // Emit configChanged if the enabled state of the selectVoiceCombo has changed.
     // This occurs when user changes Festival EXE path, then clicks Rescan.
@@ -538,14 +538,14 @@ void FestivalIntConf::scanVoices()
 
 void FestivalIntConf::slotQueryVoicesFinished(const QStringList &voiceCodes)
 {
-    // kdDebug() << "FestivalIntConf::slotQueryVoicesFinished: voiceCodes.count() = " << voiceCodes.count() << endl;
+    // kDebug() << "FestivalIntConf::slotQueryVoicesFinished: voiceCodes.count() = " << voiceCodes.count() << endl;
     m_supportedVoiceCodes = voiceCodes;
     if (m_progressDlg) m_progressDlg->close();
 }
 
 void FestivalIntConf::slotTest_clicked()
 {
-    // kdDebug() << "FestivalIntConf::slotTest_clicked: Running " << endl;
+    // kDebug() << "FestivalIntConf::slotTest_clicked: Running " << endl;
     // If currently synthesizing, stop it.
     if (m_festProc)
         m_festProc->stopText();
@@ -562,7 +562,7 @@ void FestivalIntConf::slotTest_clicked()
     QString tmpWaveFile = tempFile.name();
     QFile::remove(tmpWaveFile);
 
-    kdDebug() << "FestivalIntConf::slotTest_clicked: tmpWaveFile = " << tmpWaveFile << endl;
+    kDebug() << "FestivalIntConf::slotTest_clicked: tmpWaveFile = " << tmpWaveFile << endl;
 
     // Get the code for the selected voice.
     QString voiceCode = m_voiceList[m_widget->selectVoiceCombo->currentItem()].code;
@@ -585,7 +585,7 @@ void FestivalIntConf::slotTest_clicked()
     m_progressDlg->progressBar()->hide();
     m_progressDlg->setAllowCancel(true);
 
-    // kdDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
+    // kDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << m_widget->timeBox->value() << endl;
     connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_festProc->synth(
         realFilePath(m_widget->festivalPath->url()),
@@ -609,7 +609,7 @@ void FestivalIntConf::slotTest_clicked()
 
 void FestivalIntConf::slotSynthFinished()
 {
-    // kdDebug() << "FestivalIntConf::slotSynthFinished: Running" << endl;
+    // kDebug() << "FestivalIntConf::slotSynthFinished: Running" << endl;
     // If user canceled, progress dialog is gone, so exit.
     if (!m_progressDlg)
     {
@@ -634,7 +634,7 @@ void FestivalIntConf::slotSynthStopped()
 {
     // Clean up after canceling test.
     QString filename = m_festProc->getFilename();
-    // kdDebug() << "FestivalIntConf::slotSynthStopped: filename = " << filename << endl;
+    // kDebug() << "FestivalIntConf::slotSynthStopped: filename = " << filename << endl;
     if (!filename.isNull()) QFile::remove(filename);
 }
 

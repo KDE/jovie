@@ -46,7 +46,7 @@
 /** Constructor */
 EposProc::EposProc( QObject* parent, const char* name, const QStringList& ) : 
     PlugInProc( parent, name ){
-    kdDebug() << "EposProc::EposProc: Running" << endl;
+    kDebug() << "EposProc::EposProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;
     m_eposServerProc = 0;
@@ -55,7 +55,7 @@ EposProc::EposProc( QObject* parent, const char* name, const QStringList& ) :
 
 /** Destructor */
 EposProc::~EposProc(){
-    kdDebug() << "EposProc::~EposProc:: Running" << endl;
+    kDebug() << "EposProc::~EposProc:: Running" << endl;
     if (m_eposProc)
     {
         stopText();
@@ -67,8 +67,8 @@ EposProc::~EposProc(){
 /** Initialize the speech */
 bool EposProc::init(KConfig* config, const QString& configGroup)
 {
-    // kdDebug() << "EposProc::init: Running" << endl;
-    // kdDebug() << "Initializing plug in: Epos" << endl;
+    // kDebug() << "EposProc::init: Running" << endl;
+    // kDebug() << "Initializing plug in: Epos" << endl;
     // Retrieve path to epos executable.
     config->setGroup(configGroup);
     m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
@@ -78,8 +78,8 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     m_pitch = config->readEntry("pitch", 100);
     m_eposServerOptions = config->readEntry("EposServerOptions", QString());
     m_eposClientOptions = config->readEntry("EposClientOptions", QString());
-    kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
-    kdDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
+    kDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
+    kDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
 
     QString codecString = config->readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
@@ -97,7 +97,7 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
         m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
     }
 
-    kdDebug() << "EposProc::init: Initialized with codec: " << codecString << endl;
+    kDebug() << "EposProc::init: Initialized with codec: " << codecString << endl;
 
     return true;
 }
@@ -159,7 +159,7 @@ void EposProc::synth(
     int time,
     int pitch)
 {
-    // kdDebug() << "Running: EposProc::synth(const QString &text)" << endl;
+    // kDebug() << "Running: EposProc::synth(const QString &text)" << endl;
 
     if (m_eposProc)
     {
@@ -192,7 +192,7 @@ void EposProc::synth(
     // Quote the text as one parameter.
     // QString escText = KShellProcess::quote(encText);
 
-    // kdDebug()<< "EposProc::synth: Creating Epos object" << endl;
+    // kDebug()<< "EposProc::synth: Creating Epos object" << endl;
     m_eposProc = new KProcess;
     m_eposProc->setUseShell(true);
     QString languageCode;
@@ -247,16 +247,16 @@ void EposProc::synth(
 
     // Ok, let's rock.
     m_synthFilename = suggestedFilename;
-    kdDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
+    kDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
     if (!m_eposProc->start(KProcess::NotifyOnExit, KProcess::All))
     {
-        kdDebug() << "EposProc::synth: Error starting Epos process.  Is epos in the PATH?" << endl;
+        kDebug() << "EposProc::synth: Error starting Epos process.  Is epos in the PATH?" << endl;
         m_state = psIdle;
         return;
     }
-    kdDebug()<< "EposProc:synth: Epos initialized" << endl;
+    kDebug()<< "EposProc:synth: Epos initialized" << endl;
     if (!m_eposProc->writeStdin(m_encText, m_encText.length()))
-        kdDebug() << "EposProc::synth: Error writing to Epos client StdIn." << endl;
+        kDebug() << "EposProc::synth: Error writing to Epos client StdIn." << endl;
 }
 
 /**
@@ -268,7 +268,7 @@ void EposProc::synth(
 */
 QString EposProc::getFilename()
 {
-    kdDebug() << "EposProc::getFilename: returning " << m_synthFilename << endl;
+    kDebug() << "EposProc::getFilename: returning " << m_synthFilename << endl;
     return m_synthFilename;
 }
 
@@ -288,22 +288,22 @@ QString EposProc::getFilename()
 * operation.
 */
 void EposProc::stopText(){
-    kdDebug() << "EposProc::stopText:: Running" << endl;
+    kDebug() << "EposProc::stopText:: Running" << endl;
     if (m_eposProc)
     {
         if (m_eposProc->isRunning())
         {
-            kdDebug() << "EposProc::stopText: killing Epos." << endl;
+            kDebug() << "EposProc::stopText: killing Epos." << endl;
             m_waitingStop = true;
             m_eposProc->kill();
         } else m_state = psIdle;
     } else m_state = psIdle;
-    kdDebug() << "EposProc::stopText: Epos stopped." << endl;
+    kDebug() << "EposProc::stopText: Epos stopped." << endl;
 }
 
 void EposProc::slotProcessExited(KProcess*)
 {
-    kdDebug() << "EposProc:slotProcessExited: Epos process has exited." << endl;
+    kDebug() << "EposProc:slotProcessExited: Epos process has exited." << endl;
     pluginState prevState = m_state;
     if (m_waitingStop)
     {
@@ -323,18 +323,18 @@ void EposProc::slotProcessExited(KProcess*)
 void EposProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kdDebug() << "EposProc::slotReceivedStdout: Received output from Epos: " << buf << endl;
+    kDebug() << "EposProc::slotReceivedStdout: Received output from Epos: " << buf << endl;
 }
 
 void EposProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kdDebug() << "EposProc::slotReceivedStderr: Received error from Epos: " << buf << endl;
+    kDebug() << "EposProc::slotReceivedStderr: Received error from Epos: " << buf << endl;
 }
 
 void EposProc::slotWroteStdin(KProcess*)
 {
-    kdDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
+    kDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
     m_eposProc->closeStdin();
     m_encText = QByteArray();
 }

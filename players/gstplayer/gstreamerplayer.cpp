@@ -194,12 +194,12 @@ bool GStreamerPlayer::requireVersion(uint major, uint minor, uint micro)
     }
 
     gst_version(&gmajor, &gminor, &gmicro);
-    // kdDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    // kDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
     if (gmajor > major) return true;
     if (gminor > minor) return true;
     if (gmicro >= micro) return true;
-    kdDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
-    kdDebug() << QString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").arg(major).arg(minor).arg(micro) << endl;
+    kDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    kDebug() << QString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").arg(major).arg(minor).arg(micro) << endl;
     return false;
 }
 
@@ -239,11 +239,11 @@ void GStreamerPlayer::setupPipeline()
 
         // Reversing order.  OSS seems to work.  Alsa sink produces ugly echo of last
         // couple of words in each wav file.  argh!
-        // kdDebug() << "GStreamerPlayer::setupPipeline: trying oss sink." << endl;
+        // kDebug() << "GStreamerPlayer::setupPipeline: trying oss sink." << endl;
         m_sink = gst_element_factory_make("osssink", "sink");
         if(!m_sink)
         {
-            // kdDebug() << "GStreamerPlayer::setupPipeline: reverting to alsa sink." << endl;
+            // kDebug() << "GStreamerPlayer::setupPipeline: reverting to alsa sink." << endl;
             m_sink = gst_element_factory_make("alsasink", "sink");
         }
     }

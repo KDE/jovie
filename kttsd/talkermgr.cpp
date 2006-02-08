@@ -55,7 +55,7 @@ TalkerMgr::~TalkerMgr()
  */
 int TalkerMgr::loadPlugIns(KConfig* config)
 {
-    // kdDebug() << "Running: TalkerMgr::loadPlugIns()" << endl;
+    // kDebug() << "Running: TalkerMgr::loadPlugIns()" << endl;
     int good = 0;
     int bad = 0;
 
@@ -72,7 +72,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
         QStringList::ConstIterator itEnd(talkerIDsList.constEnd());
         for( QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
         {
-            // kdDebug() << "Loading plugInProc for Talker ID " << *it << endl;
+            // kDebug() << "Loading plugInProc for Talker ID " << *it << endl;
 
             // Talker ID.
             QString talkerID = *it;
@@ -110,25 +110,25 @@ int TalkerMgr::loadPlugIns(KConfig* config)
 
             if(offers.count() > 1){
                 ++bad;
-                kdDebug() << "More than 1 plug in doesn't make any sense, well, let's use any" << endl;
+                kDebug() << "More than 1 plug in doesn't make any sense, well, let's use any" << endl;
             } else if(offers.count() < 1){
                 ++bad;
-                kdDebug() << "Less than 1 plug in, nothing can be done" << endl;
+                kDebug() << "Less than 1 plug in, nothing can be done" << endl;
             } else {
-                kdDebug() << "Loading " << offers[0]->library() << endl;
+                kDebug() << "Loading " << offers[0]->library() << endl;
                 factory = KLibLoader::self()->factory(offers[0]->library().latin1());
                 if(factory){
                     PlugInProc *speech = 
                             KLibLoader::createInstance<PlugInProc>(
                             offers[0]->library().latin1(), this, offers[0]->library().latin1());
                     if(!speech){
-                        kdDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
+                        kDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
                         ++bad;
                     } else {
                         if (speech->supportsAsync())
                         {
                             speech->init(config, "Talker_" + talkerID);
-                            // kdDebug() << "Plug in " << desktopEntryName << " created successfully." << endl;
+                            // kDebug() << "Plug in " << desktopEntryName << " created successfully." << endl;
                             m_loadedPlugIns.append(speech);
                         } else {
                             // Synchronous plugins are run in a separate thread.
@@ -137,7 +137,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
                                     this, threadedPlugInName.latin1());
                             speechThread->init(config, "Talker_" + talkerCode);
-                            // kdDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
+                            // kDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
                             m_loadedPlugIns.append(speechThread);
                         }
                         ++good;
@@ -145,7 +145,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                         m_loadedTalkerIds.append(talkerID);
                     }
                 } else {
-                    kdDebug() << "Couldn't create the factory object from " << offers[0]->library() << endl;
+                    kDebug() << "Couldn't create the factory object from " << offers[0]->library() << endl;
                     ++bad;
                 }
             }
@@ -202,7 +202,7 @@ PlugInList TalkerMgr::getLoadedPlugIns()
  */
 int TalkerMgr::talkerToPluginIndex(const QString& talker) const
 {
-    // kdDebug() << "TalkerMgr::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
+    // kDebug() << "TalkerMgr::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
     // If we have a cached match, return that.
     if (m_talkerToPlugInCache.contains(talker))
         return m_talkerToPlugInCache[talker];
@@ -289,7 +289,7 @@ QString TalkerMgr::userDefaultTalker() const
  */
 bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/) const
 {
-    kdDebug() << "TalkerMgr::supportsMarkup: Testing talker " << talker << endl;
+    kDebug() << "TalkerMgr::supportsMarkup: Testing talker " << talker << endl;
     QString matchingTalker = talker;
     if (matchingTalker.isEmpty()) matchingTalker = userDefaultTalker();
     PlugInProc* plugin = talkerToPlugin(matchingTalker);

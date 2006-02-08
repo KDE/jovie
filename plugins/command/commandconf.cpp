@@ -46,7 +46,7 @@
 CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
     PlugInConf(parent, name)
 {
-    // kdDebug() << "CommandConf::CommandConf: Running" << endl;
+    // kDebug() << "CommandConf::CommandConf: Running" << endl;
     m_commandProc = 0;
     m_progressDlg = 0;
 
@@ -77,14 +77,14 @@ CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& 
 /** Destructor */
 CommandConf::~CommandConf()
 {
-    // kdDebug() << "CommandConf::~CommandConf: Running" << endl;
+    // kDebug() << "CommandConf::~CommandConf: Running" << endl;
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_commandProc;
     delete m_progressDlg;
 }
 
 void CommandConf::load(KConfig *config, const QString &configGroup) {
-    // kdDebug() << "CommandConf::load: Running" << endl;
+    // kDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(configGroup);
     m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
     m_widget->stdInButton->setChecked(config->readEntry("StdIn", QVariant(false)).toBool());
@@ -95,7 +95,7 @@ void CommandConf::load(KConfig *config, const QString &configGroup) {
 }
 
 void CommandConf::save(KConfig *config, const QString &configGroup) {
-    // kdDebug() << "CommandConf::save: Running" << endl;
+    // kDebug() << "CommandConf::save: Running" << endl;
     config->setGroup(configGroup);
     config->writeEntry("Command", m_widget->urlReq->url());
     config->writeEntry("StdIn", m_widget->stdInButton->isChecked());
@@ -104,7 +104,7 @@ void CommandConf::save(KConfig *config, const QString &configGroup) {
 }
 
 void CommandConf::defaults(){
-    // kdDebug() << "CommandConf::defaults: Running" << endl;
+    // kDebug() << "CommandConf::defaults: Running" << endl;
     m_widget->urlReq->setURL("cat -");
     m_widget->stdInButton->setChecked(false);
     m_widget->urlReq->setShowLocalProtocol (false);
@@ -142,7 +142,7 @@ QString CommandConf::getTalkerCode()
 
 void CommandConf::slotCommandTest_clicked()
 {
-    // kdDebug() << "CommandConf::slotCommandTest_clicked(): " << endl;
+    // kDebug() << "CommandConf::slotCommandTest_clicked(): " << endl;
     // If currently synthesizing, stop it.
     if (m_commandProc)
         m_commandProc->stopText();

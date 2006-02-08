@@ -355,7 +355,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     const QString& talker,
     bool assumeDefaultLang)
 {
-    // kdDebug() << "TalkerCode::findClosestMatchingTalker: matching on talker code " << talker << endl;
+    // kDebug() << "TalkerCode::findClosestMatchingTalker: matching on talker code " << talker << endl;
     // If nothing to match on, winner is top in the list.
     if (talker.isEmpty()) return 0;
     // Parse the given talker.
@@ -372,11 +372,11 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     for (int ndx = 0; ndx < talkersCount; ++ndx)
     {
         priorityMatch[ndx] = 0;
-        // kdDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
+        // kDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
         if (parsedTalkerCode.languageCode() == talkers[ndx].languageCode())
         {
             ++priorityMatch[ndx];
-            // kdDebug() << "TalkerCode::findClosestMatchingTalker: Match on language " << parsedTalkerCode.languageCode() << endl;
+            // kDebug() << "TalkerCode::findClosestMatchingTalker: Match on language " << parsedTalkerCode.languageCode() << endl;
         }
         if (parsedTalkerCode.countryCode().left(1) == "*")
             if (parsedTalkerCode.countryCode().mid(1) ==
@@ -416,7 +416,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
             winner = ndx;
         }
     }
-    // kdDebug() << "Priority phase: winnerCount = " << winnerCount 
+    // kDebug() << "Priority phase: winnerCount = " << winnerCount 
     //     << " winner = " << winner
     //     << " maxPriority = " << maxPriority << endl;
     // If a tie, the one that matches on the most priority and preferred attributes wins.
@@ -473,13 +473,13 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
                 }
             }
         }
-        // kdDebug() << "Preferred phase: winnerCount = " << winnerCount 
+        // kDebug() << "Preferred phase: winnerCount = " << winnerCount 
         //     << " winner = " << winner
         //     << " maxPreferred = " << maxPreferred << endl;
     }
     // If no winner found, use the first talker.
     if (winner < 0) winner = 0;
-    // kdDebug() << "TalkerCode::findClosestMatchingTalker: returning winner = " << winner << endl;
+    // kDebug() << "TalkerCode::findClosestMatchingTalker: returning winner = " << winner << endl;
     return winner;
 }
 

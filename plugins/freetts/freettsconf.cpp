@@ -45,7 +45,7 @@
 FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/*args*/) : 
 	PlugInConf( parent, name ) {
 	
-	// kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
+	// kDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
 	m_freettsProc = 0;
         m_progressDlg = 0;
 	
@@ -64,14 +64,14 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/
 
 /** Destructor */
 FreeTTSConf::~FreeTTSConf() {
-	// kdDebug() << "Running: FreeTTSConf::~FreeTTSConf()" << endl;
+	// kDebug() << "Running: FreeTTSConf::~FreeTTSConf()" << endl;
 	if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
 	delete m_freettsProc;
         delete m_progressDlg;
 }
 
 void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
-	// kdDebug() << "FreeTTSConf::load: Running" << endl;
+	// kDebug() << "FreeTTSConf::load: Running" << endl;
 
 	config->setGroup(configGroup);
         QString freeTTSJar = config->readEntry("FreeTTSJarPath", QString());
@@ -87,7 +87,7 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
 }
 
 void FreeTTSConf::save(KConfig *config, const QString &configGroup){
-	// kdDebug() << "FreeTTSConf::save: Running" << endl;
+	// kDebug() << "FreeTTSConf::save: Running" << endl;
 
     config->setGroup("FreeTTS");
     config->writeEntry("FreeTTSJarPath",
@@ -101,7 +101,7 @@ void FreeTTSConf::save(KConfig *config, const QString &configGroup){
 }
 
 void FreeTTSConf::defaults(){
-	// kdDebug() << "Running: FreeTTSConf::defaults()" << endl;
+	// kDebug() << "Running: FreeTTSConf::defaults()" << endl;
 	m_widget->freettsPath->setURL("");
 }
 
@@ -135,8 +135,8 @@ QString FreeTTSConf::getTalkerCode()
 // QString FreeTTSConf::getLocation(const QString &name) {
 // 	/// Iterate over the path and see if 'name' exists in it. Return the
 // 	/// full path to it if it does. Else return an empty QString.
-// 	kdDebug() << "FreeTTSConf::getLocation: Searching for " << name << " in the path... " << endl;
-// 	kdDebug() << m_path << endl;
+// 	kDebug() << "FreeTTSConf::getLocation: Searching for " << name << " in the path... " << endl;
+// 	kDebug() << m_path << endl;
 // 	for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
 // 		QString fullName = *it;
 // 		fullName += "/";
@@ -144,12 +144,12 @@ QString FreeTTSConf::getTalkerCode()
 // 		/// The user either has the directory of the file in the path...
 // 		if(QFile::exists(fullName)) {
 // 			return fullName;
-// 			kdDebug() << fullName << endl;
+// 			kDebug() << fullName << endl;
 // 		}
 // 		/// ....Or the file itself
 // 		else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
 // 			return fullName;
-// 			kdDebug() << fullName << endl;
+// 			kDebug() << fullName << endl;
 // 		}
 // 	}
 // 	return "";
@@ -158,7 +158,7 @@ QString FreeTTSConf::getTalkerCode()
 
 void FreeTTSConf::slotFreeTTSTest_clicked()
 {
-	// kdDebug() << "FreeTTSConf::slotFreeTTSTest_clicked(): Running" << endl;
+	// kDebug() << "FreeTTSConf::slotFreeTTSTest_clicked(): Running" << endl;
         // If currently synthesizing, stop it.
 	if (m_freettsProc)
 		m_freettsProc->stopText();

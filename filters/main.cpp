@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     QCString appId = args->getOption("appid");
     QString groupName = args->getOption("group");
 
-    if (filterName.isEmpty()) kdError(1) << "No filter name given." << endl;
+    if (filterName.isEmpty()) kError(1) << "No filter name given." << endl;
 
     const int offersCount = offers.count();
     for(int ndx=0; ndx < offersCount ; ++ndx)
@@ -112,10 +112,10 @@ int main(int argc, char *argv[])
                         delete plugIn;
                         return 0;
                     } else
-                        kdError(2) << "Unable to create instance from library." << endl;
+                        kError(2) << "Unable to create instance from library." << endl;
             } else
-                kdError(3) << "Unable to create factory." << endl;
+                kError(3) << "Unable to create factory." << endl;
         }
     }
-    kdError(4) << "Unable to find a plugin named " << filterName << endl;
+    kError(4) << "Unable to find a plugin named " << filterName << endl;
 }

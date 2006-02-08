@@ -200,11 +200,11 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* config)
         for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
         {
             QString talkerID = *it;
-            kdDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID << endl;
+            kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID << endl;
             config->setGroup(QString("Talker_") + talkerID);
             QString talkerCode = config->readEntry("TalkerCode");
             TalkerCode tc = TalkerCode(talkerCode, true);
-            kdDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode << endl;
+            kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode << endl;
             tc.setId(talkerID);
             QString desktopEntryName = config->readEntry("DesktopEntryName", QString());
             tc.setDesktopEntryName(desktopEntryName);

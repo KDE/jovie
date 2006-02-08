@@ -58,14 +58,14 @@
     QString dbgStr;\
     QString s = dbgStr.sprintf( "%s:%d: ERROR ", __FUNCTION__, __LINE__); \
     s += dbgStr.sprintf( __VA_ARGS__); \
-    kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
+    kDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #else
 #define ERR(args...) do {\
     QString dbgStr;\
     QString s = dbgStr.sprintf( "%s:%d: ERROR ", __FUNCTION__, __LINE__); \
     s += dbgStr.sprintf( ##args ); \
-    kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
+    kDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #endif
 #if !defined(__GNUC__) || __GNUC__ >= 3
@@ -74,7 +74,7 @@
         QString dbgStr; \
         QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( __VA_ARGS__); \
-        kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
+        kDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
 } while (0)
 #else
@@ -83,7 +83,7 @@
         QString dbgStr; \
         QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( ##args ); \
-        kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
+        kDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
 } while (0)
 #endif
@@ -94,7 +94,7 @@
         QString dbgStr; \
         QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( __VA_ARGS__); \
-        kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
+        kDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
 } while (0)
 #else
@@ -103,7 +103,7 @@
         QString dbgStr; \
         QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( ##args ); \
-        kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
+        kDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
 } while (0)
 #endif
@@ -1021,9 +1021,9 @@ void AlsaPlayerThread::compute_max_peak(char *data, size_t count)
         perc = max_peak * 100 / max;
     for (val = 0; val < 20; val++)
         if (val <= perc / 5)
-            kdDebug() << '#';
+            kDebug() << '#';
         else
-            kdDebug() << ' ';
+            kDebug() << ' ';
     DBG(" %i%%", perc);
 }
 

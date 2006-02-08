@@ -62,7 +62,7 @@
 SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
     KttsFilterConf(parent, name)
 {
-    // kdDebug() << "SbdConf::SbdConf: Running" << endl;
+    // kDebug() << "SbdConf::SbdConf: Running" << endl;
 
     // Create configuration widget.
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
@@ -103,7 +103,7 @@ SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/
 * Destructor.
 */
 SbdConf::~SbdConf(){
-    // kdDebug() << "SbdConf::~SbdConf: Running" << endl;
+    // kDebug() << "SbdConf::~SbdConf: Running" << endl;
 }
 
 /**
@@ -120,7 +120,7 @@ SbdConf::~SbdConf(){
 *                    loading your configuration.
 */
 void SbdConf::load(KConfig* config, const QString& configGroup){
-    // kdDebug() << "SbdConf::load: Running" << endl;
+    // kDebug() << "SbdConf::load: Running" << endl;
     config->setGroup( configGroup );
     m_widget->nameLineEdit->setText( 
         config->readEntry("UserFilterName", m_widget->nameLineEdit->text()) );
@@ -153,7 +153,7 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
 *                    saving your configuration.
 */
 void SbdConf::save(KConfig* config, const QString& configGroup){
-    // kdDebug() << "SbdConf::save: Running" << endl;
+    // kDebug() << "SbdConf::save: Running" << endl;
     config->setGroup( configGroup );
     config->writeEntry("UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text() );
@@ -170,14 +170,14 @@ void SbdConf::save(KConfig* config, const QString& configGroup){
 * be applied to the on-screen widgets; not to the config file.
 */
 void SbdConf::defaults(){
-    // kdDebug() << "SbdConf::defaults: Running" << endl;
+    // kDebug() << "SbdConf::defaults: Running" << endl;
     m_widget->nameLineEdit->setText( i18n("Standard Sentence Boundary Detector") );
     m_widget->reLineEdit->setText( "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     m_widget->sbLineEdit->setText( "\\1\\t" );
     m_languageCodeList.clear();
     m_widget->languageLineEdit->setText( "" );
     m_widget->appIdLineEdit->setText( "" );
-    // kdDebug() << "SbdConf::defaults: Exiting" << endl;
+    // kDebug() << "SbdConf::defaults: Exiting" << endl;
 }
 
 /**

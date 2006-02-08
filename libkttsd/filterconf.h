@@ -120,7 +120,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         * and should emit the @ref changed signal.
         */
         void configChanged(){
-            // kdDebug() << "KttsFilterConf::configChanged: Running"<< endl;
+            // kDebug() << "KttsFilterConf::configChanged: Running"<< endl;
             emit changed(true);
         };
 

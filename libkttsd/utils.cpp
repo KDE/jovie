@@ -43,7 +43,7 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
         // <?xml...?>
         int xmlStatementEnd = doc.find("?>");
         if(xmlStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
         }
         xmlStatementEnd += 2;  // len '?>' == 2
@@ -53,7 +53,7 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
     while(doc.startsWith("<!--") || doc.startsWith(" <!--")) {
         int commentStatementEnd = doc.find("-->");
         if(commentStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
         }
         commentStatementEnd += 3; // len '>' == 2
@@ -63,7 +63,7 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
     while(doc.startsWith("<!DOCTYPE") || doc.startsWith(" <!DOCTYPE")) {
         int doctypeStatementEnd = doc.find(">");
         if(doctypeStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
         }
         doctypeStatementEnd += 1; // len '>' == 2
@@ -90,7 +90,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
         // <?xml...?>
         int xmlStatementEnd = doc.find("?>");
         if(xmlStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
+            kDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
         }
         xmlStatementEnd += 2;  // len '?>' == 2
@@ -101,7 +101,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
     while(doc.startsWith("<!--")) {
         int commentStatementEnd = doc.find("-->");
         if(commentStatementEnd == -1) {
-            kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
+            kDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
         }
         commentStatementEnd += 3; // len '>' == 2
@@ -109,7 +109,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
         doc = doc.trimmed();
     }
     // Match the doctype statement if it exists.
-    // kdDebug() << "KttsUtils::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name << endl;
+    // kDebug() << "KttsUtils::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name << endl;
     return (doc.startsWith("<!DOCTYPE " + name));
 }
 
