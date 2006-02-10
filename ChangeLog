@@ -1,3 +1,6 @@
+2006-02-09  Gary Cramblitt (PhantomsDad)
+        * Use KDE_CHECK_{HEADER,LIB} instead of AC_CHECK_{HEADER,LIB} to locate alsalib.
+
 2006-02-07  Stephan Johach
         * Fix translation of "Speak Text" in kate/ktextedit.
 
