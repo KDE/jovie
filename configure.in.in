@@ -79,10 +79,10 @@ AC_DEFUN([KDE_CHECK_ALSA],
 [
   have_alsa=no
 
-  AC_CHECK_HEADERS([sys/asoundlib.h alsa/asoundlib.h],
+  KDE_CHECK_HEADERS([sys/asoundlib.h alsa/asoundlib.h],
     [have_alsa=yes])
 
-  AC_CHECK_LIB(asound, snd_seq_create_simple_port,
+  KDE_CHECK_LIB(asound, snd_seq_create_simple_port,
     [:], [have_alsa=no])
 
   AC_LANG_SAVE
