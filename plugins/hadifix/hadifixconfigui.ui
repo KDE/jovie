@@ -175,10 +175,10 @@
                             <property name="suffix">
                                 <string> %</string>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>200</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>50</number>
                             </property>
                             <property name="value">
@@ -198,10 +198,10 @@
                             <property name="focusPolicy">
                                 <enum>NoFocus</enum>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>0</number>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>1000</number>
                             </property>
                             <property name="lineStep">
@@ -263,10 +263,10 @@
                             <property name="suffix">
                                 <string> %</string>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>200</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>50</number>
                             </property>
                             <property name="value">
@@ -286,7 +286,7 @@
                             <property name="focusPolicy">
                                 <enum>NoFocus</enum>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>1000</number>
                             </property>
                             <property name="lineStep">
@@ -342,10 +342,10 @@
                             <property name="suffix">
                                 <string> %</string>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>200</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>50</number>
                             </property>
                             <property name="value">
@@ -362,7 +362,7 @@
                             <property name="focusPolicy">
                                 <enum>NoFocus</enum>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>1000</number>
                             </property>
                             <property name="lineStep">
