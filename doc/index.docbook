@@ -791,7 +791,7 @@ Highlight the text you want spoken and choose
 
 <tip><para>It is almost always a good idea to highlight the text on the
 web page you want spoken.  You can skip this step, but you will
-hear a lot of HTML headers and other invisible tags spoken.</para></tip>
+hear a lot of &HTML; headers and other invisible tags spoken.</para></tip>
 
 </sect1>
 
@@ -1962,10 +1962,10 @@ voice used, it may or may not be enabled.</para>
 </question>
 <answer>
 <para>The speed settings are ignored when &ktts; is speaking
-HTML.  (This is because the HTML is converted into SSML, which has its own
-"rate" tags.)  Either disable the HTML &XML; Transformer filter
+&HTML;.  (This is because the &HTML; is converted into SSML, which has its own
+"rate" tags.)  Either disable the &HTML; &XML; Transformer filter
 (see <xref linkend="filters"/>), or if you are brave, edit the .xsl file
-in the HTML to SSML Transformer filter and increase the default talking rate.</para>
+in the &HTML; to SSML Transformer filter and increase the default talking rate.</para>
 </answer>
 </qandaentry>
 <qandaentry>
@@ -1981,7 +1981,7 @@ gender tags out.  The same applies to voice tags as well.</para>
 </qandaentry>
 <qandaentry>
 <question>
-<para>I have the HTML &XML; Transformer filter configured, but web pages are not spoken at
+<para>I have the &HTML; &XML; Transformer filter configured, but web pages are not spoken at
 all using the Festival plugin.</para>
 </question>
 <answer>
