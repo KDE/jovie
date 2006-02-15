@@ -12,7 +12,7 @@
             <height>388</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Hadifix Configuration</string>
     </property>
     <property name="whatsThis" stdset="0">

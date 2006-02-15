@@ -14,7 +14,7 @@
             <height>240</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Configure Talker Chooser</string>
     </property>
     <grid>

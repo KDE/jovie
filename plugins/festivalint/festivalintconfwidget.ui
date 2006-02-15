@@ -21,7 +21,7 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Festival Config UI</string>
     </property>
     <property name="whatsThis" stdset="0">

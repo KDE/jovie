@@ -12,7 +12,7 @@
             <height>117</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Selecting Voice File</string>
     </property>
     <grid>

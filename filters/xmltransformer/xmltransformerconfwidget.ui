@@ -13,7 +13,7 @@
             <height>256</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Configure XML Transformer</string>
     </property>
     <grid>

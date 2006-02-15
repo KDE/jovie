@@ -14,7 +14,7 @@
             <height>421</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Configure String Replacer</string>
     </property>
     <grid>
