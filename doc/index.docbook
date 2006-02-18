@@ -2759,7 +2759,7 @@ If the epos server executable and client are not
 in your <envar>PATH</envar>, specify the paths to these executables
 in the <guilabel>Configure Talker</guilabel> screen.  The options boxes
 permit you to pass additional options to the server and client.  In a 
-<application>&konsole;</application>, type <userinput>epos -h</userinput> 
+&konsole;, type <userinput>epos -h</userinput> 
 or <userinput>say -h</userinput> for information.</para>
 
 </sect2>
@@ -2794,7 +2794,7 @@ http://sourceforge.net/projects/freetts/</ulink>
 
 <para>The command plugin permits you to use &ktts; with any
 speech synthesis engine that can be run as a command in a 
-<application>&konsole;</application>.</para>
+&konsole;.</para>
 
 <para>Synthesizer Name: <guilabel>Command</guilabel></para>
 
