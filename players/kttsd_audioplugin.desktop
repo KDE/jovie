@@ -2,4 +2,5 @@
 Type=ServiceType
 X-KDE-ServiceType=KTTSD/AudioPlugin
 Comment=Audio Plugin for KTTSD
+Comment[fr]=Module audio pour KTTSD
 Comment[x-test]=xxAudio Plugin for KTTSDxx

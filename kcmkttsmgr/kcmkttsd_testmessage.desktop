@@ -2,4 +2,5 @@
 Encoding=UTF-8
 NoDisplay=true
 Name=The text-to-speech system seems to be functioning properly.
+Name[fr]=Le système de synthèse vocale semble fonctionner correctement.
 Name[x-test]=xxThe text-to-speech system seems to be functioning properly.xx

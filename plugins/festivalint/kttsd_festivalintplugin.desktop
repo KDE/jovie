@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Festival Interactive
 Name[x-test]=xxFestival Interactivexx
 Comment=Festival speech synthetizer
+Comment[fr]=Synthèse vocale Festival
 Comment[x-test]=xxFestival speech synthetizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

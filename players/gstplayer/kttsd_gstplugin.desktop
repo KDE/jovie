@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD GStreamer Plugin
+Name[fr]=Module GStreamer pour KTTSD
 Name[x-test]=xxKTTSD GStreamer Pluginxx
 Comment=KTTSD GStreamer audio plugin
+Comment[fr]=Module audio GStreamer pour KTTSD
 Comment[x-test]=xxKTTSD GStreamer audio pluginxx
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin

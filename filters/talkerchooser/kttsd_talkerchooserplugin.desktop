@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Talker Chooser
+Name[fr]=Sélecteur de voix
 Name[x-test]=xxTalker Chooserxx
 Comment=Generic Talker Chooser Filter Plugin for KTTS
+Comment[fr]=Module de filtrage de sélection de voix pour KTTS
 Comment[x-test]=xxGeneric Talker Chooser Filter Plugin for KTTSxx
 Type=Service
 ServiceTypes=KTTSD/FilterPlugin

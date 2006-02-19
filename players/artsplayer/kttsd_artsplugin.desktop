@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD Arts Plugin
+Name[fr]=Module Arts pour KTTSD
 Name[x-test]=xxKTTSD Arts Pluginxx
 Comment=KTTSD aRts audio plugin
+Comment[fr]=Module audio Arts pour KTTSD
 Comment[x-test]=xxKTTSD aRts audio pluginxx
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin

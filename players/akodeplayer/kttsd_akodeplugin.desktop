@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD aKode Plugin
+Name[fr]=Module aKode pour KTTSD
 Name[x-test]=xxKTTSD aKode Pluginxx
 Comment=KTTSD aKode audio plugin
+Comment[fr]=Module audio aKode pour KTTSD
 Comment[x-test]=xxKTTSD aKode audio pluginxx
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Festival Lite (flite)
 Name[x-test]=xxFestival Lite (flite)xx
 Comment=Festival Lite (flite) speech synthesizer
+Comment[fr]=Synthèse vocale Festival Lite (flite)
 Comment[x-test]=xxFestival Lite (flite) speech synthesizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

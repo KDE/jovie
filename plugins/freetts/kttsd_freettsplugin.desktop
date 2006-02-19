@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=FreeTTS
 Name[x-test]=xxFreeTTSxx
 Comment=FreeTTS speech synthesizer
+Comment[fr]=Synthèse vocale FreeTTS
 Comment[x-test]=xxFreeTTS speech synthesizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

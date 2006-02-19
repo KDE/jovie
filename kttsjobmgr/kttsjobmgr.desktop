@@ -4,5 +4,6 @@ Type=Service
 Name=kttsjobmgrpart
 Name[x-test]=xxkttsjobmgrpartxx
 Comment=KDE Text-to-speech Job Manager
+Comment[fr]=Gestionnaire de tâches de synthèse vocale pour KDE
 Comment[x-test]=xxKDE Text-to-speech Job Managerxx
 ServiceTypes=KParts/ReadOnlyPart
