@@ -39,7 +39,7 @@
 class KAboutData;
 class KInstance;
 class KttsJobMgrBrowserExtension;
-class KListView;
+class K3ListView;
 class Q3ListViewItem;
 class KVBox;
 class KTextEdit;
@@ -270,7 +270,7 @@ private:
     /**
     * Job ListView.
     */
-    KListView* m_jobListView;
+    K3ListView* m_jobListView;
     KttsJobMgrBrowserExtension *m_extension;
 
     /**

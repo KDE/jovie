@@ -36,7 +36,7 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kdialogbase.h>
@@ -235,10 +235,10 @@ void SbdConf::slotReButton_clicked()
 
 void SbdConf::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host KListView.
+    // Create a  QHBox to host K3ListView.
     KHBox* hBox = new KHBox(m_widget/*, "SelectLanguage_hbox"*/);
-    // Create a KListView and fill with all known languages.
-    KListView* langLView = new KListView(hBox);
+    // Create a K3ListView and fill with all known languages.
+    K3ListView* langLView = new K3ListView(hBox);
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
     langLView->setSelectionMode(Q3ListView::Extended);
@@ -249,7 +249,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     QString charSet;
     QString language;
     // Blank line so user can select no language.
-    Q3ListViewItem* item = new KListViewItem(langLView, "", "");
+    Q3ListViewItem* item = new K3ListViewItem(langLView, "", "");
     if (m_languageCodeList.isEmpty()) item->setSelected(true);
     const int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
@@ -259,7 +259,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        Q3ListViewItem* item = new KListViewItem(langLView, language, locale);
+        Q3ListViewItem* item = new K3ListViewItem(langLView, language, locale);
         if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
@@ -291,7 +291,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         }
     }
     delete dlg;
-    // TODO: Also delete KListView and QHBox?
+    // TODO: Also delete K3ListView and QHBox?
     if (dlgResult != QDialog::Accepted) return;
     language = "";
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)

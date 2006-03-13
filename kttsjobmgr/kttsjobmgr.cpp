@@ -34,7 +34,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kencodingfiledialog.h>
@@ -126,9 +126,9 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     splitter->setOrientation(Qt::Vertical);
 
     // Create Job List View widget.
-    m_jobListView = new KListView( splitter );
+    m_jobListView = new K3ListView( splitter );
     m_jobListView->setObjectName( "joblistview" );
-    m_jobListView->setSelectionModeExt(KListView::Single);
+    m_jobListView->setSelectionModeExt(K3ListView::Single);
     m_jobListView->addColumn(i18n("Job Num"));
     m_jobListView->addColumn(i18n("Owner"));
     m_jobListView->addColumn(i18n("Talker ID"));

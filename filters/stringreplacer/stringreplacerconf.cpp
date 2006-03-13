@@ -37,7 +37,7 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kdialogbase.h>
@@ -236,9 +236,9 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             if (prop.tagName() == "subst") subst = prop.text();
         }
         if (!item)
-            item = new KListViewItem(m_widget->substLView, wordType, match, subst);
+            item = new K3ListViewItem(m_widget->substLView, wordType, match, subst);
         else
-            item = new KListViewItem(m_widget->substLView, item, wordType, match, subst);
+            item = new K3ListViewItem(m_widget->substLView, item, wordType, match, subst);
     }
 
     return QString();
@@ -420,10 +420,10 @@ QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
 
 void StringReplacerConf::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host KListView.
+    // Create a  QHBox to host K3ListView.
     KHBox* hBox = new KHBox(m_widget/*, "SelectLanguage_hbox"*/);
-    // Create a KListView and fill with all known languages.
-    KListView* langLView = new KListView(hBox);
+    // Create a K3ListView and fill with all known languages.
+    K3ListView* langLView = new K3ListView(hBox);
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
     langLView->setSelectionMode(Q3ListView::Extended);
@@ -434,7 +434,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     QString charSet;
     QString language;
     // Blank line so user can select no language.
-    Q3ListViewItem* item = new KListViewItem(langLView, "", "");
+    Q3ListViewItem* item = new K3ListViewItem(langLView, "", "");
     if (m_languageCodeList.isEmpty()) item->setSelected(true);
     const int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
@@ -444,7 +444,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        item = new KListViewItem(langLView, language, locale);
+        item = new K3ListViewItem(langLView, language, locale);
         if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
@@ -476,7 +476,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         }
     }
     delete dlg;
-    // TODO: Also delete KListView and QHBox?
+    // TODO: Also delete K3ListView and QHBox?
     if (dlgResult != QDialog::Accepted) return;
     language = "";
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
@@ -619,9 +619,9 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     if ( isAdd )
     {
         if ( item )
-            item = new KListViewItem( m_widget->substLView, item, substType, match, subst );
+            item = new K3ListViewItem( m_widget->substLView, item, substType, match, subst );
         else
-            item = new KListViewItem( m_widget->substLView, substType, match, subst );
+            item = new K3ListViewItem( m_widget->substLView, substType, match, subst );
         m_widget->substLView->setSelected( item, true );
     }
     else

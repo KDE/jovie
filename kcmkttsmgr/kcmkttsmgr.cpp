@@ -38,7 +38,7 @@
 
 // KDE includes.
 #include <dcopclient.h>
-//#include <klistview.h>
+//#include <k3listview.h>
 #include <kparts/componentfactory.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
@@ -1377,13 +1377,13 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
     {
-        // Create a  QHBox to host KListView.
+        // Create a  QHBox to host K3ListView.
         QWidget* hBox = new QWidget;
         hBox->setObjectName("SelectLanguage_hbox");
         QHBoxLayout* hBoxLayout = new QHBoxLayout;
         hBoxLayout->setMargin(0);
-        // Create a KListView and fill with all known languages.
-        KListView* langLView = new KListView( hBox );
+        // Create a K3ListView and fill with all known languages.
+        K3ListView* langLView = new K3ListView( hBox );
         langLView->setObjectName( "SelectLanguage_lview" );
         langLView->addColumn(i18n("Language"));
         langLView->addColumn(i18n("Code"));
@@ -1421,7 +1421,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         languageCode.clear();
         if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
         delete dlg;
-        // TODO: Also delete KListView and hBox?
+        // TODO: Also delete K3ListView and hBox?
         if (dlgResult != QDialog::Accepted) return;
     }
 

@@ -29,7 +29,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kiconloader.h>
 
 // KTTS includes
@@ -102,9 +102,9 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
             QString eventDesc = config->readEntry( QString::fromLatin1( "Comment" ),
                 config->readEntry( QString::fromLatin1( "Name" ),QString()));
             if ( !item )
-                item = new KListViewItem( eventsListView, eventDesc, eventName );
+                item = new K3ListViewItem( eventsListView, eventDesc, eventName );
             else
-                item = new KListViewItem( eventsListView, item, eventDesc, eventName );
+                item = new K3ListViewItem( eventsListView, item, eventDesc, eventName );
         }
     }
     delete config;
@@ -112,9 +112,9 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     item = eventsListView->lastChild();
     QString eventDesc = i18n("All other %1 events").arg(eventSrcComboBox->currentText());
     if ( !item )
-        item = new KListViewItem( eventsListView, eventDesc, "default" );
+        item = new K3ListViewItem( eventsListView, eventDesc, "default" );
     else
-        item = new KListViewItem( eventsListView, item, eventDesc, "default" );
+        item = new K3ListViewItem( eventsListView, item, eventDesc, "default" );
 
 }
 

@@ -32,7 +32,7 @@
 #include <kcombobox.h>
 #include <ktrader.h>
 #include <kpushbutton.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klineedit.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -162,13 +162,13 @@ QString SelectTalkerDlg::getSelectedTranslatedDescription()
 
 void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host KListView.
+    // Create a  QHBox to host K3ListView.
     QWidget* hBox = new QWidget;
     hBox->setObjectName("SelectLanguage_hbox");
     QHBoxLayout* hBoxLayout = new QHBoxLayout;
     hBoxLayout->setMargin(0);
-    // Create a KListView and fill with all known languages.
-    KListView* langLView = new KListView(hBox);
+    // Create a K3ListView and fill with all known languages.
+    K3ListView* langLView = new K3ListView(hBox);
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
     langLView->setSelectionMode(Q3ListView::Single);
@@ -177,14 +177,14 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     QString language;
     // Blank line so user can select no language.
     // Note: Don't use QString(), which gets displayed at bottom of list, rather than top.
-    Q3ListViewItem* item = new KListViewItem(langLView, "", "");
+    Q3ListViewItem* item = new K3ListViewItem(langLView, "", "");
     if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
     {
         locale = allLocales[ndx];
         language = TalkerCode::languageCodeToLanguage(locale);
-        item = new KListViewItem(langLView, language, locale);
+        item = new K3ListViewItem(langLView, language, locale);
         if (m_talkerCode.fullLanguageCode() == locale) item->setSelected(true);
     }
     // Sort by language.
