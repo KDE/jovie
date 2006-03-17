@@ -17,15 +17,16 @@ set(kttsd_SRCS
 
 kde4_automoc(${kttsd_SRCS})
 
-kde4_add_dcop_skels(kttsd_SRCS kspeech.h kttsd.h )
+kde4_add_dcop_skels(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h kttsd.h )
 
-kde4_add_dcop_stubs(kttsd_SRCS kspeechsink.h )
+kde4_add_dcop_stubs(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
 
-kde4_add_executable(kttsd ${kttsd_SRCS})
+kde4_add_executable(kttsd_bin ${kttsd_SRCS})
+set_target_properties(kttsd_bin PROPERTIES OUTPUT_NAME kttsd)
 
-target_link_libraries(kttsd  ${QT_AND_KDECORE_LIBS} kttsd kio kutils )
+target_link_libraries(kttsd_bin  ${LIB_KDE3SUPPORT} kttsd )
 
-install_targets(/bin kttsd )
+install_targets(/bin kttsd_bin )
 
 
 ########### install files ###############

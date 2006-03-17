@@ -13,17 +13,18 @@ set(kcm_kttsd_PART_SRCS
 
 kde4_automoc(${kcm_kttsd_PART_SRCS})
 
-kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui selecteventwidget.ui )
+kde4_add_ui3_files(kcm_kttsd_PART_SRCS selecteventwidget.ui)
+kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui  )
 
-kde4_add_dcop_skels(kcm_kttsd_PART_SRCS kspeechsink.h )
+kde4_add_dcop_skels(kcm_kttsd_PART_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
 
-kde4_add_dcop_stubs(kcm_kttsd_PART_SRCS kspeech.h )
+kde4_add_dcop_stubs(kcm_kttsd_PART_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h )
 
 kde4_add_plugin(kcm_kttsd ${kcm_kttsd_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kttsd )
 
-target_link_libraries(kcm_kttsd  ${QT_AND_KDECORE_LIBS} kttsd kio )
+target_link_libraries(kcm_kttsd  ${LIB_KIO} kttsd  )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kcm_kttsd )
 

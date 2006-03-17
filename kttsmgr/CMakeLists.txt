@@ -9,13 +9,13 @@ set(kttsmgr_SRCS kttsmgr.cpp )
 
 kde4_automoc(${kttsmgr_SRCS})
 
-kde4_add_dcop_skels(kttsmgr_SRCS kspeechsink.h )
+kde4_add_dcop_skels(kttsmgr_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
 
-kde4_add_dcop_stubs(kttsmgr_SRCS kspeech.h )
+kde4_add_dcop_stubs(kttsmgr_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h )
 
 kde4_add_executable(kttsmgr ${kttsmgr_SRCS})
 
-target_link_libraries(kttsmgr  ${QT_AND_KDECORE_LIBS} kutils kdeui )
+target_link_libraries(kttsmgr  ${LIB_KDE3SUPPORT})
 
 install_targets(/bin kttsmgr )
 

@@ -4,8 +4,9 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_D
 
 
 ########### next target ###############
+qt4_generate_moc(player.h player.moc.cpp)
 
-set(kttsd_LIB_SRCS 
+set(kttsd_LIB_SRCS player.moc.cpp 
    pluginproc.cpp 
    pluginconf.cpp 
    testplayer.cpp 

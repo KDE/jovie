@@ -38,7 +38,7 @@
 
 // KDE includes.
 #include <dcopclient.h>
-//#include <k3listview.h>
+#include <k3listview.h>
 #include <kparts/componentfactory.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
