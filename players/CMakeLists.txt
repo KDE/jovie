@@ -1,9 +1,13 @@
 kde4_header()
 
+macro_optional_find_package(Akode)
+if(AKODE_FOUND)
+	add_subdirectory(akodeplayer)
+endif(AKODE_FOUND)		
+
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(artsplayer_DIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(alsaplayer_DIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(gstplayer_DIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(akodeplayer_DIR)")
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
 
