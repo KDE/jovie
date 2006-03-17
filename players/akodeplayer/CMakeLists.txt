@@ -13,7 +13,7 @@ kde4_add_plugin(kttsd_akodeplugin WITH_PREFIX ${kttsd_akodeplugin_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_akodeplugin )
 
-target_link_libraries(kttsd_akodeplugin  ${QT_AND_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_akodeplugin  ${QT_AND_KDECORE_LIBS} kttsd ${AKODE_LIBRARIES})
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_akodeplugin )
 
