@@ -15,7 +15,7 @@ kde4_add_dcop_stubs(kttsmgr_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h )
 
 kde4_add_executable(kttsmgr ${kttsmgr_SRCS})
 
-target_link_libraries(kttsmgr  ${KDE4_KDE3SUPPORT_LIBRARIES})
+target_link_libraries(kttsmgr  ${KDE4_KDE3SUPPORT_LIBS})
 
 install_targets(/bin kttsmgr )
 

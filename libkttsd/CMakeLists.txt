@@ -25,7 +25,7 @@ kde4_add_ui_files(kttsd_LIB_SRCS selecttalkerwidget.ui )
 
 kde4_add_library(kttsd SHARED ${kttsd_LIB_SRCS})
 
-target_link_libraries(kttsd  ${KDE4_KDE3SUPPORT_LIBRARIES} )
+target_link_libraries(kttsd  ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kttsd PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kttsd )

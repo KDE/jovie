@@ -24,7 +24,7 @@ kde4_add_dcop_stubs(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
 kde4_add_executable(kttsd_bin ${kttsd_SRCS})
 set_target_properties(kttsd_bin PROPERTIES OUTPUT_NAME kttsd)
 
-target_link_libraries(kttsd_bin  ${KDE4_KDE3SUPPORT_LIBRARIES} kttsd )
+target_link_libraries(kttsd_bin  ${KDE4_KDE3SUPPORT_LIBS} kttsd )
 
 install_targets(/bin kttsd_bin )
 
