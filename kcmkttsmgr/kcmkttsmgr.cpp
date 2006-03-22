@@ -320,23 +320,23 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Give buttons icons.
     // Talkers tab.
     higherTalkerPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("up", K3Icon::Small));
     lowerTalkerPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small));
     removeTalkerButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small));
     configureTalkerButton->setIconSet(
-        KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
+        KGlobal::iconLoader()->loadIconSet("configure", K3Icon::Small));
 
     // Filters tab.
     higherFilterPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("up", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("up", K3Icon::Small));
     lowerFilterPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("down", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small));
     removeFilterButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small));
     configureFilterButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("configure", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("configure", K3Icon::Small));
 
     // Notify tab.
     notifyListView->setColumnCount(7);
@@ -362,9 +362,9 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         notifyPresentComboBox->insertItem( NotifyPresent::presentDisplayName( ndx ) );
 
     notifyRemoveButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small));
     notifyTestButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("speak", KIcon::Small));
+            KGlobal::iconLoader()->loadIconSet("speak", K3Icon::Small));
 
     sinkComboBox->setEditable(false);
     pcmComboBox->setEditable(false);
@@ -374,9 +374,9 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     sbdPopmenu->setObjectName( "SbdPopupMenu" );
     m_sbdBtnEdit = sbdPopmenu->addAction( i18n("&Edit..."),
         this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
-    m_sbdBtnUp = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
+    m_sbdBtnUp = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("up", K3Icon::Small),
         i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnDown = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("down", KIcon::Small),
+    m_sbdBtnDown = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small),
         i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
     m_sbdBtnAdd = sbdPopmenu->addAction( i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
     m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );

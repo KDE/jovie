@@ -190,7 +190,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
     QPushButton* btn;
     QString wt;
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("stop", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("stop", K3Icon::Small, 0, true),
                           i18n("Hold"), hbox1, "job_hold");
     wt = i18n(
             "<p>Changes a job to Paused state.  If currently speaking, the job stops speaking.  "
@@ -199,28 +199,28 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
             "down in the list.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_hold()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("exec", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("exec", K3Icon::Small, 0, true),
                           i18n("Resume"), hbox1, "job_resume");
     wt = i18n(
             "<p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the "
             "top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("redo", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("redo", K3Icon::Small, 0, true),
                           i18n("R&estart"), hbox1, "job_restart");
     wt = i18n(
             "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "
             "is the top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("edittrash", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small, 0, true),
                           i18n("Re&move"), hbox1, "job_remove");
     wt = i18n(
             "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "
             "speakable job in the list begins speaking.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("down", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small, 0, true),
                           i18n("&Later"), hbox1, "job_later");
     wt = i18n(
             "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
@@ -228,32 +228,32 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2leftarrow", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2leftarrow", K3Icon::Small, 0, true),
                           i18n("Pre&vious Part"), hbox2, "part_prevpart");
     wt = i18n(
             "<p>Rewinds a multi-part job to the previous part.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_par()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1leftarrow", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1leftarrow", K3Icon::Small, 0, true),
                           i18n("&Previous Sentence"), hbox2, "job_prevsentence");
     wt = i18n(
             "<p>Rewinds a job to the previous sentence.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_sen()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1rightarrow", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1rightarrow", K3Icon::Small, 0, true),
                           i18n("&Next Sentence"), hbox2, "job_nextsentence");
     wt = i18n(
             "<p>Advances a job to the next sentence.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_sen()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2rightarrow", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2rightarrow", K3Icon::Small, 0, true),
                           i18n("Ne&xt Part"), hbox2, "part_nextpart");
     wt = i18n(
             "<p>Advances a multi-part job to the next part.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_par()));
 
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("klipper", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("klipper", K3Icon::Small, 0, true),
                           i18n("&Speak Clipboard"), hbox3, "speak_clipboard");
     wt = i18n(
             "<p>Queues the current contents of the clipboard for speaking and sets its state "
@@ -261,7 +261,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
             "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("fileopen", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("fileopen", K3Icon::Small, 0, true),
                           i18n("Spea&k File"), hbox3, "speak_file");
     wt = i18n(
             "<p>Prompts you for a file name and queues the contents of the file for speaking.  "
@@ -269,14 +269,14 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
             "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("translate", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("translate", K3Icon::Small, 0, true),
                           i18n("Change Talker"), hbox3, "job_changetalker");
     wt = i18n(
             "<p>Prompts you with a list of your configured Talkers from the <b>Talkers</b> tab.  "
             "The job will be spoken using the selected Talker.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("reload_page", KIcon::Small, 0, true),
+    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("reload_page", K3Icon::Small, 0, true),
                           i18n("&Refresh"), hbox3, "refresh");
     wt = i18n(
             "<p>Refresh the list of jobs.</p>");

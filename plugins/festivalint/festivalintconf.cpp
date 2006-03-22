@@ -475,8 +475,8 @@ void FestivalIntConf::scanVoices()
 
         // Iterate thru list of voice codes returned by Festival,
         // find matching entry in voices.xml file, and add to list of supported voices.
-        QPixmap maleIcon = KGlobal::iconLoader()->loadIcon("male", KIcon::Small);
-        QPixmap femaleIcon = KGlobal::iconLoader()->loadIcon("female", KIcon::Small);
+        QPixmap maleIcon = KGlobal::iconLoader()->loadIcon("male", K3Icon::Small);
+        QPixmap femaleIcon = KGlobal::iconLoader()->loadIcon("female", K3Icon::Small);
         QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
         for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
         {

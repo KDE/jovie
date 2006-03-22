@@ -84,7 +84,7 @@ int main (int argc, char *argv[])
     KUniqueApplication app;
 
 #if KDE_VERSION >= KDE_MAKE_VERSION (3,3,90)
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Panel);
+    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Panel);
     aboutdata.setProgramLogo(icon.convertToImage());
 #endif
 
@@ -92,7 +92,7 @@ int main (int argc, char *argv[])
     KCMultiDialog dlg(KCMultiDialog::Plain, i18n("KDE Text-to-Speech Manager"), 0, "kttsmgrdlg", false);
     dlg.addModule("kcmkttsd");
 
-    dlg.setIcon(KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small));
+    dlg.setIcon(KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small));
 
     // Get SysTray and ShowMainWindow options.
     KConfig* config = new KConfig("kttsdrc");
@@ -172,7 +172,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     KSystemTray(parent)
 {
 	setObjectName("kttsmgrsystemtray");
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
+    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
     setPixmap (icon);
 
     // this->setToolTip( i18n("Text-to-Speech Manager"));
@@ -182,16 +182,16 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     id = contextMenu()->idAt(0);
     if (id != -1) contextMenu()->addTitle(icon, "KTTSMgr");
 
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", K3Icon::Small),
         i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("stop", KIcon::Small),
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("stop", K3Icon::Small),
         i18n("&Hold"), this, SLOT(holdSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("exec", KIcon::Small),
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("exec", K3Icon::Small),
         i18n("Resume"), this, SLOT(resumeSelected()));
     id = contextMenu()->insertSeparator();
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", K3Icon::Small),
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
+    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small),
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
