@@ -18,7 +18,7 @@ if(KDE4_BUILD_TESTS)
 
 kde4_add_executable(testfilter ${testfilter_SRCS})
 
-target_link_libraries(testfilter  ${QT_AND_KDECORE_LIBS} kttsd )
+target_link_libraries(testfilter  ${KDE4_KDECORE_LIBS} kttsd )
 
 endif(KDE4_BUILD_TESTS)
 

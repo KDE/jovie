@@ -13,7 +13,7 @@ kde4_add_plugin(kttsd_artsplugin WITH_PREFIX ${kttsd_artsplugin_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_artsplugin )
 
-target_link_libraries(kttsd_artsplugin  ${QT_AND_KDECORE_LIBS} kttsd artskde )
+target_link_libraries(kttsd_artsplugin  ${KDE4_KDECORE_LIBS} kttsd artskde )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_artsplugin )
 

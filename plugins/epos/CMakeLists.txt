@@ -15,7 +15,7 @@ kde4_add_plugin(kttsd_eposplugin WITH_PREFIX ${kttsd_eposplugin_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_eposplugin )
 
-target_link_libraries(kttsd_eposplugin  ${QT_AND_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_eposplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_eposplugin )
 
