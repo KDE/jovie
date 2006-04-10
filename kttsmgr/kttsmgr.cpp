@@ -274,7 +274,7 @@ QString KttsMgrTray::getStatus()
 {
     if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
     uint jobCount = getTextJobCount();
-    QString status = i18n("1 job", "%n jobs", jobCount);
+    QString status = i18np("1 job", "%n jobs", jobCount);
     if (jobCount > 0)
     {
         uint job = getCurrentTextJob();
@@ -286,7 +286,7 @@ QString KttsMgrTray::getStatus()
             int sentenceCount = getTextCount(job);
             uint seq = moveRelTextSentence(0, job);
             status += i18n(", current job %1 at sentence %2 of %3 sentences"
-                ).arg(stateToStr(jobState)).arg(seq).arg(sentenceCount);
+                , stateToStr(jobState), seq, sentenceCount);
         }
     }
     return status;

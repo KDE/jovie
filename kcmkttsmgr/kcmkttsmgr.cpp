@@ -2703,7 +2703,7 @@ QTreeWidgetItem* KCMKttsMgr::addNotifyItem(
     else
     {
         if (event == "default")
-            eventName = i18n("All other %1 events").arg(eventSrcName);
+            eventName = i18n("All other %1 events", eventSrcName);
         else
             eventName = NotifyEvent::getEventName(eventSrc, event);
     }
@@ -2850,7 +2850,7 @@ void KCMKttsMgr::slotNotifyLoadButton_clicked()
     if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
-        "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
+        "*.xml|" + i18nc("file type", "Notification Event List") + " (*.xml)",
         this,
         "event_loadfile");
     if ( filename.isEmpty() ) return;
@@ -2866,7 +2866,7 @@ void KCMKttsMgr::slotNotifySaveButton_clicked()
 {
     QString filename = KFileDialog::getSaveFileName(
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/notify/", false ),
-        "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
+        "*.xml|" + i18nc("file type", "Notification Event List") + " (*.xml)",
         this,
         "event_savefile");
     if ( filename.isEmpty() ) return;

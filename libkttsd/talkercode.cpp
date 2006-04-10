@@ -236,10 +236,10 @@ void TalkerCode::normalize()
     {
         QString countryName = KGlobal::locale()->twoAlphaToCountryName(countryCode);
         // Some abbreviations to save screen space.
-        if (countryName == i18n("full country name", "United States of America"))
-            countryName = i18n("abbreviated country name", "USA");
-        if (countryName == i18n("full country name", "United Kingdom"))
-            countryName = i18n("abbreviated country name", "UK");
+        if (countryName == i18nc("full country name", "United States of America"))
+            countryName = i18nc("abbreviated country name", "USA");
+        if (countryName == i18nc("full country name", "United Kingdom"))
+            countryName = i18nc("abbreviated country name", "UK");
         language += " (" + countryName + ")";
     }
     return language;
@@ -255,7 +255,7 @@ void TalkerCode::normalize()
     else if (gender == "female")
         return i18n("female");
     else if (gender == "neutral")
-        return i18n("neutral gender", "neutral");
+        return i18nc("neutral gender", "neutral");
     else return gender;
 }
 /*static*/ QString TalkerCode::untranslatedGender(const QString &gender)
@@ -264,47 +264,47 @@ void TalkerCode::normalize()
         return "male";
     else if (gender == i18n("female"))
         return "female";
-    else if (gender == i18n("neutral gender", "neutral"))
+    else if (gender == i18nc("neutral gender", "neutral"))
         return "neutral";
     else return gender;
 }
 /*static*/ QString TalkerCode::translatedVolume(const QString &volume)
 {
     if (volume == "medium")
-        return i18n("medium sound", "medium");
+        return i18nc("medium sound", "medium");
     else if (volume == "loud")
-        return i18n("loud sound", "loud");
+        return i18nc("loud sound", "loud");
     else if (volume == "soft")
-        return i18n("soft sound", "soft");
+        return i18nc("soft sound", "soft");
     else return volume;
 }
 /*static*/ QString TalkerCode::untranslatedVolume(const QString &volume)
 {
-    if (volume == i18n("medium sound", "medium"))
+    if (volume == i18nc("medium sound", "medium"))
         return "medium";
-    else if (volume == i18n("loud sound", "loud"))
+    else if (volume == i18nc("loud sound", "loud"))
         return "loud";
-    else if (volume == i18n("soft sound", "soft"))
+    else if (volume == i18nc("soft sound", "soft"))
         return "soft";
     else return volume;
 }
 /*static*/ QString TalkerCode::translatedRate(const QString &rate)
 {
     if (rate == "medium")
-        return i18n("medium speed", "medium");
+        return i18nc("medium speed", "medium");
     else if (rate == "fast")
-        return i18n("fast speed", "fast");
+        return i18nc("fast speed", "fast");
     else if (rate == "slow")
-        return i18n("slow speed", "slow");
+        return i18nc("slow speed", "slow");
     else return rate;
 }
 /*static*/ QString TalkerCode::untranslatedRate(const QString &rate)
 {
-    if (rate == i18n("medium speed", "medium"))
+    if (rate == i18nc("medium speed", "medium"))
         return "medium";
-    else if (rate == i18n("fast speed", "fast"))
+    else if (rate == i18nc("fast speed", "fast"))
         return "fast";
-    else if (rate == i18n("slow speed", "slow"))
+    else if (rate == i18nc("slow speed", "slow"))
         return "slow";
     else return rate;
 }
