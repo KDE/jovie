@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_gstplugin )
 
 target_link_libraries(kttsd_gstplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_gstplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kttsd_gstplugin )
 
 
 ########### install files ###############

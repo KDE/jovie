@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_hadifixplugin )
 
 target_link_libraries(kttsd_hadifixplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_hadifixplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kttsd_hadifixplugin )
 
 
 ########### install files ###############

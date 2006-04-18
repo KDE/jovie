@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ktexteditor_kttsd )
 
 target_link_libraries(ktexteditor_kttsd  ${KDE4_KDECORE_LIBS} ktexteditor )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 ktexteditor_kttsd )
+install_targets(${PLUGIN_INSTALL_DIR} ktexteditor_kttsd )
 
 
 ########### install files ###############

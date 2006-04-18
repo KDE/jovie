@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_akodeplugin )
 
 target_link_libraries(kttsd_akodeplugin  ${KDE4_KDECORE_LIBS} kttsd ${AKODE_LIBRARIES})
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_akodeplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kttsd_akodeplugin )
 
 
 ########### install files ###############

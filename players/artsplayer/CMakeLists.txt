@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_artsplugin )
 
 target_link_libraries(kttsd_artsplugin  ${KDE4_KDECORE_LIBS} kttsd artskde )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kttsd_artsplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kttsd_artsplugin )
 
 
 ########### install files ###############
