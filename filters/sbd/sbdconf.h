@@ -48,7 +48,7 @@ class SbdConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        SbdConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        SbdConf( QWidget *parent, const QStringList &args = QStringList() );
 
         /**
         * Destructor 

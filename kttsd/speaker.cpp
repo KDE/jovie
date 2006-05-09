@@ -1557,7 +1557,7 @@ Player* Speaker::createPlayerObject()
         if (factory)
             player = 
                 KLibLoader::createInstance<Player>(
-                    offers[0]->library().latin1(), this, offers[0]->library().latin1());
+                    offers[0]->library().latin1(), this, QStringList(offers[0]->library().latin1()));
     }
     if (player == 0)
     {

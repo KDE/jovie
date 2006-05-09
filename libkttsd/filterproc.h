@@ -51,7 +51,7 @@ public:
     /**
      * Constructor.
      */
-    KttsFilterProc( QObject *parent, const char *name );
+    KttsFilterProc( QObject *parent );
 
     /**
      * Destructor.

@@ -31,8 +31,8 @@
 /**
  * Constructor.
  */
-KttsFilterProc::KttsFilterProc( QObject *parent, const char *name) :
-        QObject(parent, name) 
+KttsFilterProc::KttsFilterProc( QObject *parent) :
+        QObject(parent) 
 {
     // kDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
 }

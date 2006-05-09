@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    StringReplacerProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
+    StringReplacerProc( QObject *parent, const QStringList &args = QStringList() );
 
     /**
      * Destructor.

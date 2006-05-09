@@ -40,8 +40,8 @@
 /**
  * Constructor.
  */
-FilterMgr::FilterMgr( QObject *parent, const char *name) :
-    KttsFilterProc(parent, name) 
+FilterMgr::FilterMgr( QObject *parent) :
+    KttsFilterProc(parent) 
 {
     // kDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;
@@ -368,8 +368,8 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
             int errorNo;
             KttsFilterProc *plugIn =
                     KLibLoader::createInstance<KttsFilterProc>(
-                    offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
-            QStringList(), &errorNo);
+                    offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()),
+             &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
                 return plugIn;

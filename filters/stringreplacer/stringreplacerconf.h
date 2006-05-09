@@ -48,7 +48,7 @@ class StringReplacerConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        StringReplacerConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        StringReplacerConf( QWidget *parent, const QStringList &args = QStringList() );
 
         /**
         * Destructor 

@@ -52,8 +52,8 @@
 /**
 * Constructor 
 */
-TalkerChooserConf::TalkerChooserConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
-    KttsFilterConf(parent, name)
+TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList& /*args*/) :
+    KttsFilterConf(parent)
 {
     // kDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
 

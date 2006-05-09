@@ -49,7 +49,7 @@ class TalkerChooserConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        TalkerChooserConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        TalkerChooserConf( QWidget *parent, const QStringList &args = QStringList() );
 
         /**
         * Destructor 

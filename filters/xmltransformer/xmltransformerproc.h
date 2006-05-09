@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    XmlTransformerProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
+    XmlTransformerProc( QObject *parent, const QStringList &args = QStringList() );
 
     /**
      * Destructor.

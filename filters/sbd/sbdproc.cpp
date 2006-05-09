@@ -563,8 +563,8 @@ bool SbdThread::event ( QEvent * e )
 /**
  * Constructor.
  */
-SbdProc::SbdProc( QObject *parent, const char *name, const QStringList& /*args*/) :
-    KttsFilterProc(parent, name) 
+SbdProc::SbdProc( QObject *parent, const QStringList& /*args*/) :
+    KttsFilterProc(parent) 
 {
     // kDebug() << "SbdProc::SbdProc: Running" << endl;
     m_sbdThread = new SbdThread(this);

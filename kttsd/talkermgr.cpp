@@ -120,7 +120,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                 if(factory){
                     PlugInProc *speech = 
                             KLibLoader::createInstance<PlugInProc>(
-                            offers[0]->library().latin1(), this, offers[0]->library().latin1());
+                            offers[0]->library().latin1(), this, QStringList(offers[0]->library().latin1()));
                     if(!speech){
                         kDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
                         ++bad;
@@ -336,7 +336,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
                 // specific plug in to get the plug in configuration object.
                 PlugInConf* loadedTalkerPlugIn =
                     KLibLoader::createInstance<PlugInConf>(
-                        offers[0]->library().latin1(), NULL, offers[0]->library().latin1());
+                        offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()));
                 if (loadedTalkerPlugIn)
                 {
                     // Give plugin the language code and permit plugin to autoconfigure itself.

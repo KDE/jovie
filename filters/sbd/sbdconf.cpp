@@ -59,8 +59,8 @@
 /**
 * Constructor 
 */
-SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
-    KttsFilterConf(parent, name)
+SbdConf::SbdConf( QWidget *parent, const QStringList& /*args*/) :
+    KttsFilterConf(parent)
 {
     // kDebug() << "SbdConf::SbdConf: Running" << endl;
 

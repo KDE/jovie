@@ -45,7 +45,7 @@ class XmlTransformerConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        XmlTransformerConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        XmlTransformerConf( QWidget *parent, const QStringList &args = QStringList() );
 
         /**
         * Destructor 
