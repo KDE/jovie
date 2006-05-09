@@ -117,7 +117,7 @@ class KCMKttsMgr :
     Q_OBJECT
 
     public:
-        KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);
+        KCMKttsMgr(QWidget *parent, const QStringList &);
 
         ~KCMKttsMgr();
 

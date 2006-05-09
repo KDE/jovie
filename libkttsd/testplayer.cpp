@@ -171,7 +171,7 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         if (factory)
             player = 
                 KLibLoader::createInstance<Player>(
-                    offers[0]->library().latin1(), this, offers[0]->library().latin1());
+                    offers[0]->library().latin1(), this, QStringList(offers[0]->library().latin1()));
         else
             kDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
     }

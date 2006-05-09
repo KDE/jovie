@@ -284,12 +284,11 @@ QVariant SbdFilterListModel::headerData(int section, Qt::Orientation orientation
 /**
 * Constructor.
 */
-KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
+KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kcmkttsmgr_kspeechsink"),
     KCModule(KCMKttsMgrFactory::instance(), parent/*, name*/)
 {
-    Q_UNUSED(name);
 
     // kDebug() << "KCMKttsMgr constructor running." << endl;
 
@@ -1283,7 +1282,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
             // If the factory is created successfully, instantiate the PlugInConf class for the
             // specific plug in to get the plug in configuration object.
             PlugInConf *plugIn = KLibLoader::createInstance<PlugInConf>(
-                    offers[0]->library().latin1(), NULL, offers[0]->library().latin1());
+                    offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()));
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
                 return plugIn;
@@ -1329,8 +1328,8 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
             int errorNo = 0;
             KttsFilterConf *plugIn =
                 KLibLoader::createInstance<KttsFilterConf>(
-                    offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
-                    QStringList(), &errorNo);
+                    offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()),
+                     &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
                 return plugIn;
@@ -2009,7 +2008,7 @@ void KCMKttsMgr::kttsdStarted()
         {
             // Create the Job Manager part
             m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( mainTab, "kttsjobmgr",
-                "KParts::ReadOnlyPart" );
+                QStringList("KParts::ReadOnlyPart") );
             if (m_jobMgrPart)
             {
                 // Add the Job Manager part as a new tab.
