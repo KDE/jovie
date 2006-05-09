@@ -38,6 +38,7 @@ Comment[ta]=பெஸ்டிவல் லைட் (flite) பேச்சு 
 Comment[tg]=Таҳлилгари овози Festival Lite (flite)
 Comment[tr]=Festival Lite(flite) konuşma bireştirici
 Comment[uk]=Синтезатор мовлення Festival Lite (flite)
+Comment[vi]=Trình tổng hợp tiếng nói Festival Lite (flite)
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_fliteplugin
