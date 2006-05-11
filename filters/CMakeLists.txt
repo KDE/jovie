@@ -5,7 +5,7 @@ add_subdirectory( xmltransformer )
 add_subdirectory( sbd ) 
 add_subdirectory( talkerchooser ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 
 ########### next target ###############
