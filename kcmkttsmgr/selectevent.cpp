@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qcombobox.h>
+#include <QComboBox>
 
 // KDE includes
 #include <kstandarddirs.h>

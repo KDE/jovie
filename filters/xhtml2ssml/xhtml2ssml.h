@@ -22,7 +22,7 @@
 #ifndef _XHTML2SSML_H_
 #define _XHTML2SSML_H_
 
-#include <qxml.h>
+#include <QtXml>
 #include <qmap.h>
 
 typedef QMap<QString, QString> QStringMap;

@@ -32,10 +32,10 @@
 #include <stdlib.h>
 
 // Qt includes.
-#include <qregexp.h>
-#include <qpair.h>
+#include <QRegExp>
+#include <QPair>
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 
 // KDE includes.
 #include <kdebug.h>

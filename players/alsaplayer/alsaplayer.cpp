@@ -39,8 +39,8 @@
 #endif
 
 // Qt includes.
-#include <qdir.h>
-#include <qapplication.h>
+#include <QDir>
+#include <QApplication>
 #include <QMutexLocker>
 
 // KDE includes.

@@ -19,7 +19,7 @@
 #define KWIDGETPROBE_H
 
 #include <qwidget.h>
-#include <qobject.h>
+#include <QObject>
 
 #include "kspeech_stub.h"
 

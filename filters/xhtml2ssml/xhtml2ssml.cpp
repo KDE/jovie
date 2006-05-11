@@ -19,10 +19,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
+#include <QString>
 #include <q3dict.h>
-#include <qxml.h>
-#include <qfile.h>
+#include <QtXml>
+#include <QFile>
 //Added by qt3to4:
 #include <QTextStream>
 #include <iostream>

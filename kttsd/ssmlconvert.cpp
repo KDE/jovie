@@ -20,11 +20,11 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <qdom.h>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <QFile>
+#include <QTextStream>
 
 // KDE includes.
 #include <kdeversion.h>

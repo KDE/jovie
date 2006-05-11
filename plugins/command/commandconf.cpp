@@ -16,11 +16,11 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qfile.h>
-#include <qapplication.h>
-#include <qtextcodec.h>
+#include <QLayout>
+#include <QCheckBox>
+#include <QFile>
+#include <QApplication>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

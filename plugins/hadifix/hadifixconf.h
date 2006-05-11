@@ -1,7 +1,7 @@
 #ifndef _HADIFIXCONF_H_
 #define _HADIFIXCONF_H_
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kconfig.h>
 

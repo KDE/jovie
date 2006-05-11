@@ -24,8 +24,8 @@
 #ifndef _FESTIVALINTPROC_H_
 #define _FESTIVALINTPROC_H_
 
-#include <qstringlist.h>
-#include <qmutex.h>
+#include <QStringList>
+#include <QMutex>
 
 #include <kprocess.h>
 

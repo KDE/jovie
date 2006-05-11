@@ -19,8 +19,8 @@
 #define _COMMANDCONF_H_
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 // KDE includes.
 #include <kconfig.h>

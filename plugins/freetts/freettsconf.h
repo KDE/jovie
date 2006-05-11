@@ -18,7 +18,7 @@
 #ifndef _FREETTSCONF_H_
 #define _FREETTSCONF_H_
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kdebug.h>
 #include <kconfig.h>

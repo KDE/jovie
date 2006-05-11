@@ -25,15 +25,15 @@
 #include <math.h>
 
 // Qt includes.
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qcheckbox.h>
-#include <qdir.h>
-#include <qslider.h>
+#include <QLayout>
+#include <QLabel>
+#include <QString>
+#include <QStringList>
+#include <QCheckBox>
+#include <QDir>
+#include <QSlider>
 #include <qdom.h>
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include <kprogressdialog.h>
 //Added by qt3to4:
 #include <QPixmap>

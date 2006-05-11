@@ -19,10 +19,10 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qclipboard.h>
-#include <qtextstream.h>
-#include <qtextcodec.h>
-#include <qfile.h>
+#include <QClipboard>
+#include <QTextStream>
+#include <QTextCodec>
+#include <QFile>
 
 // KDE includes.
 #include <kdebug.h>

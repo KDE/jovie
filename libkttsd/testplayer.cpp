@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
+#include <QFile>
 
 // KDE includes.
 #include <kapplication.h>

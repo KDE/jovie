@@ -22,14 +22,14 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QString>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qdom.h>
-#include <qfile.h>
-#include <qradiobutton.h>
+#include <QFile>
+#include <QRadioButton>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QVBoxLayout>

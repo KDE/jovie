@@ -17,11 +17,11 @@
 
 #include "kwidgetprobe.h"
 #include <kapplication.h>
-#include <qtimer.h>
-#include <qcursor.h>
+#include <QTimer>
+#include <QCursor>
 #include <QMenu>
 #include <qmenudata.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <QAbstractButton>
 #include "kwidgetprobe.moc"
 

@@ -29,7 +29,7 @@ extern "C" {
 #include <gst/gstversion.h>
 }
 #include <gst/gst.h>
-#include <qstring.h>
+#include <QString>
 #include "player.h"
 
 class GStreamerPlayer : public Player

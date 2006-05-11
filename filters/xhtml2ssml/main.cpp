@@ -1,7 +1,7 @@
 
-#include <qapplication.h>
-#include <qfile.h>
-#include <qxml.h>
+#include <QApplication>
+#include <QFile>
+#include <QtXml>
 #include <qmap.h>
 #include <iostream>
 #include "xhtml2ssml.h"

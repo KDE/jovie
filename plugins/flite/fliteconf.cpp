@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qlayout.h>
-#include <qfile.h>
-#include <qapplication.h>
+#include <QLayout>
+#include <QFile>
+#include <QApplication>
 
 // KDE includes.
 #include <klocale.h>

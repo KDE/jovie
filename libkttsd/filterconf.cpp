@@ -27,9 +27,9 @@
 #include <sys/param.h>
 
 // Qt includes.
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QString>
 
 // KDE includes.
 #include <kglobal.h>

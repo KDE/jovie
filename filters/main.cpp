@@ -4,11 +4,11 @@
   #LICENSE
 ***********************/
 
-#include <qstring.h>
+#include <QString>
 #include <iostream>
 using namespace std;
 
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>

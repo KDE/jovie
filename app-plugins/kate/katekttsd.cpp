@@ -18,9 +18,9 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qmessagebox.h>
+#include <QMessageBox>
 #include <dcopclient.h>
-#include <qtimer.h>
+#include <QTimer>
 
 // KDE includes.
 #include <ktexteditor/editinterface.h>

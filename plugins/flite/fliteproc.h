@@ -25,8 +25,8 @@
 #define _FLITEPROC_H_
 
 // Qt includes.
-#include <qstringlist.h>
-#include <qmutex.h>
+#include <QStringList>
+#include <QMutex>
 
 // KTTS includes.
 #include <pluginproc.h>

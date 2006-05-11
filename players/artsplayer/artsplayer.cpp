@@ -27,8 +27,8 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
-#include <qdir.h>
-#include <qapplication.h>
+#include <QDir>
+#include <QApplication>
 
 #include <kartsserver.h>
 #include <kartsdispatcher.h>

@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qstring.h>
+#include <QString>
 #include <q3hbox.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

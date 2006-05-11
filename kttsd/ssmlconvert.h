@@ -31,8 +31,8 @@
  */
 
 // Qt includes
-#include <qobject.h>
-#include <qstringlist.h>
+#include <QObject>
+#include <QStringList>
 
 class KProcess;
 class QString;

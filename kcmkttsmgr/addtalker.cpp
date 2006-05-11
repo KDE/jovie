@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QDialog>
 
 // KDE includes.

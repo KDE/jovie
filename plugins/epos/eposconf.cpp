@@ -25,11 +25,11 @@
 #include <math.h>
 
 // Qt includes.
-#include <qfile.h>
-#include <qapplication.h>
-#include <qtextcodec.h>
-#include <qlayout.h>
-#include <qslider.h>
+#include <QFile>
+#include <QApplication>
+#include <QTextCodec>
+#include <QLayout>
+#include <QSlider>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

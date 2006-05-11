@@ -16,12 +16,12 @@
  ***************************************************************************/
 
 // Qt includes. 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qapplication.h>
+#include <QLayout>
+#include <QLabel>
+#include <QString>
+#include <QStringList>
+#include <QFile>
+#include <QApplication>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

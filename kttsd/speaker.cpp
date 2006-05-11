@@ -22,9 +22,9 @@
 #include <config.h>
 
 // Qt includes. 
-#include <qfile.h>
-#include <qtimer.h>
-#include <qdir.h>
+#include <QFile>
+#include <QTimer>
+#include <QDir>
 
 // KDE includes.
 #include <kdebug.h>

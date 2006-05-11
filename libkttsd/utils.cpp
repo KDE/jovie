@@ -15,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
+#include <QString>
 #include <kdebug.h>
-#include <qcombobox.h>
+#include <QComboBox>
 
 #include "utils.h"
 

@@ -15,14 +15,14 @@
  ***************************************************************************/
 
 // Qt includes. 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <q3groupbox.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
+#include <QString>
+#include <QStringList>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QTextStream>

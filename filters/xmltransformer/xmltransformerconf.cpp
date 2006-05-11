@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qstring.h>
-#include <qlayout.h>
+#include <QString>
+#include <QLayout>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

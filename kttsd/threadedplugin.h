@@ -25,7 +25,7 @@
 #define _THREADEDPLUGIN_H_
 
 #include <QThread>
-#include <qmutex.h>
+#include <QMutex>
 #include <qwaitcondition.h>
 
 #include "pluginproc.h"
