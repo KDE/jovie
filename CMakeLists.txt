@@ -1,4 +1,3 @@
-kde4_header()
 project(kttsd)
 
 add_subdirectory( compat ) 
@@ -18,7 +17,6 @@ add_subdirectory( icons )
 ########### install files ###############
 
 
-kde4_footer()
 
 
 

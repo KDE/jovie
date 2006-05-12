@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -24,7 +23,6 @@ install_targets(/bin kttsmgr )
 
 install_files( ${XDG_APPS_DIR} FILES kttsmgr.desktop )
 
-kde4_footer()
 
 
 

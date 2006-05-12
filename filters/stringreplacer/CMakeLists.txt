@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -25,7 +24,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_stringreplacerplugin )
 install_files( ${DATA_INSTALL_DIR}/kttsd/stringreplacer/ FILES abbreviations.xml  	chat.xml  	emoticons.xml  	polish_festival_fixes.xml  	polish_festival_unspeakables.xml  	kmail.xml  	festival_unspeakable_chars.xml  	qt2plaintext.xml )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_stringreplacerplugin.desktop )
 
-kde4_footer()
 
 
 

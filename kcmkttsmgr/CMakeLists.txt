@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -34,7 +33,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kcm_kttsd )
 install_files( ${XDG_APPS_DIR} FILES kcmkttsd.desktop )
 install_files( ${DATA_INSTALL_DIR}/kttsd/ FILES kcmkttsd_testmessage.desktop )
 
-kde4_footer()
 
 
 

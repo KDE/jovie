@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -25,7 +24,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_sbdplugin )
 install_files( ${DATA_INSTALL_DIR}/kttsd/sbd/ FILES standard_sbdrc  	polish_festival_sbdrc )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_sbdplugin.desktop )
 
-kde4_footer()
 
 
 

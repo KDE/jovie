@@ -1,4 +1,3 @@
-kde4_header()
 
 if(KDE4_KTTSD_COMMAND)
 	add_subdirectory(command)
@@ -30,7 +29,6 @@ endif(KDE4_KTTSD_HADIFIX)
 ########### install files ###############
 
 
-kde4_footer()
 
 
 

@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -22,7 +21,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_artsplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_artsplugin.desktop )
 
-kde4_footer()
 
 
 

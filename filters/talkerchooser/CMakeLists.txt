@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -25,7 +24,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_talkerchooserplugin )
 install_files( ${DATA_INSTALL_DIR}/kttsd/talkerchooser/ FILES female_notifications_rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_talkerchooserplugin.desktop )
 
-kde4_footer()
 
 
 

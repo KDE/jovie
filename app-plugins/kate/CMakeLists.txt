@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kate/interfaces  )
 
@@ -23,7 +22,6 @@ install_targets(${PLUGIN_INSTALL_DIR} ktexteditor_kttsd )
 install_files( ${SERVICES_INSTALL_DIR} FILES ktexteditor_kttsd.desktop )
 install_files( ${DATA_INSTALL_DIR}/ktexteditor_kttsd FILES ktexteditor_kttsdui.rc )
 
-kde4_footer()
 
 
 

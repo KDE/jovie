@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -22,7 +21,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_alsaplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_alsaplugin.desktop )
 
-kde4_footer()
 
 
 

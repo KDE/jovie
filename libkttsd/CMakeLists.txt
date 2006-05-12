@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -35,7 +34,6 @@ install_targets(${LIB_INSTALL_DIR} kttsd )
 
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES kttsd_synthplugin.desktop )
 
-kde4_footer()
 
 
 

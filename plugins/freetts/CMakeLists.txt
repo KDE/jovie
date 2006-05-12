@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -24,7 +23,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_freettsplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_freettsplugin.desktop )
 
-kde4_footer()
 
 
 

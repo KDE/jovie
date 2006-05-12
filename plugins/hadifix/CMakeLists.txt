@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -25,7 +24,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_hadifixplugin )
 install_files( ${DATA_INSTALL_DIR}/kttsd/hadifix/xslt/ FILES SSMLtoTxt2pho.xsl )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_hadifixplugin.desktop )
 
-kde4_footer()
 
 
 

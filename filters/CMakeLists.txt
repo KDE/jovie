@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory( stringreplacer ) 
 add_subdirectory( xmltransformer ) 
@@ -26,7 +25,6 @@ endif(KDE4_BUILD_TESTS)
 
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES kttsd_filterplugin.desktop )
 
-kde4_footer()
 
 
 

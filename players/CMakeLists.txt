@@ -1,4 +1,3 @@
-kde4_header()
 
 macro_optional_find_package(Akode)
 if(AKODE_FOUND AND KDE4_KTTSD_AKODE)
@@ -23,7 +22,6 @@ endif(KDE4_KTTSD_ALSA)
 
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES kttsd_audioplugin.desktop )
 
-kde4_footer()
 
 
 

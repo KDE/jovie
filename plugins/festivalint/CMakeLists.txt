@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -26,7 +25,6 @@ install_files( ${DATA_INSTALL_DIR}/kttsd/festivalint/ FILES voices sabletowave.s
 install_files( ${DATA_INSTALL_DIR}/kttsd/festivalint/xslt/ FILES SSMLtoSable.xsl )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_festivalintplugin.desktop )
 
-kde4_footer()
 
 
 

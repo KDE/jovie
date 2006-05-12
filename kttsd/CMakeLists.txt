@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -34,7 +33,6 @@ install_targets(/bin kttsd_bin )
 install_files( ${DATA_INSTALL_DIR}/kttsd/xslt/ FILES SSMLtoPlainText.xsl )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd.desktop )
 
-kde4_footer()
 
 
 

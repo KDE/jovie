@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
@@ -25,7 +24,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kttsd_xmltransformerplugin )
 install_files( ${DATA_INSTALL_DIR}/kttsd/xmltransformer/ FILES xhtml2ssml.xsl xhtml2ssml_simple.xsl )
 install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_xmltransformerplugin.desktop )
 
-kde4_footer()
 
 
 
