@@ -38,7 +38,8 @@
 /**
 * Constructor 
 */
-PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, name){
+PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent){
+    Q_UNUSED(name);
     kDebug() << "PlugInConf::PlugInConf: Running" << endl;
     QString systemPath(getenv("PATH"));
     // kDebug() << "Path is " << systemPath << endl;
@@ -169,7 +170,7 @@ QString PlugInConf::getLocation(const QString &name) {
 //             kDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
         // ....Or the file itself in the path (slightly freaky but hey.)
-        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).suffix())) == name) {
             return fullName;
 //             kDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
@@ -214,7 +215,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
     if (file.open(QIODevice::ReadOnly))
     {
         QTextStream stream(&file);
-        stream.setEncoding(QTextStream::UnicodeUTF8);
+        stream.setCodec("UTF-8");
         while ( !stream.atEnd() ) {
             QString line = stream.readLine(); // line of text excluding '\n'
             QStringList keyAndValue = line.split( "=");

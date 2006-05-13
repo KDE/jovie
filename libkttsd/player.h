@@ -73,7 +73,7 @@ public:
 
 protected:
     Player(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList() ) :
-        QObject(parent, name) { if (args.isEmpty()); } // TODO: Avoid compiler WARNING.  Better way?
+        QObject(parent) { Q_UNUSED(name); if (args.isEmpty()); } // TODO: Avoid compiler WARNING.  Better way?
 
 };
 

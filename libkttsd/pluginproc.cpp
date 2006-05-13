@@ -31,7 +31,8 @@
 /**
 * Constructor
 */
-PlugInProc::PlugInProc( QObject *parent, const char *name) : QObject(parent, name){
+PlugInProc::PlugInProc( QObject *parent, const char *name) : QObject(parent){
+    Q_UNUSED(name);
     // kDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 
@@ -160,7 +161,7 @@ QString PlugInProc::getSsmlXsltFilename()
     else if (codecName == "Unicode")
         codec = QTextCodec::codecForName("utf16");
     else
-        codec = QTextCodec::codecForName(codecName.latin1());
+        codec = QTextCodec::codecForName(codecName.toLatin1());
     if (!codec)
     {
         kDebug() << "PluginProc::codecNameToCodec: Invalid codec name " << codecName << endl;
@@ -244,7 +245,7 @@ QString PlugInProc::getSsmlXsltFilename()
             codec = QTextCodec::codecForName("utf16");
             break;
         default:
-            codec = QTextCodec::codecForName(codecList[codecNum].latin1());
+            codec = QTextCodec::codecForName(codecList[codecNum].toLatin1());
             break;
     }
     if (!codec)

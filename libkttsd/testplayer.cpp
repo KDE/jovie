@@ -46,8 +46,9 @@
  */
 TestPlayer::TestPlayer(QObject *parent, const char *name,
     const int playerOption, const float audioStretchFactor, const QString &sinkName) :
-    QObject(parent, name)
+    QObject(parent)
 {
+    Q_UNUSED(name);
     m_playerOption = playerOption;
     m_audioStretchFactor = audioStretchFactor;
     m_stretcher = 0;
@@ -167,11 +168,11 @@ Player* TestPlayer::createPlayerObject(int playerOption)
     if(offers.count() == 1)
     {
         // kDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if (factory)
             player = 
                 KLibLoader::createInstance<Player>(
-                    offers[0]->library().latin1(), this, QStringList(offers[0]->library().latin1()));
+                    offers[0]->library().toLatin1(), this, QStringList(offers[0]->library().toLatin1()));
         else
             kDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
     }
@@ -200,7 +201,7 @@ Player* TestPlayer::createPlayerObject(int playerOption)
 QString TestPlayer::makeSuggestedFilename()
 {
     KTempFile tempFile (locateLocal("tmp", "kttsmgr-"), ".wav");
-    QString waveFile = tempFile.file()->name();
+    QString waveFile = tempFile.file()->fileName();
     tempFile.close();
     QFile::remove(waveFile);
     // kDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
