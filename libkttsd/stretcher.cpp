@@ -35,8 +35,9 @@
  * Constructor.
  */
 Stretcher::Stretcher(QObject *parent, const char *name) :
-    QObject(parent, name)
+    QObject(parent)
 {
+    Q_UNUSED(name);
     m_state = 0;
     m_stretchProc = 0;
 }

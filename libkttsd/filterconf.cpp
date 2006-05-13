@@ -42,7 +42,8 @@
 /**
 * Constructor 
 */
-KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent, name){
+KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent){
+    Q_UNUSED(name);
     // kDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
     QString systemPath(getenv("PATH"));
     // kDebug() << "Path is " << systemPath << endl;
@@ -143,7 +144,7 @@ QString KttsFilterConf::getLocation(const QString &name) {
             return fullName;
         }
         // ....Or the file itself
-        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).suffix())) == name) {
             // kDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
             return fullName;
         }
