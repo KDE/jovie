@@ -50,8 +50,9 @@
 
 KTTSD::KTTSD(const DCOPCString& objId, QObject *parent, const char *name) :
     DCOPObject(objId),
-    QObject(parent, name)
+    QObject(parent)
 {
+    Q_UNUSED(name);
     // kDebug() << "KTTSD::KTTSD Running" << endl;
     m_speaker = 0;
     m_talkerMgr = 0;
@@ -423,10 +424,10 @@ uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/,
         QString enc = fixNullString(encoding);
         if (!enc.isEmpty())
         {
-            QTextCodec* codec = QTextCodec::codecForName(enc.latin1());
+            QTextCodec* codec = QTextCodec::codecForName(enc.toLatin1());
             if (codec) stream.setCodec(codec);
         }
-        jobNum = m_speechData->setText(stream.read(), fixNullString(talker), getAppId());
+        jobNum = m_speechData->setText(stream.readAll(), fixNullString(talker), getAppId());
         file.close();
     }
     return jobNum;
@@ -1119,9 +1120,10 @@ void KTTSD::announceEvent(const QString& slotName, const QString& eventName, con
 // Constructor.
 kspeech::kspeech(const DCOPCString& objId, QObject *parent, const char *name) :
     DCOPObject(objId),
-    QObject(parent, name),
+    QObject(parent),
     m_kttsd("KSpeech")
 {
+    Q_UNUSED(name);
 }
 
 // Destructor.

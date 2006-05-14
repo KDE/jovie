@@ -110,10 +110,11 @@
 */
 Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     QObject *parent, const char *name) :
-    QObject(parent, name), 
+    QObject(parent), 
     m_speechData(speechData),
     m_talkerMgr(talkerMgr)
 {
+    Q_UNUSED(name);
     // kDebug() << "Running: Speaker::Speaker()" << endl;
     m_exitRequested = false;
     m_textInterrupted = false;
@@ -121,7 +122,7 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_lastAppId = 0;
     m_lastJobNum = 0;
     m_lastSeq = 0;
-    m_timer = new QTimer(this, "kttsdAudioTimer");
+    m_timer = new QTimer(this);
     m_speechData->config->setGroup("General");
     m_playerOption = m_speechData->config->readEntry("AudioOutputMethod", 0);  // default to aRts.
     // Map 50% to 100% onto 2.0 to 0.5.
@@ -1402,8 +1403,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                     m_speechData->setJobSequenceNum(m_currentJobNum, sentence->seq);
                     prePlaySignals(it);
                     it->state = usPlaying;
-                    if (!m_timer->start(timerInterval, FALSE))
-                        kDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
+                    m_timer->start(timerInterval);
                     started = true;
                 } else {
                     // If could not create audio player object, best we can do is silence.
@@ -1422,8 +1422,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 // kDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
                 it->audioPlayer->startPlay(QString());  // resume
                 it->state = usPlaying;
-                if (!m_timer->start(timerInterval, FALSE))
-                    kDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
+                m_timer->start(timerInterval);
                 started = true;
             }
             break;
@@ -1435,8 +1434,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                 // Note: Must call stop(), even if player not currently playing.  Why?
             it->audioPlayer->startPlay(QString());  // resume
             it->state = usPlaying;
-            if (!m_timer->start(timerInterval, FALSE))
-                kDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
+            m_timer->start(timerInterval);
             started = true;
             break;
         }
@@ -1553,11 +1551,11 @@ Player* Speaker::createPlayerObject()
     if(offers.count() == 1)
     {
         kDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if (factory)
             player = 
                 KLibLoader::createInstance<Player>(
-                    offers[0]->library().latin1(), this, QStringList(offers[0]->library().latin1()));
+                    offers[0]->library().toLatin1(), this, QStringList(offers[0]->library().toLatin1()));
     }
     if (player == 0)
     {
