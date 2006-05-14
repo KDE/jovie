@@ -28,17 +28,17 @@
 #define _SELECTTALKERDLG_H_
 
 // KDE includes.
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kdemacros.h>
 
 // KTTS includes.
 #include "talkercode.h"
-#include "selecttalkerwidget.h"
+#include "ui_selecttalkerwidget.h"
 
 class TalkerListModel;
 
-class KDE_EXPORT SelectTalkerDlg : public KDialogBase
+class KDE_EXPORT SelectTalkerDlg : public KDialog
 {
     Q_OBJECT
 

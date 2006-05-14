@@ -29,6 +29,8 @@
 #include <QRadioButton>
 
 // KDE includes.
+// TODO: Replace KDialogBase with KDialog.
+#include <kdialogbase.h>
 #include <kcombobox.h>
 #include <ktrader.h>
 #include <kpushbutton.h>
@@ -50,14 +52,12 @@ SelectTalkerDlg::SelectTalkerDlg(
     const QString& talkerCode,
     bool runningTalkers) :
 
-    KDialogBase(
+    KDialog(
         parent,
-        name,
-        true,
         caption,
-        KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Ok)
+        KDialog::Ok|KDialog::Cancel)
 {
+    Q_UNUSED(name);
     m_widget = new Ui::SelectTalkerWidget();
     QWidget* w = new QWidget();
     m_widget->setupUi( w );
@@ -72,28 +72,28 @@ SelectTalkerDlg::SelectTalkerDlg(
 
     // Fill combo boxes.
     KComboBox* cb = m_widget->genderComboBox;
-    cb->insertItem( QString() );
-    cb->insertItem( TalkerCode::translatedGender("male") );
-    cb->insertItem( TalkerCode::translatedGender("female") );
-    cb->insertItem( TalkerCode::translatedGender("neutral") );
+    cb->addItem( QString() );
+    cb->addItem( TalkerCode::translatedGender("male") );
+    cb->addItem( TalkerCode::translatedGender("female") );
+    cb->addItem( TalkerCode::translatedGender("neutral") );
 
     cb = m_widget->volumeComboBox;
-    cb->insertItem( QString() );
-    cb->insertItem( TalkerCode::translatedVolume("medium") );
-    cb->insertItem( TalkerCode::translatedVolume("loud") );
-    cb->insertItem( TalkerCode::translatedVolume("soft") );
+    cb->addItem( QString() );
+    cb->addItem( TalkerCode::translatedVolume("medium") );
+    cb->addItem( TalkerCode::translatedVolume("loud") );
+    cb->addItem( TalkerCode::translatedVolume("soft") );
 
     cb = m_widget->rateComboBox;
-    cb->insertItem( QString() );
-    cb->insertItem( TalkerCode::translatedRate("medium") );
-    cb->insertItem( TalkerCode::translatedRate("fast") );
-    cb->insertItem( TalkerCode::translatedRate("slow") );
+    cb->addItem( QString() );
+    cb->addItem( TalkerCode::translatedRate("medium") );
+    cb->addItem( TalkerCode::translatedRate("fast") );
+    cb->addItem( TalkerCode::translatedRate("slow") );
 
     cb = m_widget->synthComboBox;
-    cb->insertItem( QString() );
+    cb->addItem( QString() );
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
     for(int i=0; i < offers.count() ; ++i)
-        cb->insertItem(offers[i]->name());
+        cb->addItem(offers[i]->name());
 
     // Fill List View with list of Talkers.
     KConfig config("kttsdrc");

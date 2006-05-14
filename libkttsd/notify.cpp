@@ -68,7 +68,7 @@ static void notifyaction_init()
 /*static*/ int NotifyAction::action( const QString& actionName )
 {
     notifyaction_init();
-    return s_actionNames->findIndex( actionName );
+    return s_actionNames->indexOf( actionName );
 }
 
 /*static*/ QString NotifyAction::actionDisplayName( const int action )
@@ -126,7 +126,7 @@ static void notifypresent_init()
 /*static*/ int NotifyPresent::present( const QString& presentName )
 {
     notifypresent_init();
-    return s_presentNames->findIndex( presentName );
+    return s_presentNames->indexOf( presentName );
 }
 
 /*static*/ QString NotifyPresent::presentDisplayName( const int present )
