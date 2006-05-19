@@ -46,7 +46,7 @@ class FestivalIntProc : public PlugInProc{
         /**
          * Constructor
          */
-        FestivalIntProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        FestivalIntProc( QObject* parent = 0, const QStringList &args = QStringList());
 
         /**
          * Destructor

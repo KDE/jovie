@@ -44,8 +44,8 @@
 #include "festivalintproc.moc"
 
 /** Constructor */
-FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList& ) : 
-    PlugInProc( parent, name ){
+FestivalIntProc::FestivalIntProc( QObject* parent, const QStringList& ) : 
+    PlugInProc( parent, "festivalintproc" ){
     // kDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
     m_ready = true;
     m_writingStdin = false;
@@ -182,8 +182,8 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         m_festProc = new KProcess;
         *m_festProc << festivalExePath;
         *m_festProc << "--interactive";
-        m_festProc->setEnvironment("LANG", languageCode + "." + codec->mimeName());
-        m_festProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->mimeName());
+        m_festProc->setEnvironment("LANG", languageCode + "." + codec->name());
+        m_festProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->name());
         // kDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
         connect(m_festProc, SIGNAL(processExited(KProcess*)),
                 this, SLOT(slotProcessExited(KProcess*)));
@@ -402,7 +402,7 @@ bool FestivalIntProc::sendIfReady()
     if (m_codec)
         encodedText = m_codec->fromUnicode(text);
     else
-        encodedText = text.latin1();  // Should not happen, but just in case.
+        encodedText = text.toLatin1();  // Should not happen, but just in case.
     m_outputQueue.pop_front();
     m_ready = false;
     // kDebug() << "FestivalIntProc::sendIfReady: sending to Festival: " << text << endl;
@@ -510,24 +510,24 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     {
         // Look for opening ( and closing ).
         buf.simplified();
-		if (buf.left(3) == "nil") {
-			emitQueryVoicesFinished = true;
-			m_waitingQueryVoices = false;
-		} else {
-			if (buf.left(1) == "(")
-			{
-				int rightParen = buf.find(')');
-				if (rightParen > 0)
-				{
-					m_waitingQueryVoices = false;
-					// Extract contents between parens.
-					buf = buf.mid(1, rightParen - 1);
-					// Space separated list.
-					voiceCodesList = buf.split( " ", QString::SkipEmptyParts);
-					emitQueryVoicesFinished = true;
-				}
-			}
-		}
+        if (buf.left(3) == "nil") {
+            emitQueryVoicesFinished = true;
+            m_waitingQueryVoices = false;
+        } else {
+            if (buf.left(1) == "(")
+            {
+                int rightParen = buf.indexOf(')');
+                if (rightParen > 0)
+                {
+                    m_waitingQueryVoices = false;
+                    // Extract contents between parens.
+                    buf = buf.mid(1, rightParen - 1);
+                    // Space separated list.
+                    voiceCodesList = buf.split( " ", QString::SkipEmptyParts);
+                    emitQueryVoicesFinished = true;
+                }
+            }
+        }
     }
     if (promptSeen)
     {

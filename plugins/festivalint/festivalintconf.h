@@ -36,7 +36,7 @@
 #include "pluginconf.h"
 
 // FestivalInt includes.
-#include "festivalintconfwidget.h"
+#include "ui_festivalintconfwidget.h"
 #include "festivalintproc.h"
 
 class KProgressDialog;
@@ -54,12 +54,12 @@ typedef struct voiceStruct{
     bool pitchAdjustable;       // True if the voice supports pitch adjustments.
 } voice;
 
-class FestivalIntConf : public PlugInConf {
+class FestivalIntConf : public PlugInConf, public Ui::FestivalIntConfWidget {
     Q_OBJECT 
 
     public:
         /** Constructor */
-        FestivalIntConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        FestivalIntConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~FestivalIntConf();
@@ -161,9 +161,6 @@ class FestivalIntConf : public PlugInConf {
         * @param currentVoiceIndex      This voice is preferred if it matches.
         */
         void setDefaultVoice(int currentVoiceIndex);
-
-        // Configuration Widget.
-        FestivalIntConfWidget* m_widget;
 
         // Language code.
         QString m_languageCode;
