@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kprogressbar.h>
 #include <kprogressdialog.h>
+
 // KTTS includes.
 #include <testplayer.h>
 
@@ -42,24 +43,24 @@
 #include "fliteconf.moc"
 
 /** Constructor */
-FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
-    PlugInConf(parent, name)
+FliteConf::FliteConf( QWidget* parent, const QStringList& /*args*/) :
+    PlugInConf(parent, "fliteconf")
 {
     // kDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;
     m_progressDlg = 0;
-    
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
-        KDialog::spacingHint(), "FliteConfigWidgetLayout");
+
+    setupUi(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setAlignment (Qt::AlignTop);
-    m_widget = new FliteConfWidget(this, "FliteConfigWidget");
-    layout->addWidget(m_widget);
-    
+    layout->addWidget(this);
+
     defaults();
-    
-    connect(m_widget->flitePath, SIGNAL(textChanged(const QString&)),
+
+    connect(flitePath, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
-    connect(m_widget->fliteTest, SIGNAL(clicked()), this, SLOT(slotFliteTest_clicked()));
+    connect(fliteTest, SIGNAL(clicked()), this, SLOT(slotFliteTest_clicked()));
 }
 
 /** Destructor */
@@ -80,7 +81,7 @@ void FliteConf::load(KConfig *config, const QString &configGroup){
         config->setGroup("Flite");
         fliteExe = config->readEntry("FliteExePath", "flite");
     }
-    m_widget->flitePath->setURL(fliteExe);
+    flitePath->setURL(fliteExe);
 }
 
 void FliteConf::save(KConfig *config, const QString &configGroup){
@@ -88,15 +89,15 @@ void FliteConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("Flite");
     config->writeEntry("FliteExePath", 
-        realFilePath(m_widget->flitePath->url()));
+        realFilePath(flitePath->url()));
     config->setGroup(configGroup);
     config->writeEntry("FliteExePath",
-        realFilePath(m_widget->flitePath->url()));
+        realFilePath(flitePath->url()));
 }
 
 void FliteConf::defaults(){
     // kDebug() << "FliteConf::defaults: Running" << endl;
-    m_widget->flitePath->setURL("flite");
+    flitePath->setURL("flite");
 }
 
 void FliteConf::setDesiredLanguage(const QString &lang)
@@ -106,7 +107,7 @@ void FliteConf::setDesiredLanguage(const QString &lang)
 
 QString FliteConf::getTalkerCode()
 {
-    QString fliteExe = realFilePath(m_widget->flitePath->url());
+    QString fliteExe = realFilePath(flitePath->url());
     if (!fliteExe.isEmpty())
     {
         if (!getLocation(fliteExe).isEmpty())
@@ -139,14 +140,14 @@ void FliteConf::slotFliteTest_clicked()
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "fliteplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->name();
+    QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 
     // Get test message in the language of the voice.
     QString testMsg = testMessage(m_languageCode);
 
     // Tell user to wait.
-    m_progressDlg = new KProgressDialog(m_widget,
+    m_progressDlg = new KProgressDialog(this,
         i18n("Testing"),
         i18n("Testing."),
         true);
@@ -158,7 +159,7 @@ void FliteConf::slotFliteTest_clicked()
     m_fliteProc->synth(
         testMsg,
         tmpWaveFile,
-        realFilePath(m_widget->flitePath->url()));
+        realFilePath(flitePath->url()));
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.

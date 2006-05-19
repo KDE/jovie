@@ -34,10 +34,10 @@
 // Flite Plugin includes.
 #include "fliteproc.h"
 #include "fliteproc.moc"
- 
+
 /** Constructor */
-FliteProc::FliteProc( QObject* parent, const char* name, const QStringList& ) : 
-    PlugInProc( parent, name ){
+FliteProc::FliteProc( QObject* parent, const QStringList& ) :
+    PlugInProc( parent, "fliteproc" ){
     kDebug() << "FliteProc::FliteProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;
@@ -125,7 +125,6 @@ void FliteProc::synth(
     else
         m_state = psSynthing;
 
-    
     // Encode quotation characters.
     QString saidText = text;
 /*
@@ -141,7 +140,7 @@ void FliteProc::synth(
     *m_fliteProc << fliteExePath;
 //    *m_fliteProc << "-t" << saidText;
     if (!synthFilename.isNull()) *m_fliteProc << "-o" << synthFilename;
-    
+
     // Ok, let's rock.
     m_synthFilename = synthFilename;
     kDebug() << "FliteProc::synth: Synthing text: '" << saidText << "' using Flite plug in" << endl;
@@ -152,9 +151,9 @@ void FliteProc::synth(
         return;
     }
     kDebug()<< "FliteProc:synth: Flite initialized" << endl;
-    m_fliteProc->writeStdin(saidText.latin1(), saidText.length());
+    m_fliteProc->writeStdin(saidText.toLatin1(), saidText.length());
 }
-        
+
 /**
 * Get the generated audio filename from synthText.
 * @return                        Name of the audio file the plugin generated.
@@ -278,4 +277,4 @@ bool FliteProc::supportsAsync() { return true; }
 * @return                        True if this plugin supports synthText method.
 */
 bool FliteProc::supportsSynth() { return true; }
-    
+

@@ -35,17 +35,17 @@
 #include <pluginconf.h>
 
 // Flite plugin includes.
-#include "fliteconfwidget.h"
+#include "ui_fliteconfwidget.h"
 
 class FliteProc;
 class KProgressDialog;
 
-class FliteConf : public PlugInConf {
+class FliteConf : public PlugInConf, public Ui::FliteConfWidget {
     Q_OBJECT 
 
     public:
         /** Constructor */
-        FliteConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        FliteConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~FliteConf();
@@ -112,9 +112,7 @@ class FliteConf : public PlugInConf {
     private:
         // Language code.
         QString m_languageCode;
-        // Configuration Widget.
-        FliteConfWidget* m_widget;
-        // Flite synthesizer.
+       // Flite synthesizer.
         FliteProc* m_fliteProc;
         // Synthesized wave file name.
         QString m_waveFile;
