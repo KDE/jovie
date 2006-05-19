@@ -3,7 +3,7 @@
 
 
 ########### next target ###############
-qt4_generate_moc(player.h player.moc.cpp)
+qt4_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/player.h ${CMAKE_CURRENT_SOURCE_DIR}/player.moc.cpp)
 
 set(kttsd_LIB_SRCS player.moc.cpp 
    pluginproc.cpp 
