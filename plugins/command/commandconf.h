@@ -29,17 +29,17 @@
 #include <pluginconf.h>
 
 // Command Plugin includes.
-#include "commandconfwidget.h"
+#include "ui_commandconfwidget.h"
 
 class CommandProc;
 class KProgressDialog;
 
-class CommandConf : public PlugInConf {
+class CommandConf : public PlugInConf, public Ui::CommandConfWidget {
     Q_OBJECT 
 
     public:
         /** Constructor */
-        CommandConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        CommandConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~CommandConf();
@@ -105,9 +105,6 @@ class CommandConf : public PlugInConf {
 
     private:
         QString m_languageCode;
-
-        // Configuration Widget.
-        CommandConfWidget* m_widget;
 
         // Command synthesizer.
         CommandProc* m_commandProc;

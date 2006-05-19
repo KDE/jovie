@@ -21,7 +21,6 @@
 #include <QFile>
 #include <QApplication>
 #include <QTextCodec>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
 // KDE includes.
@@ -43,34 +42,34 @@
 #include "commandconf.h"
 
 /** Constructor */
-CommandConf::CommandConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
-    PlugInConf(parent, name)
+CommandConf::CommandConf( QWidget* parent, const QStringList& /*args*/) :
+    PlugInConf(parent, "commandconf")
 {
     // kDebug() << "CommandConf::CommandConf: Running" << endl;
     m_commandProc = 0;
     m_progressDlg = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
-        KDialog::spacingHint(), "CommandConfigWidgetLayout");
+    setupUi(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setAlignment (Qt::AlignTop);
-    m_widget = new CommandConfWidget(this, "CommandConfigWidget");
-    layout->addWidget(m_widget);
+    layout->addWidget(this);
 
     // Build codec list and fill combobox.
     m_codecList = PlugInProc::buildCodecList();
-    m_widget->characterCodingBox->clear();
-    m_widget->characterCodingBox->insertStringList(m_codecList);
+    characterCodingBox->clear();
+    characterCodingBox->addItems(m_codecList);
 
     defaults();
-    connect(m_widget->characterCodingBox, SIGNAL(textChanged(const QString&)),
+    connect(characterCodingBox, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
-    connect(m_widget->characterCodingBox, SIGNAL(activated(const QString&)),
+    connect(characterCodingBox, SIGNAL(activated(const QString&)),
         this, SLOT(configChanged()));
-    connect(m_widget->stdInButton, SIGNAL(toggled(bool)),
+    connect(stdInButton, SIGNAL(toggled(bool)),
         this, SLOT(configChanged()));
-    connect(m_widget->urlReq, SIGNAL(textChanged(const QString&)),
+    connect(urlReq, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
-    connect(m_widget->commandTestButton, SIGNAL(clicked()),
+    connect(commandTestButton, SIGNAL(clicked()),
         this, SLOT(slotCommandTest_clicked()));
 }
 
@@ -86,29 +85,29 @@ CommandConf::~CommandConf()
 void CommandConf::load(KConfig *config, const QString &configGroup) {
     // kDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(configGroup);
-    m_widget->urlReq->setURL (config->readEntry("Command", "cat -"));
-    m_widget->stdInButton->setChecked(config->readEntry("StdIn", QVariant(false)).toBool());
+    urlReq->setURL (config->readEntry("Command", "cat -"));
+    stdInButton->setChecked(config->readEntry("StdIn", QVariant(false)).toBool());
     QString codecString = config->readEntry("Codec", "Local");
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
-    m_widget->characterCodingBox->setCurrentItem(codec);
+    characterCodingBox->setCurrentIndex(codec);
 }
 
 void CommandConf::save(KConfig *config, const QString &configGroup) {
     // kDebug() << "CommandConf::save: Running" << endl;
     config->setGroup(configGroup);
-    config->writeEntry("Command", m_widget->urlReq->url());
-    config->writeEntry("StdIn", m_widget->stdInButton->isChecked());
-    int codec = m_widget->characterCodingBox->currentItem();
+    config->writeEntry("Command", urlReq->url());
+    config->writeEntry("StdIn", stdInButton->isChecked());
+    int codec = characterCodingBox->currentIndex();
     config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void CommandConf::defaults(){
     // kDebug() << "CommandConf::defaults: Running" << endl;
-    m_widget->urlReq->setURL("cat -");
-    m_widget->stdInButton->setChecked(false);
-    m_widget->urlReq->setShowLocalProtocol (false);
-    m_widget->characterCodingBox->setCurrentItem(0);
+    urlReq->setURL("cat -");
+    stdInButton->setChecked(false);
+    urlReq->setShowLocalProtocol (false);
+    characterCodingBox->setCurrentIndex(0);
 }
 
 void CommandConf::setDesiredLanguage(const QString &lang)
@@ -118,12 +117,12 @@ void CommandConf::setDesiredLanguage(const QString &lang)
 
 QString CommandConf::getTalkerCode()
 {
-    QString url = m_widget->urlReq->url();
+    QString url = urlReq->url();
     if (!url.isEmpty())
     {
         // Must contain either text or file parameter, or StdIn checkbox must be checked,
         // otherwise, does nothing!
-        if ((url.contains("%t") > 0) || (url.contains("%f") > 0) || m_widget->stdInButton->isChecked())
+        if ((url.contains("%t") > 0) || (url.contains("%f") > 0) || stdInButton->isChecked())
         {
             return QString(
                 "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
@@ -154,14 +153,14 @@ void CommandConf::slotCommandTest_clicked()
 
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "commandplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->name();
+    QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 
     // Get test message in the language of the voice.
     QString testMsg = testMessage(m_languageCode);
 
     // Tell user to wait.
-    m_progressDlg = new KProgressDialog(m_widget,
+    m_progressDlg = new KProgressDialog(this,
         i18n("Testing"),
         i18n("Testing."),
         true);
@@ -173,9 +172,9 @@ void CommandConf::slotCommandTest_clicked()
     m_commandProc->synth(
         testMsg,
         tmpWaveFile,
-        m_widget->urlReq->url(),
-        m_widget->stdInButton->isChecked(),
-        PlugInProc::codecIndexToCodec(m_widget->characterCodingBox->currentItem(), m_codecList),
+        urlReq->url(),
+        stdInButton->isChecked(),
+        PlugInProc::codecIndexToCodec(characterCodingBox->currentIndex(), m_codecList),
         m_languageCode);
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,

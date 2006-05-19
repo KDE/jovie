@@ -39,8 +39,8 @@
 #include "commandproc.moc"
 
 /** Constructor */
-CommandProc::CommandProc( QObject* parent, const char* name, const QStringList& /*args*/) : 
-    PlugInProc( parent, name )
+CommandProc::CommandProc( QObject* parent, const QStringList& /*args*/) : 
+    PlugInProc( parent, "commandproc" )
 {
     kDebug() << "CommandProc::CommandProc: Running" << endl;
     m_commandProc = 0;
@@ -153,7 +153,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         fs->setCodec(codec);
         *fs << text;
         *fs << endl;
-        m_textFilename = tempFile.file()->name();
+        m_textFilename = tempFile.file()->fileName();
         tempFile.close();
     } else m_textFilename.clear();
 
@@ -166,11 +166,11 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     QRegExp re_singlequote("('|%%|%t|%f|%l|%w)");
     QRegExp re_doublequote("(\"|\\\\|`|\\$\\(|\\$\\{|%%|%t|%f|%l|%w)");
 
-    for	( int i = re_noquote.search(command);
+    for	( int i = re_noquote.indexIn(command);
         i != -1;
-        i = (issinglequote?re_singlequote.search(command,i)
-            :isdoublequote?re_doublequote.search(command,i)
-            :re_noquote.search(command,i))
+        i = (issinglequote?re_singlequote.indexIn(command,i)
+            :isdoublequote?re_doublequote.indexIn(command,i)
+            :re_noquote.indexIn(command,i))
     )
     {
         if ((command[i]=='(') || (command[i]=='{')) // (...) or {...}
@@ -220,9 +220,9 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
             // Replace all `...` with safer $(...)
             command.replace (i, 1, "$(");
             QRegExp re_backticks("(`|\\\\`|\\\\\\\\|\\\\\\$)");
-            for (	int i2=re_backticks.search(command,i+2);
+            for (	int i2=re_backticks.indexIn(command,i+2);
                 i2!=-1;
-                i2=re_backticks.search(command,i2)
+                i2=re_backticks.indexIn(command,i2)
             )
             {
                 if (command[i2] == '`')
@@ -286,8 +286,8 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     kDebug() << "CommandProc::synth: running command: " << command << endl;
     m_commandProc = new KProcess;
     m_commandProc->setUseShell(true);
-    m_commandProc->setEnvironment("LANG", language + "." + codec->mimeName());
-    m_commandProc->setEnvironment("LC_CTYPE", language + "." + codec->mimeName());
+    m_commandProc->setEnvironment("LANG", language + "." + codec->name());
+    m_commandProc->setEnvironment("LC_CTYPE", language + "." + codec->name());
     *m_commandProc << command;
     connect(m_commandProc, SIGNAL(processExited(KProcess*)),
         this, SLOT(slotProcessExited(KProcess*)));
