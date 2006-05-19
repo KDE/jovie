@@ -36,17 +36,17 @@
 #include <pluginconf.h>
 
 // Epos plugin includes.
-#include "eposconfwidget.h"
+#include "ui_eposconfwidget.h"
 
 class EposProc;
 class KProgressDialog;
 
-class EposConf : public PlugInConf {
+class EposConf : public PlugInConf, public Ui::EposConfWidget {
     Q_OBJECT 
 
     public:
         /** Constructor */
-        EposConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        EposConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~EposConf();
@@ -126,10 +126,7 @@ class EposConf : public PlugInConf {
         // Language code.
         QString m_languageCode;
 
-        // Configuration widget.
-        EposConfWidget* m_widget;
-
-        // Epos synthesizer.
+       // Epos synthesizer.
         EposProc* m_eposProc;
         // Synthesized wave file name.
         QString m_waveFile;

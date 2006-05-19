@@ -44,8 +44,8 @@
 #include "eposproc.moc"
  
 /** Constructor */
-EposProc::EposProc( QObject* parent, const char* name, const QStringList& ) : 
-    PlugInProc( parent, name ){
+EposProc::EposProc( QObject* parent, const QStringList& ) : 
+    PlugInProc( parent, "eposproc" ){
     kDebug() << "EposProc::EposProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;
@@ -202,8 +202,8 @@ void EposProc::synth(
         languageCode == "sk";
     if (!languageCode.isEmpty())
     {
-        m_eposProc->setEnvironment("LANG", languageCode + "." + codec->mimeName());
-        m_eposProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->mimeName());
+        m_eposProc->setEnvironment("LANG", languageCode + "." + codec->name());
+        m_eposProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->name());
     }
     *m_eposProc << eposClientExePath;
     // Language.

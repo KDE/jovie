@@ -50,49 +50,49 @@
 #include "eposconf.moc"
 
 /** Constructor */
-EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
-    PlugInConf(parent, name)
+EposConf::EposConf( QWidget* parent, const QStringList& /*args*/) :
+    PlugInConf(parent, "eposconf")
 {
     // kDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;
     m_progressDlg = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
-        KDialog::spacingHint(), "EposConfigWidgetLayout");
+    setupUi(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setAlignment (Qt::AlignTop);
-    m_widget = new EposConfWidget(this, "EposConfigWidget");
-    layout->addWidget(m_widget);
+    layout->addWidget(this);
 
     // Build codec list and fill combobox.
     m_codecList = PlugInProc::buildCodecList();
-    m_widget->characterCodingBox->clear();
-    m_widget->characterCodingBox->insertStringList(m_codecList);
+    characterCodingBox->clear();
+    characterCodingBox->addItems(m_codecList);
 
     defaults();
 
-    connect(m_widget->eposServerPath, SIGNAL(textChanged(const QString&)),
+    connect(eposServerPath, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
-    connect(m_widget->eposClientPath, SIGNAL(textChanged(const QString&)),
+    connect(eposClientPath, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-    connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
+    connect(timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
-    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)),
+    connect(frequencyBox, SIGNAL(valueChanged(int)),
             this, SLOT(frequencyBox_valueChanged(int)));
-    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)),
+    connect(timeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(timeSlider_valueChanged(int)));
-    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)),
+    connect(frequencySlider, SIGNAL(valueChanged(int)),
             this, SLOT(frequencySlider_valueChanged(int)));
-    connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->characterCodingBox, SIGNAL(activated(const QString&)),
+    connect(timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(frequencyBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(frequencySlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
+    connect(characterCodingBox, SIGNAL(activated(const QString&)),
         this, SLOT(configChanged()));
-    connect(m_widget->eposServerOptions, SIGNAL(textChanged(const QString&)),
+    connect(eposServerOptions, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-    connect(m_widget->eposClientOptions, SIGNAL(textChanged(const QString&)),
+    connect(eposClientOptions, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-    connect(m_widget->eposTest, SIGNAL(clicked()),
+    connect(eposTest, SIGNAL(clicked()),
         this, SLOT(slotEposTest_clicked()));
 }
 
@@ -108,15 +108,15 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     // kDebug() << "EposConf::load: Running " << endl;
 
     config->setGroup(configGroup);
-    m_widget->eposServerPath->setURL(config->readEntry("EposServerExePath", "epos"));
-    m_widget->eposClientPath->setURL(config->readEntry("EposClientExePath", "say"));
-    m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
-    m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
+    eposServerPath->setURL(config->readEntry("EposServerExePath", "epos"));
+    eposClientPath->setURL(config->readEntry("EposClientExePath", "say"));
+    eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
+    eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "ISO 8859-2");
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
-    m_widget->timeBox->setValue(config->readEntry("time", 100));
-    m_widget->frequencyBox->setValue(config->readEntry("pitch", 100));
-    m_widget->characterCodingBox->setCurrentItem(codec);
+    timeBox->setValue(config->readEntry("time", 100));
+    frequencyBox->setValue(config->readEntry("pitch", 100));
+    characterCodingBox->setCurrentIndex(codec);
 }
 
 /**
@@ -135,35 +135,35 @@ void EposConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("Epos");
     config->writeEntry("EposServerExePath",
-        realFilePath(m_widget->eposServerPath->url()));
+        realFilePath(eposServerPath->url()));
     config->writeEntry("EposClientExePath", 
-        realFilePath(m_widget->eposClientPath->url()));
+        realFilePath(eposClientPath->url()));
     config->writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
     config->setGroup(configGroup);
     config->writeEntry("EposServerExePath", 
-        realFilePath(m_widget->eposServerPath->url()));
+        realFilePath(eposServerPath->url()));
     config->writeEntry("EposClientExePath", 
-        realFilePath(m_widget->eposClientPath->url()));
-    config->writeEntry("EposServerOptions", m_widget->eposServerOptions->text());
-    config->writeEntry("EposClientOptions", m_widget->eposClientOptions->text());
-    config->writeEntry("time", m_widget->timeBox->value());
-    config->writeEntry("pitch", m_widget->frequencyBox->value());
-    int codec = m_widget->characterCodingBox->currentItem();
+        realFilePath(eposClientPath->url()));
+    config->writeEntry("EposServerOptions", eposServerOptions->text());
+    config->writeEntry("EposClientOptions", eposClientOptions->text());
+    config->writeEntry("time", timeBox->value());
+    config->writeEntry("pitch", frequencyBox->value());
+    int codec = characterCodingBox->currentIndex();
     config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void EposConf::defaults(){
     // kDebug() << "EposConf::defaults: Running" << endl;
-    m_widget->eposServerPath->setURL("epos");
-    m_widget->eposClientPath->setURL("say");
-    m_widget->eposServerOptions->setText("");
-    m_widget->eposClientOptions->setText("");
-    m_widget->timeBox->setValue(100);
+    eposServerPath->setURL("epos");
+    eposClientPath->setURL("say");
+    eposServerOptions->setText("");
+    eposClientOptions->setText("");
+    timeBox->setValue(100);
     timeBox_valueChanged(100);
-    m_widget->frequencyBox->setValue(100);
+    frequencyBox->setValue(100);
     frequencyBox_valueChanged(100);
     int codec = PlugInProc::codecNameToListIndex("ISO 8859-2", m_codecList);
-    m_widget->characterCodingBox->setCurrentItem(codec);
+    characterCodingBox->setCurrentIndex(codec);
 }
 
 void EposConf::setDesiredLanguage(const QString &lang)
@@ -173,15 +173,15 @@ void EposConf::setDesiredLanguage(const QString &lang)
 
 QString EposConf::getTalkerCode()
 {
-    QString eposServerExe = realFilePath(m_widget->eposServerPath->url());
-    QString eposClientExe = realFilePath(m_widget->eposClientPath->url());
+    QString eposServerExe = realFilePath(eposServerPath->url());
+    QString eposClientExe = realFilePath(eposClientPath->url());
     if (!eposServerExe.isEmpty() && !eposClientExe.isEmpty())
     {
         if (!getLocation(eposServerExe).isEmpty() && !getLocation(eposClientExe).isEmpty())
         {
             QString rate = "medium";
-            if (m_widget->timeBox->value() < 75) rate = "slow";
-            if (m_widget->timeBox->value() > 125) rate = "fast";
+            if (timeBox->value() < 75) rate = "slow";
+            if (timeBox->value() > 125) rate = "fast";
             return QString(
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
@@ -210,14 +210,14 @@ void EposConf::slotEposTest_clicked()
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "eposplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->name();
+    QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 
     // Get test message in the language of the voice.
     QString testMsg = testMessage(m_languageCode);
 
     // Tell user to wait.
-    m_progressDlg = new KProgressDialog(m_widget,
+    m_progressDlg = new KProgressDialog(this,
         i18n("Testing"),
         i18n("Testing."),
         true);
@@ -230,14 +230,14 @@ void EposConf::slotEposTest_clicked()
     m_eposProc->synth(
         testMsg,
         tmpWaveFile,
-        realFilePath(m_widget->eposServerPath->url()),
-        realFilePath(m_widget->eposClientPath->url()),
-        m_widget->eposServerOptions->text(),
-        m_widget->eposClientOptions->text(),
-        PlugInProc::codecIndexToCodec(m_widget->characterCodingBox->currentItem(), m_codecList),
+        realFilePath(eposServerPath->url()),
+        realFilePath(eposClientPath->url()),
+        eposServerOptions->text(),
+        eposClientOptions->text(),
+        PlugInProc::codecIndexToCodec(characterCodingBox->currentIndex(), m_codecList),
         languageCodeToEposLanguage(m_languageCode),
-        m_widget->timeBox->value(),
-        m_widget->frequencyBox->value()
+        timeBox->value(),
+        frequencyBox->value()
         );
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
@@ -295,17 +295,17 @@ int EposConf::sliderToPercent(int sliderValue) {
 }
 
 void EposConf::timeBox_valueChanged(int percentValue) {
-    m_widget->timeSlider->setValue (percentToSlider (percentValue));
+    timeSlider->setValue (percentToSlider (percentValue));
 }
 
 void EposConf::frequencyBox_valueChanged(int percentValue) {
-    m_widget->frequencySlider->setValue(percentToSlider(percentValue));
+    frequencySlider->setValue(percentToSlider(percentValue));
 }
 
 void EposConf::timeSlider_valueChanged(int sliderValue) {
-    m_widget->timeBox->setValue (sliderToPercent (sliderValue));
+    timeBox->setValue (sliderToPercent (sliderValue));
 }
 
 void EposConf::frequencySlider_valueChanged(int sliderValue) {
-    m_widget->frequencyBox->setValue(sliderToPercent(sliderValue));
+    frequencyBox->setValue(sliderToPercent(sliderValue));
 }
