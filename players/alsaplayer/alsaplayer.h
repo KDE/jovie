@@ -132,6 +132,7 @@ private:
 
     QFile audiofile;
     QString name;
+    char* audiofile_name;
     bool canPause;
 
     snd_pcm_t *handle;
@@ -183,7 +184,7 @@ class KDE_EXPORT AlsaPlayer : public Player
 {
     Q_OBJECT
 public:
-    AlsaPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
+    AlsaPlayer(QObject* parent = 0, const QStringList& args=QStringList());
     ~AlsaPlayer();
 
     virtual void startPlay(const QString& file);

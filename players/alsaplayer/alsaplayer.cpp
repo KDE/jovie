@@ -159,9 +159,11 @@ void AlsaPlayerThread::startPlay(const QString &file)
         }
         return;
     }
-    audiofile.setName(file);
+    audiofile.setFileName(file);
     audiofile.open(QIODevice::ReadOnly);
     fd = audiofile.handle();
+    if (audiofile_name) free(audiofile_name);
+    audiofile_name = qstrdup(file.toAscii().constData());
     // Start thread running.
     start();
 }
@@ -169,8 +171,8 @@ void AlsaPlayerThread::startPlay(const QString &file)
 /*virtual*/ void AlsaPlayerThread::run()
 {
     QString pName = m_pcmName.section(" ", 0, 0);
-    DBG("pName = %s", pName.ascii());
-    pcm_name = qstrdup(pName.ascii());
+    pcm_name = qstrdup(pName.toAscii().constData());
+    DBG("pName = %s", pcm_name);
     int err;
     snd_pcm_info_t *info;
 
@@ -452,6 +454,7 @@ void AlsaPlayerThread::setSinkName(const QString& sinkName) { m_pcmName = sinkNa
 void AlsaPlayerThread::init()
 {
     pcm_name = 0;
+    audiofile_name = 0;
     handle = 0;
     canPause = false;
     timelimit = 0;
@@ -484,6 +487,7 @@ void AlsaPlayerThread::cleanup()
     DBG("cleaning up");
     QMutexLocker locker(&m_mutex);
     if (pcm_name) free(pcm_name);
+    if (audiofile_name) free(audiofile_name);
     if (fd >= 0) audiofile.close();
     if (handle) {
         snd_pcm_drop(handle);
@@ -1122,7 +1126,7 @@ void AlsaPlayerThread::voc_write_silence(unsigned x)
     unsigned l;
     char *buf;
 
-    QByteArray buffer(chunk_bytes);
+    QByteArray buffer(chunk_bytes, '\0');
     // buf = (char *) malloc(chunk_bytes);
     buf = buffer.data();
     if (buf == NULL) {
@@ -1176,7 +1180,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 #define COUNT(x)    nextblock -= x; in_buffer -= x; data += x
 #define COUNT1(x)    in_buffer -= x; data += x
 
-    QByteArray buffer(64 * 1024);
+    QByteArray buffer(64 * 1024, '\0');
     // data = buf = (u_char *)malloc(64 * 1024);
     data = buf = (u_char*)buffer.data();
     buffer_pos = 0;
@@ -1414,10 +1418,11 @@ void AlsaPlayerThread::header(int /*rtype*/, const char* /*name*/)
         channels = "Stereo";
     else
         channels = QString("Channels %1").arg(hwdata.channels);
+    QByteArray asciiChannels = channels.toAscii();
     DBG("Format: %s, Rate %d Hz, %s",
         snd_pcm_format_description(hwdata.format),
         hwdata.rate,
-        channels.ascii());
+        asciiChannels.constData());
 }
 
 /* playing raw data */
@@ -1540,7 +1545,7 @@ void AlsaPlayerThread::playback(int fd)
     if (test_au(fd, audiobuf) >= 0) {
         rhwdata.format = hwdata.format;
         pbrec_count = calc_count();
-        playback_go(fd, 0, pbrec_count, FORMAT_AU, name.ascii());
+        playback_go(fd, 0, pbrec_count, FORMAT_AU, audiofile_name);
         goto __end;
     }
     dta = sizeof(VocHeader);
@@ -1551,18 +1556,18 @@ void AlsaPlayerThread::playback(int fd)
     }
     if ((ofs = test_vocfile(audiobuf)) >= 0) {
         pbrec_count = calc_count();
-        voc_play(fd, ofs, name.ascii());
+        voc_play(fd, ofs, audiofile_name);
         goto __end;
     }
     /* read bytes for WAVE-header */
     if ((dtawave = test_wavefile(fd, audiobuf, dta)) >= 0) {
         pbrec_count = calc_count();
-        playback_go(fd, dtawave, pbrec_count, FORMAT_WAVE, name.ascii());
+        playback_go(fd, dtawave, pbrec_count, FORMAT_WAVE, audiofile_name);
     } else {
         /* should be raw data */
         init_raw_data();
         pbrec_count = calc_count();
-        playback_go(fd, dta, pbrec_count, FORMAT_RAW, name.ascii());
+        playback_go(fd, dta, pbrec_count, FORMAT_RAW, audiofile_name);
     }
 __end:
     return;
@@ -1644,8 +1649,8 @@ int AlsaPlayerThread::wait_for_poll(int draining)
 // in order to avoid ambiguous QObject, since both Player and QThread
 // derive from QObject.  Is there a better solution?
 
-AlsaPlayer::AlsaPlayer(QObject* parent, const char* name, const QStringList& args):
-    Player(parent, name, args)
+AlsaPlayer::AlsaPlayer(QObject* parent, const QStringList& args):
+    Player(parent, "alsaplayer", args)
 {
     m_AlsaPlayerThread = new AlsaPlayerThread(this);
 }
