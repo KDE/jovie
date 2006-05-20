@@ -8,7 +8,7 @@ set(kttsd_xmltransformerplugin_PART_SRCS xmltransformerconf.cpp xmltransformerpr
 
 kde4_automoc(${kttsd_xmltransformerplugin_PART_SRCS})
 
-kde4_add_ui3_files(kttsd_xmltransformerplugin_PART_SRCS xmltransformerconfwidget.ui )
+kde4_add_ui_files(kttsd_xmltransformerplugin_PART_SRCS xmltransformerconfwidget.ui )
 
 kde4_add_plugin(kttsd_xmltransformerplugin WITH_PREFIX ${kttsd_xmltransformerplugin_PART_SRCS})
 

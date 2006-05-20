@@ -25,7 +25,7 @@
 #define _XMLTRANSFORMERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <QWidget>
 
 // KDE includes.
 #include <kconfig.h>
@@ -35,9 +35,9 @@
 #include "filterconf.h"
 
 // XmlTransformer includes.
-#include "xmltransformerconfwidget.h"
+#include "ui_xmltransformerconfwidget.h"
 
-class XmlTransformerConf : public KttsFilterConf
+class XmlTransformerConf : public KttsFilterConf, public Ui::XmlTransformerConfWidget
 {
     Q_OBJECT
 
@@ -113,8 +113,6 @@ class XmlTransformerConf : public KttsFilterConf
     private slots:
 
     private:
-        // Configuration Widget.
-        XmlTransformerConfWidget* m_widget;
 };
 
 #endif  //_XMLTRANSFORMERCONF_H_

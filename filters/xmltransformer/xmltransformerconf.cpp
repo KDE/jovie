@@ -24,7 +24,6 @@
 // Qt includes.
 #include <QString>
 #include <QLayout>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
 // KDE includes.
@@ -45,33 +44,33 @@
 /**
 * Constructor 
 */
-XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QStringList& /*args*/) :
+XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QStringList &args) :
     KttsFilterConf(parent)
 {
+    Q_UNUSED(args);
     // kDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
-        KDialog::spacingHint(), "XmlTransformerConfWidgetLayout");
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setAlignment (Qt::AlignTop);
-    m_widget = new XmlTransformerConfWidget(this, "XmlTransformerConfigWidget");
-    layout->addWidget(m_widget);
+    setupUi(this);
+    layout->addWidget(this);
 
     // Set up defaults.
     defaults();
 
     // Connect signals.
-    connect( m_widget->nameLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( nameLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()));
-    connect( m_widget->xsltPath, SIGNAL(textChanged(const QString&)),
+    connect( xsltPath, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
-    connect( m_widget->xsltprocPath, SIGNAL(textChanged(const QString&)),
+    connect( xsltprocPath, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
-    connect( m_widget->rootElementLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( rootElementLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
-    connect( m_widget->doctypeLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( doctypeLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
-    connect( m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( appIdLineEdit, SIGNAL(textChanged(const QString&)),
          this, SLOT(configChanged()) );
 }
 
@@ -98,15 +97,15 @@ XmlTransformerConf::~XmlTransformerConf(){
 void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::load: Running" << endl;
     config->setGroup( configGroup );
-    m_widget->nameLineEdit->setText( config->readEntry( "UserFilterName", m_widget->nameLineEdit->text() ) );
-    m_widget->xsltPath->setURL( config->readEntry( "XsltFilePath", m_widget->xsltPath->url() ) );
-    m_widget->xsltprocPath->setURL( config->readEntry( "XsltprocPath", m_widget->xsltprocPath->url() ) );
-    m_widget->rootElementLineEdit->setText(
-            config->readEntry( "RootElement", m_widget->rootElementLineEdit->text() ) );
-    m_widget->doctypeLineEdit->setText(
-            config->readEntry( "DocType", m_widget->doctypeLineEdit->text() ) );
-    m_widget->appIdLineEdit->setText(
-            config->readEntry( "AppID", m_widget->appIdLineEdit->text() ) );
+    nameLineEdit->setText( config->readEntry( "UserFilterName", nameLineEdit->text() ) );
+    xsltPath->setURL( config->readEntry( "XsltFilePath", xsltPath->url() ) );
+    xsltprocPath->setURL( config->readEntry( "XsltprocPath", xsltprocPath->url() ) );
+    rootElementLineEdit->setText(
+            config->readEntry( "RootElement", rootElementLineEdit->text() ) );
+    doctypeLineEdit->setText(
+            config->readEntry( "DocType", doctypeLineEdit->text() ) );
+    appIdLineEdit->setText(
+            config->readEntry( "AppID", appIdLineEdit->text() ) );
 }
 
 /**
@@ -122,12 +121,12 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
 void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::save: Running" << endl;
     config->setGroup( configGroup );
-    config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
-    config->writeEntry( "XsltFilePath", realFilePath( m_widget->xsltPath->url() ) );
-    config->writeEntry( "XsltprocPath", realFilePath( m_widget->xsltprocPath->url() ) );
-    config->writeEntry( "RootElement", m_widget->rootElementLineEdit->text() );
-    config->writeEntry( "DocType", m_widget->doctypeLineEdit->text() );
-    config->writeEntry( "AppID", m_widget->appIdLineEdit->text().replace(" ", "") );
+    config->writeEntry( "UserFilterName", nameLineEdit->text() );
+    config->writeEntry( "XsltFilePath", realFilePath( xsltPath->url() ) );
+    config->writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url() ) );
+    config->writeEntry( "RootElement", rootElementLineEdit->text() );
+    config->writeEntry( "DocType", doctypeLineEdit->text() );
+    config->writeEntry( "AppID", appIdLineEdit->text().replace(" ", "") );
 }
 
 /** 
@@ -140,17 +139,17 @@ void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
 void XmlTransformerConf::defaults(){
     // kDebug() << "XmlTransformerConf::defaults: Running" << endl;
     // Default name.
-    m_widget->nameLineEdit->setText(i18n( "XML Transformer" ));
+    nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
-    m_widget->xsltPath->setURL( locate("data", "kttsd/xmltransformer/") );
+    xsltPath->setURL( locate("data", "kttsd/xmltransformer/") );
     // Default path to xsltproc.
-    m_widget->xsltprocPath->setURL( "xsltproc" );
+    xsltprocPath->setURL( "xsltproc" );
     // Default root element to "html".
-    m_widget->rootElementLineEdit->setText( "html" );
+    rootElementLineEdit->setText( "html" );
     // Default doctype to blank.
-    m_widget->doctypeLineEdit->setText( "" );
+    doctypeLineEdit->setText( "" );
     // Default App ID to blank.
-    m_widget->appIdLineEdit->setText( "" );
+    appIdLineEdit->setText( "" );
     // kDebug() << "XmlTransformerConf::defaults: Exiting" << endl;
 }
 
@@ -171,14 +170,14 @@ bool XmlTransformerConf::supportsMultiInstance() { return true; }
  */
 QString XmlTransformerConf::userPlugInName()
 {
-    QString filePath = realFilePath(m_widget->xsltprocPath->url());
+    QString filePath = realFilePath(xsltprocPath->url());
     if (filePath.isEmpty()) return QString();
     if (getLocation(filePath).isEmpty()) return QString();
 
-    filePath = realFilePath(m_widget->xsltPath->url());
+    filePath = realFilePath(xsltPath->url());
     if (filePath.isEmpty()) return QString();
     if (getLocation(filePath).isEmpty()) return QString();
     if (!QFileInfo(filePath).isFile()) return QString();
 
-    return m_widget->nameLineEdit->text();
+    return nameLineEdit->text();
 }
