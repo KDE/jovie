@@ -213,7 +213,7 @@ void FilterMgr::nextFilter()
         {
             m_state = fsFinished;
             // Post an event which will be later emitted as a signal.
-            QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
+            QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
             QCoreApplication::postEvent(this, ev);
             return;
         }
@@ -223,7 +223,7 @@ void FilterMgr::nextFilter()
     {
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
+        QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
         QCoreApplication::postEvent(this, ev);
         return;
     }
@@ -232,7 +232,7 @@ void FilterMgr::nextFilter()
     {
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
+        QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
         QCoreApplication::postEvent(this, ev);
         return;
     }
@@ -327,7 +327,7 @@ void FilterMgr::stopFiltering()
         disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
     m_filterProc->stopFiltering();
     m_state = fsIdle;
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 302);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 302));
     QCoreApplication::postEvent(this, ev);
 }
 
@@ -361,14 +361,14 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
     {
         // When the entry is found, load the plug in
         // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if(factory){
             // If the factory is created successfully, instantiate the KttsFilterConf class for the
             // specific plug in to get the plug in configuration object.
             int errorNo;
             KttsFilterProc *plugIn =
                     KLibLoader::createInstance<KttsFilterProc>(
-                    offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()),
+                    offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()),
              &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.

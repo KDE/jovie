@@ -1595,12 +1595,14 @@ Player* Speaker::createPlayerObject()
 /**
 * Received from PlugIn objects when they finish asynchronous synthesis
 * and audibilizing.
+* TODO: In Qt4, custom events are no longer necessary as events may pass
+*       through thread boundaries now.
 */
 void Speaker::slotSayFinished()
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 101);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 101));
     QApplication::postEvent(this, ev);
 }
 
@@ -1611,7 +1613,7 @@ void Speaker::slotSynthFinished()
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 102);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 102));
     QApplication::postEvent(this, ev);
 }
 
@@ -1622,7 +1624,7 @@ void Speaker::slotStopped()
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 103);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 103));
     QApplication::postEvent(this, ev);
 }
 
@@ -1632,7 +1634,7 @@ void Speaker::slotStopped()
 void Speaker::slotStretchFinished()
 {
     // Convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 104);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 104));
     QApplication::postEvent(this, ev);
 }
 
@@ -1642,7 +1644,7 @@ void Speaker::slotStretchFinished()
 void Speaker::slotTransformFinished()
 {
     // Convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 105);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 105));
     QApplication::postEvent(this, ev);
 }
 

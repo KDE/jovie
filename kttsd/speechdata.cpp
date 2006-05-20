@@ -702,16 +702,15 @@ void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
     typedef QList<removedJob> removedJobsList;
     removedJobsList removedJobs;
     // Walk through jobs and delete any other finished jobs.
-    QList<mlJob*>::iterator it = textJobs.begin();
-    while (it != textJobs.end()) {
-        mlJob* job = *it;
+    int ndx = 0;
+    while (ndx < textJobs.size()) {
+        mlJob* job = textJobs[ndx];
         if (job->jobNum != finishedJobNum && job->state == KSpeech::jsFinished)
         {
             removedJobs.append(removedJob(job->appId, job->jobNum));
-            it = textJobs.remove(it);
-            delete job;
+            delete textJobs.takeAt(ndx);
         } else
-            ++it;
+            ndx++;
     }
     // Emit signals for removed jobs.
     for (int i = 0; i < removedJobs.size(); ++i)

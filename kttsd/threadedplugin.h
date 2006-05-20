@@ -26,9 +26,21 @@
 
 #include <QThread>
 #include <QMutex>
-#include <qwaitcondition.h>
+#include <QWaitCondition>
 
 #include "pluginproc.h"
+
+// TODO: Qt4 deprecated the locked() method.  Why?
+class ThreadedPlugInMutex : public QMutex {
+    public:
+        inline bool locked()
+        {
+            if (!tryLock())
+                return true;
+            unlock();
+            return false;
+        }
+};
 
 class ThreadedPlugInThread : public QThread 
 {
@@ -204,7 +216,7 @@ class ThreadedPlugInThread : public QThread
         /**
         * Locked when thread is running.
         */
-        QMutex m_threadRunningMutex;
+        ThreadedPlugInMutex m_threadRunningMutex;
 
         /**
         * Filename for generated synthesized text.

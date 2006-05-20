@@ -69,7 +69,7 @@ QString SSMLConvert::extractTalker(const QString &talkercode) {
     if(t.contains("flite"))
         return "flite";
     else
-        return t.left(t.find(" ")).toLower();
+        return t.left(t.indexOf(" ")).toLower();
 }
 
 /**
@@ -137,12 +137,12 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
             lang = "en";
         }
         /// Find all hits and place them in matches. We don't search for the closing " because if
-        /// the talker emits lang="en-UK" or something we'll be ignoring it, which we don't what.
-        matches = matches.grep("lang=\"" + lang);
+        /// the talker emits lang="en-UK" or something we'll be ignoring it, which we don't want.
+        matches = matches.filter("lang=\"" + lang);
     }
     else {
         kDebug() << "SSMLConvert::appropriateTalker: no xml:lang found. Defaulting to en.." << endl;
-        matches = matches.grep("lang=\"en");
+        matches = matches.filter("lang=\"en");
     }
 
     kDebug() << "SSMLConvert::appropriateTalker: AFTER LANGUAGE SEARCH: " << matches.join(" ") << endl;;
@@ -158,8 +158,8 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
         /// If the gender found is not 'male' or 'female' then ignore it.
         if(!(gender == "male" || gender == "female")) {
             /// Make sure that we don't strip away all the talkers because of no matches.
-            if(matches.grep("gender=\"" + gender).count() >= 1)
-                matches = matches.grep("gender=\"" + gender);
+            if(matches.filter("gender=\"" + gender).count() >= 1)
+                matches = matches.filter("gender=\"" + gender);
         }
     }
     else {
@@ -174,12 +174,12 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     */
     /// Known to support (feel free to add to the list and if search):
     ///   Festival Int (not flite), Hadifix
-    if(matches.grep("synthesizer=\"Festival Interactive").count() >= 1 ||
-    matches.grep("synthesizer=\"Hadifix").count() >= 1) {
+    if(matches.filter("synthesizer=\"Festival Interactive").count() >= 1 ||
+    matches.filter("synthesizer=\"Hadifix").count() >= 1) {
 
         kDebug() << "SSMLConvert::appropriateTalker: Prosody allowed" << endl;
-        QStringList tmpmatches = matches.grep("synthesizer=\"Festival Interactive");
-        matches = matches.grep("synthesizer=\"Hadifix");
+        QStringList tmpmatches = matches.filter("synthesizer=\"Festival Interactive");
+        matches = matches.filter("synthesizer=\"Hadifix");
         matches = tmpmatches + matches;
     }
     else
@@ -207,7 +207,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     m_xsltFilename = xsltFilename;
     /// Write @param text to a temporary file.
     KTempFile inFile(locateLocal("tmp", "kttsd-"), ".ssml");
-    m_inFilename = inFile.file()->name();
+    m_inFilename = inFile.file()->fileName();
     QTextStream* wstream = inFile.textStream();
     if (wstream == 0) {
         /// wtf...
@@ -226,7 +226,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
 
     // Get a temporary output file name.
     KTempFile outFile(locateLocal("tmp", "kttsd-"), ".output");
-    m_outFilename = outFile.file()->name();
+    m_outFilename = outFile.file()->fileName();
     outFile.close();
     // outFile.unlink();    // only activate this if necessary.
 
@@ -276,7 +276,7 @@ QString SSMLConvert::getOutput()
         return QString();
     }
     QTextStream rstream(&readfile);
-    QString convertedData = rstream.read();
+    QString convertedData = rstream.readAll();
     readfile.close();
 
     // kDebug() << "SSMLConvert::slotProcessExited: Read SSML file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilename << endl;

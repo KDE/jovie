@@ -38,8 +38,9 @@
  * Constructor.
  */
 TalkerMgr::TalkerMgr(QObject *parent, const char *name) :
-    QObject( parent, name )
+    QObject( parent )
 {
+    Q_UNUSED(name);
 }
 
 /**
@@ -116,11 +117,11 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                 kDebug() << "Less than 1 plug in, nothing can be done" << endl;
             } else {
                 kDebug() << "Loading " << offers[0]->library() << endl;
-                factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+                factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
                 if(factory){
                     PlugInProc *speech = 
                             KLibLoader::createInstance<PlugInProc>(
-                            offers[0]->library().latin1(), this, QStringList(offers[0]->library().latin1()));
+                            offers[0]->library().toLatin1(), this, QStringList(offers[0]->library().toLatin1()));
                     if(!speech){
                         kDebug() << "Couldn't create the speech object from " << offers[0]->library() << endl;
                         ++bad;
@@ -135,7 +136,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                             // Init will start the thread and it will immediately go to sleep.
                             QString threadedPlugInName = QString::fromLatin1("threaded") + desktopEntryName;
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
-                                    this, threadedPlugInName.latin1());
+                                    this, threadedPlugInName.toLatin1());
                             speechThread->init(config, "Talker_" + talkerCode);
                             // kDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
                             m_loadedPlugIns.append(speechThread);
@@ -329,14 +330,14 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
             QString desktopEntryName = offers[i]->desktopEntryName();
 
             // Load the plugin.
-            KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+            KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
             if (factory)
             {
                 // If the factory is created successfully, instantiate the PlugInConf class for the
                 // specific plug in to get the plug in configuration object.
                 PlugInConf* loadedTalkerPlugIn =
                     KLibLoader::createInstance<PlugInConf>(
-                        offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()));
+                        offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()));
                 if (loadedTalkerPlugIn)
                 {
                     // Give plugin the language code and permit plugin to autoconfigure itself.

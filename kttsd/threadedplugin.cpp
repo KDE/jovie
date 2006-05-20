@@ -48,7 +48,7 @@ ThreadedPlugInThread::ThreadedPlugInThread(PlugInProc* plugin, QObject *parent) 
 */
 ThreadedPlugInThread::~ThreadedPlugInThread()
 {
-    if (running())
+    if (isRunning())
     {
         // If thread is busy, try to stop it.
         m_requestExit = true;
@@ -57,7 +57,7 @@ ThreadedPlugInThread::~ThreadedPlugInThread()
         m_waitCondition.wakeOne();
         wait(5000);
         // If thread still active, stopText didn't succeed.  Terminate the thread.
-        if (running())
+        if (isRunning())
         {
             terminate();
             wait();
