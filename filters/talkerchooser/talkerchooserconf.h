@@ -25,7 +25,7 @@
 #define _TALKERCHOOSERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <QWidget>
 
 // KDE includes.
 #include <kconfig.h>
