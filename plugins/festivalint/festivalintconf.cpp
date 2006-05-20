@@ -39,7 +39,6 @@
 #include <QVBoxLayout>
 
 // KDE includes.
-#include <kdialog.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcombobox.h>

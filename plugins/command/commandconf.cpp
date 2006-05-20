@@ -24,10 +24,8 @@
 #include <QVBoxLayout>
 
 // KDE includes.
-#include <kdialog.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kdialog.h>
 #include <kcombobox.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
