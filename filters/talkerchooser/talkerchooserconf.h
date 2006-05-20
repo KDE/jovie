@@ -36,12 +36,12 @@
 #include "talkercode.h"
 
 // TalkerChooser includes.
-#include "talkerchooserconfwidget.h"
+#include "ui_talkerchooserconfwidget.h"
 
 class KDialogBase;
 class EditReplacementWidget;
 
-class TalkerChooserConf : public KttsFilterConf
+class TalkerChooserConf : public KttsFilterConf, public Ui::TalkerChooserConfWidget
 {
     Q_OBJECT
 
@@ -122,8 +122,6 @@ class TalkerChooserConf : public KttsFilterConf
         void slotClearButton_clicked();
 
     private:
-        // Configuration Widget.
-        TalkerChooserConfWidget*    m_widget;
         // True if kdeutils Regular Expression Editor is installed.
         bool                        m_reEditorInstalled;
         // User's chosen Talker Code.

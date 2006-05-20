@@ -25,7 +25,6 @@
 #include <QString>
 #include <q3hbox.h>
 #include <QLayout>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
 // KDE includes.
@@ -52,38 +51,38 @@
 /**
 * Constructor 
 */
-TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList& /*args*/) :
+TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList & args) :
     KttsFilterConf(parent)
 {
+    Q_UNUSED(args);
     // kDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
-        KDialog::spacingHint(), "TalkerChooserConfigWidgetLayout");
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setAlignment (Qt::AlignTop);
-    m_widget = new TalkerChooserConfWidget(this, "TalkerChooserConfigWidget");
-    layout->addWidget(m_widget);
+    setupUi(this);
+    layout->addWidget(this);
 
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
-    m_widget->reEditorButton->setEnabled(m_reEditorInstalled);
+    reEditorButton->setEnabled(m_reEditorInstalled);
 
-    connect(m_widget->nameLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(nameLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-    connect(m_widget->reLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(reLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-    connect(m_widget->reEditorButton, SIGNAL(clicked()),
+    connect(reEditorButton, SIGNAL(clicked()),
             this, SLOT(slotReEditorButton_clicked()));
-    connect(m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(appIdLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
-    connect(m_widget->talkerButton, SIGNAL(clicked()),
+    connect(talkerButton, SIGNAL(clicked()),
             this, SLOT(slotTalkerButton_clicked()));
 
-    connect(m_widget->loadButton, SIGNAL(clicked()),
+    connect(loadButton, SIGNAL(clicked()),
             this, SLOT(slotLoadButton_clicked()));
-    connect(m_widget->saveButton, SIGNAL(clicked()),
+    connect(saveButton, SIGNAL(clicked()),
             this, SLOT(slotSaveButton_clicked()));
-    connect(m_widget->clearButton, SIGNAL(clicked()),
+    connect(clearButton, SIGNAL(clicked()),
             this, SLOT(slotClearButton_clicked()));
 
     // Set up defaults.
@@ -113,11 +112,11 @@ TalkerChooserConf::~TalkerChooserConf(){
 void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
     // kDebug() << "TalkerChooserConf::load: Running" << endl;
     config->setGroup( configGroup );
-    m_widget->nameLineEdit->setText( config->readEntry( "UserFilterName", m_widget->nameLineEdit->text() ) );
-    m_widget->reLineEdit->setText(
-            config->readEntry("MatchRegExp", m_widget->reLineEdit->text()) );
-    m_widget->appIdLineEdit->setText(
-            config->readEntry("AppIDs", m_widget->appIdLineEdit->text()) );
+    nameLineEdit->setText( config->readEntry( "UserFilterName", nameLineEdit->text() ) );
+    reLineEdit->setText(
+            config->readEntry("MatchRegExp", reLineEdit->text()) );
+    appIdLineEdit->setText(
+            config->readEntry("AppIDs", appIdLineEdit->text()) );
 
     m_talkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
     // Legacy settings.
@@ -132,7 +131,7 @@ void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
     s = config->readEntry( "Rate" );
     if (!s.isEmpty()) m_talkerCode.setRate(s);
 
-    m_widget->talkerLineEdit->setText(m_talkerCode.getTranslatedDescription());
+    talkerLineEdit->setText(m_talkerCode.getTranslatedDescription());
 }
 
 /**
@@ -148,9 +147,9 @@ void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
 void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
     // kDebug() << "TalkerChooserConf::save: Running" << endl;
     config->setGroup( configGroup );
-    config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
-    config->writeEntry( "MatchRegExp", m_widget->reLineEdit->text() );
-    config->writeEntry( "AppIDs", m_widget->appIdLineEdit->text().replace(" ", "") );
+    config->writeEntry( "UserFilterName", nameLineEdit->text() );
+    config->writeEntry( "MatchRegExp", reLineEdit->text() );
+    config->writeEntry( "AppIDs", appIdLineEdit->text().replace(" ", "") );
     config->writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
 }
 
@@ -164,14 +163,14 @@ void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
 void TalkerChooserConf::defaults(){
     // kDebug() << "TalkerChooserConf::defaults: Running" << endl;
     // Default name.
-    m_widget->nameLineEdit->setText( i18n("Talker Chooser") );
+    nameLineEdit->setText( i18n("Talker Chooser") );
     // Default regular expression is blank.
-    m_widget->reLineEdit->setText( "" );
+    reLineEdit->setText( "" );
     // Default App ID is blank.
-    m_widget->appIdLineEdit->setText( "" );
+    appIdLineEdit->setText( "" );
     // Default to using default Talker.
     m_talkerCode = TalkerCode( QString(), false );
-    m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
+    talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
 }
 
 /**
@@ -191,10 +190,10 @@ bool TalkerChooserConf::supportsMultiInstance() { return true; }
  */
 QString TalkerChooserConf::userPlugInName()
 {
-    if (m_widget->talkerLineEdit->text().isEmpty()) return QString();
-    if (m_widget->appIdLineEdit->text().isEmpty() &&
-        m_widget->reLineEdit->text().isEmpty()) return QString();
-    QString instName = m_widget->nameLineEdit->text();
+    if (talkerLineEdit->text().isEmpty()) return QString();
+    if (appIdLineEdit->text().isEmpty() &&
+        reLineEdit->text().isEmpty()) return QString();
+    QString instName = nameLineEdit->text();
     if (instName.isEmpty()) return QString();
     return instName;
 }
@@ -211,12 +210,12 @@ void TalkerChooserConf::slotReEditorButton_clicked()
         KRegExpEditorInterface *reEditor =
             dynamic_cast<KRegExpEditorInterface *>(editorDialog);
         Q_ASSERT( reEditor ); // This should not fail!// now use the editor.
-        reEditor->setRegExp( m_widget->reLineEdit->text() );
+        reEditor->setRegExp( reLineEdit->text() );
         int dlgResult = editorDialog->exec();
         if ( dlgResult == QDialog::Accepted )
         {
             QString re = reEditor->regExp();
-            m_widget->reLineEdit->setText( re );
+            reLineEdit->setText( re );
         }
         delete editorDialog;
     } else return;
@@ -225,11 +224,11 @@ void TalkerChooserConf::slotReEditorButton_clicked()
 void TalkerChooserConf::slotTalkerButton_clicked()
 {
     QString talkerCode = m_talkerCode.getTalkerCode();
-    SelectTalkerDlg dlg( m_widget, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
+    SelectTalkerDlg dlg( this, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
     int dlgResult = dlg.exec();
     if ( dlgResult != KDialogBase::Accepted ) return;
     m_talkerCode = TalkerCode( dlg.getSelectedTalkerCode(), false );
-    m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
+    talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
 }
 
@@ -241,7 +240,7 @@ void TalkerChooserConf::slotLoadButton_clicked()
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*rc|Talker Chooser Config (*rc)",
-        m_widget,
+        this,
         "talkerchooser_loadfile");
     if ( filename.isEmpty() ) return;
     KConfig* cfg = new KConfig( filename, true, false, 0 );
@@ -255,7 +254,7 @@ void TalkerChooserConf::slotSaveButton_clicked()
     QString filename = KFileDialog::getSaveFileName(
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/talkerchooser/", false ),
        "*rc|Talker Chooser Config (*rc)",
-        m_widget,
+        this,
         "talkerchooser_savefile");
     if ( filename.isEmpty() ) return;
     KConfig* cfg = new KConfig( filename, false, false, 0 );
@@ -265,10 +264,10 @@ void TalkerChooserConf::slotSaveButton_clicked()
 
 void TalkerChooserConf::slotClearButton_clicked()
 {
-    m_widget->nameLineEdit->setText( QString() );
-    m_widget->reLineEdit->setText( QString() );
-    m_widget->appIdLineEdit->setText( QString() );
+    nameLineEdit->setText( QString() );
+    reLineEdit->setText( QString() );
+    appIdLineEdit->setText( QString() );
     m_talkerCode = TalkerCode( QString(), false );
-    m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
+    talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
 }

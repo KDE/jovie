@@ -107,7 +107,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
 {
     if ( !m_re.isEmpty() )
     {
-        int pos = inputText.find( QRegExp(m_re) );
+        int pos = inputText.indexOf( QRegExp(m_re) );
         if ( pos < 0 ) return inputText;
     }
     // If appId doesn't match, return input unmolested.
