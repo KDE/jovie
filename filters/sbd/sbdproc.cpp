@@ -543,7 +543,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
 
     // Post an event.  We need to emit filterFinished signal, but not from the
     // separate thread.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
+    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
     QApplication::postEvent(this, ev);
 }
 
@@ -579,7 +579,7 @@ SbdProc::~SbdProc()
     // kDebug() << "SbdProc::~SbdProc: Running" << endl;
     if ( m_sbdThread )
     {
-        if ( m_sbdThread->running() )
+        if ( m_sbdThread->isRunning() )
         {
             m_sbdThread->terminate();
             m_sbdThread->wait();
@@ -714,7 +714,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  */
 /*virtual*/ void SbdProc::waitForFinished()
 {
-    if ( m_sbdThread->running() )
+    if ( m_sbdThread->isRunning() )
     {
         // kDebug() << "SbdProc::waitForFinished: waiting" << endl;
         m_sbdThread->wait();
@@ -748,7 +748,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  */
 /*virtual*/ void SbdProc::stopFiltering()
 {
-    if ( m_sbdThread->running() )
+    if ( m_sbdThread->isRunning() )
     {
         m_sbdThread->terminate();
         m_sbdThread->wait();

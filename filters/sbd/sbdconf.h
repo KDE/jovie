@@ -25,7 +25,7 @@
 #define _SBDCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <QWidget>
 
 // KDE includes.
 #include <kconfig.h>
@@ -35,12 +35,9 @@
 #include "filterconf.h"
 
 // SBD includes.
-#include "sbdconfwidget.h"
+#include "ui_sbdconfwidget.h"
 
-class KDialogBase;
-class EditReplacementWidget;
-
-class SbdConf : public KttsFilterConf
+class SbdConf : public KttsFilterConf, public Ui::SbdConfWidget
 {
     Q_OBJECT
 
@@ -127,9 +124,6 @@ class SbdConf : public KttsFilterConf
         void slotClearButton_clicked();
 
     private:
-
-        // Configuration Widget.
-        SbdConfWidget* m_widget;
         // True if kdeutils Regular Expression Editor is installed.
         bool m_reEditorInstalled;
         // Language Code.
