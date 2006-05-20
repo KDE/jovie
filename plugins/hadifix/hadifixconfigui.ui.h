@@ -12,95 +12,97 @@
 // slider = alpha * (log(percent)-log(50))
 // with alpha = 1000/(log(200)-log(50))
 
-int HadifixConfigUI::percentToSlider (int percentValue) {
+int percentToSlider (int percentValue) {
    double alpha = 1000 / (log(200) - log(50));
    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
 }
 
-int HadifixConfigUI::sliderToPercent (int sliderValue) {
+int sliderToPercent (int sliderValue) {
    double alpha = 1000 / (log(200) - log(50));
    return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
 }
 
-void HadifixConfigUI::volumeBox_valueChanged (int percentValue) {
+void volumeBox_valueChanged (int percentValue) {
    volumeSlider->setValue (percentToSlider (percentValue));
 }
 
-void HadifixConfigUI::timeBox_valueChanged (int percentValue) {
+void timeBox_valueChanged (int percentValue) {
    timeSlider->setValue (percentToSlider (percentValue));
 }
 
-void HadifixConfigUI::frequencyBox_valueChanged (int percentValue) {
+void frequencyBox_valueChanged (int percentValue) {
    frequencySlider->setValue (percentToSlider (percentValue));
 }
 
-void HadifixConfigUI::volumeSlider_valueChanged (int sliderValue) {
+void volumeSlider_valueChanged (int sliderValue) {
    volumeBox->setValue (sliderToPercent (sliderValue));
 }
 
-void HadifixConfigUI::timeSlider_valueChanged (int sliderValue) {
+void timeSlider_valueChanged (int sliderValue) {
    timeBox->setValue (sliderToPercent (sliderValue));
 }
 
-void HadifixConfigUI::frequencySlider_valueChanged (int sliderValue) {
+void frequencySlider_valueChanged (int sliderValue) {
    frequencyBox->setValue (sliderToPercent (sliderValue));
 }
 
-void HadifixConfigUI::init () {
+void init () {
    male = KGlobal::iconLoader()->loadIcon("male", K3Icon::Small);
    female = KGlobal::iconLoader()->loadIcon("female", K3Icon::Small);
 }
 
-void HadifixConfigUI::addVoice (const QString &filename, bool isMale) {
+void addVoice (const QString &filename, bool isMale) {
    if (isMale) {
       if (!maleVoices.contains(filename)) {
          int id = voiceCombo->count();
          maleVoices.insert (filename, id);
-         voiceCombo->insertItem (male, filename, id);
+         voiceCombo->addItem (male, filename);
       }
    }
    else {
       if (!femaleVoices.contains(filename)) {
          int id = voiceCombo->count();
          femaleVoices.insert (filename, id);
-         voiceCombo->insertItem (female, filename, id);
+         voiceCombo->addItem (female, filename);
       }
    }
 }
 
-void HadifixConfigUI::addVoice (const QString &filename, bool isMale, const QString &displayname) {
+void addVoice (const QString &filename, bool isMale, const QString &displayname) {
    addVoice (filename, isMale);
    
    if (isMale) {
-      defaultVoices [maleVoices [filename]] = filename;
-      voiceCombo->changeItem (male, displayname, maleVoices [filename]);
+      defaultVoicesMap [maleVoices [filename]] = filename;
+      voiceCombo->setItemIcon (maleVoices [filename], male);
+      voiceCombo->setItemText (maleVoices [filename], displayname);
    }
    else{
-      defaultVoices [femaleVoices [filename]] = filename;
-      voiceCombo->changeItem (female, displayname, femaleVoices [filename]);
+      defaultVoicesMap [femaleVoices [filename]] = filename;
+      voiceCombo->setItemIcon (femaleVoices [filename], female);
+      voiceCombo->setItemText (femaleVoices [filename], displayname);
    }
 }
 
-void HadifixConfigUI::setVoice (const QString &filename, bool isMale) {
+void setVoice (const QString &filename, bool isMale) {
    addVoice (filename, isMale);
    if (isMale)
-      voiceCombo->setCurrentItem (maleVoices[filename]);
+      voiceCombo->setCurrentIndex (maleVoices[filename]);
    else
-      voiceCombo->setCurrentItem (femaleVoices[filename]);
+      voiceCombo->setCurrentIndex (femaleVoices[filename]);
 }
 
-QString HadifixConfigUI::getVoiceFilename() {
-   int curr = voiceCombo->currentItem();
+QString getVoiceFilename() {
+   int curr = voiceCombo->currentIndex();
 
-   QString filename = voiceCombo->text(curr);
-   if (defaultVoices.contains(curr))
-      filename = defaultVoices[curr];
+   QString filename = voiceCombo->itemText(curr);
+   if (defaultVoicesMap.contains(curr))
+      filename = defaultVoicesMap[curr];
 
    return filename;
 }
 
-bool HadifixConfigUI::isMaleVoice() {
-   int curr = voiceCombo->currentItem();
+bool isMaleVoice() {
+   int curr = voiceCombo->currentIndex();
    QString filename = getVoiceFilename();
 
    if (maleVoices.contains(filename))
@@ -109,6 +111,6 @@ bool HadifixConfigUI::isMaleVoice() {
       return false;
 }
 
-void HadifixConfigUI::changed (const QString &) {
+void changed (const QString &) {
    emit changed (true);
 }

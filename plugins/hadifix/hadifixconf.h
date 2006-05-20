@@ -1,21 +1,88 @@
 #ifndef _HADIFIXCONF_H_
 #define _HADIFIXCONF_H_
 
+// Qt includes.
 #include <QStringList>
 
-#include <kconfig.h>
-
+// KTTS includes.
 #include <pluginconf.h>
 
+// Hadifix includes.
+#include "ui_hadifixconfigui.h"
+
+class KConfig;
+class KProgressDialog;
 class HadifixProc;
-class HadifixConfPrivate;
+
+class HadifixConfPrivate : public QWidget, public Ui::HadifixConfigUI {
+    friend class HadifixConf;
+
+    Q_OBJECT
+
+    private:
+        HadifixConfPrivate(QWidget *parent);
+        virtual ~HadifixConfPrivate();
+
+        void setConfiguration (QString hadifixExec,  QString mbrolaExec,
+                               QString voice,        bool male,
+                               int volume, int time, int pitch,
+                               QString codecName);
+        void initializeVoices ();
+        void initializeCharacterCodes();
+        void setDefaultEncodingFromVoice();
+        void setDefaults ();
+        void load (KConfig *config, const QString &configGroup);
+        void save (KConfig *config, const QString &configGroup);
+
+        void findInitialConfig();
+        QString findHadifixDataPath ();
+        QString findExecutable (const QStringList &names, const QString &possiblePath);
+        QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath);
+        QStringList findSubdirs (const QStringList &baseDirs);
+
+    private slots:
+        int percentToSlider (int percentValue);
+        int sliderToPercent (int sliderValue);
+        void volumeBox_valueChanged (int percentValue);
+        void timeBox_valueChanged (int percentValue);
+        void frequencyBox_valueChanged (int percentValue);
+        void volumeSlider_valueChanged (int sliderValue);
+        void timeSlider_valueChanged (int sliderValue);
+        void frequencySlider_valueChanged (int sliderValue);
+        void init ();
+        void addVoice (const QString &filename, bool isMale);
+        void addVoice (const QString &filename, bool isMale, const QString &displayname);
+        void setVoice (const QString &filename, bool isMale);
+        QString getVoiceFilename();
+        bool isMaleVoice();
+
+    private:
+        QString languageCode;
+        QString defaultHadifixExec;
+        QString defaultMbrolaExec;
+        QStringList defaultVoices;
+        QStringList codecList;
+
+        // Wave file playing on play object.
+        QString waveFile;
+        // Synthesizer.
+        HadifixProc* hadifixProc;
+        // Progress Dialog.
+        KProgressDialog* progressDlg;
+
+        QMap<QString,int> maleVoices;
+        QMap<int,QString> defaultVoicesMap;
+        QPixmap female;
+        QPixmap male;
+        QMap<QString,int> femaleVoices;
+};
 
 class HadifixConf : public PlugInConf {
-    Q_OBJECT 
+    Q_OBJECT
 
     public:
         /** Constructor */
-        HadifixConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        HadifixConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~HadifixConf();

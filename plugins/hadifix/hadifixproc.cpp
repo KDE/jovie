@@ -78,8 +78,8 @@ class HadifixProcPrivate {
 };
 
 /** Constructor */
-HadifixProc::HadifixProc( QObject* parent, const char* name, const QStringList &) : 
-   PlugInProc( parent, name ){
+HadifixProc::HadifixProc( QObject* parent, const QStringList &) : 
+   PlugInProc( parent, "hadifixproc" ){
    // kDebug() << "HadifixProc::HadifixProc: Running" << endl;
    d = 0;
 }
@@ -219,7 +219,7 @@ void HadifixProc::synth(QString text,
        encodedText = codec->fromUnicode(text);
        // kDebug() << "HadifixProc::synth: encoding using " << codec->name() << endl;
      } else
-       encodedText = text.latin1();  // Should not happen, but just in case.
+       encodedText = text.toLatin1();  // Should not happen, but just in case.
      // Send the text to be synthesized to process.
      d->hadifixProc->writeStdin(encodedText, encodedText.length());
    }
@@ -380,9 +380,9 @@ HadifixProc::VoiceGender HadifixProc::determineGender(QString mbrola, QString vo
    else {
       if (output != 0)
          *output = speech.stdOut;
-      if (speech.stdOut.contains("female", false))
+      if (speech.stdOut.contains("female", Qt::CaseInsensitive))
          result = FemaleGender;
-      else if (speech.stdOut.contains("male", false))
+      else if (speech.stdOut.contains("male", Qt::CaseInsensitive))
          result = MaleGender;
       else
          result = NoGender;

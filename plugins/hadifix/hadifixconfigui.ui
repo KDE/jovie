@@ -1,700 +1,535 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>HadifixConfigUI</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>HadifixConfigUI</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>HadifixConfigUI</class>
+  <widget class="QWidget" name="HadifixConfigUI" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>578</width>
+        <height>388</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>578</width>
-            <height>388</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Hadifix Configuration</string>
     </property>
-    <property name="windowTitle">
-        <string>Hadifix Configuration</string>
+    <property name="whatsThis" stdset="0" >
+      <string>This is the configuration dialog for the Hadifix (txt2pho and Mbrola) speech synthesizer.</string>
     </property>
-    <property name="whatsThis" stdset="0">
-        <string>This is the configuration dialog for the Hadifix (txt2pho and Mbrola) speech synthesizer.</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>GroupBox4</cstring>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="GroupBox4" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="title" >
+            <string>Had&amp;ifix Configuration</string>
+          </property>
+          <property name="whatsThis" stdset="0" >
+            <string>This is the configuration dialog for the Hadifix (txt2pho and Mbrola) speech synthesizer.</string>
+          </property>
+          <layout class="QGridLayout" >
+            <property name="margin" >
+              <number>11</number>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
+            <property name="spacing" >
+              <number>6</number>
+            </property>
+            <item rowspan="1" row="0" column="0" colspan="2" >
+              <widget class="QGroupBox" name="basicOptions" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
                     <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
+                    <vsizetype>0</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Had&amp;ifix Configuration</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This is the configuration dialog for the Hadifix (txt2pho and Mbrola) speech synthesizer.</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                  </sizepolicy>
                 </property>
-                <property name="margin">
+                <property name="title" >
+                  <string>&amp;Basic Options</string>
+                </property>
+                <layout class="QGridLayout" >
+                  <item row="0" column="0" >
+                    <widget class="QLabel" name="voiceLabel" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>5</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text" >
+                        <string>&amp;Voice file:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>voiceCombo</cstring>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Select a voice for speaking text.  If no voices are listed, check your Mbrola configuration.  You must install at least one voice.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item rowspan="1" row="0" column="1" colspan="2" >
+                    <widget class="KComboBox" name="voiceCombo" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>1</hsizetype>
+                          <vsizetype>0</vsizetype>
+                          <horstretch>1</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Select a voice for speaking text.  If no voices are listed, check your Mbrola configuration.  You must install at least one voice.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="0" column="3" >
+                    <widget class="KPushButton" name="voiceButton" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>1</hsizetype>
+                          <vsizetype>1</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text" >
+                        <string>&amp;Select...</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="1" column="0" >
+                    <widget class="QLabel" name="volumeLabel" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>5</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text" >
+                        <string>Volume &amp;ratio:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>volumeBox</cstring>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="1" column="1" >
+                    <widget class="KIntSpinBox" name="volumeBox" >
+                      <property name="enabled" >
+                        <bool>true</bool>
+                      </property>
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>0</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="suffix" >
+                        <string> %</string>
+                      </property>
+                      <property name="maximum" >
+                        <number>200</number>
+                      </property>
+                      <property name="minimum" >
+                        <number>50</number>
+                      </property>
+                      <property name="value" >
+                        <number>100</number>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item rowspan="1" row="1" column="2" colspan="2" >
+                    <widget class="QSlider" name="volumeSlider" >
+                      <property name="enabled" >
+                        <bool>true</bool>
+                      </property>
+                      <property name="focusPolicy" >
+                        <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="minimum" >
+                        <number>0</number>
+                      </property>
+                      <property name="maximum" >
+                        <number>1000</number>
+                      </property>
+                      <property name="singleStep" >
+                        <number>10</number>
+                      </property>
+                      <property name="pageStep" >
+                        <number>100</number>
+                      </property>
+                      <property name="value" >
+                        <number>500</number>
+                      </property>
+                      <property name="orientation" >
+                        <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="2" column="0" >
+                    <widget class="QLabel" name="timeLabel" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>5</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text" >
+                        <string>Speed:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>timeBox</cstring>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="2" column="1" >
+                    <widget class="KIntSpinBox" name="timeBox" >
+                      <property name="enabled" >
+                        <bool>true</bool>
+                      </property>
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>0</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="suffix" >
+                        <string> %</string>
+                      </property>
+                      <property name="maximum" >
+                        <number>200</number>
+                      </property>
+                      <property name="minimum" >
+                        <number>50</number>
+                      </property>
+                      <property name="value" >
+                        <number>100</number>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item rowspan="1" row="2" column="2" colspan="2" >
+                    <widget class="QSlider" name="timeSlider" >
+                      <property name="enabled" >
+                        <bool>true</bool>
+                      </property>
+                      <property name="focusPolicy" >
+                        <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="maximum" >
+                        <number>1000</number>
+                      </property>
+                      <property name="singleStep" >
+                        <number>10</number>
+                      </property>
+                      <property name="pageStep" >
+                        <number>100</number>
+                      </property>
+                      <property name="value" >
+                        <number>500</number>
+                      </property>
+                      <property name="orientation" >
+                        <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="3" column="0" >
+                    <widget class="QLabel" name="frequencyLabel" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>5</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="text" >
+                        <string>&amp;Pitch:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>frequencyBox</cstring>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="3" column="1" >
+                    <widget class="KIntSpinBox" name="frequencyBox" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>0</hsizetype>
+                          <vsizetype>0</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="suffix" >
+                        <string> %</string>
+                      </property>
+                      <property name="maximum" >
+                        <number>200</number>
+                      </property>
+                      <property name="minimum" >
+                        <number>50</number>
+                      </property>
+                      <property name="value" >
+                        <number>100</number>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item rowspan="1" row="3" column="2" colspan="2" >
+                    <widget class="QSlider" name="frequencySlider" >
+                      <property name="focusPolicy" >
+                        <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="maximum" >
+                        <number>1000</number>
+                      </property>
+                      <property name="singleStep" >
+                        <number>10</number>
+                      </property>
+                      <property name="pageStep" >
+                        <number>100</number>
+                      </property>
+                      <property name="value" >
+                        <number>500</number>
+                      </property>
+                      <property name="orientation" >
+                        <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </widget>
+            </item>
+            <item rowspan="1" row="1" column="0" colspan="2" >
+              <widget class="QGroupBox" name="advancedOptions" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="title" >
+                  <string>&amp;Advanced Options</string>
+                </property>
+                <layout class="QGridLayout" >
+                  <property name="margin" >
                     <number>11</number>
-                </property>
-                <property name="spacing">
+                  </property>
+                  <property name="spacing" >
                     <number>6</number>
+                  </property>
+                  <item row="0" column="0" >
+                    <widget class="QLabel" name="hadifixBinLabel" >
+                      <property name="text" >
+                        <string>txt2pho e&amp;xecutable:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>hadifixURL</cstring>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="0" column="1" >
+                    <widget class="KUrlRequester" name="hadifixURL" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>5</hsizetype>
+                          <vsizetype>5</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="1" column="0" >
+                    <widget class="QLabel" name="mbrolaBinLabel" >
+                      <property name="text" >
+                        <string>&amp;Mbrola executable:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>mbrolaURL</cstring>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item row="1" column="1" >
+                    <widget class="KUrlRequester" name="mbrolaURL" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>5</hsizetype>
+                          <vsizetype>5</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="whatsThis" stdset="0" >
+                        <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item rowspan="1" row="2" column="0" colspan="2" >
+                    <layout class="QHBoxLayout" >
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <item>
+                        <widget class="QLabel" name="characterCodingLabel" >
+                          <property name="sizePolicy" >
+                            <sizepolicy>
+                              <hsizetype>5</hsizetype>
+                              <vsizetype>5</vsizetype>
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                            </sizepolicy>
+                          </property>
+                          <property name="text" >
+                            <string>Character &amp;encoding:</string>
+                          </property>
+                          <property name="buddy" stdset="0" >
+                            <cstring>characterCodingBox</cstring>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="KComboBox" name="characterCodingBox" >
+                          <property name="sizePolicy" >
+                            <sizepolicy>
+                              <hsizetype>7</hsizetype>
+                              <vsizetype>0</vsizetype>
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                            </sizepolicy>
+                          </property>
+                          <property name="whatsThis" stdset="0" >
+                            <string>This combo box specifies which character encoding is used for passing the text.  For most western languages, use ISO-8859-1.  For Hungarian, use ISO-8859-2.</string>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </item>
+                </layout>
+              </widget>
+            </item>
+            <item row="2" column="0" >
+              <spacer name="spacer1" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>240</width>
+                    <height>20</height>
+                  </size>
                 </property>
-                <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>basicOptions</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Box</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="title">
-                        <string>&amp;Basic Options</string>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>voiceLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Voice file:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>voiceCombo</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Select a voice for speaking text.  If no voices are listed, check your Mbrola configuration.  You must install at least one voice.</string>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>voiceCombo</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>1</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Select a voice for speaking text.  If no voices are listed, check your Mbrola configuration.  You must install at least one voice.</string>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton" row="0" column="3">
-                            <property name="name">
-                                <cstring>voiceButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>1</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Select...</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>volumeLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Volume &amp;ratio:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>volumeBox</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
-                            </property>
-                        </widget>
-                        <widget class="KIntSpinBox" row="1" column="1">
-                            <property name="name">
-                                <cstring>volumeBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="suffix">
-                                <string> %</string>
-                            </property>
-                            <property name="maximum">
-                                <number>200</number>
-                            </property>
-                            <property name="minimum">
-                                <number>50</number>
-                            </property>
-                            <property name="value">
-                                <number>100</number>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
-                            </property>
-                        </widget>
-                        <widget class="QSlider" row="1" column="2" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>volumeSlider</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>NoFocus</enum>
-                            </property>
-                            <property name="minimum">
-                                <number>0</number>
-                            </property>
-                            <property name="maximum">
-                                <number>1000</number>
-                            </property>
-                            <property name="lineStep">
-                                <number>10</number>
-                            </property>
-                            <property name="pageStep">
-                                <number>100</number>
-                            </property>
-                            <property name="value">
-                                <number>500</number>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="tickmarks">
-                                <enum>NoMarks</enum>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="0">
-                            <property name="name">
-                                <cstring>timeLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Speed:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>timeBox</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
-                            </property>
-                        </widget>
-                        <widget class="KIntSpinBox" row="2" column="1">
-                            <property name="name">
-                                <cstring>timeBox</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="suffix">
-                                <string> %</string>
-                            </property>
-                            <property name="maximum">
-                                <number>200</number>
-                            </property>
-                            <property name="minimum">
-                                <number>50</number>
-                            </property>
-                            <property name="value">
-                                <number>100</number>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
-                            </property>
-                        </widget>
-                        <widget class="QSlider" row="2" column="2" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>timeSlider</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>NoFocus</enum>
-                            </property>
-                            <property name="maximum">
-                                <number>1000</number>
-                            </property>
-                            <property name="lineStep">
-                                <number>10</number>
-                            </property>
-                            <property name="pageStep">
-                                <number>100</number>
-                            </property>
-                            <property name="value">
-                                <number>500</number>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="3" column="0">
-                            <property name="name">
-                                <cstring>frequencyLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Pitch:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>frequencyBox</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
-                            </property>
-                        </widget>
-                        <widget class="KIntSpinBox" row="3" column="1">
-                            <property name="name">
-                                <cstring>frequencyBox</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="suffix">
-                                <string> %</string>
-                            </property>
-                            <property name="maximum">
-                                <number>200</number>
-                            </property>
-                            <property name="minimum">
-                                <number>50</number>
-                            </property>
-                            <property name="value">
-                                <number>100</number>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
-                            </property>
-                        </widget>
-                        <widget class="QSlider" row="3" column="2" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>frequencySlider</cstring>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>NoFocus</enum>
-                            </property>
-                            <property name="maximum">
-                                <number>1000</number>
-                            </property>
-                            <property name="lineStep">
-                                <number>10</number>
-                            </property>
-                            <property name="pageStep">
-                                <number>100</number>
-                            </property>
-                            <property name="value">
-                                <number>500</number>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>advancedOptions</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="title">
-                        <string>&amp;Advanced Options</string>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>11</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>hadifixBinLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>txt2pho e&amp;xecutable:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>hadifixURL</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
-                            </property>
-                        </widget>
-                        <widget class="KUrlRequester" row="0" column="1">
-                            <property name="name">
-                                <cstring>hadifixURL</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>mbrolaBinLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Mbrola executable:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>mbrolaURL</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
-                            </property>
-                        </widget>
-                        <widget class="KUrlRequester" row="1" column="1">
-                            <property name="name">
-                                <cstring>mbrolaURL</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>layout5</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>characterCodingLabel</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>5</hsizetype>
-                                            <vsizetype>5</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Character &amp;encoding:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>characterCodingBox</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KComboBox">
-                                    <property name="name">
-                                        <cstring>characterCodingBox</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>7</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>This combo box specifies which character encoding is used for passing the text.  For most western languages, use ISO-8859-1.  For Hungarian, use ISO-8859-2.</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </grid>
-                </widget>
-                <spacer row="2" column="0">
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Preferred</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>240</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="KPushButton" row="2" column="1">
-                    <property name="name">
-                        <cstring>testButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Test</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Click to test the configuration.  You should hear a spoken sentence.</string>
-                    </property>
-                </widget>
-            </grid>
+                <property name="sizeType" >
+                  <enum>Preferred</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+            <item row="2" column="1" >
+              <widget class="KPushButton" name="testButton" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string>&amp;Test</string>
+                </property>
+                <property name="whatsThis" stdset="0" >
+                  <string>Click to test the configuration.  You should hear a spoken sentence.</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<connections>
-    <connection>
-        <sender>volumeBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>volumeBox_valueChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>volumeSlider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>volumeSlider_valueChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>timeBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>timeBox_valueChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>timeSlider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>timeSlider_valueChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>frequencyBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>frequencyBox_valueChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>frequencySlider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>frequencySlider_valueChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>voiceCombo</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>volumeBox</sender>
-        <signal>valueChanged(const QString&amp;)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>timeBox</sender>
-        <signal>valueChanged(const QString&amp;)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>frequencyBox</sender>
-        <signal>valueChanged(const QString&amp;)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>hadifixURL</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>mbrolaURL</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
-    </connection>
-</connections>
-<includes>
-    <include location="global" impldecl="in declaration">qradiobutton.h</include>
-    <include location="global" impldecl="in declaration">qpixmap.h</include>
-    <include location="global" impldecl="in declaration">kurl.h</include>
-    <include location="global" impldecl="in declaration">qmap.h</include>
-    <include location="global" impldecl="in implementation">kglobal.h</include>
-    <include location="global" impldecl="in implementation">qstringlist.h</include>
-    <include location="global" impldecl="in implementation">math.h</include>
-    <include location="global" impldecl="in implementation">kiconloader.h</include>
-</includes>
-<customwidgets>
-	<customwidget>
-		<class>KIntSpinBox</class>
-		<header location="global">knuminput.h</header>
-		<container>0</container>
-	</customwidget>
-</customwidgets>
-
-<forwards>
-    <forward>class QStringList;</forward>
-</forwards>
-<variables>
-    <variable>QMap&lt;QString,int&gt; maleVoices;</variable>
-    <variable>QMap&lt;int,QString&gt; defaultVoices;</variable>
-    <variable>QPixmap female;</variable>
-    <variable>QPixmap male;</variable>
-    <variable>QMap&lt;QString,int&gt; femaleVoices;</variable>
-</variables>
-<signals>
-    <signal>changed(bool)</signal>
-</signals>
-<slots>
-    <slot access="protected" specifier="non virtual">volumeBox_valueChanged( int percentValue )</slot>
-    <slot access="protected" specifier="non virtual">timeBox_valueChanged( int percentValue )</slot>
-    <slot access="protected" specifier="non virtual">frequencyBox_valueChanged( int percentValue )</slot>
-    <slot access="protected" specifier="non virtual">volumeSlider_valueChanged( int sliderValue )</slot>
-    <slot access="protected" specifier="non virtual">timeSlider_valueChanged( int sliderValue )</slot>
-    <slot access="protected" specifier="non virtual">frequencySlider_valueChanged( int sliderValue )</slot>
-    <slot access="protected">changed( const QString &amp; )</slot>
-</slots>
-<functions>
-    <function access="protected" specifier="non virtual" returnType="int">percentToSlider( int percentValue )</function>
-    <function access="protected" specifier="non virtual" returnType="int">sliderToPercent( int sliderValue )</function>
-    <function access="private" specifier="non virtual">init()</function>
-    <function specifier="non virtual">addVoice( const QString &amp;filename, bool isMale )</function>
-    <function specifier="non virtual">addVoice( const QString &amp;filename, bool isMale, const QString &amp;displayname )</function>
-    <function specifier="non virtual">setVoice( const QString &amp;filename, bool isMale )</function>
-    <function specifier="non virtual" returnType="QString">getVoiceFilename()</function>
-    <function specifier="non virtual" returnType="bool">isMaleVoice()</function>
-</functions>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>KIntSpinBox</class>
+      <extends></extends>
+      <header location="global" >knuminput.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <includes>
+    <include location="global" >qradiobutton.h</include>
+    <include location="global" >qpixmap.h</include>
+    <include location="global" >kurl.h</include>
+    <include location="global" >qmap.h</include>
+  </includes>
+</ui>

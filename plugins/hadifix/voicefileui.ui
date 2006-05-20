@@ -1,119 +1,82 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>VoiceFileWidget</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>VoiceFileWidget</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>VoiceFileWidget</class>
+  <widget class="QWidget" name="VoiceFileWidget" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>452</width>
+        <height>117</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>452</width>
-            <height>117</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Selecting Voice File</string>
     </property>
-    <property name="windowTitle">
-        <string>Selecting Voice File</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>voiceFileLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Path of the voice file:</string>
-            </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>11</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item row="0" column="0" >
+        <widget class="QLabel" name="voiceFileLabel" >
+          <property name="text" >
+            <string>Path of the voice file:</string>
+          </property>
         </widget>
-        <widget class="KUrlRequester" row="0" column="1">
-            <property name="name">
-                <cstring>voiceFileURL</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
+      </item>
+      <item row="0" column="1" >
+        <widget class="KUrlRequester" name="voiceFileURL" >
+          <property name="frameShape" >
+            <enum>NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+            <enum>Plain</enum>
+          </property>
         </widget>
-        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>genderOption</cstring>
+      </item>
+      <item rowspan="1" row="1" column="0" colspan="2" >
+        <widget class="QGroupBox" name="genderOption" >
+          <property name="title" >
+            <string>Gender</string>
+          </property>
+          <layout class="QGridLayout" >
+            <property name="margin" >
+              <number>11</number>
             </property>
-            <property name="title">
-                <string>Gender</string>
+            <property name="spacing" >
+              <number>6</number>
             </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+            <item row="0" column="0" >
+              <widget class="QRadioButton" name="femaleOption" >
+                <property name="text" >
+                  <string>Female</string>
                 </property>
-                <property name="margin">
-                    <number>11</number>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="QRadioButton" name="maleOption" >
+                <property name="text" >
+                  <string>Male</string>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
+              </widget>
+            </item>
+            <item row="0" column="2" >
+              <widget class="KPushButton" name="genderButton" >
+                <property name="text" >
+                  <string>Try to Determine From Voice File</string>
                 </property>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>femaleOption</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Female</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>maleOption</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Male</string>
-                    </property>
-                </widget>
-                <widget class="KPushButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>genderButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Try to Determine From Voice File</string>
-                    </property>
-                </widget>
-            </grid>
+              </widget>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<connections>
-    <connection>
-        <sender>genderButton</sender>
-        <signal>clicked()</signal>
-        <receiver>VoiceFileWidget</receiver>
-        <slot>genderButton_clicked()</slot>
-    </connection>
-</connections>
-<includes>
-    <include location="global" impldecl="in implementation">kurlrequesterdlg.h</include>
-    <include location="global" impldecl="in implementation">kmessagebox.h</include>
-    <include location="local" impldecl="in implementation">hadifixproc.h</include>
-    <include location="local" impldecl="in implementation">voicefileui.ui.h</include>
-</includes>
-<variables>
-    <variable access="public">QString mbrola;</variable>
-</variables>
-<slots>
-    <slot>genderButton_clicked()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>
