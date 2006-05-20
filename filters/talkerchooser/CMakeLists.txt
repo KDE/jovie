@@ -6,9 +6,10 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_talkerchooserplugin_PART_SRCS talkerchooserconf.cpp talkerchooserproc.cpp talkerchooserplugin.cpp )
 
-kde4_automoc(${kttsd_talkerchooserplugin_PART_SRCS})
 
 kde4_add_ui3_files(kttsd_talkerchooserplugin_PART_SRCS talkerchooserconfwidget.ui )
+
+kde4_automoc(${kttsd_talkerchooserplugin_PART_SRCS})
 
 kde4_add_plugin(kttsd_talkerchooserplugin WITH_PREFIX ${kttsd_talkerchooserplugin_PART_SRCS})
 
