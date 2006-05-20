@@ -1,148 +1,113 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>EditReplacementWidget</class>
-<author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>EditReplacementWidget</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>EditReplacementWidget</class>
+  <widget class="QWidget" name="EditReplacementWidget" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>440</width>
+        <height>150</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>440</width>
-            <height>150</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>typeButtonGroup</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Type</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item rowspan="1" row="0" column="0" colspan="2" >
+        <widget class="QGroupBox" name="typeGroupBox" >
+          <property name="title" >
+            <string>&amp;Type</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0">
-                    <property name="name">
-                        <cstring>layout6</cstring>
+                <item>
+                  <widget class="QRadioButton" name="wordRadioButton" >
+                    <property name="text" >
+                      <string>&amp;Word</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>wordRadioButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Word</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>regexpRadioButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Regular &amp;expression</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </grid>
+                    <property name="checked" >
+                      <bool>true</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QRadioButton" name="regexpRadioButton" >
+                    <property name="text" >
+                      <string>Regular &amp;expression</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>matchLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Match:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>matchLineEdit</cstring>
-                    </property>
+      </item>
+      <item row="1" column="0" >
+        <layout class="QVBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <widget class="QLabel" name="matchLabel" >
+              <property name="text" >
+                <string>&amp;Match:</string>
+              </property>
+              <property name="alignment" >
+                <set>Qt::AlignVCenter|Qt::AlignRight</set>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>matchLineEdit</cstring>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLabel" name="substLabel" >
+              <property name="text" >
+                <string>&amp;Replace with:</string>
+              </property>
+              <property name="alignment" >
+                <set>Qt::AlignVCenter|Qt::AlignRight</set>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>matchLineEdit</cstring>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item row="1" column="1" >
+        <layout class="QVBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <layout class="QHBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="KLineEdit" name="matchLineEdit" />
+              </item>
+              <item>
+                <widget class="KPushButton" name="matchButton" >
+                  <property name="text" >
+                    <string>...</string>
+                  </property>
                 </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>substLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Replace with:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>matchLineEdit</cstring>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QLayoutWidget" row="1" column="1">
-            <property name="name">
-                <cstring>layout6</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout5</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>matchLineEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>matchButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>...</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>substLineEdit</cstring>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-</includehints>
-</UI>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <widget class="KLineEdit" name="substLineEdit" />
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

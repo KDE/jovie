@@ -22,9 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
-#include <q3listview.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -138,7 +137,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
         }
         // Build Regular Expression for each word's match string.
         QRegExp rx;
-        rx.setCaseSensitive(false);
+        rx.setCaseSensitivity(Qt::CaseInsensitive);
         if ( wordType == i18n("Word") )
         {
                 // TODO: Does \b honor strange non-Latin1 encodings?

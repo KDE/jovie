@@ -1,461 +1,404 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>StringReplacerConfWidget</class>
-<comment>Widget for configuring String Replacer Filter for KTTSD.</comment>
-<author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>StringReplacerConfWidget</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>548</width>
-            <height>421</height>
-        </rect>
-    </property>
-    <property name="windowTitle">
-        <string>Configure String Replacer</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<ui version="4.0" >
+ <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
+ <comment>Widget for configuring String Replacer Filter for KTTSD.</comment>
+ <exportmacro></exportmacro>
+ <class>StringReplacerConfWidget</class>
+ <widget class="QWidget" name="StringReplacerConfWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>421</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Configure String Replacer</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="nameLabel" >
+       <property name="whatsThis" >
+        <string comment="What's this text" >Enter any name you like for this filter.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Name:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>nameLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="nameLineEdit" >
+       <property name="whatsThis" >
+        <string>Enter any name you like for this filter.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QGroupBox" name="applyGroupBox" >
+     <property name="whatsThis" >
+      <string>These settings determines when the filter is applied to text.</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout3</cstring>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="languageLabel" >
+          <property name="whatsThis" >
+           <string comment="What's this text" >This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+          </property>
+          <property name="text" >
+           <string>Lan&amp;guage is:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>languageLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="appIdLabel" >
+          <property name="whatsThis" >
+           <string>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
+          </property>
+          <property name="text" >
+           <string>Application &amp;ID contains:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>appIdLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1" >
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="KLineEdit" name="languageLineEdit" >
+            <property name="enabled" >
+             <bool>false</bool>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>nameLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Name:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>nameLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Enter any name you like for this filter.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>nameLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Enter any name you like for this filter.</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="whatsThis" >
+             <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="KPushButton" name="languageBrowseButton" >
+            <property name="whatsThis" >
+             <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="KLineEdit" name="appIdLineEdit" >
+          <property name="whatsThis" >
+           <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="KPushButton" name="loadButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Click to load a word list from a file.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="saveButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Click to save word list to a file.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="clearButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Click to empty the word list.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="1" >
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="KPushButton" name="addButton" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>1</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="whatsThis" >
+          <string>Click to add another word or regular expression to the list.</string>
+         </property>
         </widget>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>applyGroupBox</cstring>
-            </property>
-            <property name="title">
-                <string>Apply This &amp;Filter When</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>These settings determines when the filter is applied to text.</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget" row="0" column="0">
-                    <property name="name">
-                        <cstring>layout11</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>languageLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Lan&amp;guage is:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>languageLineEdit</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>appIdLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Application &amp;ID contains:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>appIdLineEdit</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="QLayoutWidget" row="0" column="1">
-                    <property name="name">
-                        <cstring>layout13</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout12</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="KLineEdit">
-                                    <property name="name">
-                                        <cstring>languageLineEdit</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
-                                    </property>
-                                </widget>
-                                <widget class="KPushButton">
-                                    <property name="name">
-                                        <cstring>languageBrowseButton</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>...</string>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>appIdLineEdit</cstring>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>&lt;qt&gt;Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b&gt;knotify&lt;/b&gt; to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt&gt;</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-            </grid>
+       </item>
+       <item>
+        <widget class="QPushButton" name="upButton" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="whatsThis" >
+          <string>Click to move selected word up in the list.  Words higher in the list are applied first.</string>
+         </property>
+         <property name="text" >
+          <string>&amp;Up</string>
+         </property>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
-            <property name="name">
-                <cstring>layout6</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>loadButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Load...</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Click to load a word list from a file.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>saveButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Save...</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Click to save word list to a file.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>clearButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>C&amp;lear</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Click to empty the word list.</string>
-                        <comment>What's this text</comment>
-                    </property>
-                </widget>
-            </hbox>
+       </item>
+       <item>
+        <widget class="QPushButton" name="downButton" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="whatsThis" >
+          <string>Click to move a word down in the list.  Words lower in the list are applied last.</string>
+         </property>
+         <property name="text" >
+          <string>Do&amp;wn</string>
+         </property>
         </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
-            <property name="name">
-                <cstring>layout24</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="K3ListView" row="0" column="0">
-                    <column>
-                        <property name="text">
-                            <string>Type</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Match</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Replace With</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>substLView</cstring>
-                    </property>
-                    <property name="fullWidth">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="0" column="1">
-                    <property name="name">
-                        <cstring>layout23</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>addButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Add...</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to add another word or regular expression to the list.</string>
-                                <comment>What's this text</comment>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>upButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Up</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to move selected word up in the list.  Words higher in the list are applied first.</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>downButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Do&amp;wn</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to move a word down in the list.  Words lower in the list are applied last.</string>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>editButton</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Edit...</string>
-                            </property>
-                            <property name="toggleButton">
-                                <bool>false</bool>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to modify an existing word or regular expression in the list.</string>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>removeButton</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Remove</string>
-                            </property>
-                            <property name="toggleButton">
-                                <bool>false</bool>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Click to remove a word or regular expression from the list.</string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer13</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </vbox>
-                </widget>
-            </grid>
+       </item>
+       <item>
+        <widget class="KPushButton" name="editButton" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>1</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="whatsThis" >
+          <string>Click to modify an existing word or regular expression in the list.</string>
+         </property>
         </widget>
-    </grid>
-</widget>
-<tabstops>
-    <tabstop>nameLineEdit</tabstop>
-    <tabstop>substLView</tabstop>
-    <tabstop>addButton</tabstop>
-    <tabstop>upButton</tabstop>
-    <tabstop>downButton</tabstop>
-    <tabstop>editButton</tabstop>
-    <tabstop>removeButton</tabstop>
-    <tabstop>loadButton</tabstop>
-    <tabstop>saveButton</tabstop>
-    <tabstop>clearButton</tabstop>
-    <tabstop>languageLineEdit</tabstop>
-    <tabstop>languageBrowseButton</tabstop>
-    <tabstop>appIdLineEdit</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
-</UI>
+       </item>
+       <item>
+        <widget class="KPushButton" name="removeButton" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>1</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="whatsThis" >
+          <string>Click to remove a word or regular expression from the list.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QTableWidget" name="substLView" >
+       <property name="editTriggers" >
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionMode" >
+        <enum>QAbstractItemView::NoSelection</enum>
+       </property>
+       <property name="selectionBehavior" >
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="columnCount" >
+        <number>3</number>
+       </property>
+       <column>
+        <property name="text" >
+         <string>Type</string>
+        </property>
+       </column>
+       <column>
+        <property name="text" >
+         <string>Match</string>
+        </property>
+       </column>
+       <column>
+        <property name="text" >
+         <string>Replace With</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QWidget</extends>
+   <header>kpushbutton.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QWidget</extends>
+   <header>klineedit.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>nameLineEdit</tabstop>
+  <tabstop>addButton</tabstop>
+  <tabstop>upButton</tabstop>
+  <tabstop>downButton</tabstop>
+  <tabstop>editButton</tabstop>
+  <tabstop>removeButton</tabstop>
+  <tabstop>loadButton</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>clearButton</tabstop>
+  <tabstop>languageLineEdit</tabstop>
+  <tabstop>languageBrowseButton</tabstop>
+  <tabstop>appIdLineEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

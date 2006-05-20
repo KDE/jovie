@@ -25,7 +25,7 @@
 #define _STRINGREPLACERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <QWidget>
 
 // KDE includes.
 #include <kconfig.h>
@@ -35,12 +35,12 @@
 #include "filterconf.h"
 
 // StringReplacer includes.
-#include "stringreplacerconfwidget.h"
+#include "ui_stringreplacerconfwidget.h"
+#include "ui_editreplacementwidget.h"
 
-class KDialogBase;
-class EditReplacementWidget;
+class KDialog;
 
-class StringReplacerConf : public KttsFilterConf
+class StringReplacerConf : public KttsFilterConf, public Ui::StringReplacerConfWidget
 {
     Q_OBJECT
 
@@ -146,11 +146,9 @@ class StringReplacerConf : public KttsFilterConf
         QString saveToFile( const QString& filename );
 
 
-        // Configuration Widget.
-        StringReplacerConfWidget* m_widget;
         // Edit Dialog and widget.
-        KDialogBase* m_editDlg;
-        EditReplacementWidget* m_editWidget;
+        KDialog* m_editDlg;
+        Ui::EditReplacementWidget* m_editWidget;
         // True if kdeutils Regular Expression Editor is installed.
         bool m_reEditorInstalled;
         // Language Codes.
