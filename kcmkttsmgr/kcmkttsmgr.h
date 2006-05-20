@@ -41,7 +41,7 @@
 #include "talkercode.h"
 #include "talkerlistmodel.h"
 #include "addtalker.h"
-#include "kcmkttsmgrwidget.h"
+#include "ui_kcmkttsmgrwidget.h"
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 

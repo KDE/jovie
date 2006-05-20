@@ -28,7 +28,7 @@
 // Qt includes.
 #include <qmap.h>
 
-#include "addtalkerwidget.h"
+#include "ui_addtalkerwidget.h"
 
 typedef QMap<QString,QStringList> SynthToLangMap;
 typedef QMap<QString,QStringList> LangToSynthMap;
