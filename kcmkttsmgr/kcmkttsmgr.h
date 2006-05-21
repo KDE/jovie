@@ -53,7 +53,6 @@ class QTreeWidgetItem;
 class KAboutData;
 class KConfig;
 class QAction;
-class KWidgetProbe;     // experimental
 
 class FilterItem
 {
@@ -349,7 +348,7 @@ class KCMKttsMgr :
         /**
         * Plugin configuration dialog.
         */
-        KDialogBase* m_configDlg;
+        KDialog* m_configDlg;
 
         /**
         * Sentence Boundary Detector button popup menu actions.
@@ -422,11 +421,6 @@ class KCMKttsMgr :
         */
         QString m_defaultNotifyTalkerCode;
 
-        /**
-        * Screen Reader.  Experimental.
-        */
-        KWidgetProbe* m_screenReader;
-
     private slots:
         /**
         * Update the status of the Talker/Filter buttons.
@@ -451,8 +445,6 @@ class KCMKttsMgr :
         void slotEnableKttsd_toggled(bool checked);
         void slotEmbedInSysTrayCheckBox_toggled(bool checked);
         void slotAutoStartMgrCheckBox_toggled(bool checked);
-        // TODO: Experimental.
-        void enableScreenReaderToggled(bool);
 
         /**
         * Talker tab slots.

@@ -178,13 +178,6 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" >
-        <widget class="QCheckBox" name="screenReaderCheckBox" >
-         <property name="text" >
-          <string>Screen Reader enabled</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="TabPage" >

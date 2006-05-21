@@ -1,62 +1,64 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>SelectEventWidget</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>SelectEventWidget</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>472</width>
-            <height>326</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>eventSrcLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Event source:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>eventSrcComboBox</cstring>
-            </property>
-        </widget>
-        <widget class="QComboBox" row="0" column="1">
-            <property name="name">
-                <cstring>eventSrcComboBox</cstring>
-            </property>
-        </widget>
-        <widget class="K3ListView" row="1" column="0" rowspan="1" colspan="2">
-            <column>
-                <property name="text">
-                    <string>Events</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>eventsListView</cstring>
-            </property>
-            <property name="fullWidth">
-                <bool>true</bool>
-            </property>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klistview.h</includehint>
-</includehints>
-</UI>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SelectEventWidget</class>
+ <widget class="QWidget" name="SelectEventWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>472</width>
+    <height>326</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="eventSrcLabel" >
+     <property name="text" >
+      <string>Event source:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>eventSrcComboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QComboBox" name="eventSrcComboBox" />
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QTableWidget" name="eventsListView" >
+     <property name="editTriggers" >
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <column>
+      <property name="text" >
+       <string>New Column</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>EventName(Hidden)</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

@@ -36,9 +36,12 @@
 #include "utils.h"
 #include "selectevent.h"
 
-SelectEvent::SelectEvent(QWidget* parent, const char* name, Qt::WFlags fl, const QString& initEventSrc)
-    : SelectEventWidget(parent,name,fl)
+SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
+    QWidget(parent)
 {
+    setupUi(this);
+    // Hide Event Name column.
+    eventsListView->setColumnHidden(1, true);
     // Load list of event sources (applications).
     QStringList fullpaths =
         KGlobal::dirs()->findAllResources("data", "*/eventsrc", false, true );
@@ -67,18 +70,18 @@ SelectEvent::SelectEvent(QWidget* parent, const char* name, Qt::WFlags fl, const
             QString description = config->readEntry( QString::fromLatin1("Comment"),
                 i18n("No description available") );
             delete config;
-            int index = relativePath.find( '/' );
+            int index = relativePath.indexOf( '/' );
             QString appname;
             if ( index >= 0 )
                 appname = relativePath.left( index );
             else
                 kDebug() << "Cannot determine application name from path: " << relativePath << endl;
-            eventSrcComboBox->insertItem( SmallIcon( icon ), description );
+            eventSrcComboBox->addItem( SmallIcon( icon ), description );
             m_eventSrcNames.append( appname );
             if ( appname == initEventSrc ) KttsUtils::setCbItemFromText(eventSrcComboBox, description);
         }
     }
-    slotEventSrcComboBox_activated(eventSrcComboBox->currentItem());
+    slotEventSrcComboBox_activated(eventSrcComboBox->currentIndex());
     connect (eventSrcComboBox, SIGNAL(activated(int)), this, SLOT(slotEventSrcComboBox_activated(int)));
 }
 
@@ -87,7 +90,6 @@ SelectEvent::~SelectEvent() { }
 void SelectEvent::slotEventSrcComboBox_activated(int index)
 {
     eventsListView->clear();
-    Q3ListViewItem* item = 0;
     QString eventSrc = m_eventSrcNames[index];
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
@@ -101,35 +103,31 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
             config->setGroup( eventName );
             QString eventDesc = config->readEntry( QString::fromLatin1( "Comment" ),
                 config->readEntry( QString::fromLatin1( "Name" ),QString()));
-            if ( !item )
-                item = new K3ListViewItem( eventsListView, eventDesc, eventName );
-            else
-                item = new K3ListViewItem( eventsListView, item, eventDesc, eventName );
-        }
+            int row = eventsListView->rowCount();
+            eventsListView->setRowCount(row + 1);
+            eventsListView->setItem(row, 0, new QTableWidgetItem(eventDesc));
+            eventsListView->setItem(row, 1, new QTableWidgetItem(eventName));
+       }
     }
     delete config;
-    eventsListView->sort();
-    item = eventsListView->lastChild();
+    eventsListView->sortItems(0);
     QString eventDesc = i18n("All other %1 events", eventSrcComboBox->currentText());
-    if ( !item )
-        item = new K3ListViewItem( eventsListView, eventDesc, "default" );
-    else
-        item = new K3ListViewItem( eventsListView, item, eventDesc, "default" );
-
+    int row = eventsListView->rowCount();
+    eventsListView->setRowCount(row + 1);
+    eventsListView->setItem(row, 0, new QTableWidgetItem(eventDesc));
+    eventsListView->setItem(row, 1, new QTableWidgetItem("default"));
 }
 
 QString SelectEvent::getEventSrc()
 {
-    return m_eventSrcNames[eventSrcComboBox->currentItem()];
+    return m_eventSrcNames[eventSrcComboBox->currentIndex()];
 }
 
 QString SelectEvent::getEvent()
 {
-    Q3ListViewItem* item = eventsListView->currentItem();
-    if ( item )
-        return item->text(1);
-    else
-        return QString();
+    int row = eventsListView->currentRow();
+    if (row <= 1 || row >= eventsListView->rowCount()) return QString();
+    return eventsListView->itemAt(row, 1)->text();
 }
 
 // returns e.g. "kwin/eventsrc" from a given path
@@ -145,5 +143,5 @@ QString SelectEvent::makeRelative( const QString& fullPath )
     return fullPath.mid( slash+1 );
 }
 
-
 #include "selectevent.moc"
+

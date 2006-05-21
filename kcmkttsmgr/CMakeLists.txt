@@ -7,13 +7,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 set(kcm_kttsd_PART_SRCS 
    kcmkttsmgr.cpp 
    addtalker.cpp 
-   selectevent.cpp 
-   kwidgetprobe.cpp )
+   selectevent.cpp )
 
 kde4_automoc(${kcm_kttsd_PART_SRCS})
 
-kde4_add_ui3_files(kcm_kttsd_PART_SRCS selecteventwidget.ui)
-kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui  )
+kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui selecteventwidget.ui )
 
 kde4_add_dcop_skels(kcm_kttsd_PART_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
 

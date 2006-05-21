@@ -24,26 +24,24 @@
 #ifndef _SELECTEVENT_H_
 #define _SELECTEVENT_H_
 
-#include "selecteventwidget.h"
+#include "ui_selecteventwidget.h"
 
-class SelectEvent : public SelectEventWidget
+class SelectEvent : public QWidget, public Ui::SelectEventWidget
 {
     Q_OBJECT
 
 public:
     /**
     * Constructor.
-    * @param parent             Inherited KDialog parameter.
-    * @param name               Inherited KDialog parameter.
+    * @param parent             Parent KDialog.
     * @param initEventSrc       Event source to start with.
     */
-    SelectEvent(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0,
-        const QString& initEventSrc = QString() );
+    SelectEvent(QWidget* parent = 0, const QString& initEventSrc = QString() );
 
     /**
     * Destructor.
     */
-    ~SelectEvent();
+    virtual ~SelectEvent();
 
     /**
      * Returns the chosen event source (app name).
@@ -51,7 +49,7 @@ public:
     QString getEventSrc();
 
     /**
-     * Returns the chosen event.
+     * Returns the chosen event name.
      */
     QString getEvent();
 

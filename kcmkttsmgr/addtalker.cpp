@@ -165,7 +165,7 @@ void AddTalker::applyFilter()
         languageList.sort();
         for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
-            languageSelection->insertItem(languageList[ndx]);
+            languageSelection->addItem(languageList[ndx]);
         }
         // Re-select user's selection.
         languageSelection->setCurrentItem(language, false);
@@ -183,7 +183,7 @@ void AddTalker::applyFilter()
         const int synthListCount = synthList.count();
         for (int ndx=0; ndx < synthListCount; ++ndx)
         {
-            synthesizerSelection->insertItem(synthList[ndx]);
+            synthesizerSelection->addItem(synthList[ndx]);
         }
         // Re-select user's selection.
         synthesizerSelection->setCurrentItem(synth, false);
@@ -199,7 +199,7 @@ void AddTalker::applyFilter()
         const int synthListCount = synthList.count();
         for (int ndx=0; ndx < synthListCount; ++ndx)
         {
-            synthesizerSelection->insertItem(synthList[ndx]);
+            synthesizerSelection->addItem(synthList[ndx]);
         }
         // Re-select user's synthesizer.
         synthesizerSelection->setCurrentItem(synth, false);
@@ -220,7 +220,7 @@ void AddTalker::applyFilter()
         languageList.sort();
         for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
-            languageSelection->insertItem(languageList[ndx]);
+            languageSelection->addItem(languageList[ndx]);
         }
         // Re-select user's language selection.
         languageSelection->setCurrentItem(language, false);

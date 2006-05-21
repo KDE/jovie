@@ -26,7 +26,7 @@
 #define ADDTALKER_H
 
 // Qt includes.
-#include <qmap.h>
+#include <QMap>
 
 #include "ui_addtalkerwidget.h"
 

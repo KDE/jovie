@@ -38,7 +38,6 @@
 
 // KDE includes.
 #include <dcopclient.h>
-#include <k3listview.h>
 #include <kparts/componentfactory.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
@@ -54,6 +53,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <ktoolinvocation.h>
+#include <kdialog.h>
 
 // KTTS includes.
 #include "talkercode.h"
@@ -67,7 +67,6 @@
 #include "utils.h"
 
 // KCMKttsMgr includes.
-#include "kwidgetprobe.h"
 #include "kcmkttsmgr.h"
 #include "kcmkttsmgr.moc"
 
@@ -318,24 +317,24 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 
     // Give buttons icons.
     // Talkers tab.
-    higherTalkerPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("up", K3Icon::Small));
-    lowerTalkerPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small));
-    removeTalkerButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small));
-    configureTalkerButton->setIconSet(
-        KGlobal::iconLoader()->loadIconSet("configure", K3Icon::Small));
+    higherTalkerPriorityButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("up", K3Icon::Small));
+    lowerTalkerPriorityButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("down", K3Icon::Small));
+    removeTalkerButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small));
+    configureTalkerButton->setIcon(
+        KGlobal::iconLoader()->loadIcon("configure", K3Icon::Small));
 
     // Filters tab.
-    higherFilterPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("up", K3Icon::Small));
-    lowerFilterPriorityButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small));
-    removeFilterButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small));
-    configureFilterButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("configure", K3Icon::Small));
+    higherFilterPriorityButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("up", K3Icon::Small));
+    lowerFilterPriorityButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("down", K3Icon::Small));
+    removeFilterButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small));
+    configureFilterButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("configure", K3Icon::Small));
 
     // Notify tab.
     notifyListView->setColumnCount(7);
@@ -355,15 +354,15 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     header->setStretchLastSection( true );
     notifyActionComboBox->clear();
     for (int ndx = 0; ndx < NotifyAction::count(); ++ndx)
-        notifyActionComboBox->insertItem( NotifyAction::actionDisplayName( ndx ) );
+        notifyActionComboBox->addItem( NotifyAction::actionDisplayName( ndx ) );
     notifyPresentComboBox->clear();
     for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
-        notifyPresentComboBox->insertItem( NotifyPresent::presentDisplayName( ndx ) );
+        notifyPresentComboBox->addItem( NotifyPresent::presentDisplayName( ndx ) );
 
-    notifyRemoveButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small));
-    notifyTestButton->setIconSet(
-            KGlobal::iconLoader()->loadIconSet("speak", K3Icon::Small));
+    notifyRemoveButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small));
+    notifyTestButton->setIcon(
+            KGlobal::iconLoader()->loadIcon("speak", K3Icon::Small));
 
     sinkComboBox->setEditable(false);
     pcmComboBox->setEditable(false);
@@ -379,7 +378,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
         i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
     m_sbdBtnAdd = sbdPopmenu->addAction( i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
     m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
-    sbdButton->setPopup( sbdPopmenu );
+    sbdButton->setMenu( sbdPopmenu );
 
     // If aRts is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
@@ -404,7 +403,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
         QStringList sinkList = player->getPluginList("Sink/Audio");
         // kDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer Sink List = " << sinkList << endl;
         sinkComboBox->clear();
-        sinkComboBox->insertStringList(sinkList);
+        sinkComboBox->addItems(sinkList);
     }
     delete player;
     delete testPlayer;
@@ -423,7 +422,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
         pcmList.append("custom");
         kDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
         pcmComboBox->clear();
-        pcmComboBox->insertStringList(pcmList);
+        pcmComboBox->addItems(pcmList);
     }
     delete player;
     delete testPlayer;
@@ -440,7 +439,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
         QStringList pcmList = player->getPluginList("");
         kDebug() << "KCMKttsMgr::KCMKttsMgr: aKode Sink List = " << pcmList << endl;
         akodeComboBox->clear();
-        akodeComboBox->insertStringList(pcmList);
+        akodeComboBox->addItems(pcmList);
     }
     delete player;
     delete testPlayer;
@@ -468,9 +467,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
             SLOT(slotAutoStartMgrCheckBox_toggled(bool)));
     connect(autoexitMgrCheckBox, SIGNAL(toggled(bool)),
             SLOT(configChanged()));
-    // TODO: Experimental.
-    connect(screenReaderCheckBox, SIGNAL(toggled(bool)),
-            SLOT(enableScreenReaderToggled(bool)));
 
     // Talker tab.
     connect(addTalkerButton, SIGNAL(clicked()),
@@ -614,9 +610,9 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     // Switch to Talkers tab if none configured,
     // otherwise switch to Jobs tab if it is active.
     if (m_talkerListModel.rowCount() == 0)
-        mainTab->setCurrentPage(wpTalkers);
+        mainTab->setCurrentIndex(wpTalkers);
     else if (enableKttsdCheckBox->isChecked())
-        mainTab->setCurrentPage(wpJobs);
+        mainTab->setCurrentIndex(wpJobs);
 } 
 
 /**
@@ -1059,20 +1055,10 @@ void KCMKttsMgr::save()
     }
 }
 
-void KCMKttsMgr::enableScreenReaderToggled(bool enabled)
-{
-    if (enabled)
-        m_screenReader = new KWidgetProbe(this, "ktts_widgetprobe");
-    else {
-        delete m_screenReader;
-        m_screenReader = 0;
-    }
-}
-
 void KCMKttsMgr::slotTabChanged()
 {
     setButtons(buttons());
-    int currentPageIndex = mainTab->currentPageIndex();
+    int currentPageIndex = mainTab->currentIndex();
     if (currentPageIndex == wpJobs)
     {
         if (m_changed)
@@ -1093,7 +1079,7 @@ void KCMKttsMgr::slotTabChanged()
 void KCMKttsMgr::defaults() {
     // kDebug() << "Running: KCMKttsMgr::defaults: Running"<< endl;
 
-    int currentPageIndex = mainTab->currentPageIndex();
+    int currentPageIndex = mainTab->currentIndex();
     bool changed = false;
     switch (currentPageIndex)
     {
@@ -1277,12 +1263,12 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
     {
         // When the entry is found, load the plug in
         // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if(factory){
             // If the factory is created successfully, instantiate the PlugInConf class for the
             // specific plug in to get the plug in configuration object.
             PlugInConf *plugIn = KLibLoader::createInstance<PlugInConf>(
-                    offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()));
+                    offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()));
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
                 return plugIn;
@@ -1321,14 +1307,14 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
     {
         // When the entry is found, load the plug in
         // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
+        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if(factory){
             // If the factory is created successfully, instantiate the KttsFilterConf class for the
             // specific plug in to get the plug in configuration object.
             int errorNo = 0;
             KttsFilterConf *plugIn =
                 KLibLoader::createInstance<KttsFilterConf>(
-                    offers[0]->library().latin1(), NULL, QStringList(offers[0]->library().latin1()),
+                    offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()),
                      &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
@@ -1355,15 +1341,10 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
     AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, this, "AddTalker_widget");
-    KDialogBase* dlg = new KDialogBase(
-        KDialogBase::Swallow,
-        i18n("Add Talker"),
-        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
+    KDialog* dlg = new KDialog(
         this,
-        "AddTalker_dlg",
-        true,
-        true);
+        i18n("Add Talker"),
+        KDialog::Help|KDialog::Ok|KDialog::Cancel);
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
@@ -1376,16 +1357,16 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
     {
-        // Create a  QHBox to host K3ListView.
+        // Create a  QHBox to host QTableWidget.
         QWidget* hBox = new QWidget;
         hBox->setObjectName("SelectLanguage_hbox");
         QHBoxLayout* hBoxLayout = new QHBoxLayout;
         hBoxLayout->setMargin(0);
-        // Create a K3ListView and fill with all known languages.
-        K3ListView* langLView = new K3ListView( hBox );
-        langLView->setObjectName( "SelectLanguage_lview" );
-        langLView->addColumn(i18n("Language"));
-        langLView->addColumn(i18n("Code"));
+        // Create a QTableWidget and fill with all known languages.
+        QTableWidget* langLView = new QTableWidget( hBox );
+        langLView->setColumnCount(2);
+        langLView->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Language")));
+        langLView->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Code")));
         QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
         QString locale;
         QString countryCode;
@@ -1396,21 +1377,18 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         {
             locale = allLocales[ndx];
             language = TalkerCode::languageCodeToLanguage(locale);
-            new Q3ListViewItem(langLView, language, locale);
+            int row = langLView->rowCount();
+            langLView->setRowCount(row + 1);
+            langLView->setItem(row, 0, new QTableWidgetItem(language));
+            langLView->setItem(row, 1, new QTableWidgetItem(locale));
         }
         // Sort by language.
-        langLView->setSorting(0);
-        langLView->sort();
+        langLView->sortItems(0);
         // Display the box in a dialog.
-        KDialogBase* dlg = new KDialogBase(
-            KDialogBase::Swallow,
-            i18n("Select Language"),
-            KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-            KDialogBase::Cancel,
+        KDialog* dlg = new KDialog(
             this,
-            "SelectLanguage_dlg",
-            true,
-            true);
+            i18n("Select Language"),
+            KDialog::Help|KDialog::Ok|KDialog::Cancel);
         hBoxLayout->addWidget(langLView);
         hBox->setLayout(hBoxLayout);
         dlg->setMainWidget(hBox);
@@ -1418,9 +1396,10 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         dlg->setInitialSize(QSize(200, 500));
         dlgResult = dlg->exec();
         languageCode.clear();
-        if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
+        int row = langLView->currentRow();
+        if (row > 0) languageCode = langLView->itemAt(row, 1)->text();
         delete dlg;
-        // TODO: Also delete K3ListView and hBox?
+        // TODO: Also delete QTableWidget and hBox?
         if (dlgResult != QDialog::Accepted) return;
     }
 
@@ -2040,7 +2019,7 @@ void KCMKttsMgr::kttsdExiting()
     // kDebug() << "KCMKttsMgr::kttsdExiting: Running" << endl;
     if (m_jobMgrPart)
     {
-        mainTab->removePage(m_jobMgrPart->widget());
+        mainTab->removeTab(wpJobs);
         delete m_jobMgrPart;
         m_jobMgrPart = 0;
     }
@@ -2210,15 +2189,10 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
 void KCMKttsMgr::configureTalker()
 {
     if (!m_loadedTalkerPlugIn) return;
-    m_configDlg = new KDialogBase(
-        KDialogBase::Swallow,
-        i18n("Talker Configuration"),
-        KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
+    m_configDlg = new KDialog(
         this,
-        "configureTalker_dlg",
-        true,
-        true);
+        i18n("Talker Configuration"),
+        KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
     m_configDlg->setInitialSize(QSize(700, 300));
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
@@ -2266,15 +2240,10 @@ void KCMKttsMgr::configureTalker()
 void KCMKttsMgr::configureFilter()
 {
     if (!m_loadedFilterPlugIn) return;
-    m_configDlg = new KDialogBase(
-        KDialogBase::Swallow,
-        i18n("Filter Configuration"),
-        KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
+    m_configDlg = new KDialog(
         this,
-        "configureFilter_dlg",
-        true,
-        true);
+        i18n("Filter Configuration"),
+        KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
     m_configDlg->setInitialSize(QSize(600, 450));
     m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
@@ -2511,7 +2480,7 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
 
     // Write it all out.
     QTextStream ts( &file );
-    ts.setEncoding( QTextStream::UnicodeUTF8 );
+    ts.setCodec( "UTF-8" );
     ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     ts << doc.toString();
     file.close();
@@ -2568,10 +2537,10 @@ void KCMKttsMgr::slotNotifyListView_currentItemChanged()
             bool defaultItem = ( item->parent()->text(nlvcEventSrc) == "default" );
             notifyPresentComboBox->setEnabled( defaultItem );
             if ( defaultItem )
-                notifyPresentComboBox->setCurrentItem( NotifyPresent::present( item->text( nlvcEvent ) ) );
+                notifyPresentComboBox->setCurrentIndex( NotifyPresent::present( item->text( nlvcEvent ) ) );
             notifyActionComboBox->setEnabled( true );
             int action = NotifyAction::action( item->text( nlvcAction ) );
-            notifyActionComboBox->setCurrentItem( action );
+            notifyActionComboBox->setCurrentIndex( action );
             notifyTalkerButton->setEnabled( true );
             TalkerCode talkerCode( item->text( nlvcTalker ) );
             notifyTalkerLabel->setText( talkerCode.getTranslatedDescription() );
@@ -2627,7 +2596,7 @@ void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
     if ( item )
         if ( item->parent() ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
-    if ( notifyActionComboBox->currentItem() != NotifyAction::SpeakCustom) return;
+    if ( notifyActionComboBox->currentIndex() != NotifyAction::SpeakCustom) return;
     item->setText( nlvcActionName, "\"" + text + "\"" );
     notifyTestButton->setEnabled(
         !text.isEmpty() && enableKttsdCheckBox->isChecked());
@@ -2669,7 +2638,7 @@ void KCMKttsMgr::slotNotifyTalkerButton_clicked()
     QString talkerCode = item->text( nlvcTalker );
     SelectTalkerDlg dlg( this, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
     int dlgResult = dlg.exec();
-    if ( dlgResult != KDialogBase::Accepted ) return;
+    if ( dlgResult != KDialog::Accepted ) return;
     item->setText( nlvcTalker, dlg.getSelectedTalkerCode() );
     QString talkerName = dlg.getSelectedTranslatedDescription();
     item->setText( nlvcTalkerName, talkerName );
@@ -2764,16 +2733,11 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     QTreeWidgetItem* item = lv->currentItem();
     QString eventSrc;
     if ( item ) eventSrc = item->text( nlvcEventSrc );
-    SelectEvent* selectEventWidget = new SelectEvent( this, "SelectEvent_widget", 0, eventSrc );
-    KDialogBase* dlg = new KDialogBase(
-        KDialogBase::Swallow,
-        i18n("Select Event"),
-        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
+    KDialog* dlg = new KDialog(
         this,
-        "SelectEvent_dlg",
-        true,
-        true);
+        i18n("Select Event"),
+        KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    SelectEvent* selectEventWidget = new SelectEvent( this, eventSrc );
     dlg->setMainWidget( selectEventWidget );
     dlg->setInitialSize( QSize(500, 400) );
     // dlg->setHelp("select-plugin", "kttsd");
