@@ -29,48 +29,28 @@
 
 // KDE includes.
 #include <kparts/browserextension.h>
-#include <klibloader.h>
-#include <kvbox.h>
 
 // KTTS includes.
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
 class KAboutData;
-class KInstance;
 class KttsJobMgrBrowserExtension;
 class K3ListView;
 class Q3ListViewItem;
 class KVBox;
 class KTextEdit;
 
-class KttsJobMgrFactory : public KLibFactory
-{
-    Q_OBJECT
-public:
-    KttsJobMgrFactory() {};
-    virtual ~KttsJobMgrFactory();
-
-    virtual QObject* createObject(QObject* parent = 0, const char* name = 0,
-                            const char* classname = "QObject",
-                            const QStringList &args = QStringList());
-
-    static KInstance *instance();
-    static KAboutData *aboutData();
-
-private:
-    static KInstance *s_instance;
-};
-
-class KttsJobMgrPart: 
+class KttsJobMgrPart:
     public KParts::ReadOnlyPart,
     public KSpeech_stub,
     virtual public KSpeechSink
 {
     Q_OBJECT
 public:
-    KttsJobMgrPart(QWidget *parent, const char *name);
+    KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args=QStringList());
     virtual ~KttsJobMgrPart();
+    static KAboutData* createAboutData();
 
 protected:
     virtual bool openFile();

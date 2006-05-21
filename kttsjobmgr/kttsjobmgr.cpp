@@ -29,6 +29,7 @@
 #include <QPushButton>
 #include <QList>
 #include <Q3TextEdit>
+#include <QMimeData>
 
 // KDE includes.
 #include <kinstance.h>
@@ -43,6 +44,7 @@
 #include <ktextedit.h>
 #include <kvbox.h>
 #include <kdemacros.h>
+#include <kparts/genericfactory.h>
 
 // KTTS includes.
 #include "kspeech.h"
@@ -51,74 +53,84 @@
 #include "kttsjobmgr.h"
 #include "kttsjobmgr.moc"
 
-extern "C"
+//extern "C"
+//{
+//    /**
+//    * This function is the 'main' function of this part.  It takes
+//    * the form 'void *init_lib<library name>()  It always returns a
+//    * new factory object
+//    */
+//   KDE_EXPORT void *init_libkttsjobmgrpart()
+//    {
+//        return new KttsJobMgrFactory;
+//    }
+//};
+
+///**
+//* We need one static instance of the factory for our C 'main'
+//* function
+//*/
+//KInstance *KttsJobMgrFactory::s_instance = 0L;
+
+//KttsJobMgrFactory::~KttsJobMgrFactory()
+//{
+//    if (s_instance)
+//    {
+//        delete s_instance->aboutData();
+//        delete s_instance;
+//    }
+
+//    s_instance = 0;
+//}
+
+//QObject *KttsJobMgrFactory::createObject(QObject *parent, const char *name, const char*,
+//                               const QStringList& )
+//{
+//    QObject *obj = new KttsJobMgrPart((QWidget*)parent, name);
+//    emit objectCreated(obj);
+//    return obj;
+//}
+
+//KInstance *KttsJobMgrFactory::instance()
+//{
+//    if ( !s_instance )
+//        s_instance = new KInstance( aboutData() );
+//    return s_instance;
+//}
+
+//KAboutData *KttsJobMgrFactory::aboutData()
+//{
+//    KAboutData *about = new KAboutData("kttsjobmgr", I18N_NOOP("KttsJobMgr"), "1.99");
+//    return about;
+//}
+
+typedef KParts::GenericFactory<KttsJobMgrPart> KttsJobMgrPartFactory;
+K_EXPORT_COMPONENT_FACTORY( libkttsjobmgrpart, KttsJobMgrPartFactory )
+
+KAboutData* KttsJobMgrPart::createAboutData()
 {
-    /**
-    * This function is the 'main' function of this part.  It takes
-    * the form 'void *init_lib<library name>()  It always returns a
-    * new factory object
-    */
-    KDE_EXPORT void *init_libkttsjobmgrpart()
-    {
-        return new KttsJobMgrFactory;
-    }
-};
-
-/**
-* We need one static instance of the factory for our C 'main'
-* function
-*/
-KInstance *KttsJobMgrFactory::s_instance = 0L;
-
-KttsJobMgrFactory::~KttsJobMgrFactory()
-{
-    if (s_instance)
-    {
-        delete s_instance->aboutData();
-        delete s_instance;
-    }
-
-    s_instance = 0;
+    KAboutData *about = new KAboutData("kttsjobmgr", I18N_NOOP("KttsJobMgr"), "1.99");
+    return about;
 }
 
-QObject *KttsJobMgrFactory::createObject(QObject *parent, const char *name, const char*,
-                               const QStringList& )
-{
-    QObject *obj = new KttsJobMgrPart((QWidget*)parent, name);
-    emit objectCreated(obj);
-    return obj;
-}
-
-KInstance *KttsJobMgrFactory::instance()
-{
-    if ( !s_instance )
-        s_instance = new KInstance( aboutData() );
-    return s_instance;
-}
-
-KAboutData *KttsJobMgrFactory::aboutData()
-{
-  KAboutData *about = new KAboutData("kttsjobmgr", I18N_NOOP("KttsJobMgr"), "1.99");
-  return about;
-}
-
-KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
+KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kttsjobmgr_kspeechsink"),
     KParts::ReadOnlyPart(parent)
 {
-	setObjectName(name);
+    Q_UNUSED(args);
     // Initialize some variables.
     m_selectOnTextSet = false;
     m_buttonBox = 0;
 
-    setInstance(KttsJobMgrFactory::instance());
+    setWidget(parentWidget);
+    // setInstance(KttsJobMgrFactory::instance());
 
     // All the ktts components use the same catalogue.
     KGlobal::locale()->insertCatalog("kttsd");
 
     // Create a QVBox to host everything.
-    KVBox* vBox = new KVBox(parent);
+    KVBox* vBox = new KVBox(parentWidget);
     //vBox->setMargin(6);
 
     // Create a splitter to contain the Job List View and the current sentence.
@@ -190,8 +202,9 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
 
     QPushButton* btn;
     QString wt;
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("stop", K3Icon::Small, 0, true),
-                          i18n("Hold"), hbox1, "job_hold");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("stop", K3Icon::Small, 0, true),
+                          i18n("Hold"), hbox1);
+    btn->setObjectName("job_hold");
     wt = i18n(
             "<p>Changes a job to Paused state.  If currently speaking, the job stops speaking.  "
             "Paused jobs prevent jobs that follow them from speaking, so either click "
@@ -199,85 +212,97 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parent, const char *name) :
             "down in the list.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_hold()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("exec", K3Icon::Small, 0, true),
-                          i18n("Resume"), hbox1, "job_resume");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("exec", K3Icon::Small, 0, true),
+                          i18n("Resume"), hbox1);
+    btn->setObjectName("job_resume");
     wt = i18n(
             "<p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the "
             "top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("redo", K3Icon::Small, 0, true),
-                          i18n("R&estart"), hbox1, "job_restart");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("redo", K3Icon::Small, 0, true),
+                          i18n("R&estart"), hbox1);
+    btn->setObjectName("job_restart");
     wt = i18n(
             "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "
             "is the top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("edittrash", K3Icon::Small, 0, true),
-                          i18n("Re&move"), hbox1, "job_remove");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small, 0, true),
+                          i18n("Re&move"), hbox1);
+    btn->setObjectName("job_remove");
     wt = i18n(
             "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "
             "speakable job in the list begins speaking.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small, 0, true),
-                          i18n("&Later"), hbox1, "job_later");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("down", K3Icon::Small, 0, true),
+                          i18n("&Later"), hbox1);
+    btn->setObjectName("job_later");
     wt = i18n(
             "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
             "is currently speaking, its state changes to Paused.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2leftarrow", K3Icon::Small, 0, true),
-                          i18n("Pre&vious Part"), hbox2, "part_prevpart");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("2leftarrow", K3Icon::Small, 0, true),
+                          i18n("Pre&vious Part"), hbox2);
+    btn->setObjectName("part_prevpart");
     wt = i18n(
             "<p>Rewinds a multi-part job to the previous part.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_par()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1leftarrow", K3Icon::Small, 0, true),
-                          i18n("&Previous Sentence"), hbox2, "job_prevsentence");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("1leftarrow", K3Icon::Small, 0, true),
+                          i18n("&Previous Sentence"), hbox2);
+    btn->setObjectName("job_prevsentence");
     wt = i18n(
             "<p>Rewinds a job to the previous sentence.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_sen()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("1rightarrow", K3Icon::Small, 0, true),
-                          i18n("&Next Sentence"), hbox2, "job_nextsentence");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("1rightarrow", K3Icon::Small, 0, true),
+                          i18n("&Next Sentence"), hbox2);
+    btn->setObjectName("job_nextsentence");
     wt = i18n(
             "<p>Advances a job to the next sentence.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_sen()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("2rightarrow", K3Icon::Small, 0, true),
-                          i18n("Ne&xt Part"), hbox2, "part_nextpart");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("2rightarrow", K3Icon::Small, 0, true),
+                          i18n("Ne&xt Part"), hbox2);
+    btn->setObjectName("part_nextpart");
     wt = i18n(
             "<p>Advances a multi-part job to the next part.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_par()));
 
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("klipper", K3Icon::Small, 0, true),
-                          i18n("&Speak Clipboard"), hbox3, "speak_clipboard");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("klipper", K3Icon::Small, 0, true),
+                          i18n("&Speak Clipboard"), hbox3);
+    btn->setObjectName("speak_clipboard");
     wt = i18n(
             "<p>Queues the current contents of the clipboard for speaking and sets its state "
             "to Waiting.  If the job is the topmost in the list, it begins speaking.  "
             "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("fileopen", K3Icon::Small, 0, true),
-                          i18n("Spea&k File"), hbox3, "speak_file");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("fileopen", K3Icon::Small, 0, true),
+                          i18n("Spea&k File"), hbox3);
+    btn->setObjectName("speak_file");
     wt = i18n(
             "<p>Prompts you for a file name and queues the contents of the file for speaking.  "
             "You must click the <b>Resume</b> button before the job will be speakable.  "
             "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("translate", K3Icon::Small, 0, true),
-                          i18n("Change Talker"), hbox3, "job_changetalker");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("translate", K3Icon::Small, 0, true),
+                          i18n("Change Talker"), hbox3);
+    btn->setObjectName("job_changetalker");
     wt = i18n(
             "<p>Prompts you with a list of your configured Talkers from the <b>Talkers</b> tab.  "
             "The job will be spoken using the selected Talker.</p>");
     btn->setWhatsThis( wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
-    btn = new QPushButton(KGlobal::iconLoader()->loadIconSet("reload_page", K3Icon::Small, 0, true),
-                          i18n("&Refresh"), hbox3, "refresh");
+    btn = new QPushButton(KGlobal::iconLoader()->loadIcon("reload_page", K3Icon::Small, 0, true),
+                          i18n("&Refresh"), hbox3);
+    btn->setObjectName("refresh");
     wt = i18n(
             "<p>Refresh the list of jobs.</p>");
     btn->setWhatsThis( wt);
@@ -510,7 +535,7 @@ void KttsJobMgrPart::slot_job_change_talker()
     {
         QString talkerID = item->text(jlvcTalkerID);
         QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
-        int ndx = talkerIDs.findIndex(talkerID);
+        int ndx = talkerIDs.indexOf(talkerID);
         QString talkerCode;
         if (ndx >= 0) talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
         SelectTalkerDlg dlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
@@ -531,22 +556,19 @@ void KttsJobMgrPart::slot_speak_clipboard()
 
     // Copy text from the clipboard.
     QString text;
-    QMimeSource* data = cb->data();
+    const QMimeData* data = cb->mimeData();
     if (data)
     {
-        if (data->provides("text/html"))
+        if (data->hasFormat("text/html"))
         {
             if (supportsMarkup(NULL, KSpeech::mtHtml))
-            {
-                QByteArray d = data->encodedData("text/html");
-                text = QString(d);
-            }
+                text = data->html();
         }
-        if (data->provides("text/ssml"))
+        if (data->hasFormat("text/ssml"))
         {
             if (supportsMarkup(NULL, KSpeech::mtSsml))
             {
-                QByteArray d = data->encodedData("text/ssml");
+                QByteArray d = data->data("text/ssml");
                 text = QString(d);
             }
         }
@@ -701,7 +723,7 @@ void KttsJobMgrPart::refreshJobListView()
     enableJobPartActions(false);
     QString jobNumbers = getTextJobNumbers();
     // kDebug() << "jobNumbers: " << jobNumbers << endl;
-    QStringList jobNums = QStringList::split(",", jobNumbers);
+    QStringList jobNums = jobNumbers.split(",");
     Q3ListViewItem* lastItem = 0;
     QStringList::ConstIterator endJobNums(jobNums.constEnd());
     for( QStringList::ConstIterator it = jobNums.constBegin(); it != endJobNums; ++it)
@@ -785,11 +807,11 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 {
     if (!m_buttonBox) return;
 
-    QList<QObject *> l = m_buttonBox->queryList( "QPushButton", "job_*", true, true );
-    QListIterator<QObject *> i(l);
+    QList<QPushButton *> l = m_buttonBox->findChildren<QPushButton *>( QRegExp("job_*") );
+    QListIterator<QPushButton *> i(l);
 
     while (i.hasNext())
-        ((QPushButton*)i.next())->setEnabled( enable );
+        (i.next())->setEnabled( enable );
 
     if (enable)
     {
@@ -799,11 +821,11 @@ void KttsJobMgrPart::enableJobActions(bool enable)
         {
             bool enableLater = item->nextSibling();
 
-            l = m_buttonBox->queryList( "QPushButton", "job_later", false, true );
-            QListIterator<QObject *> it(l); // iterate over the buttons
+            l = m_buttonBox->findChildren<QPushButton *>( "job_later" );
+            QListIterator<QPushButton *> it(l); // iterate over the buttons
             while (it.hasNext())
                 // for each found object...
-                ((QPushButton*)it.next())->setEnabled( enableLater );
+                (it.next())->setEnabled( enableLater );
         }
     }
 }
@@ -815,11 +837,11 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 void KttsJobMgrPart::enableJobPartActions(bool enable)
 {
     if (!m_buttonBox) return;
-    QList<QObject *> l = m_buttonBox->queryList( "QPushButton", "part_*", true, true );
-    QListIterator<QObject *> i(l);
+    QList<QPushButton *> l = m_buttonBox->findChildren<QPushButton *>( QRegExp("part_*") );
+    QListIterator<QPushButton *> i(l);
 
     while (i.hasNext())
-        ((QPushButton*)i.next())->setEnabled( enable );
+        (i.next())->setEnabled( enable );
 
 }
 
@@ -855,7 +877,7 @@ ASYNC KttsJobMgrPart::sentenceStarted(const QByteArray&, const uint jobNum, cons
     {
         item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
         item->setText(jlvcPosition, QString::number(seq));
-        m_currentSentence->setText(getTextJobSentence(jobNum, seq));
+        m_currentSentence->setPlainText(getTextJobSentence(jobNum, seq));
     }
 }
 
@@ -962,7 +984,7 @@ ASYNC KttsJobMgrPart::textFinished(const QByteArray&, const uint jobNum)
         // Update sentence pointer, since signal may not be emitted for final CR.
         refreshJob(jobNum);
     }
-    m_currentSentence->setText(QString());
+    m_currentSentence->setPlainText(QString());
 }
 
 /**
@@ -1031,3 +1053,4 @@ KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
 KttsJobMgrBrowserExtension::~KttsJobMgrBrowserExtension()
 {
 }
+
