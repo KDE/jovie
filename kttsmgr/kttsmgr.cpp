@@ -38,7 +38,6 @@
 #include <kmenu.h>
 #include <kaboutapplication.h>
 #include <dcopclient.h>
-#include <kdeversion.h>
 #include <ktoolinvocation.h>
 
 // KTTSMgr includes.
@@ -83,16 +82,14 @@ int main (int argc, char *argv[])
 
     KUniqueApplication app;
 
-#if KDE_VERSION >= KDE_MAKE_VERSION (3,3,90)
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Panel);
-    aboutdata.setProgramLogo(icon.convertToImage());
-#endif
+    aboutdata.setProgramLogo(icon.toImage());
 
     // The real work of KTTS Manager is done in the KControl Module kcmkttsd.
     KCMultiDialog dlg(KCMultiDialog::Plain, i18n("KDE Text-to-Speech Manager"), 0, "kttsmgrdlg", false);
     dlg.addModule("kcmkttsd");
 
-    dlg.setIcon(KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small));
+    dlg.setWindowIcon(KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small));
 
     // Get SysTray and ShowMainWindow options.
     KConfig* config = new KConfig("kttsdrc");
@@ -121,16 +118,13 @@ int main (int argc, char *argv[])
     else app.setMainWidget(&dlg);
 
     if (showMainWindowOnStartup)
-#if KDE_VERSION < KDE_MAKE_VERSION (3,3,0)
-        dlg.show();
-#else
     {
         if (embedInSysTray)
             tray->setActive();
         else
             dlg.show();
     }
-#endif
+
     int result = app.exec();
     delete tray;
     return result;
@@ -145,22 +139,22 @@ int main (int argc, char *argv[])
 // /*virtual*/ void KttsToolTip::maybeTip ( const QPoint & p )
 // {
 //     Q_UNUSED(p);
-// 
+//
 //     if (!parentWidget()->inherits("KttsMgrTray"))
 //         return;
-// 
+//
 //     KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
-// 
+//
 //     QRect r(kttsMgrTray->geometry());
 //     if ( !r.isValid() )
 //         return;
-// 
+//
 //     QString status = "<qt><b>KTTSMgr</b> - ";
 //     status += i18n("<qt>Text-to-Speech Manager");
 //     status += "<br/><br/>";
 //     status += kttsMgrTray->getStatus();
 //     status += "</qt>";
-// 
+//
 //     tip(r, status);
 // }
 
@@ -171,27 +165,26 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     DCOPObject("kkttsmgr_kspeechsink"),
     KSystemTray(parent)
 {
-	setObjectName("kttsmgrsystemtray");
+    setObjectName("kttsmgrsystemtray");
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
     setPixmap (icon);
 
     // this->setToolTip( i18n("Text-to-Speech Manager"));
     // m_toolTip = new KttsToolTip(this);
 
-    int id;
-    id = contextMenu()->idAt(0);
-    if (id != -1) contextMenu()->addTitle(icon, "KTTSMgr");
+    QAction *act;
+    contextMenu()->addTitle(icon, "KTTSMgr");
 
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", K3Icon::Small),
+    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("klipper", K3Icon::Small),
         i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("stop", K3Icon::Small),
+    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("stop", K3Icon::Small),
         i18n("&Hold"), this, SLOT(holdSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("exec", K3Icon::Small),
+    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("exec", K3Icon::Small),
         i18n("Resume"), this, SLOT(resumeSelected()));
-    id = contextMenu()->insertSeparator();
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", K3Icon::Small),
+    act = contextMenu()->addSeparator();
+    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("contents", K3Icon::Small),
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
-    id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small),
+    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small),
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
@@ -237,9 +230,9 @@ void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
-    if ( parentWidget()->isShown() ) return;
+    if ( parentWidget()->isVisible() ) return;
     QString jobNums = getTextJobNumbers();
-    QStringList jobNumsList = QStringList::split(jobNums, ",");
+    QStringList jobNumsList = jobNums.split(",");
     uint jobNumsListCount = jobNumsList.count();
     // Since there can only be 2 Finished jobs at a time, more than 2 jobs means at least
     // one job is not Finished.
