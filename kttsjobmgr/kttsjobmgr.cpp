@@ -53,57 +53,6 @@
 #include "kttsjobmgr.h"
 #include "kttsjobmgr.moc"
 
-//extern "C"
-//{
-//    /**
-//    * This function is the 'main' function of this part.  It takes
-//    * the form 'void *init_lib<library name>()  It always returns a
-//    * new factory object
-//    */
-//   KDE_EXPORT void *init_libkttsjobmgrpart()
-//    {
-//        return new KttsJobMgrFactory;
-//    }
-//};
-
-///**
-//* We need one static instance of the factory for our C 'main'
-//* function
-//*/
-//KInstance *KttsJobMgrFactory::s_instance = 0L;
-
-//KttsJobMgrFactory::~KttsJobMgrFactory()
-//{
-//    if (s_instance)
-//    {
-//        delete s_instance->aboutData();
-//        delete s_instance;
-//    }
-
-//    s_instance = 0;
-//}
-
-//QObject *KttsJobMgrFactory::createObject(QObject *parent, const char *name, const char*,
-//                               const QStringList& )
-//{
-//    QObject *obj = new KttsJobMgrPart((QWidget*)parent, name);
-//    emit objectCreated(obj);
-//    return obj;
-//}
-
-//KInstance *KttsJobMgrFactory::instance()
-//{
-//    if ( !s_instance )
-//        s_instance = new KInstance( aboutData() );
-//    return s_instance;
-//}
-
-//KAboutData *KttsJobMgrFactory::aboutData()
-//{
-//    KAboutData *about = new KAboutData("kttsjobmgr", I18N_NOOP("KttsJobMgr"), "1.99");
-//    return about;
-//}
-
 typedef KParts::GenericFactory<KttsJobMgrPart> KttsJobMgrPartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkttsjobmgrpart, KttsJobMgrPartFactory )
 
@@ -807,7 +756,11 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 {
     if (!m_buttonBox) return;
 
+#if defined Q_CC_MSVC && _MSC_VER < 1300
+    QList<QPushButton *> l = qfindChildren<QPushButton *>( m_buttonBox, QRegExp("job_*") );
+#else
     QList<QPushButton *> l = m_buttonBox->findChildren<QPushButton *>( QRegExp("job_*") );
+#endif
     QListIterator<QPushButton *> i(l);
 
     while (i.hasNext())
@@ -821,7 +774,11 @@ void KttsJobMgrPart::enableJobActions(bool enable)
         {
             bool enableLater = item->nextSibling();
 
+#if defined Q_CC_MSVC && _MSC_VER < 1300
+            l = qfindChildren<QPushButton *>( m_buttonBox, "job_later" );
+#else
             l = m_buttonBox->findChildren<QPushButton *>( "job_later" );
+#endif
             QListIterator<QPushButton *> it(l); // iterate over the buttons
             while (it.hasNext())
                 // for each found object...
@@ -837,12 +794,15 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 void KttsJobMgrPart::enableJobPartActions(bool enable)
 {
     if (!m_buttonBox) return;
+#if defined Q_CC_MSVC && _MSC_VER < 1300
+    QList<QPushButton *> l = qfindChildren<QPushButton *>( m_buttonBox, QRegExp("part_*") );
+#else
     QList<QPushButton *> l = m_buttonBox->findChildren<QPushButton *>( QRegExp("part_*") );
+#endif
     QListIterator<QPushButton *> i(l);
 
     while (i.hasNext())
         (i.next())->setEnabled( enable );
-
 }
 
 /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
