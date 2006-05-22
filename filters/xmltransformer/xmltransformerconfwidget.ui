@@ -1,204 +1,291 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>XmlTransformerConfWidget</class>
-  <widget class="QWidget" name="XmlTransformerConfWidget" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>548</width>
-        <height>256</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Configure XML Transformer</string>
-    </property>
-    <layout class="QGridLayout" >
+<ui version="4.0" >
+ <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>XmlTransformerConfWidget</class>
+ <widget class="QWidget" name="XmlTransformerConfWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>256</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Configure XML Transformer</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="1" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="KLineEdit" name="nameLineEdit" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Enter any descriptive name you like for this filter.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KUrlRequester" name="xsltPath" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KUrlRequester" name="xsltprocPath" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Enter the path to the xsltproc executable program.  If it is in the PATH environment variable, just enter "xsltproc".</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="nameLabel" >
+       <property name="whatsThis" >
+        <string comment="What's this text" >Enter any descriptive name you like for this filter.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Name:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>nameLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="xsltLabel" >
+       <property name="whatsThis" >
+        <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;XSLT file:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>xsltPath</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="xsltprocLabel" >
+       <property name="whatsThis" >
+        <string>Enter the path to the xsltproc executable program.  If it is in the PATH environment variable, just enter "xsltproc".</string>
+       </property>
+       <property name="text" >
+        <string>xsltproc &amp;executable:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>xsltprocPath</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="applyGroupBox" >
+     <property name="whatsThis" >
+      <string>These settings determines when the filter is applied to text.</string>
+     </property>
+     <property name="title" >
+      <string>Apply This &amp;Filter When</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
       <item row="0" column="1" >
-        <layout class="QVBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="KLineEdit" name="rootElementLineEdit" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <item>
-            <widget class="KLineEdit" name="nameLineEdit" >
-              <property name="whatsThis" stdset="0" >
-                <string>Enter any descriptive name you like for this filter.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KUrlRequester" name="xsltPath" >
-              <property name="whatsThis" stdset="0" >
-                <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KUrlRequester" name="xsltprocPath" >
-              <property name="url" stdset="0" >
-                <string>xsltproc</string>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string>Enter the path to the xsltproc executable program.  If it is in the PATH environment variable, just enter "xsltproc".</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
+          <property name="whatsThis" >
+           <string>This filter will be applied only to text having the specified XML root element.  If blank, applies to all text.  You may enter more than one root element separated by commas.  Example: "html".</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KLineEdit" name="doctypeLineEdit" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="whatsThis" >
+           <string>This filter will be applied only to text having the specified DOCTYPE specification.  If blank, applies to all text.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KLineEdit" name="appIdLineEdit" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="rootElementLabel" >
+          <property name="whatsThis" >
+           <string comment="What's this text" >This filter will be applied only to text having the specified XML root element.  If blank, applies to all text.  You may enter more than one root element separated by commas.  Example: "html".</string>
           </property>
-          <item>
-            <widget class="QLabel" name="nameLabel" >
-              <property name="text" >
-                <string>&amp;Name:</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-              <property name="buddy" stdset="0" >
-                <cstring>nameLineEdit</cstring>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >Enter any descriptive name you like for this filter.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="xsltLabel" >
-              <property name="text" >
-                <string>&amp;XSLT file:</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-              <property name="buddy" stdset="0" >
-                <cstring>xsltPath</cstring>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string>Enter the full path to an XML Style Language - Transforms (XSLT) stylesheet file.  XSLT files usually end with extension .xsl.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="xsltprocLabel" >
-              <property name="text" >
-                <string>xsltproc &amp;executable:</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-              <property name="buddy" stdset="0" >
-                <cstring>xsltprocPath</cstring>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string>Enter the path to the xsltproc executable program.  If it is in the PATH environment variable, just enter "xsltproc".</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
+          <property name="text" >
+           <string>&amp;Root element is:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>rootElementLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="doctypeLabel" >
+          <property name="whatsThis" >
+           <string>This filter will be applied only to text having the specified DOCTYPE specification.  If blank, applies to all text.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
+          </property>
+          <property name="text" >
+           <string>or DOC&amp;TYPE is:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>doctypeLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="appIdLabel" >
+          <property name="whatsThis" >
+           <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
+          </property>
+          <property name="text" >
+           <string>and Application &amp;ID contains:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>appIdLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item rowspan="1" row="1" column="0" colspan="2" >
-        <widget class="QGroupBox" name="applyGroupBox" >
-          <property name="title" >
-            <string>Apply This &amp;Filter When</string>
-          </property>
-          <property name="whatsThis" stdset="0" >
-            <string>These settings determines when the filter is applied to text.</string>
-          </property>
-          <layout class="QGridLayout" >
-            <item row="0" column="1" >
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <widget class="KLineEdit" name="rootElementLineEdit" >
-                    <property name="whatsThis" stdset="0" >
-                      <string>This filter will be applied only to text having the specified XML root element.  If blank, applies to all text.  You may enter more than one root element separated by commas.  Example: "html".</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="KLineEdit" name="doctypeLineEdit" >
-                    <property name="whatsThis" stdset="0" >
-                      <string>This filter will be applied only to text having the specified DOCTYPE specification.  If blank, applies to all text.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="KLineEdit" name="appIdLineEdit" >
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="0" column="0" >
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="rootElementLabel" >
-                    <property name="text" >
-                      <string>&amp;Root element is:</string>
-                    </property>
-                    <property name="alignment" >
-                      <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0" >
-                      <cstring>rootElementLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string comment="What's this text" >This filter will be applied only to text having the specified XML root element.  If blank, applies to all text.  You may enter more than one root element separated by commas.  Example: "html".</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QLabel" name="doctypeLabel" >
-                    <property name="text" >
-                      <string>or DOC&amp;TYPE is:</string>
-                    </property>
-                    <property name="alignment" >
-                      <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0" >
-                      <cstring>doctypeLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>This filter will be applied only to text having the specified DOCTYPE specification.  If blank, applies to all text.  You may enter more than one DOCTYPE separated by commas.  Example: "xhtml".</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QLabel" name="appIdLabel" >
-                    <property name="text" >
-                      <string>and Application &amp;ID contains:</string>
-                    </property>
-                    <property name="alignment" >
-                      <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0" >
-                      <cstring>appIdLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-          </layout>
-        </widget>
-      </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QLineEdit</extends>
+   <header>kurlrequester.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>
