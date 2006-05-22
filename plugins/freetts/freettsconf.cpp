@@ -15,15 +15,12 @@
  *                                                                            *
  ******************************************************************************/
 
-// Qt includes. 
-#include <QLayout>
+// Qt includes.
 #include <QLabel>
 #include <QString>
 #include <QStringList>
 #include <QFile>
 #include <QApplication>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 // KDE includes.
 #include <kdialog.h>
@@ -33,6 +30,7 @@
 #include <klocale.h>
 #include <kprogressbar.h>
 #include <kprogressdialog.h>
+
 // KTTS includes.
 #include <pluginconf.h>
 #include <testplayer.h>
@@ -49,10 +47,6 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const QStringList&/*args*/) :
     m_freettsProc = 0;
         m_progressDlg = 0;
         setupUi(this);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
-    layout->addWidget(this);
 
     defaults();
 

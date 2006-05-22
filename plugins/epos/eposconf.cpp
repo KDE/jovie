@@ -28,10 +28,7 @@
 #include <QFile>
 #include <QApplication>
 #include <QTextCodec>
-#include <QLayout>
 #include <QSlider>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 // KDE includes.
 #include <kdialog.h>
@@ -58,10 +55,6 @@ EposConf::EposConf( QWidget* parent, const QStringList& /*args*/) :
     m_progressDlg = 0;
 
     setupUi(this);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
-    layout->addWidget(this);
 
     // Build codec list and fill combobox.
     m_codecList = PlugInProc::buildCodecList();

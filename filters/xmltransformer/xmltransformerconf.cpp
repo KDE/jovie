@@ -23,8 +23,6 @@
 
 // Qt includes.
 #include <QString>
-#include <QLayout>
-#include <QVBoxLayout>
 
 // KDE includes.
 #include <klocale.h>
@@ -48,15 +46,13 @@ XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QStringList &args
     KttsFilterConf(parent)
 {
     Q_UNUSED(args);
-    // kDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
+    kDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
     setupUi(this);
-    layout->addWidget(this);
 
     // Set up defaults.
+    kDebug() << "XmlTransformerConf:: setting up defaults" << endl;
     defaults();
 
     // Connect signals.

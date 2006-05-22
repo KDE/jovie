@@ -25,12 +25,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QString>
-#include <QLayout>
 #include <QDomDocument>
 #include <QFile>
 #include <QRadioButton>
 #include <QTextStream>
-#include <QVBoxLayout>
 #include <QTableWidget>
 
 // KDE includes.
@@ -67,10 +65,8 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
     // kDebug() << "StringReplacerConf::StringReplacerConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
     setupUi(this);
-    layout->addWidget(this);
+
     substLView->setSortingEnabled(false);
 
     connect(nameLineEdit, SIGNAL(textChanged(const QString&)),

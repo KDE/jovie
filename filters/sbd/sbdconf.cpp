@@ -25,12 +25,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QString>
-
-#include <QLayout>
 #include <QDomDocument>
 #include <QFile>
 #include <QRadioButton>
-#include <QVBoxLayout>
 
 // KDE includes.
 #include <kglobal.h>
@@ -64,10 +61,7 @@ SbdConf::SbdConf( QWidget *parent, const QStringList &args) :
     // kDebug() << "SbdConf::SbdConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
     setupUi(this);
-    layout->addWidget(this);
 
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();

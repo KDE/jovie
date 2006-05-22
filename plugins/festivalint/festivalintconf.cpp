@@ -25,7 +25,6 @@
 #include <math.h>
 
 // Qt includes.
-#include <QLayout>
 #include <QLabel>
 #include <QString>
 #include <QStringList>
@@ -34,9 +33,7 @@
 #include <QSlider>
 #include <qdom.h>
 #include <QTextCodec>
-#include <kprogressdialog.h>
 #include <QPixmap>
-#include <QVBoxLayout>
 
 // KDE includes.
 #include <kdebug.h>
@@ -48,6 +45,7 @@
 #include <knuminput.h>
 #include <kprocio.h>
 #include <kprogressbar.h>
+#include <kprogressdialog.h>
 #include <kiconloader.h>
 
 // KTTS includes.
@@ -68,10 +66,6 @@ FestivalIntConf::FestivalIntConf( QWidget* parent, const QStringList& /*args*/) 
     m_supportsSSML = FestivalIntProc::ssUnknown;
 
     setupUi(this);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
-    layout->addWidget(this);
 
     festivalPath->setMode(KFile::File | KFile::ExistingOnly);
     festivalPath->setFilter("*");

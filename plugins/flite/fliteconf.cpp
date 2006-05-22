@@ -22,7 +22,6 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QLayout>
 #include <QFile>
 #include <QApplication>
 
@@ -51,10 +50,6 @@ FliteConf::FliteConf( QWidget* parent, const QStringList& /*args*/) :
     m_progressDlg = 0;
 
     setupUi(this);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
-    layout->addWidget(this);
 
     defaults();
 

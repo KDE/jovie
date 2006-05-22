@@ -470,7 +470,7 @@ HadifixConf::HadifixConf( QWidget* parent, const QStringList &) :
     QVBoxLayout *layout = new QVBoxLayout (this);
     layout->setAlignment (Qt::AlignTop);
 
-    d = new HadifixConfPrivate(this);
+    d = new HadifixConfPrivate(parent);
 
     QString file = locate("data", "LICENSES/LGPL_V2");
     i18n("This plugin is distributed under the terms of the GPL v2 or later.");

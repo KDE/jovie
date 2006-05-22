@@ -23,9 +23,6 @@
 
 // Qt includes.
 #include <QString>
-#include <q3hbox.h>
-#include <QLayout>
-#include <QVBoxLayout>
 
 // KDE includes.
 #include <klocale.h>
@@ -57,10 +54,7 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList & args)
     // kDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment (Qt::AlignTop);
     setupUi(this);
-    layout->addWidget(this);
 
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
