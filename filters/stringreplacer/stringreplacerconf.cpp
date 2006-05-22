@@ -30,6 +30,7 @@
 #include <QRadioButton>
 #include <QTextStream>
 #include <QTableWidget>
+#include <QHeaderView>
 
 // KDE includes.
 #include <kglobal.h>
@@ -44,7 +45,7 @@
 #include <kparts/componentfactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <kvbox.h>
+#include <khbox.h>
 
 // KTTS includes.
 #include "filterconf.h"
@@ -68,6 +69,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
     setupUi(this);
 
     substLView->setSortingEnabled(false);
+    substLView->verticalHeader()->hide();
 
     connect(nameLineEdit, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
@@ -89,7 +91,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
         this, SLOT(slotSaveButton_clicked()));
     connect(clearButton, SIGNAL(clicked()),
         this, SLOT(slotClearButton_clicked()));
-    connect(substLView, SIGNAL(selectionChanged()),
+    connect(substLView, SIGNAL(currentItemChanged(QTableWidgetItem *, QTableWidgetItem *)),
         this, SLOT(enableDisableButtons()));
     connect(appIdLineEdit, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
@@ -154,7 +156,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     file.close();
 
     // Clear list view.
-    if ( clear ) substLView->clear();
+    if ( clear ) substLView->setRowCount(0);
 
     // Name setting.
     QDomNodeList nameList = doc.elementsByTagName( "name" );
@@ -314,7 +316,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     }
 
     // Words.
-    for ( int row = 1; row < substLView->rowCount(); ++row )
+    for ( int row = 0; row < substLView->rowCount(); ++row )
     {
         QDomElement wordTag = doc.createElement( "word" );
         root.appendChild( wordTag );
@@ -359,7 +361,7 @@ void StringReplacerConf::defaults(){
     languageLineEdit->setText( "" );
     // Default name.
     nameLineEdit->setText( i18n("String Replacer") );
-    substLView->clear();
+    substLView->setRowCount(0);
     // Default App ID is blank.
     appIdLineEdit->setText( "" );
     enableDisableButtons();
@@ -411,10 +413,11 @@ QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
 
 void StringReplacerConf::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host K3ListView.
+    // Create a  QHBox to host QTableWidget.
     KHBox* hBox = new KHBox(this);
     // Create a QTableWidget and fill with all known languages.
     QTableWidget* langLView = new QTableWidget(hBox);
+    langLView->verticalHeader()->hide();
     langLView->setColumnCount(2);
     langLView->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Language")));
     langLView->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Code")));
@@ -427,7 +430,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     QString charSet;
     QString language;
     // Blank line so user can select no language.
-    langLView->setRowCount(2);
+    langLView->setRowCount(1);
     langLView->setItem(1, 0, new QTableWidgetItem(""));
     langLView->setItem(1, 1, new QTableWidgetItem(""));
     if (m_languageCodeList.isEmpty()) langLView->selectRow(1);
@@ -440,7 +443,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
         int row = langLView->rowCount();
-        langLView->setRowCount(row+1);
+        langLView->setRowCount(row + 1);
         langLView->setItem(row, 0, new QTableWidgetItem(language));
         langLView->setItem(row, 1, new QTableWidgetItem(locale));
         if (m_languageCodeList.contains(locale)) langLView->selectRow(row);
@@ -467,7 +470,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         }
     }
     delete dlg;
-    // TODO: Also delete K3ListView and QHBox?
+    // TODO: Also delete QTableWidget and QHBox?
     if (dlgResult != QDialog::Accepted) return;
     language = "";
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
@@ -494,7 +497,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
 void StringReplacerConf::enableDisableButtons()
 {
     int row = substLView->currentRow();
-    bool enableBtn = row > 0 && row < substLView->rowCount();
+    bool enableBtn = (row >= 0 && row < substLView->rowCount());
     if (enableBtn)
     {
         upButton->setEnabled(row > 0);
@@ -505,8 +508,8 @@ void StringReplacerConf::enableDisableButtons()
     }
     editButton->setEnabled(enableBtn);
     removeButton->setEnabled(enableBtn);
-    clearButton->setEnabled(substLView->rowCount() > 1);
-    saveButton->setEnabled(substLView->rowCount() > 1);
+    clearButton->setEnabled(substLView->rowCount() > 0);
+    saveButton->setEnabled(substLView->rowCount() > 0);
 }
 
 void StringReplacerConf::slotUpButton_clicked()
@@ -514,19 +517,25 @@ void StringReplacerConf::slotUpButton_clicked()
     int row = substLView->currentRow();
     if (row < 1 || row >= substLView->rowCount()) return;
 
-    QTableWidgetItem *itemAbove = substLView->itemAt(row - 1, 0);
-    QTableWidgetItem *item = substLView->itemAt(row, 0);
+    QTableWidgetItem *itemAbove = substLView->item(row - 1, 0);
+    QTableWidgetItem *item = substLView->item(row, 0);
     QString t = itemAbove->text();
     itemAbove->setText(item->text());
     item->setText(t);
 
-    itemAbove = substLView->itemAt(row - 1, 1);
-    item = substLView->itemAt(row, 1);
+    itemAbove = substLView->item(row - 1, 1);
+    item = substLView->item(row, 1);
     t = itemAbove->text();
     itemAbove->setText(item->text());
     item->setText(t);
 
-    substLView->setCurrentItem(substLView->itemAt(row - 1, substLView->currentColumn()));
+    itemAbove = substLView->item(row - 1, 2);
+    item = substLView->item(row, 2);
+    t = itemAbove->text();
+    itemAbove->setText(item->text());
+    item->setText(t);
+
+    substLView->setCurrentItem(substLView->item(row - 1, substLView->currentColumn()));
     // TODO: Is this needed? substLView->scrollTo(substLView->indexFromItem(itemAbove));
     enableDisableButtons();
     configChanged();
@@ -535,27 +544,27 @@ void StringReplacerConf::slotUpButton_clicked()
 void StringReplacerConf::slotDownButton_clicked()
 {
     int row = substLView->currentRow();
-    if (row == 0 || row >= substLView->rowCount() - 1) return;
+    if (row < 0 || row >= substLView->rowCount() - 1) return;
 
-    QTableWidgetItem *itemBelow = substLView->itemAt(row + 1, 0);
-    QTableWidgetItem *item = substLView->itemAt(row, 0);
+    QTableWidgetItem *itemBelow = substLView->item(row + 1, 0);
+    QTableWidgetItem *item = substLView->item(row, 0);
     QString t = itemBelow->text();
     itemBelow->setText(item->text());
     item->setText(t);
 
-    itemBelow = substLView->itemAt(row - 1, 1);
-    item = substLView->itemAt(row, 1);
+    itemBelow = substLView->item(row + 1, 1);
+    item = substLView->item(row, 1);
     t = itemBelow->text();
     itemBelow->setText(item->text());
     item->setText(t);
 
-    itemBelow = substLView->itemAt(row - 1, 2);
-    item = substLView->itemAt(row, 2);
+    itemBelow = substLView->item(row + 1, 2);
+    item = substLView->item(row, 2);
     t = itemBelow->text();
     itemBelow->setText(item->text());
     item->setText(t);
 
-    substLView->setCurrentItem(substLView->itemAt(row + 1, substLView->currentColumn()));
+    substLView->setCurrentItem(substLView->item(row + 1, substLView->currentColumn()));
     // TODO: Is this needed? substLView->scrollTo(substLView->indexFromItem(itemBelow));
     enableDisableButtons();
     configChanged();
@@ -579,22 +588,21 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         row = substLView->rowCount() - 1;
     else
         row = substLView->currentRow();
-    // Create a QHBox to host widget.
-    KHBox* hBox = new KHBox(this);
     // Create widget.
+    QWidget *w = new QWidget();
     m_editWidget = new Ui::EditReplacementWidget();
-    m_editWidget->setupUi( hBox );
+    m_editWidget->setupUi( w );
     // Set controls if editing existing.
     m_editWidget->matchButton->setEnabled( false );
     if (!isAdd)
     {
-        if ( substLView->itemAt(row, 0)->text() == "RegExp" )
+        if ( substLView->item(row, 0)->text() == "RegExp" )
         {
             m_editWidget->regexpRadioButton->setChecked( true );
             m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
         }
-        m_editWidget->matchLineEdit->setText( substLView->itemAt(row, 1)->text() );
-        m_editWidget->substLineEdit->setText( substLView->itemAt(row, 2)->text() );
+        m_editWidget->matchLineEdit->setText( substLView->item(row, 1)->text() );
+        m_editWidget->substLineEdit->setText( substLView->item(row, 2)->text() );
     }
     // The match box may not be blank.
     connect( m_editWidget->matchLineEdit, SIGNAL(textChanged(const QString&)),
@@ -611,7 +619,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         i18n("Edit String Replacement"),
         KDialog::Help|KDialog::Ok|KDialog::Cancel);
     // Disable OK button if match field blank.
-    m_editDlg->setMainWidget( hBox );
+    m_editDlg->setMainWidget( w );
     m_editDlg->setHelp( "", "kttsd" );
     m_editDlg->enableButton( KDialog::Ok, !m_editWidget->matchLineEdit->text().isEmpty() );
     int dlgResult = m_editDlg->exec();
@@ -623,18 +631,18 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editDlg = 0;
     m_editWidget = 0;
     if (dlgResult != QDialog::Accepted) return;
-    // TODO: Also delete hBox and w?
+    // TODO: Also delete QTableWidget and w?
     if ( match.isEmpty() ) return;
     if ( isAdd )
     {
         row = substLView->rowCount();
         substLView->setRowCount(row + 1);
-        substLView->setCurrentItem(substLView->itemAt(row, 0));
+        substLView->setCurrentItem(substLView->item(row, 0));
     }
-    substLView->itemAt(row, 0)->setText(substType);
-    substLView->itemAt(row, 1)->setText(match);
-    substLView->itemAt(row, 2)->setText(subst);
-    // TODO: Is this needed? substLView->scrollTo(substLView->indexFromItem(substLView->itemAt(row,0)));
+    substLView->item(row, 0)->setText(substType);
+    substLView->item(row, 1)->setText(match);
+    substLView->item(row, 2)->setText(subst);
+    // TODO: Is this needed? substLView->scrollTo(substLView->indexFromItem(substLView->item(row,0)));
     enableDisableButtons();
     configChanged();
 }
@@ -726,7 +734,7 @@ void StringReplacerConf::slotSaveButton_clicked()
 
 void StringReplacerConf::slotClearButton_clicked()
 {
-    substLView->clear();
+    substLView->setRowCount(0);
     enableDisableButtons();
 }
 
