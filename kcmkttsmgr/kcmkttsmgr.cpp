@@ -542,7 +542,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     connect(textPostMsg, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
     connect(textPostSndCheck, SIGNAL(toggled(bool)),
-            this, SLOT(slotTextPreSndCheck_toggled(bool)));
+            this, SLOT(slotTextPostSndCheck_toggled(bool)));
     connect(textPostSnd, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
 
@@ -1365,6 +1365,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         // Create a QTableWidget and fill with all known languages.
         QTableWidget* langLView = new QTableWidget( hBox );
         langLView->setColumnCount(2);
+        langLView->verticalHeader()->hide();
         langLView->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Language")));
         langLView->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Code")));
         QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
@@ -1377,10 +1378,12 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         {
             locale = allLocales[ndx];
             language = TalkerCode::languageCodeToLanguage(locale);
-            int row = langLView->rowCount();
-            langLView->setRowCount(row + 1);
-            langLView->setItem(row, 0, new QTableWidgetItem(language));
-            langLView->setItem(row, 1, new QTableWidgetItem(locale));
+            if (!language.isEmpty()) {
+                int row = langLView->rowCount();
+                langLView->setRowCount(row + 1);
+                langLView->setItem(row, 0, new QTableWidgetItem(language));
+                langLView->setItem(row, 1, new QTableWidgetItem(locale));
+            }
         }
         // Sort by language.
         langLView->sortItems(0);
