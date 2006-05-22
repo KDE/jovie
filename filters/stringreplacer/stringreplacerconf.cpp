@@ -442,11 +442,14 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        int row = langLView->rowCount();
-        langLView->setRowCount(row + 1);
-        langLView->setItem(row, 0, new QTableWidgetItem(language));
-        langLView->setItem(row, 1, new QTableWidgetItem(locale));
-        if (m_languageCodeList.contains(locale)) langLView->selectRow(row);
+        if (!language.isEmpty())
+        {
+            int row = langLView->rowCount();
+            langLView->setRowCount(row + 1);
+            langLView->setItem(row, 0, new QTableWidgetItem(language));
+            langLView->setItem(row, 1, new QTableWidgetItem(locale));
+            if (m_languageCodeList.contains(locale)) langLView->selectRow(row);
+        }
     }
     // Sort by language.
     langLView->sortItems(0);
