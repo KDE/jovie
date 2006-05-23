@@ -641,6 +641,8 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         row = substLView->rowCount();
         substLView->setRowCount(row + 1);
         substLView->setCurrentItem(substLView->item(row, 0));
+        for (int i = 0; i <= 3; ++i)
+            substLView->setItem(row, i, new QTableWidgetItem(""));
     }
     substLView->item(row, 0)->setText(substType);
     substLView->item(row, 1)->setText(match);
