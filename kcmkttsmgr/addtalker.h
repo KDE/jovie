@@ -33,7 +33,7 @@
 typedef QMap<QString,QStringList> SynthToLangMap;
 typedef QMap<QString,QStringList> LangToSynthMap;
 
-class AddTalker : public QDialog, private Ui::AddTalkerWidget
+class AddTalker : public QWidget, private Ui::AddTalkerWidget
 {
     Q_OBJECT
 

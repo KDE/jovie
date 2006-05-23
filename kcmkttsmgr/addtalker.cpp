@@ -36,7 +36,7 @@
 #include "addtalker.h"
 
 AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char* name, Qt::WFlags fl)
-    : QDialog(parent)
+    : QWidget(parent)
 {
     Q_UNUSED(name);
     Q_UNUSED(fl);

@@ -1340,11 +1340,11 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
  */
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
-    AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, this, "AddTalker_widget");
     KDialog* dlg = new KDialog(
         this,
         i18n("Add Talker"),
         KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, dlg, "AddTalker_widget");
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
@@ -2740,7 +2740,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
         this,
         i18n("Select Event"),
         KDialog::Help|KDialog::Ok|KDialog::Cancel);
-    SelectEvent* selectEventWidget = new SelectEvent( this, eventSrc );
+    SelectEvent* selectEventWidget = new SelectEvent( dlg, eventSrc );
     dlg->setMainWidget( selectEventWidget );
     dlg->setInitialSize( QSize(500, 400) );
     // dlg->setHelp("select-plugin", "kttsd");
