@@ -27,14 +27,14 @@
 // Qt includes.
 #include <QCheckBox>
 #include <QRadioButton>
+#include <QTableWidget>
+#include <QHeaderView>
 
 // KDE includes.
-// TODO: Replace KDialogBase with KDialog.
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kcombobox.h>
 #include <ktrader.h>
 #include <kpushbutton.h>
-#include <k3listview.h>
 #include <klineedit.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -64,8 +64,6 @@ SelectTalkerDlg::SelectTalkerDlg(
     m_talkerListModel = new TalkerListModel();
     m_widget->talkersView->setModel(m_talkerListModel);
 
-    // TODO: How do I do this in a general way and still get KDialogBase to properly resize?
-    //w->setMinimumSize( QSize(700,500) );
     setMainWidget( w );
     m_runningTalkers = runningTalkers;
     m_talkerCode = TalkerCode( talkerCode, false );
@@ -162,59 +160,61 @@ QString SelectTalkerDlg::getSelectedTranslatedDescription()
 
 void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host K3ListView.
+    // Create a  QHBox to host QTableWidget.
     QWidget* hBox = new QWidget;
     hBox->setObjectName("SelectLanguage_hbox");
     QHBoxLayout* hBoxLayout = new QHBoxLayout;
     hBoxLayout->setMargin(0);
-    // Create a K3ListView and fill with all known languages.
-    K3ListView* langLView = new K3ListView(hBox);
-    langLView->addColumn(i18n("Language"));
-    langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(Q3ListView::Single);
+    // Create a QTableWidget and fill with all known languages.
+    QTableWidget *langLView = new QTableWidget(hBox);
+    langLView->setColumnCount(2);
+    langLView->verticalHeader()->hide();
+    langLView->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Language")));
+    langLView->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Code")));
+    langLView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    langLView->setSelectionBehavior(QAbstractItemView::SelectRows);
     QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
     QString locale;
     QString language;
     // Blank line so user can select no language.
-    // Note: Don't use QString(), which gets displayed at bottom of list, rather than top.
-    Q3ListViewItem* item = new K3ListViewItem(langLView, "", "");
-    if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
+    // TODO: Blank line sorts to bottom, but prefer top.
+    langLView->setRowCount(1);
+    langLView->setItem(1, 0, new QTableWidgetItem(""));
+    langLView->setItem(1, 1, new QTableWidgetItem(""));
+    if (m_widget->languageLabel->text().isEmpty()) langLView->selectRow(1);
     int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
     {
         locale = allLocales[ndx];
         language = TalkerCode::languageCodeToLanguage(locale);
-        item = new K3ListViewItem(langLView, language, locale);
-        if (m_talkerCode.fullLanguageCode() == locale) item->setSelected(true);
+        if (!language.isEmpty())
+        {
+            int row = langLView->rowCount();
+            langLView->setRowCount(row + 1);
+            langLView->setItem(row, 0, new QTableWidgetItem(language));
+            langLView->setItem(row, 1, new QTableWidgetItem(locale));
+            if (m_talkerCode.fullLanguageCode() == locale) langLView->selectRow(row);        }
     }
     // Sort by language.
-    langLView->setSorting(0);
-    langLView->sort();
+    langLView->sortItems(0);
     // Display the box in a dialog.
-    KDialogBase* dlg = new KDialogBase(
-        KDialogBase::Swallow,
-        i18n("Select Languages"),
-        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel,
-        KDialogBase::Cancel,
+    KDialog* dlg = new KDialog(
         this,
-        "SelectLanguage_dlg",
-        true,
-        true);
+        i18n("Select Language"),
+        KDialog::Help|KDialog::Ok|KDialog::Cancel);
     hBoxLayout->addWidget(langLView);
     hBox->setLayout(hBoxLayout);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500));
-    // TODO: This isn't working.  Furthermore, item appears selected but is not.
-    langLView->ensureItemVisible(langLView->selectedItem());
+    dlg->setInitialSize(QSize(200, 500));
     int dlgResult = dlg->exec();
     language.clear();
     if (dlgResult == QDialog::Accepted)
     {
-        if (langLView->selectedItem())
-        {
-            language = langLView->selectedItem()->text(0);
-            m_talkerCode.setFullLanguageCode( langLView->selectedItem()->text(1) );
+        int row = langLView->currentRow();
+        if (row > 0) {
+            language = langLView->item(row, 0)->text();
+            m_talkerCode.setFullLanguageCode( langLView->item(row, 1)->text() );
         }
     }
     delete dlg;
