@@ -1,300 +1,332 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>SbdConfWidget</class>
-  <widget class="QWidget" name="SbdConfWidget" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>544</width>
-        <height>315</height>
-      </rect>
-    </property>
-    <property name="sizePolicy" >
-      <sizepolicy>
-        <hsizetype>5</hsizetype>
-        <vsizetype>5</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-      </sizepolicy>
-    </property>
-    <layout class="QGridLayout" >
-      <item row="0" column="0" >
-        <widget class="QLabel" name="textLabel1" >
-          <property name="text" >
-            <string>&lt;b>WARNING: This filter is a key component of the KTTS system. Please read the KTTS Handbook before modifying these settings.&lt;/b></string>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="nameLabel" >
-              <property name="text" >
-                <string>&amp;Name:</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-              <property name="buddy" stdset="0" >
-                <cstring>nameLineEdit</cstring>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >The name of this filter.  Enter any descriptive name you like.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KLineEdit" name="nameLineEdit" >
-              <property name="text" >
-                <string>Standard Sentence Boundary Detector</string>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string>The name of this filter.  Enter any descriptive name you like.</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item row="2" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="reLabel" >
-              <property name="text" >
-                <string>&amp;Sentence boundary regular expression:</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-              <property name="buddy" stdset="0" >
-                <cstring>nameLineEdit</cstring>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >The regular expression that detects boundaries between sentences in text jobs.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KLineEdit" name="reLineEdit" >
-              <property name="whatsThis" stdset="0" >
-                <string>The regular expression that detects boundaries between sentences in text jobs.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KPushButton" name="reButton" >
-              <property name="text" >
-                <string>...</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item row="3" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="sbLabel" >
-              <property name="text" >
-                <string>&amp;Replacement sentence boundary:</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-              <property name="buddy" stdset="0" >
-                <cstring>nameLineEdit</cstring>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >This string replaces the matched regular expression.  &lt;b>Important&lt;/b>: must end with tab (\t).</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KLineEdit" name="sbLineEdit" >
-              <property name="whatsThis" stdset="0" >
-                <string>This string replaces the matched regular expression.  &lt;b>Important&lt;/b>: must end with tab (\t).</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item row="4" column="0" >
-        <widget class="QGroupBox" name="applyGroupBox" >
-          <property name="title" >
-            <string>Apply This &amp;Filter When</string>
-          </property>
-          <property name="whatsThis" stdset="0" >
-            <string>These settings determines when the filter is applied to text.</string>
-          </property>
-          <layout class="QGridLayout" >
-            <item row="0" column="0" >
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="languageLabel" >
-                    <property name="text" >
-                      <string>&amp;Language is:</string>
-                    </property>
-                    <property name="alignment" >
-                      <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0" >
-                      <cstring>languageLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string comment="What's this text" >This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QLabel" name="appIdLabel" >
-                    <property name="text" >
-                      <string>Application &amp;ID contains:</string>
-                    </property>
-                    <property name="alignment" >
-                      <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0" >
-                      <cstring>appIdLineEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="0" column="1" >
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <layout class="QHBoxLayout" >
-                    <property name="margin" >
-                      <number>0</number>
-                    </property>
-                    <item>
-                      <widget class="KLineEdit" name="languageLineEdit" >
-                        <property name="enabled" >
-                          <bool>false</bool>
-                        </property>
-                        <property name="whatsThis" stdset="0" >
-                          <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="KPushButton" name="languageBrowseButton" >
-                        <property name="text" >
-                          <string>...</string>
-                        </property>
-                        <property name="whatsThis" stdset="0" >
-                          <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
-                        </property>
-                      </widget>
-                    </item>
-                  </layout>
-                </item>
-                <item>
-                  <widget class="KLineEdit" name="appIdLineEdit" >
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-          </layout>
-        </widget>
-      </item>
-      <item row="5" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="KPushButton" name="loadButton" >
-              <property name="sizePolicy" >
-                <sizepolicy>
-                  <hsizetype>1</hsizetype>
-                  <vsizetype>0</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                </sizepolicy>
-              </property>
-              <property name="text" >
-                <string>Load...</string>
-              </property>
-              <property name="shortcut" >
-                <string/>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >Click to load a Sentence Boundary Detection configuration from a file.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KPushButton" name="saveButton" >
-              <property name="sizePolicy" >
-                <sizepolicy>
-                  <hsizetype>1</hsizetype>
-                  <vsizetype>0</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                </sizepolicy>
-              </property>
-              <property name="text" >
-                <string>Sa&amp;ve...</string>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >Click to save this Sentence Boundary Detection configuration to a file.</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KPushButton" name="clearButton" >
-              <property name="sizePolicy" >
-                <sizepolicy>
-                  <hsizetype>1</hsizetype>
-                  <vsizetype>0</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                </sizepolicy>
-              </property>
-              <property name="text" >
-                <string>Clea&amp;r</string>
-              </property>
-              <property name="whatsThis" stdset="0" >
-                <string comment="What's this text" >Click to clear everything.</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
+<ui version="4.0" >
+ <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SbdConfWidget</class>
+ <widget class="QWidget" name="SbdConfWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>544</width>
+    <height>315</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>5</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="textLabel1" >
+     <property name="text" >
+      <string>&lt;b>WARNING: This filter is a key component of the KTTS system. Please read the KTTS Handbook before modifying these settings.&lt;/b></string>
+     </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="nameLabel" >
+       <property name="whatsThis" >
+        <string comment="What's this text" >The name of this filter.  Enter any descriptive name you like.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Name:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>nameLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="nameLineEdit" >
+       <property name="whatsThis" >
+        <string>The name of this filter.  Enter any descriptive name you like.</string>
+       </property>
+      </widget>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
-    <tabstop>nameLineEdit</tabstop>
-    <tabstop>reLineEdit</tabstop>
-    <tabstop>reButton</tabstop>
-    <tabstop>sbLineEdit</tabstop>
-    <tabstop>languageLineEdit</tabstop>
-    <tabstop>languageBrowseButton</tabstop>
-    <tabstop>appIdLineEdit</tabstop>
-  </tabstops>
+   </item>
+   <item row="2" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="reLabel" >
+       <property name="whatsThis" >
+        <string comment="What's this text" >The regular expression that detects boundaries between sentences in text jobs.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Sentence boundary regular expression:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>nameLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="reLineEdit" >
+       <property name="whatsThis" >
+        <string>The regular expression that detects boundaries between sentences in text jobs.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="reButton" />
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="sbLabel" >
+       <property name="whatsThis" >
+        <string comment="What's this text" >This string replaces the matched regular expression.  &lt;b>Important&lt;/b>: must end with tab (\t).</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Replacement sentence boundary:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>nameLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="sbLineEdit" >
+       <property name="whatsThis" >
+        <string>This string replaces the matched regular expression.  &lt;b>Important&lt;/b>: must end with tab (\t).</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QGroupBox" name="applyGroupBox" >
+     <property name="whatsThis" >
+      <string>These settings determines when the filter is applied to text.</string>
+     </property>
+     <property name="title" >
+      <string>Apply This &amp;Filter When</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="languageLabel" >
+          <property name="whatsThis" >
+           <string comment="What's this text" >This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+          </property>
+          <property name="text" >
+           <string>&amp;Language is:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>languageLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="appIdLabel" >
+          <property name="whatsThis" >
+           <string>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
+          </property>
+          <property name="text" >
+           <string>Application &amp;ID contains:</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy" >
+           <cstring>appIdLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1" >
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="KLineEdit" name="languageLineEdit" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="whatsThis" >
+             <string>This filter is applied to text jobs of the specified language.  You may select more than one language by clicking the browse button and Ctrl-clicking on more than one in the list.  If blank the filter applies to all text jobs of any language.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="KPushButton" name="languageBrowseButton" >
+            <property name="whatsThis" >
+             <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="KLineEdit" name="appIdLineEdit" >
+          <property name="whatsThis" >
+           <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="KPushButton" name="loadButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Click to load a Sentence Boundary Detection configuration from a file.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="saveButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Click to save this Sentence Boundary Detection configuration to a file.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="clearButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis" >
+        <string>Click to clear everything.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QWidget</extends>
+   <header>kpushbutton.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QWidget</extends>
+   <header>klineedit.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>nameLineEdit</tabstop>
+  <tabstop>reLineEdit</tabstop>
+  <tabstop>reButton</tabstop>
+  <tabstop>sbLineEdit</tabstop>
+  <tabstop>languageLineEdit</tabstop>
+  <tabstop>languageBrowseButton</tabstop>
+  <tabstop>appIdLineEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
 </ui>
