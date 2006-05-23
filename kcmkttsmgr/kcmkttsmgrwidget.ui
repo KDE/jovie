@@ -37,6 +37,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
        <string>&amp;General</string>
@@ -386,6 +389,9 @@
              <widget class="QPushButton" name="notifyTalkerButton" >
               <property name="whatsThis" >
                <string>Click to select the Talker to speak the notification.</string>
+              </property>
+              <property name="text" >
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -1387,20 +1393,6 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QWidget</extends>
-   <header>klineedit.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
@@ -1411,6 +1403,20 @@
    <class>KCModule</class>
    <extends>QWidget</extends>
    <header>kcmodule.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QLineEdit</extends>
+   <header>kurlrequester.h</header>
+   <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
    <container>1</container>
    <pixmap></pixmap>
   </customwidget>

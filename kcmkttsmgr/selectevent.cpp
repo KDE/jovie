@@ -23,13 +23,13 @@
 
 // Qt includes.
 #include <QComboBox>
+#include <QHeaderView>
 
 // KDE includes
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <k3listview.h>
 #include <kiconloader.h>
 
 // KTTS includes
@@ -42,6 +42,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
     setupUi(this);
     // Hide Event Name column.
     eventsListView->setColumnHidden(1, true);
+    eventsListView->verticalHeader()->hide();
     // Load list of event sources (applications).
     QStringList fullpaths =
         KGlobal::dirs()->findAllResources("data", "*/eventsrc", false, true );
@@ -89,7 +90,7 @@ SelectEvent::~SelectEvent() { }
 
 void SelectEvent::slotEventSrcComboBox_activated(int index)
 {
-    eventsListView->clear();
+    eventsListView->setRowCount(0);
     QString eventSrc = m_eventSrcNames[index];
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
@@ -126,8 +127,8 @@ QString SelectEvent::getEventSrc()
 QString SelectEvent::getEvent()
 {
     int row = eventsListView->currentRow();
-    if (row <= 1 || row >= eventsListView->rowCount()) return QString();
-    return eventsListView->itemAt(row, 1)->text();
+    if (row < 0 || row >= eventsListView->rowCount()) return QString();
+    return eventsListView->item(row, 1)->text();
 }
 
 // returns e.g. "kwin/eventsrc" from a given path

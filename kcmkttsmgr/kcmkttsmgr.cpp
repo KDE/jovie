@@ -1400,7 +1400,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         dlgResult = dlg->exec();
         languageCode.clear();
         int row = langLView->currentRow();
-        if (row > 0) languageCode = langLView->itemAt(row, 1)->text();
+        if (row > 0) languageCode = langLView->item(row, 1)->text();
         delete dlg;
         // TODO: Also delete QTableWidget and hBox?
         if (dlgResult != QDialog::Accepted) return;
