@@ -67,8 +67,7 @@ TestPlayer::~TestPlayer()
 
 /**
  * Sets which audio player to use.
- *  0 = aRts
- *  1 = gstreamer
+ *  0 = Phonon (future)
  *  2 = ALSA
  *  3 = aKode
  */
@@ -141,11 +140,6 @@ Player* TestPlayer::createPlayerObject(int playerOption)
     QString plugInName;
     switch(playerOption)
     {
-        case 1 :
-        {
-            plugInName = "kttsd_gstplugin";
-            break;
-        }
         case 2 :
         {
             plugInName = "kttsd_alsaplugin";
@@ -158,7 +152,8 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         }
         default:
         {
-            plugInName = "kttsd_artsplugin";
+            // TODO: Default to ALSA but change to Phonon in future.
+            plugInName = "kttsd_alsaplugin";
             break;
         }
     }

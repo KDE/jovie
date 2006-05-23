@@ -124,19 +124,14 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_lastSeq = 0;
     m_timer = new QTimer(this);
     m_speechData->config->setGroup("General");
-    m_playerOption = m_speechData->config->readEntry("AudioOutputMethod", 0);  // default to aRts.
+    // TODO: Default to ALSA for now, change to Phonon (0) later.
+    m_playerOption = m_speechData->config->readEntry("AudioOutputMethod", 2);
     // Map 50% to 100% onto 2.0 to 0.5.
     m_audioStretchFactor = 1.0/(float(m_speechData->config->readEntry("AudioStretchFactor", 100))/100.0);
     switch (m_playerOption)
     {
-        case 0: break;
-        case 1:
-            m_speechData->config->setGroup("GStreamerPlayer");
-            m_sinkName = m_speechData->config->readEntry("SinkName", "osssink");
-            m_periodSize = m_speechData->config->readEntry("PeriodSize", 128);
-            m_periods = m_speechData->config->readEntry("Periods", 8);
-            m_playerDebugLevel = m_speechData->config->readEntry("DebugLevel", 1);
-            break;
+        case 0:
+        case 1: break;
         case 2:
             m_speechData->config->setGroup("ALSAPlayer");
             m_sinkName = m_speechData->config->readEntry("PcmName", "default");
@@ -1524,11 +1519,6 @@ Player* Speaker::createPlayerObject()
     QString plugInName;
     switch(m_playerOption)
     {
-        case 1 :
-            {
-                plugInName = "kttsd_gstplugin";
-                break;
-            }
         case 2 :
             {
                 plugInName = "kttsd_alsaplugin";
@@ -1541,7 +1531,8 @@ Player* Speaker::createPlayerObject()
             }
         default:
             {
-                plugInName = "kttsd_artsplugin";
+                // TODO: Default to ALSA for now, change to Phonon later.
+                plugInName = "kttsd_alsaplugin";
                 break;
             }
     }
@@ -1559,27 +1550,18 @@ Player* Speaker::createPlayerObject()
     }
     if (player == 0)
     {
-        // If we tried for GStreamer or ALSA plugin and failed, fall back to aRts plugin.
+        // If we failed, fall back to default plugin.
+        // TODO: Default to ALSA for now, change to Phonon later.
         if (m_playerOption != 0)
         {
             kDebug() << "Speaker::createPlayerObject: Could not load " + plugInName + 
-                " plugin.  Falling back to aRts." << endl;
-            m_playerOption = 0;
+                " plugin.  Falling back to ALSA." << endl;
+            m_playerOption = 2;
             return createPlayerObject();
         }
         else
-            kDebug() << "Speaker::createPlayerObject: Could not load aRts plugin.  Is KDEDIRS set  correctly?" << endl;
-    } else
-        // Must have GStreamer >= 0.8.7.  If not, use aRts.
-        if (m_playerOption == 1)
-        {
-            if (!player->requireVersion(0, 8, 7))
-            {
-                delete player;
-                m_playerOption = 0;
-                return createPlayerObject();
-            }
-        }
+            kDebug() << "Speaker::createPlayerObject: Could not load ALSA plugin.  Is KDEDIRS set  correctly?" << endl;
+    }
     if (player) {
         player->setSinkName(m_sinkName);
         player->setPeriodSize(m_periodSize);

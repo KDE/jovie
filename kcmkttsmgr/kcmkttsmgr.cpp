@@ -364,7 +364,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     notifyTestButton->setIcon(
             KGlobal::iconLoader()->loadIcon("speak", K3Icon::Small));
 
-    sinkComboBox->setEditable(false);
     pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
@@ -380,38 +379,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
     sbdButton->setMenu( sbdPopmenu );
 
-    // If aRts is available, enable its radio button.
-    // Determine if available by loading its plugin.  If it fails, not available.
     TestPlayer* testPlayer = new TestPlayer();
-    Player* player = testPlayer->createPlayerObject(0);
-    if (player)
-        artsRadioButton->setEnabled(true);
-    else
-        artsRadioButton->setEnabled(false);
-    delete player;
-    delete testPlayer;
-
-    // If GStreamer is available, enable its radio button.
-    // Determine if available by loading its plugin.  If it fails, not available.
-    testPlayer = new TestPlayer();
-    player = testPlayer->createPlayerObject(1);
-    if (player)
-    {
-        gstreamerRadioButton->setEnabled(true);
-        sinkLabel->setEnabled(true);
-        sinkComboBox->setEnabled(true);
-        QStringList sinkList = player->getPluginList("Sink/Audio");
-        // kDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer Sink List = " << sinkList << endl;
-        sinkComboBox->clear();
-        sinkComboBox->addItems(sinkList);
-    }
-    delete player;
-    delete testPlayer;
 
     // If ALSA is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
     testPlayer = new TestPlayer();
-    player = testPlayer->createPlayerObject(2);
+    Player* player = testPlayer->createPlayerObject(2);
     if (player)
     {
         alsaRadioButton->setEnabled(true);
@@ -547,12 +520,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
             this, SLOT(configChanged()));
 
     // Audio tab.
-    connect(artsRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(gstreamerRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotGstreamerRadioButton_toggled(bool)));
-    connect(sinkComboBox, SIGNAL(activated(int)),
-            this, SLOT(configChanged()));
     connect(alsaRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAlsaRadioButton_toggled(bool)));
     connect(pcmComboBox, SIGNAL(activated(int)),
@@ -691,25 +658,22 @@ void KCMKttsMgr::load()
         notifyListView->scrollToItem( item );
 
     // Audio Output.
-    int audioOutputMethod = 0;
-    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    // TODO: Default to ALSA for now, but change to Phonon (0) in future.
+    int audioOutputMethod = 2;
+//    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
     if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
     audioOutputMethod = m_config->readEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
-        case 0:
-            artsRadioButton->setChecked(true);
-            break;
-        case 1:
-            gstreamerRadioButton->setChecked(true);
-            break;
         case 2:
             alsaRadioButton->setChecked(true);
             break;
         case 3:
             akodeRadioButton->setChecked(true);
             break;
+        default:
+            alsaRadioButton->setChecked(true);
     }
     timeBox->setValue(m_config->readEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(timeBox->value());
@@ -877,10 +841,6 @@ void KCMKttsMgr::load()
     showMainWindowOnStartupCheckBox->setEnabled(
         embedInSysTrayCheckBox->isChecked());
 
-    // GStreamer settings.
-    m_config->setGroup("GStreamerPlayer");
-    KttsUtils::setCbItemFromText(sinkComboBox, m_config->readEntry("SinkName", "osssink"));
-
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
     KttsUtils::setCbItemFromText(pcmComboBox, m_config->readEntry("PcmName", "default"));
@@ -895,7 +855,6 @@ void KCMKttsMgr::load()
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
-    slotGstreamerRadioButton_toggled(gstreamerRadioButton->isChecked());
     slotAlsaRadioButton_toggled(alsaRadioButton->isChecked());
     slotAkodeRadioButton_toggled(akodeRadioButton->isChecked());
 
@@ -963,8 +922,8 @@ void KCMKttsMgr::save()
     saveNotifyEventsToFile( locateLocal("config", "kttsd_notifyevents.xml") );
 
     // Audio Output.
-    int audioOutputMethod = 0;
-    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
+    int audioOutputMethod = 2;
+    // if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
     if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
@@ -1022,10 +981,6 @@ void KCMKttsMgr::save()
             if (!filterIDsList.contains(groupFilterID)) m_config->deleteGroup(groupName);
         }
     }
-
-    // GStreamer settings.
-    m_config->setGroup("GStreamerPlayer");
-    m_config->writeEntry("SinkName", sinkComboBox->currentText());
 
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
@@ -1170,10 +1125,11 @@ void KCMKttsMgr::defaults() {
             break;
 
         case wpAudio:
-            if (!artsRadioButton->isChecked())
+            // TODO: Default to ALSA for now but change to Phonon later.
+            if (!alsaRadioButton->isChecked())
             {
                 changed = true;
-                artsRadioButton->setChecked(true);
+                alsaRadioButton->setChecked(true);
             }
             if (timeBox->value() != timeBoxValue)
             {
@@ -1939,16 +1895,6 @@ void KCMKttsMgr::slotTextPostSndCheck_toggled(bool checked)
 }
 
 /**
-* This signal is emitted whenever user checks/unchecks the GStreamer radio button.
-*/
-void KCMKttsMgr::slotGstreamerRadioButton_toggled(bool state)
-{
-    sinkLabel->setEnabled(state);
-    sinkComboBox->setEnabled(state);
-    configChanged();
-}
-
-/**
 * This signal is emitted whenever user checks/unchecks the ALSA radio button.
 */
 void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
@@ -2207,13 +2153,6 @@ void KCMKttsMgr::configureTalker()
     // Create a Player object for the plugin to use for testing.
     int playerOption = 0;
     QString sinkName;
-    if (gstreamerRadioButton->isChecked()) {
-        playerOption = 1;
-        if (pcmComboBox->currentText() == "custom")
-            sinkName = pcmCustom->text();
-        else
-            sinkName = pcmComboBox->currentText();
-    }
     if (alsaRadioButton->isChecked()) {
         playerOption = 2;
         sinkName = pcmComboBox->currentText();

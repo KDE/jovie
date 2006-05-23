@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>659</width>
-    <height>333</height>
+    <width>527</width>
+    <height>303</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -1008,22 +1008,6 @@
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="3" column="0" colspan="2" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="1" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
          <property name="margin" >
@@ -1167,6 +1151,22 @@
          </property>
         </spacer>
        </item>
+       <item row="3" column="0" colspan="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="audioButtonGroup" >
          <property name="sizePolicy" >
@@ -1190,153 +1190,7 @@
           <property name="spacing" >
            <number>6</number>
           </property>
-          <item row="3" column="0" >
-           <widget class="QRadioButton" name="akodeRadioButton" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="whatsThis" >
-             <string>&lt;p>Check to use aKode for audio output.  You must also select a &lt;b>Sink&lt;/b>.&lt;/p></string>
-            </property>
-            <property name="text" >
-             <string>aKode</string>
-            </property>
-            <property name="shortcut" >
-             <string/>
-            </property>
-            <property name="checked" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" >
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="akodeSinkLabel" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="whatsThis" >
-               <string>Select the sound sink to be used for aKode output.</string>
-              </property>
-              <property name="text" >
-               <string>Sink:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KComboBox" name="akodeComboBox" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>Select the sink to be used for aKode output.  Select "auto" to let aKode pick the best output method.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0" >
-           <widget class="QRadioButton" name="alsaRadioButton" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="whatsThis" >
-             <string>Check to use Advanced Linux Sound Architecture (ALSA) for audio output.</string>
-            </property>
-            <property name="text" >
-             <string>ALSA</string>
-            </property>
-            <property name="shortcut" >
-             <string/>
-            </property>
-            <property name="checked" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QRadioButton" name="gstreamerRadioButton" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="whatsThis" >
-             <string>&lt;p>Check to use the GStreamer audio output system.  You must also select a &lt;b>Sink&lt;/b> plugin.&lt;/p></string>
-            </property>
-            <property name="text" >
-             <string>GStrea&amp;mer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" >
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="sinkLabel" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="whatsThis" >
-               <string>Select the sound sink to be used for GStreamer output.</string>
-              </property>
-              <property name="text" >
-               <string>Sink:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KComboBox" name="sinkComboBox" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>Select the sound sink to be used for GStreamer output.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0" colspan="2" >
-           <widget class="QRadioButton" name="artsRadioButton" >
-            <property name="whatsThis" >
-             <string>Check to use the KDE aRts system for audio output.</string>
-            </property>
-            <property name="text" >
-             <string>a&amp;Rts</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1" >
+          <item row="0" column="1" >
            <layout class="QHBoxLayout" >
             <property name="margin" >
              <number>0</number>
@@ -1380,6 +1234,85 @@
             </item>
            </layout>
           </item>
+          <item row="0" column="0" >
+           <widget class="QRadioButton" name="alsaRadioButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="whatsThis" >
+             <string>Check to use Advanced Linux Sound Architecture (ALSA) for audio output.</string>
+            </property>
+            <property name="text" >
+             <string>ALSA</string>
+            </property>
+            <property name="shortcut" >
+             <string/>
+            </property>
+            <property name="checked" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="akodeSinkLabel" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="whatsThis" >
+               <string>Select the sound sink to be used for aKode output.</string>
+              </property>
+              <property name="text" >
+               <string>Sink:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KComboBox" name="akodeComboBox" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="whatsThis" >
+               <string>Select the sink to be used for aKode output.  Select "auto" to let aKode pick the best output method.</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QRadioButton" name="akodeRadioButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="whatsThis" >
+             <string>&lt;p>Check to use aKode for audio output.  You must also select a &lt;b>Sink&lt;/b>.&lt;/p></string>
+            </property>
+            <property name="text" >
+             <string>aKode</string>
+            </property>
+            <property name="shortcut" >
+             <string/>
+            </property>
+            <property name="checked" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -1392,13 +1325,6 @@
  <layoutdefault spacing="6" margin="6" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
   <customwidget>
    <class>KCModule</class>
    <extends>QWidget</extends>
@@ -1418,6 +1344,13 @@
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
    <container>1</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+   <container>0</container>
    <pixmap></pixmap>
   </customwidget>
  </customwidgets>
@@ -1459,8 +1392,6 @@
   <tabstop>textPostMsg</tabstop>
   <tabstop>textPostSndCheck</tabstop>
   <tabstop>textPostSnd</tabstop>
-  <tabstop>artsRadioButton</tabstop>
-  <tabstop>sinkComboBox</tabstop>
   <tabstop>pcmComboBox</tabstop>
   <tabstop>akodeComboBox</tabstop>
   <tabstop>timeBox</tabstop>
