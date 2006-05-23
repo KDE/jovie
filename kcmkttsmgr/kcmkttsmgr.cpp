@@ -1396,7 +1396,9 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         hBox->setLayout(hBoxLayout);
         dlg->setMainWidget(hBox);
         dlg->setHelp("select-plugin", "kttsd");
-        dlg->setInitialSize(QSize(200, 500));
+        QSize size = langLView->minimumSize();
+        size.setHeight(500);
+        langLView->setMinimumSize(size);
         dlgResult = dlg->exec();
         languageCode.clear();
         int row = langLView->currentRow();
@@ -2196,7 +2198,6 @@ void KCMKttsMgr::configureTalker()
         this,
         i18n("Talker Configuration"),
         KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
-    m_configDlg->setInitialSize(QSize(700, 300));
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
     m_configDlg->enableButtonOK(false);
@@ -2247,7 +2248,6 @@ void KCMKttsMgr::configureFilter()
         this,
         i18n("Filter Configuration"),
         KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
-    m_configDlg->setInitialSize(QSize(600, 450));
     m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);
@@ -2742,7 +2742,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
         KDialog::Help|KDialog::Ok|KDialog::Cancel);
     SelectEvent* selectEventWidget = new SelectEvent( dlg, eventSrc );
     dlg->setMainWidget( selectEventWidget );
-    dlg->setInitialSize( QSize(500, 400) );
+//    dlg->setInitialSize( QSize(500, 400) );
     // dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
     eventSrc = selectEventWidget->getEventSrc();

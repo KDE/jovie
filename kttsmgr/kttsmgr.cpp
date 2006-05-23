@@ -115,7 +115,7 @@ int main (int argc, char *argv[])
         tray = new KttsMgrTray(&dlg);
         tray->show();
     }
-    else app.setMainWidget(&dlg);
+//    else app.setMainWidget(&dlg);
 
     if (showMainWindowOnStartup)
     {

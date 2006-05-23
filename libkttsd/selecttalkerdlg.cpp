@@ -206,7 +206,10 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     hBox->setLayout(hBoxLayout);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(200, 500));
+    QSize minSize = hBox->minimumSize();
+    minSize.setHeight(500);
+    hBox->setMinimumSize(minSize);
+//    dlg->setInitialSize(QSize(200, 500));
     int dlgResult = dlg->exec();
     language.clear();
     if (dlgResult == QDialog::Accepted)
