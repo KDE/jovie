@@ -419,7 +419,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 
     // Set up Keep Audio Path KURLRequestor.
     keepAudioPath->setMode(KFile::Directory);
-    keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
+    keepAudioPath->setUrl(locateLocal("data", "kttsd/audio/"));
 
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
@@ -615,7 +615,7 @@ void KCMKttsMgr::load()
     textPreMsg->setEnabled(textPreMsgCheck->isChecked());
 
     textPreSndCheck->setChecked(m_config->readEntry("TextPreSndEnabled", QVariant(textPreSndCheckValue)).toBool());
-    textPreSnd->setURL(m_config->readEntry("TextPreSnd", textPreSndValue));
+    textPreSnd->setUrl(m_config->readEntry("TextPreSnd", textPreSndValue));
     textPreSnd->setEnabled(textPreSndCheck->isChecked());
 
     textPostMsgCheck->setChecked(m_config->readEntry("TextPostMsgEnabled", QVariant(textPostMsgCheckValue)).toBool());
@@ -623,7 +623,7 @@ void KCMKttsMgr::load()
     textPostMsg->setEnabled(textPostMsgCheck->isChecked());
 
     textPostSndCheck->setChecked(m_config->readEntry("TextPostSndEnabled", QVariant(textPostSndCheckValue)).toBool());
-    textPostSnd->setURL(m_config->readEntry("TextPostSnd", textPostSndValue));
+    textPostSnd->setUrl(m_config->readEntry("TextPostSnd", textPostSndValue));
     textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
     // Overall settings.
@@ -679,9 +679,9 @@ void KCMKttsMgr::load()
     timeBox_valueChanged(timeBox->value());
     keepAudioCheckBox->setChecked(
         m_config->readEntry("KeepAudio", QVariant(keepAudioCheckBox->isChecked())).toBool());
-    keepAudioPath->setURL(
+    keepAudioPath->setUrl(
         m_config->readEntry("KeepAudioPath",
-        keepAudioPath->url()));
+        keepAudioPath->url().path()));
     keepAudioPath->setEnabled(keepAudioCheckBox->isChecked());
 
     // Last filter ID.  Used to generate a new ID for an added filter.
@@ -702,7 +702,7 @@ void KCMKttsMgr::load()
     }
 
     // Query for all the KCMKTTSD SynthPlugins and store the list in offers.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
 
     // Iterate thru the possible plug ins getting their language support codes.
     for(int i=0; i < offers.count() ; ++i)
@@ -773,7 +773,7 @@ void KCMKttsMgr::load()
 
     // Add at least one unchecked instance of each available filter plugin if there is
     // not already at least one instance and the filter can autoconfig itself.
-    offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
     for (int i=0; i < offers.count() ; ++i)
     {
         QString filterPlugInName = offers[i]->name();
@@ -929,7 +929,7 @@ void KCMKttsMgr::save()
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
     m_config->writeEntry("AudioStretchFactor", timeBox->value());
     m_config->writeEntry("KeepAudio", keepAudioCheckBox->isChecked());
-    m_config->writeEntry("KeepAudioPath", keepAudioPath->url());
+    m_config->writeEntry("KeepAudioPath", keepAudioPath->url().path());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
@@ -1100,7 +1100,7 @@ void KCMKttsMgr::defaults() {
             if (textPreSnd->url() != textPreSndValue)
             {
                 changed = true;
-                textPreSnd->setURL(textPreSndValue);
+                textPreSnd->setUrl(textPreSndValue);
             }
             if (textPostMsgCheck->isChecked() != textPostMsgCheckValue)
             {
@@ -1120,7 +1120,7 @@ void KCMKttsMgr::defaults() {
             if (textPostSnd->url() != textPostSndValue)
             {
                 changed = true;
-                textPostSnd->setURL(textPostSndValue);
+                textPostSnd->setUrl(textPostSndValue);
             }
             break;
 
@@ -1145,7 +1145,7 @@ void KCMKttsMgr::defaults() {
             if (keepAudioPath->url() != locateLocal("data", "kttsd/audio/"))
             {
                 changed = true;
-                keepAudioPath->setURL(locateLocal("data", "kttsd/audio/"));
+                keepAudioPath->setUrl(locateLocal("data", "kttsd/audio/"));
             }
             keepAudioPath->setEnabled(keepAudioCheckBox->isEnabled());
     }
@@ -1212,7 +1212,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
     // kDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
     // Find the plugin.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin",
         QString("DesktopEntryName == '%1'").arg(name));
 
     if (offers.count() == 1)
@@ -1256,7 +1256,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
     // kDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
     // Find the plugin.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
         QString("DesktopEntryName == '%1'").arg(plugInName));
 
     if (offers.count() == 1)
@@ -1487,7 +1487,7 @@ void KCMKttsMgr::addFilter( bool sbd)
         }
     }
     // Append those available plugins not yet in the list at all.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
     for (int i=0; i < offers.count() ; ++i)
     {
         QString filterPlugInName = offers[i]->name();
@@ -2287,7 +2287,7 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+	KService::List  offers =  KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
     return QString::null;
@@ -2301,7 +2301,7 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName)
 {
     if (desktopEntryName.isEmpty()) return QString();
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
         QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)

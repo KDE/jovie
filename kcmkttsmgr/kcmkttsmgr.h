@@ -33,7 +33,6 @@
 
 // KDE includes.
 #include <kcmodule.h>
-#include <ktrader.h>
 #include <kdebug.h>
 #include <kparts/part.h>
 

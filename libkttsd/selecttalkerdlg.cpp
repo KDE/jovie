@@ -33,11 +33,11 @@
 // KDE includes.
 #include <kdialog.h>
 #include <kcombobox.h>
-#include <ktrader.h>
 #include <kpushbutton.h>
 #include <klineedit.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kservicetypetrader.h>
 
 // KTTS includes.
 #include "utils.h"
@@ -89,7 +89,7 @@ SelectTalkerDlg::SelectTalkerDlg(
 
     cb = m_widget->synthComboBox;
     cb->addItem( QString() );
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
     for(int i=0; i < offers.count() ; ++i)
         cb->addItem(offers[i]->name());
 

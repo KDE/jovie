@@ -26,9 +26,8 @@
 // KDE includes.
 #include <kdebug.h>
 #include <kparts/componentfactory.h>
-#include <ktrader.h>
 #include <kstandarddirs.h>
-
+#include <kservicetypetrader.h>
 // KTTS includes.
 #include "pluginconf.h"
 #include "talkermgr.h"
@@ -106,7 +105,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
 
             // Find the KTTSD SynthPlugin.
-            KTrader::OfferList offers = KTrader::self()->query(
+			KService::List offers = KServiceTypeTrader::self()->query(
                 "KTTSD/SynthPlugin", QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
             if(offers.count() > 1){
@@ -318,7 +317,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     QString talkerID = QString::number(lastTalkerID + 1);
 
     // Query for all the KTTSD SynthPlugins.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
 
     // Iterate thru the possible plug ins.
     for(int i=0; i < offers.count() ; ++i)

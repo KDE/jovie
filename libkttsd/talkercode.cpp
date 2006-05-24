@@ -25,9 +25,8 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktrader.h>
 #include <kdebug.h>
-
+#include <kservicetypetrader.h>
 // TalkerCode includes.
 #include "talkercode.h"
 //Added by qt3to4:
@@ -504,7 +503,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 /*static*/ QString TalkerCode::TalkerNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
+    KService::List  offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
     return QString::null;
@@ -518,7 +517,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 /*static*/ QString TalkerCode::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
 {
     if (desktopEntryName.isEmpty()) return QString();
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin",
     QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)

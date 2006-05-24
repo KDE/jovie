@@ -29,9 +29,9 @@
 // KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
-#include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <klocale.h>
+#include <kservicetypetrader.h>
 
 // FilterMgr includes.
 #include "filtermgr.h"
@@ -354,7 +354,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
     // kDebug() << "FilterMgr::loadFilterPlugin: Running"<< endl;
 
     // Find the plugin.
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
         QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
@@ -400,7 +400,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
     QString("Name == '%1'").arg(name));
 
     if (offers.count() == 1)

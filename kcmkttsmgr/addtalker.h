@@ -70,7 +70,7 @@ private:
     void setSynthToLangMap(SynthToLangMap synthToLangMap);
 
     // Converts a language code plus optional country code to language description.
-    QString AddTalker::languageCodeToLanguage(const QString &languageCode);
+    QString languageCodeToLanguage(const QString &languageCode);
 
     // QMap of language descriptions to language codes.
     QMap<QString,QString> m_languageToLanguageCodeMap;

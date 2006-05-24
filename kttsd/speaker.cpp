@@ -30,10 +30,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kparts/componentfactory.h>
-#include <ktrader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
+#include <kservicetypetrader.h>
 //#include <kio/job.h>
 
 // KTTSD includes.
@@ -1536,7 +1536,7 @@ Player* Speaker::createPlayerObject()
                 break;
             }
     }
-    KTrader::OfferList offers = KTrader::self()->query(
+	KService::List offers = KServiceTypeTrader::self()->query(
             "KTTSD/AudioPlugin", QString("DesktopEntryName == '%1'").arg(plugInName));
 
     if(offers.count() == 1)

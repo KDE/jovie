@@ -41,12 +41,11 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kregexpeditorinterface.h>
-#include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <khbox.h>
-
+#include <kservicetypetrader.h>
 // KTTS includes.
 #include "filterconf.h"
 
@@ -97,7 +96,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
         this, SLOT(configChanged()));
 
     // Determine if kdeutils Regular Expression Editor is installed.
-    m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
+    m_reEditorInstalled = !KServiceTypeTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
 
     // Set up defaults.
     defaults();

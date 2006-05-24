@@ -33,9 +33,9 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kregexpeditorinterface.h>
-#include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kfiledialog.h>
+#include <kservicetypetrader.h>
 
 // KTTS includes.
 #include "selecttalkerdlg.h"
@@ -57,7 +57,7 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList & args)
     setupUi(this);
 
     // Determine if kdeutils Regular Expression Editor is installed.
-    m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
+    m_reEditorInstalled = !KServiceTypeTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
     reEditorButton->setEnabled(m_reEditorInstalled);
 
     connect(nameLineEdit, SIGNAL(textChanged(const QString&)),

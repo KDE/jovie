@@ -94,8 +94,8 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::load: Running" << endl;
     config->setGroup( configGroup );
     nameLineEdit->setText( config->readEntry( "UserFilterName", nameLineEdit->text() ) );
-    xsltPath->setURL( config->readEntry( "XsltFilePath", xsltPath->url() ) );
-    xsltprocPath->setURL( config->readEntry( "XsltprocPath", xsltprocPath->url() ) );
+    xsltPath->setUrl( config->readEntry( "XsltFilePath", xsltPath->url().path() ) );
+    xsltprocPath->setUrl( config->readEntry( "XsltprocPath", xsltprocPath->url().path() ) );
     rootElementLineEdit->setText(
             config->readEntry( "RootElement", rootElementLineEdit->text() ) );
     doctypeLineEdit->setText(
@@ -137,9 +137,9 @@ void XmlTransformerConf::defaults(){
     // Default name.
     nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
-    xsltPath->setURL( locate("data", "kttsd/xmltransformer/") );
+    xsltPath->setUrl( locate("data", "kttsd/xmltransformer/") );
     // Default path to xsltproc.
-    xsltprocPath->setURL( "xsltproc" );
+    xsltprocPath->setUrl( KUrl("xsltproc") );
     // Default root element to "html".
     rootElementLineEdit->setText( "html" );
     // Default doctype to blank.

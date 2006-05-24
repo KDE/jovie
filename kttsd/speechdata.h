@@ -678,7 +678,7 @@ class SpeechData : public QObject {
         * If appId is NULL, returns the last job in the queue.
         * Does not change textJobs.current().
         */
-        mlJob* SpeechData::findAJobByAppId(const QByteArray& appId);
+        mlJob* findAJobByAppId(const QByteArray& appId);
 
         /**
         * Given a job and a sequence number, returns the part that sentence is in.
@@ -698,7 +698,7 @@ class SpeechData : public QObject {
         * @return               List of parsed sentences.
         */
 
-        QStringList SpeechData::parseText(const QString &text, const QByteArray &appId);
+        QStringList parseText(const QString &text, const QByteArray &appId);
 
         /**
         * Delete expired jobs.  At most, one finished job is kept on the queue.
