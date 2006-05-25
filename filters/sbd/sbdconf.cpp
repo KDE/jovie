@@ -46,6 +46,7 @@
 
 // KTTS includes.
 #include "filterconf.h"
+#include "selectlanguagedlg.h"
 
 // SBD includes.
 #include "sbdconf.h"
@@ -227,60 +228,18 @@ void SbdConf::slotReButton_clicked()
 
 void SbdConf::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host K3ListView.
-    KHBox* hBox = new KHBox(this);
-    // Create a K3ListView and fill with all known languages.
-    K3ListView* langLView = new K3ListView(hBox);
-    langLView->addColumn(i18n("Language"));
-    langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(Q3ListView::Extended);
-    QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-    QString locale;
-    QString languageCode;
-    QString countryCode;
-    QString charSet;
-    QString language;
-    // Blank line so user can select no language.
-    Q3ListViewItem* item = new K3ListViewItem(langLView, "", "");
-    if (m_languageCodeList.isEmpty()) item->setSelected(true);
-    const int allLocalesCount = allLocales.count();
-    for (int ndx=0; ndx < allLocalesCount; ++ndx)
-    {
-        locale = allLocales[ndx];
-        KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);
-        language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
-        if (!countryCode.isEmpty()) language +=
-            " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        Q3ListViewItem* item = new K3ListViewItem(langLView, language, locale);
-        if (m_languageCodeList.contains(locale)) item->setSelected(true);
-    }
-    // Sort by language.
-    langLView->setSorting(0);
-    langLView->sort();
-    // Display the box in a dialog.
-    KDialog* dlg = new KDialog(
+    SelectLanguageDlg* dlg = new SelectLanguageDlg(
         this,
         i18n("Select Languages"),
-        KDialog::Help|KDialog::Ok|KDialog::Cancel);
-    dlg->setMainWidget(hBox);
-    dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500));
+        QStringList(m_languageCodeList),
+        SelectLanguageDlg::MultipleSelect,
+        SelectLanguageDlg::BlankAllowed);
     int dlgResult = dlg->exec();
-    languageCode.clear();
     if (dlgResult == QDialog::Accepted)
-    {
-        m_languageCodeList.clear();
-        Q3ListViewItem* item = langLView->firstChild();
-        while (item)
-        {
-            if (item->isSelected()) m_languageCodeList += item->text(1);
-            item = item->nextSibling();
-        }
-    }
+        m_languageCodeList = dlg->selectedLanguageCodes();
     delete dlg;
-    // TODO: Also delete K3ListView and QHBox?
     if (dlgResult != QDialog::Accepted) return;
-    language = "";
+    QString language("");
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
         if (!language.isEmpty()) language += ",";

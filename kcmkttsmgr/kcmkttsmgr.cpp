@@ -62,6 +62,7 @@
 #include "testplayer.h"
 #include "player.h"
 #include "selecttalkerdlg.h"
+#include "selectlanguagedlg.h"
 #include "selectevent.h"
 #include "notify.h"
 #include "utils.h"
@@ -1313,52 +1314,14 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
     {
-        // Create a  QHBox to host QTableWidget.
-        QWidget* hBox = new QWidget;
-        hBox->setObjectName("SelectLanguage_hbox");
-        QHBoxLayout* hBoxLayout = new QHBoxLayout;
-        hBoxLayout->setMargin(0);
-        // Create a QTableWidget and fill with all known languages.
-        QTableWidget* langLView = new QTableWidget( hBox );
-        langLView->setColumnCount(2);
-        langLView->verticalHeader()->hide();
-        langLView->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Language")));
-        langLView->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Code")));
-        QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-        QString locale;
-        QString countryCode;
-        QString charSet;
-        QString language;
-        const int allLocalesCount = allLocales.count();
-        for (int ndx=0; ndx < allLocalesCount; ++ndx)
-        {
-            locale = allLocales[ndx];
-            language = TalkerCode::languageCodeToLanguage(locale);
-            if (!language.isEmpty()) {
-                int row = langLView->rowCount();
-                langLView->setRowCount(row + 1);
-                langLView->setItem(row, 0, new QTableWidgetItem(language));
-                langLView->setItem(row, 1, new QTableWidgetItem(locale));
-            }
-        }
-        // Sort by language.
-        langLView->sortItems(0);
-        // Display the box in a dialog.
-        KDialog* dlg = new KDialog(
+        SelectLanguageDlg* dlg = new SelectLanguageDlg(
             this,
             i18n("Select Language"),
-            KDialog::Help|KDialog::Ok|KDialog::Cancel);
-        hBoxLayout->addWidget(langLView);
-        hBox->setLayout(hBoxLayout);
-        dlg->setMainWidget(hBox);
-        dlg->setHelp("select-plugin", "kttsd");
-        QSize size = langLView->minimumSize();
-        size.setHeight(500);
-        langLView->setMinimumSize(size);
-        dlgResult = dlg->exec();
-        languageCode.clear();
-        int row = langLView->currentRow();
-        if (row > 0) languageCode = langLView->item(row, 1)->text();
+            QStringList(),
+            SelectLanguageDlg::SingleSelect,
+            SelectLanguageDlg::BlankNotAllowed);
+        int dlgResult = dlg->exec();
+        languageCode = dlg->selectedLanguageCode();
         delete dlg;
         // TODO: Also delete QTableWidget and hBox?
         if (dlgResult != QDialog::Accepted) return;

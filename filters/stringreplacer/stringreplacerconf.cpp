@@ -46,7 +46,9 @@
 #include <kmessagebox.h>
 #include <khbox.h>
 #include <kservicetypetrader.h>
+
 // KTTS includes.
+#include "selectlanguagedlg.h"
 #include "filterconf.h"
 
 // StringReplacer includes.
@@ -412,72 +414,18 @@ QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
 
 void StringReplacerConf::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host QTableWidget.
-    KHBox* hBox = new KHBox(this);
-    // Create a QTableWidget and fill with all known languages.
-    QTableWidget* langLView = new QTableWidget(hBox);
-    langLView->verticalHeader()->hide();
-    langLView->setColumnCount(2);
-    langLView->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Language")));
-    langLView->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Code")));
-    langLView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    langLView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-    QString locale;
-    QString languageCode;
-    QString countryCode;
-    QString charSet;
-    QString language;
-    // Blank line so user can select no language.
-    langLView->setRowCount(1);
-    langLView->setItem(1, 0, new QTableWidgetItem(""));
-    langLView->setItem(1, 1, new QTableWidgetItem(""));
-    if (m_languageCodeList.isEmpty()) langLView->selectRow(1);
-    const int allLocalesCount = allLocales.count();
-    for (int ndx=0; ndx < allLocalesCount; ++ndx)
-    {
-        locale = allLocales[ndx];
-        KGlobal::locale()->splitLocale(locale, languageCode, countryCode, charSet);
-        language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
-        if (!countryCode.isEmpty()) language +=
-            " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        if (!language.isEmpty())
-        {
-            int row = langLView->rowCount();
-            langLView->setRowCount(row + 1);
-            langLView->setItem(row, 0, new QTableWidgetItem(language));
-            langLView->setItem(row, 1, new QTableWidgetItem(locale));
-            if (m_languageCodeList.contains(locale)) langLView->selectRow(row);
-        }
-    }
-    // Sort by language.
-    langLView->sortItems(0);
-    // Display the box in a dialog.
-    KDialog* dlg = new KDialog(
+    SelectLanguageDlg* dlg = new SelectLanguageDlg(
         this,
         i18n("Select Languages"),
-        KDialog::Help|KDialog::Ok|KDialog::Cancel);
-    dlg->setMainWidget(hBox);
-    dlg->setHelp("", "kttsd");
-    QSize minSize = hBox->minimumSize();
-    minSize.setHeight(500);
-    hBox->setMinimumSize(minSize);
-//    dlg->setInitialSize(QSize(300, 500));
+        QStringList(m_languageCodeList),
+        SelectLanguageDlg::MultipleSelect,
+        SelectLanguageDlg::BlankAllowed);
     int dlgResult = dlg->exec();
-    languageCode.clear();
     if (dlgResult == QDialog::Accepted)
-    {
-        m_languageCodeList.clear();
-        for (int row = 1; row < langLView->rowCount(); ++row)
-        {
-            if (langLView->isItemSelected(langLView->item(row, 1)))
-                m_languageCodeList += langLView->item(row, 1)->text();
-        }
-    }
+        m_languageCodeList = dlg->selectedLanguageCodes();
     delete dlg;
-    // TODO: Also delete QTableWidget and QHBox?
     if (dlgResult != QDialog::Accepted) return;
-    language = "";
+    QString language("");
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
         if (!language.isEmpty()) language += ",";
