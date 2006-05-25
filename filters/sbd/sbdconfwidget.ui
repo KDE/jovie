@@ -102,7 +102,11 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="reButton" />
+      <widget class="KPushButton" name="reButton" >
+       <property name="text" >
+        <string>...</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -227,6 +231,9 @@
             <property name="whatsThis" >
              <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
             </property>
+            <property name="text" >
+             <string>...</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -264,6 +271,9 @@
        <property name="whatsThis" >
         <string>Click to load a Sentence Boundary Detection configuration from a file.</string>
        </property>
+       <property name="text" >
+        <string>Lo&amp;ad...</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -278,6 +288,9 @@
        </property>
        <property name="whatsThis" >
         <string>Click to save this Sentence Boundary Detection configuration to a file.</string>
+       </property>
+       <property name="text" >
+        <string>Sa&amp;ve...</string>
        </property>
       </widget>
      </item>
@@ -294,6 +307,9 @@
        <property name="whatsThis" >
         <string>Click to clear everything.</string>
        </property>
+       <property name="text" >
+        <string>Cl&amp;ear</string>
+       </property>
       </widget>
      </item>
     </layout>
@@ -305,14 +321,14 @@
  <customwidgets>
   <customwidget>
    <class>KPushButton</class>
-   <extends>QWidget</extends>
+   <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
    <container>1</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QWidget</extends>
+   <extends>QLineEdit</extends>
    <header>klineedit.h</header>
    <container>1</container>
    <pixmap></pixmap>
