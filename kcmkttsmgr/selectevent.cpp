@@ -43,6 +43,8 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
     // Hide Event Name column.
     eventsListView->setColumnHidden(1, true);
     eventsListView->verticalHeader()->hide();
+    eventsListView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    
     // Load list of event sources (applications).
     QStringList fullpaths =
         KGlobal::dirs()->findAllResources("data", "*/eventsrc", false, true );

@@ -71,6 +71,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
 
     substLView->setSortingEnabled(false);
     substLView->verticalHeader()->hide();
+    substLView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
     connect(nameLineEdit, SIGNAL(textChanged(const QString&)),
         this, SLOT(configChanged()));
