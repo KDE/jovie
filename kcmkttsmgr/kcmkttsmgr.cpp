@@ -419,7 +419,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 
     // Set up Keep Audio Path KURLRequestor.
     keepAudioPath->setMode(KFile::Directory);
-    keepAudioPath->setUrl(locateLocal("data", "kttsd/audio/"));
+    keepAudioPath->setUrl(KUrl::fromPath(locateLocal("data", "kttsd/audio/")));
 
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
@@ -615,7 +615,7 @@ void KCMKttsMgr::load()
     textPreMsg->setEnabled(textPreMsgCheck->isChecked());
 
     textPreSndCheck->setChecked(m_config->readEntry("TextPreSndEnabled", QVariant(textPreSndCheckValue)).toBool());
-    textPreSnd->setUrl(m_config->readEntry("TextPreSnd", textPreSndValue));
+    textPreSnd->setUrl(KUrl::fromPath(m_config->readEntry("TextPreSnd", textPreSndValue)));
     textPreSnd->setEnabled(textPreSndCheck->isChecked());
 
     textPostMsgCheck->setChecked(m_config->readEntry("TextPostMsgEnabled", QVariant(textPostMsgCheckValue)).toBool());
@@ -623,7 +623,7 @@ void KCMKttsMgr::load()
     textPostMsg->setEnabled(textPostMsgCheck->isChecked());
 
     textPostSndCheck->setChecked(m_config->readEntry("TextPostSndEnabled", QVariant(textPostSndCheckValue)).toBool());
-    textPostSnd->setUrl(m_config->readEntry("TextPostSnd", textPostSndValue));
+    textPostSnd->setUrl(KUrl::fromPath(m_config->readEntry("TextPostSnd", textPostSndValue)));
     textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
     // Overall settings.
@@ -679,9 +679,9 @@ void KCMKttsMgr::load()
     timeBox_valueChanged(timeBox->value());
     keepAudioCheckBox->setChecked(
         m_config->readEntry("KeepAudio", QVariant(keepAudioCheckBox->isChecked())).toBool());
-    keepAudioPath->setUrl(
+    keepAudioPath->setUrl(KUrl::fromPath(
         m_config->readEntry("KeepAudioPath",
-        keepAudioPath->url().path()));
+        keepAudioPath->url().path())));
     keepAudioPath->setEnabled(keepAudioCheckBox->isChecked());
 
     // Last filter ID.  Used to generate a new ID for an added filter.
@@ -884,13 +884,13 @@ void KCMKttsMgr::save()
     m_config->writeEntry("TextPreMsg", textPreMsg->text());
 
     m_config->writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked()); 
-    m_config->writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url()));
+    m_config->writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
 
     m_config->writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
     m_config->writeEntry("TextPostMsg", textPostMsg->text());
 
     m_config->writeEntry("TextPostSndEnabled", textPostSndCheck->isChecked());
-    m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url()));
+    m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
 
     // Overall settings.
     m_config->writeEntry("EmbedInSysTray", embedInSysTrayCheckBox->isChecked());
@@ -1097,10 +1097,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 textPreSndCheck->setChecked(textPreSndCheckValue);
             }
-            if (textPreSnd->url() != textPreSndValue)
+            if (textPreSnd->url().path() != textPreSndValue)
             {
                 changed = true;
-                textPreSnd->setUrl(textPreSndValue);
+                textPreSnd->setUrl(KUrl::fromPath(textPreSndValue));
             }
             if (textPostMsgCheck->isChecked() != textPostMsgCheckValue)
             {
@@ -1117,10 +1117,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 textPostSndCheck->setChecked(textPostSndCheckValue);
             }
-            if (textPostSnd->url() != textPostSndValue)
+            if (textPostSnd->url().path() != textPostSndValue)
             {
                 changed = true;
-                textPostSnd->setUrl(textPostSndValue);
+                textPostSnd->setUrl(KUrl::fromPath(textPostSndValue));
             }
             break;
 
@@ -1142,10 +1142,10 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 keepAudioCheckBox->setChecked(keepAudioCheckBoxValue);
             }
-            if (keepAudioPath->url() != locateLocal("data", "kttsd/audio/"))
+            if (keepAudioPath->url().path() != locateLocal("data", "kttsd/audio/"))
             {
                 changed = true;
-                keepAudioPath->setUrl(locateLocal("data", "kttsd/audio/"));
+                keepAudioPath->setUrl(KUrl::fromPath(locateLocal("data", "kttsd/audio/")));
             }
             keepAudioPath->setEnabled(keepAudioCheckBox->isEnabled());
     }

@@ -101,8 +101,8 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     // kDebug() << "EposConf::load: Running " << endl;
 
     config->setGroup(configGroup);
-    eposServerPath->setURL(config->readEntry("EposServerExePath", "epos"));
-    eposClientPath->setURL(config->readEntry("EposClientExePath", "say"));
+    eposServerPath->setUrl(KUrl::fromPath(config->readEntry("EposServerExePath", "epos")));
+    eposClientPath->setUrl(KUrl::fromPath(config->readEntry("EposClientExePath", "say")));
     eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
     eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
     QString codecString = config->readEntry("Codec", "ISO 8859-2");
@@ -128,15 +128,15 @@ void EposConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("Epos");
     config->writeEntry("EposServerExePath",
-        realFilePath(eposServerPath->url()));
+        realFilePath(eposServerPath->url().path()));
     config->writeEntry("EposClientExePath", 
-        realFilePath(eposClientPath->url()));
+        realFilePath(eposClientPath->url().path()));
     config->writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
     config->setGroup(configGroup);
     config->writeEntry("EposServerExePath", 
-        realFilePath(eposServerPath->url()));
+        realFilePath(eposServerPath->url().path()));
     config->writeEntry("EposClientExePath", 
-        realFilePath(eposClientPath->url()));
+        realFilePath(eposClientPath->url().path()));
     config->writeEntry("EposServerOptions", eposServerOptions->text());
     config->writeEntry("EposClientOptions", eposClientOptions->text());
     config->writeEntry("time", timeBox->value());
@@ -147,8 +147,8 @@ void EposConf::save(KConfig *config, const QString &configGroup){
 
 void EposConf::defaults(){
     // kDebug() << "EposConf::defaults: Running" << endl;
-    eposServerPath->setURL("epos");
-    eposClientPath->setURL("say");
+    eposServerPath->setUrl(KUrl("epos"));
+    eposClientPath->setUrl(KUrl("say"));
     eposServerOptions->setText("");
     eposClientOptions->setText("");
     timeBox->setValue(100);
@@ -166,8 +166,8 @@ void EposConf::setDesiredLanguage(const QString &lang)
 
 QString EposConf::getTalkerCode()
 {
-    QString eposServerExe = realFilePath(eposServerPath->url());
-    QString eposClientExe = realFilePath(eposClientPath->url());
+    QString eposServerExe = realFilePath(eposServerPath->url().path());
+    QString eposClientExe = realFilePath(eposClientPath->url().path());
     if (!eposServerExe.isEmpty() && !eposClientExe.isEmpty())
     {
         if (!getLocation(eposServerExe).isEmpty() && !getLocation(eposClientExe).isEmpty())
@@ -223,8 +223,8 @@ void EposConf::slotEposTest_clicked()
     m_eposProc->synth(
         testMsg,
         tmpWaveFile,
-        realFilePath(eposServerPath->url()),
-        realFilePath(eposClientPath->url()),
+        realFilePath(eposServerPath->url().path()),
+        realFilePath(eposClientPath->url().path()),
         eposServerOptions->text(),
         eposClientOptions->text(),
         PlugInProc::codecIndexToCodec(characterCodingBox->currentIndex(), m_codecList),

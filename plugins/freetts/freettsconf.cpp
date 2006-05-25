@@ -75,7 +75,7 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
         }
     if (freeTTSJar.isEmpty())
         freeTTSJar = getLocation("freetts.jar");
-        freettsPath->setURL(freeTTSJar);
+        freettsPath->setUrl(KUrl::fromPath(freeTTSJar));
     /// If freettsPath is still empty, then we couldn't find the file in the path.
 }
 
@@ -84,18 +84,18 @@ void FreeTTSConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("FreeTTS");
     config->writeEntry("FreeTTSJarPath",
-        realFilePath(freettsPath->url()));
+        realFilePath(freettsPath->url().path()));
 
     config->setGroup(configGroup);
-    if(freettsPath->url().isEmpty())
+    if(freettsPath->url().path().isEmpty())
     KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
     config->writeEntry("FreeTTSJarPath",
-    realFilePath(freettsPath->url()));
+    realFilePath(freettsPath->url().path()));
 }
 
 void FreeTTSConf::defaults(){
     // kDebug() << "Running: FreeTTSConf::defaults()" << endl;
-    freettsPath->setURL("");
+    freettsPath->setUrl(KUrl(""));
 }
 
 void FreeTTSConf::setDesiredLanguage(const QString &lang)
@@ -105,7 +105,7 @@ void FreeTTSConf::setDesiredLanguage(const QString &lang)
 
 QString FreeTTSConf::getTalkerCode()
 {
-    QString freeTTSJar = realFilePath(freettsPath->url());
+    QString freeTTSJar = realFilePath(freettsPath->url().path());
     if (!freeTTSJar.isEmpty())
     {
         if (!getLocation(freeTTSJar).isEmpty())
@@ -182,7 +182,7 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
         m_freettsProc->synth(
             testMsg,
             tmpWaveFile,
-            realFilePath(freettsPath->url()));
+            realFilePath(freettsPath->url().path()));
 
         // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
         // or if user clicks Cancel button.

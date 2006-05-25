@@ -137,7 +137,7 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
     if (!exeLocation.isEmpty()) exePath = exeLocation;
     exePath = realFilePath(exePath);
     config->setGroup(configGroup);
-    festivalPath->setURL(config->readEntry("FestivalExecutablePath", exePath));
+    festivalPath->setUrl(KUrl::fromPath(config->readEntry("FestivalExecutablePath", exePath)));
     preloadCheckBox->setChecked(false);
     scanVoices();
     QString voiceSelected(config->readEntry("Voice"));
@@ -165,9 +165,9 @@ void FestivalIntConf::load(KConfig *config, const QString &configGroup){
 void FestivalIntConf::save(KConfig *config, const QString &configGroup){
     // kDebug() << "FestivalIntConf::save: Running" << endl;
     config->setGroup("FestivalInt");
-    config->writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url()));
+    config->writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url().path()));
     config->setGroup(configGroup);
-    config->writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url()));
+    config->writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url().path()));
     config->writeEntry("Voice", m_voiceList[selectVoiceCombo->currentIndex()].code);
     config->writeEntry("volume", volumeBox->value());
     config->writeEntry("time", timeBox->value());
@@ -181,7 +181,7 @@ void FestivalIntConf::save(KConfig *config, const QString &configGroup){
 
 void FestivalIntConf::defaults(){
     // kDebug() << "FestivalIntConf::defaults: Running" << endl;
-    festivalPath->setURL("festival");
+    festivalPath->setUrl(KUrl("festival"));
     timeBox->setValue(100);
     timeBox_valueChanged(100);
     volumeBox->setValue(100);
@@ -203,7 +203,7 @@ void FestivalIntConf::setDesiredLanguage(const QString &lang)
 QString FestivalIntConf::getTalkerCode()
 {
     if (!selectVoiceCombo->isEnabled()) return QString();
-    QString exePath = realFilePath(festivalPath->url());
+    QString exePath = realFilePath(festivalPath->url().path());
     if (exePath.isEmpty()) return QString();
     if (getLocation(exePath).isEmpty()) return QString();
     if (m_voiceList.count() == 0) return QString();
@@ -405,7 +405,7 @@ void FestivalIntConf::scanVoices()
     // m_supportedVoiceCodes.clear();
     selectVoiceCombo->clear();
 
-    QString exePath = realFilePath(festivalPath->url());
+    QString exePath = realFilePath(festivalPath->url().path());
     if (!getLocation(exePath).isEmpty())
     {
         // Set up a progress dialog.
@@ -580,7 +580,7 @@ void FestivalIntConf::slotTest_clicked()
     // kDebug() << "FestivalIntConf::slotTest_clicked: calling synth with voiceCode: " << voiceCode << " time percent: " << timeBox->value() << endl;
     connect (m_festProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     m_festProc->synth(
-        realFilePath(festivalPath->url()),
+        realFilePath(festivalPath->url().path()),
         testMsg,
         tmpWaveFile,
         voiceCode,
@@ -632,7 +632,7 @@ void FestivalIntConf::slotSynthStopped()
 
 void FestivalIntConf::slotFestivalPath_textChanged()
 {
-    QString exePath = realFilePath(festivalPath->url());
+    QString exePath = realFilePath(festivalPath->url().path());
     selectVoiceCombo->setEnabled(false);
     if (!exePath.isEmpty() && !getLocation(exePath).isEmpty())
     {

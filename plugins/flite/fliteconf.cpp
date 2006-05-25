@@ -76,7 +76,7 @@ void FliteConf::load(KConfig *config, const QString &configGroup){
         config->setGroup("Flite");
         fliteExe = config->readEntry("FliteExePath", "flite");
     }
-    flitePath->setURL(fliteExe);
+    flitePath->setUrl(KUrl::fromPath(fliteExe));
 }
 
 void FliteConf::save(KConfig *config, const QString &configGroup){
@@ -84,15 +84,15 @@ void FliteConf::save(KConfig *config, const QString &configGroup){
 
     config->setGroup("Flite");
     config->writeEntry("FliteExePath", 
-        realFilePath(flitePath->url()));
+        realFilePath(flitePath->url().path()));
     config->setGroup(configGroup);
     config->writeEntry("FliteExePath",
-        realFilePath(flitePath->url()));
+        realFilePath(flitePath->url().path()));
 }
 
 void FliteConf::defaults(){
     // kDebug() << "FliteConf::defaults: Running" << endl;
-    flitePath->setURL("flite");
+    flitePath->setUrl(KUrl::fromPath("flite"));
 }
 
 void FliteConf::setDesiredLanguage(const QString &lang)
@@ -102,7 +102,7 @@ void FliteConf::setDesiredLanguage(const QString &lang)
 
 QString FliteConf::getTalkerCode()
 {
-    QString fliteExe = realFilePath(flitePath->url());
+    QString fliteExe = realFilePath(flitePath->url().path());
     if (!fliteExe.isEmpty())
     {
         if (!getLocation(fliteExe).isEmpty())
@@ -154,7 +154,7 @@ void FliteConf::slotFliteTest_clicked()
     m_fliteProc->synth(
         testMsg,
         tmpWaveFile,
-        realFilePath(flitePath->url()));
+        realFilePath(flitePath->url().path()));
 
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.

@@ -348,8 +348,8 @@ void HadifixConfPrivate::setConfiguration (QString hadifixExec,  QString mbrolaE
                 int volume, int time, int pitch,
                 QString codecName)
 {
-    hadifixURL->setURL (hadifixExec);
-    mbrolaURL->setURL (mbrolaExec);
+    hadifixURL->setUrl (KUrl(hadifixExec));
+    mbrolaURL->setUrl (KUrl(mbrolaExec));
     setVoice (voice, male);
 
     volumeBox->setValue (volume);
@@ -449,8 +449,8 @@ void HadifixConfPrivate::load (KConfig *config, const QString &configGroup) {
 
 void HadifixConfPrivate::save (KConfig *config, const QString &configGroup) {
     config->setGroup(configGroup);
-    config->writeEntry ("hadifixExec", PlugInConf::realFilePath(hadifixURL->url()));
-    config->writeEntry ("mbrolaExec", PlugInConf::realFilePath(mbrolaURL->url()));
+    config->writeEntry ("hadifixExec", PlugInConf::realFilePath(hadifixURL->url().path()));
+    config->writeEntry ("mbrolaExec", PlugInConf::realFilePath(mbrolaURL->url().path()));
     config->writeEntry ("voice",      getVoiceFilename());
     config->writeEntry ("gender",     isMaleVoice());
     config->writeEntry ("volume",     volumeBox->value());
@@ -529,7 +529,7 @@ void HadifixConf::setDesiredLanguage(const QString &lang)
 
 QString HadifixConf::getTalkerCode()
 {
-    if (!d->hadifixURL->url().isEmpty() && !d->mbrolaURL->url().isEmpty())
+    if (!d->hadifixURL->url().path().isEmpty() && !d->mbrolaURL->url().path().isEmpty())
     {
         QString voiceFile = d->getVoiceFilename();
         if (QFileInfo(voiceFile).exists())
@@ -579,10 +579,10 @@ void HadifixConf::voiceButton_clicked () {
 
     widget->femaleOption->setChecked(!d->isMaleVoice());
     widget->maleOption->setChecked(d->isMaleVoice());
-    widget->voiceFileURL->setURL(d->getVoiceFilename());
+    widget->voiceFileURL->setUrl(KUrl::fromPath(d->getVoiceFilename()));
 
     if (dialog->exec() == QDialog::Accepted) {
-        d->setVoice (widget->voiceFileURL->url(), widget->maleOption->isChecked());
+        d->setVoice (widget->voiceFileURL->url().path(), widget->maleOption->isChecked());
         d->setDefaultEncodingFromVoice();
         emit changed(true);
     }
@@ -628,9 +628,9 @@ void HadifixConf::testButton_clicked () {
     QString testMsg = testMessage(d->languageCode);
     connect (d->hadifixProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
     d->hadifixProc->synth (testMsg,
-        realFilePath(d->hadifixURL->url()),
+        realFilePath(d->hadifixURL->url().path()),
         d->isMaleVoice(),
-        realFilePath(d->mbrolaURL->url()),
+        realFilePath(d->mbrolaURL->url().path()),
         d->getVoiceFilename(),
         d->volumeBox->value(),
         d->timeBox->value(),

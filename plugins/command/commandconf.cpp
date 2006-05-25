@@ -77,7 +77,7 @@ CommandConf::~CommandConf()
 void CommandConf::load(KConfig *config, const QString &configGroup) {
     // kDebug() << "CommandConf::load: Running" << endl;
     config->setGroup(configGroup);
-    urlReq->setURL (config->readEntry("Command", "cat -"));
+    urlReq->setUrl(KUrl(config->readEntry("Command", "cat -")));
     stdInButton->setChecked(config->readEntry("StdIn", QVariant(false)).toBool());
     QString codecString = config->readEntry("Codec", "Local");
     m_languageCode = config->readEntry("LanguageCode", m_languageCode);
@@ -88,7 +88,7 @@ void CommandConf::load(KConfig *config, const QString &configGroup) {
 void CommandConf::save(KConfig *config, const QString &configGroup) {
     // kDebug() << "CommandConf::save: Running" << endl;
     config->setGroup(configGroup);
-    config->writeEntry("Command", urlReq->url());
+    config->writeEntry("Command", urlReq->url().path());
     config->writeEntry("StdIn", stdInButton->isChecked());
     int codec = characterCodingBox->currentIndex();
     config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
@@ -96,9 +96,8 @@ void CommandConf::save(KConfig *config, const QString &configGroup) {
 
 void CommandConf::defaults(){
     // kDebug() << "CommandConf::defaults: Running" << endl;
-    urlReq->setURL("cat -");
+    urlReq->setUrl(KUrl("cat -"));
     stdInButton->setChecked(false);
-    urlReq->setShowLocalProtocol (false);
     characterCodingBox->setCurrentIndex(0);
 }
 
@@ -109,7 +108,7 @@ void CommandConf::setDesiredLanguage(const QString &lang)
 
 QString CommandConf::getTalkerCode()
 {
-    QString url = urlReq->url();
+    QString url = urlReq->url().path();
     if (!url.isEmpty())
     {
         // Must contain either text or file parameter, or StdIn checkbox must be checked,
@@ -164,7 +163,7 @@ void CommandConf::slotCommandTest_clicked()
     m_commandProc->synth(
         testMsg,
         tmpWaveFile,
-        urlReq->url(),
+        urlReq->url().path(),
         stdInButton->isChecked(),
         PlugInProc::codecIndexToCodec(characterCodingBox->currentIndex(), m_codecList),
         m_languageCode);

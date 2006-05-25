@@ -94,8 +94,8 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::load: Running" << endl;
     config->setGroup( configGroup );
     nameLineEdit->setText( config->readEntry( "UserFilterName", nameLineEdit->text() ) );
-    xsltPath->setUrl( config->readEntry( "XsltFilePath", xsltPath->url().path() ) );
-    xsltprocPath->setUrl( config->readEntry( "XsltprocPath", xsltprocPath->url().path() ) );
+    xsltPath->setUrl( KUrl::fromPath( config->readEntry( "XsltFilePath", xsltPath->url().path() ) ) );
+    xsltprocPath->setUrl( KUrl::fromPath( config->readEntry( "XsltprocPath", xsltprocPath->url().path() ) ) );
     rootElementLineEdit->setText(
             config->readEntry( "RootElement", rootElementLineEdit->text() ) );
     doctypeLineEdit->setText(
@@ -118,8 +118,8 @@ void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::save: Running" << endl;
     config->setGroup( configGroup );
     config->writeEntry( "UserFilterName", nameLineEdit->text() );
-    config->writeEntry( "XsltFilePath", realFilePath( xsltPath->url() ) );
-    config->writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url() ) );
+    config->writeEntry( "XsltFilePath", realFilePath( xsltPath->url().path() ) );
+    config->writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url().path() ) );
     config->writeEntry( "RootElement", rootElementLineEdit->text() );
     config->writeEntry( "DocType", doctypeLineEdit->text() );
     config->writeEntry( "AppID", appIdLineEdit->text().replace(" ", "") );
@@ -137,7 +137,7 @@ void XmlTransformerConf::defaults(){
     // Default name.
     nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
-    xsltPath->setUrl( locate("data", "kttsd/xmltransformer/") );
+    xsltPath->setUrl( KUrl::fromPath( locate("data", "kttsd/xmltransformer/") ) );
     // Default path to xsltproc.
     xsltprocPath->setUrl( KUrl("xsltproc") );
     // Default root element to "html".
@@ -166,11 +166,11 @@ bool XmlTransformerConf::supportsMultiInstance() { return true; }
  */
 QString XmlTransformerConf::userPlugInName()
 {
-    QString filePath = realFilePath(xsltprocPath->url());
+    QString filePath = realFilePath(xsltprocPath->url().path());
     if (filePath.isEmpty()) return QString();
     if (getLocation(filePath).isEmpty()) return QString();
 
-    filePath = realFilePath(xsltPath->url());
+    filePath = realFilePath(xsltPath->url().path());
     if (filePath.isEmpty()) return QString();
     if (getLocation(filePath).isEmpty()) return QString();
     if (!QFileInfo(filePath).isFile()) return QString();
