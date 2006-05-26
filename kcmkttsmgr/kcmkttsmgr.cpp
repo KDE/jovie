@@ -413,23 +413,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     delete player;
     delete testPlayer;
 
-    // If aKode is available, enable its radio button.
-    // Determine if available by loading its plugin.  If it fails, not available.
-    testPlayer = new TestPlayer();
-    player = testPlayer->createPlayerObject(3);
-    if (player)
-    {
-        akodeRadioButton->setEnabled(true);
-        akodeSinkLabel->setEnabled(true);
-        akodeComboBox->setEnabled(true);
-        QStringList pcmList = player->getPluginList("");
-        kDebug() << "KCMKttsMgr::KCMKttsMgr: aKode Sink List = " << pcmList << endl;
-        akodeComboBox->clear();
-        akodeComboBox->addItems(pcmList);
-    }
-    delete player;
-    delete testPlayer;
-
     // Set up Keep Audio Path KURLRequestor.
     keepAudioPath->setMode(KFile::Directory);
     keepAudioPath->setUrl(KUrl::fromPath(locateLocal("data", "kttsd/audio/")));
@@ -540,10 +523,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     connect(pcmComboBox, SIGNAL(activated(int)),
             this, SLOT(slotPcmComboBox_activated()));
     connect(pcmComboBox, SIGNAL(activated(int)),
-            this, SLOT(configChanged()));
-    connect(akodeRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotAkodeRadioButton_toggled(bool)));
-    connect(akodeComboBox, SIGNAL(activated(int)),
             this, SLOT(configChanged()));
     connect(timeBox, SIGNAL(valueChanged(int)),
             this, SLOT(timeBox_valueChanged(int)));
@@ -677,7 +656,6 @@ void KCMKttsMgr::load()
     int audioOutputMethod = 0;
 //    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
     audioOutputMethod = m_config->readEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
@@ -685,9 +663,6 @@ void KCMKttsMgr::load()
             phononRadioButton->setChecked(true);
         case 2:
             alsaRadioButton->setChecked(true);
-            break;
-        case 3:
-            akodeRadioButton->setChecked(true);
             break;
         default:
             phononRadioButton->setChecked(true);
@@ -866,10 +841,6 @@ void KCMKttsMgr::load()
     KttsUtils::setCbItemFromText(pcmComboBox, m_config->readEntry("PcmName", "default"));
     pcmCustom->setText(m_config->readEntry("CustomPcmName", ""));
 
-    // aKode settings.
-    m_config->setGroup("aKodePlayer");
-    KttsUtils::setCbItemFromText(akodeComboBox, m_config->readEntry("SinkName", "auto"));
-
     // Update controls based on new states.
     slotNotifyListView_currentItemChanged();
     updateTalkerButtons();
@@ -877,7 +848,6 @@ void KCMKttsMgr::load()
     updateSbdButtons();
     slotPhononRadioButton_toggled(phononRadioButton->isChecked());
     slotAlsaRadioButton_toggled(alsaRadioButton->isChecked());
-    slotAkodeRadioButton_toggled(akodeRadioButton->isChecked());
 
     m_changed = false;
     m_suppressConfigChanged = false;
@@ -946,7 +916,6 @@ void KCMKttsMgr::save()
     int audioOutputMethod = 0;
     // if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
     m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
     m_config->writeEntry("AudioStretchFactor", timeBox->value());
     m_config->writeEntry("KeepAudio", keepAudioCheckBox->isChecked());
@@ -1009,10 +978,6 @@ void KCMKttsMgr::save()
     m_config->setGroup("ALSAPlayer");
     m_config->writeEntry("PcmName", pcmComboBox->currentText());
     m_config->writeEntry("CustomPcmName", pcmCustom->text());
-
-    // aKode settings.
-    m_config->setGroup("aKodePlayer");
-    m_config->writeEntry("SinkName", akodeComboBox->currentText());
 
     m_config->sync();
 
@@ -1908,16 +1873,6 @@ void KCMKttsMgr::slotPcmComboBox_activated()
 }
 
 /**
-* This signal is emitted whenever user checks/unchecks the aKode radio button.
-*/
-void KCMKttsMgr::slotAkodeRadioButton_toggled(bool state)
-{
-    akodeSinkLabel->setEnabled(state);
-    akodeComboBox->setEnabled(state);
-    configChanged();
-}
-
-/**
 * This slot is called whenever KTTSD starts or restarts.
 */
 void KCMKttsMgr::kttsdStarted()
@@ -2147,10 +2102,6 @@ void KCMKttsMgr::configureTalker()
     if (alsaRadioButton->isChecked()) {
         playerOption = 2;
         sinkName = pcmComboBox->currentText();
-    }
-    if (akodeRadioButton->isChecked()) {
-        playerOption = 3;
-        sinkName = akodeComboBox->currentText();
     }
     float audioStretchFactor = 1.0/(float(timeBox->value())/100.0);
     // kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;

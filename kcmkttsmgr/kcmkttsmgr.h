@@ -502,7 +502,6 @@ class KCMKttsMgr :
         void slotPhononRadioButton_toggled(bool state);
         void slotAlsaRadioButton_toggled(bool state);
         void slotPcmComboBox_activated();
-        void slotAkodeRadioButton_toggled(bool state);
 
         /**
         * Other slots.

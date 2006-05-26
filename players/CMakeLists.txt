@@ -3,11 +3,6 @@ if(KDE4_KTTSD_PHONON)
         add_subdirectory(phononplayer)
 endif(KDE4_KTTSD_PHONON)
 
-macro_optional_find_package(Akode)
-if(AKODE_FOUND AND KDE4_KTTSD_AKODE)
-	add_subdirectory(akodeplayer)
-endif(AKODE_FOUND AND KDE4_KTTSD_AKODE)	
-
 if(KDE4_KTTSD_ALSA)
 	add_subdirectory(alsaplayer)
 endif(KDE4_KTTSD_ALSA)

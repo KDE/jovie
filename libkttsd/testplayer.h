@@ -53,7 +53,6 @@ class KDE_EXPORT TestPlayer : public QObject{
          * Sets which audio player to use.
          *  0 = Phonon
          *  2 = ALSA
-         *  3 = aKode
          */
         void setPlayerOption(const int playerOption);
 
@@ -95,7 +94,6 @@ class KDE_EXPORT TestPlayer : public QObject{
          * Which audio player to use.
          *  0 = Phonon
          *  2 = ALSA
-         *  3 = aKode
          */
         int m_playerOption;
 

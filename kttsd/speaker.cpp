@@ -141,13 +141,6 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
             m_periods = m_speechData->config->readEntry("Periods", 8);
             m_playerDebugLevel = m_speechData->config->readEntry("DebugLevel", 1);
             break;
-        case 3:
-            m_speechData->config->setGroup("aKodePlayer");
-            m_sinkName = m_speechData->config->readEntry("SinkName", "auto");
-            m_periodSize = m_speechData->config->readEntry("PeriodSize", 128);
-            m_periods = m_speechData->config->readEntry("Periods", 8);
-            m_playerDebugLevel = m_speechData->config->readEntry("DebugLevel", 1);
-            break;
     }
     // Connect timer timeout signal.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
@@ -1527,11 +1520,6 @@ Player* Speaker::createPlayerObject()
         case 2 :
             {
                 plugInName = "kttsd_alsaplugin";
-                break;
-            }
-        case 3 :
-            {
-                plugInName = "kttsd_akodeplugin";
                 break;
             }
         default:
