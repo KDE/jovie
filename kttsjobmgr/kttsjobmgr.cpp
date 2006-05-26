@@ -72,7 +72,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_selectOnTextSet = false;
     m_buttonBox = 0;
 
-    setWidget(parentWidget);
     // setInstance(KttsJobMgrFactory::instance());
 
     // All the ktts components use the same catalogue.

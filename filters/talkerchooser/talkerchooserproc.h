@@ -25,6 +25,7 @@
 #define _TALKERCHOOSERPROC_H_
 
 // Qt includes.
+#include <QObject>
 #include <QByteArray>
 
 // KTTS includes.

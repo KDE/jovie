@@ -895,7 +895,7 @@ void KCMKttsMgr::save()
     m_changed = false;
 
     // Clean up config.
-    m_config->deleteGroup("General");
+    m_config->deleteGroup("General", 0);
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
     m_config->setGroup("General");
@@ -968,7 +968,8 @@ void KCMKttsMgr::save()
         if (groupName.left(7) == "Talker_")
         {
             QString groupTalkerID = groupName.mid(7);
-            if (!talkerIDsList.contains(groupTalkerID)) m_config->deleteGroup(groupName);
+            if (!talkerIDsList.contains(groupTalkerID))
+                m_config->deleteGroup(groupName, 0);
         }
     }
 
@@ -999,7 +1000,8 @@ void KCMKttsMgr::save()
         if (groupName.left(7) == "Filter_")
         {
             QString groupFilterID = groupName.mid(7);
-            if (!filterIDsList.contains(groupFilterID)) m_config->deleteGroup(groupName);
+            if (!filterIDsList.contains(groupFilterID))
+                m_config->deleteGroup(groupName, 0);
         }
     }
 
@@ -1357,7 +1359,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     QString talkerID = QString::number(m_lastTalkerID + 1);
 
     // Erase extraneous Talker configuration entries that might be there.
-    m_config->deleteGroup(QString("Talker_")+talkerID);
+    m_config->deleteGroup(QString("Talker_")+talkerID, 0);
     m_config->sync();
 
     // Convert translated plugin name to DesktopEntryName.
@@ -1514,7 +1516,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     QString filterID = QString::number(m_lastFilterID + 1);
 
     // Erase extraneous Filter configuration entries that might be there.
-    m_config->deleteGroup(QString("Filter_")+filterID);
+    m_config->deleteGroup(QString("Filter_")+filterID, 0);
     m_config->sync();
 
     // Get DesktopEntryName from the translated name.
@@ -1613,7 +1615,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
 
     // Delete the talker from configuration file?
     QString talkerID = m_talkerListModel.getRow(modelIndex.row()).id();
-    m_config->deleteGroup("Talker_"+talkerID);
+    m_config->deleteGroup(QString("Talker_")+talkerID, 0);
 
     // Delete the talker from the list of Talkers.
     m_talkerListModel.removeRow(modelIndex.row());
@@ -1660,7 +1662,7 @@ void KCMKttsMgr::removeFilter( bool sbd )
 
     // Delete the filter from the configuration file?
     kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file." << endl;
-    m_config->deleteGroup("Filter_"+filterID);
+    m_config->deleteGroup(QString("Filter_")+filterID, 0);
 
     // Emit configuraton changed.
     configChanged();
@@ -1925,22 +1927,16 @@ void KCMKttsMgr::kttsdStarted()
     // Load Job Manager Part library.
     if (!kttsdLoaded)
     {
-        KLibFactory *factory = KLibLoader::self()->factory( "libkttsjobmgrpart" );
-        if (factory)
+        m_jobMgrPart = KParts::ComponentFactory::createPartInstanceFromLibrary<KParts::ReadOnlyPart>(
+            "libkttsjobmgrpart", mainTab, this);
+        if (m_jobMgrPart)
         {
-            // Create the Job Manager part
-            m_jobMgrPart = (KParts::ReadOnlyPart *)factory->create( mainTab, "kttsjobmgr",
-                QStringList("KParts::ReadOnlyPart") );
-            if (m_jobMgrPart)
-            {
-                // Add the Job Manager part as a new tab.
-                mainTab->addTab(m_jobMgrPart->widget(), i18n("&Jobs"));
-                kttsdLoaded = true;
-            }
-            else
-                kDebug() << "Could not create kttsjobmgr part." << endl;
+            // Add the Job Manager part as a new tab.
+            mainTab->addTab(m_jobMgrPart->widget(), i18n("&Jobs"));
+            kttsdLoaded = true;
         }
-        else kDebug() << "Could not load libkttsjobmgrpart.  Is libkttsjobmgrpart installed?" << endl;
+        else
+            kDebug() << "KCMKttsMgr::kttsdStarted: Could not create kttsjobmgr part." << endl;
     }
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded)

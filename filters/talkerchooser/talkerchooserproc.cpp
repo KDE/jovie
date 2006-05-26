@@ -38,9 +38,10 @@
 /**
  * Constructor.
  */
-TalkerChooserProc::TalkerChooserProc( QObject *parent, const QStringList& /*args*/ ) :
+TalkerChooserProc::TalkerChooserProc( QObject *parent, const QStringList& args ) :
     KttsFilterProc(parent) 
 {
+    Q_UNUSED(args);
     // kDebug() << "TalkerChooserProc::TalkerChooserProc: Running" << endl;
 }
 
