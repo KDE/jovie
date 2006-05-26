@@ -380,12 +380,24 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
     sbdButton->setMenu( sbdPopmenu );
 
-    TestPlayer* testPlayer = new TestPlayer();
+    TestPlayer* testPlayer;
+    Player* player;
+
+    // If Phonon is available, enable its radio button.
+    // Determine if available by loading its plugin.  If it fails, not available.
+    testPlayer = new TestPlayer();
+    player = testPlayer->createPlayerObject(0);
+    if (player)
+    {
+        phononRadioButton->setEnabled(true);
+    }
+    delete player;
+    delete testPlayer;
 
     // If ALSA is available, enable its radio button.
     // Determine if available by loading its plugin.  If it fails, not available.
     testPlayer = new TestPlayer();
-    Player* player = testPlayer->createPlayerObject(2);
+    player = testPlayer->createPlayerObject(2);
     if (player)
     {
         alsaRadioButton->setEnabled(true);
@@ -521,6 +533,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
             this, SLOT(configChanged()));
 
     // Audio tab.
+    connect(phononRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotPhononRadioButton_toggled(bool)));
     connect(alsaRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotAlsaRadioButton_toggled(bool)));
     connect(pcmComboBox, SIGNAL(activated(int)),
@@ -659,14 +673,16 @@ void KCMKttsMgr::load()
         notifyListView->scrollToItem( item );
 
     // Audio Output.
-    // TODO: Default to ALSA for now, but change to Phonon (0) in future.
-    int audioOutputMethod = 2;
+    // Default to Phonon.
+    int audioOutputMethod = 0;
 //    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
     if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
     audioOutputMethod = m_config->readEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
+        case 0:
+            phononRadioButton->setChecked(true);
         case 2:
             alsaRadioButton->setChecked(true);
             break;
@@ -674,7 +690,7 @@ void KCMKttsMgr::load()
             akodeRadioButton->setChecked(true);
             break;
         default:
-            alsaRadioButton->setChecked(true);
+            phononRadioButton->setChecked(true);
     }
     timeBox->setValue(m_config->readEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(timeBox->value());
@@ -842,6 +858,9 @@ void KCMKttsMgr::load()
     showMainWindowOnStartupCheckBox->setEnabled(
         embedInSysTrayCheckBox->isChecked());
 
+    // Phonon settings.
+    // None.
+
     // ALSA settings.
     m_config->setGroup("ALSAPlayer");
     KttsUtils::setCbItemFromText(pcmComboBox, m_config->readEntry("PcmName", "default"));
@@ -856,6 +875,7 @@ void KCMKttsMgr::load()
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
+    slotPhononRadioButton_toggled(phononRadioButton->isChecked());
     slotAlsaRadioButton_toggled(alsaRadioButton->isChecked());
     slotAkodeRadioButton_toggled(akodeRadioButton->isChecked());
 
@@ -923,7 +943,7 @@ void KCMKttsMgr::save()
     saveNotifyEventsToFile( locateLocal("config", "kttsd_notifyevents.xml") );
 
     // Audio Output.
-    int audioOutputMethod = 2;
+    int audioOutputMethod = 0;
     // if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
     if (akodeRadioButton->isChecked()) audioOutputMethod = 3;
@@ -1126,11 +1146,11 @@ void KCMKttsMgr::defaults() {
             break;
 
         case wpAudio:
-            // TODO: Default to ALSA for now but change to Phonon later.
-            if (!alsaRadioButton->isChecked())
+            // Default to Phonon.
+            if (!phononRadioButton->isChecked())
             {
                 changed = true;
-                alsaRadioButton->setChecked(true);
+                phononRadioButton->setChecked(true);
             }
             if (timeBox->value() != timeBoxValue)
             {
@@ -1858,6 +1878,15 @@ void KCMKttsMgr::slotTextPostSndCheck_toggled(bool checked)
 }
 
 /**
+* This signal is emitted whenever user checks/unchecks the Phonon radio button.
+*/
+void KCMKttsMgr::slotPhononRadioButton_toggled(bool state)
+{
+    Q_UNUSED(state);
+    configChanged();
+}
+
+/**
 * This signal is emitted whenever user checks/unchecks the ALSA radio button.
 */
 void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
@@ -2116,6 +2145,9 @@ void KCMKttsMgr::configureTalker()
     // Create a Player object for the plugin to use for testing.
     int playerOption = 0;
     QString sinkName;
+    if (phononRadioButton->isChecked()) {
+        playerOption = 0;
+    }
     if (alsaRadioButton->isChecked()) {
         playerOption = 2;
         sinkName = pcmComboBox->currentText();

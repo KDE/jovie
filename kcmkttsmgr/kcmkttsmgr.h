@@ -499,6 +499,7 @@ class KCMKttsMgr :
         void timeBox_valueChanged(int percentValue);
         void timeSlider_valueChanged(int sliderValue);
         void keepAudioCheckBox_toggled(bool checked);
+        void slotPhononRadioButton_toggled(bool state);
         void slotAlsaRadioButton_toggled(bool state);
         void slotPcmComboBox_activated();
         void slotAkodeRadioButton_toggled(bool state);

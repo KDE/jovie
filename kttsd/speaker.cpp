@@ -124,8 +124,8 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_lastSeq = 0;
     m_timer = new QTimer(this);
     m_speechData->config->setGroup("General");
-    // TODO: Default to ALSA for now, change to Phonon (0) later.
-    m_playerOption = m_speechData->config->readEntry("AudioOutputMethod", 2);
+    // Default to Phonon (0).
+    m_playerOption = m_speechData->config->readEntry("AudioOutputMethod", 0);
     // Map 50% to 100% onto 2.0 to 0.5.
     m_audioStretchFactor = 1.0/(float(m_speechData->config->readEntry("AudioStretchFactor", 100))/100.0);
     switch (m_playerOption)
@@ -1519,6 +1519,11 @@ Player* Speaker::createPlayerObject()
     QString plugInName;
     switch(m_playerOption)
     {
+        case 0 :
+            {
+                plugInName = "kttsd_phononplugin";
+                break;
+            }
         case 2 :
             {
                 plugInName = "kttsd_alsaplugin";
@@ -1531,8 +1536,8 @@ Player* Speaker::createPlayerObject()
             }
         default:
             {
-                // TODO: Default to ALSA for now, change to Phonon later.
-                plugInName = "kttsd_alsaplugin";
+                // TODO: Default to Phonon.
+                plugInName = "kttsd_phononplugin";
                 break;
             }
     }
@@ -1551,16 +1556,16 @@ Player* Speaker::createPlayerObject()
     if (player == 0)
     {
         // If we failed, fall back to default plugin.
-        // TODO: Default to ALSA for now, change to Phonon later.
+        // Default to Phonon.
         if (m_playerOption != 0)
         {
             kDebug() << "Speaker::createPlayerObject: Could not load " + plugInName + 
-                " plugin.  Falling back to ALSA." << endl;
-            m_playerOption = 2;
+                " plugin.  Falling back to KDE (Phonon)." << endl;
+            m_playerOption = 0;
             return createPlayerObject();
         }
         else
-            kDebug() << "Speaker::createPlayerObject: Could not load ALSA plugin.  Is KDEDIRS set  correctly?" << endl;
+            kDebug() << "Speaker::createPlayerObject: Could not load KDE (Phonon) plugin.  Is KDEDIRS set  correctly?" << endl;
     }
     if (player) {
         player->setSinkName(m_sinkName);

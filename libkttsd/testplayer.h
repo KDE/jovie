@@ -51,7 +51,7 @@ class KDE_EXPORT TestPlayer : public QObject{
 
         /**
          * Sets which audio player to use.
-         *  0 = Phonon (future)
+         *  0 = Phonon
          *  2 = ALSA
          *  3 = aKode
          */
@@ -93,7 +93,7 @@ class KDE_EXPORT TestPlayer : public QObject{
 
          /**
          * Which audio player to use.
-         *  0 = Phonon (future)
+         *  0 = Phonon
          *  2 = ALSA
          *  3 = aKode
          */

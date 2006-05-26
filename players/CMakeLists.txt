@@ -1,4 +1,8 @@
 
+if(KDE4_KTTSD_PHONON)
+        add_subdirectory(phononplayer)
+endif(KDE4_KTTSD_PHONON)
+
 macro_optional_find_package(Akode)
 if(AKODE_FOUND AND KDE4_KTTSD_AKODE)
 	add_subdirectory(akodeplayer)

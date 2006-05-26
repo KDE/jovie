@@ -66,7 +66,7 @@ TestPlayer::~TestPlayer()
 
 /**
  * Sets which audio player to use.
- *  0 = Phonon (future)
+ *  0 = Phonon
  *  2 = ALSA
  *  3 = aKode
  */
@@ -139,6 +139,11 @@ Player* TestPlayer::createPlayerObject(int playerOption)
     QString plugInName;
     switch(playerOption)
     {
+        case 0 :
+        {
+            plugInName = "kttsd_phononplugin";
+            break;
+        }
         case 2 :
         {
             plugInName = "kttsd_alsaplugin";
@@ -151,8 +156,8 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         }
         default:
         {
-            // TODO: Default to ALSA but change to Phonon in future.
-            plugInName = "kttsd_alsaplugin";
+            // Default to Phonon.
+            plugInName = "kttsd_phononplugin";
             break;
         }
     }
@@ -173,16 +178,6 @@ Player* TestPlayer::createPlayerObject(int playerOption)
     if (player == 0)
         kDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
             ".  Is KDEDIRS set correctly?" << endl;
-    else
-        // Must have GStreamer >= 0.8.7.
-        if (playerOption == 1)
-        {
-            if (!player->requireVersion(0, 8, 7))
-            {
-                delete player;
-                player = 0;
-            }
-        }
     if (player) player->setSinkName(m_sinkName);
     return player;
 }
