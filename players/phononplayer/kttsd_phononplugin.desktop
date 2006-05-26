@@ -1,9 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD Phonon Plugin
-Name[x-test]=xxKTTSD Phonon Pluginxx
 Comment=KTTSD Phonon audio plugin
-Comment[x-test]=xxKTTSD Phonon audio pluginxx
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
 X-KDE-Library=libkttsd_phononplugin
