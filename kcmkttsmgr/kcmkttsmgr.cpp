@@ -661,6 +661,7 @@ void KCMKttsMgr::load()
     {
         case 0:
             phononRadioButton->setChecked(true);
+            break;
         case 2:
             alsaRadioButton->setChecked(true);
             break;
