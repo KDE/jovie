@@ -241,7 +241,6 @@ void AlsaPlayerThread::pause()
                 // Set a flag and cause wait_for_poll to sleep.  When resumed, will get
                 // an underrun.
                 m_simulatedPause = true;
-                locker.unlock();
             }
         }
     }
@@ -266,6 +265,9 @@ void AlsaPlayerThread::stop()
         DBG("waiting for thread to exit");
         wait();
         DBG("cleaning up");
+        // TODO: This seems like a bug.  Why must I relock the locker
+        // since I'm about to destroy the locker?
+        locker.relock();
     }
     cleanup();
 }
