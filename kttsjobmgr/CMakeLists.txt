@@ -4,7 +4,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd ${CMAKE_BINARY_DIR}/ktts
 
 ########### next target ###############
 
-set(kttsjobmgrpart_PART_SRCS kttsjobmgr.cpp )
+set(kttsjobmgrpart_PART_SRCS
+    jobinfolistmodel.cpp
+    kttsjobmgr.cpp )
 
 kde4_automoc(${kttsjobmgrpart_PART_SRCS})
 

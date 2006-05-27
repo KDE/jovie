@@ -28,14 +28,13 @@
 #include <QClipboard>
 #include <QPushButton>
 #include <QList>
-#include <Q3TextEdit>
+#include <QTreeView>
 #include <QMimeData>
 
 // KDE includes.
 #include <kinstance.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <k3listview.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kencodingfiledialog.h>
@@ -50,6 +49,9 @@
 #include "kspeech.h"
 #include "talkercode.h"
 #include "selecttalkerdlg.h"
+#include "jobinfolistmodel.h"
+
+// KttsJobMgr includes.
 #include "kttsjobmgr.h"
 #include "kttsjobmgr.moc"
 
@@ -72,8 +74,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_selectOnTextSet = false;
     m_buttonBox = 0;
 
-    // setInstance(KttsJobMgrFactory::instance());
-
     // All the ktts components use the same catalogue.
     KGlobal::locale()->insertCatalog("kttsd");
 
@@ -85,42 +85,41 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     QSplitter* splitter = new QSplitter(vBox);
     splitter->setOrientation(Qt::Vertical);
 
-    // Create Job List View widget.
-    m_jobListView = new K3ListView( splitter );
-    m_jobListView->setObjectName( "joblistview" );
-    m_jobListView->setSelectionModeExt(K3ListView::Single);
-    m_jobListView->addColumn(i18n("Job Num"));
-    m_jobListView->addColumn(i18n("Owner"));
-    m_jobListView->addColumn(i18n("Talker ID"));
-    m_jobListView->addColumn(i18n("State"));
-    m_jobListView->addColumn(i18n("Position"));
-    m_jobListView->addColumn(i18n("Sentences"));
-    m_jobListView->addColumn(i18n("Part Num"));
-    m_jobListView->addColumn(i18n("Parts"));
+    // Create Job List View widget and model.
+    m_jobListView = new QTreeView( splitter );
+    m_jobListModel = new JobInfoListModel();
+    m_jobListView->setModel(m_jobListModel);
 
-    // Do not sort the list.
-    m_jobListView->setSorting(-1);
+    // Select by row.
+    m_jobListView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_jobListView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    // Not a tree.    
+    m_jobListView->setRootIsDecorated(false);
+    
+    // TODO: Do not sort the list.
+    // m_jobListView->setSorting(-1);
 
     QString jobListViewWT = i18n(
-            "<p>These are all the text jobs.  The <b>State</b> column "
-            "may be:"
-            "<ul>"
-            "<li><b>Queued</b> - the job is waiting and will not be spoken until its state "
-            "is changed to <b>Waiting</b> by clicking the <b>Resume</b> or <b>Restart</b> buttons.</li>"
-            "<li><b>Waiting</b> - the job is ready to be spoken.  It will be spoken when the jobs "
-            "preceding it in the list have finished.</li>"
-            "<li><b>Speaking</b> - the job is speaking.  The <b>Position</b> column shows the current "
-            "sentence of the job being spoken.  You may pause a speaking job by clicking the "
-            "<b>Hold</b> button.</li>"
-            "<li><b>Paused</b> - the job is currently paused.  Paused jobs prevent jobs below them "
-            "from speaking.  Use the <b>Resume</b> or <b>Restart</b> buttons to resume speaking the "
-            "job, or click <b>Later</b> to move the job down in the list.</li>"
-            "<li><b>Finished</b> - the job has finished speaking.  When a second job finishes, "
-            "this one will be deleted.  You may click <b>Restart</b> to repeat the job.</li>"
-            "</ul>"
-            "<em>Note</em>: Messages, Warnings, and Screen Reader Output do not appear in this list.  "
-            "See the Handbook for more information."
-            "</p>");
+        "<p>These are all the text jobs.  The <b>State</b> column "
+        "may be:"
+        "<ul>"
+        "<li><b>Queued</b> - the job is waiting and will not be spoken until its state "
+        "is changed to <b>Waiting</b> by clicking the <b>Resume</b> or <b>Restart</b> buttons.</li>"
+        "<li><b>Waiting</b> - the job is ready to be spoken.  It will be spoken when the jobs "
+        "preceding it in the list have finished.</li>"
+        "<li><b>Speaking</b> - the job is speaking.  The <b>Position</b> column shows the current "
+        "sentence of the job being spoken.  You may pause a speaking job by clicking the "
+        "<b>Hold</b> button.</li>"
+        "<li><b>Paused</b> - the job is currently paused.  Paused jobs prevent jobs below them "
+        "from speaking.  Use the <b>Resume</b> or <b>Restart</b> buttons to resume speaking the "
+        "job, or click <b>Later</b> to move the job down in the list.</li>"
+        "<li><b>Finished</b> - the job has finished speaking.  When a second job finishes, "
+        "this one will be deleted.  You may click <b>Restart</b> to repeat the job.</li>"
+        "</ul>"
+        "<em>Note</em>: Messages, Warnings, and Screen Reader Output do not appear in this list.  "
+        "See the Handbook for more information."
+        "</p>");
     m_jobListView->setWhatsThis( jobListViewWT);
 
     // splitter->setResizeMode(m_jobListView, QSplitter::Stretch);
@@ -154,106 +153,106 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
                           i18n("Hold"), hbox1);
     btn->setObjectName("job_hold");
     wt = i18n(
-            "<p>Changes a job to Paused state.  If currently speaking, the job stops speaking.  "
-            "Paused jobs prevent jobs that follow them from speaking, so either click "
-            "<b>Resume</b> to make the job speakable, or click <b>Later</b> to move it "
-            "down in the list.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Changes a job to Paused state.  If currently speaking, the job stops speaking.  "
+        "Paused jobs prevent jobs that follow them from speaking, so either click "
+        "<b>Resume</b> to make the job speakable, or click <b>Later</b> to move it "
+        "down in the list.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_hold()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("exec", K3Icon::Small, 0, true),
                           i18n("Resume"), hbox1);
     btn->setObjectName("job_resume");
     wt = i18n(
-            "<p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the "
-            "top speakable job in the list, it begins speaking.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the "
+        "top speakable job in the list, it begins speaking.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("redo", K3Icon::Small, 0, true),
                           i18n("R&estart"), hbox1);
     btn->setObjectName("job_restart");
     wt = i18n(
-            "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "
-            "is the top speakable job in the list, it begins speaking.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "
+        "is the top speakable job in the list, it begins speaking.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small, 0, true),
                           i18n("Re&move"), hbox1);
     btn->setObjectName("job_remove");
     wt = i18n(
-            "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "
-            "speakable job in the list begins speaking.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "
+        "speakable job in the list begins speaking.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("down", K3Icon::Small, 0, true),
                           i18n("&Later"), hbox1);
     btn->setObjectName("job_later");
     wt = i18n(
-            "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
-            "is currently speaking, its state changes to Paused.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
+        "is currently speaking, its state changes to Paused.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("2leftarrow", K3Icon::Small, 0, true),
                           i18n("Pre&vious Part"), hbox2);
     btn->setObjectName("part_prevpart");
     wt = i18n(
-            "<p>Rewinds a multi-part job to the previous part.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Rewinds a multi-part job to the previous part.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_par()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("1leftarrow", K3Icon::Small, 0, true),
                           i18n("&Previous Sentence"), hbox2);
     btn->setObjectName("job_prevsentence");
     wt = i18n(
-            "<p>Rewinds a job to the previous sentence.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Rewinds a job to the previous sentence.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_sen()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("1rightarrow", K3Icon::Small, 0, true),
                           i18n("&Next Sentence"), hbox2);
     btn->setObjectName("job_nextsentence");
     wt = i18n(
-            "<p>Advances a job to the next sentence.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Advances a job to the next sentence.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_sen()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("2rightarrow", K3Icon::Small, 0, true),
                           i18n("Ne&xt Part"), hbox2);
     btn->setObjectName("part_nextpart");
     wt = i18n(
-            "<p>Advances a multi-part job to the next part.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Advances a multi-part job to the next part.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_next_par()));
 
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("klipper", K3Icon::Small, 0, true),
                           i18n("&Speak Clipboard"), hbox3);
     btn->setObjectName("speak_clipboard");
     wt = i18n(
-            "<p>Queues the current contents of the clipboard for speaking and sets its state "
-            "to Waiting.  If the job is the topmost in the list, it begins speaking.  "
-            "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Queues the current contents of the clipboard for speaking and sets its state "
+        "to Waiting.  If the job is the topmost in the list, it begins speaking.  "
+        "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("fileopen", K3Icon::Small, 0, true),
                           i18n("Spea&k File"), hbox3);
     btn->setObjectName("speak_file");
     wt = i18n(
-            "<p>Prompts you for a file name and queues the contents of the file for speaking.  "
-            "You must click the <b>Resume</b> button before the job will be speakable.  "
-            "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Prompts you for a file name and queues the contents of the file for speaking.  "
+        "You must click the <b>Resume</b> button before the job will be speakable.  "
+        "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("translate", K3Icon::Small, 0, true),
                           i18n("Change Talker"), hbox3);
     btn->setObjectName("job_changetalker");
     wt = i18n(
-            "<p>Prompts you with a list of your configured Talkers from the <b>Talkers</b> tab.  "
-            "The job will be spoken using the selected Talker.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Prompts you with a list of your configured Talkers from the <b>Talkers</b> tab.  "
+        "The job will be spoken using the selected Talker.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
     btn = new QPushButton(KGlobal::iconLoader()->loadIcon("reload_page", K3Icon::Small, 0, true),
                           i18n("&Refresh"), hbox3);
     btn->setObjectName("refresh");
     wt = i18n(
-            "<p>Refresh the list of jobs.</p>");
-    btn->setWhatsThis( wt);
+        "<p>Refresh the list of jobs.</p>");
+    btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_refresh()));
 
     // Disable job buttons until a job is selected.
@@ -277,17 +276,18 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     //m_currentSentence->setHScrollBarMode(Q3ScrollView::AlwaysOff);
     //m_currentSentence->setVScrollBarMode(Q3ScrollView::Auto);
     wt = i18n(
-            "<p>The text of the sentence currently speaking.</p>");
-    m_currentSentence->setWhatsThis( wt);
+        "<p>The text of the sentence currently speaking.</p>");
+    m_currentSentence->setWhatsThis(wt);
 
     // Set the main widget for the part.
     setWidget(vBox);
 
-    connect(m_jobListView, SIGNAL(selectionChanged(Q3ListViewItem* )),
-        this, SLOT(slot_selectionChanged(Q3ListViewItem* )));
+    connect(m_jobListView, SIGNAL(clicked(const QModelIndex&)),
+        this, SLOT(slot_jobListView_clicked()));
 
-    // Fill the Job List View.
-    refreshJobListView();
+    // Fill the Job List.
+    refreshJobList();
+    
     // Select first item (if any).
     autoSelectInJobListView();
 
@@ -304,14 +304,14 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "sentenceStarted(QByteArray,uint,uint)",
         "sentenceStarted(QByteArray,uint,uint)",
         false)) kDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal sentenceStarted" << endl;
-    connectDCOPSignal(0, 0,
-        "sentenceFinished(QByteArray,uint,uint)",
-        "sentenceFinished(QByteArray,uint,uint)",
-        false);
     connectDCOPSignal("kttsd", "KSpeech",
-        "textSet(QByteArray,uint)",
-        "textSet(QByteArray,uint)",
+        "sentenceFinished(QByteArray,uint,uint)",
+        "sentenceFinished(QByteArray,uint,uint)",
         false);
+    if (!connectDCOPSignal("kttsd", "KSpeech",
+        "textSet(QByteArray,uint)",
+        "textSet(QByteArray,uint)",
+        false)) kDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal textSet" << endl;
     connectDCOPSignal("kttsd", "KSpeech",
         "textStarted(QByteArray,uint)",
         "textStarted(QByteArray,uint)",
@@ -339,8 +339,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
 
     m_extension = new KttsJobMgrBrowserExtension(this);
 
-    m_jobListView->show();
-
     // Divide splitter in half.  ListView gets half.  Buttons and Current Sentence get half.
     int halfSplitterSize = splitter->height()/2;
     QList<int> splitterSizes;
@@ -353,6 +351,7 @@ KttsJobMgrPart::~KttsJobMgrPart()
 {
     KGlobal::locale()->removeCatalog("kttsd");
     closeURL();
+    delete m_jobListModel;
 }
 
 bool KttsJobMgrPart::openFile()
@@ -366,9 +365,9 @@ bool KttsJobMgrPart::closeURL()
 }
 
 /**
-* This slot is connected to the Job List View selectionChanged signal.
+* This slot is connected to the Job List View clicked signal.
 */
-void KttsJobMgrPart::slot_selectionChanged(Q3ListViewItem*)
+void KttsJobMgrPart::slot_jobListView_clicked()
 {
     // Enable job buttons.
     enableJobActions(true);
@@ -469,19 +468,24 @@ void KttsJobMgrPart::slot_job_move()
     if (jobNum)
     {
         moveTextLater(jobNum);
-        refreshJobListView();
+        refreshJobList();
         // Select the job we just moved.
-        Q3ListViewItem* item = findItemByJobNum(jobNum);
-        if (item) m_jobListView->setSelected(item, true);
+        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+        if (index.isValid())
+        {
+            m_jobListView->setCurrentIndex(index);
+            slot_jobListView_clicked();
+        }
     }
 }
 
 void KttsJobMgrPart::slot_job_change_talker()
 {
-    Q3ListViewItem* item = m_jobListView->selectedItem();
-    if (item)
+    QModelIndex index = m_jobListView->currentIndex();
+    if (index.isValid())
     {
-        QString talkerID = item->text(jlvcTalkerID);
+        JobInfo job = m_jobListModel->getRow(index.row());
+        QString talkerID = job.talkerID;
         QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
         int ndx = talkerIDs.indexOf(talkerID);
         QString talkerCode;
@@ -490,7 +494,7 @@ void KttsJobMgrPart::slot_job_change_talker()
         int dlgResult = dlg.exec();
         if (dlgResult != KDialogBase::Accepted) return;
         talkerCode = dlg.getSelectedTalkerCode();
-        int jobNum = item->text(jlvcJobNum).toInt();
+        int jobNum = job.jobNum;
         changeTextTalker(talkerCode, jobNum);
         refreshJob(jobNum);
     }
@@ -498,9 +502,10 @@ void KttsJobMgrPart::slot_job_change_talker()
 
 void KttsJobMgrPart::slot_speak_clipboard()
 {
+    // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: running" << endl;
+    
     // Get the clipboard object.
     QClipboard *cb = kapp->clipboard();
-
 
     // Copy text from the clipboard.
     QString text;
@@ -553,33 +558,19 @@ void KttsJobMgrPart::slot_refresh()
     m_talkerCodesToTalkerIDs.clear();
     // Get current job number.
     uint jobNum = getCurrentJobNum();
-    refreshJobListView();
+    refreshJobList();
     // Select the previously-selected job.
     if (jobNum)
     {
-        Q3ListViewItem* item = findItemByJobNum(jobNum);
-        if (item) m_jobListView->setSelected(item, true);
+        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+        if (index.isValid())
+        {
+            m_jobListView->setCurrentIndex(index);
+            slot_jobListView_clicked();
+        }
     }
 }
 
-
-/**
-* Convert a KTTSD job state integer into a display string.
-* @param state          KTTSD job state
-* @return               Display string for the state.
-*/
-QString KttsJobMgrPart::stateToStr(int state)
-{
-    switch( state )
-    {
-        case KSpeech::jsQueued: return        i18n("Queued");
-        case KSpeech::jsSpeakable: return     i18n("Waiting");
-        case KSpeech::jsSpeaking: return      i18n("Speaking");
-        case KSpeech::jsPaused: return        i18n("Paused");
-        case KSpeech::jsFinished: return      i18n("Finished");
-        default: return                       i18n("Unknown");
-    }
-}
 
 /**
 * Get the Job Number of the currently-selected job in the Job List View.
@@ -589,12 +580,9 @@ QString KttsJobMgrPart::stateToStr(int state)
 uint KttsJobMgrPart::getCurrentJobNum()
 {
     uint jobNum = 0;
-    Q3ListViewItem* item = m_jobListView->selectedItem();
-    if (item)
-    {
-        QString jobNumStr = item->text(jlvcJobNum);
-        jobNum = jobNumStr.toUInt(0, 10);
-    }
+    QModelIndex index = m_jobListView->currentIndex();
+    if (index.isValid())
+        jobNum = m_jobListModel->getRow(index.row()).jobNum;
     return jobNum;
 }
 
@@ -606,23 +594,13 @@ uint KttsJobMgrPart::getCurrentJobNum()
 int KttsJobMgrPart::getCurrentJobPartCount()
 {
     int partCount = 0;
-    Q3ListViewItem* item = m_jobListView->selectedItem();
-    if (item)
+    QModelIndex index = m_jobListView->currentIndex();
+    if (index.isValid())
     {
-        QString partCountStr = item->text(jlvcPartCount);
-        partCount = partCountStr.toUInt(0, 10);
+        JobInfo job = m_jobListModel->getRow(index.row());
+        partCount = job.partCount;
     }
     return partCount;
-}
-
-/**
-* Given a Job Number, returns the Job List View item containing the job.
-* @param jobNum         Job Number.
-* @return               QListViewItem containing the job or 0 if not found.
-*/
-Q3ListViewItem* KttsJobMgrPart::findItemByJobNum(const uint jobNum)
-{
-    return m_jobListView->findItem(QString::number(jobNum), jlvcJobNum);
 }
 
 /**
@@ -633,79 +611,56 @@ void KttsJobMgrPart::refreshJob(uint jobNum)
 {
     QByteArray jobInfo = getTextJobInfo(jobNum);
     QDataStream stream(&jobInfo, QIODevice::ReadOnly);
-    int state;
-    DCOPCString appId;
-    QString talker;
-    int seq;
-    int sentenceCount;
-    int partNum;
-    int partCount;
-    stream >> state;
-    stream >> appId;
-    stream >> talker;
-    stream >> seq;
-    stream >> sentenceCount;
-    stream >> partNum;
-    stream >> partCount;
-    QString talkerID = cachedTalkerCodeToTalkerID(talker);
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
-    {
-        item->setText(jlvcTalkerID, talkerID);
-        item->setText(jlvcState, stateToStr(state));
-        item->setText(jlvcPosition, QString::number(seq));
-        item->setText(jlvcSentences, QString::number(sentenceCount));
-        item->setText(jlvcPartNum, QString::number(partNum));
-        item->setText(jlvcPartCount, QString::number(partCount));
-    }
+    JobInfo job;
+    QString talkerCode;
+    job.jobNum = jobNum;
+    stream >> job.state;
+    stream >> job.appId;
+    stream >> talkerCode;
+    stream >> job.sentenceNum;
+    stream >> job.sentenceCount;
+    stream >> job.partNum;
+    stream >> job.partCount;
+    job.talkerID = cachedTalkerCodeToTalkerID(talkerCode);
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
+        m_jobListModel->updateRow(index.row(), job);    
 }
 
 /**
 * Fill the Job List View.
 */
-void KttsJobMgrPart::refreshJobListView()
+void KttsJobMgrPart::refreshJobList()
 {
-    // kDebug() << "KttsJobMgrPart::refreshJobListView: Running" << endl;
-    m_jobListView->clear();
+    // kDebug() << "KttsJobMgrPart::refreshJobList: Running" << endl;
+    m_jobListModel->clear();
+    JobInfoList jobInfoList;
     enableJobActions(false);
     enableJobPartActions(false);
     QString jobNumbers = getTextJobNumbers();
     // kDebug() << "jobNumbers: " << jobNumbers << endl;
-    QStringList jobNums = jobNumbers.split(",");
-    Q3ListViewItem* lastItem = 0;
-    QStringList::ConstIterator endJobNums(jobNums.constEnd());
-    for( QStringList::ConstIterator it = jobNums.constBegin(); it != endJobNums; ++it)
+    QStringList jobNums = jobNumbers.split(",", QString::SkipEmptyParts);
+    for (int ndx = 0; ndx < jobNums.count(); ++ndx)
     {
-        QString jobNumStr = *it;
+        QString jobNumStr = jobNums[ndx];
         // kDebug() << "jobNumStr: " << jobNumStr << endl;
         uint jobNum = jobNumStr.toUInt(0, 10);
         QByteArray jobInfo = getTextJobInfo(jobNum);
         QDataStream stream(&jobInfo, QIODevice::ReadOnly);
-        int state;
-        DCOPCString appId;
+        JobInfo job;
+        job.jobNum = jobNum;
         QString talkerCode;
-        int seq;
-        int sentenceCount;
-        int partNum;
-        int partCount;
-        stream >> state;
-        stream >> appId;
+        stream >> job.state;
+        stream >> job.appId;
         stream >> talkerCode;
-        stream >> seq;
-        stream >> sentenceCount;
-        stream >> partNum;
-        stream >> partCount;
-        QString talkerID = cachedTalkerCodeToTalkerID(talkerCode);
-        // Append to list.
-        if (lastItem)
-            lastItem = new Q3ListViewItem(m_jobListView, lastItem, jobNumStr, appId, talkerID,
-                stateToStr(state), QString::number(seq), QString::number(sentenceCount),
-                QString::number(partNum), QString::number(partCount));
-        else
-            lastItem = new Q3ListViewItem(m_jobListView, jobNumStr, appId, talkerID,
-                stateToStr(state), QString::number(seq), QString::number(sentenceCount),
-                QString::number(partNum), QString::number(partCount));
+        stream >> job.sentenceNum;
+        stream >> job.sentenceCount;
+        stream >> job.partNum;
+        stream >> job.partCount;
+        job.talkerID = cachedTalkerCodeToTalkerID(talkerCode);
+        jobInfoList.append(job);
     }
+    m_jobListModel->setDatastore(jobInfoList);
 }
 
 /**
@@ -715,17 +670,20 @@ void KttsJobMgrPart::refreshJobListView()
 void KttsJobMgrPart::autoSelectInJobListView()
 {
     // If something selected, nothing to do.
-    if (m_jobListView->selectedItem()) return;
+    if (m_jobListView->currentIndex().isValid()) return;
     // If empty, disable job buttons.
-    Q3ListViewItem* item = m_jobListView->firstChild();
-    if (!item)
+    
+    if (m_jobListModel->rowCount() == 0)
     {
         enableJobActions(false);
         enableJobPartActions(false);
     }
     else
-        // Select first item.  Should fire itemSelected event which will enable job buttons.
-        m_jobListView->setSelected(item, true);
+    {
+        // Select first item.
+        m_jobListView->setCurrentIndex(m_jobListModel->index(0, 0));
+        slot_jobListView_clicked();
+    }
 }
 
 /**
@@ -768,10 +726,10 @@ void KttsJobMgrPart::enableJobActions(bool enable)
     if (enable)
     {
         // Later button only enables if currently selected list item is not bottom of list.
-        Q3ListViewItem* item = m_jobListView->selectedItem();
-        if (item)
+        QModelIndex index = m_jobListView->currentIndex();
+        if (index.isValid())
         {
-            bool enableLater = item->nextSibling();
+            bool enableLater = (index.row() < m_jobListModel->rowCount());
 
 #if defined Q_CC_MSVC && _MSC_VER < 1300
             l = qfindChildren<QPushButton *>( m_buttonBox, "job_later" );
@@ -831,11 +789,13 @@ ASYNC KttsJobMgrPart::markerSeen(const QByteArray&, const QString&)
 ASYNC KttsJobMgrPart::sentenceStarted(const QByteArray&, const uint jobNum, const uint seq)
 {
     // kDebug() << "KttsJobMgrPart::sentencedStarted: jobNum = " << jobNum << " seq = " << seq << endl;
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
     {
-        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
-        item->setText(jlvcPosition, QString::number(seq));
+        JobInfo job = m_jobListModel->getRow(index.row());
+        job.state = KSpeech::jsSpeaking;
+        job.sentenceNum = seq;
+        m_jobListModel->updateRow(index.row(), job);
         m_currentSentence->setPlainText(getTextJobSentence(jobNum, seq));
     }
 }
@@ -863,35 +823,39 @@ ASYNC KttsJobMgrPart::sentenceFinished(const QByteArray& /*appId*/, const uint /
 * This signal is emitted whenever a new text job is added to the queue.
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
+*
+* If the job is already in the list, refreshes it.
 */
 ASYNC KttsJobMgrPart::textSet(const QByteArray&, const uint jobNum)
 {
-    QByteArray jobInfo = getTextJobInfo(jobNum);
-    QDataStream stream(&jobInfo, QIODevice::ReadOnly);
-    int state;
-    DCOPCString appId;
-    QString talkerCode;
-    int seq;
-    int sentenceCount;
-    int partNum;
-    int partCount;
-    stream >> state;
-    stream >> appId;
-    stream >> talkerCode;
-    stream >> seq;
-    stream >> sentenceCount;
-    stream >> partNum;
-    stream >> partCount;
-    QString talkerID = cachedTalkerCodeToTalkerID(talkerCode);
-    Q3ListViewItem* item = new Q3ListViewItem(m_jobListView, m_jobListView->lastItem(),
-        QString::number(jobNum), appId, talkerID,
-        stateToStr(state), QString::number(seq), QString::number(sentenceCount),
-        QString::number(partNum), QString::number(partCount));
-    // Should we select this job?
-    if (m_selectOnTextSet)
+    kDebug() << "KttsJobMgrPart::textSet: jobNum = " << jobNum << endl;
+    
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
+        refreshJob(jobNum);
+    else
     {
-        m_jobListView->setSelected(item, true);
-        m_selectOnTextSet = false;
+        QByteArray jobInfo = getTextJobInfo(jobNum);
+        QDataStream stream(&jobInfo, QIODevice::ReadOnly);
+        JobInfo job;
+        job.jobNum = jobNum;
+        QString talkerCode;
+        stream >> job.state;
+        stream >> job.appId;
+        stream >> talkerCode;
+        stream >> job.sentenceNum;
+        stream >> job.sentenceCount;
+        stream >> job.partNum;
+        stream >> job.partCount;
+        job.talkerID = cachedTalkerCodeToTalkerID(talkerCode);
+        m_jobListModel->appendRow(job);
+        // Should we select this job?
+        if (m_selectOnTextSet)
+        {
+            m_jobListView->setCurrentIndex(m_jobListModel->jobNumToIndex(jobNum));
+            m_selectOnTextSet = false;
+            slot_jobListView_clicked();
+        }
     }
     // If a job not already selected, select this one.
     autoSelectInJobListView();
@@ -916,11 +880,13 @@ ASYNC KttsJobMgrPart::textAppended(const QByteArray& appId, const uint jobNum, c
 */
 ASYNC KttsJobMgrPart::textStarted(const QByteArray&, const uint jobNum)
 {
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
     {
-        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
-        item->setText(jlvcPosition, "1");
+        JobInfo job = m_jobListModel->getRow(index.row());
+        job.state = KSpeech::jsSpeaking;
+        job.sentenceNum = 1;
+        m_jobListModel->updateRow(index.row(), job);
     }
 }
 
@@ -936,13 +902,7 @@ ASYNC KttsJobMgrPart::textStarted(const QByteArray&, const uint jobNum)
 ASYNC KttsJobMgrPart::textFinished(const QByteArray&, const uint jobNum)
 {
     // kDebug() << "KttsJobMgrPart::textFinished: jobNum = " << jobNum << endl;
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
-    {
-        item->setText(jlvcState, stateToStr(KSpeech::jsFinished));
-        // Update sentence pointer, since signal may not be emitted for final CR.
-        refreshJob(jobNum);
-    }
+    refreshJob(jobNum);
     m_currentSentence->setPlainText(QString());
 }
 
@@ -954,11 +914,13 @@ ASYNC KttsJobMgrPart::textFinished(const QByteArray&, const uint jobNum)
 ASYNC KttsJobMgrPart::textStopped(const QByteArray&, const uint jobNum)
 {
     // kDebug() << "KttsJobMgrPart::textStopped: jobNum = " << jobNum << endl;
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
     {
-        item->setText(jlvcState, stateToStr(KSpeech::jsQueued));
-        item->setText(jlvcPosition, "1");
+        JobInfo job = m_jobListModel->getRow(index.row());
+        job.state = KSpeech::jsQueued;
+        job.sentenceNum = 1;
+        m_jobListModel->updateRow(index.row(), job);
     }
 }
 
@@ -970,10 +932,12 @@ ASYNC KttsJobMgrPart::textStopped(const QByteArray&, const uint jobNum)
 ASYNC KttsJobMgrPart::textPaused(const QByteArray&, const uint jobNum)
 {
     // kDebug() << "KttsJobMgrPart::textPaused: jobNum = " << jobNum << endl;
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
     {
-        item->setText(jlvcState, stateToStr(KSpeech::jsPaused));
+        JobInfo job = m_jobListModel->getRow(index.row());
+        job.state = KSpeech::jsPaused;
+        m_jobListModel->updateRow(index.row(), job);
     }
 }
 
@@ -984,10 +948,12 @@ ASYNC KttsJobMgrPart::textPaused(const QByteArray&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textResumed(const QByteArray&, const uint jobNum)
 {
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    if (item)
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
     {
-        item->setText(jlvcState, stateToStr(KSpeech::jsSpeaking));
+        JobInfo job = m_jobListModel->getRow(index.row());
+        job.state = KSpeech::jsSpeaking;
+        m_jobListModel->updateRow(index.row(), job);
     }
 }
 
@@ -999,8 +965,9 @@ ASYNC KttsJobMgrPart::textResumed(const QByteArray&, const uint jobNum)
 */
 ASYNC KttsJobMgrPart::textRemoved(const QByteArray&, const uint jobNum)
 {
-    Q3ListViewItem* item = findItemByJobNum(jobNum);
-    delete item;
+    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+    if (index.isValid())
+        m_jobListModel->removeRow(index.row());
     autoSelectInJobListView();
 }
 
@@ -1012,4 +979,3 @@ KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
 KttsJobMgrBrowserExtension::~KttsJobMgrBrowserExtension()
 {
 }
-

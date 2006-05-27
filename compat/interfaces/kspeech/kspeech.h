@@ -5,7 +5,7 @@
   Copyright:
   (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
-  (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández
  ******************************************************************************/
@@ -208,8 +208,8 @@
  *     "kttsd", object "KSpeech".
  *
    @verbatim
-     MyPart::MyPart(QWidget *parent, const char *name) :
-        KParts::ReadOnlyPart(parent, name),
+     MyPart::MyPart(QWidget *parent) :
+        KParts::ReadOnlyPart(parent),
         DCOPStub("kttsd", "KSpeech") {
    @endverbatim
  *
@@ -294,8 +294,8 @@
  *     receiving object.
  *
    @verbatim
-     MyPart::MyPart(QWidget *parent, const char *name) :
-         KParts::ReadOnlyPart(parent, name),
+     MyPart::MyPart(QWidget *parent) :
+         KParts::ReadOnlyPart(parent),
          DCOPObject("mypart_kspeechsink") {
    @endverbatim
  *

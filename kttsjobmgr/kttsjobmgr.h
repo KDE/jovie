@@ -34,12 +34,12 @@
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
+class QTreeView;
 class KAboutData;
 class KttsJobMgrBrowserExtension;
-class K3ListView;
-class Q3ListViewItem;
 class KVBox;
 class KTextEdit;
+class JobInfoListModel;
 
 class KttsJobMgrPart:
     public KParts::ReadOnlyPart,
@@ -146,9 +146,10 @@ protected:
 
 private slots:
     /**
-    * This slot is connected to the Job List View selectionChanged signal.
+    * This slot is connected to the Job List View clicked signal.
     */
-    void slot_selectionChanged(Q3ListViewItem* item);
+    void slot_jobListView_clicked();
+
     /**
     * Slots connected to buttons.
     */
@@ -168,29 +169,6 @@ private slots:
 
 private:
     /**
-    * @enum JobListViewColumn
-    * Columns in the Job List View.
-    */
-    enum JobListViewColumn
-    {
-        jlvcJobNum = 0,               /**< Job Number. */
-        jlvcOwner = 1,                /**< AppId of job owner */
-        jlvcTalkerID = 2,             /**< Job Talker ID */
-        jlvcState = 3,                /**< Job State */
-        jlvcPosition = 4,             /**< Current sentence of job. */
-        jlvcSentences = 5,            /**< Number of sentences in job. */
-        jlvcPartNum = 6,              /**< Current part of the job. */
-        jlvcPartCount = 7             /**< Number of parts in job. */
-    };
-
-    /**
-    * Convert a KTTSD job state integer into a display string.
-    * @param state          KTTSD job state
-    * @return               Display string for the state.
-    */
-    QString stateToStr(int state);
-
-    /**
     * Get the Job Number of the currently-selected job in the Job List View.
     * @return               Job Number of currently-selected job.
     *                       0 if no currently-selected job.
@@ -203,13 +181,6 @@ private:
     *                       0 if no currently-selected job.
     */
     int getCurrentJobPartCount();
-
-    /**
-    * Given a Job Number, returns the Job List View item containing the job.
-    * @param jobNum         Job Number.
-    * @return               QListViewItem containing the job or 0 if not found.
-    */
-    Q3ListViewItem* findItemByJobNum(const uint jobNum);
 
     /**
     * Enables or disables all the job-related buttons.
@@ -230,9 +201,9 @@ private:
     void refreshJob(uint jobNum);
 
     /**
-    * Fill the Job List View.
+    * Fill the Job List.
     */
-    void refreshJobListView();
+    void refreshJobList();
 
     /**
     * If nothing selected in Job List View and list not empty, select top item.
@@ -250,7 +221,8 @@ private:
     /**
     * Job ListView.
     */
-    K3ListView* m_jobListView;
+    QTreeView* m_jobListView;
+    JobInfoListModel* m_jobListModel;
     KttsJobMgrBrowserExtension *m_extension;
 
     /**
@@ -285,4 +257,3 @@ public:
 };
 
 #endif    // _KTTSJOBMGRPART_H_
-
