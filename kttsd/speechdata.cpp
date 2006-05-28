@@ -288,6 +288,7 @@ void SpeechData::enqueueWarning( const QString &warning, const QString &talker, 
     job->appId = appId;
     job->seq = 1;
     job->partCount = 1;
+    job->partSeqNums = QList<int>();
     warnings.enqueue( job );
     job->sentences = QStringList();
     // Do not apply Sentence Boundary Detection filters to warnings.
@@ -345,6 +346,8 @@ void SpeechData::enqueueMessage( const QString &message, const QString &talker, 
     job->talker = talker;
     job->appId = appId;
     job->seq = 1;
+    job->partCount = 1;
+    job->partSeqNums = QList<int>();
     messages.enqueue( job );
     job->sentences = QStringList();
     // Do not apply Sentence Boundary Detection filters to messages.
@@ -1211,7 +1214,7 @@ void SpeechData::waitJobFiltering(const mlJob* job)
 void SpeechData::doFiltering()
 {
     // kDebug() << "SpeechData::doFiltering: Running." << endl;
-    // kDebug() << "SpeechData::doFiltering: Scanning " << m_pooledFilterMgrs.count() << " pooled filter managers." << endl;
+    kDebug() << "SpeechData::doFiltering: Scanning " << m_pooledFilterMgrs.count() << " pooled filter managers." << endl;
     bool again = true;
     while (again)
     {
@@ -1230,7 +1233,7 @@ void SpeechData::doFiltering()
                 if (filterMgr->getState() == FilterMgr::fsFinished)
                 {
                     mlJob* job = pooledFilterMgr->job;
-                    // kDebug() << "SpeechData::doFiltering: filter finished, jobNum = " << job->jobNum << " partNum = " << pooledFilterMgr->partNum << endl;
+                    kDebug() << "SpeechData::doFiltering: filter finished, jobNum = " << job->jobNum << " partNum = " << pooledFilterMgr->partNum << endl;
                     // We have to retrieve parts in order, but parts may not be completed in order.
                     // See if this is the next part we need.
                     if ((int)job->partSeqNums.count() == (pooledFilterMgr->partNum - 1))
@@ -1238,7 +1241,7 @@ void SpeechData::doFiltering()
                         pooledFilterMgr->busy = false;
                         // Retrieve text from FilterMgr.
                         QString text = filterMgr->getOutput();
-                        // kDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
+                        kDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
                         // kDebug() << "SpeechData::doFiltering: filtered text: " << text << endl;
                         filterMgr->ackFinished();
                         // Convert the TalkerCode back into string.
@@ -1277,12 +1280,12 @@ void SpeechData::doFiltering()
                         // A part is ready, but need to first process a finished preceeding part
                         // that follows this one in the pool of filter managers.
                         again = true;
-                        // kDebug() << "SpeechData::doFiltering: filter is finished, but must wait for earlier part to finish filter, job = " << pooledFilterMgr->job->jobNum << endl;
+                        kDebug() << "SpeechData::doFiltering: filter is finished, but must wait for earlier part to finish filter, job = " << pooledFilterMgr->job->jobNum << endl;
                     }
                 }
-                // else kDebug() << "SpeechData::doFiltering: filter for job " << pooledFilterMgr->job->jobNum << " is busy." << endl;
+                else kDebug() << "SpeechData::doFiltering: filter for job " << pooledFilterMgr->job->jobNum << " is busy." << endl;
             }
-            // else kDebug() << "SpeechData::doFiltering: filter is idle" << endl;
+            else kDebug() << "SpeechData::doFiltering: filter is idle" << endl;
             it = nextIt;
         }
     }
