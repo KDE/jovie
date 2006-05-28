@@ -107,7 +107,7 @@ public:
     *   @param state          KTTSD job state
     *   @return               Display string for the state.
     */
-    QString JobInfoListModel::stateToStr(int state) const;
+    QString stateToStr(int state) const;
 
 private:
     // Returns the displayable portion of the job corresponding to a column of the view.
