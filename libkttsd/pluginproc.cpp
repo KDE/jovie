@@ -32,7 +32,7 @@
 * Constructor
 */
 PlugInProc::PlugInProc( QObject *parent, const char *name) : QObject(parent){
-    Q_UNUSED(name);
+    setObjectName(name);
     // kDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 

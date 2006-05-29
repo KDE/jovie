@@ -43,7 +43,7 @@
 * Constructor 
 */
 KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent){
-    Q_UNUSED(name);
+    setObjectName(name);
     // kDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
     QString systemPath(getenv("PATH"));
     // kDebug() << "Path is " << systemPath << endl;

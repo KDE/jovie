@@ -47,7 +47,7 @@ TestPlayer::TestPlayer(QObject *parent, const char *name,
     const int playerOption, const float audioStretchFactor, const QString &sinkName) :
     QObject(parent)
 {
-    Q_UNUSED(name);
+    setObjectName(name);
     m_playerOption = playerOption;
     m_audioStretchFactor = audioStretchFactor;
     m_stretcher = 0;

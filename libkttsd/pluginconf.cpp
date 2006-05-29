@@ -39,7 +39,7 @@
 * Constructor 
 */
 PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent){
-    Q_UNUSED(name);
+    setObjectName(name);
     kDebug() << "PlugInConf::PlugInConf: Running" << endl;
     QString systemPath(getenv("PATH"));
     // kDebug() << "Path is " << systemPath << endl;
