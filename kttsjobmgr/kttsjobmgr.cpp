@@ -270,11 +270,9 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     // Create a box to contain the current sentence.
     m_currentSentence = new KTextEdit(sentenceVBox);
     m_currentSentence->setReadOnly(true);
-#warning "kde4: port them"
-    //m_currentSentence->setWordWrap(Q3TextEdit::WidgetWidth);
-    //m_currentSentence->setWrapPolicy(Q3TextEdit::AtWordOrDocumentBoundary);
-    //m_currentSentence->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    //m_currentSentence->setVScrollBarMode(Q3ScrollView::Auto);
+    m_currentSentence->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    m_currentSentence->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_currentSentence->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     wt = i18n(
         "<p>The text of the sentence currently speaking.</p>");
     m_currentSentence->setWhatsThis(wt);
