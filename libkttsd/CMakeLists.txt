@@ -25,7 +25,10 @@ kde4_automoc(${kttsd_LIB_SRCS})
 
 kde4_add_library(kttsd SHARED ${kttsd_LIB_SRCS})
 
-target_link_libraries(kttsd  ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(kttsd
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KUTILS_LIBS} )
 
 set_target_properties(kttsd PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kttsd )
