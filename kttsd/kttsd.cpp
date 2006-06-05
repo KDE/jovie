@@ -810,7 +810,9 @@ void KTTSD::speakClipboard()
 */
 void KTTSD::showDialog()
 {
-    KRun::runCommand("kttsmgr");
+    QString cmd = "kcmshell kcmkttsd --caption ";
+    cmd += "'" + i18n("KDE Text-to-Speech") + "'";
+    KRun::runCommand(cmd);
 }
 
 /**
