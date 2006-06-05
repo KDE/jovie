@@ -73,9 +73,6 @@
 
 // Some constants.
 // Defaults set when clicking Defaults button.
-const bool embedInSysTrayCheckBoxValue = true;
-const bool showMainWindowOnStartupCheckBoxValue = true;
-
 const bool autostartMgrCheckBoxValue = true;
 const bool autoexitMgrCheckBoxValue = true;
 
@@ -428,10 +425,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     // General tab.
     connect(enableKttsdCheckBox, SIGNAL(toggled(bool)),
             SLOT(slotEnableKttsd_toggled(bool)));
-    connect(embedInSysTrayCheckBox, SIGNAL(toggled(bool)),
-            SLOT(slotEmbedInSysTrayCheckBox_toggled(bool)));
-    connect(showMainWindowOnStartupCheckBox, SIGNAL(toggled(bool)),
-            SLOT(configChanged()));
     connect(autostartMgrCheckBox, SIGNAL(toggled(bool)),
             SLOT(slotAutoStartMgrCheckBox_toggled(bool)));
     connect(autoexitMgrCheckBox, SIGNAL(toggled(bool)),
@@ -621,11 +614,6 @@ void KCMKttsMgr::load()
     textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
     // Overall settings.
-    embedInSysTrayCheckBox->setChecked(m_config->readEntry("EmbedInSysTray",
-        embedInSysTrayCheckBox->isChecked()));
-    showMainWindowOnStartupCheckBox->setChecked(m_config->readEntry(
-        "ShowMainWindowOnStartup", showMainWindowOnStartupCheckBox->isChecked()));
-
     enableKttsdCheckBox->setChecked(m_config->readEntry("EnableKttsd",
         enableKttsdCheckBox->isChecked()));
 
@@ -830,10 +818,6 @@ void KCMKttsMgr::load()
         slotEnableKttsd_toggled(false);
     }
 
-    // Enable ShowMainWindowOnStartup checkbox based on EmbedInSysTray checkbox.
-    showMainWindowOnStartupCheckBox->setEnabled(
-        embedInSysTrayCheckBox->isChecked());
-
     // Phonon settings.
     // None.
 
@@ -885,9 +869,6 @@ void KCMKttsMgr::save()
     m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
 
     // Overall settings.
-    m_config->writeEntry("EmbedInSysTray", embedInSysTrayCheckBox->isChecked());
-    m_config->writeEntry("ShowMainWindowOnStartup",
-        showMainWindowOnStartupCheckBox->isChecked());
     m_config->writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
     m_config->writeEntry("AutoExitManager", autoexitMgrCheckBox->isChecked());
 
@@ -1028,18 +1009,6 @@ void KCMKttsMgr::defaults() {
     switch (currentPageIndex)
     {
         case wpGeneral:
-            if (embedInSysTrayCheckBox->isChecked() != embedInSysTrayCheckBoxValue)
-            {
-                changed = true;
-                embedInSysTrayCheckBox->setChecked(embedInSysTrayCheckBoxValue);
-            }
-            if (showMainWindowOnStartupCheckBox->isChecked() !=
-                showMainWindowOnStartupCheckBoxValue)
-            {
-                changed = true;
-                showMainWindowOnStartupCheckBox->setChecked(
-                    showMainWindowOnStartupCheckBoxValue);
-            }
             if (autostartMgrCheckBox->isChecked() != autostartMgrCheckBoxValue)
             {
                 changed = true;
@@ -1807,12 +1776,6 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
             }
     }
     reenter = false;
-}
-
-void KCMKttsMgr::slotEmbedInSysTrayCheckBox_toggled(bool checked)
-{
-    showMainWindowOnStartupCheckBox->setEnabled(checked);
-    configChanged();
 }
 
 void KCMKttsMgr::slotAutoStartMgrCheckBox_toggled(bool checked)

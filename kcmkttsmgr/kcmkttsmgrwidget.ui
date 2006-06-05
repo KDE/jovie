@@ -38,20 +38,20 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
        <string>&amp;General</string>
       </attribute>
-      <layout class="QGridLayout" >
+      <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="0" colspan="2" >
+       <item>
         <widget class="QCheckBox" name="enableKttsdCheckBox" >
          <property name="whatsThis" >
           <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
@@ -61,75 +61,20 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QCheckBox" name="embedInSysTrayCheckBox" >
+       <item>
+        <widget class="QCheckBox" name="autostartMgrCheckBox" >
          <property name="whatsThis" >
-          <string>When checked, KTTSMgr displays an icon in the system tray, and clicking OK or Cancel buttons does not stop KTTSMgr.  Use system tray context menu to quit KTTSMgr.  This setting takes effect when KTTSMgr is next started.  This setting has no effect when running in the KDE Control Center.</string>
+          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em>Note&lt;em>: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
          </property>
          <property name="text" >
-          <string>Always em&amp;bed Text-to-Speech Manager in system tray</string>
+          <string>Sta&amp;rt minimized in system tray when speaking</string>
          </property>
          <property name="checked" >
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="6" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0" colspan="2" >
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="showMainWindowOnStartupCheckBox" >
-           <property name="whatsThis" >
-            <string>When checked, the KTTSMgr window is displayed when KTTSMgr starts.  When unchecked, click on the icon in the system tray to display the KTTSMgr window.</string>
-           </property>
-           <property name="text" >
-            <string>Show &amp;main window on startup</string>
-           </property>
-           <property name="checked" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="5" column="0" colspan="2" >
+       <item>
         <layout class="QHBoxLayout" >
          <property name="margin" >
           <number>0</number>
@@ -168,18 +113,21 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0" colspan="2" >
-        <widget class="QCheckBox" name="autostartMgrCheckBox" >
-         <property name="whatsThis" >
-          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em>Note&lt;em>: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="text" >
-          <string>Sta&amp;rt minimized in system tray when speaking</string>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
          </property>
-         <property name="checked" >
-          <bool>true</bool>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -1292,6 +1240,13 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
    <class>KCModule</class>
    <extends>QWidget</extends>
    <header>kcmodule.h</header>
@@ -1300,24 +1255,15 @@
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QLineEdit</extends>
+   <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-   <container>1</container>
+   <container>0</container>
    <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>mainTab</tabstop>
   <tabstop>enableKttsdCheckBox</tabstop>
-  <tabstop>embedInSysTrayCheckBox</tabstop>
-  <tabstop>showMainWindowOnStartupCheckBox</tabstop>
   <tabstop>autostartMgrCheckBox</tabstop>
   <tabstop>autoexitMgrCheckBox</tabstop>
   <tabstop>addTalkerButton</tabstop>

@@ -1,8 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KTTSMgr Application
-  -------------------
+  KTTSMgr System Tray Application
+  -------------------------------
   Copyright:
-  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
@@ -25,10 +25,6 @@
 #ifndef KTTSMGR_H
 #define KTTSMGR_H
 
-// Qt includes.
-#include <QEvent>
-#include <QToolTip>
-
 // KDE includes.
 #include <ksystemtray.h>
 
@@ -36,14 +32,9 @@
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
-// class KttsToolTip: public QToolTip
-// {
-//     public:
-//         KttsToolTip ( QWidget* parent );
-// 
-//     protected:
-//         virtual void maybeTip ( const QPoint & p );
-// };
+class QEvent;
+class QMouseEvent;
+class QAction;
 
 class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
 {
@@ -58,13 +49,18 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
 
     protected:
         ASYNC textFinished(const QByteArray& appId, uint jobNum);
-        virtual bool eventFilter( QObject* o, QEvent* e );
+        bool event(QEvent *event);
+        void mousePressEvent(QMouseEvent* ev);
+        virtual void contextMenuAboutToShow(KMenu* menu);
 
     private slots:
 
         void speakClipboardSelected();
-        void holdSelected();
+        void stopSelected();
+        void pauseSelected();
         void resumeSelected();
+        void repeatSelected();
+        void configureSelected();
         void aboutSelected();
         void helpSelected();
         void quitSelected();
@@ -76,10 +72,15 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
          * @return               Display string for the state.
          */
         QString stateToStr(int state);
-
-        bool isKttsdRunning();
         void exitWhenFinishedSpeaking();
-        // KttsToolTip* m_toolTip;
+        
+        bool isKttsdRunning();
+        QAction* actStop;
+        QAction* actPause;
+        QAction* actResume;
+        QAction* actRepeat;
+        QAction* actSpeakClipboard;
+        QAction* actConfigure;
 };
 
 #endif    // KTTSMGR_H

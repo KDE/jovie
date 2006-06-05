@@ -1,8 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KTTSMgr Application
-  -------------------
+  KTTSMgr System Tray Application
+  -------------------------------
   Copyright:
-  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
@@ -25,11 +25,12 @@
 // Qt includes.
 #include <QImage>
 #include <QPixmap>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QToolTip>
 
 // KDE includes.
-#include <kconfig.h>
 #include <kuniqueapplication.h>
-#include <kcmultidialog.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
@@ -39,6 +40,10 @@
 #include <kaboutapplication.h>
 #include <dcopclient.h>
 #include <ktoolinvocation.h>
+#include <kprocess.h>
+#include <klocale.h>
+#include <kicon.h>
+#include <kconfig.h>
 
 // KTTSMgr includes.
 #include "kspeech.h"
@@ -46,10 +51,8 @@
 
 static const KCmdLineOptions options[] =
 {
-    { "s", 0, 0 },
-    { "systray", I18N_NOOP("Start minimized in system tray"), 0 },
     { "a", 0, 0 },
-    { "autoexit", I18N_NOOP("Exit when speaking is finished and minimized in system tray"), 0 },
+    { "autoexit", I18N_NOOP("Exit when speaking is finished"), 0 },
     KCmdLineLastOption
 };
 
@@ -85,80 +88,15 @@ int main (int argc, char *argv[])
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Panel);
     aboutdata.setProgramLogo(icon.toImage());
 
-    // The real work of KTTS Manager is done in the KControl Module kcmkttsd.
-    KCMultiDialog dlg(KCMultiDialog::Plain, i18n("KDE Text-to-Speech Manager"), 0, "kttsmgrdlg", false);
-    dlg.addModule("kcmkttsd");
-
-    dlg.setWindowIcon(KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small));
-
-    // Get SysTray and ShowMainWindow options.
-    KConfig* config = new KConfig("kttsdrc");
-    config->setGroup("General");
-    bool embedInSysTray = config->readEntry("EmbedInSysTray", QVariant(true)).toBool();
-    // Can only hide main window if we are in the system tray, otherwise, no way
-    // for user to do anything.
-    bool showMainWindowOnStartup = true;
-    if (embedInSysTray)
-        showMainWindowOnStartup = config->readEntry("ShowMainWindowOnStartup", QVariant(true)).toBool();
-
-    // If --systray option specified, start minimized in system tray.
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("systray"))
-    {
-        embedInSysTray = true;
-        showMainWindowOnStartup = false;
-    }
-
-    KttsMgrTray* tray = 0;
-    if (embedInSysTray)
-    {
-        tray = new KttsMgrTray(&dlg);
-        tray->show();
-    }
-//    else app.setMainWidget(&dlg);
-
-    if (showMainWindowOnStartup)
-    {
-        if (embedInSysTray)
-            tray->setActive();
-        else
-            dlg.show();
-    }
+    KttsMgrTray* tray = new KttsMgrTray();
+    tray->show();
 
     int result = app.exec();
     delete tray;
     return result;
 }
 
-/*  KttsToolTip class */
-
-// KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
-// {
-// }
-// 
-// /*virtual*/ void KttsToolTip::maybeTip ( const QPoint & p )
-// {
-//     Q_UNUSED(p);
-//
-//     if (!parentWidget()->inherits("KttsMgrTray"))
-//         return;
-//
-//     KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
-//
-//     QRect r(kttsMgrTray->geometry());
-//     if ( !r.isValid() )
-//         return;
-//
-//     QString status = "<qt><b>KTTSMgr</b> - ";
-//     status += i18n("<qt>Text-to-Speech Manager");
-//     status += "<br/><br/>";
-//     status += kttsMgrTray->getStatus();
-//     status += "</qt>";
-//
-//     tip(r, status);
-// }
-
-/*  KttsMgrTray class */
+/* ------------------  KttsMgrTray class ----------------------- */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
     DCOPStub("kttsd", "KSpeech"),
@@ -166,71 +104,128 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     KSystemTray(parent)
 {
     setObjectName("kttsmgrsystemtray");
+    
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
     setPixmap (icon);
+    
+    // Start KTTS daemon if enabled and if not already running.
+    KConfig config("kttsdrc");
+    config.setGroup("General");
+    if (config.readEntry("EnableKttsd", false))
+    {
+        if (!isKttsdRunning())
+        {
+            QString error;
+            if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
+                kDebug() << "Starting KTTSD failed with message " << error << endl;
+        }
+    }
 
-    // this->setToolTip( i18n("Text-to-Speech Manager"));
-    // m_toolTip = new KttsToolTip(this);
-
+    // Set up menu.
     QAction *act;
-    contextMenu()->addTitle(icon, "KTTSMgr");
-
-    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("klipper", K3Icon::Small),
-        i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
-    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("stop", K3Icon::Small),
-        i18n("&Hold"), this, SLOT(holdSelected()));
-    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("exec", K3Icon::Small),
-        i18n("Resume"), this, SLOT(resumeSelected()));
+    
+    actStop = contextMenu()->addAction (
+        i18n("&Stop/Delete"), this, SLOT(stopSelected()));
+    actStop->setIcon(KIcon("player_stop"));
+    actPause = contextMenu()->addAction (
+        i18n("&Pause"), this, SLOT(pauseSelected()));
+    actPause->setIcon(KIcon("player_pause"));        
+    actResume = contextMenu()->addAction (
+        i18n("&Resume"), this, SLOT(resumeSelected()));
+    actResume->setIcon(KIcon("player_play"));
+    actRepeat = contextMenu()->addAction (
+        i18n("R&epeat"), this, SLOT(repeatSelected()));
+    actRepeat->setIcon(KIcon("reload"));
     act = contextMenu()->addSeparator();
-    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("contents", K3Icon::Small),
+    actSpeakClipboard = contextMenu()->addAction (
+        i18n("Spea&k Clipboard Contents"), this, SLOT(speakClipboardSelected()));
+    act->setIcon(KIcon("klipper"));
+    actConfigure = contextMenu()->addAction (
+        i18n("&Configure"), this, SLOT(configureSelected()));
+    actConfigure->setIcon(KIcon("configure"));
+    act = contextMenu()->addSeparator();
+    act = contextMenu()->addAction (
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
-    act = contextMenu()->addAction (KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small),
+    act->setIcon(KIcon("contents"));
+    act = contextMenu()->addAction (
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
+    act->setIcon(KIcon("kttsd"));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
+    
     // If --autoexit option given, exit when speaking stops.
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("autoexit"))
+    if (args->isSet("autoexit"));
     {
         connectDCOPSignal("kttsd", "KSpeech",
             "textFinished(QByteArray,uint)",
             "textFinished(QByteArray,uint)",
             false);
-        // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
-        parent->installEventFilter(this);
     }
 }
 
 KttsMgrTray::~KttsMgrTray()
 {
-    // delete m_toolTip;
 }
 
-void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
+bool KttsMgrTray::event(QEvent *event)
 {
-    // kDebug() << "KttsMgrTray::textFinished: running" << endl;
-    exitWhenFinishedSpeaking();
-}
-
-/*virtual*/ bool KttsMgrTray::eventFilter( QObject* /*o*/, QEvent* e )
-{
-    if ( e->type() == QEvent::Hide ) exitWhenFinishedSpeaking();
-    if ( e->type() == QEvent::ToolTip ) {
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
         QString status = "<qt><b>KTTSMgr</b> - ";
         status += i18n("<qt>Text-to-Speech Manager");
         status += "<br/><br/>";
         status += getStatus();
         status += "</qt>";
-        setToolTip(status);
-        return true;
+        QToolTip::showText(helpEvent->globalPos(), status);
     }
-    return false;
+    return QWidget::event(event);
+}
+
+void KttsMgrTray::mousePressEvent(QMouseEvent* ev)
+{
+    // Convert left-click into a right-click.
+    if (ev->button() == Qt::LeftButton) {
+        ev->accept();
+        QMouseEvent* myEv = new QMouseEvent(
+            QEvent::MouseButtonPress,
+            ev->pos(),
+            Qt::RightButton,
+            Qt::RightButton,
+            Qt::NoModifier);
+        KSystemTray::mousePressEvent(myEv);
+     } else
+        KSystemTray::mousePressEvent(ev);
+}
+
+/*virtual*/ void KttsMgrTray::contextMenuAboutToShow(KMenu* menu)
+{
+    Q_UNUSED(menu);
+    // Enable menu items based on current KTTSD state.
+    bool kttsdRunning = isKttsdRunning();
+    int jobState = -1;
+    if (kttsdRunning)
+    {
+        uint job = getCurrentTextJob();
+        if (job != 0)
+        {
+            // kDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
+            jobState = getTextJobState(job);
+        }
+    }
+    actStop->setEnabled(jobState != -1);
+    actPause->setEnabled(jobState == jsSpeaking);
+    actResume->setEnabled(jobState == jsPaused);
+    actRepeat->setEnabled(jobState != -1);
+    actSpeakClipboard->setEnabled(kttsdRunning);
+    DCOPClient *client = kapp->dcopClient();
+    bool configActive (client->isApplicationRegistered("kcmshell_kcmkttsd"));
+    actConfigure->setEnabled(!configActive);
 }
 
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
-    if ( parentWidget()->isVisible() ) return;
     QString jobNums = getTextJobNumbers();
     QStringList jobNumsList = jobNums.split(",");
     uint jobNumsListCount = jobNumsList.count();
@@ -243,6 +238,12 @@ void KttsMgrTray::exitWhenFinishedSpeaking()
         if (getTextJobState(jobNumsList[ndx].toInt()) != KSpeech::jsFinished) return;
     }
     kapp->quit();
+}
+
+void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
+{
+    // kDebug() << "KttsMgrTray::textFinished: running" << endl;
+    exitWhenFinishedSpeaking();
 }
 
 /**
@@ -313,7 +314,16 @@ void KttsMgrTray::quitSelected()
     kapp->quit();
 }
 
-void KttsMgrTray::holdSelected()
+void KttsMgrTray::stopSelected()
+{
+    if (isKttsdRunning())
+    {
+        uint jobNum = getCurrentTextJob();
+        removeText(jobNum);
+    }
+}
+
+void KttsMgrTray::pauseSelected()
 {
     if (isKttsdRunning())
     {
@@ -329,6 +339,22 @@ void KttsMgrTray::resumeSelected()
         uint jobNum = getCurrentTextJob();
         resumeText(jobNum);
     }
+}
+
+void KttsMgrTray::repeatSelected()
+{
+    if (isKttsdRunning())
+    {
+        uint jobNum = getCurrentTextJob();
+        startText(jobNum);
+    }
+}
+
+void KttsMgrTray::configureSelected()
+{
+    KProcess proc;
+    proc << "kcmshell" << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
+    proc.start(KProcess::DontCare);
 }
 
 bool KttsMgrTray::isKttsdRunning()

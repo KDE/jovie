@@ -616,7 +616,7 @@ void KTTSD::startText(const uint jobNum /*=0*/)
             // Do not start KTTSMgr unless at least 5 sentences are queued.
             if (getTextCount(jNum) > 4)
             {
-                QString cmd = "kttsmgr --systray";
+                QString cmd = "kttsmgr";
                 if (m_speechData->autoExitManager) cmd.append(" --autoexit");
                 // Notice this fails if KTTSMgr is already running, which is what we want.
                 KRun::runCommand(cmd);

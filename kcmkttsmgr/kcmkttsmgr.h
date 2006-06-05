@@ -442,7 +442,6 @@ class KCMKttsMgr :
         * General tab slots.
         */
         void slotEnableKttsd_toggled(bool checked);
-        void slotEmbedInSysTrayCheckBox_toggled(bool checked);
         void slotAutoStartMgrCheckBox_toggled(bool checked);
 
         /**
