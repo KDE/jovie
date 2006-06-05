@@ -507,7 +507,7 @@
                                                 <cstring>festivalVoicesPath</cstring>
                                             </property>
                                             <property name="whatsThis" stdset="0">
-                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not us "-o".</string>
+                                                <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not use "-o".</string>
                                             </property>
                                         </widget>
                                         <widget class="QLabel">
