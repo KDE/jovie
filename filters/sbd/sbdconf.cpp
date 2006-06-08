@@ -207,7 +207,7 @@ void SbdConf::slotReButton_clicked()
     // Show Regular Expression Editor dialog if it is installed.
     if ( !m_reEditorInstalled ) return;
     QDialog *editorDialog = 
-            KParts::ComponentFactory::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
+            KServiceTypeTrader::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.

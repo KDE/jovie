@@ -636,7 +636,7 @@ void StringReplacerConf::slotMatchButton_clicked()
     if ( !m_editDlg ) return;
     if ( !m_reEditorInstalled ) return;
     QDialog *editorDialog = 
-        KParts::ComponentFactory::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
+        KServiceTypeTrader::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
