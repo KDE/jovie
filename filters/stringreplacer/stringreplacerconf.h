@@ -136,8 +136,6 @@ class StringReplacerConf : public KttsFilterConf
         void enableDisableButtons();
 
     private:
-        // Converts a Substitution Type to displayable string.
-        QString substitutionTypeToString(const int substitutionType);
         // Displays the add/edit string replacement dialog.
         void addOrEditSubstitution(bool isAdd);
         // Loads word list and settings from a file.  Clearing configuration if clear is True.

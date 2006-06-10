@@ -231,10 +231,12 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
+        QString wordTypeStr = 
+            (wordType=="RegExp"?i18n("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
         if (!item)
-            item = new KListViewItem(m_widget->substLView, wordType, match, subst);
+            item = new KListViewItem(m_widget->substLView, wordTypeStr, match, subst);
         else
-            item = new KListViewItem(m_widget->substLView, item, wordType, match, subst);
+            item = new KListViewItem(m_widget->substLView, item, wordTypeStr, match, subst);
     }
 
     return QString::null;
@@ -323,7 +325,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
         root.appendChild( wordTag );
         QDomElement propTag = doc.createElement( "type" );
         wordTag.appendChild( propTag);
-        QDomText t = doc.createTextNode( item->text(0) );
+        QDomText t = doc.createTextNode( item->text(0)==i18n("Word")?"Word":"RegExp" );
         propTag.appendChild( t );
 
         propTag = doc.createElement( "match" );
@@ -401,17 +403,6 @@ QString StringReplacerConf::userPlugInName()
             instName = i18n("String Replacer") + " (" + language + ")";
     }
     return instName;
-}
-
-// Converts a Substitution Type to displayable string.
-QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
-{
-    switch (substitutionType)
-    {
-        case stWord:        return i18n("Word");
-        case stRegExp:      return "RegExp";
-    }
-    return i18n("Error");
 }
 
 void StringReplacerConf::slotLanguageBrowseButton_clicked()
