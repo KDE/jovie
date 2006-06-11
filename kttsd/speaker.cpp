@@ -119,7 +119,6 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_exitRequested = false;
     m_textInterrupted = false;
     m_currentJobNum = 0;
-    m_lastAppId = 0;
     m_lastJobNum = 0;
     m_lastSeq = 0;
     m_timer = new QTimer(this);
@@ -582,7 +581,7 @@ void Speaker::startText(const uint jobNum)
     {
         // kDebug() << "Speaker::startText: startText called on speaking job " << jobNum << endl;
         m_lastJobNum = 0;
-        m_lastAppId = 0;
+        m_lastAppId.clear();
         m_lastSeq = 0;
     }
     doUtterances();

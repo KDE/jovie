@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QVector>
 #include <QEvent>
-#include <QByteArray>
+#include <QString>
 
 // KTTSD includes.
 #include <speechdata.h>
@@ -297,7 +297,7 @@ class Speaker : public QObject{
         * @param markerName     The name of the marker seen.
         * @see markers
         */
-        void markerSeen(const QByteArray& appId, const QString& markerName);
+        void markerSeen(const QString& appId, const QString& markerName);
 
         /**
         * This signal is emitted whenever a sentence begins speaking.
@@ -305,7 +305,7 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         * @param seq            Sequence number of the text.
         */
-        void sentenceStarted(QString text, QString language, const QByteArray& appId,
+        void sentenceStarted(QString text, QString language, const QString& appId,
             const uint jobNum, const uint seq);
 
         /**
@@ -314,14 +314,14 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         * @param seq            Sequence number of the text.
         */        
-        void sentenceFinished(const QByteArray& appId, const uint jobNum, const uint seq);
+        void sentenceFinished(const QString& appId, const uint jobNum, const uint seq);
 
         /**
         * This signal is emitted whenever speaking of a text job begins.
         * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
         * @param jobNum         Job number of the text job.
         */
-        void textStarted(const QByteArray& appId, const uint jobNum);
+        void textStarted(const QString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a text job is finished.  The job has
@@ -332,26 +332,26 @@ class Speaker : public QObject{
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textFinished(const QByteArray& appId, const uint jobNum);
+        void textFinished(const QString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a speaking text job stops speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textStopped(const QByteArray& appId, const uint jobNum);
+        void textStopped(const QString& appId, const uint jobNum);
         /**
         * This signal is emitted whenever a speaking text job is paused.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textPaused(const QByteArray& appId, const uint jobNum);
+        void textPaused(const QString& appId, const uint jobNum);
         /**
         * This signal is emitted when a text job, that was previously paused, resumes speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textResumed(const QByteArray& appId, const uint jobNum);
+        void textResumed(const QString& appId, const uint jobNum);
 
     protected:
         /**
@@ -580,7 +580,7 @@ class Speaker : public QObject{
         * Job Number, appId, and sequence number of the last text sentence queued.
         */
         uint m_lastJobNum;
-        QByteArray m_lastAppId;
+        QString m_lastAppId;
         uint m_lastSeq;
 
         /**

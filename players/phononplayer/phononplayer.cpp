@@ -35,7 +35,7 @@
 PhononPlayer::PhononPlayer(QObject* parent, const QStringList& args) :
     Player(parent, "phononplayer", args)
 {
-    m_simplePlayer = new Phonon::SimplePlayer(this);
+    m_simplePlayer = new Phonon::SimplePlayer(Phonon::AccessibilityCategory, this);
 }
 
 PhononPlayer::~PhononPlayer()

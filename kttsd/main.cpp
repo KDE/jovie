@@ -21,42 +21,43 @@
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <dcopclient.h>
 
 #include "kttsd.h"
 
 int main (int argc, char *argv[]){
-   KLocale::setMainCatalog("kttsd");
-   KAboutData aboutdata("kttsd", I18N_NOOP("kttsd"),
+    kDebug() << "main: Running " << endl;
+    KLocale::setMainCatalog("kttsd");
+    KAboutData aboutdata("kttsd", I18N_NOOP("kttsd"),
          "0.4.0", I18N_NOOP("Text-to-speech synthesis deamon"),
          KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
-   aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
-   aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
-   aboutdata.addAuthor("Gunnar Schmi Dt", I18N_NOOP("Contributor"),"gunnar@schmi-dt.de");
-   aboutdata.addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"),"ojschmidt@kde.org");
-   aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
-   aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
-   aboutdata.addCredit("David Powell", I18N_NOOP("Testing"), "achiestdragon@gmail.com");
+    aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
+    aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
+    aboutdata.addAuthor("Gunnar Schmi Dt", I18N_NOOP("Contributor"),"gunnar@schmi-dt.de");
+    aboutdata.addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"),"ojschmidt@kde.org");
+    aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
+    aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
+    aboutdata.addCredit("David Powell", I18N_NOOP("Testing"), "achiestdragon@gmail.com");
 
-   KCmdLineArgs::init( argc, argv, &aboutdata );
-   // KCmdLineArgs::addCmdLineOptions( options );
-   KUniqueApplication::addCmdLineOptions();
+    KCmdLineArgs::init( argc, argv, &aboutdata );
+    // KCmdLineArgs::addCmdLineOptions( options );
+    KUniqueApplication::addCmdLineOptions();
 
-   if(!KUniqueApplication::start()){
-      kDebug() << "KTTSD is already running" << endl;
-      return (0);
-   }
+    KUniqueApplication app;
+    app.setOrganizationDomain("org.kde");
+    app.setApplicationName("kttsd");
 
-   KUniqueApplication app;
-   // This app is started automatically, no need for session management
-   app.disableSessionManagement();
-   // TODO: kspeech is obsolete.  Use KSpeech instead.  For backwards compatibility,
-   // kspeech creates the "real" KSpeech object (KTTSD).  At some point in the future,
-   // change following statement to
-   //     KTTSD *service = new KTTSD("KSpeech");
-   kspeech *service = new kspeech("kspeech");
+    kDebug() << "main: calling KUniqueApplication::start()" << endl;
+    if(!KUniqueApplication::start()){
+        kDebug() << "KTTSD is already running" << endl;
+        return (0);
+    }
 
-   // kDebug() << "Entering event loop." << endl;
-   return app.exec();
-   delete service;
+    // This app is started automatically, no need for session management
+    app.disableSessionManagement();
+    kDebug() << "main: Creating KTTSD Service" << endl;
+    KTTSD *service = new KTTSD();
+
+    // kDebug() << "Entering event loop." << endl;
+    return app.exec();
+    delete service;
 }

@@ -12,13 +12,14 @@ set(kttsd_SRCS
    threadedplugin.cpp 
    ssmlconvert.cpp 
    filtermgr.cpp 
-   talkermgr.cpp )
+   talkermgr.cpp
+   kspeechadaptor_p.cpp )
 
 kde4_automoc(${kttsd_SRCS})
 
-kde4_add_dcop_skels(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h kttsd.h )
+# kde4_add_dcop_skels(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h kttsd.h )
 
-kde4_add_dcop_stubs(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
+# kde4_add_dcop_stubs(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
 
 kde4_add_executable(kttsd_bin ${kttsd_SRCS})
 set_target_properties(kttsd_bin PROPERTIES OUTPUT_NAME kttsd)

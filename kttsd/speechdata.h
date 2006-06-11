@@ -34,7 +34,6 @@
 // Qt includes.
 #include <QQueue>
 #include <QList>
-#include <QByteArray>
 #include <QMultiHash>
 #include <QString>
 #include <QStringList>
@@ -44,7 +43,7 @@
 #include <kconfig.h>
 
 // KTTS includes.
-#include <kspeech.h>
+#include <kspeechdef.h>
 #include <talkercode.h>
 #include <filtermgr.h>
 
@@ -58,7 +57,7 @@ class TalkerMgr;
 struct mlText{
     QString talker;              /* Requested Talker code for the sentence. */
     QString text;                /* Text of sentence. */
-    QByteArray appId;             /* DCOP senderId of the application that requested the speech. */
+    QString appId;               /* DBUS senderId of the application that requested the speech. */
     uint jobNum;                 /* Text jobNum.  Only applies to text messages; not warning and messages. */
     uint seq;                    /* Sequence number. */
 };
@@ -69,7 +68,7 @@ struct mlText{
 struct mlJob {
     uint jobNum;                 /* Job number. */
     KSpeech::kttsdJobState state; /* Job state. */
-    QByteArray appId;             /* DCOP senderId of the application that requested the speech job. */
+    QString appId;               /* DBUS senderId of the application that requested the speech job. */
     QString talker;              /* Requested Talker code in which to speak the text. */
     int seq;                     /* Current sentence being spoken. */
     QList<int> partSeqNums;      /* List containing last sequence number for each part of a job. */
@@ -145,24 +144,24 @@ class SpeechData : public QObject {
         *                       If NULL, defaults to the user's default talker.
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         *
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
         * replaced with this new message.
         */
         void setScreenReaderOutput(const QString &msg, const QString &talker,
-            const QByteArray& appId);
+            const QString& appId);
 
         /**
         * Given an appId, returns the last (most recently queued) Job Number with that appId,
         * or if no such job, the Job Number of the last (most recent) job in the queue.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         * @return               Job Number of the text job.
         * If no such job, returns 0.
         * If appId is NULL, returns the Job Number of the last job in the queue.
         * Does not change textJobs.current().
         */
-        uint findAJobNumByAppId(const QByteArray& appId);
+        uint findAJobNumByAppId(const QString& appId);
 
         /**
         * Retrieves the Screen Reader Output.
@@ -178,7 +177,7 @@ class SpeechData : public QObject {
         * Add a new warning to the queue.
         */
         void enqueueWarning( const QString &, const QString &talker,
-            const QByteArray& appId);
+            const QString& appId);
 
         /**
         * Pop (get and erase) a warning from the queue.
@@ -197,7 +196,7 @@ class SpeechData : public QObject {
         * Add a new message to the queue.
         */
         void enqueueMessage( const QString &, const QString &talker,
-            const QByteArray&);
+            const QString&);
 
         /**
         * Pop (get and erase) a message from the queue.
@@ -215,7 +214,7 @@ class SpeechData : public QObject {
         /**
         * Sets the GREP pattern that will be used as the sentence delimiter.
         * @param delimiter      A valid GREP pattern.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         *
         * The default delimiter is
           @verbatim
@@ -227,7 +226,7 @@ class SpeechData : public QObject {
         * Changing the sentence delimiter does not affect other applications.
         * @see sentenceparsing
         */
-        void setSentenceDelimiter(const QString &delimiter, const QByteArray appId);
+        void setSentenceDelimiter(const QString &delimiter, const QString appId);
 
         /* The following methods correspond to the methods in KSpeech interface. */
 
@@ -239,7 +238,7 @@ class SpeechData : public QObject {
         *                       If NULL, defaults to the user's default talker.
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         * @return               Job number.
         *
         * The text is parsed into individual sentences.  Call getTextCount to retrieve
@@ -247,14 +246,13 @@ class SpeechData : public QObject {
         * job is the first speakable job in the queue, speaking will begin.
         * @see startText.
         */
-        uint setText(const QString &text, const QString &talker, const QByteArray& appId);
+        uint setText(const QString &text, const QString &talker, const QString& appId);
 
         /**
         * Adds another part to a text job.  Does not start speaking the text.
         * (thread safe)
         * @param jobNum         Job number of the text job.
         * @param text           The message to be spoken.
-        * @param appId          The DCOP senderId of the application.
         * @return               Part number for the added part.  Parts are numbered starting at 1.
         *
         * The text is parsed into individual sentences.  Call getTextCount to retrieve
@@ -263,7 +261,7 @@ class SpeechData : public QObject {
         * @see setText.
         * @see startText.
         */
-        int appendText(const QString &text, const uint jobNum, const QByteArray& appId);
+        int appendText(const QString &text, const uint jobNum);
 
         /**
         * Get the number of sentences in a text job.
@@ -313,7 +311,7 @@ class SpeechData : public QObject {
         *
         * The stream contains the following elements:
         *   - int state         Job state.
-        *   - QByteArray appId   DCOP senderId of the application that requested the speech job.
+        *   - QString appId     DBUS senderId of the application that requested the speech job.
         *   - QString talker    Talker code as requested by application.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
@@ -328,7 +326,7 @@ class SpeechData : public QObject {
                     QByteArray jobInfo = getTextJobInfo(jobNum);
                     QDataStream stream(jobInfo, QIODevice::ReadOnly);
                     int state;
-                    QByteArray appId;
+                    QString appId;
                     QString talker;
                     int seq;
                     int sentenceCount;
@@ -459,7 +457,7 @@ class SpeechData : public QObject {
         * If no such job, returns "".
         * Does not change textJobs.current().
         */
-        QByteArray getAppIdByJobNum(const uint jobNum);
+        QString getAppIdByJobNum(const uint jobNum);
 
         /**
         * Sets pointer to the TalkerMgr object.
@@ -586,27 +584,27 @@ class SpeechData : public QObject {
     signals:
         /**
         * This signal is emitted whenever a new text job is added to the queue.
-        * @param appId          The DCOP senderId of the application that created the job.
+        * @param appId          The DBUS senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textSet(const QByteArray& appId, const uint jobNum);
+        void textSet(const QString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a new part is appended to a text job.
-        * @param appId          The DCOP senderId of the application that created the job.
+        * @param appId          The DBUS senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         * @param partNum        Part number of the new part.  Parts are numbered starting
         *                       at 1.
         */
-        void textAppended(const QByteArray& appId, const uint jobNum, const int partNum);
+        void textAppended(const QString& appId, const uint jobNum, const int partNum);
 
         /**
         * This signal is emitted whenever a text job is deleted from the queue.
         * The job is no longer in the queue when this signal is emitted.
-        * @param appId          The DCOP senderId of the application that created the job.
+        * @param appId          The DBUS senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textRemoved(const QByteArray& appId, const uint jobNum);
+        void textRemoved(const QString& appId, const uint jobNum);
 
     private:
         /**
@@ -652,7 +650,7 @@ class SpeechData : public QObject {
         /**
         * Map of sentence delimiters.  One per app.  If none specified for an app, uses default.
         */
-        QMap<QByteArray, QString> sentenceDelimiters;
+        QMap<QString, QString> sentenceDelimiters;
 
         /**
         * Determines whether the given text is SSML markup.
@@ -661,24 +659,24 @@ class SpeechData : public QObject {
 
         /**
         * Given an appId, returns the last (most recently queued) job with that appId.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         * @return               Pointer to the text job.
         * If no such job, returns 0.
         * If appId is NULL, returns the last job in the queue.
         * Does not change textJobs.current().
         */
-        mlJob* findLastJobByAppId(const QByteArray& appId);
+        mlJob* findLastJobByAppId(const QString& appId);
 
         /**
         * Given an appId, returns the last (most recently queued) job with that appId,
         * or if no such job, the last (most recent) job in the queue.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         * @return               Pointer to the text job.
         * If no such job, returns 0.
         * If appId is NULL, returns the last job in the queue.
         * Does not change textJobs.current().
         */
-        mlJob* findAJobByAppId(const QByteArray& appId);
+        mlJob* findAJobByAppId(const QString& appId);
 
         /**
         * Given a job and a sequence number, returns the part that sentence is in.
@@ -694,11 +692,11 @@ class SpeechData : public QObject {
         * Parses a block of text into sentences using the application-specified regular expression
         * or (if not specified), the default regular expression.
         * @param text           The message to be spoken.
-        * @param appId          The DCOP senderId of the application.
+        * @param appId          The DBUS senderId of the application.
         * @return               List of parsed sentences.
         */
 
-        QStringList parseText(const QString &text, const QByteArray &appId);
+        QStringList parseText(const QString &text, const QString &appId);
 
         /**
         * Delete expired jobs.  At most, one finished job is kept on the queue.

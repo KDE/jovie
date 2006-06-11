@@ -28,7 +28,7 @@
 // Qt includes.
 #include <QObject>
 #include <QStringList>
-#include <QByteArray>
+#include <QString>
 
 // KDE includes.
 #include <kdemacros.h>
@@ -97,7 +97,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QString& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -113,7 +113,7 @@ public:
      * program may then call @ref getOutput to retrieve converted text.  Calling
      * program must call @ref ackFinished to acknowledge the conversion.
      */
-    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
+    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QString& appId);
 
     /**
      * Waits for a previous call to asyncConvert to finish.
