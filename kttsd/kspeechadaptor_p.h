@@ -76,7 +76,7 @@ class KSpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"sayText\" >\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\" />\n"
 "      <arg direction=\"in\" type=\"s\" name=\"talker\" />\n"
-"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\" />\n"
+"      <arg direction=\"out\" type=\"u\" />\n"
 "    </method>\n"
 "    <method name=\"appendText\" >\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\" />\n"
@@ -239,7 +239,7 @@ public:
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
-    Q_ASYNC void appendText(const QString &text, uint jobNum, const QDBusMessage &msg);
+    int appendText(const QString &text, uint jobNum, const QDBusMessage &msg);
     Q_ASYNC void changeTextTalker(const QString &talker, uint jobNum, const QDBusMessage &msg);
     uint getCurrentTextJob();
     QStringList getTalkers();
@@ -260,11 +260,11 @@ public Q_SLOTS: // METHODS
     Q_ASYNC void resumeText(uint jobNum, const QDBusMessage &msg);
     Q_ASYNC void sayMessage(const QString &message, const QString &talker, const QDBusMessage &msg);
     Q_ASYNC void sayScreenReaderOutput(const QString &message, const QString &talker, const QDBusMessage &msg);
-    Q_ASYNC void sayText(const QString &text, const QString &talker, const QDBusMessage &msg);
+    uint sayText(const QString &text, const QString &talker, const QDBusMessage &msg);
     Q_ASYNC void sayWarning(const QString &warning, const QString &talker, const QDBusMessage &msg);
-    Q_ASYNC void setFile(const QString &filename, const QString &talker, const QString &encoding, const QDBusMessage &msg);
+    uint setFile(const QString &filename, const QString &talker, const QString &encoding, const QDBusMessage &msg);
     Q_ASYNC void setSentenceDelimiter(const QString &delimiter, const QDBusMessage &msg);
-    Q_ASYNC void setText(const QString &text, const QString &talker, const QDBusMessage &msg);
+    uint setText(const QString &text, const QString &talker, const QDBusMessage &msg);
     Q_ASYNC void showDialog();
     Q_ASYNC void speakClipboard();
     Q_ASYNC void startText(uint jobNum, const QDBusMessage &msg);

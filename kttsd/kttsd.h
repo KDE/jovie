@@ -548,9 +548,9 @@ class KTTSD : public QObject
 
     private slots:
         /*
-         * These functions are called whenever
-         * the status of the speaker object has changed
-         */
+        * These functions are called whenever
+        * the status of the speaker object has changed
+        */
         void slotSentenceStarted(QString text, QString language, 
             const QString& appId, const uint jobNum, const uint seq);
         void slotSentenceFinished(const QString& appId, const uint jobNum, const uint seq);
@@ -561,16 +561,16 @@ class KTTSD : public QObject
         void slotTextResumed(const QString& appId, const uint jobNum);
 
         /*
-         * These functions are called whenever
-         * the status of the speechData or speaker objects has changed
-         */
+        * These functions are called whenever
+        * the status of the speechData or speaker objects has changed
+        */
         void slotTextSet(const QString& appId, const uint jobNum);
         void slotTextAppended(const QString& appId, const uint jobNum, const int appId);
         void slotTextRemoved(const QString& appId, const uint jobNum);
 
         /*
-         * Fires whenever user clicks Apply or OK buttons in Settings dialog.
-         */
+        * Fires whenever user clicks Apply or OK buttons in Settings dialog.
+        */
         void configCommitted();
 
     private:
@@ -622,8 +622,8 @@ class KTTSD : public QObject
             uint jobNum, uint seq);
 
         /*
-         * SpeechData containing all the data and the manipulating methods for all KTTSD
-         */
+        * SpeechData containing all the data and the manipulating methods for all KTTSD
+        */
         SpeechData* m_speechData;
 
         /*

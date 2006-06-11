@@ -215,20 +215,20 @@ void Speaker::doUtterances()
         {
             m_again = getNextUtterance();
         }
-//         kDebug() << "Speaker::doUtterances: queue dump:" << endl;
-//         for (it = m_uttQueue.begin(); it != m_uttQueue.end(); ++it)
-//         {
-//             QString pluginState = "no plugin";
-//             if (it->plugin) pluginState = pluginStateToStr(it->plugin->getState());
-//             QString jobState =
-//                     jobStateToStr(m_speechData->getTextJobState(it->sentence->jobNum));
-//             kDebug() << 
-//                     "  State: " << uttStateToStr(it->state) << 
-//                     "," << pluginState <<
-//                     "," << jobState <<
-//                     " Type: " << uttTypeToStr(it->utType) << 
-//                     " Text: " << it->sentence->text << endl;
-//         }
+         kDebug() << "Speaker::doUtterances: queue dump:" << endl;
+         for (it = m_uttQueue.begin(); it != m_uttQueue.end(); ++it)
+         {
+             QString pluginState = "no plugin";
+             if (it->plugin) pluginState = pluginStateToStr(it->plugin->getState());
+             QString jobState =
+                     jobStateToStr(m_speechData->getTextJobState(it->sentence->jobNum));
+             kDebug() << 
+                     "  State: " << uttStateToStr(it->state) << 
+                     "," << pluginState <<
+                     "," << jobState <<
+                     " Type: " << uttTypeToStr(it->utType) << 
+                     " Text: " << it->sentence->text << endl;
+         }
 
         if (!m_uttQueue.isEmpty())
         {
@@ -298,6 +298,7 @@ void Speaker::doUtterances()
                     }
                     case usWaitingSignal:
                     {
+                        kDebug() << "Speaker::doUtterances: state usWaitingSignal" << endl;
                         // If first in queue, emit signal.
                         if (it == itBegin)
                         {
@@ -305,7 +306,7 @@ void Speaker::doUtterances()
                             {
                                 m_speechData->setTextJobState(
                                     it->sentence->jobNum, KSpeech::jsSpeaking);
-                                if (it->sentence->seq == 0)
+                                if (it->sentence->seq == 1)
                                     emit textStarted(it->sentence->appId,
                                         it->sentence->jobNum);
                                 else
@@ -327,6 +328,7 @@ void Speaker::doUtterances()
                         // Don't bother stretching if SSML.
                         // TODO: This is because sox mangles SSML pitch settings.  Would be nice
                         // to figure out how to avoid this.
+                        kDebug() << "Speaker::doUtterances: state usSynthed" << endl;
                         if (m_audioStretchFactor == 1.0 || it->isSSML)
                         {
                             it->state = usStretched;
@@ -371,6 +373,7 @@ void Speaker::doUtterances()
                     }
                     case usStretched:
                     {
+                        kDebug() << "Speaker::doUtterances: state usStretched" << endl;
                         // If first in queue, start playback.
                         if (it == itBegin)
                         {
@@ -390,6 +393,7 @@ void Speaker::doUtterances()
                     }
                     case usPlaying:
                     {
+                        kDebug() << "Speaker::doUtterances: state usPlaying" << endl;
                         playing = true;
                         break;
                     }
@@ -455,6 +459,7 @@ void Speaker::doUtterances()
                         // reader output, it would be nice to call the synth's
                         // stopText() method.  However, some of the current plugins
                         // have horrible startup times, so we won't do that for now.
+                        kDebug() << "Speaker::doUtterances: state usWaitingSynth" << endl;
                         if (it->plugin->getState() == psIdle)
                         {
                             // kDebug() << "Async synthesis." << endl;
@@ -470,6 +475,7 @@ void Speaker::doUtterances()
                     }
                     case usSaying:
                     {
+                        kDebug() << "Speaker::doUtterances: state usSaying" << endl;
                         // See if synthesis and audibilizing is finished.
                         if (it->plugin->getState() == psFinished)
                         {
@@ -485,11 +491,12 @@ void Speaker::doUtterances()
                     }
                     case usSynthing:
                     {
+                        kDebug() << "Speaker::doUtterances: state usSynthing" << endl;
                         // See if synthesis is completed.
                         if (it->plugin->getState() == psFinished)
                         {
                             it->audioUrl = KStandardDirs::realFilePath(it->plugin->getFilename());
-                            // kDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl << endl;
+                            kDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl << endl;
                             it->plugin->ackFinished();
                             it->state = usSynthed;
                             m_again = true;

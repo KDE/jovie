@@ -44,14 +44,16 @@ KSpeechAdaptor::~KSpeechAdaptor()
     // destructor
 }
 
-void KSpeechAdaptor::appendText(const QString &text, uint jobNum, const QDBusMessage &msg)
+int KSpeechAdaptor::appendText(const QString &text, uint jobNum, const QDBusMessage &msg)
 {
     // handle method call org.kde.KSpeech.appendText
     QString appId = msg.sender();
-    QMetaObject::invokeMethod(parent(), "appendText", Q_ARG(QString, text), Q_ARG(uint, jobNum), Q_ARG(QString, appId));
+    int out0;
+    QMetaObject::invokeMethod(parent(), "appendText", Q_RETURN_ARG(int, out0), Q_ARG(QString, text), Q_ARG(uint, jobNum), Q_ARG(QString, appId));
 
     // Alternative:
     //static_cast<YourObjectType *>(parent())->appendText(text, jobNum);
+    return out0;
 }
 
 void KSpeechAdaptor::changeTextTalker(const QString &talker, uint jobNum, const QDBusMessage &msg)
@@ -269,14 +271,16 @@ void KSpeechAdaptor::sayScreenReaderOutput(const QString &message, const QString
     //static_cast<YourObjectType *>(parent())->sayScreenReaderOutput(msg, talker);
 }
 
-void KSpeechAdaptor::sayText(const QString &text, const QString &talker, const QDBusMessage &msg)
+uint KSpeechAdaptor::sayText(const QString &text, const QString &talker, const QDBusMessage &msg)
 {
     // handle method call org.kde.KSpeech.sayText
     QString appId = msg.sender();
-    QMetaObject::invokeMethod(parent(), "sayText", Q_ARG(QString, text), Q_ARG(QString, talker), Q_ARG(QString, appId));
+    uint out0;
+    QMetaObject::invokeMethod(parent(), "sayText", Q_RETURN_ARG(uint, out0), Q_ARG(QString, text), Q_ARG(QString, talker), Q_ARG(QString, appId));
 
     // Alternative:
     //static_cast<YourObjectType *>(parent())->sayText(text, talker);
+    return out0;
 }
 
 void KSpeechAdaptor::sayWarning(const QString &warning, const QString &talker, const QDBusMessage &msg)
@@ -289,14 +293,16 @@ void KSpeechAdaptor::sayWarning(const QString &warning, const QString &talker, c
     //static_cast<YourObjectType *>(parent())->sayWarning(warning, talker);
 }
 
-void KSpeechAdaptor::setFile(const QString &filename, const QString &talker, const QString &encoding, const QDBusMessage &msg)
+uint KSpeechAdaptor::setFile(const QString &filename, const QString &talker, const QString &encoding, const QDBusMessage &msg)
 {
     // handle method call org.kde.KSpeech.setFile
     QString appId = msg.sender();
-    QMetaObject::invokeMethod(parent(), "setFile", Q_ARG(QString, filename), Q_ARG(QString, talker), Q_ARG(QString, encoding), Q_ARG(QString, appId));
+    uint out0;
+    QMetaObject::invokeMethod(parent(), "setFile", Q_RETURN_ARG(uint, out0), Q_ARG(QString, filename), Q_ARG(QString, talker), Q_ARG(QString, encoding), Q_ARG(QString, appId));
 
     // Alternative:
     //static_cast<YourObjectType *>(parent())->setFile(filename, talker, encoding);
+    return out0;
 }
 
 void KSpeechAdaptor::setSentenceDelimiter(const QString &delimiter, const QDBusMessage &msg)
@@ -309,14 +315,16 @@ void KSpeechAdaptor::setSentenceDelimiter(const QString &delimiter, const QDBusM
     //static_cast<YourObjectType *>(parent())->setSentenceDelimiter(delimiter);
 }
 
-void KSpeechAdaptor::setText(const QString &text, const QString &talker, const QDBusMessage &msg)
+uint KSpeechAdaptor::setText(const QString &text, const QString &talker, const QDBusMessage &msg)
 {
     // handle method call org.kde.KSpeech.setText
     QString appId = msg.sender();
-    QMetaObject::invokeMethod(parent(), "setText", Q_ARG(QString, text), Q_ARG(QString, talker), Q_ARG(QString, appId));
+    uint out0;
+    QMetaObject::invokeMethod(parent(), "setText", Q_RETURN_ARG(uint, out0), Q_ARG(QString, text), Q_ARG(QString, talker), Q_ARG(QString, appId));
 
     // Alternative:
     //static_cast<YourObjectType *>(parent())->setText(text, talker);
+    return out0;
 }
 
 void KSpeechAdaptor::showDialog()
