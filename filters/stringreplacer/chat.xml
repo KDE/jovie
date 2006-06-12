@@ -512,4 +512,9 @@
   <match><![CDATA[\:\-\/]]></match>
   <subst><![CDATA[ frowns ]]></subst>
  </word>
+ <word>
+  <type>RegExp</type>
+  <match><![CDATA[(.)(\1){2,}]]></match>
+  <subst><![CDATA[\1\1]]></subst>
+ </word>
 </wordlist>
