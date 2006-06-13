@@ -38,7 +38,7 @@
 class JobInfo {
 public:
     uint        jobNum;
-    QByteArray  appId;
+    QString     appId;
     QString     talkerID;
     int         state;
     int         sentenceNum;

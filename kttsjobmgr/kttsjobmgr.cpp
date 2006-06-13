@@ -293,41 +293,28 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     autoSelectInJobListView();
 
     // Connect DBUS Signals emitted by KTTSD to our own slots.
-//    connect(this, SIGNAL(kttsdStarted()),
-//        this, SLOT(kttsdStarted()));
-//    connect(this, SIGNAL(markerSeen(QString,QString)),
-//        this, SLOT(markerSeen(QString,QString)));
-//    connect(this, SIGNAL(sentenceStarted(QString,uint,uint)),
-//        this, SLOT(sentenceStarted(QString,uint,uint)));
-//    connect(this, SIGNAL(sentenceFinished(QString,uint,uint)),
-//        this, SLOT(sentenceFinished(QString,uint,uint)))
-//    connect(this, SIGNAL(textSet(QString,uint)),
-//        this, SLOT(textSet(QString,uint)));
-//        false)) kDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal textSet" << endl;
-//    connect(this, SIGNAL(
-//        "textStarted(QString,uint)",
-//        "textStarted(QString,uint)",
-//        false);
-//    connect(this, SIGNAL(
-//        "textFinished(QString,uint)",
-//        "textFinished(QString,uint)",
-//        false);
-//    connect(this, SIGNAL(
-//        "textStopped(QString,uint)",
-//        "textStopped(QString,uint)",
-//        false);
-//    connect(this, SIGNAL(
-//        "textPaused(QString,uint)",
-//        "textPaused(QString,uint)",
-//        false);
-//    connect(this, SIGNAL(
-//        "textResumed(QString,uint)",
-//        "textResumed(QString,uint)",
-//        false);
-//    connect(this, SIGNAL(
-//        "textRemoved(QString,uint)",
-//        "textRemoved(QString,uint)",
-//        false);
+    connect(m_kspeech, SIGNAL(kttsdStarted()),
+        this, SLOT(kttsdStarted()));
+    connect(m_kspeech, SIGNAL(markerSeen(QString&,QString&)),
+        this, SLOT(markerSeen(QString&,QString&)));
+    connect(m_kspeech, SIGNAL(sentenceStarted(QString&,uint,uint)),
+        this, SLOT(sentenceStarted(QString&,uint,uint)));
+    connect(m_kspeech, SIGNAL(sentenceFinished(QString&,uint,uint)),
+        this, SLOT(sentenceFinished(QString&,uint,uint)));
+    connect(m_kspeech, SIGNAL(textSet(QString&,uint)),
+        this, SLOT(textSet(QString&,uint)));
+    connect(m_kspeech, SIGNAL(textStarted(QString&,uint)),
+        this, SLOT(textStarted(QString&,uint)));
+    connect(m_kspeech, SIGNAL(textFinished(QString&,uint)),
+        this, SLOT(textFinished(QString&,uint)));
+    connect(m_kspeech, SIGNAL(textStopped(QString&,uint)),
+        this, SLOT(textStopped(QString&,uint)));
+    connect(m_kspeech, SIGNAL(textPaused(QString&,uint)),
+        this, SLOT(textPaused(QString&,uint)));
+    connect(m_kspeech, SIGNAL(textResumed(QString&,uint)),
+        this, SLOT(textResumed(QString&,uint)));
+    connect(m_kspeech, SIGNAL(textRemoved(QString&,uint)),
+        this, SLOT(textRemoved(QString&,uint)));
 
     m_extension = new KttsJobMgrBrowserExtension(this);
 
