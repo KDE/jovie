@@ -44,9 +44,10 @@
 #include <kvbox.h>
 #include <kdemacros.h>
 #include <kparts/genericfactory.h>
+#include <dbus/qdbus.h>
 
 // KTTS includes.
-#include "kspeech.h"
+#include "kspeechdef.h"
 #include "talkercode.h"
 #include "selecttalkerdlg.h"
 #include "jobinfolistmodel.h"
@@ -65,11 +66,13 @@ KAboutData* KttsJobMgrPart::createAboutData()
 }
 
 KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args) :
-    DCOPStub("kttsd", "KSpeech"),
-    DCOPObject("kttsjobmgr_kspeechsink"),
-    KParts::ReadOnlyPart(parent)
+    KParts::ReadOnlyPart(parent),
+    m_kspeech(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"))
 {
+//DBusAbstractInterfacePrivate
     Q_UNUSED(args);
+    m_kspeech->setParent(this);
+
     // Initialize some variables.
     m_selectOnTextSet = false;
     m_buttonBox = 0;
@@ -289,51 +292,42 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     // Select first item (if any).
     autoSelectInJobListView();
 
-    // Connect DCOP Signals emitted by KTTSD to our own DCOP methods.
-    connectDCOPSignal("kttsd", "KSpeech",
-        "kttsdStarted()",
-        "kttsdStarted()",
-        false);
-    connectDCOPSignal("kttsd", "KSpeech",
-        "markerSeen(QByteArray,QString)",
-        "markerSeen(QByteArray,QString)",
-        false);
-    if (!connectDCOPSignal("kttsd", "KSpeech",
-        "sentenceStarted(QByteArray,uint,uint)",
-        "sentenceStarted(QByteArray,uint,uint)",
-        false)) kDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal sentenceStarted" << endl;
-    connectDCOPSignal("kttsd", "KSpeech",
-        "sentenceFinished(QByteArray,uint,uint)",
-        "sentenceFinished(QByteArray,uint,uint)",
-        false);
-    if (!connectDCOPSignal("kttsd", "KSpeech",
-        "textSet(QByteArray,uint)",
-        "textSet(QByteArray,uint)",
-        false)) kDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal textSet" << endl;
-    connectDCOPSignal("kttsd", "KSpeech",
-        "textStarted(QByteArray,uint)",
-        "textStarted(QByteArray,uint)",
-        false);
-    connectDCOPSignal("kttsd", "KSpeech",
-        "textFinished(QByteArray,uint)",
-        "textFinished(QByteArray,uint)",
-        false);
-    connectDCOPSignal("kttsd", "KSpeech",
-        "textStopped(QByteArray,uint)",
-        "textStopped(QByteArray,uint)",
-        false);
-    connectDCOPSignal("kttsd", "KSpeech",
-        "textPaused(QByteArray,uint)",
-        "textPaused(QByteArray,uint)",
-        false);
-    connectDCOPSignal("kttsd", "KSpeech",
-        "textResumed(QByteArray,uint)",
-        "textResumed(QByteArray,uint)",
-        false);
-    connectDCOPSignal("kttsd", "KSpeech",
-        "textRemoved(QByteArray,uint)",
-        "textRemoved(QByteArray,uint)",
-        false);
+    // Connect DBUS Signals emitted by KTTSD to our own slots.
+//    connect(this, SIGNAL(kttsdStarted()),
+//        this, SLOT(kttsdStarted()));
+//    connect(this, SIGNAL(markerSeen(QString,QString)),
+//        this, SLOT(markerSeen(QString,QString)));
+//    connect(this, SIGNAL(sentenceStarted(QString,uint,uint)),
+//        this, SLOT(sentenceStarted(QString,uint,uint)));
+//    connect(this, SIGNAL(sentenceFinished(QString,uint,uint)),
+//        this, SLOT(sentenceFinished(QString,uint,uint)))
+//    connect(this, SIGNAL(textSet(QString,uint)),
+//        this, SLOT(textSet(QString,uint)));
+//        false)) kDebug() << "KttsJobMgrPart::KttsJobMgrPart: failed to connect DCOP signal textSet" << endl;
+//    connect(this, SIGNAL(
+//        "textStarted(QString,uint)",
+//        "textStarted(QString,uint)",
+//        false);
+//    connect(this, SIGNAL(
+//        "textFinished(QString,uint)",
+//        "textFinished(QString,uint)",
+//        false);
+//    connect(this, SIGNAL(
+//        "textStopped(QString,uint)",
+//        "textStopped(QString,uint)",
+//        false);
+//    connect(this, SIGNAL(
+//        "textPaused(QString,uint)",
+//        "textPaused(QString,uint)",
+//        false);
+//    connect(this, SIGNAL(
+//        "textResumed(QString,uint)",
+//        "textResumed(QString,uint)",
+//        false);
+//    connect(this, SIGNAL(
+//        "textRemoved(QString,uint)",
+//        "textRemoved(QString,uint)",
+//        false);
 
     m_extension = new KttsJobMgrBrowserExtension(this);
 
@@ -380,7 +374,7 @@ void KttsJobMgrPart::slot_job_hold()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        pauseText(jobNum);
+        m_kspeech->pauseText(jobNum);
         refreshJob(jobNum);
     }
 }
@@ -390,7 +384,7 @@ void KttsJobMgrPart::slot_job_resume()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        resumeText(jobNum);
+        m_kspeech->resumeText(jobNum);
         refreshJob(jobNum);
     }
 }
@@ -401,7 +395,7 @@ void KttsJobMgrPart::slot_job_restart()
     // kDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum << endl;
     if (jobNum)
     {
-        startText(jobNum);
+        m_kspeech->startText(jobNum);
         refreshJob(jobNum);
     }
 }
@@ -412,8 +406,8 @@ void KttsJobMgrPart::slot_job_prev_par()
     if (jobNum)
     {
         // Get current part number.
-        uint partNum = jumpToTextPart(0, jobNum);
-        if (partNum > 1) jumpToTextPart(--partNum, jobNum);
+        uint partNum = m_kspeech->jumpToTextPart(0, jobNum);
+        if (partNum > 1) m_kspeech->jumpToTextPart(--partNum, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -423,7 +417,7 @@ void KttsJobMgrPart::slot_job_prev_sen()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        moveRelTextSentence(-1, jobNum);
+        m_kspeech->moveRelTextSentence(-1, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -433,7 +427,7 @@ void KttsJobMgrPart::slot_job_next_sen()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        moveRelTextSentence(1, jobNum);
+        m_kspeech->moveRelTextSentence(1, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -444,8 +438,8 @@ void KttsJobMgrPart::slot_job_next_par()
     if (jobNum)
     {
         // Get current part number.
-        uint partNum = jumpToTextPart(0, jobNum);
-        jumpToTextPart(++partNum, jobNum);
+        uint partNum = m_kspeech->jumpToTextPart(0, jobNum);
+        m_kspeech->jumpToTextPart(++partNum, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -455,7 +449,7 @@ void KttsJobMgrPart::slot_job_remove()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        removeText(jobNum);
+        m_kspeech->removeText(jobNum);
         m_currentSentence->clear();
     }
 }
@@ -465,7 +459,7 @@ void KttsJobMgrPart::slot_job_move()
     uint jobNum = getCurrentJobNum();
     if (jobNum)
     {
-        moveTextLater(jobNum);
+        m_kspeech->moveTextLater(jobNum);
         refreshJobList();
         // Select the job we just moved.
         QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
@@ -493,7 +487,7 @@ void KttsJobMgrPart::slot_job_change_talker()
         if (dlgResult != KDialogBase::Accepted) return;
         talkerCode = dlg.getSelectedTalkerCode();
         int jobNum = job.jobNum;
-        changeTextTalker(talkerCode, jobNum);
+        m_kspeech->changeTextTalker(talkerCode, jobNum);
         refreshJob(jobNum);
     }
 }
@@ -512,12 +506,12 @@ void KttsJobMgrPart::slot_speak_clipboard()
     {
         if (data->hasFormat("text/html"))
         {
-            if (supportsMarkup(NULL, KSpeech::mtHtml))
+            if (m_kspeech->supportsMarkup(NULL, KSpeech::mtHtml))
                 text = data->html();
         }
         if (data->hasFormat("text/ssml"))
         {
-            if (supportsMarkup(NULL, KSpeech::mtSsml))
+            if (m_kspeech->supportsMarkup(NULL, KSpeech::mtSsml))
             {
                 QByteArray d = data->data("text/ssml");
                 text = QString(d);
@@ -530,9 +524,9 @@ void KttsJobMgrPart::slot_speak_clipboard()
     // Speak it.
     if ( !text.isEmpty() )
     {
-        uint jobNum = setText(text, NULL);
+        uint jobNum = m_kspeech->setText(text, "");
         // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
-        startText(jobNum);
+        m_kspeech->startText(jobNum);
         // Set flag so that the job we just created will be selected when textSet signal is received.
         m_selectOnTextSet = true;
     }
@@ -546,7 +540,7 @@ void KttsJobMgrPart::slot_speak_file()
     {
         // kDebug() << "KttsJobMgr::slot_speak_file: calling setFile with filename " <<
         //     result.fileNames[0] << " and encoding " << result.encoding << endl;
-        setFile(result.fileNames[0], NULL, result.encoding);
+        m_kspeech->setFile(result.fileNames[0], NULL, result.encoding);
     }
 }
 
@@ -607,7 +601,7 @@ int KttsJobMgrPart::getCurrentJobPartCount()
 */
 void KttsJobMgrPart::refreshJob(uint jobNum)
 {
-    QByteArray jobInfo = getTextJobInfo(jobNum);
+    QByteArray jobInfo = m_kspeech->getTextJobInfo(jobNum);
     QDataStream stream(&jobInfo, QIODevice::ReadOnly);
     JobInfo job;
     QString talkerCode;
@@ -635,7 +629,7 @@ void KttsJobMgrPart::refreshJobList()
     JobInfoList jobInfoList;
     enableJobActions(false);
     enableJobPartActions(false);
-    QString jobNumbers = getTextJobNumbers();
+    QString jobNumbers = m_kspeech->getTextJobNumbers();
     // kDebug() << "jobNumbers: " << jobNumbers << endl;
     QStringList jobNums = jobNumbers.split(",", QString::SkipEmptyParts);
     for (int ndx = 0; ndx < jobNums.count(); ++ndx)
@@ -643,7 +637,7 @@ void KttsJobMgrPart::refreshJobList()
         QString jobNumStr = jobNums[ndx];
         // kDebug() << "jobNumStr: " << jobNumStr << endl;
         uint jobNum = jobNumStr.toUInt(0, 10);
-        QByteArray jobInfo = getTextJobInfo(jobNum);
+        QByteArray jobInfo = m_kspeech->getTextJobInfo(jobNum);
         QDataStream stream(&jobInfo, QIODevice::ReadOnly);
         JobInfo job;
         job.jobNum = jobNum;
@@ -697,7 +691,7 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
     else
     {
         // Otherwise, retrieve Talker ID from KTTSD and cache it.
-        QString talkerID = talkerCodeToTalkerId(talkerCode);
+        QString talkerID = m_kspeech->talkerCodeToTalkerId(talkerCode);
         m_talkerCodesToTalkerIDs[talkerCode] = talkerID;
         return talkerID;
     }
@@ -760,12 +754,12 @@ void KttsJobMgrPart::enableJobPartActions(bool enable)
         (i.next())->setEnabled( enable );
 }
 
-/** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
+/** Slots connected to DBUS Signals emitted by KTTSD. */
 
 /**
 * This signal is emitted when KTTSD starts or restarts after a call to reinit.
 */
-ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
+Q_ASYNC void KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
 
 /**
 * This signal is emitted when the speech engine/plugin encounters a marker in the text.
@@ -773,7 +767,7 @@ ASYNC KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
 * @param markerName     The name of the marker seen.
 * @see markers
 */
-ASYNC KttsJobMgrPart::markerSeen(const QByteArray&, const QString&)
+Q_ASYNC void KttsJobMgrPart::markerSeen(const QString&, const QString&)
 {
 }
 
@@ -784,7 +778,7 @@ ASYNC KttsJobMgrPart::markerSeen(const QByteArray&, const QString&)
  * @param seq            Sequence number of the text.
  * @see getTextCount
  */
-ASYNC KttsJobMgrPart::sentenceStarted(const QByteArray&, const uint jobNum, const uint seq)
+Q_ASYNC void KttsJobMgrPart::sentenceStarted(const QString&, const uint jobNum, const uint seq)
 {
     // kDebug() << "KttsJobMgrPart::sentencedStarted: jobNum = " << jobNum << " seq = " << seq << endl;
     QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
@@ -794,7 +788,7 @@ ASYNC KttsJobMgrPart::sentenceStarted(const QByteArray&, const uint jobNum, cons
         job.state = KSpeech::jsSpeaking;
         job.sentenceNum = seq;
         m_jobListModel->updateRow(index.row(), job);
-        m_currentSentence->setPlainText(getTextJobSentence(jobNum, seq));
+        m_currentSentence->setPlainText(m_kspeech->getTextJobSentence(jobNum, seq));
     }
 }
 
@@ -805,7 +799,7 @@ ASYNC KttsJobMgrPart::sentenceStarted(const QByteArray&, const uint jobNum, cons
 * @param seq            Sequence number of the text.
 * @see getTextCount
 */
-ASYNC KttsJobMgrPart::sentenceFinished(const QByteArray& /*appId*/, const uint /*jobNum*/, const uint /*seq*/)
+Q_ASYNC void KttsJobMgrPart::sentenceFinished(const QString& /*appId*/, const uint /*jobNum*/, const uint /*seq*/)
 {
     // kDebug() << "KttsJobMgrPart::sentencedFinished: jobNum = " << jobNum << endl;
 /*
@@ -824,7 +818,7 @@ ASYNC KttsJobMgrPart::sentenceFinished(const QByteArray& /*appId*/, const uint /
 *
 * If the job is already in the list, refreshes it.
 */
-ASYNC KttsJobMgrPart::textSet(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textSet(const QString&, const uint jobNum)
 {
     kDebug() << "KttsJobMgrPart::textSet: jobNum = " << jobNum << endl;
     
@@ -833,7 +827,7 @@ ASYNC KttsJobMgrPart::textSet(const QByteArray&, const uint jobNum)
         refreshJob(jobNum);
     else
     {
-        QByteArray jobInfo = getTextJobInfo(jobNum);
+        QByteArray jobInfo = m_kspeech->getTextJobInfo(jobNum);
         QDataStream stream(&jobInfo, QIODevice::ReadOnly);
         JobInfo job;
         job.jobNum = jobNum;
@@ -866,7 +860,7 @@ ASYNC KttsJobMgrPart::textSet(const QByteArray&, const uint jobNum)
 * @param partNum        Part number of the new part.  Parts are numbered starting
 *                       at 1.
 */
-ASYNC KttsJobMgrPart::textAppended(const QByteArray& appId, const uint jobNum, const int /*partNum*/)
+Q_ASYNC void KttsJobMgrPart::textAppended(const QString& appId, const uint jobNum, const int /*partNum*/)
 {
     textSet(appId, jobNum);
 }
@@ -876,7 +870,7 @@ ASYNC KttsJobMgrPart::textAppended(const QByteArray& appId, const uint jobNum, c
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textStarted(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textStarted(const QString&, const uint jobNum)
 {
     QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
     if (index.isValid())
@@ -897,7 +891,7 @@ ASYNC KttsJobMgrPart::textStarted(const QByteArray&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textFinished(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textFinished(const QString&, const uint jobNum)
 {
     // kDebug() << "KttsJobMgrPart::textFinished: jobNum = " << jobNum << endl;
     refreshJob(jobNum);
@@ -909,7 +903,7 @@ ASYNC KttsJobMgrPart::textFinished(const QByteArray&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textStopped(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textStopped(const QString&, const uint jobNum)
 {
     // kDebug() << "KttsJobMgrPart::textStopped: jobNum = " << jobNum << endl;
     QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
@@ -927,7 +921,7 @@ ASYNC KttsJobMgrPart::textStopped(const QByteArray&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textPaused(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textPaused(const QString&, const uint jobNum)
 {
     // kDebug() << "KttsJobMgrPart::textPaused: jobNum = " << jobNum << endl;
     QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
@@ -944,7 +938,7 @@ ASYNC KttsJobMgrPart::textPaused(const QByteArray&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textResumed(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textResumed(const QString&, const uint jobNum)
 {
     QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
     if (index.isValid())
@@ -961,7 +955,7 @@ ASYNC KttsJobMgrPart::textResumed(const QByteArray&, const uint jobNum)
 * @param appId          The DCOP senderId of the application that created the job.
 * @param jobNum         Job number of the text job.
 */
-ASYNC KttsJobMgrPart::textRemoved(const QByteArray&, const uint jobNum)
+Q_ASYNC void KttsJobMgrPart::textRemoved(const QString&, const uint jobNum)
 {
     QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
     if (index.isValid())

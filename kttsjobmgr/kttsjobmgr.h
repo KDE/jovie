@@ -25,14 +25,13 @@
 #define _KTTSJOBMGRPART_H_
 
 // Qt includes
-#include <QByteArray>
+#include <QString>
 
 // KDE includes.
 #include <kparts/browserextension.h>
 
 // KTTS includes.
-#include "kspeech_stub.h"
-#include "kspeechsink.h"
+#include "kspeechinterface.h"
 
 class QTreeView;
 class KAboutData;
@@ -42,9 +41,7 @@ class KTextEdit;
 class JobInfoListModel;
 
 class KttsJobMgrPart:
-    public KParts::ReadOnlyPart,
-    public KSpeech_stub,
-    virtual public KSpeechSink
+    public KParts::ReadOnlyPart
 {
     Q_OBJECT
 public:
@@ -56,19 +53,19 @@ protected:
     virtual bool openFile();
     virtual bool closeURL();
 
-    /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
-
+    /** Slots connected to DBUS Signals emitted by KTTSD. */
+protected Q_SLOTS:
     /**
     * This signal is emitted when KTTSD starts or restarts after a call to reinit.
     */
-    ASYNC kttsdStarted();
+    Q_SCRIPTABLE void kttsdStarted();
     /**
     * This signal is emitted when the speech engine/plugin encounters a marker in the text.
     * @param appId          DCOP application ID of the application that queued the text.
     * @param markerName     The name of the marker seen.
     * @see markers
     */
-    ASYNC markerSeen(const QByteArray& appId, const QString& markerName);
+    Q_SCRIPTABLE void markerSeen(const QString& appId, const QString& markerName);
     /**
     * This signal is emitted whenever a sentence begins speaking.
     * @param appId          DCOP application ID of the application that queued the text.
@@ -76,7 +73,7 @@ protected:
     * @param seq            Sequence number of the text.
     * @see getTextCount
     */
-    ASYNC sentenceStarted(const QByteArray& appId, const uint jobNum, const uint seq);
+    Q_SCRIPTABLE void sentenceStarted(const QString& appId, const uint jobNum, const uint seq);
     /**
     * This signal is emitted when a sentence has finished speaking.
     * @param appId          DCOP application ID of the application that queued the text.
@@ -84,14 +81,14 @@ protected:
     * @param seq            Sequence number of the text.
     * @see getTextCount
     */
-    ASYNC sentenceFinished(const QByteArray& appId, const uint jobNum, const uint seq);
+    Q_SCRIPTABLE void sentenceFinished(const QString& appId, const uint jobNum, const uint seq);
 
     /**
     * This signal is emitted whenever a new text job is added to the queue.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textSet(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textSet(const QString& appId, const uint jobNum);
 
     /**
     * This signal is emitted whenever a new part is appended to a text job.
@@ -100,14 +97,14 @@ protected:
     * @param partNum        Part number of the new part.  Parts are numbered starting
     *                       at 1.
     */
-    ASYNC textAppended(const QByteArray& appId, const uint jobNum, const int partNum);
+    Q_SCRIPTABLE void textAppended(const QString& appId, const uint jobNum, const int partNum);
 
     /**
     * This signal is emitted whenever speaking of a text job begins.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textStarted(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textStarted(const QString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a text job is finished.  The job has
     * been marked for deletion from the queue and will be deleted when another
@@ -117,32 +114,32 @@ protected:
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textFinished(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textFinished(const QString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a speaking text job stops speaking.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textStopped(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textStopped(const QString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a speaking text job is paused.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textPaused(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textPaused(const QString& appId, const uint jobNum);
     /**
     * This signal is emitted when a text job, that was previously paused, resumes speaking.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textResumed(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textResumed(const QString& appId, const uint jobNum);
     /**
     * This signal is emitted whenever a text job is deleted from the queue.
     * The job is no longer in the queue when this signal is emitted.
     * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
     * @param jobNum         Job number of the text job.
     */
-    ASYNC textRemoved(const QByteArray& appId, const uint jobNum);
+    Q_SCRIPTABLE void textRemoved(const QString& appId, const uint jobNum);
 
 private slots:
     /**
@@ -210,6 +207,11 @@ private:
     * If nothing selected and list is empty, disable job buttons.
     */
     void autoSelectInJobListView();
+    
+    /**
+    * DBUS KSpeech Interface.
+    */
+    org::kde::KSpeech* m_kspeech;
 
     /**
     * Return the Talker ID corresponding to a Talker Code, retrieving from cached list if present.

@@ -30,7 +30,7 @@
 #include "kdebug.h"
 
 // KTTS includes.
-#include "kspeech.h"
+#include "kspeechdef.h"
 
 // JobInfoListModel includes.
 #include "jobinfolistmodel.h"
