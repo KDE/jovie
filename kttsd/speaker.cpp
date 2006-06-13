@@ -900,16 +900,16 @@ void Speaker::pauseUtteranceByJobNum(const uint jobNum)
         {
             if (it->audioPlayer)
                 if (it->audioPlayer->playing())
-            {
-                m_timer->stop();
-                kDebug() << "Speaker::pauseUtteranceByJobNum: pausing audio player" << endl;
-                it->audioPlayer->pause();
-                kDebug() << "Speaker::pauseUtteranceByJobNum: Setting utterance state to usPaused" << endl;
-                it->state = usPaused;
-                return;
-            }
-                        // Audio player has finished, but timeout hasn't had a chance
-                        // to clean up.  So do nothing, and let timeout do the cleanup.
+                {
+                    m_timer->stop();
+                    kDebug() << "Speaker::pauseUtteranceByJobNum: pausing audio player" << endl;
+                    it->audioPlayer->pause();
+                    kDebug() << "Speaker::pauseUtteranceByJobNum: Setting utterance state to usPaused" << endl;
+                    it->state = usPaused;
+                    return;
+                }
+                // Audio player has finished, but timeout hasn't had a chance
+                // to clean up.  So do nothing, and let timeout do the cleanup.
         }
     }
 }

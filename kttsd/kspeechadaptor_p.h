@@ -71,7 +71,7 @@ class KSpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"setText\" >\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\" />\n"
 "      <arg direction=\"in\" type=\"s\" name=\"talker\" />\n"
-"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\" />\n"
+"      <arg direction=\"out\" type=\"u\" />\n"
 "    </method>\n"
 "    <method name=\"sayText\" >\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\" />\n"
