@@ -4,13 +4,11 @@
 
 ########### next target ###############
 
-set(kttsmgr_SRCS kttsmgr.cpp )
+set(kttsmgr_SRCS 
+    kttsmgr.cpp
+    kspeechinterface.cpp )
 
 kde4_automoc(${kttsmgr_SRCS})
-
-kde4_add_dcop_skels(kttsmgr_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
-
-kde4_add_dcop_stubs(kttsmgr_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h )
 
 kde4_add_executable(kttsmgr ${kttsmgr_SRCS})
 

@@ -41,8 +41,7 @@
 #include "talkerlistmodel.h"
 #include "addtalker.h"
 #include "ui_kcmkttsmgrwidget.h"
-#include "kspeech_stub.h"
-#include "kspeechsink.h"
+#include "kspeechinterface.h"
 
 class PlugInConf;
 class KttsFilterConf;
@@ -108,8 +107,6 @@ public:
 
 class KCMKttsMgr :
     public KCModule,
-    public KSpeech_stub,
-    virtual public KSpeechSink,
     private Ui::KCMKttsMgrWidget
 {
     Q_OBJECT
@@ -333,6 +330,11 @@ class KCMKttsMgr :
         * An exact match is performed.
         */
         QTreeWidgetItem* findTreeWidgetItem(QTreeWidget* tw, const QString& sought, int col);
+        
+        /**
+        * DBUS KSpeech Interface.
+        */
+        org::kde::KSpeech* m_kspeech;
 
         /**
         * Object holding all the configuration

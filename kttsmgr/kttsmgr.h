@@ -29,14 +29,13 @@
 #include <ksystemtray.h>
 
 // KTTS includes.
-#include "kspeech_stub.h"
-#include "kspeechsink.h"
+#include "kspeechinterface.h"
 
 class QEvent;
 class QMouseEvent;
 class QAction;
 
-class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
+class KttsMgrTray: public KSystemTray
 {
     Q_OBJECT
 
@@ -47,8 +46,8 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
         void setExitWhenFinishedSpeaking();
         QString getStatus();
 
-    protected:
-        ASYNC textFinished(const QByteArray& appId, uint jobNum);
+    protected Q_SLOTS:
+        Q_ASYNC void textFinished(const QString& appId, uint jobNum);
         bool event(QEvent *event);
         void mousePressEvent(QMouseEvent* ev);
         virtual void contextMenuAboutToShow(KMenu* menu);
@@ -74,6 +73,11 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
         QString stateToStr(int state);
         void exitWhenFinishedSpeaking();
         
+        /**
+        * DBUS KSpeech Interface.
+        */
+        org::kde::KSpeech* m_kspeech;
+
         bool isKttsdRunning();
         QAction* actStop;
         QAction* actPause;

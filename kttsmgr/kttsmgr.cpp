@@ -38,7 +38,6 @@
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kaboutapplication.h>
-#include <dcopclient.h>
 #include <ktoolinvocation.h>
 #include <kprocess.h>
 #include <klocale.h>
@@ -46,7 +45,7 @@
 #include <kconfig.h>
 
 // KTTSMgr includes.
-#include "kspeech.h"
+#include "kspeechdef.h"
 #include "kttsmgr.h"
 
 static const KCmdLineOptions options[] =
@@ -99,9 +98,8 @@ int main (int argc, char *argv[])
 /* ------------------  KttsMgrTray class ----------------------- */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    DCOPStub("kttsd", "KSpeech"),
-    DCOPObject("kkttsmgr_kspeechsink"),
-    KSystemTray(parent)
+    KSystemTray(parent),
+    m_kspeech(0)
 {
     setObjectName("kttsmgrsystemtray");
     
@@ -118,6 +116,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
             QString error;
             if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
                 kDebug() << "Starting KTTSD failed with message " << error << endl;
+            else
+                isKttsdRunning();
         }
     }
 
@@ -153,15 +153,6 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
     
-    // If --autoexit option given, exit when speaking stops.
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("autoexit"));
-    {
-        connectDCOPSignal("kttsd", "KSpeech",
-            "textFinished(QByteArray,uint)",
-            "textFinished(QByteArray,uint)",
-            false);
-    }
 }
 
 KttsMgrTray::~KttsMgrTray()
@@ -206,27 +197,29 @@ void KttsMgrTray::mousePressEvent(QMouseEvent* ev)
     int jobState = -1;
     if (kttsdRunning)
     {
-        uint job = getCurrentTextJob();
+        uint job = m_kspeech->getCurrentTextJob();
         if (job != 0)
         {
             // kDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
-            jobState = getTextJobState(job);
+            jobState = m_kspeech->getTextJobState(job);
         }
     }
     actStop->setEnabled(jobState != -1);
-    actPause->setEnabled(jobState == jsSpeaking);
-    actResume->setEnabled(jobState == jsPaused);
+    actPause->setEnabled(jobState == KSpeech::jsSpeaking);
+    actResume->setEnabled(jobState == KSpeech::jsPaused);
     actRepeat->setEnabled(jobState != -1);
     actSpeakClipboard->setEnabled(kttsdRunning);
-    DCOPClient *client = kapp->dcopClient();
-    bool configActive (client->isApplicationRegistered("kcmshell_kcmkttsd"));
-    actConfigure->setEnabled(!configActive);
+    // TODO: How to determine if kcmshell_kcmttsd is running?
+    //       It isn't a dbus service.
+    // DCOPClient *client = kapp->dcopClient();
+    // bool configActive (client->isApplicationRegistered("kcmshell_kcmkttsd"));
+    // actConfigure->setEnabled(!configActive);
 }
 
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
-    QString jobNums = getTextJobNumbers();
+    QString jobNums = m_kspeech->getTextJobNumbers();
     QStringList jobNumsList = jobNums.split(",");
     uint jobNumsListCount = jobNumsList.count();
     // Since there can only be 2 Finished jobs at a time, more than 2 jobs means at least
@@ -235,12 +228,12 @@ void KttsMgrTray::exitWhenFinishedSpeaking()
     // Exit if all jobs are Finished or there are no jobs.
     for (uint ndx=0; ndx < jobNumsListCount; ++ndx)
     {
-        if (getTextJobState(jobNumsList[ndx].toInt()) != KSpeech::jsFinished) return;
+        if (m_kspeech->getTextJobState(jobNumsList[ndx].toInt()) != KSpeech::jsFinished) return;
     }
     kapp->quit();
 }
 
-void KttsMgrTray::textFinished(const QByteArray& /*appId*/, uint /*jobNum*/)
+void KttsMgrTray::textFinished(const QString& /*appId*/, uint /*jobNum*/)
 {
     // kDebug() << "KttsMgrTray::textFinished: running" << endl;
     exitWhenFinishedSpeaking();
@@ -267,18 +260,18 @@ QString KttsMgrTray::stateToStr(int state)
 QString KttsMgrTray::getStatus()
 {
     if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
-    uint jobCount = getTextJobCount();
+    uint jobCount = m_kspeech->getTextJobCount();
     QString status = i18np("1 job", "%n jobs", jobCount);
     if (jobCount > 0)
     {
-        uint job = getCurrentTextJob();
+        uint job = m_kspeech->getCurrentTextJob();
         int jobState = 0;
         if (job != 0)
         {
             // kDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
-            jobState = getTextJobState(job);
-            int sentenceCount = getTextCount(job);
-            uint seq = moveRelTextSentence(0, job);
+            jobState = m_kspeech->getTextJobState(job);
+            int sentenceCount = m_kspeech->getTextCount(job);
+            uint seq = m_kspeech->moveRelTextSentence(0, job);
             status += i18n(", current job %1 at sentence %2 of %3 sentences"
                 , stateToStr(jobState), seq, sentenceCount);
         }
@@ -294,7 +287,7 @@ void KttsMgrTray::speakClipboardSelected()
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
             kError() << "Starting KTTSD failed with message " << error << endl;
     }
-    speakClipboard();
+    m_kspeech->speakClipboard();
 }
 
 void KttsMgrTray::aboutSelected()
@@ -318,8 +311,8 @@ void KttsMgrTray::stopSelected()
 {
     if (isKttsdRunning())
     {
-        uint jobNum = getCurrentTextJob();
-        removeText(jobNum);
+        uint jobNum = m_kspeech->getCurrentTextJob();
+        m_kspeech->removeText(jobNum);
     }
 }
 
@@ -327,8 +320,8 @@ void KttsMgrTray::pauseSelected()
 {
     if (isKttsdRunning())
     {
-        uint jobNum = getCurrentTextJob();
-        pauseText(jobNum);
+        uint jobNum = m_kspeech->getCurrentTextJob();
+        m_kspeech->pauseText(jobNum);
     }
 }
 
@@ -336,8 +329,8 @@ void KttsMgrTray::resumeSelected()
 {
     if (isKttsdRunning())
     {
-        uint jobNum = getCurrentTextJob();
-        resumeText(jobNum);
+        uint jobNum = m_kspeech->getCurrentTextJob();
+        m_kspeech->resumeText(jobNum);
     }
 }
 
@@ -345,8 +338,8 @@ void KttsMgrTray::repeatSelected()
 {
     if (isKttsdRunning())
     {
-        uint jobNum = getCurrentTextJob();
-        startText(jobNum);
+        uint jobNum = m_kspeech->getCurrentTextJob();
+        m_kspeech->startText(jobNum);
     }
 }
 
@@ -359,8 +352,22 @@ void KttsMgrTray::configureSelected()
 
 bool KttsMgrTray::isKttsdRunning()
 {
-    DCOPClient *client = kapp->dcopClient();
-    return (client->isApplicationRegistered("kttsd"));
+    bool isRunning = (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kttsd"));
+    if (isRunning) {
+        if (!m_kspeech) {
+            m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"));
+            m_kspeech->setParent(this);
+            // If --autoexit option given, exit when speaking stops.
+            KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+            if (args->isSet("autoexit"))
+                connect(m_kspeech, SIGNAL(textFinished(QString&,uint)),
+                    this, SLOT(textFinished(QString&,uint)));
+        }
+    } else {
+        delete m_kspeech;
+        m_kspeech = 0;
+    }
+    return isRunning;
 }
 
 #include "kttsmgr.moc"

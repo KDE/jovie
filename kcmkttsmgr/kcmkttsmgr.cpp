@@ -37,7 +37,6 @@
 #include <QMenu>
 
 // KDE includes.
-#include <dcopclient.h>
 #include <kparts/componentfactory.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
@@ -282,9 +281,8 @@ QVariant SbdFilterListModel::headerData(int section, Qt::Orientation orientation
 * Constructor.
 */
 KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
-    DCOPStub("kttsd", "KSpeech"),
-    DCOPObject("kcmkttsmgr_kspeechsink"),
-    KCModule(KCMKttsMgrFactory::instance(), parent/*, name*/)
+    KCModule(KCMKttsMgrFactory::instance(), parent/*, name*/),
+    m_kspeech(0)
 {
 
     // kDebug() << "KCMKttsMgr constructor running." << endl;
@@ -534,18 +532,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     connect(mainTab, SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotTabChanged()));
 
-    // Connect KTTSD DCOP signals to our slots.
-    if (!connectDCOPSignal("kttsd", "KSpeech",
-        "kttsdStarted()",
-        "kttsdStarted()",
-        false)) kDebug() << "connectDCOPSignal failed" << endl;
-    connectDCOPSignal("kttsd", "KSpeech",
-        "kttsdExiting()",
-        "kttsdExiting()",
-        false);
-
     // See if KTTSD is already running, and if so, create jobs tab.
-    if (kapp->dcopClient()->isApplicationRegistered("kttsd"))
+    if (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kttsd"))
         kttsdStarted();
     else
         // Start KTTSD if check box is checked.
@@ -969,13 +957,10 @@ void KCMKttsMgr::save()
     else
     {
         // If KTTSD is running, reinitialize it.
-        DCOPClient *client = kapp->dcopClient();
-        bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
-        if (kttsdRunning)
+        if (m_kspeech)
         {
             kDebug() << "Restarting KTTSD" << endl;
-            QByteArray data;
-            client->send("kttsd", "KSpeech", "reinit()", data);
+            m_kspeech->reinit();
         }
     }
 }
@@ -1745,8 +1730,7 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
     if (reenter) return;
     reenter = true;
     // See if KTTSD is running.
-    DCOPClient *client = kapp->dcopClient();
-    bool kttsdRunning = (client->isApplicationRegistered("kttsd"));
+    bool kttsdRunning = (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kttsd"));
     // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
     if (enableKttsdCheckBox->isChecked())
@@ -1760,8 +1744,11 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
                 kDebug() << "Starting KTTSD failed with message " << error << endl;
                 enableKttsdCheckBox->setChecked(false);
                 notifyTestButton->setEnabled(false);
-            } else
+                
+            } else {
                 configChanged();
+                kttsdStarted();
+            }
         }
     }
     else
@@ -1770,8 +1757,7 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
         if (kttsdRunning)
             {
                 // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping KTTSD" << endl;
-                QByteArray data;
-                client->send("kttsd", "KSpeech", "kttsdExit()", data);
+                m_kspeech->kttsdExit();
                 configChanged();
             }
     }
@@ -1863,9 +1849,19 @@ void KCMKttsMgr::kttsdStarted()
         enableKttsdCheckBox->setChecked(true);
         // Enable/disable notify Test button.
         slotNotifyListView_currentItemChanged();
+        m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"));
+        m_kspeech->setParent(this);
+        // Connect KTTSD DBUS signals to our slots.
+        connect(m_kspeech, SIGNAL(kttsdStarted()),
+            this, SLOT(kttsdStarted()));
+        connect(m_kspeech, SIGNAL(kttsdExiting()),
+            this, SLOT(kttsdExiting()));
+
     } else {
         enableKttsdCheckBox->setChecked(false);
         notifyTestButton->setEnabled(false);
+        delete m_kspeech;
+        m_kspeech = 0;
     }
 }
 
@@ -1883,6 +1879,8 @@ void KCMKttsMgr::kttsdExiting()
     }
     enableKttsdCheckBox->setChecked(false);
     notifyTestButton->setEnabled(false);
+    delete m_kspeech;
+    m_kspeech = 0;
 }
 
 /**
@@ -2473,7 +2471,7 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
                 msg.replace("%m", i18n("sample notification message"));
                 break;
         }
-        if (!msg.isEmpty()) sayMessage(msg, item->text(nlvcTalker));
+        if (!msg.isEmpty()) m_kspeech->sayMessage(msg, item->text(nlvcTalker));
     }
 }
 
