@@ -6,21 +6,25 @@
  <appid>kmail</appid>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[<br>]]></match>
   <subst><![CDATA[,]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[</b>]]></match>
   <subst><![CDATA[,]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[in /local/inbox]]></match>
   <subst><![CDATA[,]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[<b>]]></match>
   <subst><![CDATA[,]]></subst>
  </word>

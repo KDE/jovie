@@ -86,6 +86,8 @@ private:
 
     // List of regular expressions to match.
     QValueList<QRegExp> m_matchList;
+    // List of match case flag
+    QValueList<QString> m_caseList;
     // List of substitutions to replace matches.
     QValueList<QString> m_substList;
     // True if this filter did anything to the text.

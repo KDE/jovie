@@ -5,6 +5,7 @@
  <language-code>pl</language-code>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[[^a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ\,\"\'\\@#$%^*+=`~]]]></match>
   <subst><![CDATA[ ]]></subst>
  </word>

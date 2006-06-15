@@ -27,6 +27,7 @@
 #include <qstring.h>
 #include <qhbox.h>
 #include <qlayout.h>
+#include <qcheckbox.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qradiobutton.h>
@@ -220,6 +221,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
+        QString matchCase = "No"; // Default for old (v<=3.5.3) config files with no <case/>.
         QString match;
         QString subst;
         const int propListCount = propList.count();
@@ -228,15 +230,18 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
             if (prop.tagName() == "type") wordType = prop.text();
+            if (prop.tagName() == "case") matchCase = prop.text();
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
         QString wordTypeStr = 
             (wordType=="RegExp"?i18n("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
+        QString matchCaseStr = 
+            (matchCase=="Yes"?i18n("Yes"):i18n("No"));  
         if (!item)
-            item = new KListViewItem(m_widget->substLView, wordTypeStr, match, subst);
+            item = new KListViewItem(m_widget->substLView, wordTypeStr, matchCaseStr, match, subst);
         else
-            item = new KListViewItem(m_widget->substLView, item, wordTypeStr, match, subst);
+            item = new KListViewItem(m_widget->substLView, item, wordTypeStr, matchCaseStr, match, subst);
     }
 
     return QString::null;
@@ -328,14 +333,19 @@ QString StringReplacerConf::saveToFile(const QString& filename)
         QDomText t = doc.createTextNode( item->text(0)==i18n("Word")?"Word":"RegExp" );
         propTag.appendChild( t );
 
+        propTag = doc.createElement( "case" );
+        wordTag.appendChild( propTag);
+        t = doc.createTextNode( item->text(1)==i18n("Yes")?"Yes":"No" );
+        propTag.appendChild( t );      
+
         propTag = doc.createElement( "match" );
         wordTag.appendChild( propTag);
-        t = doc.createCDATASection( item->text(1) );
+        t = doc.createCDATASection( item->text(2) );
         propTag.appendChild( t );
 
         propTag = doc.createElement( "subst" );
         wordTag.appendChild( propTag);
-        t = doc.createCDATASection( item->text(2) );
+        t = doc.createCDATASection( item->text(3) );
         propTag.appendChild( t );
 
         item = item->nextSibling();
@@ -566,8 +576,9 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
             m_editWidget->regexpRadioButton->setChecked( true );
             m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
         }
-        m_editWidget->matchLineEdit->setText( item->text(1) );
-        m_editWidget->substLineEdit->setText( item->text(2) );
+        m_editWidget->caseCheckBox->setChecked( (item->text(1))==i18n("Yes") );
+        m_editWidget->matchLineEdit->setText( item->text(2) );
+        m_editWidget->substLineEdit->setText( item->text(3) );
     }
     // The match box may not be blank.
     connect( m_editWidget->matchLineEdit, SIGNAL(textChanged(const QString&)),
@@ -596,6 +607,8 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     QString substType = i18n( "Word" );
     if ( m_editWidget->regexpRadioButton->isChecked() )
     	substType = i18n("Abbreviation for 'Regular Expression'", "RegExp");
+    QString matchCase = i18n("No");
+    if ( m_editWidget->caseCheckBox->isChecked() ) matchCase = i18n("Yes");
     QString match = m_editWidget->matchLineEdit->text();
     QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;
@@ -607,16 +620,17 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     if ( isAdd )
     {
         if ( item )
-            item = new KListViewItem( m_widget->substLView, item, substType, match, subst );
+            item = new KListViewItem( m_widget->substLView, item, substType, matchCase, match, subst );
         else
-            item = new KListViewItem( m_widget->substLView, substType, match, subst );
+            item = new KListViewItem( m_widget->substLView, substType, matchCase, match, subst );
         m_widget->substLView->setSelected( item, true );
     }
     else
     {
         item->setText( 0, substType );
-        item->setText( 1, match );
-        item->setText( 2, subst );
+        item->setText( 1, matchCase );
+        item->setText( 2, match );
+        item->setText( 3, subst );
     }
     m_widget->substLView->ensureItemVisible( item );
     enableDisableButtons();

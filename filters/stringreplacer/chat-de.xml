@@ -9,506 +9,607 @@
  <appid>konversation</appid>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[<qt>]]></match>
   <subst><![CDATA[ ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[&lt([^>]+)&gt]]></match>
   <subst><![CDATA[ \1 meint ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[<br>]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[</qt>]]></match>
   <subst><![CDATA[ ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\;\)]]></match>
   <subst><![CDATA[ winkt]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\<]]></match>
   <subst><![CDATA[ traurig]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\/]]></match>
   <subst><![CDATA[stirnrunzeln]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\>]]></match>
   <subst><![CDATA[ grinst]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\|]]></match>
   <subst><![CDATA[ernsthaft]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\-\|]]></match>
   <subst><![CDATA[ernsthaft]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\-\)]]></match>
   <subst><![CDATA[ laechelt]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\'\(]]></match>
   <subst><![CDATA[weint]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\(]]></match>
   <subst><![CDATA[ traurig]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\)]]></match>
   <subst><![CDATA[ laechelt]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\@]]></match>
   <subst><![CDATA[ boese]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\$]]></match>
   <subst><![CDATA[ schaemt sich]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\@\)]]></match>
   <subst><![CDATA[ katzengesicht]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(6\)]]></match>
   <subst><![CDATA[ teufelsfratze]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(a\)]]></match>
   <subst><![CDATA[ engelsgesicht]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:D]]></match>
   <subst><![CDATA[ grins]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(h\)]]></match>
   <subst><![CDATA[ kuhl]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\so\_O]]></match>
   <subst><![CDATA[ winkt]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:p]]></match>
   <subst><![CDATA[ baeh]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(s\)]]></match>
   <subst><![CDATA[ gaehn]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ad]]></match>
   <subst><![CDATA[fuege hinzu]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[afaik]]></match>
   <subst><![CDATA[soviel ich weiss]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[afk]]></match>
   <subst><![CDATA[nicht an tastatur]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[asap]]></match>
   <subst><![CDATA[so schnell wie moeglich]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[atm]]></match>
   <subst><![CDATA[momentan]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ayt]]></match>
   <subst><![CDATA[bist du da]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[b4]]></match>
   <subst><![CDATA[vorher]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[b4n]]></match>
   <subst><![CDATA[tschuess]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[bak]]></match>
   <subst><![CDATA[zurueck]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[bbl]]></match>
   <subst><![CDATA[komme spaeter wieder]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[bf]]></match>
   <subst><![CDATA[freund]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[b/f]]></match>
   <subst><![CDATA[freund]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[brb]]></match>
   <subst><![CDATA[bin gleich wieder da]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[btw]]></match>
   <subst><![CDATA[nebenbei bemerkt]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[cu]]></match>
   <subst><![CDATA[bis dann]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[cul]]></match>
   <subst><![CDATA[bis spaeter]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[cul8r]]></match>
   <subst><![CDATA[bis spaeter]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[cya]]></match>
   <subst><![CDATA[bis spaeter]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[d/l]]></match>
   <subst><![CDATA[daunlohd]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[dvd]]></match>
   <subst><![CDATA[die wie die]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[f2f]]></match>
   <subst><![CDATA[von angesicht zu angesicht]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[fubar]]></match>
   <subst><![CDATA[leuft trotz reparatur nicht]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[fyi]]></match>
   <subst><![CDATA[zu deiner information]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[gf]]></match>
   <subst><![CDATA[freundin]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[g/f]]></match>
   <subst><![CDATA[freundin]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[gtg]]></match>
   <subst><![CDATA[ich muss weck]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[hmm]]></match>
   <subst><![CDATA[aehm]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[hth]]></match>
   <subst><![CDATA[hoffe es hilft]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ic]]></match>
   <subst><![CDATA[verstehe]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[iirc]]></match>
   <subst><![CDATA[wenn ich recht erinnere]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[imao]]></match>
   <subst><![CDATA[meiner arroganten meinung nach]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[imco]]></match>
   <subst><![CDATA[meiner wohlueberlegten meinung nach]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ime]]></match>
   <subst><![CDATA[meiner erfahrung nach]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[imho]]></match>
   <subst><![CDATA[meiner bescheidenen meinung nach]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[imnsho]]></match>
   <subst><![CDATA[meiner unbescheidenen meinung nach]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[imo]]></match>
   <subst><![CDATA[meiner meinung nach]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ip]]></match>
   <subst><![CDATA[ei pie]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[isdn]]></match>
   <subst><![CDATA[i es de en]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[k]]></match>
   <subst><![CDATA[ho key]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[kde]]></match>
   <subst><![CDATA[ka de eh]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[kbd]]></match>
   <subst><![CDATA[tastatur]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[lshmba]]></match>
   <subst><![CDATA[halte mir den bauch vor lachen]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[lthtt]]></match>
   <subst><![CDATA[unbeschreibliches gelaechter]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ltns]]></match>
   <subst><![CDATA[lange nicht gesehen]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[lol]]></match>
   <subst><![CDATA[h h h]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[m8]]></match>
   <subst><![CDATA[kumpel]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[msg]]></match>
   <subst><![CDATA[nachricht]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[np]]></match>
   <subst><![CDATA[kein problem]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[oic]]></match>
   <subst><![CDATA[oh verstehe]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ok]]></match>
   <subst><![CDATA[ho key]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ott]]></match>
   <subst><![CDATA[übertreiben]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[pc]]></match>
   <subst><![CDATA[pie cie]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ppc]]></match>
   <subst><![CDATA[power pie cie]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[ppl]]></match>
   <subst><![CDATA[leute]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[rotfl]]></match>
   <subst><![CDATA[kugelt sich vor lachen]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[rotflol]]></match>
   <subst><![CDATA[bruellt vor lachen]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[rsvp]]></match>
   <subst><![CDATA[antworte bitte]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[scsi]]></match>
   <subst><![CDATA[skasi]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[suse]]></match>
   <subst><![CDATA[suse]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[sec]]></match>
   <subst><![CDATA[sekunde]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[secs]]></match>
   <subst><![CDATA[sekunden]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[thx]]></match>
   <subst><![CDATA[danke]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[tnx]]></match>
   <subst><![CDATA[danke]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wo]]></match>
   <subst><![CDATA[ohne]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wb]]></match>
   <subst><![CDATA[willkommen urueck]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wtf]]></match>
   <subst><![CDATA[was zum teufel]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wth]]></match>
   <subst><![CDATA[was zum teufel]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wtg]]></match>
   <subst><![CDATA[gut gemacht]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wtgp]]></match>
   <subst><![CDATA[bitte um privatchett]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wth]]></match>
   <subst><![CDATA[was zum teufel]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[wygiswypf]]></match>
   <subst><![CDATA[was du kriegst ist was du bezahlst]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[yw]]></match>
   <subst><![CDATA[gruess diche]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\_]]></match>
   <subst><![CDATA[]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\|]]></match>
   <subst><![CDATA[ ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\\o\/]]></match>
   <subst><![CDATA[tschuess]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\/o\\]]></match>
   <subst><![CDATA[haelt sich die ohren zu]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\:\-\/]]></match>
   <subst><![CDATA[stirnrunzeln]]></subst>
  </word>

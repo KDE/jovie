@@ -3,46 +3,55 @@
  <name>Abbreviations</name>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[TODO]]></match>
   <subst><![CDATA[To Do]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[CPU]]></match>
   <subst><![CDATA[C P U]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[DCOP]]></match>
   <subst><![CDATA[D Cop]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[IP]]></match>
   <subst><![CDATA[I P]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[KDE]]></match>
   <subst><![CDATA[K D E]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[KTTS]]></match>
   <subst><![CDATA[K T T S]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[kttsd]]></match>
   <subst><![CDATA[K T T S D]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[KTTSD]]></match>
   <subst><![CDATA[K T T S D]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[TTS]]></match>
   <subst><![CDATA[T T S]]></subst>
  </word>

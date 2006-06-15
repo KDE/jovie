@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>StringReplacerConfWidget</class>
 <comment>Widget for configuring String Replacer Filter for KTTSD.</comment>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
@@ -263,7 +263,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Match</string>
+                            <string>Match Case</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -275,6 +275,17 @@
                     <column>
                         <property name="text">
                             <string>Replace With</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Match</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -429,6 +440,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>nameLineEdit</tabstop>
     <tabstop>substLView</tabstop>

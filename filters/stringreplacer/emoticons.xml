@@ -9,246 +9,295 @@
  <appid>konversation</appid>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\)]]></match>
   <subst><![CDATA[. smiles]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\-\)]]></match>
   <subst><![CDATA[. smiles]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\p]]></match>
   <subst><![CDATA[. sticks out tung]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:D]]></match>
   <subst><![CDATA[. grins]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\>]]></match>
   <subst><![CDATA[.grins]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\;\)]]></match>
   <subst><![CDATA[. winks]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\o\_\0]]></match>
   <subst><![CDATA[. winks]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\(]]></match>
   <subst><![CDATA[. sad face]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\<]]></match>
   <subst><![CDATA[. sad face]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\\:\|]]></match>
   <subst><![CDATA[. straight faced]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\-\|]]></match>
   <subst><![CDATA[. straight faced]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\$]]></match>
   <subst><![CDATA[. blushes]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\\(h\)]]></match>
   <subst><![CDATA[. cool shades]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\@]]></match>
   <subst><![CDATA[. angry look]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\'\(]]></match>
   <subst><![CDATA[. cries]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(a\)]]></match>
   <subst><![CDATA[. angel]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(6\)]]></match>
   <subst><![CDATA[. devil]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\%\)]]></match>
   <subst><![CDATA[. hand cuffs]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\:\[\]]></match>
   <subst><![CDATA[. bat]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\@\)]]></match>
   <subst><![CDATA[. cat face]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\&\)]]></match>
   <subst><![CDATA[. dog face]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\*\)]]></match>
   <subst><![CDATA[. star]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(s\)]]></match>
   <subst><![CDATA[. sleepy]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(Y\)]]></match>
   <subst><![CDATA[. thumbs up]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(n\)]]></match>
   <subst><![CDATA[. thumbs down]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\}\)]]></match>
   <subst><![CDATA[. girl huggs]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\{\)]]></match>
   <subst><![CDATA[. boy huggs]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(l\)]]></match>
   <subst><![CDATA[. love]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(U\)]]></match>
   <subst><![CDATA[. is hart brooken]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(k\)]]></match>
   <subst><![CDATA[. kisses]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\^\)]]></match>
   <subst><![CDATA[. birthday cake]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(g\)]]></match>
   <subst><![CDATA[. a gift]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(f\)]]></match>
   <subst><![CDATA[. flower]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(w\)]]></match>
   <subst><![CDATA[. willted flower]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(t\)]]></match>
   <subst><![CDATA[. telephone]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(e\)]]></match>
   <subst><![CDATA[. e mail]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(m\)]]></match>
   <subst><![CDATA[. messenger]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(o\)]]></match>
   <subst><![CDATA[. time]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(x\)]]></match>
   <subst><![CDATA[. girl]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(z\)]]></match>
   <subst><![CDATA[. boy]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(p\)]]></match>
   <subst><![CDATA[. picture]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\~\)]]></match>
   <subst><![CDATA[. film]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(b\)]]></match>
   <subst><![CDATA[. glass of beer]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(d\)]]></match>
   <subst><![CDATA[. glass of wine]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(\#\)]]></match>
   <subst><![CDATA[. sunny]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(r\)]]></match>
   <subst><![CDATA[. rainbow]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(8\)]]></match>
   <subst><![CDATA[. note]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(i\)]]></match>
   <subst><![CDATA[. idea]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\s\(c\)]]></match>
   <subst><![CDATA[. coffee cup]]></subst>
  </word>

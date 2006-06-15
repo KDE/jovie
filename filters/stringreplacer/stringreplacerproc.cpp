@@ -55,6 +55,7 @@ StringReplacerProc::StringReplacerProc( QObject *parent, const char *name, const
 /*virtual*/ StringReplacerProc::~StringReplacerProc()
 {
     m_matchList.clear();
+    m_caseList.clear();
     m_substList.clear();
 }
 
@@ -89,6 +90,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
 
     // Clear list.
     m_matchList.clear();
+    m_caseList.clear();
     m_substList.clear();
 
     // Name setting.
@@ -125,6 +127,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
+        QString matchCase = "No"; // Default for old (v<=3.5.3) config files with no <case/>.
         QString match;
         QString subst;
         const int propListCount = propList.count();
@@ -133,12 +136,13 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
             if (prop.tagName() == "type") wordType = prop.text();
+	    if (prop.tagName() == "case") matchCase = prop.text();
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
         // Build Regular Expression for each word's match string.
         QRegExp rx;
-        rx.setCaseSensitive(false);
+        rx.setCaseSensitive(matchCase == "Yes");
         if ( wordType == "Word" )
         {
                 // TODO: Does \b honor strange non-Latin1 encodings?
