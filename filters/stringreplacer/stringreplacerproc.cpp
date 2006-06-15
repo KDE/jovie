@@ -139,7 +139,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
         // Build Regular Expression for each word's match string.
         QRegExp rx;
         rx.setCaseSensitive(false);
-        if ( wordType == i18n("Word") )
+        if ( wordType == "Word" )
         {
                 // TODO: Does \b honor strange non-Latin1 encodings?
             rx.setPattern( "\\b" + match + "\\b" );

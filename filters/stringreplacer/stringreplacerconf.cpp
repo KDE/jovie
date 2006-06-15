@@ -561,7 +561,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editWidget->matchButton->setEnabled( false );
     if (!isAdd)
     {
-        if ( item->text(0) == "RegExp" )
+        if ( item->text(0) == i18n("Abbreviation for 'Regular Expression'", "RegExp") )
         {
             m_editWidget->regexpRadioButton->setChecked( true );
             m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
@@ -594,7 +594,8 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editDlg->enableButton( KDialogBase::Ok, !m_editWidget->matchLineEdit->text().isEmpty() );
     int dlgResult = m_editDlg->exec();
     QString substType = i18n( "Word" );
-    if ( m_editWidget->regexpRadioButton->isChecked() ) substType = "RegExp";
+    if ( m_editWidget->regexpRadioButton->isChecked() )
+    	substType = i18n("Abbreviation for 'Regular Expression'", "RegExp");
     QString match = m_editWidget->matchLineEdit->text();
     QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;
