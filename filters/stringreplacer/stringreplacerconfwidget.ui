@@ -274,7 +274,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Replace With</string>
+                            <string>Match</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -285,7 +285,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Match</string>
+                            <string>Replace With</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
