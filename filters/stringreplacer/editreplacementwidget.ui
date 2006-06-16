@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EditReplacementWidget</class>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
 <widget class="QWidget">
@@ -26,9 +26,6 @@
             <width>0</width>
             <height>0</height>
         </size>
-    </property>
-    <property name="caption">
-        <string>EditReplacementWidget</string>
     </property>
     <vbox>
         <property name="name">
@@ -87,9 +84,6 @@
                                     <property name="text">
                                         <string>&amp;Word</string>
                                     </property>
-                                    <property name="accel">
-                                        <string>Alt+W</string>
-                                    </property>
                                     <property name="checked">
                                         <bool>true</bool>
                                     </property>
@@ -108,9 +102,6 @@
                                     </property>
                                     <property name="text">
                                         <string>Regular &amp;expression</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string>Alt+E</string>
                                     </property>
                                 </widget>
                             </hbox>
@@ -131,9 +122,6 @@
                     </property>
                     <property name="text">
                         <string>Match &amp;case</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>
