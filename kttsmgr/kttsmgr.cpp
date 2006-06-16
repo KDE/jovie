@@ -355,7 +355,7 @@ bool KttsMgrTray::isKttsdRunning()
     bool isRunning = (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kttsd"));
     if (isRunning) {
         if (!m_kspeech) {
-            m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"));
+            m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/org/kde/KSpeech"));
             m_kspeech->setParent(this);
             // If --autoexit option given, exit when speaking stops.
             KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

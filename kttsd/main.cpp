@@ -25,7 +25,6 @@
 #include "kttsd.h"
 
 int main (int argc, char *argv[]){
-    kDebug() << "main: Running " << endl;
     KLocale::setMainCatalog("kttsd");
     KAboutData aboutdata("kttsd", I18N_NOOP("kttsd"),
          "0.4.0", I18N_NOOP("Text-to-speech synthesis deamon"),
@@ -41,12 +40,11 @@ int main (int argc, char *argv[]){
     KCmdLineArgs::init( argc, argv, &aboutdata );
     // KCmdLineArgs::addCmdLineOptions( options );
     KUniqueApplication::addCmdLineOptions();
-
+    
+    KUniqueApplication::setOrganizationDomain("kde.org");
+    KUniqueApplication::setApplicationName("kttsd");
     KUniqueApplication app;
-    app.setOrganizationDomain("org.kde");
-    app.setApplicationName("kttsd");
 
-    kDebug() << "main: calling KUniqueApplication::start()" << endl;
     if(!KUniqueApplication::start()){
         kDebug() << "KTTSD is already running" << endl;
         return (0);

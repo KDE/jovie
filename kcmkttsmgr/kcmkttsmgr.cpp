@@ -1849,7 +1849,7 @@ void KCMKttsMgr::kttsdStarted()
         enableKttsdCheckBox->setChecked(true);
         // Enable/disable notify Test button.
         slotNotifyListView_currentItemChanged();
-        m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"));
+        m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/org/kde/KSpeech"));
         m_kspeech->setParent(this);
         // Connect KTTSD DBUS signals to our slots.
         connect(m_kspeech, SIGNAL(kttsdStarted()),

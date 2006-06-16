@@ -67,7 +67,7 @@ KAboutData* KttsJobMgrPart::createAboutData()
 
 KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args) :
     KParts::ReadOnlyPart(parent),
-    m_kspeech(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"))
+    m_kspeech(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/org/kde/KSpeech"))
 {
 //DBusAbstractInterfacePrivate
     Q_UNUSED(args);
