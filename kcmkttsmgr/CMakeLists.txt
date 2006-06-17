@@ -8,9 +8,11 @@ set(kcm_kttsd_PART_SRCS
    kcmkttsmgr.cpp 
    addtalker.cpp 
    selectevent.cpp
-   kspeechinterface.cpp )
+   ${CMAKE_CURRENT_BINARY_DIR}/kspeechinterface.cpp )
 
 kde4_automoc(${kcm_kttsd_PART_SRCS})
+
+qdbus_add_interfaces(${kcm_kttsd_PART_SRCS} org.kde.KSpeech.xml )
 
 kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui selecteventwidget.ui )
 

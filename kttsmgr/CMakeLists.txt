@@ -6,7 +6,9 @@
 
 set(kttsmgr_SRCS 
     kttsmgr.cpp
-    kspeechinterface.cpp )
+    ${CMAKE_CURRENT_BINARY_DIR}/kspeechinterface.cpp )
+
+qdbus_add_interfaces(${kttsmgr_SRCS} org.kde.KSpeech.xml )
 
 kde4_automoc(${kttsmgr_SRCS})
 

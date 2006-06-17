@@ -7,9 +7,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd ${CMAKE_BINARY_DIR}/ktts
 set(kttsjobmgrpart_PART_SRCS
     jobinfolistmodel.cpp
     kttsjobmgr.cpp 
-    kspeechinterface.cpp )
+    ${CMAKE_CURRENT_BINARY_DIR}/kspeechinterface.cpp )
 
 kde4_automoc(${kttsjobmgrpart_PART_SRCS})
+
+qdbus_add_interfaces(${kttsjobmgrpart_PART_SRCS} org.kde.KSpeech.xml )
 
 kde4_add_plugin(kttsjobmgrpart WITH_PREFIX ${kttsjobmgrpart_PART_SRCS})
 
