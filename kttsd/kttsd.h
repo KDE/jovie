@@ -72,7 +72,7 @@ class KTTSD : public QObject
         *                       talker supports the indicated speech markup language.
         * @see kttsdMarkupType
         */
-        Q_SCRIPTABLE bool supportsMarkup(const QString &talker=NULL, const uint markupType = 0) const;
+        bool supportsMarkup(const QString &talker=NULL, const uint markupType = 0) const;
 
         /**
         * Determine whether the currently-configured speech plugin supports markers in speech markup.
@@ -81,7 +81,7 @@ class KTTSD : public QObject
         * @return               True if the plugin currently configured for the indicated
         *                       talker supports markers.
         */
-        Q_SCRIPTABLE bool supportsMarkers(const QString &talker=NULL) const;
+        bool supportsMarkers(const QString &talker=NULL) const;
 
         /**
         * Say a message as soon as possible, interrupting any other speech in progress.
@@ -96,7 +96,7 @@ class KTTSD : public QObject
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
         * replaced with this new message.
         */
-        Q_SCRIPTABLE void sayScreenReaderOutput(const QString &msg, const QString &talker=NULL, const QString &appId=NULL);
+        void sayScreenReaderOutput(const QString &msg, const QString &talker=NULL, const QString &appId=NULL);
 
         /**
         * Say a warning.  The warning will be spoken when the current sentence
@@ -109,7 +109,7 @@ class KTTSD : public QObject
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        Q_SCRIPTABLE void sayWarning(const QString &warning, const QString &talker=NULL, const QString &appId=NULL);
+        void sayWarning(const QString &warning, const QString &talker=NULL, const QString &appId=NULL);
 
         /**
         * Say a message.  The message will be spoken when the current sentence stops speaking
@@ -122,7 +122,7 @@ class KTTSD : public QObject
         *                       If no talker has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        Q_SCRIPTABLE void sayMessage(const QString &message, const QString &talker=NULL, const QString &appId=NULL);
+        void sayMessage(const QString &message, const QString &talker=NULL, const QString &appId=NULL);
 
         /**
         * Sets the GREP pattern that will be used as the sentence delimiter.
@@ -138,7 +138,7 @@ class KTTSD : public QObject
         * Changing the sentence delimiter does not affect other applications.
         * @see sentenceparsing
         */
-        Q_SCRIPTABLE void setSentenceDelimiter(const QString &delimiter, const QString &appId=NULL);
+        void setSentenceDelimiter(const QString &delimiter, const QString &appId=NULL);
 
         /**
         * Queue a text job.  Does not start speaking the text.
@@ -162,7 +162,7 @@ class KTTSD : public QObject
         * @see getTextCount
         * @see startText
         */
-        Q_SCRIPTABLE uint setText(const QString &text, const QString &talker=NULL, const QString &appId=NULL);
+        uint setText(const QString &text, const QString &talker=NULL, const QString &appId=NULL);
 
         /**
         * Say a plain text job.  This is a convenience method that
@@ -192,7 +192,7 @@ class KTTSD : public QObject
         *
         * @since KDE 3.5
         */
-        Q_SCRIPTABLE uint sayText(const QString &text, const QString &talker, const QString &appId);
+        uint sayText(const QString &text, const QString &talker, const QString &appId);
 
         /**
         * Adds another part to a text job.  Does not start speaking the text.
@@ -209,7 +209,7 @@ class KTTSD : public QObject
         * @see setText.
         * @see startText.
         */
-        Q_SCRIPTABLE int appendText(const QString &text, const uint jobNum=0, const QString &appId=NULL);
+        int appendText(const QString &text, const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Queue a text job from the contents of a file.  Does not start speaking the text.
@@ -235,7 +235,7 @@ class KTTSD : public QObject
         * @see getTextCount
         * @see startText
         */
-        Q_SCRIPTABLE uint setFile(const QString &filename, const QString &talker=NULL,
+        uint setFile(const QString &filename, const QString &talker=NULL,
             const QString& encoding=NULL, const QString &appId=NULL);
 
         /**
@@ -249,7 +249,7 @@ class KTTSD : public QObject
         * method.  The sequence numbers are emitted in the @ref sentenceStarted and
         * @ref sentenceFinished signals.
         */
-        Q_SCRIPTABLE int getTextCount(const uint jobNum=0, const QString &appId=NULL);
+        int getTextCount(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Get the job number of the current text job.
@@ -259,19 +259,19 @@ class KTTSD : public QObject
         * @see getTextJobState.
         * @see isSpeakingText
         */
-        Q_SCRIPTABLE uint getCurrentTextJob();
+        uint getCurrentTextJob();
 
         /**
         * Get the number of jobs in the text job queue.
         * @return               Number of text jobs in the queue.  0 if none.
         */
-        Q_SCRIPTABLE uint getTextJobCount();
+        uint getTextJobCount();
 
         /**
         * Get a comma-separated list of text job numbers in the queue.
         * @return               Comma-separated list of text job numbers in the queue.
         */
-        Q_SCRIPTABLE QString getTextJobNumbers();
+        QString getTextJobNumbers();
 
         /**
         * Get the state of a text job.
@@ -282,7 +282,7 @@ class KTTSD : public QObject
         *
         * @see kttsdJobState
         */
-        Q_SCRIPTABLE int getTextJobState(const uint jobNum=0, const QString &appId=NULL);
+        int getTextJobState(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Get information about a text job.
@@ -324,7 +324,7 @@ class KTTSD : public QObject
                     stream >> partCount;
                 @endverbatim
         */
-        Q_SCRIPTABLE QByteArray getTextJobInfo(const uint jobNum=0, const QString &appId=NULL);
+        QByteArray getTextJobInfo(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Given a Talker Code, returns the Talker ID of the talker that would speak
@@ -332,7 +332,7 @@ class KTTSD : public QObject
         * @param talkerCode     Talker Code.
         * @return               Talker ID of the talker that would speak the text job.
         */
-        Q_SCRIPTABLE QString talkerCodeToTalkerId(const QString& talkerCode);
+        QString talkerCodeToTalkerId(const QString& talkerCode);
 
         /**
         * Return a sentence of a job.
@@ -343,13 +343,13 @@ class KTTSD : public QObject
         * @return               The specified sentence in the specified job.  If not such
         *                       job or sentence, returns "".
         */
-        Q_SCRIPTABLE QString getTextJobSentence(const uint jobNum=0, const uint seq=1, const QString &appId=NULL);
+        QString getTextJobSentence(const uint jobNum=0, const uint seq=1, const QString &appId=NULL);
 
         /**
         * Determine if kttsd is currently speaking any text jobs.
         * @return               True if currently speaking any text jobs.
         */
-        Q_SCRIPTABLE bool isSpeakingText() const;
+        bool isSpeakingText() const;
 
         /**
         * Remove a text job from the queue.
@@ -362,7 +362,7 @@ class KTTSD : public QObject
         * If there is another job in the text queue, and it is marked speakable,
         * that job begins speaking.
         */
-        Q_SCRIPTABLE void removeText(const uint jobNum=0, const QString &appId=NULL);
+        void removeText(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Start a text job at the beginning.
@@ -381,7 +381,7 @@ class KTTSD : public QObject
         * When all the sentences of the job have been spoken, the job is marked for deletion from
         * the text queue and the @ref textFinished signal is emitted.
         */
-        Q_SCRIPTABLE void startText(const uint jobNum=0, const QString &appId=NULL);
+        void startText(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Stop a text job and rewind to the beginning.
@@ -397,7 +397,7 @@ class KTTSD : public QObject
         * Depending upon the speech engine and plugin used, speeking may not stop immediately
         * (it might finish the current sentence).
         */
-        Q_SCRIPTABLE void stopText(const uint jobNum=0, const QString &appId=NULL);
+        void stopText(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Pause a text job.
@@ -414,7 +414,7 @@ class KTTSD : public QObject
         * (it might finish the current sentence).
         * @see resumeText
         */
-        Q_SCRIPTABLE void pauseText(const uint jobNum=0, const QString &appId=NULL);
+        void pauseText(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Start or resume a text job where it was paused.
@@ -436,7 +436,7 @@ class KTTSD : public QObject
         * The @ref textResumed signal is emitted when the job resumes.
         * @see pauseText
         */
-        Q_SCRIPTABLE void resumeText(const uint jobNum=0, const QString &appId=NULL);
+        void resumeText(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Get a list of the talkers configured in KTTS.
@@ -445,7 +445,7 @@ class KTTSD : public QObject
         *
         * @see talkers
         */
-        Q_SCRIPTABLE QStringList getTalkers();
+        QStringList getTalkers();
 
         /**
         * Change the talker for a text job.
@@ -457,7 +457,7 @@ class KTTSD : public QObject
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        Q_SCRIPTABLE void changeTextTalker(const QString &talker, uint jobNum=0, const QString &appId=NULL);
+        void changeTextTalker(const QString &talker, uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Get the user's default talker.
@@ -466,7 +466,7 @@ class KTTSD : public QObject
         * @see talkers
         * @see getTalkers
         */
-        Q_SCRIPTABLE QString userDefaultTalker();
+        QString userDefaultTalker();
 
         /**
         * Move a text job down in the queue so that it is spoken later.
@@ -477,7 +477,7 @@ class KTTSD : public QObject
         * If the job is currently speaking, it is paused.
         * If the next job in the queue is speakable, it begins speaking.
         */
-        Q_SCRIPTABLE void moveTextLater(const uint jobNum=0, const QString &appId=NULL);
+        void moveTextLater(const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Jump to the first sentence of a specified part of a text job.
@@ -492,7 +492,7 @@ class KTTSD : public QObject
         * If no such job, does nothing and returns 0.
         * Does not affect the current speaking/not-speaking state of the job.
         */
-        Q_SCRIPTABLE int jumpToTextPart(const int partNum, const uint jobNum=0, const QString &appId=NULL);
+        int jumpToTextPart(const int partNum, const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Advance or rewind N sentences in a text job.
@@ -507,35 +507,35 @@ class KTTSD : public QObject
         * If n is zero, returns the current sequence number of the job.
         * Does not affect the current speaking/not-speaking state of the job.
         */
-        Q_SCRIPTABLE uint moveRelTextSentence(const int n, const uint jobNum=0, const QString &appId=NULL);
+        uint moveRelTextSentence(const int n, const uint jobNum=0, const QString &appId=NULL);
 
         /**
         * Add the clipboard contents to the text queue and begin speaking it.
         */
-        Q_SCRIPTABLE void speakClipboard();
+        void speakClipboard();
 
         /**
         * Displays the %KTTS Manager dialog.  In this dialog, the user may backup or skip forward in
         * any text job by sentence or paragraph, rewind jobs, pause or resume jobs, or
         * delete jobs.
         */
-        Q_SCRIPTABLE void showDialog();
+        void showDialog();
 
         /**
         * Stop the service.
         */
-        Q_SCRIPTABLE void kttsdExit();
+        void kttsdExit();
 
         /**
         * Re-start %KTTSD.
         */
-        Q_SCRIPTABLE void reinit();
+        void reinit();
 
         /**
         * Return the KTTSD deamon version number.
         * @since KDE 3.5.1
         */
-        Q_SCRIPTABLE QString version();
+        QString version();
 
     protected:
 

@@ -265,11 +265,10 @@ QString KttsMgrTray::getStatus()
     if (jobCount > 0)
     {
         uint job = m_kspeech->getCurrentTextJob();
-        int jobState = 0;
         if (job != 0)
         {
             // kDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
-            jobState = m_kspeech->getTextJobState(job);
+            int jobState = m_kspeech->getTextJobState(job);
             int sentenceCount = m_kspeech->getTextCount(job);
             uint seq = m_kspeech->moveRelTextSentence(0, job);
             status += i18n(", current job %1 at sentence %2 of %3 sentences"

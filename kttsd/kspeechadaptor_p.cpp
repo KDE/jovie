@@ -19,6 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <kdebug.h>
+
 #include "kspeechadaptor_p.h"
 #include <QtCore/QMetaObject>
 #include <QtCore/QByteArray>

@@ -918,7 +918,7 @@ int SpeechData::getTextJobState(const uint jobNum)
     mlJob* job = findJobByJobNum(jobNum);
     int temp;
     if (job)
-        temp = job->state;
+        temp = (int)job->state;
     else
         temp = -1;
     return temp;
