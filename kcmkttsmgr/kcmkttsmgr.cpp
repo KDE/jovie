@@ -1239,10 +1239,9 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
  */
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
-    KDialog* dlg = new KDialog(
-        this,
-        i18n("Add Talker"),
-        KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    KDialog* dlg = new KDialog(this);
+    dlg->setCaption(i18n("Add Talker"));
+    dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, dlg, "AddTalker_widget");
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
@@ -2045,10 +2044,9 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
 void KCMKttsMgr::configureTalker()
 {
     if (!m_loadedTalkerPlugIn) return;
-    m_configDlg = new KDialog(
-        this,
-        i18n("Talker Configuration"),
-        KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
+    m_configDlg = new KDialog(this);
+    m_configDlg->setCaption(i18n("Talker Configuration"));
+    m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
     m_configDlg->enableButtonOK(false);
@@ -2087,10 +2085,9 @@ void KCMKttsMgr::configureTalker()
 void KCMKttsMgr::configureFilter()
 {
     if (!m_loadedFilterPlugIn) return;
-    m_configDlg = new KDialog(
-        this,
-        i18n("Filter Configuration"),
-        KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
+    m_configDlg = new KDialog(this);
+    m_configDlg->setCaption(i18n("Filter Configuration"));
+    m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
     m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);
@@ -2579,10 +2576,9 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     QTreeWidgetItem* item = lv->currentItem();
     QString eventSrc;
     if ( item ) eventSrc = item->text( nlvcEventSrc );
-    KDialog* dlg = new KDialog(
-        this,
-        i18n("Select Event"),
-        KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    KDialog* dlg = new KDialog(this);
+    dlg->setCaption(i18n("Select Event"));
+    dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     SelectEvent* selectEventWidget = new SelectEvent( dlg, eventSrc );
     dlg->setMainWidget( selectEventWidget );
 //    dlg->setInitialSize( QSize(500, 400) );

@@ -53,12 +53,11 @@ SelectTalkerDlg::SelectTalkerDlg(
     const QString& talkerCode,
     bool runningTalkers) :
 
-    KDialog(
-        parent,
-        caption,
-        KDialog::Ok|KDialog::Cancel)
+    KDialog(parent)
 {
     Q_UNUSED(name);
+    setCaption(caption);
+    setButtons(KDialog::Ok|KDialog::Cancel);
     m_widget = new Ui::SelectTalkerWidget();
     QWidget* w = new QWidget();
     m_widget->setupUi( w );

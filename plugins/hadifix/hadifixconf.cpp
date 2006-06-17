@@ -569,9 +569,9 @@ QString HadifixConf::getTalkerCode()
 }
 
 void HadifixConf::voiceButton_clicked () {
-    KDialog *dialog = new KDialog (this, 
-        i18n("Voice File - Hadifix Plugin"),
-        KDialog::Ok|KDialog::Cancel);
+    KDialog *dialog = new KDialog (this);
+    dialog->setCaption(i18n("Voice File - Hadifix Plugin"));
+    dialog->setButtons(KDialog::Ok|KDialog::Cancel);
     QWidget *w;
     Ui::VoiceFileWidget *widget;
     widget->setupUi(w);

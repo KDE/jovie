@@ -568,10 +568,9 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     connect( m_editWidget->matchButton, SIGNAL(clicked()),
          this, SLOT(slotMatchButton_clicked()) );
     // Display the box in a dialog.
-    m_editDlg = new KDialog(
-        this,
-        i18n("Edit String Replacement"),
-        KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    m_editDlg = new KDialog(this);
+    m_editDlg->setCaption(i18n("Edit String Replacement"));
+    m_editDlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     // Disable OK button if match field blank.
     m_editDlg->setMainWidget( w );
     m_editDlg->setHelp( "", "kttsd" );

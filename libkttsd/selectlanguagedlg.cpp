@@ -43,11 +43,10 @@ SelectLanguageDlg::SelectLanguageDlg(
     bool selectMode,
     bool blankMode) :
 
-    KDialog(
-        parent,
-        caption,
-        KDialog::Help|KDialog::Ok|KDialog::Cancel)
+    KDialog(parent)
 {
+    setCaption(caption);
+    setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     // Create a QTableWidget and fill with all known languages.
     m_langList = new QTableWidget( this );
     m_langList->setColumnCount(2);
