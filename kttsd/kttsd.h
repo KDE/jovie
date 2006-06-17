@@ -512,7 +512,7 @@ class KTTSD : public QObject
         /**
         * Add the clipboard contents to the text queue and begin speaking it.
         */
-        void speakClipboard();
+        void speakClipboard(const QString &appId=NULL);
 
         /**
         * Displays the %KTTS Manager dialog.  In this dialog, the user may backup or skip forward in

@@ -790,7 +790,7 @@ uint KTTSD::moveRelTextSentence(const int n, const uint jobNum /*=0*/, const QSt
 /**
 * Add the clipboard contents to the text queue and begin speaking it.
 */
-void KTTSD::speakClipboard()
+void KTTSD::speakClipboard(const QString &appId)
 {
     // Get the clipboard object.
     QClipboard *cb = kapp->clipboard();
@@ -801,7 +801,7 @@ void KTTSD::speakClipboard()
     // Speak it.
     if ( !text.isNull() ) 
     {
-        setText(text);
+        setText(text, NULL, appId);
         startText();
     }
 }

@@ -338,10 +338,11 @@ void KSpeechAdaptor::showDialog()
     //static_cast<YourObjectType *>(parent())->showDialog();
 }
 
-void KSpeechAdaptor::speakClipboard()
+void KSpeechAdaptor::speakClipboard(const QDBusMessage &msg)
 {
+    QString appId = msg.sender();
     // handle method call org.kde.KSpeech.speakClipboard
-    QMetaObject::invokeMethod(parent(), "speakClipboard");
+    QMetaObject::invokeMethod(parent(), "speakClipboard", Q_ARG(QString, appId));
 
     // Alternative:
     //static_cast<YourObjectType *>(parent())->speakClipboard();

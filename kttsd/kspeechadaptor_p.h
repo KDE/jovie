@@ -266,7 +266,7 @@ public Q_SLOTS: // METHODS
     Q_ASYNC void setSentenceDelimiter(const QString &delimiter, const QDBusMessage &msg);
     uint setText(const QString &text, const QString &talker, const QDBusMessage &msg);
     Q_ASYNC void showDialog();
-    Q_ASYNC void speakClipboard();
+    Q_ASYNC void speakClipboard(const QDBusMessage &msg);
     Q_ASYNC void startText(uint jobNum, const QDBusMessage &msg);
     Q_ASYNC void stopText(uint jobNum, const QDBusMessage &msg);
     bool supportsMarkers(const QString &talker);

@@ -75,14 +75,16 @@ int main (int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options );
 
     KUniqueApplication::addCmdLineOptions();
+    
+    KUniqueApplication::setOrganizationDomain("kde.org");
+    KUniqueApplication::setApplicationName("kttsmgr");
+    KUniqueApplication app;
 
     if(!KUniqueApplication::start())
     {
         kDebug() << "kttsmgr is already running" << endl;
         return (0);
     }
-
-    KUniqueApplication app;
 
     QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Panel);
     aboutdata.setProgramLogo(icon.toImage());
@@ -209,11 +211,8 @@ void KttsMgrTray::mousePressEvent(QMouseEvent* ev)
     actResume->setEnabled(jobState == KSpeech::jsPaused);
     actRepeat->setEnabled(jobState != -1);
     actSpeakClipboard->setEnabled(kttsdRunning);
-    // TODO: How to determine if kcmshell_kcmttsd is running?
-    //       It isn't a dbus service.
-    // DCOPClient *client = kapp->dcopClient();
-    // bool configActive (client->isApplicationRegistered("kcmshell_kcmkttsd"));
-    // actConfigure->setEnabled(!configActive);
+    bool configActive = (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kcmshell_kcmkttsd"));
+    actConfigure->setEnabled(!configActive);
 }
 
 void KttsMgrTray::exitWhenFinishedSpeaking()
