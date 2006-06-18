@@ -5,61 +5,73 @@
  <language-code>pl</language-code>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\(]]></match>
   <subst><![CDATA[ otwieram nawias ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\)]]></match>
   <subst><![CDATA[ zamykam nawias ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\{]]></match>
   <subst><![CDATA[ otwieram nawias klamrowy ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\}]]></match>
   <subst><![CDATA[ zamykam nawias klamrowy ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\[]]></match>
   <subst><![CDATA[ otwieram nawias kwadratowy ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\]]]></match>
   <subst><![CDATA[ zamykam nawias kwadratowy ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\<]]></match>
   <subst><![CDATA[ otwieram nawias trójkątny ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\>]]></match>
   <subst><![CDATA[ zamykam nawias trójkątny ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\_]]></match>
   <subst><![CDATA[ znak podkreślenia ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\&]]></match>
   <subst><![CDATA[ i ]]></subst>
  </word>
  <word>
   <type>RegExp</type>
+  <case>No</case>
   <match><![CDATA[\/]]></match>
   <subst><![CDATA[ slesz ]]></subst>
  </word>
  <word>
   <type>Word</type>
+  <case>No</case>
   <match><![CDATA[\\]]></match>
   <subst><![CDATA[ bekslesz ]]></subst>
  </word>

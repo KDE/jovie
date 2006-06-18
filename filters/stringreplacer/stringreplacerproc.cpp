@@ -124,6 +124,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
+        QString matchCase = "No"; // Default for old (v<=3.5.3) config files with no <case/>.
         QString match;
         QString subst;
         const int propListCount = propList.count();
@@ -132,12 +133,13 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
             if (prop.tagName() == "type") wordType = prop.text();
+	    if (prop.tagName() == "case") matchCase = prop.text();
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
         // Build Regular Expression for each word's match string.
         QRegExp rx;
-        rx.setCaseSensitivity(Qt::CaseInsensitive);
+        rx.setCaseSensitivity(matchCase == "Yes"?Qt::CaseInsensitive:Qt::CaseSensitive);
         if ( wordType == "Word" )
         {
                 // TODO: Does \b honor strange non-Latin1 encodings?

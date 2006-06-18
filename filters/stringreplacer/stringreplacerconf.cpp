@@ -221,6 +221,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
+        QString matchCase = "No";
         QString match;
         QString subst;
         const int propListCount = propList.count();
@@ -229,16 +230,20 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
             if (prop.tagName() == "type") wordType = prop.text();
+            if (prop.tagName() == "case") matchCase = prop.text();
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
-        QString wordTypeStr = i18n("Word");
-        if (wordType == "RegExp") wordTypeStr = i18nc("Abbreviation for 'Regular Expression'", "RegExp");
+        QString wordTypeStr = 
+            (wordType=="RegExp"?i18nc("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
         int tableRow = substLView->rowCount();
+        QString matchCaseStr = 
+            (matchCase=="Yes"?i18n("Yes"):i18n("No"));  
         substLView->setRowCount( tableRow + 1 );
         substLView->setItem( tableRow, 0, new QTableWidgetItem( wordTypeStr ) );
-        substLView->setItem( tableRow, 1, new QTableWidgetItem( match ) );
-        substLView->setItem( tableRow, 2, new QTableWidgetItem( subst ) );
+        substLView->setItem( tableRow, 1, new QTableWidgetItem( matchCaseStr ) );
+        substLView->setItem( tableRow, 2, new QTableWidgetItem( match ) );
+        substLView->setItem( tableRow, 3, new QTableWidgetItem( subst ) );
     }
 
     return QString();
@@ -329,14 +334,20 @@ QString StringReplacerConf::saveToFile(const QString& filename)
             substLView->item(row, 0)->text()==i18n("Word")?"Word":"RegExp" );
         propTag.appendChild( t );
 
+        propTag = doc.createElement( "case" );
+        wordTag.appendChild( propTag);
+        t = doc.createTextNode(
+            substLView->item(row, 2)->text()==i18n("Yes")?"Yes":"No" );
+        propTag.appendChild( t );      
+
         propTag = doc.createElement( "match" );
         wordTag.appendChild( propTag);
-        t = doc.createCDATASection( substLView->item(row, 1)->text() );
+        t = doc.createCDATASection( substLView->item(row, 2)->text() );
         propTag.appendChild( t );
 
         propTag = doc.createElement( "subst" );
         wordTag.appendChild( propTag);
-        t = doc.createCDATASection( substLView->item(row, 2)->text() );
+        t = doc.createCDATASection( substLView->item(row, 3)->text() );
         propTag.appendChild( t );
     }
 
@@ -491,6 +502,12 @@ void StringReplacerConf::slotUpButton_clicked()
     itemAbove->setText(item->text());
     item->setText(t);
 
+    itemAbove = substLView->item(row - 1, 3);
+    item = substLView->item(row, 3);
+    t = itemAbove->text();
+    itemAbove->setText(item->text());
+    item->setText(t);
+
     substLView->setCurrentItem(substLView->item(row - 1, substLView->currentColumn()));
     // TODO: Is this needed? substLView->scrollTo(substLView->indexFromItem(itemAbove));
     enableDisableButtons();
@@ -516,6 +533,12 @@ void StringReplacerConf::slotDownButton_clicked()
 
     itemBelow = substLView->item(row + 1, 2);
     item = substLView->item(row, 2);
+    t = itemBelow->text();
+    itemBelow->setText(item->text());
+    item->setText(t);
+
+    itemBelow = substLView->item(row + 1, 3);
+    item = substLView->item(row, 3);
     t = itemBelow->text();
     itemBelow->setText(item->text());
     item->setText(t);
@@ -552,13 +575,15 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editWidget->matchButton->setEnabled( false );
     if (!isAdd)
     {
-        if ( substLView->item(row, 0)->text() == i18nc("Abbreviation for 'Regular Expression'", "RegExp" ) )
+        if ( substLView->item(row, 0)->text() != i18n("Word") )
         {
             m_editWidget->regexpRadioButton->setChecked( true );
             m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
         }
-        m_editWidget->matchLineEdit->setText( substLView->item(row, 1)->text() );
-        m_editWidget->substLineEdit->setText( substLView->item(row, 2)->text() );
+        if ( substLView->item(row, 1)->text() == i18n("Yes") )
+            m_editWidget->matchCaseCheckBox->setChecked( true );
+        m_editWidget->matchLineEdit->setText( substLView->item(row, 2)->text() );
+        m_editWidget->substLineEdit->setText( substLView->item(row, 3)->text() );
     }
     // The match box may not be blank.
     connect( m_editWidget->matchLineEdit, SIGNAL(textChanged(const QString&)),
@@ -583,6 +608,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     QString substType = i18n( "Word" );
     if ( m_editWidget->regexpRadioButton->isChecked() ) 
         substType = i18nc("Abbreviation for 'Regular Expression'", "RegExp");
+    QString matchCase = m_editWidget->matchCaseCheckBox->isChecked()?i18n("Yes"):i18n("No");
     QString match = m_editWidget->matchLineEdit->text();
     QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;
@@ -596,12 +622,13 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         row = substLView->rowCount();
         substLView->setRowCount(row + 1);
         substLView->setCurrentItem(substLView->item(row, 0));
-        for (int i = 0; i <= 3; ++i)
+        for (int i = 0; i <= 4; ++i)
             substLView->setItem(row, i, new QTableWidgetItem(""));
     }
     substLView->item(row, 0)->setText(substType);
-    substLView->item(row, 1)->setText(match);
-    substLView->item(row, 2)->setText(subst);
+    substLView->item(row, 1)->setText(matchCase);
+    substLView->item(row, 2)->setText(match);
+    substLView->item(row, 3)->setText(subst);
     // TODO: Is this needed? substLView->scrollTo(substLView->indexFromItem(substLView->item(row,0)));
     enableDisableButtons();
     configChanged();
@@ -621,6 +648,7 @@ void StringReplacerConf::slotRemoveButton_clicked()
     delete substLView->takeItem(row, 0);
     delete substLView->takeItem(row, 1);
     delete substLView->takeItem(row, 2);
+    delete substLView->takeItem(row, 3);
     substLView->removeRow(row);
     enableDisableButtons();
     configChanged();

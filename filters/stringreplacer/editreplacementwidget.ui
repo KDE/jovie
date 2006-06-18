@@ -8,13 +8,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
-    <height>150</height>
+    <width>364</width>
+    <height>163</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>11</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -24,39 +24,29 @@
      <property name="title" >
       <string>&amp;Type</string>
      </property>
-     <layout class="QGridLayout" >
+     <layout class="QVBoxLayout" >
       <property name="margin" >
-       <number>11</number>
+       <number>9</number>
       </property>
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="0" column="0" >
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
+      <item>
+       <widget class="QRadioButton" name="wordRadioButton" >
+        <property name="text" >
+         <string>&amp;Word</string>
         </property>
-        <property name="spacing" >
-         <number>6</number>
+        <property name="checked" >
+         <bool>true</bool>
         </property>
-        <item>
-         <widget class="QRadioButton" name="wordRadioButton" >
-          <property name="text" >
-           <string>&amp;Word</string>
-          </property>
-          <property name="checked" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="regexpRadioButton" >
-          <property name="text" >
-           <string>Regular &amp;expression</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="regexpRadioButton" >
+        <property name="text" >
+         <string>Regular &amp;expression</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -97,7 +87,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1" >
+   <item row="1" column="1" colspan="2" >
     <layout class="QVBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -139,23 +129,30 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="2" >
+    <widget class="QCheckBox" name="matchCaseCheckBox" >
+     <property name="text" >
+      <string>Match &amp;case</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-   <container>1</container>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+   <container>0</container>
    <pixmap></pixmap>
   </customwidget>
  </customwidgets>

@@ -365,11 +365,16 @@
         <enum>QAbstractItemView::SelectRows</enum>
        </property>
        <property name="columnCount" >
-        <number>3</number>
+        <number>4</number>
        </property>
        <column>
         <property name="text" >
          <string>Type</string>
+        </property>
+       </column>
+       <column>
+        <property name="text" >
+         <string>Match Case</string>
         </property>
        </column>
        <column>
@@ -392,17 +397,17 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-   <container>1</container>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+   <container>0</container>
    <pixmap></pixmap>
   </customwidget>
  </customwidgets>
