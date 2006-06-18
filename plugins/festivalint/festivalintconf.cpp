@@ -46,7 +46,7 @@
 #include <kprocio.h>
 #include <kprogressbar.h>
 #include <kprogressdialog.h>
-#include <kiconloader.h>
+#include <kicon.h>
 
 // KTTS includes.
 #include "testplayer.h"
@@ -415,6 +415,8 @@ void FestivalIntConf::scanVoices()
             true);
         m_progressDlg->progressBar()->hide();
         m_progressDlg->setAllowCancel(true);
+        // TODO: This is a bug workaround.  Remove when no longer needed.
+        m_progressDlg->setDefaultButton(KDialog::Cancel);
 
         // Create Festival process and request a list of voice codes.
         if (m_festProc)
@@ -467,8 +469,8 @@ void FestivalIntConf::scanVoices()
 
         // Iterate thru list of voice codes returned by Festival,
         // find matching entry in voices.xml file, and add to list of supported voices.
-        QPixmap maleIcon = KGlobal::iconLoader()->loadIcon("male", K3Icon::Small);
-        QPixmap femaleIcon = KGlobal::iconLoader()->loadIcon("female", K3Icon::Small);
+        KIcon maleIcon("male");
+        KIcon femaleIcon("female");
         QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
         for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
         {

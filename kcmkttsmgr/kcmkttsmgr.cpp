@@ -40,7 +40,7 @@
 #include <kparts/componentfactory.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <kapplication.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
@@ -313,24 +313,16 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 
     // Give buttons icons.
     // Talkers tab.
-    higherTalkerPriorityButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("up", K3Icon::Small));
-    lowerTalkerPriorityButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("down", K3Icon::Small));
-    removeTalkerButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small));
-    configureTalkerButton->setIcon(
-        KGlobal::iconLoader()->loadIcon("configure", K3Icon::Small));
+    higherTalkerPriorityButton->setIcon(KIcon("up"));
+    lowerTalkerPriorityButton->setIcon(KIcon("down"));
+    removeTalkerButton->setIcon(KIcon("edittrash"));
+    configureTalkerButton->setIcon(KIcon("configure"));
 
     // Filters tab.
-    higherFilterPriorityButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("up", K3Icon::Small));
-    lowerFilterPriorityButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("down", K3Icon::Small));
-    removeFilterButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small));
-    configureFilterButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("configure", K3Icon::Small));
+    higherFilterPriorityButton->setIcon(KIcon("up"));
+    lowerFilterPriorityButton->setIcon(KIcon("down"));
+    removeFilterButton->setIcon(KIcon("edittrash"));
+    configureFilterButton->setIcon(KIcon("configure"));
 
     // Notify tab.
     notifyListView->setColumnCount(7);
@@ -355,24 +347,24 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
         notifyPresentComboBox->addItem( NotifyPresent::presentDisplayName( ndx ) );
 
-    notifyRemoveButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("edittrash", K3Icon::Small));
-    notifyTestButton->setIcon(
-            KGlobal::iconLoader()->loadIcon("speak", K3Icon::Small));
+    notifyRemoveButton->setIcon(KIcon("edittrash"));
+    notifyTestButton->setIcon(KIcon("speak"));
 
     pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
     QMenu* sbdPopmenu = new QMenu( this );
     sbdPopmenu->setObjectName( "SbdPopupMenu" );
-    m_sbdBtnEdit = sbdPopmenu->addAction( i18n("&Edit..."),
-        this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
-    m_sbdBtnUp = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("up", K3Icon::Small),
+    m_sbdBtnEdit = sbdPopmenu->addAction(
+        i18n("&Edit..."), this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
+    m_sbdBtnUp = sbdPopmenu->addAction( KIcon("up"),
         i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnDown = sbdPopmenu->addAction( KGlobal::iconLoader()->loadIconSet("down", K3Icon::Small),
+    m_sbdBtnDown = sbdPopmenu->addAction( KIcon("down"),
         i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnAdd = sbdPopmenu->addAction( i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
-    m_sbdBtnRemove = sbdPopmenu->addAction( i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
+    m_sbdBtnAdd = sbdPopmenu->addAction(
+        i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
+    m_sbdBtnRemove = sbdPopmenu->addAction(
+        i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
     sbdButton->setMenu( sbdPopmenu );
 
     TestPlayer* testPlayer;
@@ -967,7 +959,10 @@ void KCMKttsMgr::save()
 
 void KCMKttsMgr::slotTabChanged()
 {
-    setButtons(buttons());
+    // TODO: Commentting this out to avoid a crash.  It seems there is a bug in
+    // KDialog.  The workaround is to call setDefaultButton(), but that method
+    // is not available to a KCModule.  Uncomment this when bug is fixed.
+    // setButtons(buttons());
     int currentPageIndex = mainTab->currentIndex();
     if (currentPageIndex == wpJobs)
     {
@@ -1242,6 +1237,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     KDialog* dlg = new KDialog(this);
     dlg->setCaption(i18n("Add Talker"));
     dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    dlg->setDefaultButton(KDialog::Cancel);
     AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, dlg, "AddTalker_widget");
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
@@ -2047,6 +2043,7 @@ void KCMKttsMgr::configureTalker()
     m_configDlg = new KDialog(this);
     m_configDlg->setCaption(i18n("Talker Configuration"));
     m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
+    m_configDlg->setDefaultButton(KDialog::Cancel);
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
     m_configDlg->enableButtonOK(false);
@@ -2088,6 +2085,7 @@ void KCMKttsMgr::configureFilter()
     m_configDlg = new KDialog(this);
     m_configDlg->setCaption(i18n("Filter Configuration"));
     m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
+    m_configDlg->setDefaultButton(KDialog::Cancel);
     m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);
@@ -2426,9 +2424,9 @@ void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
     if ( index == NotifyAction::SpeakCustom )
         item->setText( nlvcActionName, "\"" + notifyMsgLineEdit->text() + "\"" );
     if ( index == NotifyAction::DoNotSpeak )
-        item->setIcon( nlvcActionName, SmallIcon( "nospeak" ) );
+        item->setIcon( nlvcActionName, KIcon("nospeak") );
     else
-        item->setIcon( nlvcActionName, SmallIcon( "speak" ) );
+        item->setIcon( nlvcActionName, KIcon("speak") );
     slotNotifyListView_currentItemChanged();
     configChanged();
 }
@@ -2531,7 +2529,7 @@ QTreeWidgetItem* KCMKttsMgr::addNotifyItem(
             parentItem->setText( nlvcEventSrcName, eventSrcName );
             parentItem->setText( nlvcEventSrc, eventSrc );
             if ( !iconName.isEmpty() )
-                parentItem->setIcon( nlvcEventSrcName, SmallIcon( iconName ) );
+                parentItem->setIcon( nlvcEventSrcName, KIcon(iconName) );
         }
         // No duplicates.
         item = findTreeWidgetItem( lv, event, nlvcEvent );
@@ -2546,9 +2544,9 @@ QTreeWidgetItem* KCMKttsMgr::addNotifyItem(
             item->setText( nlvcTalker, talkerCode.getTalkerCode() );
         }
         if ( action == NotifyAction::DoNotSpeak )
-            item->setIcon( nlvcActionName, SmallIcon( "nospeak" ) );
+            item->setIcon( nlvcActionName, KIcon("nospeak") );
         else
-            item->setIcon( nlvcActionName, SmallIcon( "speak" ) );
+            item->setIcon( nlvcActionName, KIcon("speak") );
     }
     return item;
 }
@@ -2579,6 +2577,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     KDialog* dlg = new KDialog(this);
     dlg->setCaption(i18n("Select Event"));
     dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    dlg->setDefaultButton(KDialog::Cancel);
     SelectEvent* selectEventWidget = new SelectEvent( dlg, eventSrc );
     dlg->setMainWidget( selectEventWidget );
 //    dlg->setInitialSize( QSize(500, 400) );

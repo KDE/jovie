@@ -43,7 +43,7 @@
 #include <knuminput.h>
 #include <kprogressbar.h>
 #include <kprogressdialog.h>
-#include <kiconloader.h>
+#include <kicon.h>
 
 // KTTS includes.
 #include <pluginconf.h>
@@ -116,8 +116,6 @@ void HadifixConfPrivate::frequencySlider_valueChanged (int sliderValue) {
 }
 
 void HadifixConfPrivate::init () {
-    male = KGlobal::iconLoader()->loadIcon("male", K3Icon::Small);
-    female = KGlobal::iconLoader()->loadIcon("female", K3Icon::Small);
 }
 
 void HadifixConfPrivate::addVoice (const QString &filename, bool isMale) {
@@ -125,14 +123,14 @@ void HadifixConfPrivate::addVoice (const QString &filename, bool isMale) {
         if (!maleVoices.contains(filename)) {
             int id = voiceCombo->count();
             maleVoices.insert (filename, id);
-            voiceCombo->addItem (male, filename);
+            voiceCombo->addItem (KIcon("male"), filename);
         }
     }
     else {
         if (!femaleVoices.contains(filename)) {
             int id = voiceCombo->count();
             femaleVoices.insert (filename, id);
-            voiceCombo->addItem (female, filename);
+            voiceCombo->addItem (KIcon("female"), filename);
         }
     }
 }
@@ -142,12 +140,12 @@ void HadifixConfPrivate::addVoice (const QString &filename, bool isMale, const Q
 
     if (isMale) {
         defaultVoicesMap [maleVoices [filename]] = filename;
-        voiceCombo->setItemIcon (maleVoices [filename], male);
+        voiceCombo->setItemIcon (maleVoices [filename], KIcon("male"));
         voiceCombo->setItemText (maleVoices [filename], displayname);
     }
     else{
         defaultVoicesMap [femaleVoices [filename]] = filename;
-        voiceCombo->setItemIcon (femaleVoices [filename], female);
+        voiceCombo->setItemIcon (femaleVoices [filename], KIcon("female"));
         voiceCombo->setItemText (femaleVoices [filename], displayname);
     }
 }

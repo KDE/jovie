@@ -72,8 +72,6 @@ class HadifixConfPrivate : public QWidget, public Ui::HadifixConfigUI {
 
         QMap<QString,int> maleVoices;
         QMap<int,QString> defaultVoicesMap;
-        QPixmap female;
-        QPixmap male;
         QMap<QString,int> femaleVoices;
 };
 
