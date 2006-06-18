@@ -188,8 +188,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         while ( ndx >= 0 ) {
             if ( m_languageCodeList[ndx] == m_languageCodeList[ndx+1] )
                 m_languageCodeList.removeAt(ndx+1);
-            else
-                ndx--;
+            ndx--;
         }
     }
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx )
@@ -233,9 +232,11 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
+        QString wordTypeStr = i18n("Word");
+        if (wordType == "RegExp") wordTypeStr = i18nc("Abbreviation for 'Regular Expression'", "RegExp");
         int tableRow = substLView->rowCount();
         substLView->setRowCount( tableRow + 1 );
-        substLView->setItem( tableRow, 0, new QTableWidgetItem( wordType ) );
+        substLView->setItem( tableRow, 0, new QTableWidgetItem( wordTypeStr ) );
         substLView->setItem( tableRow, 1, new QTableWidgetItem( match ) );
         substLView->setItem( tableRow, 2, new QTableWidgetItem( subst ) );
     }
@@ -324,7 +325,8 @@ QString StringReplacerConf::saveToFile(const QString& filename)
         root.appendChild( wordTag );
         QDomElement propTag = doc.createElement( "type" );
         wordTag.appendChild( propTag);
-        QDomText t = doc.createTextNode( substLView->item(row, 0)->text() );
+        QDomText t = doc.createTextNode( 
+            substLView->item(row, 0)->text()==i18n("Word")?"Word":"RegExp" );
         propTag.appendChild( t );
 
         propTag = doc.createElement( "match" );
@@ -408,7 +410,7 @@ QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
     switch (substitutionType)
     {
         case stWord:        return i18n("Word");
-        case stRegExp:      return "RegExp";
+        case stRegExp:      return i18nc("Abbreviation for 'Regular Expresion'", "RegExp");
     }
     return i18n("Error");
 }
@@ -550,7 +552,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editWidget->matchButton->setEnabled( false );
     if (!isAdd)
     {
-        if ( substLView->item(row, 0)->text() == "RegExp" )
+        if ( substLView->item(row, 0)->text() == i18nc("Abbreviation for 'Regular Expression'", "RegExp" ) )
         {
             m_editWidget->regexpRadioButton->setChecked( true );
             m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
@@ -579,7 +581,8 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editDlg->enableButton( KDialog::Ok, !m_editWidget->matchLineEdit->text().isEmpty() );
     int dlgResult = m_editDlg->exec();
     QString substType = i18n( "Word" );
-    if ( m_editWidget->regexpRadioButton->isChecked() ) substType = "RegExp";
+    if ( m_editWidget->regexpRadioButton->isChecked() ) 
+        substType = i18nc("Abbreviation for 'Regular Expression'", "RegExp");
     QString match = m_editWidget->matchLineEdit->text();
     QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;
