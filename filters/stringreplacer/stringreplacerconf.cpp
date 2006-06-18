@@ -571,6 +571,8 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editDlg = new KDialog(this);
     m_editDlg->setCaption(i18n("Edit String Replacement"));
     m_editDlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    // TODO: KDialog bug workaround.  Remove when no longer needed.
+    m_editDlg->setDefaultButton(KDialog::Cancel);
     // Disable OK button if match field blank.
     m_editDlg->setMainWidget( w );
     m_editDlg->setHelp( "", "kttsd" );
