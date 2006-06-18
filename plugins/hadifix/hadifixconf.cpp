@@ -570,7 +570,10 @@ void HadifixConf::voiceButton_clicked () {
     KDialog *dialog = new KDialog (this);
     dialog->setCaption(i18n("Voice File - Hadifix Plugin"));
     dialog->setButtons(KDialog::Ok|KDialog::Cancel);
-    QWidget *w;
+    // TODO: Workaround for KDialog bug.  Remove when no longer needed.
+    dialog->setDefaultButton(KDialog::Cancel);
+    
+    QWidget *w = new QWidget(dialog);
     Ui::VoiceFileWidget *widget;
     widget->setupUi(w);
     dialog->setMainWidget(w);
