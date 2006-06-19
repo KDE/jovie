@@ -52,6 +52,7 @@ Comment[tg]=Таҳлилгари овози Festival
 Comment[tr]=Festival konuşma bireştirici
 Comment[uk]=Синтезатор мовлення Festival
 Comment[vi]=Trình tổng hợp tiếng nói Festival
+Comment[zh_TW]=Festival 語音合成器
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_festivalintplugin

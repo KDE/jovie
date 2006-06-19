@@ -38,4 +38,5 @@ Comment[tg]=Идоракунии фармоишҳо бо воситаи таҳл
 Comment[tr]=KDE Metinden Konuşmaya Görev Yöneticisi
 Comment[uk]=Менеджер завдань KDE для синтезу мовлення з тексту
 Comment[vi]=Trình quản lý Tác vụ Văn bản sang Tiếng nói KDE
+Comment[zh_TW]=KDE 文字轉語音工作管理員
 ServiceTypes=KParts/ReadOnlyPart

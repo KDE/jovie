@@ -37,6 +37,7 @@ Comment[tg]=Системаи олмонии таҳлили овози hadifix
 Comment[tr]=Alman hadifix metinden konuşmaya sistemi
 Comment[uk]=Німецька система синтезу мовлення hadifix
 Comment[vi]=Hệ thống tổng hợp tiếng nói Đức hadifix
+Comment[zh_TW]=德語 hadifix 文字轉語音系統
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_hadifixplugin
