@@ -2046,7 +2046,7 @@ void KCMKttsMgr::configureTalker()
     m_configDlg->setDefaultButton(KDialog::Cancel);
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
-    m_configDlg->enableButtonOK(false);
+    m_configDlg->enableButtonOk(false);
     connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
     connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));
     connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
@@ -2090,7 +2090,7 @@ void KCMKttsMgr::configureFilter()
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);
     m_configDlg->setHelp("configure-filter", "kttsd");
-    m_configDlg->enableButtonOK(false);
+    m_configDlg->enableButtonOk(false);
     connect(m_loadedFilterPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigFilterDlg_ConfigChanged() ));
     connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigFilterDlg_DefaultClicked() ));
     connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigFilterDlg_CancelClicked() ));
@@ -2147,12 +2147,12 @@ void KCMKttsMgr::timeSlider_valueChanged(int sliderValue) {
 
 void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
 {
-    m_configDlg->enableButtonOK(!m_loadedTalkerPlugIn->getTalkerCode().isEmpty());
+    m_configDlg->enableButtonOk(!m_loadedTalkerPlugIn->getTalkerCode().isEmpty());
 }
 
 void KCMKttsMgr::slotConfigFilterDlg_ConfigChanged()
 {
-    m_configDlg->enableButtonOK( !m_loadedFilterPlugIn->userPlugInName().isEmpty() );
+    m_configDlg->enableButtonOk( !m_loadedFilterPlugIn->userPlugInName().isEmpty() );
 }
 
 void KCMKttsMgr::slotConfigTalkerDlg_DefaultClicked()
