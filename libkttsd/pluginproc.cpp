@@ -71,7 +71,7 @@ void PlugInProc::sayText(const QString& /*text*/){
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void PlugInProc::synthText(const QString& /*text*/, const QString& /*suggestedFilename*/) { };
+void PlugInProc::synthText(const QString& /*text*/, const QString& /*suggestedFilename*/) { }
 
 /**
 * Get the generated audio filename from synthText.
@@ -80,7 +80,7 @@ void PlugInProc::synthText(const QString& /*text*/, const QString& /*suggestedFi
 *
 * The plugin must not re-use the filename.
 */
-QString PlugInProc::getFilename() { return QString(); };
+QString PlugInProc::getFilename() { return QString(); }
 
 /**
 * Stop current operation (saying or synthesizing text).
