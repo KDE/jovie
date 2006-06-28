@@ -66,14 +66,14 @@ HadifixConfPrivate::HadifixConfPrivate(QWidget *parent) :
     progressDlg = 0;
     setupUi(this);
     findInitialConfig();
-};
+}
 
 HadifixConfPrivate::~HadifixConfPrivate() {
     if (hadifixProc) hadifixProc->stopText();
     delete hadifixProc;
     if (!waveFile.isNull()) QFile::remove(waveFile);
     delete progressDlg;
-};
+}
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent
 // values are linear (50%,...,200%).
@@ -376,7 +376,7 @@ void HadifixConfPrivate::initializeVoices () {
             }
         }
     }
-};
+}
 
 void HadifixConfPrivate::initializeCharacterCodes() {
     // Build codec list and fill combobox.
@@ -415,7 +415,7 @@ void HadifixConfPrivate::setDefaults () {
     setConfiguration (defaultHadifixExec, defaultMbrolaExec,
                       *it, gender == HadifixProc::MaleGender,
                       100, 100, 100, "Local");
-};
+}
 
 void HadifixConfPrivate::load (KConfig *config, const QString &configGroup) {
     config->setGroup(configGroup);
@@ -443,7 +443,7 @@ void HadifixConfPrivate::load (KConfig *config, const QString &configGroup) {
         config->readEntry ("pitch",   100),
         config->readEntry ("codec",      defaultCodecName)
     );
-};
+}
 
 void HadifixConfPrivate::save (KConfig *config, const QString &configGroup) {
     config->setGroup(configGroup);
@@ -456,7 +456,7 @@ void HadifixConfPrivate::save (KConfig *config, const QString &configGroup) {
     config->writeEntry ("pitch",      frequencyBox->value());
     config->writeEntry ("codec",      PlugInProc::codecIndexToCodecName(
                                       characterCodingBox->currentIndex(), codecList));
-};
+}
 
 // ====================================================================
 // HadifixConf
