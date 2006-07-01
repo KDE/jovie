@@ -557,7 +557,7 @@ class KTTSD : public QObject, virtual public KSpeech
          * the status of the speechData object has changed
          */
         void slotTextSet(const QCString& appId, const uint jobNum);
-        void slotTextAppended(const QCString& appId, const uint jobNum, const int appId);
+        void slotTextAppended(const QCString& appId, const uint jobNum, const int partNum);
         void slotTextStarted(const QCString& appId, const uint jobNum);
         void slotTextFinished(const QCString& appId, const uint jobNum);
         void slotTextStopped(const QCString& appId, const uint jobNum);
