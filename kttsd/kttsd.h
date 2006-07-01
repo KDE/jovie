@@ -565,7 +565,7 @@ class KTTSD : public QObject
         * the status of the speechData or speaker objects has changed
         */
         void slotTextSet(const QString& appId, const uint jobNum);
-        void slotTextAppended(const QString& appId, const uint jobNum, const int appId);
+        void slotTextAppended(const QString& appId, const uint jobNum, const int partNum);
         void slotTextRemoved(const QString& appId, const uint jobNum);
 
         /*
