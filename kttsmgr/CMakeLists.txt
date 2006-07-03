@@ -7,7 +7,7 @@
 set(kttsmgr_SRCS 
     kttsmgr.cpp )
 
-qdbus_add_interfaces(kttsmgr_SRCS org.kde.KSpeech.xml )
+qt4_add_dbus_interfaces(kttsmgr_SRCS org.kde.KSpeech.xml )
 
 kde4_automoc(${kttsmgr_SRCS})
 

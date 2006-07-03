@@ -10,7 +10,7 @@ set(kttsjobmgrpart_PART_SRCS
 
 kde4_automoc(${kttsjobmgrpart_PART_SRCS})
 
-qdbus_add_interfaces(kttsjobmgrpart_PART_SRCS org.kde.KSpeech.xml )
+qt4_add_dbus_interfaces(kttsjobmgrpart_PART_SRCS org.kde.KSpeech.xml )
 
 kde4_add_plugin(kttsjobmgrpart WITH_PREFIX ${kttsjobmgrpart_PART_SRCS})
 
