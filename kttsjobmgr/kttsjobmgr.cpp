@@ -44,7 +44,7 @@
 #include <kvbox.h>
 #include <kdemacros.h>
 #include <kparts/genericfactory.h>
-#include <dbus/qdbus.h>
+#include <QtDBus>
 
 // KTTS includes.
 #include "kspeechdef.h"
