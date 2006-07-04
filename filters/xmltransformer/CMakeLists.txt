@@ -16,13 +16,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_xmltransformerplugin )
 
 target_link_libraries(kttsd_xmltransformerplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_xmltransformerplugin )
+install(TARGETS kttsd_xmltransformerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kttsd/xmltransformer/ FILES xhtml2ssml.xsl xhtml2ssml_simple.xsl )
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_xmltransformerplugin.desktop )
+install( FILES xhtml2ssml.xsl xhtml2ssml_simple.xsl  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/xmltransformer/ )
+install( FILES kttsd_xmltransformerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

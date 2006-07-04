@@ -18,12 +18,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsjobmgrpart )
 
 target_link_libraries(kttsjobmgrpart  ${KDE4_KDECORE_LIBS} kttsd kparts )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsjobmgrpart )
+install(TARGETS kttsjobmgrpart  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsjobmgr.desktop )
+install( FILES kttsjobmgr.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

@@ -16,12 +16,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_freettsplugin )
 
 target_link_libraries(kttsd_freettsplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_freettsplugin )
+install(TARGETS kttsd_freettsplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_freettsplugin.desktop )
+install( FILES kttsd_freettsplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

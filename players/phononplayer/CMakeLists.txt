@@ -14,9 +14,9 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_phononplugin )
 
 target_link_libraries(kttsd_phononplugin  ${KDE4_KDECORE_LIBS} ${KDE4_PHONONCORE_LIBRARY} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_phononplugin )
+install(TARGETS kttsd_phononplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_phononplugin.desktop )
+install( FILES kttsd_phononplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )

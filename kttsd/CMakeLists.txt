@@ -33,8 +33,8 @@ install_targets(/bin kttsd_bin )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kttsd/xslt/ FILES SSMLtoPlainText.xsl )
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd.desktop )
+install( FILES SSMLtoPlainText.xsl  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/xslt/ )
+install( FILES kttsd.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

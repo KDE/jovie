@@ -16,7 +16,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_stringreplacerplugin )
 
 target_link_libraries(kttsd_stringreplacerplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_stringreplacerplugin )
+install(TARGETS kttsd_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
@@ -32,7 +32,7 @@ install_files( ${DATA_INSTALL_DIR}/kttsd/stringreplacer/ FILES
     festival_unspeakable_chars.xml
     qt2plaintext.xml )
     
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_stringreplacerplugin.desktop )
+install( FILES kttsd_stringreplacerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

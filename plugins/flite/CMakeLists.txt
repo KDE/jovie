@@ -16,12 +16,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_fliteplugin )
 
 target_link_libraries(kttsd_fliteplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_fliteplugin )
+install(TARGETS kttsd_fliteplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_fliteplugin.desktop )
+install( FILES kttsd_fliteplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

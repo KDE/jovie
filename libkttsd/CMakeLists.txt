@@ -31,12 +31,12 @@ target_link_libraries(kttsd
     ${KDE4_KUTILS_LIBS} )
 
 set_target_properties(kttsd PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-install_targets(${LIB_INSTALL_DIR} kttsd )
+install(TARGETS kttsd  DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES kttsd_synthplugin.desktop )
+install( FILES kttsd_synthplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 
 
 

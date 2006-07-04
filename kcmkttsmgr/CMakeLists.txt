@@ -21,13 +21,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kttsd )
 
 target_link_libraries(kcm_kttsd  ${KDE4_KIO_LIBS} kparts kttsd  )
 
-install_targets(${PLUGIN_INSTALL_DIR} kcm_kttsd )
+install(TARGETS kcm_kttsd  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES kcmkttsd.desktop )
-install_files( ${DATA_INSTALL_DIR}/kttsd/ FILES kcmkttsd_testmessage.desktop )
+install( FILES kcmkttsd.desktop  DESTINATION  ${XDG_APPS_DIR} )
+install( FILES kcmkttsd_testmessage.desktop  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/ )
 
 
 

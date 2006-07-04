@@ -16,13 +16,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_hadifixplugin )
 
 target_link_libraries(kttsd_hadifixplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_hadifixplugin )
+install(TARGETS kttsd_hadifixplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kttsd/hadifix/xslt/ FILES SSMLtoTxt2pho.xsl )
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_hadifixplugin.desktop )
+install( FILES SSMLtoTxt2pho.xsl  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/hadifix/xslt/ )
+install( FILES kttsd_hadifixplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 

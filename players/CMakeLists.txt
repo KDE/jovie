@@ -11,7 +11,7 @@ endif(KDE4_KTTSD_ALSA)
 
 ########### install files ###############
 
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES kttsd_audioplugin.desktop )
+install( FILES kttsd_audioplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 
 
 

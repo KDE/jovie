@@ -23,7 +23,7 @@ endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES kttsd_filterplugin.desktop )
+install( FILES kttsd_filterplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 
 
 

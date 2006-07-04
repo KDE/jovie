@@ -23,7 +23,7 @@ install_targets(/bin kttsmgr )
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES kttsmgr.desktop )
+install( FILES kttsmgr.desktop  DESTINATION  ${XDG_APPS_DIR} )
 
 
 

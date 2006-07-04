@@ -14,12 +14,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_alsaplugin )
 
 target_link_libraries(kttsd_alsaplugin  ${KDE4_KDECORE_LIBS} ${ASOUND_LIBRARY} kttsd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kttsd_alsaplugin )
+install(TARGETS kttsd_alsaplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES kttsd_alsaplugin.desktop )
+install( FILES kttsd_alsaplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 
