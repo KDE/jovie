@@ -211,7 +211,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
     QString key = "Name[" + languageCode + "]";
     QString result;
     QString def;
-    QFile file(locate("data", "kttsd/kcmkttsd_testmessage.desktop"));
+    QFile file(KStandardDirs::locate("data", "kttsd/kcmkttsd_testmessage.desktop"));
     if (file.open(QIODevice::ReadOnly))
     {
         QTextStream stream(&file);

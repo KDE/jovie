@@ -183,7 +183,7 @@ Player* TestPlayer::createPlayerObject(int playerOption)
  */
 QString TestPlayer::makeSuggestedFilename()
 {
-    KTempFile tempFile (locateLocal("tmp", "kttsmgr-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "kttsmgr-"), ".wav");
     QString waveFile = tempFile.file()->fileName();
     tempFile.close();
     QFile::remove(waveFile);

@@ -137,7 +137,7 @@ void XmlTransformerConf::defaults(){
     // Default name.
     nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
-    xsltPath->setUrl( KUrl::fromPath( locate("data", "kttsd/xmltransformer/") ) );
+    xsltPath->setUrl( KUrl::fromPath( KStandardDirs::locate("data", "kttsd/xmltransformer/") ) );
     // Default path to xsltproc.
     xsltprocPath->setUrl( KUrl("xsltproc") );
     // Default root element to "html".

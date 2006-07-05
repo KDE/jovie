@@ -213,7 +213,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     }
 
     /// Write @param text to a temporary file.
-    KTempFile inFile(locateLocal("tmp", "kttsd-"), ".xml");
+    KTempFile inFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".xml");
     m_inFilename = inFile.file()->fileName();
     QTextStream* wstream = inFile.textStream();
     if (wstream == 0) {
@@ -236,7 +236,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 #endif
 
     // Get a temporary output file name.
-    KTempFile outFile(locateLocal("tmp", "kttsd-"), ".output");
+    KTempFile outFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".output");
     m_outFilename = outFile.file()->fileName();
     outFile.close();
     // outFile.unlink();    // only activate this if necessary.
