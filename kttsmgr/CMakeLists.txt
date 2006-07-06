@@ -18,7 +18,7 @@ target_link_libraries(kttsmgr
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KUTILS_LIBS} )
 
-install_targets(/bin kttsmgr )
+install(TARGETS kttsmgr  DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
