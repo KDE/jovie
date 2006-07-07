@@ -134,7 +134,7 @@ void FliteConf::slotFliteTest_clicked()
         connect (m_fliteProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (locateLocal("tmp", "fliteplugin-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "fliteplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 

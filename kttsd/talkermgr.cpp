@@ -28,6 +28,7 @@
 #include <kparts/componentfactory.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
+
 // KTTS includes.
 #include "pluginconf.h"
 #include "talkermgr.h"

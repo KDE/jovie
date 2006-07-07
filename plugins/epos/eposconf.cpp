@@ -202,7 +202,7 @@ void EposConf::slotEposTest_clicked()
         connect (m_eposProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (locateLocal("tmp", "eposplugin-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "eposplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 

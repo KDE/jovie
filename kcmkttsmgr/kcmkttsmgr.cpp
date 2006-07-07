@@ -53,6 +53,7 @@
 #include <kfiledialog.h>
 #include <ktoolinvocation.h>
 #include <kdialog.h>
+#include <kspeech.h>
 
 // KTTS includes.
 #include "talkercode.h"
@@ -402,7 +403,8 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 
     // Set up Keep Audio Path KURLRequestor.
     keepAudioPath->setMode(KFile::Directory);
-    keepAudioPath->setUrl(KUrl::fromPath(locateLocal("data", "kttsd/audio/")));
+    keepAudioPath->setUrl(KUrl::fromPath(
+        KStandardDirs::locateLocal("data", "kttsd/audio/")));
 
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
@@ -525,7 +527,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
             this, SLOT(slotTabChanged()));
 
     // See if KTTSD is already running, and if so, create jobs tab.
-    if (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kttsd"))
+    if (QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
         kttsdStarted();
     else
         // Start KTTSD if check box is checked.
@@ -607,7 +609,7 @@ void KCMKttsMgr::load()
         m_config->readEntry("ExcludeEventsWithSound",
         notifyExcludeEventsWithSoundCheckBox->isChecked()));
     slotNotifyClearButton_clicked();
-    loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
+    loadNotifyEventsFromFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml"), true );
     slotNotifyEnableCheckBox_toggled( notifyEnableCheckBox->isChecked() );
     // Auto-expand and position on the Default item.
     QTreeWidgetItem* item = findTreeWidgetItem( notifyListView, "default", nlvcEventSrc );
@@ -872,7 +874,7 @@ void KCMKttsMgr::save()
     m_config->writeEntry("Notify", notifyEnableCheckBox->isChecked());
     m_config->writeEntry("ExcludeEventsWithSound",
         notifyExcludeEventsWithSoundCheckBox->isChecked());
-    saveNotifyEventsToFile( locateLocal("config", "kttsd_notifyevents.xml") );
+    saveNotifyEventsToFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml") );
 
     // Audio Output.
     int audioOutputMethod = 0;
@@ -1080,10 +1082,11 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 keepAudioCheckBox->setChecked(keepAudioCheckBoxValue);
             }
-            if (keepAudioPath->url().path() != locateLocal("data", "kttsd/audio/"))
+            if (keepAudioPath->url().path() != KStandardDirs::locateLocal("data", "kttsd/audio/"))
             {
                 changed = true;
-                keepAudioPath->setUrl(KUrl::fromPath(locateLocal("data", "kttsd/audio/")));
+                keepAudioPath->setUrl(KUrl::fromPath(
+                    KStandardDirs::locateLocal("data", "kttsd/audio/")));
             }
             keepAudioPath->setEnabled(keepAudioCheckBox->isEnabled());
     }
@@ -1725,7 +1728,8 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
     if (reenter) return;
     reenter = true;
     // See if KTTSD is running.
-    bool kttsdRunning = (QDBus::sessionBus().busService()->nameHasOwner("org.kde.kttsd"));
+    bool kttsdRunning = (QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
+
     // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
     if (enableKttsdCheckBox->isChecked())
@@ -1844,8 +1848,11 @@ void KCMKttsMgr::kttsdStarted()
         enableKttsdCheckBox->setChecked(true);
         // Enable/disable notify Test button.
         slotNotifyListView_currentItemChanged();
-        m_kspeech = (org::kde::KSpeech*)(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/org/kde/KSpeech"));
+        m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBus::sessionBus());
         m_kspeech->setParent(this);
+        m_kspeech->setApplicationName("kcmkttsmgr");
+        m_kspeech->setDefaultPriority(KSpeech::jpMessage);
+        m_kspeech->setIsSystemManager(true);
         // Connect KTTSD DBUS signals to our slots.
         connect(m_kspeech, SIGNAL(kttsdStarted()),
             this, SLOT(kttsdStarted()));
@@ -2466,7 +2473,10 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
                 msg.replace("%m", i18n("sample notification message"));
                 break;
         }
-        if (!msg.isEmpty()) m_kspeech->sayMessage(msg, item->text(nlvcTalker));
+        if (!msg.isEmpty()) {
+            m_kspeech->setDefaultTalker(item->text(nlvcTalker));
+            m_kspeech->say(msg, 0);
+        }
     }
 }
 

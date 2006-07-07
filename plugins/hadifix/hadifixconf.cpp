@@ -470,7 +470,7 @@ HadifixConf::HadifixConf( QWidget* parent, const QStringList &) :
 
     d = new HadifixConfPrivate(parent);
 
-    QString file = locate("data", "LICENSES/LGPL_V2");
+    // QString file = locate("data", "LICENSES/LGPL_V2");
     i18n("This plugin is distributed under the terms of the GPL v2 or later.");
 
     connect(d->voiceButton, SIGNAL(clicked()), this, SLOT(voiceButton_clicked()));
@@ -606,7 +606,7 @@ void HadifixConf::testButton_clicked () {
         connect (d->hadifixProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (locateLocal("tmp", "hadifixplugin-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "hadifixplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 

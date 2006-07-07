@@ -185,7 +185,7 @@ class KCMKttsMgr :
             }
         };
 
-    protected:
+    protected slots:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
         /** Most of these are not used */
 

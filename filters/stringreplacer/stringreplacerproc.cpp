@@ -169,7 +169,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QByteArray& appId)
+    const QString& appId)
 {
     m_wasModified = false;
     // If language doesn't match, return input unmolested.

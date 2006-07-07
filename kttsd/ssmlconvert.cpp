@@ -206,7 +206,7 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
 bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     m_xsltFilename = xsltFilename;
     /// Write @param text to a temporary file.
-    KTempFile inFile(locateLocal("tmp", "kttsd-"), ".ssml");
+    KTempFile inFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".ssml");
     m_inFilename = inFile.file()->fileName();
     QTextStream* wstream = inFile.textStream();
     if (wstream == 0) {
@@ -225,7 +225,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
 #endif
 
     // Get a temporary output file name.
-    KTempFile outFile(locateLocal("tmp", "kttsd-"), ".output");
+    KTempFile outFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".output");
     m_outFilename = outFile.file()->fileName();
     outFile.close();
     // outFile.unlink();    // only activate this if necessary.

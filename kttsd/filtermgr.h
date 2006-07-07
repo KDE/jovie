@@ -55,14 +55,12 @@ class FilterMgr : public KttsFilterProc
 
         /**
          * Initialize the filters.
-         * @param config          Settings object.
-         * @param configGroup     Settings Group.
          * @return                False if filter is not ready to filter.
          *
          * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
          * separate configuration files of their own.
          */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init();
 
         /**
          * Returns True if this filter is a Sentence Boundary Detector.

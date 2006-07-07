@@ -148,7 +148,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
     {
-        KTempFile tempFile(locateLocal("tmp", "commandplugin-"), ".txt");
+        KTempFile tempFile(KStandardDirs::locateLocal("tmp", "commandplugin-"), ".txt");
         QTextStream* fs = tempFile.textStream();
         fs->setCodec(codec);
         *fs << text;

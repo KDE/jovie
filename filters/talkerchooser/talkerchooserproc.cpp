@@ -104,7 +104,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString TalkerChooserProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QByteArray& appId)
+    const QString& appId)
 {
     if ( !m_re.isEmpty() )
     {

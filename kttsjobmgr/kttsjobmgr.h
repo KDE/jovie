@@ -59,87 +59,28 @@ protected Q_SLOTS:
     * This signal is emitted when KTTSD starts or restarts after a call to reinit.
     */
     Q_SCRIPTABLE void kttsdStarted();
-    /**
-    * This signal is emitted when the speech engine/plugin encounters a marker in the text.
-    * @param appId          DCOP application ID of the application that queued the text.
-    * @param markerName     The name of the marker seen.
-    * @see markers
-    */
-    Q_SCRIPTABLE void markerSeen(const QString& appId, const QString& markerName);
-    /**
-    * This signal is emitted whenever a sentence begins speaking.
-    * @param appId          DCOP application ID of the application that queued the text.
-    * @param jobNum         Job number of the text job.
-    * @param seq            Sequence number of the text.
-    * @see getTextCount
-    */
-    Q_SCRIPTABLE void sentenceStarted(const QString& appId, const uint jobNum, const uint seq);
-    /**
-    * This signal is emitted when a sentence has finished speaking.
-    * @param appId          DCOP application ID of the application that queued the text.
-    * @param jobNum         Job number of the text job.
-    * @param seq            Sequence number of the text.
-    * @see getTextCount
-    */
-    Q_SCRIPTABLE void sentenceFinished(const QString& appId, const uint jobNum, const uint seq);
 
     /**
-    * This signal is emitted whenever a new text job is added to the queue.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
+    * This signal is emitted each time the state of a job changes.
+    * @param appId              The DBUS sender ID of the application that
+    *                           submitted the job.
+    * @param jobNum             Job Number.
+    * @param state              Job state.  @see KSpeech::JobState.
     */
-    Q_SCRIPTABLE void textSet(const QString& appId, const uint jobNum);
+    Q_SCRIPTABLE void jobStateChanged(const QString &appId, int jobNum, int state);
 
     /**
-    * This signal is emitted whenever a new part is appended to a text job.
-    * @param appId          The DCOP senderId of the application that created the job.
-    * @param jobNum         Job number of the text job.
-    * @param partNum        Part number of the new part.  Parts are numbered starting
-    *                       at 1.
+    * This signal is emitted when a marker is processed.
+    * Currently only emits mtSentenceBegin and mtSentenceEnd.
+    * @param appId         The DBUS sender ID of the application that submitted the job.
+    * @param jobNum        Job Number of the job emitting the marker.
+    * @param markerType    The type of marker.
+    *                      Currently either mtSentenceBegin or mtSentenceEnd.
+    * @param markerData    Data for the marker.
+    *                      Currently, this is the sequence number of the sentence
+    *                      begun or ended.  Sequence numbers begin at 1.
     */
-    Q_SCRIPTABLE void textAppended(const QString& appId, const uint jobNum, const int partNum);
-
-    /**
-    * This signal is emitted whenever speaking of a text job begins.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
-    */
-    Q_SCRIPTABLE void textStarted(const QString& appId, const uint jobNum);
-    /**
-    * This signal is emitted whenever a text job is finished.  The job has
-    * been marked for deletion from the queue and will be deleted when another
-    * job reaches the Finished state. (Only one job in the text queue may be
-    * in state Finished at one time.)  If @ref startText or @ref resumeText is
-    * called before the job is deleted, it will remain in the queue for speaking.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
-    */
-    Q_SCRIPTABLE void textFinished(const QString& appId, const uint jobNum);
-    /**
-    * This signal is emitted whenever a speaking text job stops speaking.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
-    */
-    Q_SCRIPTABLE void textStopped(const QString& appId, const uint jobNum);
-    /**
-    * This signal is emitted whenever a speaking text job is paused.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
-    */
-    Q_SCRIPTABLE void textPaused(const QString& appId, const uint jobNum);
-    /**
-    * This signal is emitted when a text job, that was previously paused, resumes speaking.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
-    */
-    Q_SCRIPTABLE void textResumed(const QString& appId, const uint jobNum);
-    /**
-    * This signal is emitted whenever a text job is deleted from the queue.
-    * The job is no longer in the queue when this signal is emitted.
-    * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
-    * @param jobNum         Job number of the text job.
-    */
-    Q_SCRIPTABLE void textRemoved(const QString& appId, const uint jobNum);
+    Q_SCRIPTABLE void marker(const QString &appId, int jobNum, int markerType, const QString &markerData);
 
 private slots:
     /**
@@ -159,10 +100,8 @@ private slots:
     void slot_speak_clipboard();
     void slot_speak_file();
     void slot_refresh();
-    void slot_job_prev_par();
     void slot_job_prev_sen();
     void slot_job_next_sen();
-    void slot_job_next_par();
 
 private:
     /**
@@ -170,14 +109,7 @@ private:
     * @return               Job Number of currently-selected job.
     *                       0 if no currently-selected job.
     */
-    uint getCurrentJobNum();
-
-    /**
-    * Get the number of parts in the currently-selected job in the Job List View.
-    * @return               Number of parts in currently-selected job.
-    *                       0 if no currently-selected job.
-    */
-    int getCurrentJobPartCount();
+    int getCurrentJobNum();
 
     /**
     * Enables or disables all the job-related buttons.
@@ -186,16 +118,16 @@ private:
     void enableJobActions(bool enable);
 
     /**
-    * Enables or disables all the job part-related buttons.
-    * @param enable        True to enable the job par-related butons.  False to disable.
+    * Retrieves JobInfo from KTTSD, creates and fills JobInfo object.
+    * @param jobNum         Job Number.
     */
-    void enableJobPartActions(bool enable);
+    JobInfo* retrieveJobInfo(int jobNum);
 
     /**
     * Refresh display of a single job in the JobListView.
     * @param jobNum         Job Number.
     */
-    void refreshJob(uint jobNum);
+    void refreshJob(int jobNum);
 
     /**
     * Fill the Job List.

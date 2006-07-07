@@ -26,11 +26,11 @@
 // Qt includes.
 
 // KDE includes.
-#include "klocale.h"
-#include "kdebug.h"
+#include <klocale.h>
+#include <kdebug.h>
+#include <kspeech.h>
 
 // KTTS includes.
-#include "kspeechdef.h"
 
 // JobInfoListModel includes.
 #include "jobinfolistmodel.h"
@@ -95,13 +95,12 @@ QVariant JobInfoListModel::dataColumn(const JobInfo& job, int column) const
     switch (column)
     {
         case 0: return job.jobNum; break;
-        case 1: return job.appId; break;
-        case 2: return job.talkerID; break;
-        case 3: return stateToStr(job.state); break;
-        case 4: return job.sentenceNum; break;
-        case 5: return job.sentenceCount; break;
-        case 6: return job.partNum; break;
-        case 7: return job.partCount; break;
+        case 1: return job.applicationName; break;
+        case 2: return priorityToStr(job.priority); break;
+        case 3: return job.talkerID; break;
+        case 4: return stateToStr(job.state); break;
+        case 5: return job.sentenceNum; break;
+        case 6: return job.sentenceCount; break;
     }
     return QVariant();
 }
@@ -121,12 +120,11 @@ QVariant JobInfoListModel::headerData(int section, Qt::Orientation orientation, 
     {
         case 0: return i18n("Job Num");
         case 1: return i18n("Owner");
-        case 2: return i18n("Talker ID");
-        case 3: return i18n("State");
-        case 4: return i18n("Position");
-        case 5: return i18n("Sentences");
-        case 6: return i18n("Part Num");
-        case 7: return i18n("Parts");
+        case 2: return i18n("Priority");
+        case 3: return i18n("Talker ID");
+        case 4: return i18n("State");
+        case 5: return i18n("Position");
+        case 6: return i18n("Sentences");
     };
 
     return QVariant();
@@ -180,7 +178,7 @@ void JobInfoListModel::clear()
     emit reset();
 }
 
-QModelIndex JobInfoListModel::jobNumToIndex(uint jobNum)
+QModelIndex JobInfoListModel::jobNumToIndex(int jobNum)
 {
     for (int row = 0; row < m_jobs.count(); ++row)
         if (getRow(row).jobNum == jobNum)
@@ -198,11 +196,31 @@ QString JobInfoListModel::stateToStr(int state) const
     switch( state )
     {
         case KSpeech::jsQueued: return        i18n("Queued");
+        case KSpeech::jsFiltering: return     i18n("Filtering");
         case KSpeech::jsSpeakable: return     i18n("Waiting");
         case KSpeech::jsSpeaking: return      i18n("Speaking");
         case KSpeech::jsPaused: return        i18n("Paused");
+        case KSpeech::jsInterrupted: return   i18n("Interrupted");
         case KSpeech::jsFinished: return      i18n("Finished");
         default: return                       i18n("Unknown");
+    }
+}
+
+/**
+*   Convert a KTTSD job priority into a display string.
+*   @param priority       KTTSD job priority.
+*   @return               Display string for priority.
+*/
+QString JobInfoListModel::priorityToStr(int priority) const
+{
+    switch (priority)
+    {
+        case KSpeech::jpAll: return                 i18n("All");
+        case KSpeech::jpScreenReaderOutput: return  i18n("Screen Reader");
+        case KSpeech::jpWarning: return             i18n("Warning");
+        case KSpeech::jpMessage: return             i18n("Message");
+        case KSpeech::jpText: return                i18n("Text");
+        default: return                             i18n("Unknown");
     }
 }
 

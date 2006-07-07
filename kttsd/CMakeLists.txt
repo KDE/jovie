@@ -6,22 +6,23 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_SRCS 
    main.cpp 
-   kttsd.cpp 
+   kspeech.cpp 
+   utt.cpp 
    speaker.cpp 
+   appdata.cpp 
+   configdata.cpp 
    speechdata.cpp 
    threadedplugin.cpp 
    ssmlconvert.cpp 
    filtermgr.cpp 
-   talkermgr.cpp
+   talkermgr.cpp 
+   speechjob.cpp 
    kspeechadaptor_p.cpp )
 
 kde4_automoc(${kttsd_SRCS})
 
-# kde4_add_dcop_skels(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeech.h kttsd.h )
-
-# kde4_add_dcop_stubs(kttsd_SRCS ${CMAKE_INSTALL_PREFIX}/include/kspeechsink.h )
-
 kde4_add_executable(kttsd_bin ${kttsd_SRCS})
+
 set_target_properties(kttsd_bin PROPERTIES OUTPUT_NAME kttsd)
 
 target_link_libraries(kttsd_bin

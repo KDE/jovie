@@ -161,7 +161,7 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
                 connect (m_freettsProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
         }
         // Create a temp file name for the wave file.
-    KTempFile tempFile (locateLocal("tmp", "freettsplugin-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "freettsplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 

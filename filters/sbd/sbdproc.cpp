@@ -485,6 +485,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     temp.replace(QRegExp(" +\\t"), "\t");
     // Remove blank lines.
     temp.replace(QRegExp("\t\t+"),"\t");
+    // kDebug() << "SbdThread::parsePlainText: returning " << temp << endl;
     return temp;
 }
 
@@ -517,6 +518,8 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
 
     // Replace spaces, tabs, and formfeeds with a single space.
     m_text.replace(QRegExp("[ \\t\\f]+"), " ");
+    
+    // kDebug() << "SbdThread::run: textType = " << textType << endl;
 
     // Perform the filtering based on type of text.
     switch ( textType )
@@ -598,7 +601,7 @@ SbdProc::~SbdProc()
  * separate configuration files of their own.
  */
 bool SbdProc::init(KConfig* config, const QString& configGroup){
-    // kDebug() << "PlugInProc::init: Running" << endl;
+    // kDebug() << "SbdProc::init: Running" << endl;
     config->setGroup( configGroup );
 //    m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
     m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
@@ -640,7 +643,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString SbdProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QByteArray& appId)
+    const QString& appId)
 {
     if ( asyncConvert( inputText, talkerCode, appId) )
     {
@@ -665,15 +668,16 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  * program must call @ref ackFinished to acknowledge the conversion.
  */
 /*virtual*/ bool SbdProc::asyncConvert(const QString& inputText, TalkerCode* talkerCode,
-    const QByteArray& appId)
+    const QString& appId)
 {
+    // kDebug() << "SbdProc::asyncConvert: running" << endl;
     m_sbdThread->setWasModified( false );
     // If language doesn't match, return input unmolested.
     if ( !m_languageCodeList.isEmpty() )
     {
         QString languageCode = talkerCode->languageCode();
         // kDebug() << "StringReplacerProc::convert: converting " << inputText << 
-        // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+        //     " if language code " << languageCode << " matches " << m_languageCodeList << endl;
         if ( !m_languageCodeList.contains( languageCode ) )
         {
             if ( !talkerCode->countryCode().isEmpty() )
@@ -689,7 +693,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
     if ( !m_appIdList.isEmpty() )
     {
         // kDebug() << "SbdProc::convert: converting " << inputText << " if appId "
-        //     << appId << " matches " << m_appIdList << endl;
+        //      << appId << " matches " << m_appIdList << endl;
         bool found = false;
         QString appIdStr = appId;
         for ( int ndx=0; ndx < m_appIdList.count(); ++ndx )

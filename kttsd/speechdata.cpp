@@ -1,17 +1,14 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   This contains the SpeechData class which is in charge of maintaining
-  all the data on the memory.
-  It maintains queues manages the text.
+  all the speech data.
   We could say that this is the common repository between the KTTSD class
-  (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
+  (dbus service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
   -------------------
   Copyright:
-  (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
-  (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernández
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,7 +33,6 @@
 #include <QPair>
 #include <QDomDocument>
 #include <QFile>
-#include <QByteArray>
 
 // KDE includes.
 #include <kdebug.h>
@@ -47,356 +43,134 @@
 // KTTS includes.
 #include "talkermgr.h"
 #include "notify.h"
+#include "configdata.h"
 
 // SpeechData includes.
 #include "speechdata.h"
 #include "speechdata.moc"
 
-// Set this to 1 to turn off filter support, including SBD as a plugin.
-#define NO_FILTERS 0
+/* -------------------------------------------------------------------------- */
+
+class SpeechDataPrivate
+{
+public:
+    SpeechDataPrivate() :
+        configData(NULL),
+        lastJobNum(0),
+        talkerMgr(NULL),
+        jobCounter(0),
+        supportsHTML(false)
+    {
+        jobLists.insert(KSpeech::jpScreenReaderOutput, new TJobList());
+        jobLists.insert(KSpeech::jpWarning, new TJobList());
+        jobLists.insert(KSpeech::jpMessage, new TJobList());
+        jobLists.insert(KSpeech::jpText, new TJobList());
+    };
+    
+    ~SpeechDataPrivate()
+    {
+        // kDebug() << "Running: SpeechDataPrivate::~SpeechDataPrivate" << endl;
+        // Walk through jobs and emit jobStateChanged signal for each job.
+        foreach (SpeechJob* job, allJobs)
+            delete job;
+        allJobs.clear();
+        
+        foreach (TJobListPtr jobList, jobLists)
+            jobList->clear();
+        jobLists.clear();
+
+        foreach (PooledFilterMgr* pooledFilterMgr, pooledFilterMgrs) {
+            delete pooledFilterMgr->filterMgr;
+            delete pooledFilterMgr->talkerCode;
+            delete pooledFilterMgr;
+        }
+        pooledFilterMgrs.clear();
+        
+        foreach (AppData* appData, appData)
+            delete appData;
+        appData.clear();
+    }
+    
+    friend class SpeechData;
+    
+protected:
+    /**
+    * Configuration data.
+    */
+    ConfigData* configData;
+
+    /**
+    * All jobs.
+    */
+    QHash<int, SpeechJob*> allJobs;
+
+    /**
+    * List of jobs for each job priority type.
+    */
+    QMap<KSpeech::JobPriority, TJobListPtr> jobLists;
+
+    /**
+    * Application data.
+    */
+    mutable QMap<QString, AppData*> appData;
+
+    /**
+    * The last job queued by any App.
+    */
+    int lastJobNum;
+
+    /**
+    * TalkerMgr object local pointer.
+    */
+    TalkerMgr* talkerMgr;
+
+    /**
+    * Pool of FilterMgrs.
+    */
+    QMultiHash<int, PooledFilterMgr*> pooledFilterMgrs;
+
+    /**
+    * Job counter.  Each new job increments this counter.
+    */
+    int jobCounter;
+
+    /**
+    * True if at least one XML Transformer plugin for html is enabled.
+    */
+    bool supportsHTML;
+};
+
+/* -------------------------------------------------------------------------- */
 
 /**
 * Constructor
-* Sets text to be stopped and warnings and messages queues to be autodelete.
 */
-SpeechData::SpeechData(){
-    // kDebug() << "Running: SpeechData::SpeechData()" << endl;
-    // The text should be stoped at the beggining (thread safe)
-    jobCounter = 0;
-    config = 0;
-    supportsHTML = false;
-
-    screenReaderOutput.jobNum = 0;
-    screenReaderOutput.text = "";
-}
-
-bool SpeechData::readConfig(){
-    // Load configuration
-    delete config;
-    //config = KGlobal::config();
-    config = new KConfig("kttsdrc");
-
-    // Set the group general for the configuration of KTTSD itself (no plug ins)
-    config->setGroup("General");
-
-    // Load the configuration of the text interruption messages and sound
-    textPreMsgEnabled = config->readEntry("TextPreMsgEnabled", QVariant(false)).toBool();
-    textPreMsg = config->readEntry("TextPreMsg");
-
-    textPreSndEnabled = config->readEntry("TextPreSndEnabled", QVariant(false)).toBool();
-    textPreSnd = config->readEntry("TextPreSnd");
-
-    textPostMsgEnabled = config->readEntry("TextPostMsgEnabled", QVariant(false)).toBool();
-    textPostMsg = config->readEntry("TextPostMsg");
-
-    textPostSndEnabled = config->readEntry("TextPostSndEnabled", QVariant(false)).toBool();
-    textPostSnd = config->readEntry("TextPostSnd");
-    keepAudio = config->readEntry("KeepAudio", QVariant(false)).toBool();
-    keepAudioPath = config->readEntry("KeepAudioPath", locateLocal("data", "kttsd/audio/"));
-
-    // Notification (KNotify).
-    notify = config->readEntry("Notify", QVariant(false)).toBool();
-    notifyExcludeEventsWithSound = config->readEntry("ExcludeEventsWithSound", QVariant(true)).toBool();
-    loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
-
-    // KTTSMgr auto start and auto exit.
-    autoStartManager = config->readEntry("AutoStartManager", QVariant(false)).toBool();
-    autoExitManager = config->readEntry("AutoExitManager", QVariant(false)).toBool();
-
-    // Clear the pool of filter managers so that filters re-init themselves.
-    QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
-    while (it != m_pooledFilterMgrs.end()) {
-        PooledFilterMgr* pooledFilterMgr = it.value();
-        delete pooledFilterMgr->filterMgr;
-        delete pooledFilterMgr->talkerCode;
-        delete pooledFilterMgr;
-        ++it;
-    }
-    m_pooledFilterMgrs.clear();
-
-    // Create an initial FilterMgr for the pool to save time later.
-    PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
-    FilterMgr* filterMgr = new FilterMgr();
-    filterMgr->init(config, "General");
-    supportsHTML = filterMgr->supportsHTML();
-    pooledFilterMgr->filterMgr = filterMgr;
-    pooledFilterMgr->busy = false;
-    pooledFilterMgr->job = 0;
-    pooledFilterMgr->partNum = 0;
-    pooledFilterMgr->talkerCode = 0;
-    // Connect signals from FilterMgr.
-    connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
-    connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
-    m_pooledFilterMgrs.insert(0, pooledFilterMgr);
-
-    return true;
-}
-
-/**
- * Loads notify events from a file.  Clearing data if clear is True.
- */
-void SpeechData::loadNotifyEventsFromFile( const QString& filename, bool clear)
+SpeechData::SpeechData()
 {
-    // Open existing event list.
-    QFile file( filename );
-    if ( !file.open( QIODevice::ReadOnly ) )
-    {
-        kDebug() << "SpeechData::loadNotifyEventsFromFile: Unable to open file " << filename << endl;
-    }
-    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
-    QDomDocument doc( "" );
-    if ( !doc.setContent( &file ) ) {
-        file.close();
-        kDebug() << "SpeechData::loadNotifyEventsFromFile: File not in proper XML format. " << filename << endl;
-    }
-    // kDebug() << "StringReplacerConf::load: document successfully parsed." << endl;
-    file.close();
-
-    if ( clear )
-    {
-        notifyDefaultPresent = NotifyPresent::Passive;
-        notifyDefaultOptions.action = NotifyAction::SpeakMsg;
-        notifyDefaultOptions.talker.clear();
-        notifyDefaultOptions.customMsg.clear();
-        notifyAppMap.clear();
-    }
-
-    // Event list.
-    QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
-    const int eventListCount = eventList.count();
-    for (int eventIndex = 0; eventIndex < eventListCount; ++eventIndex)
-    {
-        QDomNode eventNode = eventList.item(eventIndex);
-        QDomNodeList propList = eventNode.childNodes();
-        QString eventSrc;
-        QString event;
-        QString actionName;
-        QString message;
-        TalkerCode talkerCode;
-        const int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; ++propIndex)
-        {
-            QDomNode propNode = propList.item(propIndex);
-            QDomElement prop = propNode.toElement();
-            if (prop.tagName() == "eventSrc") eventSrc = prop.text();
-            if (prop.tagName() == "event") event = prop.text();
-            if (prop.tagName() == "action") actionName = prop.text();
-            if (prop.tagName() == "message") message = prop.text();
-            if (prop.tagName() == "talker") talkerCode = TalkerCode(prop.text(), false);
-        }
-        NotifyOptions notifyOptions;
-        notifyOptions.action = NotifyAction::action( actionName );
-        notifyOptions.talker = talkerCode.getTalkerCode();
-        notifyOptions.customMsg = message;
-        if ( eventSrc != "default" )
-        {
-            notifyOptions.eventName = NotifyEvent::getEventName( eventSrc, event );
-            NotifyEventMap notifyEventMap = notifyAppMap[ eventSrc ];
-            notifyEventMap[ event ] = notifyOptions;
-            notifyAppMap[ eventSrc ] = notifyEventMap;
-        } else {
-            notifyOptions.eventName.clear();
-            notifyDefaultPresent = NotifyPresent::present( event );
-            notifyDefaultOptions = notifyOptions;
-        }
-    }
+    d = new SpeechDataPrivate();
 }
 
 /**
 * Destructor
 */
-SpeechData::~SpeechData(){
-    // kDebug() << "Running: SpeechData::~SpeechData()" << endl;
-    // Walk through jobs and emit a textRemoved signal for each job.
-    while (!messages.isEmpty())
-        delete messages.dequeue();
-    while (!warnings.isEmpty())
-        delete warnings.dequeue();
-
-    while (!textJobs.isEmpty()) {
-        mlJob* job = textJobs.takeFirst();
-        emit textRemoved(job->appId, job->jobNum);
-        delete job;
-    }
-
-    while (!m_pooledFilterMgrs.isEmpty()) {
-        PooledFilterMgr* pooledFilterMgr = *m_pooledFilterMgrs.begin();
-        m_pooledFilterMgrs.erase(m_pooledFilterMgrs.begin());
-        delete pooledFilterMgr->filterMgr;
-        delete pooledFilterMgr->talkerCode;
-        delete pooledFilterMgr;
-    }
-
-    delete config;
-}
-
-/**
-* Say a message as soon as possible, interrupting any other speech in progress.
-* IMPORTANT: This method is reserved for use by Screen Readers and should not be used
-* by any other applications.
-* @param msg            The message to be spoken.
-* @param talker         Code for the talker to do the speaking.  Example "en".
-*                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified Talker code,
-*                       defaults to the closest matching talker.
-* @param appId          The DBUS senderId of the application.  NULL if kttsd.
-*
-* If an existing Screen Reader output is in progress, it is stopped and discarded and
-* replaced with this new message.
-*/
-void SpeechData::setScreenReaderOutput(const QString &msg, const QString &talker, const QString &appId)
+SpeechData::~SpeechData()
 {
-    screenReaderOutput.text = msg;
-    screenReaderOutput.talker = talker;
-    screenReaderOutput.appId = appId;
-    screenReaderOutput.seq = 1;
+    delete d;
 }
 
-/**
-* Retrieves the Screen Reader Output.
-*/
-mlText* SpeechData::getScreenReaderOutput()
+AppData* SpeechData::getAppData(const QString& appId) const
 {
-    mlText* temp = new mlText();
-    temp->text = screenReaderOutput.text;
-    temp->talker = screenReaderOutput.talker;
-    temp->appId = screenReaderOutput.appId;
-    temp->seq = screenReaderOutput.seq;
-    // Blank the Screen Reader to text to "empty" it.
-    screenReaderOutput.text = "";
-    return temp;
+    if (!d->appData.contains(appId))
+        d->appData.insert(appId, new AppData(appId));
+    return d->appData[appId];
 }
 
-/**
-* Returns true if Screen Reader Output is ready to be spoken.
-*/
-bool SpeechData::screenReaderOutputReady()
+void SpeechData::releaseAppData(const QString& appId)
 {
-    return !screenReaderOutput.text.isEmpty();
+    if (d->appData.contains(appId))
+        delete d->appData.take(appId);
 }
 
-/**
-* Add a new warning to the queue.
-*/
-void SpeechData::enqueueWarning( const QString &warning, const QString &talker, const QString &appId){
-    // kDebug() << "Running: SpeechData::enqueueWarning( const QString &warning )" << endl;
-    mlJob* job = new mlJob();
-    ++jobCounter;
-    if (jobCounter == 0) ++jobCounter;  // Overflow is OK, but don't want any 0 jobNums.
-    uint jobNum = jobCounter;
-    job->jobNum = jobNum;
-    job->talker = talker;
-    job->appId = appId;
-    job->seq = 1;
-    job->partCount = 1;
-    job->partSeqNums = QList<int>();
-    warnings.enqueue( job );
-    job->sentences = QStringList();
-    // Do not apply Sentence Boundary Detection filters to warnings.
-    startJobFiltering( job, warning, true );
-    // uint count = warnings.count();
-    // kDebug() << "Adding '" << temp->text << "' with talker '" << temp->talker << "' from application " << appId << " to the warnings queue leaving a total of " << count << " items." << endl;
-}
-
-/**
-* Pop (get and erase) a warning from the queue.
-* @return                Pointer to mlText structure containing the message.
-*
-* Caller is responsible for deleting the structure.
-*/
-mlText* SpeechData::dequeueWarning(){
-    // kDebug() << "Running: SpeechData::dequeueWarning()" << endl;
-    mlJob* job = warnings.dequeue();
-    waitJobFiltering(job);
-    mlText* temp = new mlText();
-    temp->jobNum = job->jobNum;
-    temp->text = job->sentences.join("");
-    temp->talker = job->talker;
-    temp->appId = job->appId;
-    temp->seq = 1;
-    delete job;
-    // uint count = warnings.count();
-    // kDebug() << "Removing '" << temp->text << "' with talker '" << temp->talker << "' from the warnings queue leaving a total of " << count << " items." << endl;
-    return temp;
-}
-
-/**
-* Are there any Warnings?
-*/
-bool SpeechData::warningInQueue(){
-    // kDebug() << "Running: SpeechData::warningInQueue() const" << endl;
-    bool temp = !warnings.isEmpty();
-    // if(temp){
-        // kDebug() << "The warnings queue is NOT empty" << endl;
-    // } else {
-        // kDebug() << "The warnings queue is empty" << endl;
-    // }
-    return temp;
-}
-
-/**
-* Add a new message to the queue.
-*/
-void SpeechData::enqueueMessage( const QString &message, const QString &talker, const QString& appId){
-    // kDebug() << "Running: SpeechData::enqueueMessage" << endl;
-    mlJob* job = new mlJob();
-    ++jobCounter;
-    if (jobCounter == 0) ++jobCounter;  // Overflow is OK, but don't want any 0 jobNums.
-    uint jobNum = jobCounter;
-    job->jobNum = jobNum;
-    job->talker = talker;
-    job->appId = appId;
-    job->seq = 1;
-    job->partCount = 1;
-    job->partSeqNums = QList<int>();
-    messages.enqueue( job );
-    job->sentences = QStringList();
-    // Do not apply Sentence Boundary Detection filters to messages.
-    startJobFiltering( job, message, true );
-    // uint count = messages.count();
-    // kDebug() << "Adding '" << temp->text << "' with talker '" << temp->talker << "' from application " << appId << " to the messages queue leaving a total of " << count << " items." << endl;
-}
-
-/**
-* Pop (get and erase) a message from the queue.
-* @return                Pointer to mlText structure containing the message.
-*
-* Caller is responsible for deleting the structure.
-*/
-mlText* SpeechData::dequeueMessage(){
-    // kDebug() << "Running: SpeechData::dequeueMessage()" << endl;
-    mlJob* job = messages.dequeue();
-    waitJobFiltering(job);
-    mlText* temp = new mlText();
-    temp->jobNum = job->jobNum;
-    temp->text = job->sentences.join("");
-    temp->talker = job->talker;
-    temp->appId = job->appId;
-    temp->seq = 1;
-    delete job;
-    /* mlText *temp = messages.dequeue(); */
-    // uint count = messages.count();
-    // kDebug() << "Removing '" << temp->text << "' with talker '" << temp->talker << "' from the messages queue leaving a total of " << count << " items." << endl;
-    return temp;
-}
-
-/**
-* Are there any Messages?
-*/
-bool SpeechData::messageInQueue(){
-    // kDebug() << "Running: SpeechData::messageInQueue() const" << endl;
-    bool temp = !messages.isEmpty();
-    // if(temp){
-    //     kDebug() << "The messages queue is NOT empty" << endl;
-    //  } else {
-    //     kDebug() << "The messages queue is empty" << endl;
-    // }
-    return temp;
-}
-
-/**
-* Determines whether the given text is SSML markup.
-*/
 bool SpeechData::isSsml(const QString &text)
 {
     /// This checks to see if the root tag of the text is a <speak> tag. 
@@ -407,33 +181,16 @@ bool SpeechData::isSsml(const QString &text)
     return (root.tagName() == "speak");
 }
 
-/**
-* Parses a block of text into sentences using the application-specified regular expression
-* or (if not specified), the default regular expression.
-* @param text           The message to be spoken.
-* @param appId          The DBUS senderId of the application.  NULL if kttsd.
-* @return               List of parsed sentences.
-*
-* If the text contains SSML, it is not parsed into sentences at all.
-* TODO: Need a way to preserve SSML but still parse into sentences.
-* We will walk before we run for now and not sentence parse.
-*/
-
 QStringList SpeechData::parseText(const QString &text, const QString &appId /*=NULL*/)
 {
     // There has to be a better way
     // kDebug() << "I'm getting: " << endl << text << " from application " << appId << endl;
-    if (isSsml(text))
-    {
+    if (isSsml(text)) {
         QStringList tempList(text);
         return tempList;
     }
     // See if app has specified a custom sentence delimiter and use it, otherwise use default.
-    QRegExp sentenceDelimiter;
-    if (sentenceDelimiters.find(appId) != sentenceDelimiters.end())
-        sentenceDelimiter = QRegExp(sentenceDelimiters[appId]);
-    else
-        sentenceDelimiter = QRegExp("([\\.\\?\\!\\:\\;]\\s)|(\\n *\\n)");
+    QRegExp sentenceDelimiter(getAppData(appId)->sentenceDelimiter());
     QString temp = text;
     // Replace spaces, tabs, and formfeeds with a single space.
     temp.replace(QRegExp("[ \\t\\f]+"), " ");
@@ -457,687 +214,414 @@ QStringList SpeechData::parseText(const QString &text, const QString &appId /*=N
     return tempList;
 }
 
-/**
-* Queues a text job.
-*/
-uint SpeechData::setText( const QString &text, const QString &talker, const QString &appId)
+int SpeechData::say(const QString& appId, const QString& text, int sayOptions)
 {
-    // kDebug() << "Running: SpeechData::setText" << endl;
-    mlJob* job = new mlJob;
-    ++jobCounter;
-    if (jobCounter == 0) ++jobCounter;  // Overflow is OK, but don't want any 0 jobNums.
-    uint jobNum = jobCounter;
-    job->jobNum = jobNum;
-    job->appId = appId;
-    job->talker = talker;
-    job->state = KSpeech::jsQueued;
-    job->seq = 0;
-    job->partCount = 1;
-#if NO_FILTERS
-    QStringList tempList = parseText(text, appId);
-    job->sentences = tempList;
-    job->partSeqNums.append(tempList.count());
-    textJobs.append(job);
-    emit textSet(appId, jobNum);
-#else
-    job->sentences = QStringList();
-    job->partSeqNums = QList<int>();
-    textJobs.append(job);
-    startJobFiltering(job, text, false);
-#endif
+    // TODO: sayOptions
+    Q_UNUSED(sayOptions);
+    
+    // kDebug() << "Running: SpeechData::say" << endl;
+    AppData* appData = getAppData(appId);
+    KSpeech::JobPriority priority = appData->defaultPriority();
+    QString talker = appData->defaultTalker();
+    
+    // Screen Reader Outputs replace other Screen Reader Outputs not yet speaking.
+    if (KSpeech::jpScreenReaderOutput == priority)
+        foreach(int jobNum, *d->jobLists[priority]) {
+            SpeechJob* job = d->allJobs[jobNum];
+            // TODO: OK to delete jobs while iterating inside foreach?
+            switch (job->state()) {
+                case KSpeech::jsQueued:
+                    removeJob(jobNum);
+                    break;
+                case KSpeech::jsFiltering:
+                    waitJobFiltering(job);
+                    removeJob(jobNum);
+                    break;
+                case KSpeech::jsSpeakable:
+                    removeJob(jobNum);
+                    break;
+                case KSpeech::jsSpeaking:
+                    break;
+                case KSpeech::jsPaused:
+                case KSpeech::jsInterrupted:
+                    break;
+                case KSpeech::jsFinished:
+                    removeJob(jobNum);
+                    break;
+                case KSpeech::jsDeleted:
+                    break;
+            }
+        };
+    SpeechJob* job = new SpeechJob(priority);
+    connect(job, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
+        this, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)));
+    ++d->jobCounter;
+    if (d->jobCounter <= 0) d->jobCounter = 1;  // Overflow is OK, but don't want any 0 jobNums.
+    int jobNum = d->jobCounter;
+    job->setJobNum(jobNum);
+    job->setAppId(appId);
+    job->setTalker(talker);
+    // Note: Set state last so job is fully populated when jobStateChanged signal is emitted.
+    d->allJobs.insert(jobNum, job);
+    d->jobLists[priority]->append(jobNum);
+    appData->jobList()->append(jobNum);
+    d->lastJobNum = jobNum;
+    if (!appData->filteringOn()) {
+        QStringList tempList = parseText(text, appId);
+        job->setSentences(tempList);
+        job->setState(KSpeech::jsSpeakable);
+    } else {
+        job->setSentences(QStringList());
+        startJobFiltering(job, text, (KSpeech::jpScreenReaderOutput == priority));
+        emit jobStateChanged(appId, jobNum, KSpeech::jsQueued);
+    }
     return jobNum;
 }
 
-/**
-* Adds another part to a text job.  Does not start speaking the text.
-* (thread safe)
-* @param jobNum         Job number of the text job.
-*                       If zero, applies to the last job queued by the application,
-*                       but if no such job, applies to the last job queued by any application.
-* @param text           The message to be spoken.
-* @return               Part number for the added part.  Parts are numbered starting at 1.
-*
-* The text is parsed into individual sentences.  Call getTextCount to retrieve
-* the sentence count.  Call startText to mark the job as speakable and if the
-* job is the first speakable job in the queue, speaking will begin.
-* @see setText.
-* @see startText.
-*/
-int SpeechData::appendText(const QString &text, const uint jobNum)
+SpeechJob* SpeechData::findLastJobByAppId(const QString& appId) const
 {
-    // kDebug() << "Running: SpeechData::appendText" << endl;
-    int newPartNum = 0;
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job)
-    {
-        job->partCount++;
-#if NO_FILTERS
-        QStringList tempList = parseText(text, appId);
-        int sentenceCount = job->sentences.count();
-        job->sentences += tempList;
-        job->partSeqNums.append(sentenceCount + tempList.count());
-        newPartNum = job->partSeqNums.count() + 1;
-        emit textAppended(job->appId, jobNum, newPartNum);
-#else
-        newPartNum = job->partSeqNums.count() + 1;
-        startJobFiltering(job, text, false);
-#endif
-    }
-    return newPartNum;
-}
-
-/**
-* Given an appId, returns the last (most recently queued) job with that appId.
-* @param appId          The DBUS senderId of the application.  NULL if kttsd.
-* @return               Pointer to the text job.
-* If no such job, returns 0.
-* If appId is NULL, returns the last job in the queue.
-* Does not change textJobs.current().
-*/
-mlJob* SpeechData::findLastJobByAppId(const QString& appId)
-{
-    if (textJobs.isEmpty()) return 0;
-    if (appId.isEmpty())
-        return textJobs.last();
-    else {
-        QList<mlJob*>::const_iterator it = textJobs.constEnd();
-        QList<mlJob*>::const_iterator itBegin = textJobs.constBegin();
-        while (it != itBegin) {
-            --it;
-            mlJob* job = *it;
-            if (job->appId == appId) return job;
-        }
-        return 0;
-    }
-}
-
-/**
-* Given an appId, returns the last (most recently queued) job with that appId,
-* or if no such job, the last (most recent) job in the queue.
-* @param appId          The DBUS senderId of the application.  NULL if kttsd.
-* @return               Pointer to the text job.
-* If no such job, returns 0.
-* If appId is NULL, returns the last job in the queue.
-* Does not change textJobs.current().
-*/
-mlJob* SpeechData::findAJobByAppId(const QString& appId)
-{
-    mlJob* job = findLastJobByAppId(appId);
-    // if (!job) job = textJobs.getLast();
-    return job;
-}
-
-/**
-* Given an appId, returns the last (most recently queued) Job Number with that appId,
-* or if no such job, the Job Number of the last (most recent) job in the queue.
-* @param appId          The DBUS senderId of the application.  NULL if kttsd.
-* @return               Job Number of the text job.
-* If no such job, returns 0.
-* If appId is NULL, returns the Job Number of the last job in the queue.
-* Does not change textJobs.current().
-*/
-uint SpeechData::findAJobNumByAppId(const QString& appId)
-{
-    mlJob* job = findAJobByAppId(appId);
-    if (job)
-        return job->jobNum;
+    int jobNum = findJobNumByAppId(appId);
+    if (jobNum)
+        return d->allJobs[jobNum];
     else
-        return 0;
+        return NULL;
+}
+
+int SpeechData::findJobNumByAppId(const QString& appId) const
+{
+    if (appId.isEmpty())
+        return d->lastJobNum;
+    else
+        return  getAppData(appId)->lastJobNum();
 }
 
 /**
 * Given a jobNum, returns the first job with that jobNum.
-* @return               Pointer to the text job.
+* @return               Pointer to the job.
 * If no such job, returns 0.
-* Does not change textJobs.current().
 */
-mlJob* SpeechData::findJobByJobNum(const uint jobNum)
+SpeechJob* SpeechData::findJobByJobNum(int jobNum) const
 {
-    QList<mlJob*>::const_iterator it = textJobs.constBegin();
-    QList<mlJob*>::const_iterator itEnd = textJobs.constEnd();
-    for ( ; it != itEnd; ++it)
-    {
-        mlJob* job = *it;
-        if (job->jobNum == jobNum)
-        {
-            return job;
-        }
-    }
-    return 0;
+    if (d->allJobs.contains(jobNum))
+        return d->allJobs[jobNum];
+    else
+        return NULL;
 }
 
-/**
-* Given a jobNum, returns the appId of the application that owns the job.
-* @param jobNum         Job number of the text job.
-* @return               appId of the job.
-* If no such job, returns "".
-* Does not change textJobs.current().
-*/
-QString SpeechData::getAppIdByJobNum(const uint jobNum)
+QString SpeechData::getAppIdByJobNum(int jobNum) const
 {
     QString appId;
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job) appId = job->appId;
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) appId = job->appId();
     return appId;
 }
 
-/**
-* Sets pointer to the TalkerMgr object.
-*/
-void SpeechData::setTalkerMgr(TalkerMgr* talkerMgr) { m_talkerMgr = talkerMgr; }
-
-/**
-* Remove a text job from the queue.
-* (thread safe)
-* @param jobNum         Job number of the text job.
-*
-* The job is deleted from the queue and the textRemoved signal is emitted.
-*/
-void SpeechData::removeText(const uint jobNum)
+void SpeechData::setTalkerMgr(TalkerMgr* talkerMgr)
 {
-    // kDebug() << "Running: SpeechData::removeText" << endl;
-    uint removeJobNum = 0;
-    QString removeAppId;    // The appId of the removed (and stopped) job.
-    mlJob* removeJob = findJobByJobNum(jobNum);
-    if (removeJob)
-    {
-        removeAppId = removeJob->appId;
-        removeJobNum = removeJob->jobNum;
-        // If filtering on the job, cancel it (all parts).
-        if (m_pooledFilterMgrs.contains(removeJobNum))
-        {
-            while (PooledFilterMgr* pooledFilterMgr = m_pooledFilterMgrs.take(removeJobNum)) {
+    d->talkerMgr = talkerMgr;
+}
+
+void SpeechData::setConfigData(ConfigData* configData)
+{
+    d->configData = configData;
+
+    // Clear the pool of filter managers so that filters re-init themselves.
+    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+    while (it != d->pooledFilterMgrs.end()) {
+        PooledFilterMgr* pooledFilterMgr = it.value();
+        delete pooledFilterMgr->filterMgr;
+        delete pooledFilterMgr->talkerCode;
+        delete pooledFilterMgr;
+        ++it;
+    }
+    d->pooledFilterMgrs.clear();
+
+    // Create an initial FilterMgr for the pool to save time later.
+    PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
+    FilterMgr* filterMgr = new FilterMgr();
+    filterMgr->init();
+    d->supportsHTML = filterMgr->supportsHTML();
+    pooledFilterMgr->filterMgr = filterMgr;
+    pooledFilterMgr->busy = false;
+    pooledFilterMgr->job = 0;
+    pooledFilterMgr->talkerCode = 0;
+    // Connect signals from FilterMgr.
+    connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
+    connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
+    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+}
+
+void SpeechData::deleteJob(int removeJobNum)
+{
+    if (d->allJobs.contains(removeJobNum)) {
+        SpeechJob* job = d->allJobs.take(removeJobNum);
+        KSpeech::JobPriority priority = job->jobPriority();
+        QString appId = job->appId();
+        delete job;
+        d->jobLists[priority]->removeAll(removeJobNum);
+        getAppData(appId)->jobList()->removeAll(removeJobNum);
+    }
+}
+
+void SpeechData::removeJob(int jobNum)
+{
+    // kDebug() << "Running: SpeechData::removeJob" << endl;
+    SpeechJob* removeJob = findJobByJobNum(jobNum);
+    if (removeJob) {
+        QString removeAppId = removeJob->appId();
+        int removeJobNum = removeJob->jobNum();
+        // If filtering on the job, cancel it.
+        if (d->pooledFilterMgrs.contains(removeJobNum)) {
+            while (PooledFilterMgr* pooledFilterMgr = d->pooledFilterMgrs.take(removeJobNum)) {
                 pooledFilterMgr->busy = false;
                 pooledFilterMgr->job = 0;
-                pooledFilterMgr->partNum = 0;
                 delete pooledFilterMgr->talkerCode;
                 pooledFilterMgr->talkerCode = 0;
                 pooledFilterMgr->filterMgr->stopFiltering();
-                m_pooledFilterMgrs.insert(0, pooledFilterMgr);
+                d->pooledFilterMgrs.insert(0, pooledFilterMgr);
             }
         }
-        // Delete the job.
-        textJobs.removeAll(removeJob);
+        deleteJob(removeJobNum);
     }
-    if (removeJobNum) emit textRemoved(removeAppId, removeJobNum);
 }
 
-/**
-* Given a job and a sequence number, returns the part that sentence is in.
-* If no such job or sequence number, returns 0.
-* @param job            The text job.
-* @param seq            Sequence number of the sentence.  Sequence numbers begin with 1.
-* @return               Part number of the part the sentence is in.  Parts are numbered
-*                       beginning with 1.  If no such job or sentence, returns 0.
-* 
-*/
-int SpeechData::getJobPartNumFromSeq(const mlJob& job, const int seq)
+void SpeechData::removeAllJobs(const QString& appId)
 {
-    int foundPartNum = 0;
-    int desiredSeq = seq;
-    int partNum = 0;
-    // Wait until all filtering has stopped for the job.
-    waitJobFiltering(&job);
-    while (partNum < job.partSeqNums.count())
-    {
-        if (desiredSeq <= job.partSeqNums[partNum])
-        {
-            foundPartNum = partNum + 1;
-            break;
-        }
-        desiredSeq = desiredSeq - job.partSeqNums[partNum];
-        ++partNum;
-    }
-    return foundPartNum;
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager())
+        foreach (SpeechJob* job, d->allJobs)
+            removeJob(job->jobNum());
+    else
+        foreach (int jobNum, *appData->jobList())
+            removeJob(jobNum);
 }
 
-
-/**
-* Delete expired jobs.  At most, one finished job is kept on the queue.
-* @param finishedJobNum Job number of a job that just finished.
-* The just finished job is not deleted, but any other finished jobs are.
-* Does not change the textJobs.current() pointer.
-*/
-void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
+void SpeechData::deleteExpiredJobs(int finishedJobNum)
 {
-    // Save current pointer.
-    typedef QPair<QString, uint> removedJob;
-    typedef QList<removedJob> removedJobsList;
-    removedJobsList removedJobs;
     // Walk through jobs and delete any other finished jobs.
-    int ndx = 0;
-    while (ndx < textJobs.size()) {
-        mlJob* job = textJobs[ndx];
-        if (job->jobNum != finishedJobNum && job->state == KSpeech::jsFinished)
-        {
-            removedJobs.append(removedJob(job->appId, job->jobNum));
-            delete textJobs.takeAt(ndx);
-        } else
-            ndx++;
-    }
-    // Emit signals for removed jobs.
-    for (int i = 0; i < removedJobs.size(); ++i)
-    {
-        QString appId = removedJobs.at(i).first;
-        uint jobNum = removedJobs.at(i).second;
-        textRemoved(appId, jobNum);
-    }
-}
-
-/**
-* Given a Job Number, returns the next speakable text job on the queue.
-* @param prevJobNum       Current job number (which should not be returned).
-* @return                 Pointer to mlJob structure of the first speakable job
-*                         not equal prevJobNum.  If no such job, returns null.
-*
-* Caller must not delete the job.
-*/
-mlJob* SpeechData::getNextSpeakableJob(const uint prevJobNum)
-{
-    QList<mlJob*>::const_iterator it = textJobs.constBegin();
-    QList<mlJob*>::const_iterator itEnd = textJobs.constEnd();
-    for ( ; it != itEnd; ++it)
-    {
-        mlJob* job = *it;
-        if (job->jobNum != prevJobNum)
-            if (job->state == KSpeech::jsSpeakable)
-            {
-                waitJobFiltering(job);
-                return job;
-            }
-    }
-    return 0;
-}
-
-/**
-* Given previous job number and sequence number, returns the next sentence from the
-* text queue.  If no such sentence is available, either because we've run out of
-* jobs, or because all jobs are paused, returns null.
-* @param prevJobNum       Previous Job Number.
-* @param prevSeq          Previous sequency number.
-* @return                 Pointer to n mlText structure containing the next sentence.  If no
-*                         sentence, returns null.
-*
-* Caller is responsible for deleting the returned mlText structure (if not null).
-*/
-mlText* SpeechData::getNextSentenceText(const uint prevJobNum, const uint prevSeq)
-{
-    // kDebug() << "SpeechData::getNextSentenceText running with prevJobNum " << prevJobNum << " prevSeq " << prevSeq << endl;
-    mlText* temp = 0;
-    uint jobNum = prevJobNum;
-    mlJob* job = 0;
-    int seq = prevSeq;
-    ++seq;
-    if (!jobNum)
-    {
-        job = getNextSpeakableJob(jobNum);
-        if (job) seq =+ job->seq;
-    } else
-        job = findJobByJobNum(prevJobNum);
-        if (!job)
-        {
-            job = getNextSpeakableJob(jobNum);
-            if (job) seq =+ job->seq;
-        }
-        else
-        {
-            if ((job->state != KSpeech::jsSpeakable) && (job->state != KSpeech::jsSpeaking))
-            {
-                job = getNextSpeakableJob(job->jobNum);
-                if (job) seq =+ job->seq;
+    foreach (TJobListPtr jobList, d->jobLists) {
+        foreach (int jobNum, *jobList) {
+            if (jobNum != finishedJobNum) {
+                SpeechJob* job = d->allJobs[jobNum];
+                if (KSpeech::jsFinished == job->state())
+                    deleteJob(jobNum);
             }
         }
-    if (job)
-    {
-        // If we run out of sentences in the job, move on to next job.
-        jobNum = job->jobNum;
-        if (seq > job->sentences.count()) 
-        {
-            job = getNextSpeakableJob(jobNum);
-            if (job) seq =+ job->seq;
+    }
+}
+
+SpeechJob* SpeechData::getNextSpeakableJob(KSpeech::JobPriority priority)
+{
+    foreach (int jobNum, *d->jobLists[priority]) {
+        SpeechJob* job = d->allJobs[jobNum];
+        if (!d->appData[job->appId()]->isApplicationPaused()) {
+            switch (job->state()) {
+                case KSpeech::jsQueued:
+                    break;
+                case KSpeech::jsFiltering:
+                    waitJobFiltering(job);
+                    return job;
+                case KSpeech::jsSpeakable:
+                    return job;
+                case KSpeech::jsSpeaking:
+                    if (job->seq() < job->sentenceCount())
+                        return job;
+                    break;
+                case KSpeech::jsPaused:
+                case KSpeech::jsInterrupted:
+                case KSpeech::jsFinished:
+                case KSpeech::jsDeleted:
+                    break;
+            }
         }
     }
-    if (job)
-    {
-        if (seq == 0) seq = 1;
-        temp = new mlText;
-        temp->text = job->sentences[seq - 1];
-        temp->appId = job->appId;
-        temp->talker = job->talker;
-        temp->jobNum = job->jobNum;
-        temp->seq = seq;
-        // kDebug() << "SpeechData::getNextSentenceText: return job number " << temp->jobNum << " seq " << temp->seq << " sentence count = " << job->sentences.count() << endl;
-    } // else kDebug() << "SpeechData::getNextSentenceText: no more sentences in queue" << endl;
-    return temp;
+    return NULL;
 }
 
-/**
-* Given a Job Number, sets the current sequence number of the job.
-* @param jobNum          Job Number.
-* @param seq             Sequence number.
-* If for some reason, the job does not exist, nothing happens.
-*/
-void SpeechData::setJobSequenceNum(const uint jobNum, const uint seq)
+void SpeechData::setJobSequenceNum(int jobNum, int seq)
 {
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job) job->seq = seq;    
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) job->setSeq(seq);    
 }
 
-/**
-* Given a Job Number, returns the current sequence number of the job.
-* @param jobNum         Job Number.
-* @return               Sequence number of the job.  If no such job, returns 0.
-*/
-uint SpeechData::getJobSequenceNum(const uint jobNum)
+int SpeechData::jobSequenceNum(int jobNum) const
 {
-    mlJob* job = findJobByJobNum(jobNum);
+    SpeechJob* job = findJobByJobNum(jobNum);
     if (job)
-        return job->seq;
+        return job->seq();
     else
         return 0;
 }
 
-/**
-* Sets the GREP pattern that will be used as the sentence delimiter.
-* @param delimiter      A valid GREP pattern.
-* @param appId          The DBUS senderId of the application.  NULL if kttsd.
-*
-* The default delimiter is
-  @verbatim
-     ([\\.\\?\\!\\:\\;])\\s
-  @endverbatim
-*
-* Note that backward slashes must be escaped.
-*
-* Changing the sentence delimiter does not affect other applications.
-* @see sentenceparsing
-*/
-void SpeechData::setSentenceDelimiter(const QString &delimiter, const QString appId)
+int SpeechData::sentenceCount(int jobNum)
 {
-    sentenceDelimiters[appId] = delimiter;
-}
-
-/**
-* Get the number of sentences in a text job.
-* (thread safe)
-* @param jobNum         Job number of the text job.
-* @return               The number of sentences in the job.  -1 if no such job.
-*
-* The sentences of a job are given sequence numbers from 1 to the number returned by this
-* method.  The sequence numbers are emitted in the sentenceStarted and sentenceFinished signals.
-*/
-int SpeechData::getTextCount(const uint jobNum)
-{
-    mlJob* job = findJobByJobNum(jobNum);
+    SpeechJob* job = findJobByJobNum(jobNum);
     int temp;
-    if (job)
-    {
+    if (job) {
         waitJobFiltering(job);
-        temp = job->sentences.count();
+        temp = job->sentenceCount();
     } else
         temp = -1;
     return temp;
 }
 
-/**
-* Get the number of jobs in the text job queue.
-* (thread safe)
-* @return               Number of text jobs in the queue.  0 if none.
-*/
-uint SpeechData::getTextJobCount()
+int SpeechData::jobCount(const QString& appId, KSpeech::JobPriority priority) const
 {
-    return textJobs.count();
+    AppData* appData = getAppData(appId);
+    // If System Manager app, return count of all jobs for all apps.
+    if (appData->isSystemManager())
+        return d->allJobs.count();
+    else {
+        if (KSpeech::jpAll == priority)
+            // Return count of all jobs for this app.
+            return appData->jobList()->count();
+        else {
+            // Return count of jobs for this app of the specified priority.
+            int cnt = 0;
+            foreach (int jobNum, *d->jobLists[priority]) {
+                SpeechJob* job = d->allJobs[jobNum];
+                if (job->appId() == appId)
+                    ++cnt;
+            }
+            return cnt;
+        }
+    }
 }
 
-/**
-* Get a comma-separated list of text job numbers in the queue.
-* @return               Comma-separated list of text job numbers in the queue.
-*/
-QString SpeechData::getTextJobNumbers()
+QStringList SpeechData::jobNumbers(const QString& appId, KSpeech::JobPriority priority) const
 {
-    QString jobs;
-    QList<mlJob*>::const_iterator it = textJobs.constBegin();
-    QList<mlJob*>::const_iterator itEnd = textJobs.constEnd();
-    for (; it != itEnd; ++it)
-    {
-        mlJob* job = *it;
-        if (!jobs.isEmpty()) jobs.append(",");
-        jobs.append(QString::number(job->jobNum));
+    QStringList jobs;
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager()) {
+        if (KSpeech::jpAll == priority) {
+            // Return job numbers for all jobs.
+            foreach (int jobNum, d->allJobs.keys())
+                jobs.append(QString::number(jobNum));
+        } else {
+            // Return job numbers for all jobs of specified priority.
+            foreach (int jobNum, *d->jobLists[priority])
+                jobs.append(QString::number(jobNum));
+        }
+    } else {
+        if (KSpeech::jpAll == priority) {
+            // Return job numbers for all jobs for this app.
+            foreach (int jobNum, *appData->jobList())
+                jobs.append(QString::number(jobNum));
+        } else {
+            // Return job numbers for this app's jobs of the specified priority.
+            foreach (int jobNum, *d->jobLists[priority]) {
+                SpeechJob* job = d->allJobs[jobNum];
+                if (job->appId() == appId)
+                    jobs.append(QString::number(jobNum));
+            }
+        }
     }
+    // kDebug() << "SpeechData::jobNumbers: appId = " << appId << " priority = " << priority
+    //     << " jobs = " << jobs << endl;
     return jobs;
 }
 
-/**
-* Get the state of a text job.
-* (thread safe)
-* @param jobNum         Job number of the text job.
-* @return               State of the job. -1 if invalid job number.
-*/
-int SpeechData::getTextJobState(const uint jobNum)
+int SpeechData::jobState(int jobNum) const
 {
-    mlJob* job = findJobByJobNum(jobNum);
+    SpeechJob* job = findJobByJobNum(jobNum);
     int temp;
     if (job)
-        temp = (int)job->state;
+        temp = (int)job->state();
     else
         temp = -1;
     return temp;
 }
 
-/**
-* Set the state of a text job.
-* @param jobNum            Job Number of the job.
-* @param state             New state for the job.
-*
-* If the new state is Finished, deletes other expired jobs.
-*
-**/
-void SpeechData::setTextJobState(const uint jobNum, const KSpeech::kttsdJobState state)
+QByteArray SpeechData::jobInfo(int jobNum)
 {
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job)
-    {
-        job->state = state;
-        if (state == KSpeech::jsFinished) deleteExpiredJobs(jobNum);
-    }
-}
-
-/**
-* Get information about a text job.
-* @param jobNum         Job number of the text job.
-* @return               A QDataStream containing information about the job.
-*                       Blank if no such job.
-*
-* The stream contains the following elements:
-*   - int state         Job state.
-*   - QString appId     DBUS senderId of the application that requested the speech job.
-*   - QString talker    Language code in which to speak the text.
-*   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
-*   - int sentenceCount Total number of sentences in the job.
-*   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
-*   - int partCount     Total number of parts in the job.
-*
-* Note that sequence numbers apply to the entire job.
-* They do not start from 1 at the beginning of each part.
-*
-* The following sample code will decode the stream:
-          @verbatim
-            QByteArray jobInfo = getTextJobInfo(jobNum);
-            QDataStream stream(jobInfo, QIODevice::ReadOnly);
-            int state;
-            QString appId;
-            QString talker;
-            int seq;
-            int sentenceCount;
-            int partNum;
-            int partCount;
-            stream >> state;
-            stream >> appId;
-            stream >> talker;
-            stream >> seq;
-            stream >> sentenceCount;
-            stream >> partNum;
-            stream >> partCount;
-          @endverbatim
-*/
-QByteArray SpeechData::getTextJobInfo(const uint jobNum)
-{
-    mlJob* job = findJobByJobNum(jobNum);
-    QByteArray temp;
-    if (job)
-    {
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) {
         waitJobFiltering(job);
-        QDataStream stream(&temp, QIODevice::WriteOnly);
-        stream << job->state;
-        stream << job->appId;
-        stream << job->talker;
-        stream << job->seq;
-        stream << job->sentences.count();
-        stream << getJobPartNumFromSeq(*job, job->seq);
-        stream << job->partSeqNums.count();
+        QByteArray temp = job->serialize();
+        QDataStream stream(&temp, QIODevice::Append);
+        stream << getAppData(job->appId())->applicationName();
+        return temp;
+    } else {
+        kDebug() << "SpeechData::jobInfo: request for job info on non-existent jobNum = " << jobNum << endl;
+        return QByteArray();
     }
-    return temp;
 }
 
-/**
-* Return a sentence of a job.
-* @param jobNum         Job number of the text job.
-* @param seq            Sequence number of the sentence.
-* @return               The specified sentence in the specified job.  If no such
-*                       job or sentence, returns "".
-*/
-QString SpeechData::getTextJobSentence(const uint jobNum, const uint seq /*=1*/)
+QString SpeechData::jobSentence(int jobNum, int seq)
 {
-    mlJob* job = findJobByJobNum(jobNum);
-    QString temp;
-    if (job)
-    {
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) {
         waitJobFiltering(job);
-        temp = job->sentences[seq - 1];
-    }
-    return temp;
+        if (seq <= job->sentenceCount())
+            return job->sentences()[seq - 1];
+        else
+            return QString();
+    } else
+        return QString();
 }
 
-/**
-* Change the talker for a text job.
-* @param jobNum         Job number of the text job.
-*                       If zero, applies to the last job queued by the application,
-*                       but if no such job, applies to the last job queued by any application.
-* @param talker         New code for the talker to do the speaking.  Example "en".
-*                       If NULL, defaults to the user's default talker.
-*                       If no plugin has been configured for the specified Talker code,
-*                       defaults to the closest matching talker.
-*/
-void SpeechData::changeTextTalker(const QString &talker, uint jobNum)
+void SpeechData::setTalker(int jobNum, const QString &talker)
 {
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job) job->talker = talker;
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) job->setTalker(talker);
 }
 
-/**
-* Move a text job down in the queue so that it is spoken later.
-* @param jobNum         Job number of the text job.
-*/
-void SpeechData::moveTextLater(const uint jobNum)
+void SpeechData::moveJobLater(int jobNum)
 {
     // kDebug() << "Running: SpeechData::moveTextLater" << endl;
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job)
-    {
+    if (d->allJobs.contains(jobNum)) {
+        KSpeech::JobPriority priority = d->allJobs[jobNum]->jobPriority();
+        TJobListPtr jobList = d->jobLists[priority];
         // Get index of the job.
-        uint index = textJobs.indexOf(job);
+        uint index = jobList->indexOf(jobNum);
         // Move job down one position in the queue.
         // kDebug() << "In SpeechData::moveTextLater, moving jobNum " << movedJobNum << endl;
-        textJobs.insert(index + 2, job);
-        textJobs.takeAt(index);
+        jobList->insert(index + 2, jobNum);
+        jobList->takeAt(index);
     }
 }
 
-/**
-* Jump to the first sentence of a specified part of a text job.
-* @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
-* @param jobNum         Job number of the text job.
-* @return               Part number of the part actually jumped to.
-*
-* If partNum is greater than the number of parts in the job, jumps to last part.
-* If partNum is 0, does nothing and returns the current part number.
-* If no such job, does nothing and returns 0.
-* Does not affect the current speaking/not-speaking state of the job.
-*/
-int SpeechData::jumpToTextPart(const int partNum, const uint jobNum)
-{
-    // kDebug() << "Running: SpeechData::jumpToTextPart" << endl;
-    int newPartNum = 0;
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job)
-    {
-        waitJobFiltering(job);
-        if (partNum > 0)
-        {
-            newPartNum = partNum;
-            int partCount = job->partSeqNums.count();
-            if (newPartNum > partCount) newPartNum = partCount;
-            if (newPartNum > 1)
-                job->seq = job->partSeqNums[newPartNum - 1];
-            else
-                job->seq = 0;
-        }
-        else
-            newPartNum = getJobPartNumFromSeq(*job, job->seq);
-    }
-    return newPartNum;
-}
-
-/**
-* Advance or rewind N sentences in a text job.
-* @param n              Number of sentences to advance (positive) or rewind (negative)
-*                       in the job.
-* @param jobNum         Job number of the text job.
-* @return               Sequence number of the sentence actually moved to.  Sequence numbers
-*                       are numbered starting at 1.
-*
-* If no such job, does nothing and returns 0.
-* If n is zero, returns the current sequence number of the job.
-* Does not affect the current speaking/not-speaking state of the job.
-*/
-uint SpeechData::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
+int SpeechData::moveRelSentence(int jobNum, int n)
 {
     // kDebug() << "Running: SpeechData::moveRelTextSentence" << endl;
     int newSeqNum = 0;
-    mlJob* job = findJobByJobNum(jobNum);
-    if (job)
-    {
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) {
         waitJobFiltering(job);
-        int oldSeqNum = job->seq;
+        int oldSeqNum = job->seq();
         newSeqNum = oldSeqNum + n;
-        if (n != 0)
-        {
+        if (0 != n) {
             if (newSeqNum < 0) newSeqNum = 0;
-            int sentenceCount = job->sentences.count();
+            int sentenceCount = job->sentenceCount() + 1;
             if (newSeqNum > sentenceCount) newSeqNum = sentenceCount;
-            job->seq = newSeqNum;
+            job->setSeq(newSeqNum);
+            // If job was previously finished, but is now rewound, set state to speakable.
+            // If job was not finished, but now is past end, set state to finished.
+            if (KSpeech::jsFinished == job->state()) {
+                if (newSeqNum < sentenceCount)
+                    job->setState(KSpeech::jsSpeakable);
+            } else {
+                if (newSeqNum == sentenceCount)
+                    job->setState(KSpeech::jsFinished);
+            }
         }
     }
     return newSeqNum;
 }
 
-/**
-* Assigns a FilterMgr to a job and starts filtering on it.
-*/
-void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
+void SpeechData::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
 {
-    uint jobNum = job->jobNum;
-    int partNum = job->partCount;
-    // kDebug() << "SpeechData::startJobFiltering: jobNum = " << jobNum << " partNum = " << partNum << " text.left(500) = " << text.left(500) << endl;
+    job->setState(KSpeech::jsFiltering);
+    int jobNum = job->jobNum();
+    // kDebug() << "SpeechData::startJobFiltering: jobNum = " << jobNum << " text.left(500) = " << text.left(500) << endl;
     PooledFilterMgr* pooledFilterMgr = 0;
-    if (m_pooledFilterMgrs.contains(jobNum)) return;
+    if (d->pooledFilterMgrs.contains(jobNum)) return;
     // Find an idle FilterMgr, if any.
-    // If filtering is already in progress for this job and part, do nothing.
-    QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
-    while (it != m_pooledFilterMgrs.end()) {
-        if (!it.value()->busy)
-        {
-            if ((it.value()->job && it.value()->job->jobNum == jobNum) && (it.value()->partNum == partNum))
+    // If filtering is already in progress for this job, do nothing.
+    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+    while (it != d->pooledFilterMgrs.end()) {
+        if (!it.value()->busy) {
+            if (it.value()->job && it.value()->job->jobNum() == jobNum)
                 return;
         } else {
             if (!it.value()->job && !pooledFilterMgr)
@@ -1146,51 +630,42 @@ void SpeechData::startJobFiltering(mlJob* job, const QString& text, bool noSBD)
         ++it;
     }
     // Create a new FilterMgr if needed and add to pool.
-    if (!pooledFilterMgr)
-    {
-         // kDebug() << "SpeechData::startJobFiltering: adding new pooledFilterMgr for job " << jobNum << " part " << partNum << endl;
+    if (!pooledFilterMgr) {
+         // kDebug() << "SpeechData::startJobFiltering: adding new pooledFilterMgr for job " << jobNum << endl;
         pooledFilterMgr = new PooledFilterMgr();
         FilterMgr* filterMgr = new FilterMgr();
-        filterMgr->init(config, "General");
+        filterMgr->init();
         pooledFilterMgr->filterMgr = filterMgr;
         // Connect signals from FilterMgr.
         connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
         connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
-        m_pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
+        d->pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
     }
-    // else kDebug() << "SpeechData::startJobFiltering: re-using idle pooledFilterMgr for job " << jobNum << " part " << partNum << endl;
+    // else kDebug() << "SpeechData::startJobFiltering: re-using idle pooledFilterMgr for job " << jobNum << endl;
     // Flag the FilterMgr as busy and set it going.
     pooledFilterMgr->busy = true;
     pooledFilterMgr->job = job;
-    pooledFilterMgr->partNum = partNum;
     pooledFilterMgr->filterMgr->setNoSBD( noSBD );
     // Get TalkerCode structure of closest matching Talker.
-    pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
-    // Pass Sentence Boundary regular expression (if app overrode default);
-    if (sentenceDelimiters.find(job->appId) != sentenceDelimiters.end())
-        pooledFilterMgr->filterMgr->setSbRegExp(sentenceDelimiters[job->appId]);
-    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, job->appId);
+    pooledFilterMgr->talkerCode = d->talkerMgr->talkerToTalkerCode(job->talker());
+    // Pass Sentence Boundary regular expression.
+    AppData* appData = getAppData(job->appId());
+    pooledFilterMgr->filterMgr->setSbRegExp(appData->sentenceDelimiter());
+    kDebug() << "SpeechData::startJobFiltering: job = " << job->jobNum() << " NoSBD = "
+        << noSBD << " sentenceDelimiter = " << appData->sentenceDelimiter() << endl;
+    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, appData->applicationName());
 }
 
-/**
-* Waits for filtering to be completed on a job.
-* This is typically called because an app has requested job info that requires
-* filtering to be completed, such as getJobInfo.
-*/
-void SpeechData::waitJobFiltering(const mlJob* job)
+void SpeechData::waitJobFiltering(const SpeechJob* job)
 {
-#if NO_FILTERS
-    return;
-#endif
-    int jobNum = job->jobNum;
+    int jobNum = job->jobNum();
     bool waited = false;
     bool notOptimum = false;
-    if (!m_pooledFilterMgrs.contains(jobNum)) return;
-    QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.find(jobNum);
-    while (it != m_pooledFilterMgrs.end() && it.key() == jobNum) {
+    if (!d->pooledFilterMgrs.contains(jobNum)) return;
+    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.find(jobNum);
+    while (it != d->pooledFilterMgrs.end() && it.key() == jobNum) {
         PooledFilterMgr* pooledFilterMgr = it.value();
-        if (pooledFilterMgr->busy)
-        {
+        if (pooledFilterMgr->busy) {
             if (!pooledFilterMgr->filterMgr->noSBD())
                 notOptimum = true;
             pooledFilterMgr->filterMgr->waitForFinished();
@@ -1202,93 +677,94 @@ void SpeechData::waitJobFiltering(const mlJob* job)
         if (notOptimum)
             kDebug() << "SpeechData::waitJobFiltering: Waited for filtering to finish on job "
                 << jobNum << ".  Not optimium.  "
-                << "Try waiting for textSet signal before querying for job information." << endl;
+                << "Try waiting for jobStateChanged signal with jsSpeakable before querying for job information." << endl;
         doFiltering();
     }
 }
 
-/**
-* Processes filters by looping across the pool of FilterMgrs.
-* As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
-*/
 void SpeechData::doFiltering()
 {
     // kDebug() << "SpeechData::doFiltering: Running." << endl;
-    kDebug() << "SpeechData::doFiltering: Scanning " << m_pooledFilterMgrs.count() << " pooled filter managers." << endl;
+    kDebug() << "SpeechData::doFiltering: Scanning " << d->pooledFilterMgrs.count() << " pooled filter managers." << endl;
     bool again = true;
-    while (again)
-    {
+    bool filterFinished = false;
+    while (again) {
         again = false;
-        QMultiHash<int, PooledFilterMgr*>::iterator it = m_pooledFilterMgrs.begin();
+        QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
         QMultiHash<int, PooledFilterMgr*>::iterator nextIt;
-        while (it != m_pooledFilterMgrs.end()) {
+        while (it != d->pooledFilterMgrs.end()) {
             nextIt = it;
             ++nextIt;
             PooledFilterMgr* pooledFilterMgr = it.value();
             // If FilterMgr is busy, see if it is now finished.
             Q_ASSERT(pooledFilterMgr);
-            if (pooledFilterMgr->busy)
-            {
+            if (pooledFilterMgr->busy) {
                 FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
-                if (filterMgr->getState() == FilterMgr::fsFinished)
-                {
-                    mlJob* job = pooledFilterMgr->job;
-                    kDebug() << "SpeechData::doFiltering: filter finished, jobNum = " << job->jobNum << " partNum = " << pooledFilterMgr->partNum << endl;
-                    // We have to retrieve parts in order, but parts may not be completed in order.
-                    // See if this is the next part we need.
-                    if ((int)job->partSeqNums.count() == (pooledFilterMgr->partNum - 1))
-                    {
-                        pooledFilterMgr->busy = false;
-                        // Retrieve text from FilterMgr.
-                        QString text = filterMgr->getOutput();
-                        kDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
-                        // kDebug() << "SpeechData::doFiltering: filtered text: " << text << endl;
-                        filterMgr->ackFinished();
-                        // Convert the TalkerCode back into string.
-                        job->talker = pooledFilterMgr->talkerCode->getTalkerCode();
-                        // TalkerCode object no longer needed.
-                        delete pooledFilterMgr->talkerCode;
-                        pooledFilterMgr->talkerCode = 0;
-                        if (filterMgr->noSBD()) {
-                            job->sentences.clear();
-                            job->sentences.append(text);
-                        } else {
-                            // Split the text into sentences and store in the job.
-                            // The SBD plugin does all the real sentence parsing, inserting tabs at each
-                            // sentence boundary.
-                            QStringList sentences = text.split( "\t", QString::SkipEmptyParts);
-                            int sentenceCount = job->sentences.count();
-                            job->sentences += sentences;
-                            job->partSeqNums.append(sentenceCount + sentences.count());
-                        }
-                        int partNum = job->partSeqNums.count();
-                        // Clean up.
-                        pooledFilterMgr->job = 0;
-                        pooledFilterMgr->partNum = 0;
-                        // Re-index pool of FilterMgrs;
-                        m_pooledFilterMgrs.erase(it);
-                        m_pooledFilterMgrs.insert(0, pooledFilterMgr);
-                        // Emit signal.
-                        if (!filterMgr->noSBD())
-                        {
-                            if (partNum == 1)
-                                emit textSet(job->appId, job->jobNum);
-                            else
-                                emit textAppended(job->appId, job->jobNum, partNum);
-                        }
+                if (FilterMgr::fsFinished == filterMgr->getState()) {
+                    filterFinished = true;
+                    SpeechJob* job = pooledFilterMgr->job;
+                    kDebug() << "SpeechData::doFiltering: filter finished, jobNum = " << job->jobNum() << endl;
+                    pooledFilterMgr->busy = false;
+                    // Retrieve text from FilterMgr.
+                    QString text = filterMgr->getOutput();
+                    kDebug() << "SpeechData::doFiltering: text.left(500) = " << text.left(500) << endl;
+                    // kDebug() << "SpeechData::doFiltering: filtered text: " << text << endl;
+                    filterMgr->ackFinished();
+                    // Convert the TalkerCode back into string.
+                    job->setTalker(pooledFilterMgr->talkerCode->getTalkerCode());
+                    // TalkerCode object no longer needed.
+                    delete pooledFilterMgr->talkerCode;
+                    pooledFilterMgr->talkerCode = 0;
+                    if (filterMgr->noSBD()) {
+                        job->setSentences(QStringList(text));
                     } else {
-                        // A part is ready, but need to first process a finished preceeding part
-                        // that follows this one in the pool of filter managers.
-                        again = true;
-                        kDebug() << "SpeechData::doFiltering: filter is finished, but must wait for earlier part to finish filter, job = " << pooledFilterMgr->job->jobNum << endl;
+                        // Split the text into sentences and store in the job.
+                        // The SBD plugin does all the real sentence parsing, inserting tabs at each
+                        // sentence boundary.
+                        QStringList sentences = text.split( "\t", QString::SkipEmptyParts);
+                        job->setSentences(sentences);
                     }
+                    // Clean up.
+                    pooledFilterMgr->job = 0;
+                    // Re-index pool of FilterMgrs;
+                    d->pooledFilterMgrs.erase(it);
+                    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+                    // Emit signal.
+                    job->setState(KSpeech::jsSpeakable);
                 }
-                else kDebug() << "SpeechData::doFiltering: filter for job " << pooledFilterMgr->job->jobNum << " is busy." << endl;
+                else kDebug() << "SpeechData::doFiltering: filter for job " << pooledFilterMgr->job->jobNum() << " is busy." << endl;
             }
             else kDebug() << "SpeechData::doFiltering: filter is idle" << endl;
             it = nextIt;
         }
     }
+    if (filterFinished)
+        emit filteringFinished();
+}
+
+void SpeechData::pause(const QString& appId)
+{
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager()) {
+        foreach (AppData* app, d->appData)
+            app->setIsApplicationPaused(true);
+    } else
+        appData->setIsApplicationPaused(true);
+}
+
+void SpeechData::resume(const QString& appId)
+{
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager()) {
+        foreach (AppData* app, d->appData)
+            app->setIsApplicationPaused(false);
+    } else
+        appData->setIsApplicationPaused(false);
+}
+
+bool SpeechData::isApplicationPaused(const QString& appId)
+{
+    return getAppData(appId)->isApplicationPaused();
 }
 
 void SpeechData::slotFilterMgrFinished()
@@ -1301,4 +777,3 @@ void SpeechData::slotFilterMgrStopped()
 {
     doFiltering();
 }
-

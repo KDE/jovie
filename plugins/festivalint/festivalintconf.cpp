@@ -549,7 +549,7 @@ void FestivalIntConf::slotTest_clicked()
         connect (m_festProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (locateLocal("tmp", "festivalintplugin-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "festivalintplugin-"), ".wav");
     // FIXME: Temporary workaround for KTempFile problem.
     // QString tmpWaveFile = tempFile.file()->name();
     // tempFile.close();

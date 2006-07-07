@@ -1,0 +1,5 @@
+The kspeech.h file in this directory is a copy from
+kdelibs/interfaces/kspeech/
+
+If anyone has can offer a way to eliminate it and build
+using the copy in kdelibs, I'd be grateful..grc.

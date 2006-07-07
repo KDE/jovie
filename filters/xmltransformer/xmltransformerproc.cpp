@@ -107,7 +107,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  *                          Also useful for hints about how to do the filtering.
  */
 /*virtual*/ QString XmlTransformerProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QByteArray& appId)
+    const QString& appId)
 {
     // kDebug() << "XmlTransformerProc::convert: Running." << endl;
     // If not properly configured, do nothing.
@@ -141,7 +141,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * program must call @ref ackFinished to acknowledge the conversion.
  */
 /*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
-    const QByteArray& appId)
+    const QString& appId)
 {
     m_wasModified = false;
 

@@ -31,7 +31,6 @@
 #include <QRegExp>
 #include <QStringList>
 #include <QList>
-#include <QByteArray>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -71,7 +70,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QByteArray& appId);
+    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QString& appId);
 
     /**
      * Did this filter do anything?  If the filter returns the input as output

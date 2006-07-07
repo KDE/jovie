@@ -67,26 +67,27 @@ FilterMgr::~FilterMgr()
  * @param config          Settings object.
  * @return                False if FilterMgr is not ready to filter.
  */
-bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
+bool FilterMgr::init()
 {
     // Load each of the filters and initialize.
-    config->setGroup("General");
-    QStringList filterIDsList = config->readEntry("FilterIDs", QStringList(), ',');
+    KConfig config("kttsdrc");
+    config.setGroup("General");
+    QStringList filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
     // kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
     {
-        config->setGroup("Filter_1");
-        config->writeEntry("DesktopEntryName", "kttsd_sbdplugin");
-        config->writeEntry("Enabled", true);
-        config->writeEntry("IsSBD", true);
-        config->writeEntry("MultiInstance", true);
-        config->writeEntry("SentenceBoundary", "\\1\\t");
-        config->writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
-        config->writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
-        config->setGroup("General");
-        config->writeEntry("FilterIDs", "1");
-        filterIDsList = config->readEntry("FilterIDs", QStringList(), ',');
+        config.setGroup("Filter_1");
+        config.writeEntry("DesktopEntryName", "kttsd_sbdplugin");
+        config.writeEntry("Enabled", true);
+        config.writeEntry("IsSBD", true);
+        config.writeEntry("MultiInstance", true);
+        config.writeEntry("SentenceBoundary", "\\1\\t");
+        config.writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
+        config.writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
+        config.setGroup("General");
+        config.writeEntry("FilterIDs", "1");
+        filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
     }
     if ( !filterIDsList.isEmpty() )
     {
@@ -95,8 +96,8 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
         {
             QString filterID = *it;
             QString groupName = "Filter_" + filterID;
-            config->setGroup( groupName );
-            QString desktopEntryName = config->readEntry( "DesktopEntryName" );
+            config.setGroup( groupName );
+            QString desktopEntryName = config.readEntry( "DesktopEntryName" );
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
@@ -104,23 +105,23 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString filterPlugInName = config->readEntry("PlugInName", QString());
+                QString filterPlugInName = config.readEntry("PlugInName", QString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
-                if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
+                if (!desktopEntryName.isEmpty()) config.writeEntry("DesktopEntryName", desktopEntryName);
             }
-            if (config->readEntry("Enabled",QVariant(false)).toBool()  || config->readEntry("IsSBD",QVariant(false)).toBool())
+            if (config.readEntry("Enabled",QVariant(false)).toBool()  || config.readEntry("IsSBD",QVariant(false)).toBool())
             {
                 // kDebug() << "FilterMgr::init: filterID = " << filterID << endl;
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
                 if ( filterProc )
                 {
-                    filterProc->init( config, groupName );
+                    filterProc->init( &config, groupName );
                     m_filterList.append( filterProc );
                 }
-                if (config->readEntry("DocType").contains("html") ||
-                    config->readEntry("RootElement").contains("html"))
+                if (config.readEntry("DocType").contains("html") ||
+                    config.readEntry("RootElement").contains("html"))
                     m_supportsHTML = true;
             }
         }
@@ -230,6 +231,8 @@ void FilterMgr::nextFilter()
     m_filterProc = m_filterList.at(m_filterIndex);
     if ( m_noSBD && m_filterProc->isSBD() )
     {
+        // kDebug() << "FilterMgr::nextFilter: skipping plugin " << m_filterIndex 
+        //     << " because it is an SBD filter and noSBD is true." << endl;
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
         QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
@@ -250,6 +253,7 @@ void FilterMgr::nextFilter()
                 nextFilter();
             }
         } else {
+            // kDebug() << "FilterMgr::nextFilter: calling convert on filter " << m_filterIndex << endl;
             m_text = m_filterProc->convert( m_text, m_talkerCode, m_appId );
             nextFilter();
         }
@@ -372,6 +376,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
              &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
+                // kDebug() << "FilterMgr::loadFilterPlugin: plugin " << offers[0]->library().toLatin1() << " loaded successfully." << endl;
                 return plugIn;
             } else {
                 // Something went wrong, returning null.

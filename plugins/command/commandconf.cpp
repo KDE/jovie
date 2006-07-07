@@ -143,7 +143,7 @@ void CommandConf::slotCommandTest_clicked()
     }
 
     // Create a temp file name for the wave file.
-    KTempFile tempFile (locateLocal("tmp", "commandplugin-"), ".wav");
+    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "commandplugin-"), ".wav");
     QString tmpWaveFile = tempFile.file()->fileName();
     tempFile.close();
 

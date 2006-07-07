@@ -1,3 +1,50 @@
+_ A GPLed French language synth is available at
+      http://www.cam.org/~nico/cicero
+      
+_ Possible bug. "<" characters not being properly stored in the .xml file?
+
+_ DBUS Interface
+    _ Refactor so that each job is an object and emits signals from
+      object path /org/kde/KSpeechJob_NN.  Apps can receive these signals
+      using
+      
+          QDBus::sessionBus().connect("org.kde.kttsd", QString(),
+          "org.kde.KSpeechJob", "signalname", this, SLOT(slotName()));
+        
+      Thiago tells me that the QString() for object path name will
+      filter on all objects with interface org.kde.KSpeechJob.
+      This is because QtDBus receives all signals.
+      
+      <thiago> right now, I gave it only two rules: "all signals"
+      and "everything whose destination is me"
+      
+      and then filters on what the connect specifies.
+      Once in place, the only signals emitted by KSpeech will be
+      kttsdStarted and kttsdExiting.  Everything else will come
+      from the jobs.  In theory, this means that apps that aren't
+      interesting in tracking jobs don't need to receive those events,
+      but OTOH, if an app is receiving any events, then it
+      chances are it is interested in most/all of the events.
+      The only real advantage to this change is that apps that are
+      interesting in tracking only a single job can receive those
+      signals and don't have to check the appId (assuming they
+      created the job in the first place).  Is this advantage
+      worth the pain of refactoring kttsd?  Thoughts:
+          _ I want to make everything (text, messages, warnings, and SR)
+            jobs so that KttsJobMgr can track all speech.
+          _ There's already an mlTextJob structure, so converting that
+            to an object won't be that hard.
+      
+    _ Add setFriendlyName(QString &name) to interface and
+      QString getFriendlyName(QString &appId) so that friendly names
+      can be displayed in KttsJobMgr.  
+      
+      <thiago> hint: connect to the nameOwnerChange signal from
+      QDBus::sessionBus().busService() to find out when the application
+      :1.120 goes away, so that you can release the resource
+        
+KDE4 above this line
+-------------------------------------------------------------------------
 _ Filters:
     _ XHTMLtoSSML stylesheet needs work to provide better mappings for most web pages.
     _ Add KNewStuff capability for folks to upload/download filter configs.

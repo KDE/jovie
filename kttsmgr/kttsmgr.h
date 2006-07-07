@@ -47,7 +47,8 @@ class KttsMgrTray: public KSystemTray
         QString getStatus();
 
     protected Q_SLOTS:
-        Q_ASYNC void textFinished(const QString& appId, uint jobNum);
+        Q_SCRIPTABLE void jobStateChanged(const QString &appId, int jobNum, int state);
+
         bool event(QEvent *event);
         void mousePressEvent(QMouseEvent* ev);
         virtual void contextMenuAboutToShow(KMenu* menu);

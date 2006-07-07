@@ -1,17 +1,14 @@
 /*************************************************** vim:set ts=4 sw=4 sts=4:
   This contains the SpeechData class which is in charge of maintaining
-  all the data on the memory.
-  It maintains queues manages the text.
+  all the speech data.
   We could say that this is the common repository between the KTTSD class
-  (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
+  (dbus service) and the Speaker class (speaker, loads plug ins, call plug in
   functions)
   -------------------
   Copyright:
-  (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
-  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
-  Original author: José Pablo Ezequiel "Pupeno" Fernández
+  Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -32,49 +29,26 @@
 #define _SPEECHDATA_H_
 
 // Qt includes.
-#include <QQueue>
-#include <QList>
-#include <QMultiHash>
 #include <QString>
 #include <QStringList>
+#include <QByteArray>
+#include <QHash>
+#include <QList>
+#include <QMultiHash>
 #include <QMap>
 
 // KDE includes.
 #include <kconfig.h>
+#include <kspeech.h>
 
-// KTTS includes.
-#include <kspeechdef.h>
-#include <talkercode.h>
-#include <filtermgr.h>
+// KTTSD includes.
+#include "speechjob.h"
+#include "talkercode.h"
+#include "filtermgr.h"
+#include "appdata.h"
+#include "configdata.h"
 
 class TalkerMgr;
-
-/**
-* Struct containing a text cell, for messages, warnings, and texts.
-* Contains the text itself, the associated talker, 
-* the ID of the application that requested it be spoken, and a sequence number.
-*/
-struct mlText{
-    QString talker;              /* Requested Talker code for the sentence. */
-    QString text;                /* Text of sentence. */
-    QString appId;               /* DBUS senderId of the application that requested the speech. */
-    uint jobNum;                 /* Text jobNum.  Only applies to text messages; not warning and messages. */
-    uint seq;                    /* Sequence number. */
-};
-
-/**
- * Struct containing a text job.
- */
-struct mlJob {
-    uint jobNum;                 /* Job number. */
-    KSpeech::kttsdJobState state; /* Job state. */
-    QString appId;               /* DBUS senderId of the application that requested the speech job. */
-    QString talker;              /* Requested Talker code in which to speak the text. */
-    int seq;                     /* Current sentence being spoken. */
-    QList<int> partSeqNums;      /* List containing last sequence number for each part of a job. */
-    QStringList sentences;       /* List of sentences in the job. */
-    int partCount;               /* Number of parts in the job. */
-};
 
 /**
  * Struct used to keep a pool of FilterMgr objects.
@@ -82,656 +56,364 @@ struct mlJob {
 struct PooledFilterMgr {
     FilterMgr* filterMgr;       /* The FilterMgr object. */
     bool busy;                  /* True if the FilterMgr is busy. */
-    mlJob* job;                 /* The job the FilterMgr is filtering. */
-    int partNum;                /* The part number of the job that is filtering. */
+    SpeechJob* job;             /* The job the FilterMgr is filtering. */
     TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 };
 
-/**
- * Struct used to keep notification options.
- */
-struct NotifyOptions {
-    QString eventName;
-    int action;
-    QString talker;
-    QString customMsg;
-};
-
-/**
- * A list of notification options for a single app, indexed by event.
- */
-typedef QMap<QString, NotifyOptions> NotifyEventMap;
-
-/**
- * A list of notification event maps for all apps, indexed by app.
- */
-typedef QMap<QString, NotifyEventMap> NotifyAppMap;
-
-/**
- * SpeechData class which is in charge of maintaining all the data on the memory.
- * It maintains queues and has methods to enque
- * messages and warnings and manage the text queues.
- * We could say that this is the common repository between the KTTSD class
- * (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
- * functions)
- */
+class SpeechDataPrivate;
 class SpeechData : public QObject {
     Q_OBJECT
 
-    public:
-        /**
-        * Constructor
-        * Sets text to be stopped and warnings and messages queues to be autodelete (thread safe)
-        */
-        SpeechData();
-
-        /**
-        * Destructor
-        */
-        ~SpeechData();
-
-        /**
-        * Read the configuration
-        */
-        bool readConfig();
-
-        /**
-        * Say a message as soon as possible, interrupting any other speech in progress.
-        * IMPORTANT: This method is reserved for use by Screen Readers and should not be used
-        * by any other applications.
-        * @param msg            The message to be spoken.
-        * @param talker         Code for the talker to speak the message.  Example "en".
-        *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified Talker code,
-        *                       defaults to the closest matching talker.
-        * @param appId          The DBUS senderId of the application.
-        *
-        * If an existing Screen Reader output is in progress, it is stopped and discarded and
-        * replaced with this new message.
-        */
-        void setScreenReaderOutput(const QString &msg, const QString &talker,
-            const QString& appId);
-
-        /**
-        * Given an appId, returns the last (most recently queued) Job Number with that appId,
-        * or if no such job, the Job Number of the last (most recent) job in the queue.
-        * @param appId          The DBUS senderId of the application.
-        * @return               Job Number of the text job.
-        * If no such job, returns 0.
-        * If appId is NULL, returns the Job Number of the last job in the queue.
-        * Does not change textJobs.current().
-        */
-        uint findAJobNumByAppId(const QString& appId);
-
-        /**
-        * Retrieves the Screen Reader Output.
-        */
-        mlText* getScreenReaderOutput();
-
-        /**
-        * Returns true if Screen Reader Output is ready to be spoken.
-        */
-        bool screenReaderOutputReady();
-
-       /**
-        * Add a new warning to the queue.
-        */
-        void enqueueWarning( const QString &, const QString &talker,
-            const QString& appId);
-
-        /**
-        * Pop (get and erase) a warning from the queue.
-        * @return                Pointer to mlText structure containing the warning.
-        *
-        * Caller is responsible for deleting the structure.
-        */
-        mlText* dequeueWarning();
-
-        /**
-        * Are there any Warnings?
-        */
-        bool warningInQueue();
-
-        /**
-        * Add a new message to the queue.
-        */
-        void enqueueMessage( const QString &, const QString &talker,
-            const QString&);
-
-        /**
-        * Pop (get and erase) a message from the queue.
-        * @return                Pointer to mlText structure containing the message.
-        *
-        * Caller is responsible for deleting the structure.
-        */
-        mlText* dequeueMessage();
-
-        /**
-        * Are there any Messages?
-        */
-        bool messageInQueue();
-
-        /**
-        * Sets the GREP pattern that will be used as the sentence delimiter.
-        * @param delimiter      A valid GREP pattern.
-        * @param appId          The DBUS senderId of the application.
-        *
-        * The default delimiter is
-          @verbatim
-             ([\\.\\?\\!\\:\\;])\\s
-          @endverbatim
-        *
-        * Note that backward slashes must be escaped.
-        *
-        * Changing the sentence delimiter does not affect other applications.
-        * @see sentenceparsing
-        */
-        void setSentenceDelimiter(const QString &delimiter, const QString appId);
-
-        /* The following methods correspond to the methods in KSpeech interface. */
-
-        /**
-        * Queue a text job.  Does not start speaking the text.
-        * (thread safe)
-        * @param text           The message to be spoken.
-        * @param talker         Code for the talker to speak the text.  Example "en".
-        *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified Talker code,
-        *                       defaults to the closest matching talker.
-        * @param appId          The DBUS senderId of the application.
-        * @return               Job number.
-        *
-        * The text is parsed into individual sentences.  Call getTextCount to retrieve
-        * the sentence count.  Call startText to mark the job as speakable and if the
-        * job is the first speakable job in the queue, speaking will begin.
-        * @see startText.
-        */
-        uint setText(const QString &text, const QString &talker, const QString& appId);
-
-        /**
-        * Adds another part to a text job.  Does not start speaking the text.
-        * (thread safe)
-        * @param jobNum         Job number of the text job.
-        * @param text           The message to be spoken.
-        * @return               Part number for the added part.  Parts are numbered starting at 1.
-        *
-        * The text is parsed into individual sentences.  Call getTextCount to retrieve
-        * the sentence count.  Call startText to mark the job as speakable and if the
-        * job is the first speakable job in the queue, speaking will begin.
-        * @see setText.
-        * @see startText.
-        */
-        int appendText(const QString &text, const uint jobNum);
-
-        /**
-        * Get the number of sentences in a text job.
-        * (thread safe)
-        * @param jobNum         Job number of the text job.
-        * @return               The number of sentences in the job.  -1 if no such job.
-        *
-        * The sentences of a job are given sequence numbers from 1 to the number returned by this
-        * method.  The sequence numbers are emitted in the sentenceStarted and sentenceFinished signals.
-        */
-        int getTextCount(const uint jobNum);
-
-        /**
-        * Get the number of jobs in the text job queue.
-        * (thread safe)
-        * @return               Number of text jobs in the queue.  0 if none.
-        */
-        uint getTextJobCount();
-
-        /**
-        * Get a comma-separated list of text job numbers in the queue.
-        * @return               Comma-separated list of text job numbers in the queue.
-        */
-        QString getTextJobNumbers();
-
-        /**
-        * Get the state of a text job.
-        * (thread safe)
-        * @param jobNum         Job number of the text job.
-        * @return               State of the job. -1 if invalid job number.
-        */
-        int getTextJobState(const uint jobNum);
-
-        /**
-        * Set the state of a text job.
-        * @param jobNum         Job Number of the job.
-        * @param state          New state for the job.
-        *
-        **/
-        void setTextJobState(const uint jobNum, const KSpeech::kttsdJobState state);
-
-        /**
-        * Get information about a text job.
-        * @param jobNum         Job number of the text job.
-        * @return               A QDataStream containing information about the job.
-        *                       Blank if no such job.
-        *
-        * The stream contains the following elements:
-        *   - int state         Job state.
-        *   - QString appId     DBUS senderId of the application that requested the speech job.
-        *   - QString talker    Talker code as requested by application.
-        *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
-        *   - int sentenceCount Total number of sentences in the job.
-        *   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
-        *   - int partCount     Total number of parts in the job.
-        *
-        * Note that sequence numbers apply to the entire job.
-        * They do not start from 1 at the beginning of each part.
-        *
-        * The following sample code will decode the stream:
-                @verbatim
-                    QByteArray jobInfo = getTextJobInfo(jobNum);
-                    QDataStream stream(jobInfo, QIODevice::ReadOnly);
-                    int state;
-                    QString appId;
-                    QString talker;
-                    int seq;
-                    int sentenceCount;
-                    int partNum;
-                    int partCount;
-                    stream >> state;
-                    stream >> appId;
-                    stream >> talker;
-                    stream >> seq;
-                    stream >> sentenceCount;
-                    stream >> partNum;
-                    stream >> partCount;
-                @endverbatim
-        */
-        QByteArray getTextJobInfo(const uint jobNum);
-
-        /**
-        * Return a sentence of a job.
-        * @param jobNum         Job number of the text job.
-        * @param seq            Sequence number of the sentence.
-        * @return               The specified sentence in the specified job.  If no such
-        *                       job or sentence, returns "".
-        */
-        QString getTextJobSentence(const uint jobNum, const uint seq=1);
-
-        /**
-        * Remove a text job from the queue.
-        * (thread safe)
-        * @param jobNum         Job number of the text job.
-        *
-        * The job is deleted from the queue and the textRemoved signal is emitted.
-        */
-        void removeText(const uint jobNum);
-
-        /**
-        * Change the talker for a text job.
-        * @param jobNum         Job number of the text job.
-        * @param talker         New code for the talker to do speaking.  Example "en".
-        *                       If NULL, defaults to the user's default talker.
-        *                       If no plugin has been configured for the specified Talker code,
-        *                       defaults to the closest matching talker.
-        */
-        void changeTextTalker(const QString &talker, uint jobNum);
-
-        /**
-        * Move a text job down in the queue so that it is spoken later.
-        * @param jobNum         Job number of the text job.
-        */
-        void moveTextLater(const uint jobNum);
-
-        /**
-        * Jump to the first sentence of a specified part of a text job.
-        * @param partNum        Part number of the part to jump to.  Parts are numbered starting at 1.
-        * @param jobNum         Job number of the text job.
-        * @return               Part number of the part actually jumped to.
-        *
-        * If partNum is greater than the number of parts in the job, jumps to last part.
-        * If partNum is 0, does nothing and returns the current part number.
-        * If no such job, does nothing and returns 0.
-        * Does not affect the current speaking/not-speaking state of the job.
-        */
-        int jumpToTextPart(const int partNum, const uint jobNum);
-
-        /**
-        * Advance or rewind N sentences in a text job.
-        * @param n              Number of sentences to advance (positive) or rewind (negative)
-        *                       in the job.
-        * @param jobNum         Job number of the text job.
-        * @return               Sequence number of the sentence actually moved to.  Sequence numbers
-        *                       are numbered starting at 1.
-        *
-        * If no such job, does nothing and returns 0.
-        * If n is zero, returns the current sequence number of the job.
-        * Does not affect the current speaking/not-speaking state of the job.
-        */
-        uint moveRelTextSentence(const int n, const uint jobNum);
-
-        /**
-        * Given a jobNum, returns the first job with that jobNum.
-        * @return               Pointer to the text job.
-        * If no such job, returns 0.
-        * Does not change textJobs.current().
-        */
-        mlJob* findJobByJobNum(const uint jobNum);
-
-        /**
-        * Given a Job Number, returns the next speakable text job on the queue.
-        * @param prevJobNum       Current job number (which should not be returned).
-        * @return                 Pointer to mlJob structure of the first speakable job
-        *                         not equal prevJobNum.  If no such job, returns null.
-        *
-        * Caller must not delete the job.
-        */
-        mlJob* getNextSpeakableJob(const uint prevJobNum);
-
-        /**
-        * Given previous job number and sequence number, returns the next sentence from the
-        * text queue.  If no such sentence is available, either because we've run out of
-        * jobs, or because all jobs are paused, returns null.
-        * @param prevJobNum       Previous Job Number.
-        * @param prevSeq          Previous sequency number.
-        * @return                 Pointer to n mlText structure containing the next sentence.  If no
-        *                         sentence, returns null.
-        *
-        * Caller is responsible for deleting the returned mlText structure (if not null).
-        */
-        mlText* getNextSentenceText(const uint prevJobNum, const uint prevSeq);
-
-        /**
-        * Given a Job Number, sets the current sequence number of the job.
-        * @param jobNum          Job Number.
-        * @param seq             Sequence number.
-        * If for some reason, the job does not exist, nothing happens.
-        */
-        void setJobSequenceNum(const uint jobNum, const uint seq);
-
-        /**
-        * Given a Job Number, returns the current sequence number of the job.
-        * @param jobNum         Job Number.
-        * @return               Sequence number of the job.  If no such job, returns 0.
-        */
-        uint getJobSequenceNum(const uint jobNum);
-
-        /**
-        * Given a jobNum, returns the appId of the application that owns the job.
-        * @param jobNum         Job number of the text job.
-        * @return               appId of the job.
-        * If no such job, returns "".
-        * Does not change textJobs.current().
-        */
-        QString getAppIdByJobNum(const uint jobNum);
-
-        /**
-        * Sets pointer to the TalkerMgr object.
-        */
-        void setTalkerMgr(TalkerMgr* talkerMgr);
-
-        /* The following properties come from the configuration. */
-
-        /**
-        * Text pre message
-        */
-        QString textPreMsg;
-
-        /**
-        * Text pre message enabled ?
-        */
-        bool textPreMsgEnabled;
-
-        /**
-        * Text pre sound
-        */
-        QString textPreSnd;
-
-        /**
-        * Text pre sound enabled ?
-        */
-        bool textPreSndEnabled;
-
-        /**
-        * Text post message
-        */
-        QString textPostMsg;
-
-        /**
-        * Text post message enabled ?
-        */
-        bool textPostMsgEnabled;
-
-        /**
-        * Text post sound
-        */
-        QString textPostSnd;
-
-        /**
-        * Text post sound enabled ?
-        */
-        bool textPostSndEnabled;
-
-        /**
-        * Paragraph pre message
-        */
-        QString parPreMsg;
-
-        /**
-        * Paragraph pre message enabled ?
-        */
-        bool parPreMsgEnabled;
-
-        /**
-        * Paragraph pre sound
-        */
-        QString parPreSnd;
-
-        /**
-        * Paragraph pre sound enabled ?
-        */
-        bool parPreSndEnabled;
-
-        /**
-        * Paragraph post message
-        */
-        QString parPostMsg;
-
-        /**
-        * Paragraph post message enabled ?
-        */
-        bool parPostMsgEnabled;
-
-        /**
-        * Paragraph post sound
-        */
-        QString parPostSnd;
-
-        /**
-        * Paragraph post sound enabled ?
-        */
-        bool parPostSndEnabled;
-
-        /**
-        * Keep audio files.  Do not delete generated tmp wav files.
-        */
-        bool keepAudio;
-        QString keepAudioPath;
-
-        /**
-        * Notification settings.
-        */
-        bool notify;
-        bool notifyExcludeEventsWithSound;
-        NotifyAppMap notifyAppMap;
-        int notifyDefaultPresent;
-        NotifyOptions notifyDefaultOptions;
-
-        /**
-        * Automatically start KTTSMgr whenever speaking.
-        */
-        bool autoStartManager;
-
-        /**
-        * Automatically exit auto-started KTTSMgr when speaking finishes.
-        */
-        bool autoExitManager;
-
-        /**
-        * Configuration
-        */
-        KConfig *config;
-
-        /**
-        * True if at least one XML Transformer plugin for html is enabled.
-        */
-        bool supportsHTML;
-
-    signals:
-        /**
-        * This signal is emitted whenever a new text job is added to the queue.
-        * @param appId          The DBUS senderId of the application that created the job.
-        * @param jobNum         Job number of the text job.
-        */
-        void textSet(const QString& appId, const uint jobNum);
-
-        /**
-        * This signal is emitted whenever a new part is appended to a text job.
-        * @param appId          The DBUS senderId of the application that created the job.
-        * @param jobNum         Job number of the text job.
-        * @param partNum        Part number of the new part.  Parts are numbered starting
-        *                       at 1.
-        */
-        void textAppended(const QString& appId, const uint jobNum, const int partNum);
-
-        /**
-        * This signal is emitted whenever a text job is deleted from the queue.
-        * The job is no longer in the queue when this signal is emitted.
-        * @param appId          The DBUS senderId of the application that created the job.
-        * @param jobNum         Job number of the text job.
-        */
-        void textRemoved(const QString& appId, const uint jobNum);
-
-    private:
-        /**
-        * Screen Reader Output.
-        */
-        mlText screenReaderOutput;
-
-        /**
-        * Queue of warnings
-        */
-        QQueue<mlJob*> warnings;
-
-        /**
-        * Queue of messages
-        */
-        QQueue<mlJob*> messages;
-
-        /**
-        * Queue of text jobs.
-        */
-        QList<mlJob*> textJobs;
-
-        /**
-        * TalkerMgr object local pointer.
-        */
-        TalkerMgr* m_talkerMgr;
-
-        /**
-        * Pool of FilterMgrs.
-        */
-        QMultiHash<int, PooledFilterMgr*> m_pooledFilterMgrs;
-
-        /**
-        * Job counter.  Each new job increments this counter.
-        */
-        uint jobCounter;
-
-        /**
-        * Talker of the text
-        */
-        QString textTalker;
-
-        /**
-        * Map of sentence delimiters.  One per app.  If none specified for an app, uses default.
-        */
-        QMap<QString, QString> sentenceDelimiters;
-
-        /**
-        * Determines whether the given text is SSML markup.
-        */
-        bool isSsml(const QString &text);
-
-        /**
-        * Given an appId, returns the last (most recently queued) job with that appId.
-        * @param appId          The DBUS senderId of the application.
-        * @return               Pointer to the text job.
-        * If no such job, returns 0.
-        * If appId is NULL, returns the last job in the queue.
-        * Does not change textJobs.current().
-        */
-        mlJob* findLastJobByAppId(const QString& appId);
-
-        /**
-        * Given an appId, returns the last (most recently queued) job with that appId,
-        * or if no such job, the last (most recent) job in the queue.
-        * @param appId          The DBUS senderId of the application.
-        * @return               Pointer to the text job.
-        * If no such job, returns 0.
-        * If appId is NULL, returns the last job in the queue.
-        * Does not change textJobs.current().
-        */
-        mlJob* findAJobByAppId(const QString& appId);
-
-        /**
-        * Given a job and a sequence number, returns the part that sentence is in.
-        * If no such job or sequence number, returns 0.
-        * @param job            The text job.
-        * @param seq            Sequence number of the sentence.  Sequence numbers begin with 1.
-        * @return               Part number of the part the sentence is in.  Parts are numbered
-        *                       beginning with 1.  If no such job or sentence, returns 0.
-        */
-        int getJobPartNumFromSeq(const mlJob& job, const int seq);
-
-        /**
-        * Parses a block of text into sentences using the application-specified regular expression
-        * or (if not specified), the default regular expression.
-        * @param text           The message to be spoken.
-        * @param appId          The DBUS senderId of the application.
-        * @return               List of parsed sentences.
-        */
-
-        QStringList parseText(const QString &text, const QString &appId);
-
-        /**
-        * Delete expired jobs.  At most, one finished job is kept on the queue.
-        * @param finishedJobNum Job number of a job that just finished
-        * The just finished job is not deleted, but any other finished jobs are.
-        * Does not change the textJobs.current() pointer.
-        */
-        void deleteExpiredJobs(const uint finishedJobNum);
-
-        /**
-        * Assigns a FilterMgr to a job and starts filtering on it.
-        */
-        void startJobFiltering(mlJob* job, const QString& text, bool noSBD);
-
-        /**
-        * Waits for filtering to be completed on a job.
-        * This is typically called because an app has requested job info that requires
-        * filtering to be completed, such as getJobInfo.
-        */
-        void waitJobFiltering(const mlJob* job);
-
-        /**
-        * Processes filters by looping across the pool of FilterMgrs.
-        * As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
-        */
-        void doFiltering();
-
-        /**
-        * Loads notify events from a file.  Clearing data if clear is True.
-        */
-        void loadNotifyEventsFromFile( const QString& filename, bool clear);
-
-    private slots:
-        void slotFilterMgrFinished();
-        void slotFilterMgrStopped();
+public:
+    /**
+    * Constructor
+    */
+    SpeechData();
+
+    /**
+    * Destructor
+    */
+    ~SpeechData();
+
+    /**
+    * Get application data.
+    * If this is a new application, a new AppData object is created and initialized
+    * with defaults.
+    * Caller may set properties, but must not delete the returned AppData object.
+    * Use releaseAppData instead.
+    * @param appId          The DBUS senderId of the application.
+    */
+    AppData* getAppData(const QString& appId) const;
+
+    /**
+    * Destroys the application data.
+    */
+    void releaseAppData(const QString& appId);
+
+    /**
+    * Queue and start a speech job.
+    * @param appId          The DBUS senderId of the application.
+    * @param text           The text to be spoken.
+    * @param options        Option flags.  @see SayOptions.  Defaults to KSpeech::soNone.
+    *
+    * Based on the options, the text may contain the text to be spoken, with or withou
+    * markup, or it may contain characters to be spelled out, or it may contain
+    * the symbolic name of a keyboard key, or it may contain the name of a sound
+    * icon.
+    *
+    * The job is given the applications current defaultPriority.  @see defaultPriority.
+    * The job is assigned the applications current defaultTalker.  @see defaultTalker.
+    */
+    int say(const QString& appId, const QString& text, int sayOptions);
+
+    /**
+    * Remove a job from the queue.
+    * @param jobNum         Job number.
+    *
+    * The job is deleted from the queue and the textRemoved signal is emitted.
+    */
+    void removeJob(int jobNum);
+
+    /**
+    * Remove all jobs owned by the application.
+    * @param appId          The DBUS senderId of the application.
+    */
+    void removeAllJobs(const QString& appId);
+
+    /**
+    * Get the number of sentences in a job.
+    * (thread safe)
+    * @param jobNum         Job number.
+    * @return               The number of sentences in the job.  -1 if no such job.
+    *
+    * The sentences of a job are given sequence numbers from 1 to the number returned by this
+    * method.  The sequence numbers are emitted in the sentenceStarted and sentenceFinished signals.
+    *
+    * If the job is being filtered and split into sentences, waits until that is finished
+    * before returning.
+    */
+    int sentenceCount(int jobNum);
+
+    /**
+    * Get the number of jobs in the queue of the specified type owned by
+    * the application.
+    * @param appId          The DBUS senderId of the application.
+    * @param priority       Type of job.  Text, Message, Warning, or ScreenReaderOutput.
+    * @return               Number of jobs in the queue.  0 if none.
+    *
+    * A priority of KSpeech::jpAll will return all the job numbers 
+    * owned by the application.
+    */
+    int jobCount(const QString& appId, KSpeech::JobPriority priority) const;
+
+    /**
+    * Get a list of job numbers in the queue of the
+    * specified type owned by the application.
+    * @param appId          The DBUS senderId of the application.
+    * @param priority       Type of job.  Text, Message, Warning, or ScreenReaderOutput.
+    * @return               List of job numbers in the queue.
+    */
+    QStringList jobNumbers(const QString& appId, KSpeech::JobPriority priority) const;
+
+    /**
+    * Get the state of a job.
+    * @param jobNum         Job number.
+    * @return               State of the job. -1 if invalid job number.
+    *
+    * @see setJobState
+    */
+    int jobState(int jobNum) const;
+
+    /**
+    * Get information about a job.
+    * @param jobNum         Job number of the job.
+    * @return               A QDataStream containing information about the job.
+    *                       Blank if no such job.
+    *
+    * The stream contains the following elements:
+    *   - int priority      Job Type.
+    *   - int state         Job state.
+    *   - QString appId     DBUS senderId of the application that requested the speech job.
+    *   - QString talker    Talker code as requested by application.
+    *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
+    *   - int sentenceCount Total number of sentences in the job.
+    *   - QString applicationName Application's friendly name (if provided by app)
+    *
+    * If the job is currently filtering, waits for that to finish before returning.
+    *
+    * The following sample code will decode the stream:
+            @verbatim
+                QByteArray jobInfo = getTextJobInfo(jobNum);
+                QDataStream stream(jobInfo, QIODevice::ReadOnly);
+                qint32 priority;
+                qint32 state;
+                QString appId;
+                QString talker;
+                qint32 seq;
+                qint32 sentenceCount;
+                QString applicationName;
+                stream >> priority;
+                stream >> state;
+                stream >> appId;
+                stream >> talker;
+                stream >> seq;
+                stream >> sentenceCount;
+                stream >> applicationName;
+            @endverbatim
+    */
+    QByteArray jobInfo(int jobNum);
+
+    /**
+    * Return a sentence of a job.
+    * @param jobNum         Job number.
+    * @param seq            Sequence number of the sentence.
+    * @return               The specified sentence in the specified job.  If no such
+    *                       job or sentence, returns "".
+    */
+    QString jobSentence(int jobNum, int seq=1);
+
+    /**
+    * Return the talker code for a job.
+    * @param jobNum         Job number of the job.
+    *
+    * @see setTalker
+    */
+    QString talker(int jobNum);
+
+    /**
+    * Change the talker for a job.
+    * @param jobNum         Job number of the job.
+    * @param talker         New code for the talker to do speaking.  Example "en".
+    *                       If NULL, defaults to the user's default talker.
+    *                       If no plugin has been configured for the specified Talker code,
+    *                       defaults to the closest matching talker.
+    *
+    * @see talker
+    */
+    void setTalker(int jobNum, const QString &talker);
+
+    /**
+    * Move a job down in the queue so that it is spoken later.
+    * @param jobNum         Job number.
+    *
+    * Since there is only one ScreenReaderOutput, this method is meaningless
+    * for ScreenReaderOutput jobs.
+    */
+    void moveJobLater(int jobNum);
+
+    /**
+    * Advance or rewind N sentences in a job.
+    * @param jobNum         Job number of the job.
+    * @param n              Number of sentences to advance (positive) or rewind (negative)
+    *                       in the job.
+    * @return               Sequence number of the sentence actually moved to.  Sequence numbers
+    *                       are numbered starting at 1.
+    *
+    * If no such job, does nothing and returns 0.
+    * If n is zero, returns the current sequence number of the job.
+    * Does not affect the current speaking/not-speaking state of the job.
+    *
+    * Since ScreenReaderOutput jobs are not split into sentences, this method
+    * is meaningless for ScreenReaderOutput jobs.
+    */
+    int moveRelSentence(int jobNum, int n);
+
+    /**
+    * Given an appId, returns the last (most recently queued) Job Number with that appId,
+    * or if no such job, the Job Number of the last (most recent) job in the queue.
+    * @param appId          The DBUS senderId of the application.
+    * @return               Job Number.
+    * If no such job, returns 0.
+    * If appId is NULL, returns the Job Number of the last job in the queue.
+    * Does not change textJobs.current().
+    */
+    int findJobNumByAppId(const QString& appId) const;
+
+    /**
+    * Given a jobNum, returns the first job with that jobNum.
+    * @return               Pointer to the job.
+    * If no such job, returns 0.
+    * Does not change textJobs.current().
+    */
+    SpeechJob* findJobByJobNum(int jobNum) const;
+
+    /**
+    * Given an appId, returns the last (most recently queued) job with that appId.
+    * @param appId          The DBUS senderId of the application.
+    * @return               Pointer to the job.
+    * If no such job, returns 0.
+    * If appId is NULL, returns the last job in the queue.
+    * Does not change textJobs.current().
+    */
+    SpeechJob* findLastJobByAppId(const QString& appId) const;
+
+    /**
+    * Given a Job Type and Job Number, returns the next speakable job on the queue.
+    * @param priority       Type of job.  Text, Message, Warning, or ScreenReaderOutput.
+    * @return               Pointer to the speakable job.
+    *
+    * Caller must not delete the job.
+    */
+    SpeechJob* getNextSpeakableJob(KSpeech::JobPriority priority);
+
+    /**
+    * Given a Job Number, returns the current sequence number of the job.
+    * @param jobNum         Job Number.
+    * @return               Sequence number of the job.  If no such job, returns 0.
+    */
+    int jobSequenceNum(int jobNum) const;
+
+    /**
+    * Given a Job Number, sets the current sequence number of the job.
+    * @param jobNum          Job Number.
+    * @param seq             Sequence number.
+    * If for some reason, the job does not exist, nothing happens.
+    */
+    void setJobSequenceNum(int jobNum, int seq);
+
+    /**
+    * Given a jobNum, returns the appId of the application that owns the job.
+    * @param jobNum         Job number.
+    * @return               appId of the job.
+    * If no such job, returns "".
+    * Does not change textJobs.current().
+    */
+    QString getAppIdByJobNum(int jobNum) const;
+
+    /**
+    * Delete expired jobs.  At most, one finished job is kept on the queue.
+    * @param finishedJobNum Job number of a job that just finished
+    * The just finished job is not deleted, but any other finished jobs are.
+    * Does not change the textJobs.current() pointer.
+    */
+    void deleteExpiredJobs(int finishedJobNum);
+    
+    /**
+    * Return true if the application is paused.
+    */
+    bool isApplicationPaused(const QString& appId);
+    
+    /**
+    * Pauses the application.
+    */
+    void pause(const QString& appId);
+    
+    /**
+    * Resumes the application.
+    */
+    void resume(const QString& appId);
+
+    /**
+    * Sets pointer to the TalkerMgr object.
+    */
+    void setTalkerMgr(TalkerMgr* talkerMgr);
+
+    /**
+    * Sets pointer to the Configuration data object.
+    */
+    void setConfigData(ConfigData* configData);
+
+Q_SIGNALS:
+    /**
+    * Emitted when the state of a job changes.
+    */
+    void jobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
+    
+    /**
+    * Emitted when job filtering completes.
+    */
+    void filteringFinished();
+
+private slots:
+    void slotFilterMgrFinished();
+    void slotFilterMgrStopped();
+
+private:
+    /**
+    * Determines whether the given text is SSML markup.
+    */
+    bool isSsml(const QString &text);
+
+    /**
+    * Parses a block of text into sentences using the application-specified regular expression
+    * or (if not specified), the default regular expression.
+    * @param text           The message to be spoken.
+    * @param appId          The DBUS senderId of the application.
+    * @return               List of parsed sentences.
+    */
+
+    QStringList parseText(const QString &text, const QString &appId);
+
+    /**
+    * Deletes job, removing it from all queues.
+    */
+    void deleteJob(int removeJobNum);
+
+    /**
+    * Assigns a FilterMgr to a job and starts filtering on it.
+    */
+    void startJobFiltering(SpeechJob* job, const QString& text, bool noSBD);
+
+    /**
+    * Waits for filtering to be completed on a job.
+    * This is typically called because an app has requested job info that requires
+    * filtering to be completed, such as getJobInfo.
+    */
+    void waitJobFiltering(const SpeechJob* job);
+
+    /**
+    * Processes filters by looping across the pool of FilterMgrs.
+    * As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
+    */
+    void doFiltering();
+
+    /**
+    * Loads notify events from a file.  Clearing data if clear is True.
+    */
+    void loadNotifyEventsFromFile( const QString& filename, bool clear);
+
+private:
+    SpeechDataPrivate* d;
 };
 
 #endif // _SPEECHDATA_H_

@@ -37,14 +37,14 @@
 
 class JobInfo {
 public:
-    uint        jobNum;
-    QString     appId;
+    int         jobNum;
+    QString     applicationName;
+    int         priority;
     QString     talkerID;
     int         state;
     int         sentenceNum;
     int         sentenceCount;
-    int         partNum;
-    int         partCount;
+    QString     appId;
 };
 
 typedef QList<JobInfo> JobInfoList;
@@ -101,13 +101,19 @@ public:
     /**
     *   Returns a QModelIndex to the row corresponding to a job number.
     */
-    QModelIndex jobNumToIndex(uint jobNum);
+    QModelIndex jobNumToIndex(int jobNum);
     /**
     *   Convert a KTTSD job state integer into a display string.
     *   @param state          KTTSD job state
     *   @return               Display string for the state.
     */
     QString stateToStr(int state) const;
+    /**
+    *   Convert a KTTSD job priority into a display string.
+    *   @param priority       KTTSD job priority.
+    *   @return               Display string for priority.
+    */
+    QString priorityToStr(int priority) const;
 
 private:
     // Returns the displayable portion of the job corresponding to a column of the view.
