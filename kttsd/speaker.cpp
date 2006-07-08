@@ -458,7 +458,7 @@ void Speaker::doUtterances()
                             {
                                     if (it->plugin()->getState() == psIdle)
                                     {
-                                        // Set job to speaking state and set sequence number.
+                                        // Set job to speaking state and set sentence number.
                                         d->currentJobNum = it->job()->jobNum();
                                         it->setState(Utt::usSaying);
                                         prePlaySignals(it);
@@ -558,6 +558,8 @@ void Speaker::doUtterances()
             d->again = getNextUtterance(KSpeech::jpAll);
         }
     }
+    if (!d->exitRequested)
+        d->speechData->deleteExpiredJobs();
     // kDebug() << "Speaker::doUtterances: exiting." << endl;
 }
 
@@ -571,6 +573,7 @@ int Speaker::getCurrentJobNum() { return d->currentJobNum; }
 void Speaker::removeJob(int jobNum)
 {
     deleteUtteranceByJobNum(jobNum);
+    d->speechData->removeJob(jobNum);
     doUtterances();
 }
 
@@ -585,11 +588,12 @@ void Speaker::removeAllJobs(const QString& appId)
         uttIterator it = d->uttQueue.begin();
         while (it != d->uttQueue.end()) {
             if (it->appId() == appId)
-                deleteUtterance(it);
+                it = deleteUtterance(it);
             else
                 ++it;
         }
     }
+    d->speechData->removeAllJobs(appId);
     doUtterances();
 }
 
@@ -644,19 +648,15 @@ void Speaker::moveJobLater(int jobNum)
 int Speaker::moveRelSentence(int jobNum, int n)
 {
     if (0 == n)
-        return d->speechData->jobSequenceNum(jobNum);
+        return d->speechData->jobSentenceNum(jobNum);
     else {
-        // TODO: If the job is speaking, we must establish the current
-        // sequence number from the speaking utterance and move relative
-        // to that.  Actually, this is a design flaw, as the job's seq
-        // number doesn't match what is speaking.
         deleteUtteranceByJobNum(jobNum);
         // TODO: More efficient way to advance one or two sentences, since there is a
         // good chance those utterances are already in the queue and synthesized.
-        int seq = d->speechData->moveRelSentence(jobNum, n);
-        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to seq: " << seq << endl;
+        int sentenceNum = d->speechData->moveRelSentence(jobNum, n);
+        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to: " << sentenceNum << endl;
         doUtterances();
-        return seq;
+        return sentenceNum;
     }
 }
 

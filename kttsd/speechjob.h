@@ -51,6 +51,7 @@ class SpeechJob : public QObject {
     Q_PROPERTY(KSpeech::JobState state READ state WRITE setState)
     Q_PROPERTY(QStringList sentences READ sentences WRITE setSentences)
     Q_PROPERTY(int sentenceCount READ sentenceCount)
+    Q_PROPERTY(int sentenceNum READ sentenceNum WRITE setSentenceNum);
     Q_PROPERTY(int seq READ seq WRITE setSeq)
     Q_PROPERTY(QString getNextSentence READ getNextSentence)
     Q_PROPERTY(QByteArray serialize READ serialize)
@@ -79,14 +80,20 @@ public:
     void setSentences(const QStringList &sentences);
     /** Count of sentences in the job. */
     int sentenceCount() const;
-    /** Current sentence being spoken.
-        The first sentence is at seq 1, so if 0, not speaking. */
+    /** Current sentence begin spoken.
+        The first sentence is at 1, so if 0, not speaking. */
+    int sentenceNum() const;
+    void setSentenceNum(int sentenceNum);
+    /** Current sentence being synthesized.  First sentence is 1. */
     int seq() const;
     void setSeq(int seq);
+    int refCount() const;
+    void incRefCount();
+    void decRefCount();
 
     /**
      * Returns the next sentence in the Job.
-     * Increments seq number.
+     * Increments sentenceNum.
      * If we run out of sentences, returns QString().
      */
     QString getNextSentence();
@@ -101,7 +108,7 @@ public:
      *   - int state         Job state.
      *   - QString appId     DBUS senderId of the application that requested the speech job.
      *   - QString talker    Language code in which to speak the text.
-     *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
+     *   - int sentenceNum   Current sentence being spoken.  Sentences are numbered starting at 1.
      *   - int sentenceCount Total number of sentences in the job.
      *
      * Note that sequence numbers apply to the entire job.
@@ -115,13 +122,13 @@ public:
              qint32 state;
              QString appId;
              QString talker;
-             qint32 seq;
+             qint32 sentenceNum;
              qint32 sentenceCount;
              stream >> priority;
              stream >> state;
              stream >> appId;
              stream >> talker;
-             stream >> seq;
+             stream >> sentenceNum;
              stream >> sentenceCount;
            @endverbatim
      */

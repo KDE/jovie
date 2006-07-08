@@ -289,13 +289,11 @@ void KSpeech::resume()
 void KSpeech::removeJob(int jobNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    d->speechData->removeJob(jobNum);
     d->speaker->removeJob(jobNum);
 }
 
 void KSpeech::removeAllJobs()
 {
-    d->speechData->removeAllJobs(callingAppId());
     d->speaker->removeAllJobs(callingAppId());
 }
 
@@ -332,10 +330,10 @@ QByteArray KSpeech::getJobInfo(int jobNum)
     return d->speechData->jobInfo(jobNum);
 }
 
-QString KSpeech::getJobSentence(int jobNum, int seq)
+QString KSpeech::getJobSentence(int jobNum, int sentenceNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    return d->speechData->jobSentence(jobNum, seq);
+    return d->speechData->jobSentence(jobNum, sentenceNum);
 }
 
 QStringList KSpeech::getTalkerCodes()
@@ -385,8 +383,8 @@ void KSpeech::moveJobLater(int jobNum)
 int KSpeech::moveRelSentence(int jobNum, int n)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    int seq = d->speaker->moveRelSentence(jobNum, n);
-    return seq;
+    int sentenceNum = d->speaker->moveRelSentence(jobNum, n);
+    return sentenceNum;
 }
 
 void KSpeech::showManagerDialog()

@@ -33,6 +33,7 @@
 #include <QPair>
 #include <QDomDocument>
 #include <QFile>
+#include <QtDBus>
 
 // KDE includes.
 #include <kdebug.h>
@@ -148,6 +149,10 @@ protected:
 SpeechData::SpeechData()
 {
     d = new SpeechDataPrivate();
+    
+    // Connect ServiceUnregistered signal from DBUS so we know when apps have exited.
+    connect (QDBus::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
+        this, SLOT(slotServiceUnregistered(const QString&)));
 }
 
 /**
@@ -357,6 +362,8 @@ void SpeechData::deleteJob(int removeJobNum)
         SpeechJob* job = d->allJobs.take(removeJobNum);
         KSpeech::JobPriority priority = job->jobPriority();
         QString appId = job->appId();
+        if (0 != job->refCount())
+            kWarning() << "SpeechData::deleteJob: deleting job " << removeJobNum << " with non-zero refCount." << endl;
         delete job;
         d->jobLists[priority]->removeAll(removeJobNum);
         getAppData(appId)->jobList()->removeAll(removeJobNum);
@@ -396,16 +403,45 @@ void SpeechData::removeAllJobs(const QString& appId)
             removeJob(jobNum);
 }
 
-void SpeechData::deleteExpiredJobs(int finishedJobNum)
+void SpeechData::deleteExpiredJobs()
 {
-    // Walk through jobs and delete any other finished jobs.
-    foreach (TJobListPtr jobList, d->jobLists) {
-        foreach (int jobNum, *jobList) {
-            if (jobNum != finishedJobNum) {
+    foreach (AppData* appData, d->appData) {
+        if (appData->unregistered())
+            deleteExpiredApp(appData->appId());
+        else {
+            int finishedCount = 0;
+            // Copy JobList.
+            TJobList jobList = *(appData->jobList());
+            for (int ndx = jobList.size() - 1; ndx >= 0; --ndx) {
+                int jobNum = jobList[ndx];
                 SpeechJob* job = d->allJobs[jobNum];
-                if (KSpeech::jsFinished == job->state())
-                    deleteJob(jobNum);
+                if (KSpeech::jsFinished == job->state()) {
+                    ++finishedCount;
+                    if (finishedCount > 1 && 0 == job->refCount())
+                        deleteJob(jobNum);
+                }
             }
+        }
+    }
+}
+
+void SpeechData::deleteExpiredApp(const QString appId)
+{
+    if (d->appData.contains(appId)) {
+        AppData* appData = getAppData(appId);
+        // Scan the app's job list.  If there are no utterances on any jobs,
+        // delete the app altogether.
+        bool speaking = false;
+        foreach (int jobNum, *appData->jobList())
+            if (0 != d->allJobs[jobNum]->refCount()) {
+                speaking = true;
+                break;
+            }
+        if (!speaking) {
+            foreach (int jobNum, *appData->jobList())
+                deleteJob(jobNum);
+            releaseAppData(appId);
+            kDebug() << "SpeechData::deleteExpiredApp: application " << appId << " deleted." << endl;
         }
     }
 }
@@ -438,17 +474,17 @@ SpeechJob* SpeechData::getNextSpeakableJob(KSpeech::JobPriority priority)
     return NULL;
 }
 
-void SpeechData::setJobSequenceNum(int jobNum, int seq)
+void SpeechData::setJobSentenceNum(int jobNum, int sentenceNum)
 {
     SpeechJob* job = findJobByJobNum(jobNum);
-    if (job) job->setSeq(seq);    
+    if (job) job->setSentenceNum(sentenceNum);
 }
 
-int SpeechData::jobSequenceNum(int jobNum) const
+int SpeechData::jobSentenceNum(int jobNum) const
 {
     SpeechJob* job = findJobByJobNum(jobNum);
     if (job)
-        return job->seq();
+        return job->sentenceNum();
     else
         return 0;
 }
@@ -547,13 +583,13 @@ QByteArray SpeechData::jobInfo(int jobNum)
     }
 }
 
-QString SpeechData::jobSentence(int jobNum, int seq)
+QString SpeechData::jobSentence(int jobNum, int sentenceNum)
 {
     SpeechJob* job = findJobByJobNum(jobNum);
     if (job) {
         waitJobFiltering(job);
-        if (seq <= job->sentenceCount())
-            return job->sentences()[seq - 1];
+        if (sentenceNum <= job->sentenceCount())
+            return job->sentences()[sentenceNum - 1];
         else
             return QString();
     } else
@@ -584,29 +620,32 @@ void SpeechData::moveJobLater(int jobNum)
 int SpeechData::moveRelSentence(int jobNum, int n)
 {
     // kDebug() << "Running: SpeechData::moveRelTextSentence" << endl;
-    int newSeqNum = 0;
+    int newSentenceNum = 0;
     SpeechJob* job = findJobByJobNum(jobNum);
     if (job) {
         waitJobFiltering(job);
-        int oldSeqNum = job->seq();
-        newSeqNum = oldSeqNum + n;
+        int oldSentenceNum = job->sentenceNum();
+        newSentenceNum = oldSentenceNum + n;
         if (0 != n) {
-            if (newSeqNum < 0) newSeqNum = 0;
-            int sentenceCount = job->sentenceCount() + 1;
-            if (newSeqNum > sentenceCount) newSeqNum = sentenceCount;
-            job->setSeq(newSeqNum);
+            // Position one before the desired sentence.
+            int seq = newSentenceNum - 1;
+            if (seq < 0) seq = 0;
+            int sentenceCount = job->sentenceCount();
+            if (seq > sentenceCount) seq = sentenceCount;
+            job->setSentenceNum(seq);
+            job->setSeq(seq);
             // If job was previously finished, but is now rewound, set state to speakable.
             // If job was not finished, but now is past end, set state to finished.
             if (KSpeech::jsFinished == job->state()) {
-                if (newSeqNum < sentenceCount)
+                if (seq < sentenceCount)
                     job->setState(KSpeech::jsSpeakable);
             } else {
-                if (newSeqNum == sentenceCount)
+                if (seq == sentenceCount)
                     job->setState(KSpeech::jsFinished);
             }
         }
     }
-    return newSeqNum;
+    return newSentenceNum;
 }
 
 void SpeechData::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
@@ -776,4 +815,10 @@ void SpeechData::slotFilterMgrFinished()
 void SpeechData::slotFilterMgrStopped()
 {
     doFiltering();
+}
+
+void SpeechData::slotServiceUnregistered(const QString& serviceName)
+{
+    if (d->appData.contains(serviceName))
+        d->appData[serviceName]->setUnregistered(true);
 }

@@ -161,14 +161,14 @@ QStringList KSpeechAdaptor::getJobNumbers(int priority, const QDBusMessage &msg)
     return out0;
 }
 
-QString KSpeechAdaptor::getJobSentence(int jobNum, int seq)
+QString KSpeechAdaptor::getJobSentence(int jobNum, int sentenceNum)
 {
     // handle method call org.kde.KSpeech.getJobSentence
     QString out0;
-    QMetaObject::invokeMethod(parent(), "getJobSentence", Q_RETURN_ARG(QString, out0), Q_ARG(int, jobNum), Q_ARG(int, seq));
+    QMetaObject::invokeMethod(parent(), "getJobSentence", Q_RETURN_ARG(QString, out0), Q_ARG(int, jobNum), Q_ARG(int, sentenceNum));
 
     // Alternative:
-    //out0 = static_cast<YourObjectType *>(parent())->getJobSentence(jobNum, seq);
+    //out0 = static_cast<YourObjectType *>(parent())->getJobSentence(jobNum, sentenceNum);
     return out0;
 }
 

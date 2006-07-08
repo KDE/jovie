@@ -35,7 +35,9 @@ public:
         talker(),
         state(KSpeech::jsQueued),
         sentences(),
-        seq(0)
+        sentenceNum(0),
+        seq(0),
+        refCount(0)
     {};
     ~SpeechJobPrivate() {};
     friend class SpeechJob;
@@ -55,7 +57,12 @@ protected:
     QStringList sentences;
     /** Current sentence being spoken.
         The first sentence is at seq 1, so if 0, not speaking. */
+    int sentenceNum;
+    /** Current sentence begin synthesized. */
     int seq;
+    /** Reference count.  Used to delete job when all utterances
+        have been deleted. **/
+    int refCount;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -96,9 +103,16 @@ QStringList SpeechJob::sentences() const { return d->sentences; }
 void SpeechJob::setSentences(const QStringList &sentences) { d->sentences = sentences; }
 
 int SpeechJob::sentenceCount() const { return d->sentences.count(); }
+int SpeechJob::sentenceNum() const { return d->sentenceNum; }
+void SpeechJob::setSentenceNum(int sentenceNum) { d->sentenceNum = sentenceNum; }
 
 int SpeechJob::seq() const { return d->seq; }
 void SpeechJob::setSeq(int seq) { d->seq = seq; }
+
+int SpeechJob::refCount() const { return d->refCount; }
+void SpeechJob::incRefCount() { ++d->refCount; }
+void SpeechJob::decRefCount() { --d->refCount; }
+
 
 QString SpeechJob::getNextSentence() {
     int newSeq = d->seq + 1;
@@ -109,7 +123,7 @@ QString SpeechJob::getNextSentence() {
         d->seq = newSeq;
         return sentence;
     }
-};
+}
 
 QByteArray SpeechJob::serialize() const
 {
@@ -119,7 +133,7 @@ QByteArray SpeechJob::serialize() const
     stream << (qint32)d->state;
     stream << d->appId;
     stream << d->talker;
-    stream << (qint32)d->seq;
+    stream << (qint32)d->sentenceNum;
     stream << (qint32)(d->sentences.count());
     return temp;
 }

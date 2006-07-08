@@ -1850,7 +1850,7 @@ void KCMKttsMgr::kttsdStarted()
         slotNotifyListView_currentItemChanged();
         m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBus::sessionBus());
         m_kspeech->setParent(this);
-        m_kspeech->setApplicationName("kcmkttsmgr");
+        m_kspeech->setApplicationName("KCMKttsMgr");
         m_kspeech->setDefaultPriority(KSpeech::jpMessage);
         m_kspeech->setIsSystemManager(true);
         // Connect KTTSD DBUS signals to our slots.

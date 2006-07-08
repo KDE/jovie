@@ -205,6 +205,12 @@ public:
     * but must not delete the list.
     */
     TJobListPtr jobList() const;
+    
+    /**
+    * True when the app has exited.
+    */
+    bool unregistered() const;
+    void setUnregistered(bool unregistered);
 
 private:
     AppDataPrivate* d;    

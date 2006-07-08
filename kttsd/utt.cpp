@@ -90,6 +90,7 @@ Utt::Utt(uttType utType,
     d->utType = utType;
     d->appId = appId;
     d->job = job;
+    if (job) job->incRefCount();
     d->sentence = sentence;
     d->plugin = pluginproc;
     if (job)
@@ -111,14 +112,25 @@ Utt::Utt(uttType utType, const QString& appId, const QString& audioUrl) :
     setInitialState();    
 }
 
-Utt::~Utt() { delete d; }
+Utt::~Utt() {
+    if (d->job)
+        d->job->decRefCount();
+    delete d;
+}
     
 Utt::uttType Utt::utType() const { return d->utType; }
 void Utt::setUtType(uttType type) { d->utType = type; }
 QString Utt::appId() const { return d->appId; }
 void Utt::setAppId(const QString& appId) { d->appId = appId; }
 SpeechJob* Utt::job() const { return d->job; }
-void Utt::setJob(SpeechJob* job) { d->job = job; }
+void Utt::setJob(SpeechJob* job)
+{
+    if (d->job)
+        d->job->decRefCount();
+    d->job = job;
+    if (job)
+        job->incRefCount();
+}
 QString Utt::sentence() const { return d->sentence; }
 void Utt::setSentence(const QString& sentence)
 {
@@ -145,6 +157,7 @@ void Utt::setState(uttState state)
             case usWaitingSynth:
                 break;
             case usSaying:
+                d->job->setSentenceNum(d->seq);
                 d->job->setState(KSpeech::jsSpeaking);
                 break;
             case usSynthing:
@@ -153,6 +166,7 @@ void Utt::setState(uttState state)
             case usStretched:
                 break;
             case usPlaying:
+                d->job->setSentenceNum(d->seq);
                 d->job->setState(KSpeech::jsSpeaking);
                 break;
             case usPaused:

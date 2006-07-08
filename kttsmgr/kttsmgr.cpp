@@ -77,7 +77,7 @@ int main (int argc, char *argv[])
     KUniqueApplication::addCmdLineOptions();
     
     KUniqueApplication::setOrganizationDomain("kde.org");
-    KUniqueApplication::setApplicationName("kttsmgr");
+    KUniqueApplication::setApplicationName("KttsMgr");
     KUniqueApplication app;
 
     if(!KUniqueApplication::start())
@@ -348,7 +348,7 @@ bool KttsMgrTray::isKttsdRunning()
         if (!m_kspeech) {
             m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBus::sessionBus());
             m_kspeech->setParent(this);
-            m_kspeech->setApplicationName("kttsmgr");
+            m_kspeech->setApplicationName("KttsMgr");
             m_kspeech->setIsSystemManager(true);
             // If --autoexit option given, exit when speaking stops.
             KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

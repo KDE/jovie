@@ -41,7 +41,8 @@ public:
         ssmlFilterXsltFile(""),
         autoConfigureTalkersOn(false),
         isSystemManager(false),
-        jobList() {}
+        jobList(),
+        unregistered(false) {}
         
     friend class AppData;
 
@@ -58,6 +59,7 @@ protected:
     bool autoConfigureTalkersOn;
     bool isSystemManager;
     TJobList jobList;
+    bool unregistered;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -95,3 +97,6 @@ int AppData::lastJobNum() const
         return d->jobList.last();
 }
 TJobListPtr AppData::jobList() const { return &(d->jobList); }
+bool AppData::unregistered() const { return d->unregistered; }
+void AppData::setUnregistered(bool unregistered) { d->unregistered = unregistered; }
+

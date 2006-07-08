@@ -75,7 +75,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_kspeech->setParent(this);
     
     // Establish ourself as a System Manager.
-    m_kspeech->setApplicationName("kcmkttsmgr");
+    m_kspeech->setApplicationName("KCMKttsMgr");
     m_kspeech->setIsSystemManager(true);
 
     // Initialize some variables.
@@ -715,6 +715,7 @@ Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobN
                 job.state = state;
                 m_jobListModel->updateRow(index.row(), job);
             }
+            m_currentSentence->setPlainText(QString());
             break;
         }
         case KSpeech::jsDeleted:

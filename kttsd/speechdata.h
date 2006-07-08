@@ -122,12 +122,11 @@ public:
 
     /**
     * Get the number of sentences in a job.
-    * (thread safe)
     * @param jobNum         Job number.
     * @return               The number of sentences in the job.  -1 if no such job.
     *
-    * The sentences of a job are given sequence numbers from 1 to the number returned by this
-    * method.  The sequence numbers are emitted in the sentenceStarted and sentenceFinished signals.
+    * The sentences of a job are given numbers from 1 to the number returned by this
+    * method.
     *
     * If the job is being filtered and split into sentences, waits until that is finished
     * before returning.
@@ -175,7 +174,7 @@ public:
     *   - int state         Job state.
     *   - QString appId     DBUS senderId of the application that requested the speech job.
     *   - QString talker    Talker code as requested by application.
-    *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
+    *   - int sentenceNum   Current sentence being spoken.  Sentences are numbered starting at 1.
     *   - int sentenceCount Total number of sentences in the job.
     *   - QString applicationName Application's friendly name (if provided by app)
     *
@@ -189,14 +188,14 @@ public:
                 qint32 state;
                 QString appId;
                 QString talker;
-                qint32 seq;
+                qint32 sentenceNum;
                 qint32 sentenceCount;
                 QString applicationName;
                 stream >> priority;
                 stream >> state;
                 stream >> appId;
                 stream >> talker;
-                stream >> seq;
+                stream >> sentenceNum;
                 stream >> sentenceCount;
                 stream >> applicationName;
             @endverbatim
@@ -206,11 +205,11 @@ public:
     /**
     * Return a sentence of a job.
     * @param jobNum         Job number.
-    * @param seq            Sequence number of the sentence.
+    * @param sentenceNum    Sentence number of the sentence.
     * @return               The specified sentence in the specified job.  If no such
     *                       job or sentence, returns "".
     */
-    QString jobSentence(int jobNum, int seq=1);
+    QString jobSentence(int jobNum, int sentenceNum=1);
 
     /**
     * Return the talker code for a job.
@@ -246,11 +245,11 @@ public:
     * @param jobNum         Job number of the job.
     * @param n              Number of sentences to advance (positive) or rewind (negative)
     *                       in the job.
-    * @return               Sequence number of the sentence actually moved to.  Sequence numbers
+    * @return               Sentence number of the sentence actually moved to.  Sentence numbers
     *                       are numbered starting at 1.
     *
     * If no such job, does nothing and returns 0.
-    * If n is zero, returns the current sequence number of the job.
+    * If n is zero, returns the current sentence number of the job.
     * Does not affect the current speaking/not-speaking state of the job.
     *
     * Since ScreenReaderOutput jobs are not split into sentences, this method
@@ -265,7 +264,6 @@ public:
     * @return               Job Number.
     * If no such job, returns 0.
     * If appId is NULL, returns the Job Number of the last job in the queue.
-    * Does not change textJobs.current().
     */
     int findJobNumByAppId(const QString& appId) const;
 
@@ -273,7 +271,6 @@ public:
     * Given a jobNum, returns the first job with that jobNum.
     * @return               Pointer to the job.
     * If no such job, returns 0.
-    * Does not change textJobs.current().
     */
     SpeechJob* findJobByJobNum(int jobNum) const;
 
@@ -283,7 +280,6 @@ public:
     * @return               Pointer to the job.
     * If no such job, returns 0.
     * If appId is NULL, returns the last job in the queue.
-    * Does not change textJobs.current().
     */
     SpeechJob* findLastJobByAppId(const QString& appId) const;
 
@@ -297,36 +293,33 @@ public:
     SpeechJob* getNextSpeakableJob(KSpeech::JobPriority priority);
 
     /**
-    * Given a Job Number, returns the current sequence number of the job.
+    * Given a Job Number, returns the current sentence number begin spoken.
     * @param jobNum         Job Number.
-    * @return               Sequence number of the job.  If no such job, returns 0.
+    * @return               Sentence number of the job.  If no such job, returns 0.
     */
-    int jobSequenceNum(int jobNum) const;
+    int jobSentenceNum(int jobNum) const;
 
     /**
-    * Given a Job Number, sets the current sequence number of the job.
+    * Given a Job Number, sets the current sentence number begin spoken.
     * @param jobNum          Job Number.
-    * @param seq             Sequence number.
+    * @param sentenceNum     Sentence number.
     * If for some reason, the job does not exist, nothing happens.
     */
-    void setJobSequenceNum(int jobNum, int seq);
+    void setJobSentenceNum(int jobNum, int sentenceNum);
 
     /**
     * Given a jobNum, returns the appId of the application that owns the job.
     * @param jobNum         Job number.
     * @return               appId of the job.
     * If no such job, returns "".
-    * Does not change textJobs.current().
     */
     QString getAppIdByJobNum(int jobNum) const;
 
     /**
-    * Delete expired jobs.  At most, one finished job is kept on the queue.
-    * @param finishedJobNum Job number of a job that just finished
-    * The just finished job is not deleted, but any other finished jobs are.
-    * Does not change the textJobs.current() pointer.
+    * Delete expired jobs.  At most, one finished job per application 
+    * is kept on the queue.
     */
-    void deleteExpiredJobs(int finishedJobNum);
+    void deleteExpiredJobs();
     
     /**
     * Return true if the application is paused.
@@ -367,6 +360,8 @@ Q_SIGNALS:
 private slots:
     void slotFilterMgrFinished();
     void slotFilterMgrStopped();
+    
+    void slotServiceUnregistered(const QString& serviceName);
 
 private:
     /**
@@ -411,6 +406,13 @@ private:
     * Loads notify events from a file.  Clearing data if clear is True.
     */
     void loadNotifyEventsFromFile( const QString& filename, bool clear);
+
+    /**
+    * Checks to see if an application has active jobs, and if not and
+    * the application has exited, deletes the app and all its jobs.
+    * @param appId          DBUS sender id of the application.
+    */
+    void deleteExpiredApp(const QString appId);
 
 private:
     SpeechDataPrivate* d;

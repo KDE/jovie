@@ -145,11 +145,11 @@ public:
     * @param jobNum         Job number of the job.
     * @param n              Number of sentences to advance (positive) or rewind (negative)
     *                       in the job.
-    * @return               Sequence number of the sentence actually moved to.
-    *                       Sequence numbers are numbered starting at 1.
+    * @return               Sentence number of the sentence actually moved to.
+    *                       Sentence numbers are numbered starting at 1.
     *
     * If no such job, does nothing and returns 0.
-    * If n is zero, returns the current sequence number of the job.
+    * If n is zero, returns the current sentence number of the job.
     * Does not affect the current speaking/not-speaking state of the job.
     */
     int moveRelSentence(int jobNum, int n);
@@ -163,8 +163,8 @@ signals:
     * @param markerType    The type of marker.
     *                      Currently either mtSentenceBegin or mtSentenceEnd.
     * @param markerData    Data for the marker.
-    *                      Currently, this is the sequence number of the sentence
-    *                      begun or ended.  Sequence numbers begin at 1.
+    *                      Currently, this is the sentence number of the sentence
+    *                      begun or ended.  Sentence numbers begin at 1.
     */
     void marker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData);
 

@@ -152,7 +152,7 @@ class KSpeechAdaptor: public QDBusAbstractAdaptor
 "    </method>\n"
 "    <method name=\"getJobSentence\" >\n"
 "      <arg direction=\"in\" type=\"i\" name=\"jobNum\" />\n"
-"      <arg direction=\"in\" type=\"i\" name=\"seq\" />\n"
+"      <arg direction=\"in\" type=\"i\" name=\"sentenceNum\" />\n"
 "      <arg direction=\"out\" type=\"s\" />\n"
 "    </method>\n"
 "    <method name=\"getTalkerCodes\" >\n"
@@ -234,7 +234,7 @@ public Q_SLOTS: // METHODS
     int getJobCount(int priority, const QDBusMessage &msg);
     QByteArray getJobInfo(int jobNum);
     QStringList getJobNumbers(int priority, const QDBusMessage &msg);
-    QString getJobSentence(int jobNum, int seq);
+    QString getJobSentence(int jobNum, int sentenceNum);
     int getJobState(int jobNum);
     int getSentenceCount(int jobNum);
     int getTalkerCapabilities1(const QString &talker);
