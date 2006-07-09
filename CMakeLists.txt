@@ -2,7 +2,6 @@ project(kttsd)
 
 configure_file (config-kttsd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kttsd.h )
 
-add_subdirectory( compat ) 
 add_subdirectory( libkttsd ) 
 add_subdirectory( players ) 
 add_subdirectory( plugins ) 
