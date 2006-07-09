@@ -1106,17 +1106,6 @@ void KCMKttsMgr::init(){
 }
 
 /**
-* The control center calls this function to decide which buttons should
-* be displayed. For example, it does not make sense to display an "Apply" 
-* button for one of the information modules. The value returned can be set by 
-* modules using setButtons.
-*/
-int KCMKttsMgr::buttons() {
-    // kDebug() << "KCMKttsMgr::buttons: Running"<< endl;
-    return KCModule::Ok|KCModule::Apply|KCModule::Help|KCModule::Default;
-}
-
-/**
 * This function returns the small quickhelp.
 * That is displayed in the sidebar in the KControl
 */

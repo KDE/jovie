@@ -153,14 +153,6 @@ class KCMKttsMgr :
         static void init();
 
         /**
-        * The control center calls this function to decide which buttons should
-        * be displayed. For example, it does not make sense to display an "Apply" 
-        * button for one of the information modules. The value returned can be set by 
-        * modules using setButtons.
-        */
-        int buttons();
-
-        /**
         * This function returns the small quickhelp.
         * That is displayed in the sidebar in the KControl
         */
