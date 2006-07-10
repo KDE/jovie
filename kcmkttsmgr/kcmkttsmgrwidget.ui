@@ -1,15 +1,13 @@
 <ui version="4.0" >
  <author>Gary Cramblitt</author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KCMKttsMgrWidget</class>
  <widget class="KCModule" name="KCMKttsMgrWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>303</height>
+    <width>467</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -44,37 +42,37 @@
       <attribute name="title" >
        <string>&amp;General</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QGridLayout" >
        <property name="margin" >
         <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item>
-        <widget class="QCheckBox" name="enableKttsdCheckBox" >
-         <property name="whatsThis" >
-          <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
-         </property>
+       <item row="4" column="0" >
+        <widget class="QLabel" name="kttsdVersion" >
          <property name="text" >
-          <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
+          <string>KTTSD not running</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="autostartMgrCheckBox" >
-         <property name="whatsThis" >
-          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em>Note&lt;em>: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
+       <item row="3" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="text" >
-          <string>Sta&amp;rt minimized in system tray when speaking</string>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
          </property>
-         <property name="checked" >
-          <bool>true</bool>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
-       <item>
+       <item row="2" column="0" >
         <layout class="QHBoxLayout" >
          <property name="margin" >
           <number>0</number>
@@ -113,21 +111,28 @@
          </item>
         </layout>
        </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+       <item row="1" column="0" >
+        <widget class="QCheckBox" name="autostartMgrCheckBox" >
+         <property name="whatsThis" >
+          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em>Note&lt;em>: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
          </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
+         <property name="text" >
+          <string>Sta&amp;rt minimized in system tray when speaking</string>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
+         <property name="checked" >
+          <bool>true</bool>
          </property>
-        </spacer>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QCheckBox" name="enableKttsdCheckBox" >
+         <property name="whatsThis" >
+          <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
+         </property>
+         <property name="text" >
+          <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1233,32 +1238,25 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
+   <class>KCModule</class>
+   <extends>QWidget</extends>
+   <header>kcmodule.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KCModule</class>
-   <extends>QWidget</extends>
-   <header>kcmodule.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>

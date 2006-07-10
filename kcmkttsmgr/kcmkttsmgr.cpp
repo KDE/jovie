@@ -1847,6 +1847,7 @@ void KCMKttsMgr::kttsdStarted()
             this, SLOT(kttsdStarted()));
         connect(m_kspeech, SIGNAL(kttsdExiting()),
             this, SLOT(kttsdExiting()));
+        kttsdVersion->setText(i18n("KTTSD Version: %1", m_kspeech->version()));
 
     } else {
         enableKttsdCheckBox->setChecked(false);
@@ -1872,6 +1873,7 @@ void KCMKttsMgr::kttsdExiting()
     notifyTestButton->setEnabled(false);
     delete m_kspeech;
     m_kspeech = 0;
+    kttsdVersion->setText(i18n("KTTSD not running"));
 }
 
 /**
