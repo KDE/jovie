@@ -24,7 +24,7 @@
 // Qt includes.
 
 // KDE includes.
-#include <phonon/simpleplayer.h>
+#include <phonon/audioplayer.h>
 #include <kurl.h>
 
 // KTTS includes.
@@ -35,57 +35,57 @@
 PhononPlayer::PhononPlayer(QObject* parent, const QStringList& args) :
     Player(parent, "phononplayer", args)
 {
-    m_simplePlayer = new Phonon::SimplePlayer(Phonon::AccessibilityCategory, this);
+    m_audioPlayer = new Phonon::AudioPlayer(Phonon::AccessibilityCategory, this);
 }
 
 PhononPlayer::~PhononPlayer()
 {
-    delete m_simplePlayer;
+    delete m_audioPlayer;
 }
 
 /*virtual*/ void PhononPlayer::startPlay(const QString& file)
 {
-    m_simplePlayer->play(KUrl::fromPath(file));
+    m_audioPlayer->play(KUrl::fromPath(file));
 }
 
 /*virtual*/ void PhononPlayer::pause()
 {
-    m_simplePlayer->pause(); 
+    m_audioPlayer->pause(); 
 }
 
 /*virtual*/ void PhononPlayer::stop() 
 {
-    m_simplePlayer->stop();
+    m_audioPlayer->stop();
 }
 
 /*virtual*/ void PhononPlayer::setVolume(float volume)
 {
-    m_simplePlayer->setVolume(volume);
+    m_audioPlayer->setVolume(volume);
 }
 
 /*virtual*/ float PhononPlayer::volume() const
 {
-    return m_simplePlayer->volume();
+    return m_audioPlayer->volume();
 }
 
 /*virtual*/ bool PhononPlayer::playing() const
 {
-    return m_simplePlayer->isPlaying();
+    return m_audioPlayer->isPlaying();
 }
 
 /*virtual*/ bool PhononPlayer::paused() const
 {
-    return m_simplePlayer->isPaused();
+    return m_audioPlayer->isPaused();
 }
 
 /*virtual*/ int PhononPlayer::totalTime() const
 {
-    return m_simplePlayer->totalTime();
+    return m_audioPlayer->totalTime();
 }
 
 /*virtual*/ int PhononPlayer::currentTime() const
 {
-    return m_simplePlayer->currentTime();
+    return m_audioPlayer->currentTime();
 }
 
 /*virtual*/ int PhononPlayer::position() const
@@ -99,7 +99,7 @@ PhononPlayer::~PhononPlayer()
 
 /*virtual*/ void PhononPlayer::seek(int seekTime)
 {
-    m_simplePlayer->seek(seekTime);
+    m_audioPlayer->seek(seekTime);
 }
 
 /*virtual*/ void PhononPlayer::seekPosition(int position)
