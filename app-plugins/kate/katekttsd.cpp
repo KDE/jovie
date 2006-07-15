@@ -19,9 +19,8 @@
 
 // Qt includes.
 #include <QMessageBox>
-#include <dcopclient.h>
 #include <QTimer>
-
+#include <QtDBus>
 // KDE includes.
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/selectioninterface.h>
@@ -92,32 +91,21 @@ void KateKttsdPluginView::slotReadOut()
         text = ei->text();
     }
 
-    DCOPClient *client = kapp->dcopClient();
     // If KTTSD not running, start it.
-    if (!client->isApplicationRegistered("kttsd"))
+    if (!QDBus::sessionBus().interface()->isServiceRegistered("kttsd"))
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
             QMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
     }
-    QByteArray  data;
-    QByteArray  data2;
-    DCOPCString    replyType;
-    QByteArray  replyData;
-    QDataStream arg( &data,QIODevice::WriteOnly);
-    arg.setVersion(QDataStream::Qt_3_1);
-    arg << text << "";
-    if ( !client->call("kttsd", "KSpeech", "setText(QString,QString)",
-                       data, replyType, replyData, true) )
-       QMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
-                                 i18n( "The DCOP call setText failed." ));
-    QDataStream arg2( &data2,QIODevice::WriteOnly);
-    arg2.setVersion(QDataStream::Qt_3_1);
-
-    arg2 << 0;
-    if ( !client->call("kttsd", "KSpeech", "startText(uint)",
-                       data2, replyType, replyData, true) )
-       QMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
-                                i18n( "The DCOP call startText failed." ));
+	QDBusInterface kttsd( "org.kde.KSpeech", "/KSpeech", "org.kde.KSpeech" );
+	QDBusReply<bool> reply = kttsd.call("setText", text,"");
+    if ( !reply.isValid())
+       QMessageBox::warning( 0, i18n( "DBUS Call Failed" ),
+                                 i18n( "The DBUS call setText failed." ));
+	reply = kttsd.call("startText", 0);
+    if ( !reply.isValid())
+       QMessageBox::warning( 0, i18n( "DBUS Call Failed" ),
+                                i18n( "The DBUS call startText failed." ));
 }
 
