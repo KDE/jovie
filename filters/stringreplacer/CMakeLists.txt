@@ -21,7 +21,7 @@ install(TARGETS kttsd_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kttsd/stringreplacer/ FILES 
+install(FILES 
     abbreviations.xml
     chat.xml
     chat-de.xml
@@ -30,7 +30,7 @@ install_files( ${DATA_INSTALL_DIR}/kttsd/stringreplacer/ FILES
     polish_festival_unspeakables.xml
     kmail.xml
     festival_unspeakable_chars.xml
-    qt2plaintext.xml )
+    qt2plaintext.xml DESTINATION ${DATA_INSTALL_DIR}/kttsd/stringreplacer/)
     
 install( FILES kttsd_stringreplacerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
