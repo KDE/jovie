@@ -105,8 +105,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 {
     setObjectName("kttsmgrsystemtray");
     
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
-    setPixmap (icon);
+    QIcon icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
+    setIcon (icon);
     
     // Start KTTS daemon if enabled and if not already running.
     KConfig config("kttsdrc");
@@ -154,7 +154,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     act->setIcon(KIcon("kttsd"));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
-    
+    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+		  SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 KttsMgrTray::~KttsMgrTray()
@@ -163,6 +164,9 @@ KttsMgrTray::~KttsMgrTray()
 
 bool KttsMgrTray::event(QEvent *event)
 {
+#warning use setToolTip if status changes
+
+/*
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
         QString status = "<qt><b>KTTSMgr</b> - ";
@@ -173,22 +177,15 @@ bool KttsMgrTray::event(QEvent *event)
         QToolTip::showText(helpEvent->globalPos(), status);
     }
     return QWidget::event(event);
+
+*/
 }
 
-void KttsMgrTray::mousePressEvent(QMouseEvent* ev)
+void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
 {
     // Convert left-click into a right-click.
-    if (ev->button() == Qt::LeftButton) {
-        ev->accept();
-        QMouseEvent* myEv = new QMouseEvent(
-            QEvent::MouseButtonPress,
-            ev->pos(),
-            Qt::RightButton,
-            Qt::RightButton,
-            Qt::NoModifier);
-        KSystemTray::mousePressEvent(myEv);
-     } else
-        KSystemTray::mousePressEvent(ev);
+    if (reason == Trigger)
+       contextMenu()->exec();
 }
 
 /*virtual*/ void KttsMgrTray::contextMenuAboutToShow(KMenu* menu)
