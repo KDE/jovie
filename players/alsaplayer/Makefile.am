@@ -2,6 +2,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/kttsd/libkttsd -I$(top_builddir)/kttsd/libkttsd \
 	$(all_includes)
+KDE_CXXFLAGS = -D_LARGEFILE64_SOURCE -D_GNU_SOURCE
 
 # Let automoc handle all of the metsource files (moc).
 METASOURCES = AUTO

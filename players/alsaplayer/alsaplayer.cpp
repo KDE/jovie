@@ -893,7 +893,11 @@ void AlsaPlayer::set_params(void)
     assert(err >= 0);
 #endif
     rate = hwdata.rate;
+#if SND_LIB_MAJOR >= 1
     err = snd_pcm_hw_params_set_rate_near(handle, hwparams, &hwdata.rate, 0);
+#else
+    err = snd_pcm_hw_params_set_rate_near(handle, hwparams, hwdata.rate, 0);
+#endif
     assert(err >= 0);
     if ((float)rate * 1.05 < hwdata.rate || (float)rate * 0.95 > hwdata.rate) {
         MSG("Warning: rate is not accurate (requested = %iHz, got = %iHz)", rate, hwdata.rate);
@@ -902,14 +906,22 @@ void AlsaPlayer::set_params(void)
 
     period_size = m_defPeriodSize;
     dir = 1;
+#if SND_LIB_MAJOR >= 1
     err = snd_pcm_hw_params_set_period_size_near(handle, hwparams, &period_size, &dir);
+#else
+    err = snd_pcm_hw_params_set_period_size_near(handle, hwparams, period_size, &dir);
+#endif
     if (err < 0) {
         MSG("Setting period_size to %lu failed, but continuing: %s", period_size, snd_strerror(err));
     }
 
     periods = m_defPeriods;
     dir = 1;
+#if SND_LIB_MAJOR >= 1
     err = snd_pcm_hw_params_set_periods_near(handle, hwparams, &periods, &dir);
+#else
+    err = snd_pcm_hw_params_set_periods_near(handle, hwparams, periods, &dir);
+#endif
     if (err < 0)
         MSG("Unable to set number of periods to %i, but continuing: %s", periods, snd_strerror(err));
 
@@ -925,7 +937,11 @@ void AlsaPlayer::set_params(void)
     canPause = (1 == snd_pcm_hw_params_can_pause(hwparams));
 
     /* Get final buffer size and calculate the chunk size we will pass to device. */
+#if SND_LIB_MAJOR >= 1
     snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size);
+#else
+    buffer_size = snd_pcm_hw_params_get_buffer_size(hwparams);
+#endif
     chunk_size = periods * period_size;
 
     if (0 == chunk_size) {
