@@ -26,7 +26,7 @@
 #define KTTSMGR_H
 
 // KDE includes.
-#include <ksystemtray.h>
+#include <ksystemtrayicon.h>
 
 // KTTS includes.
 #include "kspeechinterface.h"
@@ -35,7 +35,7 @@ class QEvent;
 class QMouseEvent;
 class QAction;
 
-class KttsMgrTray: public KSystemTray
+class KttsMgrTray: public KSystemTrayIcon
 {
     Q_OBJECT
 

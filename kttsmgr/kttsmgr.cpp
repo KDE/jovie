@@ -34,7 +34,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
-#include <ksystemtray.h>
+#include <ksystemtrayicon.h>
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kaboutapplication.h>
@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options );
 
     KUniqueApplication::addCmdLineOptions();
-    
+
     KUniqueApplication::setOrganizationDomain("kde.org");
     KUniqueApplication::setApplicationName("KttsMgr");
     KUniqueApplication app;
@@ -100,14 +100,14 @@ int main (int argc, char *argv[])
 /* ------------------  KttsMgrTray class ----------------------- */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    KSystemTray(parent),
+    KSystemTrayIcon(parent),
     m_kspeech(0)
 {
     setObjectName("kttsmgrsystemtray");
-    
+
     QIcon icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
     setIcon (icon);
-    
+
     // Start KTTS daemon if enabled and if not already running.
     KConfig config("kttsdrc");
     config.setGroup("General");
@@ -125,13 +125,13 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     // Set up menu.
     QAction *act;
-    
+
     actStop = contextMenu()->addAction (
         i18n("&Stop/Delete"), this, SLOT(stopSelected()));
     actStop->setIcon(KIcon("player_stop"));
     actPause = contextMenu()->addAction (
         i18n("&Pause"), this, SLOT(pauseSelected()));
-    actPause->setIcon(KIcon("player_pause"));        
+    actPause->setIcon(KIcon("player_pause"));
     actResume = contextMenu()->addAction (
         i18n("&Resume"), this, SLOT(resumeSelected()));
     actResume->setIcon(KIcon("player_play"));
