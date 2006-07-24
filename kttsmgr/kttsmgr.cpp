@@ -34,7 +34,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
-#include <ksystemtray.h>
+#include <ksystemtrayicon.h>
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kaboutapplication.h>
@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options );
 
     KUniqueApplication::addCmdLineOptions();
-    
+
     KUniqueApplication::setOrganizationDomain("kde.org");
     KUniqueApplication::setApplicationName("KttsMgr");
     KUniqueApplication app;
@@ -100,14 +100,14 @@ int main (int argc, char *argv[])
 /* ------------------  KttsMgrTray class ----------------------- */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    KSystemTray(parent),
+    KSystemTrayIcon(parent),
     m_kspeech(0)
 {
     setObjectName("kttsmgrsystemtray");
-    
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
-    setPixmap (icon);
-    
+
+    QIcon icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
+    setIcon (icon);
+
     // Start KTTS daemon if enabled and if not already running.
     KConfig config("kttsdrc");
     config.setGroup("General");
@@ -125,13 +125,13 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     // Set up menu.
     QAction *act;
-    
+
     actStop = contextMenu()->addAction (
         i18n("&Stop/Delete"), this, SLOT(stopSelected()));
     actStop->setIcon(KIcon("player_stop"));
     actPause = contextMenu()->addAction (
         i18n("&Pause"), this, SLOT(pauseSelected()));
-    actPause->setIcon(KIcon("player_pause"));        
+    actPause->setIcon(KIcon("player_pause"));
     actResume = contextMenu()->addAction (
         i18n("&Resume"), this, SLOT(resumeSelected()));
     actResume->setIcon(KIcon("player_play"));
@@ -154,7 +154,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     act->setIcon(KIcon("kttsd"));
 
     connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
-    
+    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+		  SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 KttsMgrTray::~KttsMgrTray()
@@ -163,6 +164,9 @@ KttsMgrTray::~KttsMgrTray()
 
 bool KttsMgrTray::event(QEvent *event)
 {
+#warning use setToolTip if status changes
+
+/*
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
         QString status = "<qt><b>KTTSMgr</b> - ";
@@ -173,22 +177,15 @@ bool KttsMgrTray::event(QEvent *event)
         QToolTip::showText(helpEvent->globalPos(), status);
     }
     return QWidget::event(event);
+
+*/
 }
 
-void KttsMgrTray::mousePressEvent(QMouseEvent* ev)
+void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
 {
     // Convert left-click into a right-click.
-    if (ev->button() == Qt::LeftButton) {
-        ev->accept();
-        QMouseEvent* myEv = new QMouseEvent(
-            QEvent::MouseButtonPress,
-            ev->pos(),
-            Qt::RightButton,
-            Qt::RightButton,
-            Qt::NoModifier);
-        KSystemTray::mousePressEvent(myEv);
-     } else
-        KSystemTray::mousePressEvent(ev);
+    if (reason == Trigger)
+       contextMenu()->exec();
 }
 
 /*virtual*/ void KttsMgrTray::contextMenuAboutToShow(KMenu* menu)
