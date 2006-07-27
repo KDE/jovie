@@ -100,13 +100,13 @@ int main (int argc, char *argv[])
 /* ------------------  KttsMgrTray class ----------------------- */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    KSystemTrayIcon(parent),
+    KSystemTrayIcon("kttsd", parent),
     m_kspeech(0)
 {
     setObjectName("kttsmgrsystemtray");
 
-    QIcon icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
-    setIcon (icon);
+//    QIcon icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
+//    setIcon (icon);
 
     // Start KTTS daemon if enabled and if not already running.
     KConfig config("kttsdrc");
@@ -116,7 +116,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
         if (!isKttsdRunning())
         {
             QString error;
-            if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
+            if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
                 kDebug() << "Starting KTTSD failed with message " << error << endl;
             else
                 isKttsdRunning();
@@ -153,9 +153,10 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
     act->setIcon(KIcon("kttsd"));
 
-    connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
-    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-		  SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
+    connect(this, SIGNAL(quitSelected()),
+                  SLOT(quitSelected()));
+    connect(this, SIGNAL(activated(int)),
+                  SLOT(slotActivated(int)));
 }
 
 KttsMgrTray::~KttsMgrTray()
@@ -164,27 +165,24 @@ KttsMgrTray::~KttsMgrTray()
 
 bool KttsMgrTray::event(QEvent *event)
 {
-#warning use setToolTip if status changes
-
-/*
+    // TODO: This code is not working, apparently because the Tooltip
+    // event does not fire anymore since KSystemTrayIcon is not a widget??
+    kDebug() << "KttsMgrTray::event: running" << endl;
     if (event->type() == QEvent::ToolTip) {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
         QString status = "<qt><b>KTTSMgr</b> - ";
         status += i18n("<qt>Text-to-Speech Manager");
         status += "<br/><br/>";
         status += getStatus();
         status += "</qt>";
-        QToolTip::showText(helpEvent->globalPos(), status);
+        setToolTip(status);
     }
-    return QWidget::event(event);
-
-*/
+    return false;
 }
 
-void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
+void KttsMgrTray::slotActivated(int reason)
 {
     // Convert left-click into a right-click.
-    if (reason == Trigger)
+    if (reason == QSystemTrayIcon::Trigger)
        contextMenu()->exec();
 }
 
@@ -280,7 +278,7 @@ void KttsMgrTray::speakClipboardSelected()
     if (!isKttsdRunning())
     {
         QString error;
-        if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
+        if (KToolInvocation::startServiceByDesktopName("kttsd", QString(), &error) != 0)
             kError() << "Starting KTTSD failed with message " << error << endl;
     }
     m_kspeech->sayClipboard();

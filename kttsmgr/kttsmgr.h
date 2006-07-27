@@ -50,7 +50,7 @@ class KttsMgrTray: public KSystemTrayIcon
         Q_SCRIPTABLE void jobStateChanged(const QString &appId, int jobNum, int state);
 
         bool event(QEvent *event);
-        void slotActivated(QSystemTrayIcon::ActivationReason);
+        void slotActivated(int reason);
         virtual void contextMenuAboutToShow(KMenu* menu);
 
     private slots:
