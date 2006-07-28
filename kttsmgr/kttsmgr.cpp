@@ -155,8 +155,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     connect(this, SIGNAL(quitSelected()),
                   SLOT(quitSelected()));
-    connect(this, SIGNAL(activated(int)),
-                  SLOT(slotActivated(int)));
+    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+                  SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 KttsMgrTray::~KttsMgrTray()
@@ -167,7 +167,6 @@ bool KttsMgrTray::event(QEvent *event)
 {
     // TODO: This code is not working, apparently because the Tooltip
     // event does not fire anymore since KSystemTrayIcon is not a widget??
-    kDebug() << "KttsMgrTray::event: running" << endl;
     if (event->type() == QEvent::ToolTip) {
         QString status = "<qt><b>KTTSMgr</b> - ";
         status += i18n("<qt>Text-to-Speech Manager");
@@ -179,7 +178,7 @@ bool KttsMgrTray::event(QEvent *event)
     return false;
 }
 
-void KttsMgrTray::slotActivated(int reason)
+void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
 {
     // Convert left-click into a right-click.
     if (reason == QSystemTrayIcon::Trigger)
