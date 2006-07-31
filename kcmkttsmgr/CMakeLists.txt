@@ -19,7 +19,7 @@ kde4_add_plugin(kcm_kttsd ${kcm_kttsd_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kttsd )
 
-target_link_libraries(kcm_kttsd  ${KDE4_KIO_LIBS} kparts kttsd  )
+target_link_libraries(kcm_kttsd  ${KDE4_KPARTS_LIBS} kttsd  )
 
 install(TARGETS kcm_kttsd  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
