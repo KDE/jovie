@@ -25,5 +25,5 @@
 
 #include "phononplayer.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkttsd_phononplugin, KGenericFactory<PhononPlayer>("kttsd") );
+K_EXPORT_COMPONENT_FACTORY( libkttsd_phononplugin, KGenericFactory<PhononPlayer>("kttsd") )
 

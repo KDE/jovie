@@ -52,7 +52,7 @@ public:
         utResumeSnd,                 /**< Resume sound file */
         utMessage,                   /**< Message */
         utWarning,                   /**< Warning */
-        utScreenReader,              /**< Screen Reader Output */
+        utScreenReader               /**< Screen Reader Output */
     };
 
     /**

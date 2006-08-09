@@ -51,7 +51,7 @@ class SpeechJob : public QObject {
     Q_PROPERTY(KSpeech::JobState state READ state WRITE setState)
     Q_PROPERTY(QStringList sentences READ sentences WRITE setSentences)
     Q_PROPERTY(int sentenceCount READ sentenceCount)
-    Q_PROPERTY(int sentenceNum READ sentenceNum WRITE setSentenceNum);
+    Q_PROPERTY(int sentenceNum READ sentenceNum WRITE setSentenceNum)
     Q_PROPERTY(int seq READ seq WRITE setSeq)
     Q_PROPERTY(QString getNextSentence READ getNextSentence)
     Q_PROPERTY(QByteArray serialize READ serialize)

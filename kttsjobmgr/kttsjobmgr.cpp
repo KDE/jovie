@@ -652,7 +652,7 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 /**
 * This signal is emitted when KTTSD starts or restarts after a call to reinit.
 */
-Q_SCRIPTABLE void KttsJobMgrPart::kttsdStarted() { slot_refresh(); };
+Q_SCRIPTABLE void KttsJobMgrPart::kttsdStarted() { slot_refresh(); }
 
 
 /**
