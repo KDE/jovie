@@ -574,16 +574,16 @@ void HadifixConf::voiceButton_clicked () {
     dialog->setDefaultButton(KDialog::Cancel);
     
     QWidget *w = new QWidget(dialog);
-    Ui::VoiceFileWidget *widget;
-    widget->setupUi(w);
+    Ui::VoiceFileWidget voicefile;
+    voicefile.setupUi(w);
     dialog->setMainWidget(w);
 
-    widget->femaleOption->setChecked(!d->isMaleVoice());
-    widget->maleOption->setChecked(d->isMaleVoice());
-    widget->voiceFileURL->setUrl(KUrl::fromPath(d->getVoiceFilename()));
+    voicefile.femaleOption->setChecked(!d->isMaleVoice());
+    voicefile.maleOption->setChecked(d->isMaleVoice());
+    voicefile.voiceFileURL->setUrl(KUrl::fromPath(d->getVoiceFilename()));
 
     if (dialog->exec() == QDialog::Accepted) {
-        d->setVoice (widget->voiceFileURL->url().path(), widget->maleOption->isChecked());
+        d->setVoice (voicefile.voiceFileURL->url().path(), voicefile.maleOption->isChecked());
         d->setDefaultEncodingFromVoice();
         emit changed(true);
     }
