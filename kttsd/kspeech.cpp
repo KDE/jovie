@@ -110,7 +110,7 @@ KSpeech::KSpeech(QObject *parent) :
 {
     kDebug() << "KSpeech::KSpeech Running" << endl;
     new KSpeechAdaptor(this);
-    QDBus::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
+    QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
     ready();
 }
 
