@@ -527,7 +527,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
             this, SLOT(slotTabChanged()));
 
     // See if KTTSD is already running, and if so, create jobs tab.
-    if (QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
         kttsdStarted();
     else
         // Start KTTSD if check box is checked.
@@ -1717,7 +1717,7 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
     if (reenter) return;
     reenter = true;
     // See if KTTSD is running.
-    bool kttsdRunning = (QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
+    bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
 
     // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning << endl;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
@@ -1837,7 +1837,7 @@ void KCMKttsMgr::kttsdStarted()
         enableKttsdCheckBox->setChecked(true);
         // Enable/disable notify Test button.
         slotNotifyListView_currentItemChanged();
-        m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBus::sessionBus());
+        m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
         m_kspeech->setParent(this);
         m_kspeech->setApplicationName("KCMKttsMgr");
         m_kspeech->setDefaultPriority(KSpeech::jpMessage);

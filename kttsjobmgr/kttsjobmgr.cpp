@@ -71,7 +71,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
 {
 //DBusAbstractInterfacePrivate
     Q_UNUSED(args);
-    m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBus::sessionBus());
+    m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
     m_kspeech->setParent(this);
     
     // Establish ourself as a System Manager.

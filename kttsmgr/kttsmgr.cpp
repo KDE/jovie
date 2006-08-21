@@ -205,7 +205,7 @@ void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
     actResume->setEnabled(jobState == KSpeech::jsPaused);
     actRepeat->setEnabled(jobState != -1);
     actSpeakClipboard->setEnabled(kttsdRunning);
-    bool configActive = (QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kcmshell_kcmkttsd"));
+    bool configActive = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kcmshell_kcmkttsd"));
     actConfigure->setEnabled(!configActive);
 }
 
@@ -337,10 +337,10 @@ void KttsMgrTray::configureSelected()
 
 bool KttsMgrTray::isKttsdRunning()
 {
-    bool isRunning = (QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
+    bool isRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
     if (isRunning) {
         if (!m_kspeech) {
-            m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBus::sessionBus());
+            m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
             m_kspeech->setParent(this);
             m_kspeech->setApplicationName("KttsMgr");
             m_kspeech->setIsSystemManager(true);
