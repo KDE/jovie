@@ -67,7 +67,7 @@ public:
         jobLists.insert(KSpeech::jpMessage, new TJobList());
         jobLists.insert(KSpeech::jpText, new TJobList());
     };
-    
+
     ~SpeechDataPrivate()
     {
         // kDebug() << "Running: SpeechDataPrivate::~SpeechDataPrivate" << endl;
@@ -75,7 +75,7 @@ public:
         foreach (SpeechJob* job, allJobs)
             delete job;
         allJobs.clear();
-        
+
         foreach (TJobListPtr jobList, jobLists)
             jobList->clear();
         jobLists.clear();
@@ -86,14 +86,14 @@ public:
             delete pooledFilterMgr;
         }
         pooledFilterMgrs.clear();
-        
+
         foreach (AppData* appData, appData)
             delete appData;
         appData.clear();
     }
-    
+
     friend class SpeechData;
-    
+
 protected:
     /**
     * Configuration data.
@@ -149,9 +149,9 @@ protected:
 SpeechData::SpeechData()
 {
     d = new SpeechDataPrivate();
-    
+
     // Connect ServiceUnregistered signal from DBUS so we know when apps have exited.
-    connect (QDBus::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
+    connect (QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
         this, SLOT(slotServiceUnregistered(const QString&)));
 }
 
@@ -178,7 +178,7 @@ void SpeechData::releaseAppData(const QString& appId)
 
 bool SpeechData::isSsml(const QString &text)
 {
-    /// This checks to see if the root tag of the text is a <speak> tag. 
+    /// This checks to see if the root tag of the text is a <speak> tag.
     QDomDocument ssml;
     ssml.setContent(text, false);  // No namespace processing.
     /// Check to see if this is SSML
@@ -223,12 +223,12 @@ int SpeechData::say(const QString& appId, const QString& text, int sayOptions)
 {
     // TODO: sayOptions
     Q_UNUSED(sayOptions);
-    
+
     // kDebug() << "Running: SpeechData::say" << endl;
     AppData* appData = getAppData(appId);
     KSpeech::JobPriority priority = appData->defaultPriority();
     QString talker = appData->defaultTalker();
-    
+
     // Screen Reader Outputs replace other Screen Reader Outputs not yet speaking.
     if (KSpeech::jpScreenReaderOutput == priority)
         foreach(int jobNum, *d->jobLists[priority]) {
