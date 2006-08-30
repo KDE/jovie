@@ -1,22 +1,12 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!-- Define an entity for your application if it is not part of KDE
-       CVS -->
   <!ENTITY ktts "<application>KTTS</application>">
-  <!ENTITY kappname "&ktts;"><!-- replace kmyapplication here
-                                            do *not* replace kappname-->
-  <!ENTITY package "kdeaccessibility"><!-- kdebase, kdeadmin, etc.  Leave
-                                     this unchanged if your
-                                     application is not maintained in KDE CVS -->
+  <!ENTITY kappname "&ktts;">
+  <!ENTITY package "kdeaccessibility">
   <!ENTITY mbrola "<application>MBROLA</application>">
   <!ENTITY % imageobjectco.module "INCLUDE">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE"> <!-- ONLY If you are writing non-English 
-                                     original documentation, change 
-                                     the language here -->
-    
-  <!-- Do not define any other entities; instead, use the entities
-       from entities/general.entities and $LANG/user.entities. -->
+  <!ENTITY % English "INCLUDE">
 ]>
 <!-- Note to translators: KTTSD is meant to be built under KDE
      versions 3.2 and later.  Please avoid entities that won't
@@ -1724,7 +1714,7 @@ or menu bars. -->
 <!--
 
 <sect1 id="kapp-mainwindow">
-<title>The main &kmyapplication; window</title>
+<title>The main &ktts; window</title>
 
 <sect2>
 <title>The File Menu</title>
@@ -1758,7 +1748,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits</action> &kmyapplication;</para></listitem>
+<listitem><para><action>Quits</action> &ktts;</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
