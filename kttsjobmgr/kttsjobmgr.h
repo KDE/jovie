@@ -51,7 +51,7 @@ public:
 
 protected:
     virtual bool openFile();
-    virtual bool closeURL();
+    virtual bool closeUrl();
 
     /** Slots connected to DBUS Signals emitted by KTTSD. */
 protected Q_SLOTS:

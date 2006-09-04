@@ -290,7 +290,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
 KttsJobMgrPart::~KttsJobMgrPart()
 {
     KGlobal::locale()->removeCatalog("kttsd");
-    closeURL();
+    closeUrl();
     delete m_jobListModel;
 }
 
@@ -299,7 +299,7 @@ bool KttsJobMgrPart::openFile()
     return true;
 }
 
-bool KttsJobMgrPart::closeURL()
+bool KttsJobMgrPart::closeUrl()
 {
     return true;
 }
