@@ -710,6 +710,7 @@ bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
     if (!sentence.isEmpty()) {
         switch (priority) {
             case KSpeech::jpAll:    // should not happen.
+                Q_ASSERT(0);
                 break;
             case KSpeech::jpScreenReaderOutput:
                 utType = Utt::utScreenReader;
@@ -729,6 +730,8 @@ bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
         utt = new Utt(utType, appId, job, sentence, d->talkerMgr->talkerToPlugin(job->talker()));
         utt->setSeq(job->seq());
     }
+
+    bool r = (utt != NULL);
 
     if (utt)
     {
@@ -820,9 +823,13 @@ bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
         // If a text message...
         if (Utt::utText == utt->utType())
             d->uttQueue.append(*utt);
+        else {
+            delete utt;
+            r = false;
+        }
     }
-    
-    return (NULL != utt);
+
+    return r;
 }
 
 uttIterator Speaker::deleteUtterance(uttIterator it)
