@@ -44,7 +44,6 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kprocio.h>
-#include <kprogressbar.h>
 #include <kprogressdialog.h>
 #include <kicon.h>
 

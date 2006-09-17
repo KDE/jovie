@@ -30,7 +30,6 @@
 // KDE includes.
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kprogressbar.h>
 
 // KTTS includes.
 #include <pluginconf.h>

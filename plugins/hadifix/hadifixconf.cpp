@@ -41,7 +41,6 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kprogressbar.h>
 #include <kprogressdialog.h>
 #include <kicon.h>
 

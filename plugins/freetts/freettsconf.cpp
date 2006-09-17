@@ -28,7 +28,6 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kprogressbar.h>
 #include <kprogressdialog.h>
 
 // KTTS includes.
