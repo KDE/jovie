@@ -24,13 +24,13 @@
 // Qt includes.
 #include <QFile>
 #include <QApplication>
+#include <QProgressBar>
 
 // KDE includes.
 #include <klocale.h>
 #include <kdialog.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
-#include <kprogressbar.h>
 #include <kprogressdialog.h>
 
 // KTTS includes.
