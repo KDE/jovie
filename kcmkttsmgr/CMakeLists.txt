@@ -26,7 +26,7 @@ install(TARGETS kcm_kttsd  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kcmkttsd.desktop  DESTINATION  ${XDG_APPS_DIR} )
+install( FILES kcmkttsd.desktop  DESTINATION ${SERVICES_INSTALL_DIR}  )
 install( FILES kcmkttsd_testmessage.desktop  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/ )
 
 
