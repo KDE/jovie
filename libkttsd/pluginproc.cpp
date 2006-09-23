@@ -184,7 +184,7 @@ QString PlugInProc::getSsmlXsltFilename()
     QStringList codecList;
     QString local = i18n("Local")+" (";
     local += QTextCodec::codecForLocale()->name();
-    local += ")";
+    local += ')';
     codecList.append(local);
     codecList.append(i18n("Latin1"));
     codecList.append(i18n("Unicode"));

@@ -193,7 +193,7 @@ QString SbdThread::makeSsmlElem( SsmlElemType et )
             SpeakElem e = m_speakStack.top();
             s = "<speak";
             if ( !e.lang.isEmpty() ) s += makeAttr( "lang", e.lang );
-            s += ">";
+            s += '>';
             break; }
         case etVoice: {
             VoiceElem e = m_voiceStack.top();
@@ -202,7 +202,7 @@ QString SbdThread::makeSsmlElem( SsmlElemType et )
             a += makeAttr( "age",      QString::number(e.age) );
             a += makeAttr( "name",     e.name );
             a += makeAttr( "variant",  e.variant );
-            if ( !a.isEmpty() ) s = "<voice" + a + ">";
+            if ( !a.isEmpty() ) s = "<voice" + a + '>';
             break; }
         case etProsody: {
             ProsodyElem e = m_prosodyStack.top();
@@ -212,12 +212,12 @@ QString SbdThread::makeSsmlElem( SsmlElemType et )
             a += makeAttr( "rate",     e.rate );
             a += makeAttr( "duration", e.duration );
             a += makeAttr( "volume",   e.volume );
-            if ( !a.isEmpty() ) s = "<prosody" + a + ">";
+            if ( !a.isEmpty() ) s = "<prosody" + a + '>';
             break; }
         case etEmphasis: {
             EmphasisElem e = m_emphasisStack.top();
             a += makeAttr( "level",    e.level );
-            if ( !a.isEmpty() ) s = "<emphasis" + a + ">";
+            if ( !a.isEmpty() ) s = "<emphasis" + a + '>';
             break; }
         case etPS: {
             break; }
@@ -251,7 +251,7 @@ QString SbdThread::makeBreakElem( const QDomElement& e )
         QDomAttr a = attrList.item( ndx ).toAttr();
         s += makeAttr( a.name(), a.value() );
     }
-    s += ">";
+    s += '>';
     return s;
 }
 
@@ -302,7 +302,7 @@ QString SbdThread::endSentence()
 {
     if ( !m_sentenceStarted ) return QString();
     QString s = "</speak>";
-    s += "\t";
+    s += '\t';
     m_sentenceStarted = false;
     return s;
 }

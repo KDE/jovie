@@ -286,8 +286,8 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     kDebug() << "CommandProc::synth: running command: " << command << endl;
     m_commandProc = new KProcess;
     m_commandProc->setUseShell(true);
-    m_commandProc->setEnvironment("LANG", language + "." + codec->name());
-    m_commandProc->setEnvironment("LC_CTYPE", language + "." + codec->name());
+    m_commandProc->setEnvironment("LANG", language + '.' + codec->name());
+    m_commandProc->setEnvironment("LC_CTYPE", language + '.' + codec->name());
     *m_commandProc << command;
     connect(m_commandProc, SIGNAL(processExited(KProcess*)),
         this, SLOT(slotProcessExited(KProcess*)));

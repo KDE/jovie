@@ -100,7 +100,7 @@ void TalkerCode::setFullLanguageCode(const QString &fullLanguageCode)
 QString TalkerCode::fullLanguageCode() const
 {
     if (!m_countryCode.isEmpty())
-        return m_languageCode + "_" + m_countryCode;
+        return m_languageCode + '_' + m_countryCode;
     else
         return m_languageCode;
 }
@@ -117,7 +117,7 @@ QString TalkerCode::getTalkerCode() const
 {
     QString code;
     QString languageCode = m_languageCode;
-    if (!m_countryCode.isEmpty()) languageCode += "_" + m_countryCode;
+    if (!m_countryCode.isEmpty()) languageCode += '_' + m_countryCode;
     if (!languageCode.isEmpty()) code = "lang=\"" + languageCode + "\" ";
     if (!m_voice.isEmpty()) code += "name=\"" + m_voice + "\" ";
     if (!m_gender.isEmpty()) code += "gender=\"" + m_gender + "\" ";
@@ -142,11 +142,11 @@ QString TalkerCode::getTranslatedDescription() const
     // TODO: The PlugInName is always English.  Need a way to convert this to a translated
     // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
     // from the config file).
-    if (!m_plugInName.isEmpty()) code += " " + stripPrefer(m_plugInName, prefer);
-    if (!m_voice.isEmpty()) code += " " + stripPrefer(m_voice, prefer);
-    if (!m_gender.isEmpty()) code += " " + translatedGender(stripPrefer(m_gender, prefer));
-    if (!m_volume.isEmpty()) code += " " + translatedVolume(stripPrefer(m_volume, prefer));
-    if (!m_rate.isEmpty()) code += " " + translatedRate(stripPrefer(m_rate, prefer));
+    if (!m_plugInName.isEmpty()) code += ' ' + stripPrefer(m_plugInName, prefer);
+    if (!m_voice.isEmpty()) code += ' ' + stripPrefer(m_voice, prefer);
+    if (!m_gender.isEmpty()) code += ' ' + translatedGender(stripPrefer(m_gender, prefer));
+    if (!m_volume.isEmpty()) code += ' ' + translatedVolume(stripPrefer(m_volume, prefer));
+    if (!m_rate.isEmpty()) code += ' ' + translatedRate(stripPrefer(m_rate, prefer));
     code = code.trimmed();
     if (code.isEmpty()) code = i18n("default");
     return code;
@@ -239,7 +239,7 @@ void TalkerCode::normalize()
             countryName = i18nc("abbreviated country name", "USA");
         if (countryName == i18nc("full country name", "United Kingdom"))
             countryName = i18nc("abbreviated country name", "UK");
-        language += " (" + countryName + ")";
+        language += " (" + countryName + ')';
     }
     return language;
 }
@@ -326,7 +326,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     QString countryCode;
     splitFullLanguageCode(fullLanguageCode, languageCode, countryCode);
     m_languageCode = languageCode;
-    if (fullLanguageCode.left(1) == "*") countryCode = "*" + countryCode;
+    if (fullLanguageCode.left(1) == "*") countryCode = '*' + countryCode;
     m_countryCode = countryCode;
     m_voice = talkerCode.section("name=", 1, 1);
     m_voice = m_voice.section('"', 1, 1);

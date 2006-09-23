@@ -70,7 +70,7 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
         doc = doc.right(doc.length() - doctypeStatementEnd);
     }
     // We should (hopefully) be left with the root element.
-    return (doc.startsWith("<" + elementName) || doc.startsWith(" <" + elementName));
+    return (doc.startsWith('<' + elementName) || doc.startsWith(" <" + elementName));
 }
 
 /** 

@@ -202,8 +202,8 @@ void EposProc::synth(
         languageCode == "sk";
     if (!languageCode.isEmpty())
     {
-        m_eposProc->setEnvironment("LANG", languageCode + "." + codec->name());
-        m_eposProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->name());
+        m_eposProc->setEnvironment("LANG", languageCode + '.' + codec->name());
+        m_eposProc->setEnvironment("LC_CTYPE", languageCode + '.' + codec->name());
     }
     *m_eposProc << eposClientExePath;
     // Language.

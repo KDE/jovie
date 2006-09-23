@@ -141,7 +141,7 @@ QString AddTalker::languageCodeToLanguage(const QString &languageCode)
         language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
     }
     if (!countryCode.isEmpty())
-        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ")";
+        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ')';
     return language;
 }
 

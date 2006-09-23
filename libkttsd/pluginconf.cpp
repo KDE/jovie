@@ -161,7 +161,7 @@ QString PlugInConf::getLocation(const QString &name) {
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
         QString fullName = *it;
 
-        fullName += "/";
+        fullName += '/';
         fullName += name;
         fileinfo.setFile(fullName);
         // The user either has the directory of the file in the path...
@@ -208,7 +208,7 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
 
 /*static*/ QString PlugInConf::testMessage(const QString& languageCode)
 {
-    QString key = "Name[" + languageCode + "]";
+    QString key = "Name[" + languageCode + ']';
     QString result;
     QString def;
     QFile file(KStandardDirs::locate("data", "kttsd/kcmkttsd_testmessage.desktop"));

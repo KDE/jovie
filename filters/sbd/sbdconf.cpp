@@ -127,7 +127,7 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
     QString language = "";
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
-        if (!language.isEmpty()) language += ",";
+        if (!language.isEmpty()) language += ',';
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
     }
     languageLineEdit->setText(language);
@@ -242,7 +242,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     QString language("");
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
-        if (!language.isEmpty()) language += ",";
+        if (!language.isEmpty()) language += ',';
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
     }
     languageLineEdit->setText(language);

@@ -243,7 +243,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
         bool found = false;
         // First search for a match on both language code and country code.
         QString languageCode = m_languageCode;
-        if (!m_countryCode.isNull()) languageCode += "_" + m_countryCode;
+        if (!m_countryCode.isNull()) languageCode += '_' + m_countryCode;
         // kDebug() << "FestivalIntConf::setDefaultVoice:: looking for default voice to match language code " << languageCode << endl;
         int index = 0;
         // Prefer existing voice if it matches.
@@ -495,7 +495,7 @@ void FestivalIntConf::scanVoices()
                     voiceTemp.rateAdjustable = readXmlBool(voiceNode, "rate-adjustable", true);
                     voiceTemp.pitchAdjustable = readXmlBool(voiceNode, "pitch-adjustable", true);
                     m_voiceList.append(voiceTemp);
-                    QString voiceDisplayName = voiceTemp.name + " (" + voiceTemp.code + ")";
+                    QString voiceDisplayName = voiceTemp.name + " (" + voiceTemp.code + ')';
                     if (voiceTemp.gender == "male")
                         selectVoiceCombo->addItem(maleIcon, voiceDisplayName);
                     else if (voiceTemp.gender == "female")
@@ -518,7 +518,7 @@ void FestivalIntConf::scanVoices()
                 voiceTemp.rateAdjustable = true;
                 voiceTemp.pitchAdjustable = true;
                 m_voiceList.append(voiceTemp);
-                selectVoiceCombo->addItem(voiceTemp.name + " (" + voiceTemp.code + ")");
+                selectVoiceCombo->addItem(voiceTemp.name + " (" + voiceTemp.code + ')');
             }
         }
         selectVoiceCombo->setEnabled(true);

@@ -135,7 +135,7 @@ void FliteProc::synth(
     saidText.replace("--", "");
     saidText = "\"" + saidText + "\"";
 */
-    saidText += "\n";
+    saidText += '\n';
 
     *m_fliteProc << fliteExePath;
 //    *m_fliteProc << "-t" << saidText;

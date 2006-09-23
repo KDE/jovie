@@ -190,13 +190,13 @@ void HadifixProc::synth(QString text,
    mbrolaCommand += QString(" -v %1").arg(volume/100.0); // volume ratio
    mbrolaCommand += QString(" -f %1").arg(pitch/100.0);  // freqency ratio
    mbrolaCommand += QString(" -t %1").arg(1/(time/100.0));   // time ratio
-   mbrolaCommand += " " + d->hadifixProc->quote(voice);
+   mbrolaCommand += ' ' + d->hadifixProc->quote(voice);
    mbrolaCommand += " - " + d->hadifixProc->quote(waveFilename);
 
    // kDebug() << "HadifixProc::synth: Hadifix command: " << hadifixCommand << endl;
    // kDebug() << "HadifixProc::synth: Mbrola command: " << mbrolaCommand << endl;
 
-   QString command = hadifixCommand + "|" + mbrolaCommand;
+   QString command = hadifixCommand + '|' + mbrolaCommand;
    *(d->hadifixProc) << command;
    
    // Connect signals from process.

@@ -136,7 +136,7 @@ QString KttsFilterConf::getLocation(const QString &name) {
     // kDebug() << m_path << endl;
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
         QString fullName = *it;
-        fullName += "/";
+        fullName += '/';
         fullName += name;
         // The user either has the directory of the file in the path...
         if(QFile::exists(fullName)) {

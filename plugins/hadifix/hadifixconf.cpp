@@ -217,7 +217,7 @@ QString HadifixConfPrivate::findHadifixDataPath () {
                         if (s.startsWith("/"))
                             return s;
                         else {
-                            QFileInfo info (QFileInfo(*it).path() + "/" + s);
+                            QFileInfo info (QFileInfo(*it).path() + '/' + s);
                             return info.absoluteFilePath();
                         }
                     }
@@ -299,7 +299,7 @@ QStringList HadifixConfPrivate::findVoices(QString mbrolaExec, const QString &ha
         QStringList::iterator iter;
         for (iter = files.begin(); iter != files.end(); ++iter) {
             // Voice files start with "MBROLA", but are afterwards binary files
-            QString filename = *it + "/" + *iter;
+            QString filename = *it + '/' + *iter;
             QFile file (filename);
             if (file.open(QIODevice::ReadOnly)) {
                 QTextStream stream(&file);
@@ -334,7 +334,7 @@ QStringList HadifixConfPrivate::findSubdirs (const QStringList &baseDirs) {
         QStringList::ConstIterator iterEnd = list.constEnd();
         for (iter = list.constBegin(); iter != iterEnd; ++iter) {
             if ((*iter != ".") && (*iter != ".."))
-                result += *it + "/" + *iter;
+                result += *it + '/' + *iter;
         }
     }
     return result;

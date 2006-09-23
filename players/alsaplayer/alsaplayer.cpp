@@ -439,7 +439,7 @@ QStringList AlsaPlayerThread::getPluginList( const QByteArray& classname )
                 infoName += snd_ctl_card_info_get_name(info);
                 infoName += " (";
                 infoName += snd_pcm_info_get_name(pcminfo);
-                infoName += ")";
+                infoName += ')';
                 if (0 == devCnt) {
                     QString pcmName = QString("default:%1").arg(card);
                     result.append(pcmName + infoName);

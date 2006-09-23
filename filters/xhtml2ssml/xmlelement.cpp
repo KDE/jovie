@@ -53,7 +53,7 @@ QString XMLElement::name() {
     return m_name;
 }
 QString XMLElement::startTag() {
-    QString output = "<" + m_name + " ";
+    QString output = '<' + m_name + ' ';
     for(AttributeToValueMap::Iterator it = m_attrmapper.begin(); it != m_attrmapper.end(); ++it) {
         output.append(it.key() + "=\"" + it.data() + "\" ");
     }
@@ -64,7 +64,7 @@ QString XMLElement::startTag() {
 }
 
 QString XMLElement::endTag() {
-    return "</" + m_name + ">";
+    return "</" + m_name + '>';
 }
 
 void XMLElement::setAttribute(const QString &attr, const QString &value) {

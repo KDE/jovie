@@ -182,8 +182,8 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         m_festProc = new KProcess;
         *m_festProc << festivalExePath;
         *m_festProc << "--interactive";
-        m_festProc->setEnvironment("LANG", languageCode + "." + codec->name());
-        m_festProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->name());
+        m_festProc->setEnvironment("LANG", languageCode + '.' + codec->name());
+        m_festProc->setEnvironment("LC_CTYPE", languageCode + '.' + codec->name());
         // kDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
         connect(m_festProc, SIGNAL(processExited(KProcess*)),
                 this, SLOT(slotProcessExited(KProcess*)));
@@ -222,7 +222,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
     }
     // If we just started Festival, or voiceCode has changed, send code to Festival.
     if (m_runningVoiceCode != voiceCode && !voiceCode.isEmpty()) {
-        sendToFestival("(voice_" + voiceCode + ")");
+        sendToFestival("(voice_" + voiceCode + ')');
         m_runningVoiceCode = voiceCode;
     }
 }
@@ -352,7 +352,7 @@ void FestivalIntProc::synth(
             saidText =
                 "(ktts_sabletowave \"" + saidText + "\" \"" +
                 synthFilename + "\" " +
-                QString::number(volumeValue) + ")";
+                QString::number(volumeValue) + ')';
         }
         else
         {
@@ -397,7 +397,7 @@ bool FestivalIntProc::sendIfReady()
     if (m_outputQueue.isEmpty()) return false;
     if (!m_festProc->isRunning()) return false;
     QString text = m_outputQueue[0];
-    text += "\n";
+    text += '\n';
     QByteArray encodedText;
     if (m_codec)
         encodedText = m_codec->fromUnicode(text);

@@ -108,7 +108,7 @@ void FreeTTSProc::synth(
 
 
     QString saidText = text;
-    saidText += "\n";
+    saidText += '\n';
 
     /// As freetts.jar doesn't seem to like being called from an absolute path, 
     /// we need to strip off the path to freetts.jar and pass it to 

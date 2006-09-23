@@ -173,7 +173,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     for ( int ndx=0; ndx < languageList.count(); ++ndx )
     {
         QDomNode languageNode = languageList.item( ndx );
-        if (!languageCodes.isEmpty()) languageCodes += ",";
+        if (!languageCodes.isEmpty()) languageCodes += ',';
         languageCodes += languageNode.toElement().text();
     }
     if ( clear )
@@ -193,7 +193,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     }
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx )
     {
-        if (!language.isEmpty()) language += ",";
+        if (!language.isEmpty()) language += ',';
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
     }
     languageLineEdit->setText(language);
@@ -206,7 +206,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     for ( int ndx=0; ndx < appIdList.count(); ++ndx )
     {
         QDomNode appIdNode = appIdList.item( ndx );
-        if (!appIds.isEmpty()) appIds += ",";
+        if (!appIds.isEmpty()) appIds += ',';
         appIds += appIdNode.toElement().text();
     }
     if ( !clear ) appIds = appIdLineEdit->text() + appIds;
@@ -410,7 +410,7 @@ QString StringReplacerConf::userPlugInName()
         if (m_languageCodeList.count() > 1)
             language = i18n("Multiple Languages");
         if (!language.isEmpty())
-            instName = i18n("String Replacer") + " (" + language + ")";
+            instName = i18n("String Replacer") + " (" + language + ')';
     }
     return instName;
 }
@@ -442,7 +442,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     QString language("");
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
-        if (!language.isEmpty()) language += ",";
+        if (!language.isEmpty()) language += ',';
         language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
     }
     QString s1 = languageLineEdit->text();
@@ -456,7 +456,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         s2.replace( i18n("Multiple Languages"), language );
     }
     s2.replace(" ()", "");
-    if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ")";
+    if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ')';
     nameLineEdit->setText(s2);
     configChanged();
 }
