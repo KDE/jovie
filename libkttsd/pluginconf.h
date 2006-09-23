@@ -32,7 +32,7 @@
 /**
 * @interface PlugInConf
 *
-* pluginconf - the KDE Text-to-Speech Deamon Plugin Configuration API.
+* pluginconf - the KDE Text-to-Speech Daemon Plugin Configuration API.
 *
 * @version 1.0 Draft 2
 *

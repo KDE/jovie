@@ -128,7 +128,7 @@ class CommandProc : public PlugInProc{
         * @param suggestedFilename       If not Null, synthesize only to this filename, otherwise
         *                                synthesize and audibilize the text.
         * @param userCmd                 The program that shall be executed for speaking
-        * @param stdIn                   True if the program shall recieve its data via
+        * @param stdIn                   True if the program shall receive its data via
         *                                standard input.
         * @param codec                   Codec for encoding the text.
         * @param language                The language code (used for the %l macro)

@@ -186,7 +186,7 @@ void HadifixProc::synth(QString text,
       hadifixCommand += " -f";
 
    QString mbrolaCommand = d->hadifixProc->quote(mbrola);
-   mbrolaCommand += " -e"; //Ignore fatal errors on unkown diphone
+   mbrolaCommand += " -e"; //Ignore fatal errors on unknown diphone
    mbrolaCommand += QString(" -v %1").arg(volume/100.0); // volume ratio
    mbrolaCommand += QString(" -f %1").arg(pitch/100.0);  // freqency ratio
    mbrolaCommand += QString(" -t %1").arg(1/(time/100.0));   // time ratio

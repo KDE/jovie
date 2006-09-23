@@ -30,7 +30,7 @@
 /**
 * @interface PlugInProc
 *
-* pluginproc - the KDE Text-to-Speech Deamon Plugin API.
+* pluginproc - the KDE Text-to-Speech Daemon Plugin API.
 *
 * @version 1.0 Draft 1
 *

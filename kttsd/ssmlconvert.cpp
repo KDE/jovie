@@ -78,7 +78,7 @@ QString SSMLConvert::extractTalker(const QString &talkercode) {
 * @returns                  the appropriate talker for the job as a talker code.
 *
 * The appropriate talker is the one that has the most features that are required in some
-* SSML markup. In the future i'm hoping to make the importance of individual features 
+* SSML markup. In the future I'm hoping to make the importance of individual features
 * configurable, but better to walk before you can run.
 * Currently, the searching method in place is like a filter: Those that meet the criteria we're
 * searchin for stay while others are sifted out. This should leave us with the right talker to use.

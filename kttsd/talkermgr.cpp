@@ -138,7 +138,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
                                     this, threadedPlugInName.toLatin1());
                             speechThread->init(config, "Talker_" + talkerCode);
-                            // kDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created succesfully." << endl;
+                            // kDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created successfully." << endl;
                             m_loadedPlugIns.append(speechThread);
                         }
                         ++good;

@@ -179,7 +179,7 @@ bool HadifixConfPrivate::isMaleVoice() {
 
 /**
  * Tries to find hadifix and mbrola by looking onto the hard disk. This is
- * neccessary because both hadifix and mbrola do not have standard
+ * necessary because both hadifix and mbrola do not have standard
  * installation directories.
  */
 void HadifixConfPrivate::findInitialConfig() {

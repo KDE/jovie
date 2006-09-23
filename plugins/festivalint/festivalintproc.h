@@ -265,7 +265,7 @@ class FestivalIntProc : public PlugInProc{
         QString m_voiceCode;
 
         /**
-        * True if the voice is preloaded.  Also used as a flag to supress killing
+        * True if the voice is preloaded.  Also used as a flag to suppress killing
         * Festival, since startup time will be excessive.
         */
         bool m_preload;
