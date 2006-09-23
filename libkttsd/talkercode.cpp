@@ -506,7 +506,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     KService::List  offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return QString::null;
+    return QString();
 }
 
 /**

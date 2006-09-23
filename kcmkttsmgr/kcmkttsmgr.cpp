@@ -2187,7 +2187,7 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 	KService::List  offers =  KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return QString::null;
+    return QString();
 }
 
 /**
