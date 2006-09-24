@@ -1178,7 +1178,7 @@ bool Speaker::event ( QEvent * e )
     {
         // kDebug() << "Speaker::event: received event." << endl;
         doUtterances();
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
