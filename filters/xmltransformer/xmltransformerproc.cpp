@@ -29,7 +29,7 @@
 // KDE includes.
 #include <kdeversion.h>
 #include <kconfig.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <kdebug.h>
@@ -213,33 +213,31 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     }
 
     /// Write @param text to a temporary file.
-    KTempFile inFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".xml");
-    m_inFilename = inFile.file()->fileName();
-    QTextStream* wstream = inFile.textStream();
-    if (wstream == 0) {
-        /// wtf...
-        kDebug() << "XmlTransformerProc::convert: Can't write to " << m_inFilename << endl;;
-        return false;
-    }
+    KTemporaryFile inFile;
+    inFile.setPrefix("kttsd-");
+    inFile.setSuffix(".xml");
+    inFile.setAutoRemove(false);
+    inFile.open();
+    m_inFilename = inFile.fileName();
+    QTextStream wstream (&inFile);
     // TODO: Is encoding an issue here?
     // If input does not have xml processing instruction, add it.
-    if (!inputText.startsWith("<?xml")) *wstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    if (!inputText.startsWith("<?xml")) wstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     // FIXME: Temporary Fix until Konqi returns properly formatted xhtml with & coded as &amp;
     // This will change & inside a CDATA section, which is not good, and also within comments and
     // processing instructions, which is OK because we don't speak those anyway.
     QString text = inputText;
     text.replace(QRegExp("&(?!amp;)"),"&amp;");
-    *wstream << text;
-    inFile.close();
-#if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)
-    inFile.sync();
-#endif
+    wstream << text;
+    inFile.flush();
 
     // Get a temporary output file name.
-    KTempFile outFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".output");
-    m_outFilename = outFile.file()->fileName();
-    outFile.close();
-    // outFile.unlink();    // only activate this if necessary.
+    KTemporaryFile outFile;
+    outFile.setPrefix("kttsd-");
+    outFile.setSuffix(".output");
+    outFile.setAutoRemove(false);
+    outFile.open();
+    m_outFilename = outFile.fileName();
 
     /// Spawn an xsltproc process to apply our stylesheet to input file.
     m_xsltProc = new KProcess;

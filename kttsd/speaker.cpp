@@ -38,7 +38,7 @@
 #include <kparts/componentfactory.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kservicetypetrader.h>
 #include <kspeech.h>
 //#include <kio/job.h>
@@ -992,15 +992,12 @@ void Speaker::postPlaySignals(uttIterator it)
 
 QString Speaker::makeSuggestedFilename()
 {
-    QString tmpDir = KStandardDirs::locateLocal("tmp", "kttsd-");
-    kDebug() << "Speaker::makeSuggestedFilename: tmpDir = " << tmpDir << endl;
-    KTempFile tempFile (tmpDir, ".wav");
-    // TODO: This not working.  Why?
-    // QString waveFile = tempFile.file()->name();
-    // QString waveFile = mFile.name();
-    // tempFile.close();
-    QString waveFile = tempFile.name();
-    QFile::remove(waveFile);
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setPrefix("kttsd-");
+    tempFile->setSuffix(".wav");
+    tempFile->open();
+    QString waveFile = tempFile->fileName();
+    delete tempFile;
     kDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return KStandardDirs::realFilePath(waveFile);
 }

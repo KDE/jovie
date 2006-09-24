@@ -28,7 +28,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kprocess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 
 // KTTS includes.
@@ -148,13 +148,16 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
     {
-        KTempFile tempFile(KStandardDirs::locateLocal("tmp", "commandplugin-"), ".txt");
-        QTextStream* fs = tempFile.textStream();
-        fs->setCodec(codec);
-        *fs << text;
-        *fs << endl;
-        m_textFilename = tempFile.file()->fileName();
-        tempFile.close();
+        KTemporaryFile tempFile;
+        tempFile.setPrefix("commandplugin-");
+        tempFile.setSuffix(".txt");
+        tempFile.setAutoRemove(false);
+        tempFile.open();
+        QTextStream fs (&tempFile);
+        fs.setCodec(codec);
+        fs << text;
+        fs << endl;
+        m_textFilename = tempFile.fileName();
     } else m_textFilename.clear();
 
     // 2. replace variables with values

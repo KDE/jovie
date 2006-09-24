@@ -30,7 +30,7 @@
 #include <kdeversion.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 
 // SSMLConvert includes.
@@ -206,29 +206,27 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
 bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     m_xsltFilename = xsltFilename;
     /// Write @param text to a temporary file.
-    KTempFile inFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".ssml");
-    m_inFilename = inFile.file()->fileName();
-    QTextStream* wstream = inFile.textStream();
-    if (wstream == 0) {
-        /// wtf...
-        kDebug() << "SSMLConvert::transform: Can't write to " << m_inFilename << endl;;
-        return false;
-    }
+    KTemporaryFile inFile;
+    inFile.setPrefix("kttsd-");
+    inFile.setSuffix(".ssml");
+    inFile.setAutoRemove(false);
+    inFile.open();
+    m_inFilename = inFile.fileName();
+    QTextStream wstream (&inFile);
     // TODO: Is encoding an issue here?
     // TODO: It would be nice if we detected whether the XML is properly formed
     // with the required xml processing instruction and encoding attribute.  If
     // not wrap it in such.  But maybe this should be handled by SpeechData::setText()?
-    *wstream << text;
-    inFile.close();
-#if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)
-    inFile.sync();
-#endif
+    wstream << text;
+    inFile.flush();
 
     // Get a temporary output file name.
-    KTempFile outFile(KStandardDirs::locateLocal("tmp", "kttsd-"), ".output");
-    m_outFilename = outFile.file()->fileName();
-    outFile.close();
-    // outFile.unlink();    // only activate this if necessary.
+    KTemporaryFile outFile;
+    outFile.setPrefix("kttsd-");
+    outFile.setSuffix(".output");
+    outFile.setAutoRemove(false);
+    outFile.open();
+    m_outFilename = outFile.fileName();
 
     /// Spawn an xsltproc process to apply our stylesheet to our SSML file.
     m_xsltProc = new KProcess;

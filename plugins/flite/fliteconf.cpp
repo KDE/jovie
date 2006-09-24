@@ -29,7 +29,7 @@
 // KDE includes.
 #include <klocale.h>
 #include <kdialog.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <kprogressdialog.h>
 
@@ -134,9 +134,12 @@ void FliteConf::slotFliteTest_clicked()
         connect (m_fliteProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "fliteplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->fileName();
-    tempFile.close();
+    KTemporaryFile tempFile;
+    tempFile.setPrefix("fliteplugin-");
+    tempFile.setSuffix(".wav");
+    tempFile.setAutoRemove(false);
+    tempFile.open();
+    QString tmpWaveFile = tempFile.fileName();
 
     // Get test message in the language of the voice.
     QString testMsg = testMessage(m_languageCode);

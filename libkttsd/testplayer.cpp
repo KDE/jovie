@@ -27,7 +27,7 @@
 
 // KDE includes.
 #include <kapplication.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <kparts/componentfactory.h>
 #include <kdebug.h>
@@ -183,10 +183,12 @@ Player* TestPlayer::createPlayerObject(int playerOption)
  */
 QString TestPlayer::makeSuggestedFilename()
 {
-    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "kttsmgr-"), ".wav");
-    QString waveFile = tempFile.file()->fileName();
-    tempFile.close();
-    QFile::remove(waveFile);
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setPrefix("kttsmgr-");
+    tempFile->setSuffix(".wav");
+    tempFile->open();
+    QString waveFile = tempFile->fileName();
+    delete tempFile;
     // kDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return PlugInConf::realFilePath(waveFile);
 }

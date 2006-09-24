@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kglobal.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kprocio.h>
@@ -548,12 +548,12 @@ void FestivalIntConf::slotTest_clicked()
         connect (m_festProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "festivalintplugin-"), ".wav");
-    // FIXME: Temporary workaround for KTempFile problem.
-    // QString tmpWaveFile = tempFile.file()->name();
-    // tempFile.close();
-    QString tmpWaveFile = tempFile.name();
-    QFile::remove(tmpWaveFile);
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setPrefix("festivalintplugin-");
+    tempFile->setSuffix(".wav");
+    tempFile->open();
+    QString tmpWaveFile = tempFile->fileName();
+    delete tempFile;
 
     kDebug() << "FestivalIntConf::slotTest_clicked: tmpWaveFile = " << tmpWaveFile << endl;
 

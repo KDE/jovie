@@ -30,7 +30,7 @@
 #include <QTextStream>
 
 // KDE includes.
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kaboutdata.h>
 #include <kaboutapplication.h>
 #include <kdebug.h>
@@ -605,9 +605,12 @@ void HadifixConf::testButton_clicked () {
         connect (d->hadifixProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
-    KTempFile tempFile (KStandardDirs::locateLocal("tmp", "hadifixplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->fileName();
-    tempFile.close();
+    KTemporaryFile tempFile;
+    tempFile.setPrefix("hadifixplugin-");
+    tempFile.setSuffix(".wav");
+    tempFile.setAutoRemove(false);
+    tempFile.open();
+    QString tmpWaveFile = tempFile.fileName();
 
     // Tell user to wait.
     d->progressDlg = new KProgressDialog(d, 
