@@ -73,7 +73,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     Q_UNUSED(args);
     m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
     m_kspeech->setParent(this);
-    
+
     // Establish ourself as a System Manager.
     m_kspeech->setApplicationName("KCMKttsMgr");
     m_kspeech->setIsSystemManager(true);
@@ -82,7 +82,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_selectOnTextSet = false;
     m_buttonBox = 0;
 
-    // All the ktts components use the same catalogue.
+    // All the ktts components use the same catalog.
     KGlobal::locale()->insertCatalog("kttsd");
 
     // Create a QVBox to host everything.
@@ -102,9 +102,9 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_jobListView->setSelectionMode(QAbstractItemView::SingleSelection);
     m_jobListView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    // Not a tree.    
+    // Not a tree.
     m_jobListView->setRootIsDecorated(false);
-    
+
     // TODO: Do not sort the list.
     // m_jobListView->setSorting(-1);
 
