@@ -390,7 +390,7 @@ int KSpeech::moveRelSentence(int jobNum, int n)
 void KSpeech::showManagerDialog()
 {
     QString cmd = "kcmshell kcmkttsd --caption ";
-    cmd += "'" + i18n("KDE Text-to-Speech") + "'";
+    cmd += '\'' + i18n("KDE Text-to-Speech") + '\'';
     KRun::runCommand(cmd);
 }
 
