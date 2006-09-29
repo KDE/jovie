@@ -31,7 +31,7 @@
 
 // #include "filehandle.h"
 
-class KDE_EXPORT Player : virtual public QObject
+class KDE_EXPORT Player : public QObject
 {
     Q_OBJECT
 

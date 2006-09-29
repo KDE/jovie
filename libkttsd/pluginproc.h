@@ -229,7 +229,7 @@ enum pluginState
     psFinished = 3               /**< Plugin has finished synthesizing.  Audio file is ready. */
 };
 
-class KDE_EXPORT PlugInProc : virtual public QObject{
+class KDE_EXPORT PlugInProc : public QObject{
     Q_OBJECT
 
     public:
