@@ -1840,7 +1840,6 @@ void KCMKttsMgr::kttsdStarted()
         m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
         m_kspeech->setParent(this);
         m_kspeech->setApplicationName("KCMKttsMgr");
-        m_kspeech->setDefaultPriority(KSpeech::jpMessage);
         m_kspeech->setIsSystemManager(true);
         // Connect KTTSD DBUS signals to our slots.
         connect(m_kspeech, SIGNAL(kttsdStarted()),
@@ -2466,7 +2465,10 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
         }
         if (!msg.isEmpty()) {
             m_kspeech->setDefaultTalker(item->text(nlvcTalker));
+            int savePriority = m_kspeech->defaultPriority();
+            m_kspeech->setDefaultPriority(KSpeech::jpMessage);
             m_kspeech->say(msg, 0);
+            m_kspeech->setDefaultPriority(savePriority);
         }
     }
 }

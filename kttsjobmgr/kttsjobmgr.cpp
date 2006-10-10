@@ -443,7 +443,8 @@ void KttsJobMgrPart::slot_speak_clipboard()
     // Speak it.
     if ( !text.isEmpty() )
     {
-        int jobNum = m_kspeech->say(text, sayOptions);
+        m_kspeech->say(text, sayOptions);
+        // int jobNum = m_kspeech->say(text, sayOptions);
         // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
         // Set flag so that the job we just created will be selected when textSet signal is received.
         m_selectOnTextSet = true;
