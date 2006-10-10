@@ -231,7 +231,7 @@ void KSpeech::setIsSystemManager(bool isSystemManager)
 
 int KSpeech::say(const QString &text, int options) {
     if (!d->speaker) return 0;
-    kDebug() << "KSpeech::say: Adding '" << text << "' to queue." << endl;
+    // kDebug() << "KSpeech::say: Adding '" << text << "' to queue." << endl;
     int jobNum = d->speechData->say(callingAppId(), text, options);
     d->speaker->doUtterances();
     return jobNum;
@@ -253,6 +253,7 @@ int KSpeech::sayFile(const QString &filename, const QString &encoding)
         }
         jobNum = d->speechData->say(callingAppId(), stream.readAll(), 0);
         file.close();
+        d->speaker->doUtterances();
     }
     return jobNum;
 }
@@ -266,9 +267,12 @@ int KSpeech::sayClipboard()
     QString text = cb->text();
 
     // Speak it.
-    if (!text.isNull()) 
-        return d->speechData->say(callingAppId(), text, 0);
-    else
+    if (!text.isNull())
+    {
+        int jobNum = d->speechData->say(callingAppId(), text, 0);
+        d->speaker->doUtterances();
+        return jobNum;
+    } else
         return 0;
 }
 
@@ -695,7 +699,7 @@ int KSpeech::applyDefaultJobNum(int jobNum)
     {
         jNum = d->speechData->findJobNumByAppId(callingAppId());
         if (!jNum) jNum = getCurrentJob();
-        if (!jNum) jNum = d->speechData->findJobNumByAppId(0);
+        if (!jNum) jNum = d->speechData->findJobNumByAppId(QString());
     }
     return jNum;
 }

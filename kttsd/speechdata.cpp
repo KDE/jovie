@@ -224,10 +224,11 @@ int SpeechData::say(const QString& appId, const QString& text, int sayOptions)
     // TODO: sayOptions
     Q_UNUSED(sayOptions);
 
-    // kDebug() << "Running: SpeechData::say" << endl;
+    // kDebug() << "Running: SpeechData::say appId = " << appId << " text = " << text << endl;
     AppData* appData = getAppData(appId);
     KSpeech::JobPriority priority = appData->defaultPriority();
     QString talker = appData->defaultTalker();
+    // kDebug() << "SpeechData::say priority = " << priority << endl;
 
     // Screen Reader Outputs replace other Screen Reader Outputs not yet speaking.
     if (KSpeech::jpScreenReaderOutput == priority)
@@ -297,7 +298,7 @@ int SpeechData::findJobNumByAppId(const QString& appId) const
     if (appId.isEmpty())
         return d->lastJobNum;
     else
-        return  getAppData(appId)->lastJobNum();
+        return getAppData(appId)->lastJobNum();
 }
 
 /**

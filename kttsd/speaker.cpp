@@ -684,6 +684,7 @@ void Speaker::deleteUtteranceByJobNum(int jobNum)
         else
             ++it;
     }
+    if (d->currentJobNum == jobNum) d->currentJobNum = 0;
 }
 
 bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
@@ -823,10 +824,6 @@ bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
         // If a text message...
         if (Utt::utText == utt->utType())
             d->uttQueue.append(*utt);
-        else {
-            delete utt;
-            r = false;
-        }
     }
 
     return r;
@@ -918,15 +915,15 @@ bool Speaker::startPlayingUtterance(uttIterator it)
     uttIterator itEnd = d->uttQueue.end();
     for (uttIterator it2 = d->uttQueue.begin(); it2 != itEnd; ++it2)
         if (it2 != it)
-    {
-        if (Utt::usPlaying == it2->state())
         {
-            d->timer->stop();
-            it2->audioPlayer()->pause();
-            it2->setState(Utt::usPreempted);
+            if (Utt::usPlaying == it2->state())
+            {
+                d->timer->stop();
+                it2->audioPlayer()->pause();
+                it2->setState(Utt::usPreempted);
+            }
+            if (Utt::usSaying == it2->state()) return false;
         }
-        if (Utt::usSaying == it2->state()) return false;
-    }
     Utt::uttState utState = it->state();
     switch (utState)
     {

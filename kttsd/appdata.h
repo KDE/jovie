@@ -212,6 +212,8 @@ public:
     bool unregistered() const;
     void setUnregistered(bool unregistered);
 
+    // void debugDump();
+
 private:
     AppDataPrivate* d;    
 };

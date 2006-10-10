@@ -22,6 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+#include "kdebug.h"
+
 #include "appdata.h"
 
 /* -------------------------------------------------------------------------- */
@@ -74,7 +76,7 @@ void AppData::setApplicationName(const QString& applicationName) { d->applicatio
 QString AppData::defaultTalker() const { return d->defaultTalker; }
 void AppData::setDefaultTalker(const QString& defaultTalker) { d->defaultTalker = defaultTalker; }
 KSpeech::JobPriority AppData::defaultPriority() const { return d->defaultPriority; }
-void AppData::setDefaultPriority(KSpeech::JobPriority defaultPriority) { d->defaultPriority = defaultPriority; }
+void AppData::setDefaultPriority(KSpeech::JobPriority priority) { d->defaultPriority = priority; }
 QString AppData::sentenceDelimiter() const { return d->sentenceDelimiter; }
 void AppData::setSentenceDelimiter(const QString& sentenceDelimiter) { d->sentenceDelimiter = sentenceDelimiter; }
 bool AppData::filteringOn() const { return d->filteringOn; }
@@ -100,3 +102,15 @@ TJobListPtr AppData::jobList() const { return &(d->jobList); }
 bool AppData::unregistered() const { return d->unregistered; }
 void AppData::setUnregistered(bool unregistered) { d->unregistered = unregistered; }
 
+/*
+void AppData::debugDump()
+{
+    kDebug() << "AppData::debugDump: appId = " << appId() << " applicationName = " << applicationName()
+        << " defaultTalker = " << defaultTalker() << " defaultPriority = " << defaultPriority()
+        << " sentenceDelimiter = " << sentenceDelimiter() << " filteringOn = " << filteringOn()
+        << " isApplicationPaused = " << isApplicationPaused() << " htmlFilterXsltFile = " << htmlFilterXsltFile()
+        << " ssmlFilterXsltFile = " << ssmlFilterXsltFile() << " autoConfigureTalkersOn = "
+        << autoConfigureTalkersOn() << " isSystemManager = " << isSystemManager()
+        << " lastJobNum = " << lastJobNum() << endl;
+}
+*/

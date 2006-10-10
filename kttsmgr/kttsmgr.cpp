@@ -165,14 +165,16 @@ KttsMgrTray::~KttsMgrTray()
 
 bool KttsMgrTray::event(QEvent *event)
 {
-    // TODO: This code is not working, apparently because the Tooltip
-    // event does not fire anymore since KSystemTrayIcon is not a widget??
+    // TODO: This event only fires on X11 systems.
+    // To make it work on all platforms, would have to constantly monitor status and update,
+    // which would suck up huge amounts of CPU.
     if (event->type() == QEvent::ToolTip) {
         QString status = "<qt><b>KTTSMgr</b> - ";
         status += i18n("<qt>Text-to-Speech Manager");
         status += "<br/><br/>";
         status += getStatus();
         status += "</qt>";
+        // kDebug() << "KttsMgrTray::event status = " << status << endl;
         setToolTip(status);
     }
     return false;
