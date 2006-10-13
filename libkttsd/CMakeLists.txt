@@ -15,7 +15,7 @@ set(kttsd_LIB_SRCS
 
 kde4_add_ui_files(kttsd_LIB_SRCS selecttalkerwidget.ui )
 
-kde4_automoc(${kttsd_LIB_SRCS})
+kde4_automoc(kttsd ${kttsd_LIB_SRCS})
 
 kde4_add_library(kttsd SHARED ${kttsd_LIB_SRCS})
 

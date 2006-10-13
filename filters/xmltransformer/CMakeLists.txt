@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_xmltransformerplugin_PART_SRCS xmltransformerconf.cpp xmltransformerproc.cpp xmltransformerplugin.cpp )
 
-kde4_automoc(${kttsd_xmltransformerplugin_PART_SRCS})
+kde4_automoc(kttsd_xmltransformerplugin ${kttsd_xmltransformerplugin_PART_SRCS})
 
 kde4_add_ui_files(kttsd_xmltransformerplugin_PART_SRCS xmltransformerconfwidget.ui )
 
