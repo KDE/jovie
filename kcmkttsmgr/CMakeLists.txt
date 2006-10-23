@@ -9,7 +9,7 @@ set(kcm_kttsd_PART_SRCS
    addtalker.cpp 
    selectevent.cpp )
 
-kde4_automoc(kcm_kttsd ${kcm_kttsd_PART_SRCS})
+kde4_automoc(${kcm_kttsd_PART_SRCS})
 
 qt4_add_dbus_interfaces(kcm_kttsd_PART_SRCS org.kde.KSpeech.xml )
 

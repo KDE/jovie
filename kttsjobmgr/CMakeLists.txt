@@ -8,7 +8,7 @@ set(kttsjobmgrpart_PART_SRCS
     jobinfolistmodel.cpp
     kttsjobmgr.cpp )
 
-kde4_automoc(kttsjobmgrpart ${kttsjobmgrpart_PART_SRCS})
+kde4_automoc(${kttsjobmgrpart_PART_SRCS})
 
 qt4_add_dbus_interfaces(kttsjobmgrpart_PART_SRCS org.kde.KSpeech.xml )
 

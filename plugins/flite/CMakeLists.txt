@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_fliteplugin_PART_SRCS fliteconf.cpp fliteproc.cpp fliteplugin.cpp )
 
-kde4_automoc(kttsd_fliteplugin ${kttsd_fliteplugin_PART_SRCS})
+kde4_automoc(${kttsd_fliteplugin_PART_SRCS})
 
 kde4_add_ui_files(kttsd_fliteplugin_PART_SRCS fliteconfwidget.ui )
 
