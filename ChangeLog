@@ -1,3 +1,6 @@
+2006-11-02  Gary Cramblitt (PhantomsDad)
+        * Add support for new Vietnamese voices to festivalintvoices file.  Get them at http://sourceforge.net/projects/vietnamesevoice.
+
 2006-02-09  Gary Cramblitt (PhantomsDad)
         * Use KDE_CHECK_{HEADER,LIB} instead of AC_CHECK_{HEADER,LIB} to locate alsalib.
 
