@@ -712,4 +712,27 @@
   <name>Americas Spanish Female</name>
 </voice>
 
+<voice>
+  <code>wow_vi_ptn_diphone</code>
+  <language>vi</language>
+  <codec>UTF-8</codec>
+  <gender>male</gender>
+  <preload>false</preload>
+  <volume-adjustable>true</volume-adjustable>
+  <speed-adjustable>true></speed-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Vietnamese Male</name>
+</voice>
+
+<voice>
+  <code>wow_vi_liz_diphone</code>
+  <language>vi</language>
+  <codec>UTF-8</codec>
+  <gender>female</gender>
+  <volume-adjustable>true</volume-adjustable>
+  <speed-adjustable>true</speed-adjustable>
+  <pitch-adjustable>false</pitch-adjustable>
+  <name>Vietnamese Female</name>
+</voice>
+
 </voices>
