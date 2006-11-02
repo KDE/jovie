@@ -8,4 +8,4 @@ Comment[x-test]=xxFestival speech synthetizerxx
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_festivalintplugin
-X-KDE-Languages=en,en_US,en_GB,en_CA,es,es_mx,cy,de,fi,cs,pl,ru,it,sw,zu,fr_CA
+X-KDE-Languages=en,en_US,en_GB,en_CA,es,es_mx,cy,de,fi,cs,pl,ru,it,sw,zu,fr_CA,vi
