@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_festivalintplugin_PART_SRCS festivalintconfwidget.ui )
 
 kde4_add_plugin(kttsd_festivalintplugin WITH_PREFIX ${kttsd_festivalintplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_festivalintplugin )
+
 
 target_link_libraries(kttsd_festivalintplugin  ${KDE4_KDECORE_LIBS} kttsd )
 

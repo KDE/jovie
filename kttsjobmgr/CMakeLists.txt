@@ -14,7 +14,7 @@ qt4_add_dbus_interfaces(kttsjobmgrpart_PART_SRCS org.kde.KSpeech.xml )
 
 kde4_add_plugin(kttsjobmgrpart WITH_PREFIX ${kttsjobmgrpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsjobmgrpart )
+
 
 target_link_libraries(kttsjobmgrpart  ${KDE4_KPARTS_LIBS} kttsd  )
 

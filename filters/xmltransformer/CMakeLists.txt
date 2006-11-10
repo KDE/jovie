@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_xmltransformerplugin_PART_SRCS xmltransformerconfwidget.
 
 kde4_add_plugin(kttsd_xmltransformerplugin WITH_PREFIX ${kttsd_xmltransformerplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_xmltransformerplugin )
+
 
 target_link_libraries(kttsd_xmltransformerplugin  ${KDE4_KDECORE_LIBS} kttsd )
 

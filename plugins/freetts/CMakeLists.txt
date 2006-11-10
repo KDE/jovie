@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_freettsplugin_PART_SRCS freettsconfigwidget.ui )
 
 kde4_add_plugin(kttsd_freettsplugin WITH_PREFIX ${kttsd_freettsplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_freettsplugin )
+
 
 target_link_libraries(kttsd_freettsplugin  ${KDE4_KDECORE_LIBS} kttsd )
 

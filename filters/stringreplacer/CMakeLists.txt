@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.
 
 kde4_add_plugin(kttsd_stringreplacerplugin WITH_PREFIX ${kttsd_stringreplacerplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_stringreplacerplugin )
+
 
 target_link_libraries(kttsd_stringreplacerplugin  ${KDE4_KDECORE_LIBS} kttsd )
 

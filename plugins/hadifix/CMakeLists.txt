@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_hadifixplugin_PART_SRCS hadifixconfigui.ui voicefileui.u
 
 kde4_add_plugin(kttsd_hadifixplugin WITH_PREFIX ${kttsd_hadifixplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_hadifixplugin )
+
 
 target_link_libraries(kttsd_hadifixplugin  ${KDE4_KDECORE_LIBS} kttsd )
 

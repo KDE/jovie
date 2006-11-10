@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_commandplugin_PART_SRCS commandconfwidget.ui )
 
 kde4_add_plugin(kttsd_commandplugin WITH_PREFIX ${kttsd_commandplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_commandplugin )
+
 
 target_link_libraries(kttsd_commandplugin  ${KDE4_KDECORE_LIBS} kttsd )
 

@@ -10,7 +10,7 @@ kde4_automoc(${ktexteditor_kttsd_PART_SRCS})
 
 kde4_add_plugin(ktexteditor_kttsd ${ktexteditor_kttsd_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ktexteditor_kttsd )
+
 
 target_link_libraries(ktexteditor_kttsd  ${KDE4_KDECORE_LIBS} ktexteditor )
 

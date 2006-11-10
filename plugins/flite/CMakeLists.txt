@@ -12,7 +12,7 @@ kde4_add_ui_files(kttsd_fliteplugin_PART_SRCS fliteconfwidget.ui )
 
 kde4_add_plugin(kttsd_fliteplugin WITH_PREFIX ${kttsd_fliteplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kttsd_fliteplugin )
+
 
 target_link_libraries(kttsd_fliteplugin  ${KDE4_KDECORE_LIBS} kttsd )
 
