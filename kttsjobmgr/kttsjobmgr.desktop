@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=kttsjobmgrpart
+Name[km]= kttsjobmgrpart
 Name[pt_BR]=Componente Ger. de Jobs do Ktts
 Comment=KDE Text-to-speech Job Manager
 Comment[bg]=Мениджър на задачите за синтез на глас
@@ -20,6 +21,7 @@ Comment[hu]=KDE-s kezelőprogram szövegfelolvasáshoz
 Comment[is]=KDE texti-í-tal verkstjóri
 Comment[it]=Gestore dei processi di pronuncia di KDE
 Comment[ja]=KDE テキスト読み上げジョブマネージャ
+Comment[km]= អត្ថបទ​ KDE សម្រាប់​និយាយ​អ្នក​គ្រប់គ្រង​ការងារ
 Comment[mk]=Менаџер на задачи во KDE за текст-во-говор
 Comment[ms]=Pengurus Kerja Teks-ke-tutur KDE
 Comment[nb]=Jobbkontroll for KDE tekst-til-tale

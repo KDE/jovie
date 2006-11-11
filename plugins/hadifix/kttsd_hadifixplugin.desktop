@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Hadifix
+Name[km]= Hadifix
 Comment=German hadifix text-to-speech system
 Comment[bg]=Синтезатор на глас за немски език Hadifix
 Comment[ca]=Sistema de text a veu alemany hadifix
@@ -18,6 +19,7 @@ Comment[hu]=Hadifix szövegfelolvasó (Mbrola-alapú)
 Comment[is]=Þýska hadifix texti-í-tal kerfið
 Comment[it]=Sistema di pronuncia tedesca Hadifix
 Comment[ja]=ドイツ語 hadifix テキスト読み上げシステム
+Comment[km]=អាឡឺម៉ង់​ hadifix ប្រព័ន្ធ​អត្ថបទ​សម្រាប់​និយាយ​
 Comment[mk]=Германски hadifix систем за текст-во-говор
 Comment[ms]=Sistem teks-ke-tutur hadifiks Jerman
 Comment[mt]=Sistema test-għal-vuċi hadifix Ġermaniż
