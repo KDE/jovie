@@ -64,7 +64,7 @@ QTextStream stdERR(stderr);
  * Print an error message and also store the message in $ERROR variable.
  * @param msg  The message.
  */
-void printError(const QString& msg)
+static void printError(const QString& msg)
 {
     vars["$ERROR"] = msg;
     stdERR << msg << endl;
@@ -162,7 +162,7 @@ QDBusMessage placeCall(QDBusInterface& iface, const QString member, QStringList 
  * The return types and parameter types are given inside angle brackets.
  * @param mm    QMethodMethod to print.
  */
-void printMethodHelp(const QMetaMethod& mm)
+static void printMethodHelp(const QMetaMethod& mm)
 {
     QByteArray rt = mm.typeName();
     if (!rt.isEmpty()) rt = "<" + rt + "> = ";
@@ -184,7 +184,7 @@ void printMethodHelp(const QMetaMethod& mm)
  * @param iface     The KSpeech DBusInteface object.
  * @param member    (Optional) "signals" or a specific member name.
  */
-void printHelp(const QDBusInterface& iface, const QString& member = QString())
+static void printHelp(const QDBusInterface& iface, const QString& member = QString())
 {
     const QMetaObject *mo = iface.metaObject();
 
