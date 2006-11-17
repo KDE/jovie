@@ -69,7 +69,7 @@ void printError(const QString& msg)
     vars["$ERROR"] = msg;
     stdERR << msg << endl;
     stdERR.flush();
-};
+}
 
 /**
  * Make a DBus call.
@@ -155,7 +155,7 @@ QDBusMessage placeCall(QDBusInterface& iface, const QString member, QStringList 
 
     QDBusMessage reply = iface.callWithArgumentList(QDBus::AutoDetect, member, params);
     return reply;
-};
+}
 
 /**
  * Prints a member in format user would enter it into kspeak.
@@ -174,7 +174,7 @@ void printMethodHelp(const QMetaMethod& mm)
     for (int i = 0; i < ptl.size(); ++i)
         params.append("<" + ptl[i] + ">" + pnl[i]);
     out << rt << mn << " " << params.join(" ") << endl;
-};
+}
 
 /**
  * Prints help.  If no member is specified, lists all members
@@ -214,7 +214,7 @@ void printHelp(const QDBusInterface& iface, const QString& member = QString())
         }
         printError(i18n("ERROR: No such command."));
     }
-};
+}
 
 /**
  * Split single string into list of arguments.  Arguments are separated by spaces.
@@ -225,7 +225,7 @@ QStringList parseArgs(const QString& argsStr)
     int error = 0;
     QStringList args = KShell::splitArgs(argsStr, KShell::NoOptions, &error);
     return args;
-};
+}
 
 /**
  * Convert a reply DBusMessage into a QStringList.
@@ -244,7 +244,7 @@ QStringList dbusReplyToStringList(const QDBusMessage& reply)
         }
     }
     return sl;
-};
+}
 
 /**
  * Convert a reply DBusMessage into a printable string.
@@ -259,7 +259,7 @@ QString dbusReplyToPrintable(const QDBusMessage& reply)
     foreach (QString s, sl)
         pl.append(qPrintable(s));
     return pl.join("\n");
-};
+}
 
 /**
  * Main routine.
@@ -427,4 +427,4 @@ int main(int argc, char *argv[])
         out.flush();
     }
     kDebug() << "At EOL" << endl;
-};
+}
