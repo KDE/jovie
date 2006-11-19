@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+    "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<node name="/org/kde/KSpeech">
+    <interface name="org.kde.KSpeech">
+    
+        <property name="version" type="s" access="read"/>
+
+        <property name="isSpeaking" type="b" access="read"/>
+        
+        <method name="applicationName">
+            <arg type="s" direction="out"/>
+        </method>
+        <method name="setApplicationName">
+            <arg name="applicationName" type="s" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="defaultTalker">
+            <arg type="s" direction="out"/>
+        </method>
+        <method name="setDefaultTalker">
+            <arg name="defaultTalker" type="s" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="defaultPriority">
+            <arg type="i" direction="out"/>
+        </method>
+        <method name="setDefaultPriority">
+            <arg name="defaultPriority" type="i" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="sentenceDelimiter">
+            <arg type="s" direction="out"/>
+        </method>
+        <method name="setSentenceDelimiter">
+            <arg name="sentenceDelimiter" type="s" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="filteringOn">
+            <arg type="b" direction="out"/>
+        </method>
+        <method name="setFilteringOn">
+            <arg name="filteringOn" type="b" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="autoConfigureTalkersOn">
+            <arg type="b" direction="out"/>
+        </method>
+        <method name="setAutoConfigureTalkersOn">
+            <arg name="autoConfigureTalkersOn" type="b" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="isApplicationPaused">
+            <arg type="b" direction="out"/>
+        </method>
+        
+        <method name="htmlFilterXsltFile">
+            <arg type="s" direction="out"/>
+        </method>
+        <method name="setHtmlFilterXsltFile">
+            <arg name="htmlFilterXsltFile" type="s" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="ssmlFilterXsltFile">
+            <arg type="s" direction="out"/>
+        </method>
+        <method name="setSsmlFilterXsltFile">
+            <arg name="ssmlFilterXsltFile" type="s" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="isSystemManager">
+            <arg type="b" direction="out"/>
+        </method>
+        <method name="setIsSystemManager">
+            <arg name="isSystemManager" type="b" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="say">
+            <arg name="text" type="s" direction="in"/>
+            <arg name="options" type="i" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+        
+        <method name="sayFile">
+            <arg name="filename" type="s" direction="in"/>
+            <arg name="encoding" type="s" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="sayClipboard">
+            <arg type="i" direction="out"/>
+        </method>        
+
+        <method name="pause">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="resume">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="removeJob">
+            <arg name="jobNum" type="i" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="removeAllJobs">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="getSentenceCount">
+            <arg name="jobNum" type="i" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="getCurrentJob">
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="getJobCount">
+            <arg name="priority" type="i" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="getJobNumbers">
+            <arg name="priority" type="i" direction="in"/>
+            <arg type="as" direction="out"/>
+        </method>
+
+        <method name="getJobState">
+            <arg name="jobNum" type="i" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="getJobInfo">
+            <arg name="jobNum" type="i" direction="in"/>
+            <arg type="ay" direction="out"/>
+        </method>
+
+        <method name="getJobSentence">
+            <arg name="jobNum" type="i" direction="in"/>
+            <arg name="sentenceNum" type="i" direction="in"/>
+            <arg type="s" direction="out"/>
+        </method>
+
+        <method name="getTalkerCodes">
+            <arg type="as" direction="out"/>
+        </method>
+    
+        <method name="talkerToTalkerId">
+            <arg name="talker" type="s" direction="in"/>
+            <arg type="s" direction="out"/>
+        </method>
+
+        <method name="getTalkerCapabilities1">
+            <arg name="talker" type="s" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+        
+        <method name="getTalkerCapabilities2">
+            <arg name="talker" type="s" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+        
+        <method name="getTalkerVoices">
+            <arg name="talker" type="s" direction="in"/>
+            <arg type="as" direction="out"/>
+        </method>
+
+        <method name="changeJobTalker">
+            <arg name="jobNum" type="i" direction="in"/>
+            <arg name="talker" type="s" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="moveJobLater">
+            <arg name="jobNum" type="i" direction="in"/>
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="moveRelSentence">
+            <arg name="jobNum" type="i" direction="in"/>
+            <arg name="n" type="i" direction="in"/>
+            <arg type="i" direction="out"/>
+        </method>
+
+        <method name="showManagerDialog">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+
+        <method name="kttsdExit">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <method name="reinit">
+            <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+        </method>
+        
+        <signal name="kttsdStarted"/>
+        
+        <signal name="kttsdExiting"/>
+        
+        <signal name="jobStateChanged">
+            <arg name="appId" type="s"/>
+            <arg name="jobNum" type="i"/>
+            <arg name="state" type="i"/>
+        </signal>
+        
+        <signal name="marker">
+            <arg name="appId" type="s"/>
+            <arg name="jobNum" type="i"/>
+            <arg name="markerType" type="i"/>
+            <arg name="markerData" type="s"/>
+        </signal>
+        
+    </interface>
+</node>

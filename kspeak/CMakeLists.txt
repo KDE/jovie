@@ -1,9 +1,10 @@
 set(kspeak_SRCS 
+    kspeak.cpp
     main.cpp )
 
-# qt4_add_dbus_interfaces(kttsmgr_SRCS org.kde.KSpeech.xml )
+qt4_add_dbus_interfaces(kspeak_SRCS org.kde.KSpeech.xml )
 
-# kde4_automoc(${kttsmgr_SRCS})
+kde4_automoc(${kspeak_SRCS})
 
 kde4_add_executable(kspeak ${kspeak_SRCS})
 
