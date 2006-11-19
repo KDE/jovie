@@ -90,10 +90,10 @@ public:
     bool showSignals();
     void setShowSignals(bool on);
 
-    Q_PROPERTY(bool echo READ echo WRITE setEcho);
-    Q_PROPERTY(bool stopOnError READ stopOnError WRITE setStopOnError);
-    Q_PROPERTY(bool showReply READ showReply WRITE setShowReply);
-    Q_PROPERTY(bool showSignals READ showSignals WRITE setShowSignals);
+    Q_PROPERTY(bool echo READ echo WRITE setEcho)
+    Q_PROPERTY(bool stopOnError READ stopOnError WRITE setStopOnError)
+    Q_PROPERTY(bool showReply READ showReply WRITE setShowReply)
+    Q_PROPERTY(bool showSignals READ showSignals WRITE setShowSignals)
 
     /**
     * See if KTTSD is running, and optional, if not, start it.
