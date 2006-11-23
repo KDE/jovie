@@ -30,17 +30,23 @@
 #include <QObject>
 #include <QHash>
 #include <QThread>
+#include <QTimer>
+
+// KDE includes.
+#include <kcmdlineargs.h>
 
 // ktts includes.
 #include "kspeechinterface.h"
 
 class QString;
 class QTextStream;
+class QWaitCondition;
+class QMutex;
 
 // ====================================================================
 
 /**
- * Class StdinReader reads from stdin in a separate thread, emitting
+ * Class StdinReader reads from an input file in a separate thread, emitting
  * signal lineReady for each line of input.  This prevents from blocking
  * waiting for input.
  */
@@ -49,8 +55,13 @@ class StdinReader : public QThread
     Q_OBJECT
 
 public:
-    StdinReader(QObject* parent, QTextStream* in);
+    StdinReader(const QString& filename, QObject* parent);
     ~StdinReader();
+
+    /**
+     * Tell StdinReader to get more input.
+     */
+    void requestInput();
 
 Q_SIGNALS:
     /**
@@ -67,8 +78,13 @@ protected:
     void run();
 
 private:
-    // stdin
-    QTextStream* m_in;
+    // Input filename.
+    QString m_inputFilename;
+    // True to stop reading input.
+    mutable bool m_quit;
+    // Mutex and wait condition for controlling input.
+    QWaitCondition* m_waitForInputRequest;
+    QMutex* m_mutexForInputRequest;
 };
 
 // ====================================================================
@@ -78,7 +94,7 @@ class KSpeak : public QObject
     Q_OBJECT
 
 public:
-    KSpeak(QObject* parent = 0);
+    KSpeak(KCmdLineArgs* args, QObject* parent = 0);
     ~KSpeak();
 
     bool echo();
@@ -116,10 +132,29 @@ protected Q_SLOTS:
     void stopInput();
 
     /**
-    * Process a single command from input stream.
-    */
+     * Process a single command from input stream.
+     */
     void processCommand(const QString& inputLine);
+
+    /**
+     * WAIT for signal timeout.
+     */
+    void waitForSignalTimeout();
+
 private:
+    /**
+     * Given a signal, checks to see if it matches a pending WAIT command.
+     * It it does, more input is requested from the StdinReader and the pending
+     * WAIT is cleared.
+     * @param signalName    Name of the signal.  "marker" or "jobStateChanged".
+     * @param appId         AppID from signal.
+     * @param jobNum        Job Number from signal.
+     * @param data1         Marker Type or State from signal.
+     * @param data2         Additional data from signal.
+     *
+     */
+    void checkWaitForSignal(const QString& signalName, const QString& appId, int jobNum, int data1, const QString& data2Str = QString("*"));
+
     /**
     * Print an error message and also store the message in $ERROR variable.
     * @param msg  The message.
@@ -204,12 +239,13 @@ private:
     */
     QString dbusReplyToPrintable(const QDBusMessage& reply, const QString& cmd = QString());
     
+    // Input filename.
+    QString m_inputFilename;
     // A dictionary of variables.
-    QHash<QString, QVariant> m_vars;
+    QHash<QString, QString> m_vars;
     // Stdin Reader.
     StdinReader* m_stdinReader;
-    // Input/Output streams.
-    QTextStream* m_in;
+    // Output streams.
     QTextStream* m_out;
     QTextStream* m_stderr;
     // True if commands should be echoed to display.
@@ -224,6 +260,12 @@ private:
     org::kde::KSpeech* m_kspeech;
     // Exit code.
     int m_exitCode;
+    // Name of buffer variable currently being filled.
+    QString m_fillingBuffer;
+    // Signal and arguments WAITing for.
+    QStringList m_waitingSignal;
+    // Timer for WAIT.
+    QTimer m_waitTimer;
 };
 
 #endif  // KSPEAK_H

@@ -25,10 +25,13 @@
 
 // Qt includes.
 #include <QString>
+#include <QFile>
 #include <QTextStream>
 #include <QtDBus>
 #include <QMetaMethod>
 #include <QTimer>
+#include <QWaitCondition>
+#include <QMutex>
 
 // KDE includes.
 #include <kdebug.h>
@@ -45,51 +48,82 @@
 
 // ====================================================================
 
-StdinReader::StdinReader(QObject* parent, QTextStream* in) :
-    QThread(parent), m_in(in)
+StdinReader::StdinReader(const QString& filename, QObject* parent) :
+    QThread(parent), m_inputFilename(filename), m_waitForInputRequest(0), m_mutexForInputRequest(0)
 {
-    setTerminationEnabled(true);
 }
 
 StdinReader::~StdinReader()
 {
-    if (isRunning()) {
-        terminate();
+    if (0 != m_waitForInputRequest) {
+        m_quit = true;
+        m_waitForInputRequest->wakeOne();
+        // kDebug() << "Waiting for StdinReader thread to exit." << endl;
         wait();
+        // kDebug() << "StdinReader thread has exited." << endl;
+        delete m_mutexForInputRequest;
+        delete m_waitForInputRequest;
     }
+}
+
+void StdinReader::requestInput()
+{
+    // Notice this is running in caller's thread.
+    // Wait for StdinReader to go into waiting state,
+    // then wake it.
+    m_mutexForInputRequest->lock();
+    m_mutexForInputRequest->unlock();
+    m_waitForInputRequest->wakeOne();
 }
 
 void StdinReader::run()
 {
-    bool quit = false;
-    while (!quit) {
+    m_quit = false;
+    m_mutexForInputRequest = new QMutex();
+    m_waitForInputRequest = new QWaitCondition();
+    QTextStream* in;
+    if ("-" == m_inputFilename)
+        in =  new QTextStream(stdin);
+    else {
+        QFile inFile(m_inputFilename);
+        inFile.open(QFile::ReadOnly);
+        in = new QTextStream(&inFile);
+    }
+    m_mutexForInputRequest->lock();
+    while (!m_quit) {
         // TODO: Trolltech Tracker Bug #133063 in Qt 4.2.  Change when 4.3 is released.
-        // if (in.atEnd())
+        // if (in->atEnd())
+        //     m_quit = true;
         //     emit endInput();
-        //     exit(0);
         // else
-        {
-            QString line = m_in->readLine();
-            if (line.isEmpty()) {
-                if (m_in->atEnd()) {
-                    emit endInput();
-                    quit = true;
-                }
-            } else
-                emit lineReady(line);
+        QString line = in->readLine();
+        if ("PAUSE" == line.trimmed().left(5).toUpper()) {
+            QString args = line.trimmed().mid(6);
+            bool ok;
+            int msec = args.toInt(&ok);
+            if (ok) msleep(msec);
+        } else {
+            emit lineReady(line);
+            // Wait until kspeak is ready to process more input.
+            if (!m_quit) m_waitForInputRequest->wait(m_mutexForInputRequest);
         }
     }
-    kDebug() << "StdinReader stopping" << endl;
+    m_mutexForInputRequest->unlock();
+    delete in;
+    delete m_mutexForInputRequest;
+    m_mutexForInputRequest = 0;
+    delete m_waitForInputRequest;
+    m_waitForInputRequest = 0;
+    // kDebug() << "StdinReader stopping" << endl;
 }
 
 // ====================================================================
 
-KSpeak::KSpeak(QObject* parent) :
+KSpeak::KSpeak(KCmdLineArgs* args, QObject* parent) :
     QObject(parent), m_echo(false), m_showSignals(false),
     m_stopOnError(false), m_showReply(false), m_exitCode(0)
 {
-    // Open input/output streams.
-    m_in = new QTextStream(stdin);
+    // Open output streams.
     m_out = new QTextStream(stdout);
     m_stderr = new QTextStream(stderr);
 
@@ -104,13 +138,33 @@ KSpeak::KSpeak(QObject* parent) :
     connect(m_kspeech, SIGNAL(marker(const QString&, int, int, const QString&)),
         this, SLOT(marker(const QString&, int, int, const QString&)));
 
+    // Set up WAIT for signal timer.
+    m_waitTimer.setInterval(0);
+    m_waitTimer.setSingleShot(true);
+    connect(&m_waitTimer, SIGNAL(timeout()), this, SLOT(waitForSignalTimeout()));
+
+    // Store AppID variable.
+    m_vars["_APPID"] = m_kspeech->connection().baseService();
+    // kDebug() << "kspeak AppID = " << m_vars["_APPID"] << endl;
+
+    // Input filename.
+    m_inputFilename = QFile::decodeName(args->arg(0));
+
+    // Store command-line arguments and count.
+    m_vars["_ARGCOUNT"] = QString().setNum(args->count() - 1);
+    for(int i = 0; i < args->count(); i++)
+    {
+        QString s = QString().setNum(i);
+        QString varName = "_ARG" + s;
+        m_vars[varName] = args->arg(i);
+     }
+
     // Start input when kapp->exec() is called.
     QTimer::singleShot(0, this, SLOT(startInput()));
 }
 
 KSpeak::~KSpeak()
 {
-    delete m_in;
     delete m_out;
     delete m_stderr;
 }
@@ -131,6 +185,7 @@ void KSpeak::marker(const QString& appId, int jobNum, int markerType, const QStr
             << " type: " << markerType << " data: " << markerData << endl;
         m_out->flush();
     }
+    checkWaitForSignal("marker", appId, jobNum, markerType, markerData);
 }
 
 void KSpeak::jobStateChanged(const QString &appId, int jobNum, int state)
@@ -140,15 +195,40 @@ void KSpeak::jobStateChanged(const QString &appId, int jobNum, int state)
             << " state " << state << " (" << stateToStr(state) << ")" << endl;
         m_out->flush();
     }
+    checkWaitForSignal("jobStateChanged", appId, jobNum, state);
+}
+
+void KSpeak::checkWaitForSignal(const QString& signalName, const QString& appId, int jobNum, int data1, const QString& data2Str)
+{
+    if (0 == m_waitingSignal.size()) return;
+    if ("*" != m_waitingSignal[0] && signalName != m_waitingSignal[0]) return;
+    if ("*" != m_waitingSignal[1] && appId != m_waitingSignal[1]) return;
+    QString jNumStr = QString().setNum(jobNum);
+    if ("*" != m_waitingSignal[2] && jNumStr != m_waitingSignal[2]) return;
+    QString data1Str = QString().setNum(data1);
+    if ("*" != m_waitingSignal[3] && data1Str != m_waitingSignal[3]) return;
+    if ("*" != m_waitingSignal[4] && data2Str != m_waitingSignal[4]) return;
+    // kDebug() << "WAIT for signal matched" << endl;
+    if (m_waitTimer.isActive()) m_waitTimer.stop();
+    m_waitingSignal = QStringList();
+    m_stdinReader->requestInput();
+}
+
+void KSpeak::waitForSignalTimeout()
+{
+    if (m_waitingSignal.size() == 0) return;
+    *m_out << "WAIT TIMEOUT" << endl;
+    m_waitingSignal = QStringList();
+    m_stdinReader->requestInput();
 }
 
 /**
- * Print an error message and also store the message in $ERROR variable.
+ * Print an error message and also store the message in _ERROR variable.
  * @param msg  The message.
  */
 void KSpeak::printError(const QString& msg)
 {
-    m_vars["$ERROR"] = msg;
+    m_vars["_ERROR"] = msg;
     *m_stderr << msg << endl;
     m_stderr->flush();
 }
@@ -271,11 +351,50 @@ void KSpeak::printHelp(const QString& member)
     const QMetaObject *mo = m_kspeech->metaObject();
 
     if (member.isEmpty()) {
+        *m_out << i18n("Enter HELP <option> where <option> may be:") << endl;
+        *m_out << i18n("  COMMANDS to list local commands understood by kspeak.") << endl;
+        *m_out << i18n("  SIGNALS to list KTTSD signals sent via D-Bus.") << endl;
+        *m_out << i18n("  MEMBERS to list all commands that may be sent to KTTSD via D-Bus.") << endl;
+        *m_out << i18n("  <member> to show a single command that may be sent to KTTSD via D-Bus.") << endl;
+        *m_out << i18n("Options may be entered in lower- or uppercase.  Examples:") << endl;
+        *m_out << i18n("  help commands") << endl;
+        *m_out << i18n("  help say") << endl;
+        *m_out << i18n("Member argument types are displayed in brackets.") << endl;
+    } else if ("COMMANDS" == member.toUpper()) {
+        *m_out << "QUIT                 " << i18n("Exit kspeak.") << endl;
+        *m_out << "SET ECHO ON          " << i18n("Echo inputs to stdin.") << endl;
+        *m_out << "SET ECHO OFF         " << i18n("Do not echo inputs.") << endl;
+        *m_out << "SET STOPONERROR ON   " << i18n("Stop if any errors occur.") << endl;
+        *m_out << "SET STOPONERROR OFF  " << i18n("Do not stop if an error occurs.") << endl;
+        *m_out << "SET REPLIES ON       " << i18n("Display values returned by KTTSD.") << endl;
+        *m_out << "SET REPLIES OFF      " << i18n("Do not display KTTSD return values.") << endl;
+        *m_out << "SET SIGNALS ON       " << i18n("Display signals emitted by KTTSD.") << endl;
+        *m_out << "SET SIGNALS OFF      " << i18n("Do not display KTTSD signals.") << endl;
+        *m_out << "SET WTIMEOUT <msec>  " << i18n("Set the WAIT timeout to <msec> milliseconds. 0 waits forever.") << endl;
+        *m_out << "BUFFERBEGIN          " << i18n("Start filling a buffer.") << endl;
+        *m_out << "BUFFEREND            " << i18n("Stop filling buffer.") << endl;
+        *m_out << i18n("  Example buffer usage:") << endl;
+        *m_out << "    mybuf = BUFFERBEGIN" << endl;
+        *m_out << "    KDE is a powerful Free Software graphical desktop environment" << endl;
+        *m_out << "    for Linux and Unix workstations." << endl;
+        *m_out << "    BUFFEREND" << endl;
+        *m_out << "    say \"$(mybuf)\" 0" << endl;
+        *m_out << "PAUSE <msec>         " << i18n("Pause <msec> milliseconds.  Example") << endl;
+        *m_out << "  pause 500" << endl;
+        *m_out << "WAIT <signal> <args> " << i18n("Wait for <signal> with (optional) <args> arguments.  Example:")  << endl;
+        *m_out << "  set wtimeout 5000" << endl;
+        *m_out << "  wait marker" << endl;
+    } else if ("MEMBERS" == member.toUpper()) {
         for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
             QMetaMethod mm = mo->method(i);
             if (mm.methodType() != QMetaMethod::Signal)
                 printMethodHelp(mm);
         }
+        *m_out << endl;
+        *m_out << i18n("Values returned by a member may be assigned to a variable.") << endl;
+        *m_out << i18n("Variables may be substituted in format $(variable).  Examples:") << endl;
+        *m_out << "  jobnum = say \"Hello World\" 0" << endl;
+        *m_out << "  remove $(jobnum)" << endl;
     } else if ("SIGNALS" == member.toUpper()) {
         for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
             QMetaMethod mm = mo->method(i);
@@ -294,7 +413,7 @@ void KSpeak::printHelp(const QString& member)
                 return;
             }
         }
-        printError(i18n("ERROR: No such command."));
+        printError(i18n("ERROR: No such member."));
     }
 }
 
@@ -455,12 +574,12 @@ QString KSpeak::dbusReplyToPrintable(const QDBusMessage& reply, const QString& c
 bool KSpeak::isKttsdRunning(bool autoStart)
 {
     // See if KTTSD is running.
-    kDebug() << "Checking for running KTTSD." << endl;
+    // kDebug() << "Checking for running KTTSD." << endl;
     bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
-    if (kttsdRunning)
-        kDebug() << "KTTSD is already running" << endl;
-    else
-        kDebug() << "KTTSD is not running.  Will try starting it." << endl;
+    // if (kttsdRunning)
+    //     kDebug() << "KTTSD is already running" << endl;
+    // else
+    //     kDebug() << "KTTSD is not running." << endl;
 
     // If not running, and autostart requested, start KTTSD.
     if (!kttsdRunning && autoStart) {
@@ -478,133 +597,152 @@ void KSpeak::processCommand(const QString& inputLine)
     QString line = inputLine.trimmed();
     // kDebug() << "Line read: " << line << endl;
 
+    bool requestMoreInput = true;
     if (line.isEmpty()) {
-        // TODO: Remove next line when Qt 4.3 is released.
-        if (m_in->atEnd()) {
-            m_exitCode = 1;
-            stopInput();
-        }
+        stopInput();
         // Output blank lines.
         *m_out << endl;
     } else {
 
-        // An @ in column one is a comment sent to output.
-        if (line.startsWith("@")) {
-            line.remove(0, 1);
-            *m_out << qPrintable(line) << endl;
+        // If filling a buffer, fill it until BUFFEREND is seen.
+        if (!m_fillingBuffer.isEmpty()) {
+            if ("BUFFEREND" == line.trimmed().toUpper()) {
+                // kDebug() << "End buffer filling for " << m_fillingBuffer << endl;
+                // Remove first space.
+                m_vars["_BUF"].remove(0, 1);
+                if ("_BUF" != m_fillingBuffer) m_vars[m_fillingBuffer] = m_vars["_BUF"];
+                m_fillingBuffer = QString();
+            } else {
+                // kDebug() << "Appending to buffer " << m_fillingBuffer << " data = " << line << endl;
+                m_vars["_BUF"] += ' ' + line;
+            }
         } else {
-
-            // Look for assignment statement. left = right
-            QString left = line.section("=", 0, 0).trimmed();
-            QString right = line.section("=", 1).trimmed();
-            // kDebug() << "left = right: " << left << " = " << right << endl;
-            if (right.isEmpty()) {
-                right = left;
-                left = QString();
-            }
-
-            // Obtain command, which is first word, and arguments that follow.
-            // cmd arg arg...
-            QString cmd = right.section(" ", 0, 0).trimmed();
-            QString args = right.section(" ", 1).trimmed();
-            // kDebug() << "cmd: " << cmd << " args: " << args << endl;
-
-            // Variable substitution.
-            foreach (QString var, m_vars.keys()) {
-                // kDebug() << var << ": " + m_vars[var].toString() << endl;
-                args.replace("$(" + var + ")", m_vars[var].toString());
-            }
-            // kDebug() << "post variable substitution: " << cmd << " " << args << endl;
-
-            // If echo is on, output command.
-            if (m_echo) *m_out << "> " << cmd << ' ' << args << endl;
-
-            // Non-KTTSD commands.
-            QString ucCmd = cmd.toUpper();
-            if ("QUIT" == ucCmd)
-                stopInput();
-            else if ("HELP" == ucCmd)
-                printHelp(args);
-            else if ("PRINT" == ucCmd)
-                *m_out << qPrintable(args);
-            else if ("PRINTLINE" == ucCmd) {
-                *m_out << qPrintable(args) << endl;
-            } else if ("BUFFERBEGIN" == ucCmd) {
-                // Read into buffer until "BUFFEREND" is seen.
-                QString buf;
-                bool again = true;
-                while (!m_in->atEnd() && again) {
-                    line = m_in->readLine();
-                    again = ("BUFFEREND" != line.left(9).toUpper());
-                    if (again) buf += ' ' + line;
+            // An @ in column one is a comment sent to output.
+            if (line.startsWith("@")) {
+                line.remove(0, 1);
+                *m_out << qPrintable(line) << endl;
+            } else {
+    
+                // Look for assignment statement. left = right
+                QString left = line.section("=", 0, 0).trimmed();
+                QString right = line.section("=", 1).trimmed();
+                // kDebug() << "left = right: " << left << " = " << right << endl;
+                if (right.isEmpty()) {
+                    right = left;
+                    left = QString();
                 }
-                // Remove leading space.
-                buf.remove(0, 1);
-                m_vars["$BUF"] = buf;
-                if (!left.isEmpty()) m_vars[left] = buf;
-            } else if ("PAUSE" == ucCmd) {
-                // TODO: Pause args milliseconds.
-                ;
-            } else if ("SET" == ucCmd) {
-                QString ucArgs = args.toUpper();
-                if ("ECHO ON" == ucArgs)
-                    m_echo = true;
-                else if ("ECHO OFF" == ucArgs)
-                    m_echo = false;
-                else if ("STOPONERROR ON" == ucArgs)
-                    m_stopOnError = true;
-                else if ("STOPONERROR OFF" == ucArgs)
-                    m_stopOnError = false;
-                else if ("SHOWREPLY ON" == ucArgs)
-                    m_showReply = true;
-                else if ("SHOWREPLY OFF" == ucArgs)
-                    m_showReply = false;
-                else if ("SHOWSIGNALS ON" == ucArgs)
-                    m_showSignals = true;
-                else if ("SHOWSIGNALS OFF" == ucArgs)
-                    m_showSignals = false;
+    
+                // Obtain command, which is first word, and arguments that follow.
+                // cmd arg arg...
+                QString cmd = right.section(" ", 0, 0).trimmed();
+                QString args = right.section(" ", 1).trimmed();
+                // kDebug() << "cmd: " << cmd << " args: " << args << endl;
+    
+                // Variable substitution.
+                foreach (QString var, m_vars.keys()) {
+                    // kDebug() << var << ": " + m_vars[var].toString() << endl;
+                    args.replace("$(" + var + ")", m_vars[var]);
+                }
+                // kDebug() << "post variable substitution: " << cmd << " " << args << endl;
+    
+                // If echo is on, output command.
+                if (m_echo) *m_out << "> " << cmd << ' ' << args << endl;
+    
+                // Non-KTTSD commands.
+                QString ucCmd = cmd.toUpper();
+                if ("QUIT" == ucCmd)
+                    stopInput();
+                else if ("HELP" == ucCmd)
+                    printHelp(args);
+                else if ("PRINT" == ucCmd)
+                    *m_out << qPrintable(args);
+                else if ("PRINTLINE" == ucCmd) {
+                    *m_out << qPrintable(args) << endl;
+                } else if ("BUFFERBEGIN" == ucCmd) {
+                    if (!left.isEmpty())
+                        m_fillingBuffer = left;
+                    else
+                        m_fillingBuffer = "_BUF";
+                    m_vars["_BUF"] = QString();
+                } else if ("SET" == ucCmd) {
+                    QString ucArgs = args.toUpper();
+                    QString property = ucArgs.section(" ", 0, 0).trimmed();
+                    QString value = ucArgs.section(" ", 1).trimmed();
+                    bool onOff = ("ON" == value) ? true : false;
+                    if ("ECHO" == property)
+                        m_echo = onOff;
+                    else if ("STOPONERROR" == property)
+                        m_stopOnError = onOff;
+                    else if ("REPLIES" == property)
+                        m_showReply = onOff;
+                    else if ("SIGNALS" == property)
+                        m_showSignals = onOff;
+                    else if ("WTIMEOUT" == property)
+                        m_waitTimer.setInterval(value.toInt());
+                    else {
+                        printError(i18n("ERROR: Invalid SET command."));
+                        if (m_stopOnError) {
+                            m_exitCode = 1;
+                            stopInput();
+                        }
+                    }
+                } else if ("WAIT" == ucCmd) {
+                    m_waitingSignal = parseArgs(args);
+                    if (0 == m_waitingSignal.size()) {
+                        printError(i18n("ERROR: Invalid WAIT command."));
+                        if (m_stopOnError) {
+                            m_exitCode = 1;
+                            stopInput();
+                        }
+                    }
+                    // Pad waiting signal string list.
+                    while (m_waitingSignal.size() < 5)
+                        m_waitingSignal.append("*");
+                    // kDebug() << "WAIT" << m_waitingSignal << endl;
+                    requestMoreInput = false;
+                    if (m_waitTimer.interval() > 0)
+                        m_waitTimer.start();
+                }
                 else {
-                    printError(i18n("ERROR: Invalid SET command."));
-                    if (m_stopOnError) {
-                        m_exitCode = 1;
-                        stopInput();
+                    // Parse arguments.
+                    QStringList cmdArgs = parseArgs(args);
+    
+                    // Send command to KTTSD.
+                    QDBusMessage reply = placeCall(cmd, cmdArgs);
+                    if (QDBusMessage::ErrorMessage == reply.type()) {
+                        QDBusError errMsg = reply;
+                        QString eMsg = i18n("ERROR: ") + errMsg.name() + ": " + errMsg.message();
+                        printError(eMsg);
+                        if (m_stopOnError) {
+                            m_exitCode = 1;
+                            stopInput();
+                        }
+                    } else {
+                        if (m_showReply)
+                            *m_out << "< " << dbusReplyToPrintable(reply, cmd) << endl;
+                        QString v = dbusReplyToStringList(reply, cmd).join(",");
+                        m_vars["_REPLY"] = v;
+                        if (!left.isEmpty()) m_vars[left] = v;
                     }
-                }
-            } else if ("WAIT" == ucCmd) {
-                // TODO: Wait for D-Bus signal.
-            }
-            else {
-                // Parse arguments.
-                QStringList cmdArgs = parseArgs(args);
-
-                // Send command to KTTSD.
-                QDBusMessage reply = placeCall(cmd, cmdArgs);
-                if (QDBusMessage::ErrorMessage == reply.type()) {
-                    QDBusError errMsg = reply;
-                    QString eMsg = i18n("ERROR: ") + errMsg.name() + ": " + errMsg.message();
-                    printError(eMsg);
-                    if (m_stopOnError) {
-                        m_exitCode = 1;
-                        stopInput();
-                    }
-                } else {
-                    if (m_showReply)
-                        *m_out << "< " << dbusReplyToPrintable(reply, cmd) << endl;
-                    QString v = dbusReplyToStringList(reply, cmd).join(",");
-                    m_vars["$REPLY"] = v;
-                    if (!left.isEmpty()) m_vars[left] = v;
                 }
             }
         }
     }
     m_out->flush();
+    // Get more input, if we aren't exiting and not waiting for a signal.
+    if (0 != m_stdinReader && requestMoreInput) m_stdinReader->requestInput();
 }
 
 void KSpeak::startInput()
 {
-    // Create Stdin Reader object in another thread.
+    if ("-" != m_inputFilename && !QFile::exists(m_inputFilename)) {
+        printError(QString("ERROR: invalid input file name: %1").arg(m_inputFilename));
+        kapp->exit(1);
+    }
+    // Create Stdin Reader object which runs in another thread.
     // It emits lineReady for each input line.
-    m_stdinReader = new StdinReader(this, m_in);
+    // kDebug() << "KSpeak::startInput: creating StdinReader" << endl;
+    m_stdinReader = new StdinReader(m_inputFilename, this);
     connect(m_stdinReader, SIGNAL(lineReady(const QString&)),
         this, SLOT(processCommand(const QString&)), Qt::QueuedConnection);
     connect(m_stdinReader, SIGNAL(endInput()),
@@ -615,6 +753,7 @@ void KSpeak::startInput()
 void KSpeak::stopInput()
 {
     delete m_stdinReader;
+    m_stdinReader = 0;
     kapp->exit(m_exitCode);
 }
 

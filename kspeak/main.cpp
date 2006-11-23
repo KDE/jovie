@@ -37,13 +37,18 @@
 static const KCmdLineOptions options[] =
 {
     { "e", 0, 0 },
-    { "echo", I18N_NOOP("Echo input. [off]"), 0},
+    { "echo", I18N_NOOP("Echo commands. [off]"), 0},
     { "r", 0, 0 },
-    { "showreply", I18N_NOOP("Show D-Bus replies. [off]"), 0},
+    { "replies", I18N_NOOP("Show KTTSD D-Bus replies. [off]"), 0},
+    { "s", 0, 0 },
+    { "signals", I18N_NOOP("Show KTTSD D-Bus signals. [off]"), 0},
     { "k", 0, 0 },
     { "startkttsd", I18N_NOOP("Start KTTSD if not already running. [off]"), 0},
-    { "s", 0, 0 },
+    { "x", 0, 0 },
     { "nostoponerror", I18N_NOOP("Continue on error."), 0},
+    { "+scriptfile", I18N_NOOP("Name of script to run.  Use '-' for stdin."), 0},
+    { "!+[args...]", I18N_NOOP("Optional arguments passed to script."), 0},
+    { "", I18N_NOOP("Type 'help' for kspeak commands."), 0},
     KCmdLineLastOption // End of options.
 };
 
@@ -65,12 +70,14 @@ int main(int argc, char *argv[])
     KApplication app(false);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    
+    if (args->count() == 0) KCmdLineArgs::usage(i18n("No script file specified"));
+
     // Create KSpeak object.
-    KSpeak kspeak(0);
+    KSpeak kspeak(args, 0);
     kspeak.setEcho(args->isSet("echo"));
     kspeak.setStopOnError(args->isSet("stoponerror"));
-    kspeak.setShowReply(args->isSet("showreply"));
+    kspeak.setShowReply(args->isSet("replies"));
+    kspeak.setShowSignals(args->isSet("signals"));
     if (!kspeak.isKttsdRunning(args->isSet("startkttsd"))) exit (1);
 
     // Main event loop.
