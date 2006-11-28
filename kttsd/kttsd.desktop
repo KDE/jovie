@@ -5,7 +5,6 @@ Exec=kttsd
 Icon=kttsd
 ServiceTypes=DBUS/Text-to-Speech
 X-DBUS-StartupType=Unique
-X-DCOP-ServiceName=kttsd
 X-KDE-StartupNotify=false
 Name=KTTSD
 Name[x-test]=xxKTTSDxx
