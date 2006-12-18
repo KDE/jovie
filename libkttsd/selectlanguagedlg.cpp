@@ -30,6 +30,7 @@
 // KDE includes.
 #include <kdialog.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // KTTS includes.
 #include "talkercode.h"

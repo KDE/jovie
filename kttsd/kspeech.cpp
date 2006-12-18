@@ -24,6 +24,7 @@
  ******************************************************************************/
 
 // Qt includes.
+#include <QApplication>
 #include <QClipboard>
 #include <QTextStream>
 #include <QTextCodec>
@@ -31,9 +32,10 @@
 
 // KDE includes.
 #include <kdebug.h>
-#include <kapplication.h>
+#include <kglobal.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kinstance.h>
 #include <kfiledialog.h>
 #include <knotifyclient.h>
 #include <krun.h>
@@ -131,7 +133,7 @@ bool KSpeech::isSpeaking() const
 
 QString KSpeech::version() const
 {
-    return kapp->aboutData()->version();
+    return KGlobal::instance()->aboutData()->version();
 }
 
 QString KSpeech::applicationName()
@@ -261,7 +263,7 @@ int KSpeech::sayFile(const QString &filename, const QString &encoding)
 int KSpeech::sayClipboard()
 {
     // Get the clipboard object.
-    QClipboard *cb = kapp->clipboard();
+    QClipboard *cb = qApp->clipboard();
 
     // Copy text from the clipboard.
     QString text = cb->text();
@@ -404,7 +406,7 @@ void KSpeech::kttsdExit()
     d->speaker->removeAllJobs("kttsd");
     announceEvent("kttsdExit", "kttsdExiting");
     kttsdExiting();
-    kapp->quit();
+    qApp->quit();
 }
 
 void KSpeech::reinit()
