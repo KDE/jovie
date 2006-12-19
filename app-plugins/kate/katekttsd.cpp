@@ -92,7 +92,7 @@ void KateKttsdPluginView::slotReadOut()
     }
 
     // If KTTSD not running, start it.
-    if (!QDBus::sessionBus().interface()->isServiceRegistered("kttsd"))
+    if (!QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
