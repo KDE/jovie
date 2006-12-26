@@ -11,7 +11,7 @@ set(kcm_kttsd_PART_SRCS
 
 kde4_automoc(${kcm_kttsd_PART_SRCS})
 
-qt4_add_dbus_interfaces(kcm_kttsd_PART_SRCS org.kde.KSpeech.xml )
+qt4_add_dbus_interfaces(kcm_kttsd_PART_SRCS ${DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml )
 
 kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui selecteventwidget.ui )
 
