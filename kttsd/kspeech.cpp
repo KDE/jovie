@@ -37,7 +37,6 @@
 #include <klocale.h>
 #include <kinstance.h>
 #include <kfiledialog.h>
-#include <knotifyclient.h>
 #include <krun.h>
 #include <kaboutdata.h>
 #include <kspeech.h>
