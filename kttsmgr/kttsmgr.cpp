@@ -86,7 +86,7 @@ int main (int argc, char *argv[])
         return (0);
     }
 
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Panel);
+    QPixmap icon = kapp->iconLoader()->loadIcon("kttsd", K3Icon::Panel);
     aboutdata.setProgramLogo(icon.toImage());
 
     KttsMgrTray* tray = new KttsMgrTray();
