@@ -593,6 +593,17 @@ void KSpeech::notificationSignal( const QString& event, const QString& fromApp,
             // If no app-specific action, try default.
             if ( !found )
             {
+                enum {   //this enum was previously in KNotifyClient
+                    Default = -1,
+                    None = 0,
+                    Sound = 1,
+                    Messagebox = 2,
+                    Logfile = 4,
+                    Stderr = 8,
+                    PassivePopup = 16,
+                    Execute = 32,
+                    Taskbar = 64
+                };
                 switch ( d->configData->notifyDefaultPresent )
                 {
                     case NotifyPresent::None:
@@ -600,23 +611,23 @@ void KSpeech::notificationSignal( const QString& event, const QString& fromApp,
                         break;
                     case NotifyPresent::Dialog:
                         found = (
-                            (present & KNotifyClient::Messagebox)
+                            (present & Messagebox)
                             &&
-                            !(present & KNotifyClient::PassivePopup)
+                            !(present & PassivePopup)
                             );
                         break;
                     case NotifyPresent::Passive:
                         found = (
-                            !(present & KNotifyClient::Messagebox)
+                            !(present & Messagebox)
                             &&
-                            (present & KNotifyClient::PassivePopup)
+                            (present & PassivePopup)
                             );
                         break;
                     case NotifyPresent::DialogAndPassive:
                         found = (
-                            (present & KNotifyClient::Messagebox)
+                            (present & Messagebox)
                             &&
-                            (present & KNotifyClient::PassivePopup)
+                            (present & PassivePopup)
                             );
                         break;
                     case NotifyPresent::All:
