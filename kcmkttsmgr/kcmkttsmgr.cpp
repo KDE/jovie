@@ -41,7 +41,6 @@
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kicon.h>
-#include <kapplication.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>

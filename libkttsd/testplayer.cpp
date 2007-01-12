@@ -24,9 +24,8 @@
 
 // Qt includes.
 #include <QFile>
-
+#include <QApplication>
 // KDE includes.
-#include <kapplication.h>
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <kparts/componentfactory.h>

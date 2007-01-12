@@ -39,7 +39,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kapplication.h>
 
 // KTTS includes.
 #include "talkermgr.h"

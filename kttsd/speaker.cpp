@@ -31,12 +31,12 @@
 #include <QFile>
 #include <QTimer>
 #include <QDir>
+#include <QApplication>
 
 // KDE includes.
 #include <kdebug.h>
 #include <klocale.h>
 #include <kparts/componentfactory.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kservicetypetrader.h>

@@ -13,7 +13,6 @@ using namespace std;
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
 #include <ktrader.h>

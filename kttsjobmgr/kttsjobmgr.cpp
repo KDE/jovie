@@ -39,7 +39,6 @@
 #include <kicon.h>
 #include <kdebug.h>
 #include <kencodingfiledialog.h>
-#include <kapplication.h>
 #include <kinputdialog.h>
 #include <ktextedit.h>
 #include <kvbox.h>
@@ -411,7 +410,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
     // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: running" << endl;
 
     // Get the clipboard object.
-    QClipboard *cb = kapp->clipboard();
+    QClipboard *cb = QApplication::clipboard();
 
     // Copy text from the clipboard.
     QString text;

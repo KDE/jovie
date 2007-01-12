@@ -28,7 +28,6 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kapplication.h>
 #include <kgenericfactory.h>
 #include <ktoolinvocation.h>
 
