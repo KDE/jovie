@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Epos TTS Synthesis System
+Name[el]=Σύστημα σύνθεσης Epos TTS
 Name[fr]=Système de synthèse Epos TTS
 Name[x-test]=xxEpos TTS Synthesis Systemxx
 Comment=Epos TTS speech synthesizer
+Comment[el]=Συνθέτης ομιλίας Epos TTS
 Comment[fr]=Synthèse vocale Epos TTS
 Comment[x-test]=xxEpos TTS speech synthesizerxx
 Type=Service

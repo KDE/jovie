@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTextEditor KTTSD Plugin
+Name[el]=Πρόσθετο KTextEditor KTTSD
 Name[fr]=Module KTTSD pour KTextEditor
 Name[x-test]=xxKTextEditor KTTSD Pluginxx
 Comment=Adds a menu entry for speaking the text
+Comment[el]=Προσθέτει μία καταχώρηση στο μενού για τη μετατροπή σε φωνή του κειμένου
 Comment[fr]=Ajoute une entrée dans le menu pour prononcer le texte
 Comment[x-test]=xxAdds a menu entry for speaking the textxx
 Type=Service

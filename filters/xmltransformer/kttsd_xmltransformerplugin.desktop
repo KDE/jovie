@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XML Transformer
+Name[el]=XML μεταμορφωτής
 Name[fr]=Transformation XML
 Name[x-test]=xxXML Transformerxx
 Comment=Generic XML Tranformation Filter Plugin for KTTS
+Comment[el]=Γενικό φίλτρο πρόσθετο XML μεταμόρφωσης για το KTTS
 Comment[fr]=Module de filtrage de transformation XML générique pour KTTS
 Comment[x-test]=xxGeneric XML Tranformation Filter Plugin for KTTSxx
 Type=Service

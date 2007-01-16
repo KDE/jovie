@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Festival Interactive
+Name[el]=Διαδραστικό Festival
 Name[x-test]=xxFestival Interactivexx
 Comment=Festival speech synthetizer
+Comment[el]=Συνθέτης ομιλίας Festival
 Comment[fr]=Synthèse vocale Festival
 Comment[x-test]=xxFestival speech synthetizerxx
 Type=Service

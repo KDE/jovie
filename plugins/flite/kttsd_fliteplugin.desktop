@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Festival Lite (flite)
+Name[el]=Festival ελαφρύ (flite)
 Name[x-test]=xxFestival Lite (flite)xx
 Comment=Festival Lite (flite) speech synthesizer
+Comment[el]=Συνθέτης ομιλίας Festival ελαφρύ (flite)
 Comment[fr]=Synthèse vocale Festival Lite (flite)
 Comment[x-test]=xxFestival Lite (flite) speech synthesizerxx
 Type=Service

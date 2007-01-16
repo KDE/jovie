@@ -9,6 +9,7 @@ X-KDE-StartupNotify=false
 Name=KTTSD
 Name[x-test]=xxKTTSDxx
 Comment=KDE Text To Speech Daemon
+Comment[el]=KDE δαίμονας κειμένου-σε-ομιλία
 Comment[fr]=Démon de synthèse vocale pour KDE
 Comment[x-test]=xxKDE Text To Speech Daemonxx
 

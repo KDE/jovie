@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD ALSA Plugin
+Name[el]=KTTSD πρόσθετο ALSA
 Name[fr]=Module ALSA pour KTTSD
 Name[x-test]=xxKTTSD ALSA Pluginxx
 Comment=KTTSD ALSA audio plugin
+Comment[el]=KTTSD πρόσθετο ήχου ALSA
 Comment[fr]=Module audio ALSA pour KTTSD
 Comment[x-test]=xxKTTSD ALSA audio pluginxx
 Type=Service

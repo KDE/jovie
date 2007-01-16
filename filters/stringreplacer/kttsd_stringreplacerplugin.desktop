@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=String Replacer
+Name[el]=Αντικαταστάτης συμβολοσειρών
 Name[fr]=Remplacement de chaînes
 Name[x-test]=xxString Replacerxx
 Comment=Generic String Replacement Filter Plugin for KTTS
+Comment[el]=Γενικό φίλτρο πρόσθετο αντικατάστασης συμβολοσειρών για το KTTS
 Comment[fr]=Module de filtrage de remplacement de chaînes générique pour KTTS
 Comment[x-test]=xxGeneric String Replacement Filter Plugin for KTTSxx
 Type=Service

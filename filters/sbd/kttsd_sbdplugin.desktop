@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sentence Boundary Detector
+Name[el]=Ανιχνευτής ορίων πρότασης
 Name[fr]=Détecteur de fins de phrases
 Name[x-test]=xxSentence Boundary Detectorxx
 Comment=Sentence Boundary Detection Filter Plugin for KTTS
+Comment[el]=Φίλτρο πρόσθετο ανίχνευσης ορίων πρότασης για το KTTS
 Comment[fr]=Module de filtrage de fins de phrases pour KTTS
 Comment[x-test]=xxSentence Boundary Detection Filter Plugin for KTTSxx
 Type=Service

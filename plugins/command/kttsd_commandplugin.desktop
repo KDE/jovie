@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Command
+Name[el]=Εντολή
 Name[fr]=Commande
 Name[x-test]=xxCommandxx
 Comment=Generic speech synthesizer from command line
+Comment[el]=Γενικός συνθέτης ομιλίας για τη γραμμή εντολών
 Comment[fr]=Synthèse vocale générique en ligne de commande
 Comment[x-test]=xxGeneric speech synthesizer from command linexx
 Type=Service

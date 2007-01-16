@@ -6,9 +6,11 @@ Icon=kttsd
 
 
 Name=Text-to-Speech
+Name[el]=Κείμενο-σε-ομιλία
 Name[fr]=Synthèse vocale
 Name[x-test]=xxText-to-Speechxx
 Comment=Text-to-Speech Control Module
+Comment[el]=Άρθρωμα ελέγχου κειμένου-σε-ομιλία
 Comment[fr]=Module de configuration de la synthèse vocale
 Comment[x-test]=xxText-to-Speech Control Modulexx
 
@@ -20,6 +22,7 @@ StartupWMClass=
 
 Categories=Qt;KDE;X-KDE-settings-accessibility;
 Keywords=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
+Keywords[el]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,κείμενο,σε,ομιλία,εκφώνηση,synthesizer,synth,festival,εντολή,freetts,proklam,μέσω,φωνή
 Keywords[fr]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,texte,to,prononcer,énoncer,synthétiseur,synth,festival,command,freetts,proklam,via,voix
 Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
 
