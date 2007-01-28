@@ -33,7 +33,7 @@
 #include <QtDBus>
 
 // KDE includes.
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kicon.h>

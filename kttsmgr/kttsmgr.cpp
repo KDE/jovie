@@ -287,7 +287,7 @@ void KttsMgrTray::speakClipboardSelected()
 
 void KttsMgrTray::aboutSelected()
 {
-    KAboutApplication aboutDlg(kapp->aboutData(), 0, true);
+    KAboutApplication aboutDlg(KGlobal::mainComponent().aboutData(), 0, true);
     aboutDlg.exec();
 }
 

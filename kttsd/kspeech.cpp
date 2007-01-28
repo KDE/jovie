@@ -35,7 +35,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kfiledialog.h>
 #include <krun.h>
 #include <kaboutdata.h>
@@ -132,7 +132,7 @@ bool KSpeech::isSpeaking() const
 
 QString KSpeech::version() const
 {
-    return KGlobal::instance()->aboutData()->version();
+    return KGlobal::mainComponent().aboutData()->version();
 }
 
 QString KSpeech::applicationName()
@@ -436,7 +436,7 @@ void KSpeech::setCallingAppId(const QString& appId)
 bool KSpeech::initializeConfigData()
 {
     if (d->configData) delete d->configData;
-    d->configData = new ConfigData(KGlobal::config());
+    d->configData = new ConfigData(KGlobal::config().data());
     return true;
 }
 
