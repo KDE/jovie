@@ -31,8 +31,6 @@
 
 // KDE includes.
 #include <ktemporaryfile.h>
-#include <kaboutdata.h>
-#include <kaboutapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdialog.h>

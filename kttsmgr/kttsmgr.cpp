@@ -37,7 +37,7 @@
 #include <ksystemtrayicon.h>
 #include <kiconloader.h>
 #include <kmenu.h>
-#include <kaboutapplication.h>
+#include <kaboutapplicationdialog.h>
 #include <ktoolinvocation.h>
 #include <kprocess.h>
 #include <klocale.h>
@@ -287,7 +287,7 @@ void KttsMgrTray::speakClipboardSelected()
 
 void KttsMgrTray::aboutSelected()
 {
-    KAboutApplication aboutDlg(KGlobal::mainComponent().aboutData(), 0, true);
+    KAboutApplicationDialog aboutDlg(KGlobal::mainComponent().aboutData());
     aboutDlg.exec();
 }
 
