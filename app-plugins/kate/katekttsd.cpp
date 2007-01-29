@@ -72,7 +72,7 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
     KXMLGUIClient( view )
 {
     view->insertChildClient( this );
-    setInstance( KGenericFactory<KateKttsdPlugin>::instance() );
+    setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
     (void) new KAction( i18n("Speak Text"), "kttsd", 0, this, SLOT(slotReadOut()), actionCollection(), "tools_kttsd" );
     setXMLFile( "ktexteditor_kttsdui.rc" );
 }

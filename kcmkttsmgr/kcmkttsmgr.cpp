@@ -281,7 +281,7 @@ QVariant SbdFilterListModel::headerData(int section, Qt::Orientation orientation
 * Constructor.
 */
 KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
-    KCModule(KCMKttsMgrFactory::instance(), parent/*, name*/),
+    KCModule(KCMKttsMgrFactory::componentData(), parent/*, name*/),
     m_kspeech(0)
 {
 
