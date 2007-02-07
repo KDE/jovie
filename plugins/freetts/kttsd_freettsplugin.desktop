@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=FreeTTS
-Name[km]= FreeTTS
 Name[vi]=Văn bản sang Tiếng nói Tự do
 Comment=FreeTTS speech synthesizer
 Comment[bg]=Синтезатор на глас FreeTTS
@@ -22,7 +21,7 @@ Comment[hu]=FreeTTS beszédszintetizátor
 Comment[is]=FreeTTS talgerfill
 Comment[it]=Sintetizzatore vocale FreeTTS
 Comment[ja]=FreeTTS スピーチシンセサイザ
-Comment[km]= FreeTTS និយាយ​ synthesizer
+Comment[km]=កម្មវិធី​សង្គ្រោះ​ការនិយាយ FreeTTS
 Comment[mk]=FreeTTS синтетизатор на говор
 Comment[ms]=Pensintesis tutur FreeTTS
 Comment[nb]=FreeTTS talesyntetisering
