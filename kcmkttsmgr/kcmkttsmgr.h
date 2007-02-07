@@ -24,8 +24,6 @@
 #ifndef KCMKTTSMGR_H
 #define KCMKTTSMGR_H
 
-#include "config.h"
-
 // Qt includes.
 #include <QMap>
 #include <QAbstractListModel>

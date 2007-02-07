@@ -25,7 +25,6 @@
  ******************************************************************************/
 
 // System includes.
-#include <config.h>
 
 // Qt includes. 
 #include <QFile>

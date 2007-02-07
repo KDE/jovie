@@ -37,7 +37,6 @@
 #include <QByteArray>
 
 // KDE includes.
-#include <config.h>
 #include <kdemacros.h>
 #include <kurl.h>
 
