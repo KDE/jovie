@@ -1073,7 +1073,7 @@ ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
             stopAndExit();
         }
         if (r > 0) {
-            if (m_debugLevel >= 2 > 1)
+            if (m_debugLevel >= 2)
                 compute_max_peak(data, r * hwdata.channels);
             result += r;
             count -= r;
