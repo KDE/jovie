@@ -1,10 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD Phonon Plugin
-Name[el]=KTTSD πρόσθετο Phonon
 Name[x-test]=xxKTTSD Phonon Pluginxx
 Comment=KTTSD Phonon audio plugin
-Comment[el]=KTTSD πρόσθετο ήχου Phonon
 Comment[x-test]=xxKTTSD Phonon audio pluginxx
 Type=Service
 ServiceTypes=KTTSD/AudioPlugin
