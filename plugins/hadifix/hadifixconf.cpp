@@ -434,7 +434,7 @@ void HadifixConfPrivate::load (KConfig *config, const QString &configGroup) {
         config->readEntry ("hadifixExec",defaultHadifixExec),
         config->readEntry ("mbrolaExec", defaultMbrolaExec),
         config->readEntry ("voice",      voice),
-        config->readEntry("gender", QVariant(isMale)).toBool(),
+        config->readEntry("gender", isMale),
         config->readEntry ("volume",  100),
         config->readEntry ("time",    100),
         config->readEntry ("pitch",   100),

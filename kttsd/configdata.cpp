@@ -53,29 +53,29 @@ bool ConfigData::readConfig()
     m_config->setGroup("General");
 
     // Load the configuration of the text interruption messages and sound
-    textPreMsgEnabled = m_config->readEntry("TextPreMsgEnabled", QVariant(false)).toBool();
+    textPreMsgEnabled = m_config->readEntry("TextPreMsgEnabled", false);
     textPreMsg = m_config->readEntry("TextPreMsg");
 
-    textPreSndEnabled = m_config->readEntry("TextPreSndEnabled", QVariant(false)).toBool();
+    textPreSndEnabled = m_config->readEntry("TextPreSndEnabled", false);
     textPreSnd = m_config->readEntry("TextPreSnd");
 
-    textPostMsgEnabled = m_config->readEntry("TextPostMsgEnabled", QVariant(false)).toBool();
+    textPostMsgEnabled = m_config->readEntry("TextPostMsgEnabled", false);
     textPostMsg = m_config->readEntry("TextPostMsg");
 
-    textPostSndEnabled = m_config->readEntry("TextPostSndEnabled", QVariant(false)).toBool();
+    textPostSndEnabled = m_config->readEntry("TextPostSndEnabled", false);
     textPostSnd = m_config->readEntry("TextPostSnd");
-    keepAudio = m_config->readEntry("KeepAudio", QVariant(false)).toBool();
+    keepAudio = m_config->readEntry("KeepAudio", false);
     keepAudioPath = m_config->readEntry("KeepAudioPath",
         KStandardDirs::locateLocal("data", "kttsd/audio/"));
 
     // Notification (KNotify).
-    notify = m_config->readEntry("Notify", QVariant(false)).toBool();
-    notifyExcludeEventsWithSound = m_config->readEntry("ExcludeEventsWithSound", QVariant(true)).toBool();
+    notify = m_config->readEntry("Notify", false);
+    notifyExcludeEventsWithSound = m_config->readEntry("ExcludeEventsWithSound", true);
     loadNotifyEventsFromFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml"), true );
 
     // KTTSMgr auto start and auto exit.
-    autoStartManager = m_config->readEntry("AutoStartManager", QVariant(false)).toBool();
-    autoExitManager = m_config->readEntry("AutoExitManager", QVariant(false)).toBool();
+    autoStartManager = m_config->readEntry("AutoStartManager", false);
+    autoExitManager = m_config->readEntry("AutoExitManager", false);
 
     // Default to Phonon (0).
     playerOption = m_config->readEntry("AudioOutputMethod", 0);

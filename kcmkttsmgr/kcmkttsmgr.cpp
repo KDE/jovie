@@ -578,19 +578,19 @@ void KCMKttsMgr::load()
     m_config->setGroup("General");
 
     // Load the configuration of the text interruption messages and sound
-    textPreMsgCheck->setChecked(m_config->readEntry("TextPreMsgEnabled", QVariant(textPreMsgCheckValue)).toBool());
+    textPreMsgCheck->setChecked(m_config->readEntry("TextPreMsgEnabled", textPreMsgCheckValue));
     textPreMsg->setText(m_config->readEntry("TextPreMsg", textPreMsgValue));
     textPreMsg->setEnabled(textPreMsgCheck->isChecked());
 
-    textPreSndCheck->setChecked(m_config->readEntry("TextPreSndEnabled", QVariant(textPreSndCheckValue)).toBool());
+    textPreSndCheck->setChecked(m_config->readEntry("TextPreSndEnabled", textPreSndCheckValue));
     textPreSnd->setUrl(KUrl::fromPath(m_config->readEntry("TextPreSnd", textPreSndValue)));
     textPreSnd->setEnabled(textPreSndCheck->isChecked());
 
-    textPostMsgCheck->setChecked(m_config->readEntry("TextPostMsgEnabled", QVariant(textPostMsgCheckValue)).toBool());
+    textPostMsgCheck->setChecked(m_config->readEntry("TextPostMsgEnabled", textPostMsgCheckValue));
     textPostMsg->setText(m_config->readEntry("TextPostMsg", textPostMsgValue));
     textPostMsg->setEnabled(textPostMsgCheck->isChecked());
 
-    textPostSndCheck->setChecked(m_config->readEntry("TextPostSndEnabled", QVariant(textPostSndCheckValue)).toBool());
+    textPostSndCheck->setChecked(m_config->readEntry("TextPostSndEnabled", textPostSndCheckValue));
     textPostSnd->setUrl(KUrl::fromPath(m_config->readEntry("TextPostSnd", textPostSndValue)));
     textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
@@ -598,8 +598,8 @@ void KCMKttsMgr::load()
     enableKttsdCheckBox->setChecked(m_config->readEntry("EnableKttsd",
         enableKttsdCheckBox->isChecked()));
 
-    autostartMgrCheckBox->setChecked(m_config->readEntry("AutoStartManager", QVariant(true)).toBool());
-    autoexitMgrCheckBox->setChecked(m_config->readEntry("AutoExitManager", QVariant(true)).toBool());
+    autostartMgrCheckBox->setChecked(m_config->readEntry("AutoStartManager", true));
+    autoexitMgrCheckBox->setChecked(m_config->readEntry("AutoExitManager", true));
 
     // Notification settings.
     notifyEnableCheckBox->setChecked(m_config->readEntry("Notify",
@@ -640,7 +640,7 @@ void KCMKttsMgr::load()
     timeBox->setValue(m_config->readEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(timeBox->value());
     keepAudioCheckBox->setChecked(
-        m_config->readEntry("KeepAudio", QVariant(keepAudioCheckBox->isChecked())).toBool());
+        m_config->readEntry("KeepAudio", keepAudioCheckBox->isChecked()));
     keepAudioPath->setUrl(KUrl::fromPath(
         m_config->readEntry("KeepAudioPath",
         keepAudioPath->url().path())));
@@ -720,10 +720,10 @@ void KCMKttsMgr::load()
                 fi.plugInName = filterPlugInName;
                 fi.desktopEntryName = desktopEntryName;
                 fi.userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
-                fi.multiInstance = m_config->readEntry("MultiInstance", QVariant(false)).toBool();
-                fi.enabled = m_config->readEntry("Enabled", QVariant(false)).toBool();
+                fi.multiInstance = m_config->readEntry("MultiInstance", false);
+                fi.enabled = m_config->readEntry("Enabled", false);
                 // Determine if this filter is a Sentence Boundary Detector (SBD).
-                bool isSbd = m_config->readEntry("IsSBD", QVariant(false)).toBool();
+                bool isSbd = m_config->readEntry("IsSBD", false);
                 if (isSbd)
                     m_sbdFilterListModel.appendRow(fi);
                 else
