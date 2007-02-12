@@ -257,7 +257,7 @@ QString KttsMgrTray::getStatus()
 {
     if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
     int jobCount = m_kspeech->getJobCount(KSpeech::jpAll);
-    QString status = i18np("1 job", "%n jobs", jobCount);
+    QString status = i18np("1 job", "%1 jobs", jobCount);
     if (jobCount > 0)
     {
         int jobNum = m_kspeech->getCurrentJob();
