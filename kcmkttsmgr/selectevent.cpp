@@ -47,7 +47,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
     
     // Load list of event sources (applications).
     QStringList fullpaths =
-        KGlobal::dirs()->findAllResources("data", "*/eventsrc", false, true );
+        KGlobal::dirs()->findAllResources("data", "*/eventsrc", KStandardDirs::NoDuplicates);
     QStringList::ConstIterator it = fullpaths.begin();
     QStringList relativePaths;
     for ( ; it != fullpaths.end(); ++it)
