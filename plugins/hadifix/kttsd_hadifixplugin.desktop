@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Hadifix
+Name[ne]=ह्याडिफिक्स
 Comment=German hadifix text-to-speech system
 Comment[bg]=Синтезатор на глас за немски език Hadifix
 Comment[ca]=Sistema de text a veu alemany hadifix
@@ -26,6 +27,7 @@ Comment[ms]=Sistem teks-ke-tutur hadifiks Jerman
 Comment[mt]=Sistema test-għal-vuċi hadifix Ġermaniż
 Comment[nb]=Tysk hadifix system for tekst-til-tale
 Comment[nds]=Düütsch Blicksnuut Hadifix
+Comment[ne]=जर्मनी ह्याडिफिक्स पाठबाट संवाद प्रणाली
 Comment[nl]=Duits hadifix tekst-tot-spraak-systeem
 Comment[pa]=ਜਰਮਨ hadifix ਪਾਠ ਤੋਂ ਬੋਲੀ ਸਿਸਟਮ
 Comment[pl]=Niemiecki system syntezy mowy hadifix

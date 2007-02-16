@@ -24,6 +24,7 @@ Name[km]= កម្មវិធី​ជំនួយ​ ALSA សម្រាប�
 Name[mk]=ALSA-приклучок за KTTSD
 Name[nb]=Alsas programtillegg for KTTSD
 Name[nds]=ALSA-Moduul för KTTSD
+Name[ne]=KTTSD ALSA प्लगइन
 Name[nl]=KTTSD ALSA-plugin
 Name[pa]=KTTSD ALSA ਪਲੱਗਿੰਨ
 Name[pl]=Wtyczka ALSA dla KTTSD
@@ -65,6 +66,7 @@ Comment[km]= កម្មវិធី​ជំនួយអូឌីយ៉ូ​ 
 Comment[mk]=ALSA-аудиоприклучок за KTTSD
 Comment[nb]=Alsas lyd-programtillegg for KTTSD
 Comment[nds]=ALSA-Audiomoduul för KTTSD
+Comment[ne]=KTTSD ALSA अडियो प्लगइन
 Comment[nl]=KTTSD ALSA geluidsplugin
 Comment[pa]=KTTSD ALSA ਆਡੀਓ ਪਲੱਗਿੰਨ
 Comment[pl]=Wtyczka dźwięku ALSA dla KTTSD
