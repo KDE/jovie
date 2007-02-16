@@ -53,7 +53,7 @@
 #include "sbdconf.moc"
 
 /**
-* Constructor 
+* Constructor
 */
 SbdConf::SbdConf( QWidget *parent, const QStringList &args) :
     KttsFilterConf(parent)
@@ -100,10 +100,10 @@ SbdConf::~SbdConf(){
 }
 
 /**
-* This method is invoked whenever the module should read its 
-* configuration (most of the times from a config file) and update the 
-* user interface. This happens when the user clicks the "Reset" button in 
-* the control center, to undo all of his changes and restore the currently 
+* This method is invoked whenever the module should read its
+* configuration (most of the times from a config file) and update the
+* user interface. This happens when the user clicks the "Reset" button in
+* the control center, to undo all of his changes and restore the currently
 * valid settings.  Note that kttsmgr calls this when the plugin is
 * loaded, so it not necessary to call it in your constructor.
 * The plugin should read its configuration from the specified group
@@ -115,7 +115,7 @@ SbdConf::~SbdConf(){
 void SbdConf::load(KConfig* config, const QString& configGroup){
     // kDebug() << "SbdConf::load: Running" << endl;
     config->setGroup( configGroup );
-    nameLineEdit->setText( 
+    nameLineEdit->setText(
         config->readEntry("UserFilterName", nameLineEdit->text()) );
     reLineEdit->setText(
         config->readEntry("SentenceDelimiterRegExp", reLineEdit->text()) );
@@ -136,9 +136,9 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
 }
 
 /**
-* This function gets called when the user wants to save the settings in 
-* the user interface, updating the config files or wherever the 
-* configuration is stored. The method is called when the user clicks "Apply" 
+* This function gets called when the user wants to save the settings in
+* the user interface, updating the config files or wherever the
+* configuration is stored. The method is called when the user clicks "Apply"
 * or "Ok". The plugin should save its configuration in the specified
 * group of the specified config file.
 * @param config      Pointer to a KConfig object.
@@ -155,10 +155,10 @@ void SbdConf::save(KConfig* config, const QString& configGroup){
     config->writeEntry("AppID", appIdLineEdit->text().replace(" ", "") );
 }
 
-/** 
+/**
 * This function is called to set the settings in the module to sensible
-* default values. It gets called when hitting the "Default" button. The 
-* default values should probably be the same as the ones the application 
+* default values. It gets called when hitting the "Default" button. The
+* default values should probably be the same as the ones the application
 * uses when started without a config file.  Note that defaults should
 * be applied to the on-screen widgets; not to the config file.
 */
@@ -206,7 +206,7 @@ void SbdConf::slotReButton_clicked()
 {
     // Show Regular Expression Editor dialog if it is installed.
     if ( !m_reEditorInstalled ) return;
-    QDialog *editorDialog = 
+    QDialog *editorDialog =
             KServiceTypeTrader::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
     if ( editorDialog )
     {
@@ -260,7 +260,7 @@ void SbdConf::slotLoadButton_clicked()
         this,
         "sbd_loadfile");
     if ( filename.isEmpty() ) return;
-    KConfig* cfg = new KConfig( filename, true, false, 0 );
+    KConfig* cfg = new KConfig( filename, KConfig::NoGlobals );
     load( cfg, "Filter" );
     delete cfg;
     configChanged();
@@ -274,7 +274,7 @@ void SbdConf::slotSaveButton_clicked()
         this,
         "sbd_savefile");
     if ( filename.isEmpty() ) return;
-    KConfig* cfg = new KConfig( filename, false, false, 0 );
+    KConfig* cfg = new KConfig( filename );
     save( cfg, "Filter" );
     delete cfg;
 }

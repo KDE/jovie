@@ -44,7 +44,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
     eventsListView->setColumnHidden(1, true);
     eventsListView->verticalHeader()->hide();
     eventsListView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-    
+
     // Load list of event sources (applications).
     QStringList fullpaths =
         KGlobal::dirs()->findAllResources("data", "*/eventsrc", false, true );
@@ -66,7 +66,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
         QString relativePath = *it;
         if ( !relativePath.isEmpty() )
         {
-            KConfig* config = new KConfig(relativePath, true, false, "data");
+            KConfig* config = new KConfig("data", relativePath, KConfig::NoGlobals );
             config->setGroup( QString::fromLatin1("!Global!") );
             QString icon = config->readEntry(QString::fromLatin1("IconName"),
                 QString::fromLatin1("misc"));
@@ -95,7 +95,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     eventsListView->setRowCount(0);
     QString eventSrc = m_eventSrcNames[index];
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig* config = new KConfig( configFilename, true, false, "data" );
+    KConfig* config = new KConfig( "data", configFilename, KConfig::NoGlobals );
     QStringList eventNames = config->groupList();
     uint eventNamesCount = eventNames.count();
     for (uint ndx = 0; ndx < eventNamesCount; ++ndx)
