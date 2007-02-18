@@ -109,8 +109,8 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 //    setIcon (icon);
 
     // Start KTTS daemon if enabled and if not already running.
-    KConfig config("kttsdrc");
-    config.setGroup("General");
+    KConfig _config( "kttsdrc" );
+    KConfigGroup config(&_config, "General");
     if (config.readEntry("EnableKttsd", false))
     {
         if (!isKttsdRunning())

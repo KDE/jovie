@@ -70,8 +70,8 @@ FilterMgr::~FilterMgr()
 bool FilterMgr::init()
 {
     // Load each of the filters and initialize.
-    KConfig config("kttsdrc");
-    config.setGroup("General");
+    KConfig _config( "kttsdrc" );
+    KConfigGroup config(&_config, "General");
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
     // kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
     // If no filters have been configured, automatically configure the standard SBD.
