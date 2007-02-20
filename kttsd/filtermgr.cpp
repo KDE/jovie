@@ -1,6 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Description: 
-    Filters text, applying each configured Filter in turn.
+  Description:t, applying each configured Filter in turn.
     Runs asynchronously, emitting Finished() signal when all Filters have run.
 
   Copyright:
@@ -29,6 +28,7 @@
 // KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kparts/componentfactory.h>
 #include <klocale.h>
 #include <kservicetypetrader.h>
@@ -41,7 +41,7 @@
  * Constructor.
  */
 FilterMgr::FilterMgr( QObject *parent) :
-    KttsFilterProc(parent) 
+    KttsFilterProc(parent)
 {
     // kDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;
@@ -70,14 +70,14 @@ FilterMgr::~FilterMgr()
 bool FilterMgr::init()
 {
     // Load each of the filters and initialize.
-    KConfig config("kttsdrc");
-    config.setGroup("General");
+    KSharedConfig::Ptr pConfig = KSharedConfig::openConfig( "kttsdrc" );
+    KConfigGroup config( pConfig, "General");
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
     // kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
     {
-        config.setGroup("Filter_1");
+        config.changeGroup("Filter_1");
         config.writeEntry("DesktopEntryName", "kttsd_sbdplugin");
         config.writeEntry("Enabled", true);
         config.writeEntry("IsSBD", true);
@@ -85,7 +85,7 @@ bool FilterMgr::init()
         config.writeEntry("SentenceBoundary", "\\1\\t");
         config.writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
         config.writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
-        config.setGroup("General");
+        config.changeGroup("General");
         config.writeEntry("FilterIDs", "1");
         filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
     }
@@ -96,7 +96,7 @@ bool FilterMgr::init()
         {
             QString filterID = *it;
             QString groupName = "Filter_" + filterID;
-            config.setGroup( groupName );
+            config.changeGroup( groupName );
             QString desktopEntryName = config.readEntry( "DesktopEntryName" );
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
@@ -117,7 +117,7 @@ bool FilterMgr::init()
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
                 if ( filterProc )
                 {
-                    filterProc->init( &config, groupName );
+                    filterProc->init( pConfig->group( groupName ) );
                     m_filterList.append( filterProc );
                 }
                 if (config.readEntry("DocType").contains("html") ||
@@ -148,7 +148,7 @@ bool FilterMgr::init()
  */
 /*virtual*/ bool FilterMgr::supportsAsync() { return true; }
 
-/** 
+/**
  * Synchronously convert text.
  * @param inputText         Input text.
  * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
@@ -231,7 +231,7 @@ void FilterMgr::nextFilter()
     m_filterProc = m_filterList.at(m_filterIndex);
     if ( m_noSBD && m_filterProc->isSBD() )
     {
-        // kDebug() << "FilterMgr::nextFilter: skipping plugin " << m_filterIndex 
+        // kDebug() << "FilterMgr::nextFilter: skipping plugin " << m_filterIndex
         //     << " because it is an SBD filter and noSBD is true." << endl;
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.

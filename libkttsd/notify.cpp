@@ -149,7 +149,7 @@ static void notifypresent_init()
 /*static*/ QString NotifyEvent::getEventSrcName(const QString& eventSrc, QString& iconName)
 {
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig* config = new KConfig( configFilename, true, false, "data" );
+    KConfig* config = new KConfig( "data", configFilename, KConfig::NoGlobals );
     config->setGroup( QString::fromLatin1( "!Global!" ) );
     QString appDesc = config->readEntry( "Comment", i18n("No description available") );
     iconName = config->readEntry( "IconName" );
@@ -164,7 +164,7 @@ static void notifypresent_init()
 {
     QString eventName;
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig* config = new KConfig( configFilename, true, false, "data" );
+    KConfig* config = new KConfig( "data", configFilename, KConfig::NoGlobals );
     if ( config->hasGroup( event ) )
     {
         config->setGroup( event );
