@@ -62,22 +62,22 @@ TalkerChooserProc::~TalkerChooserProc()
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
+bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
     // kDebug() << "PlugInProc::init: Running" << endl;
-    config->setGroup( configGroup );
-    m_re = config->readEntry( "MatchRegExp" );
-    m_appIdList = config->readEntry( "AppIDs", QStringList(), ',' );
-    m_chosenTalkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
+    KConfigGroup config( c, configGroup );
+    m_re = config.readEntry( "MatchRegExp" );
+    m_appIdList = config.readEntry( "AppIDs", QStringList(), ',' );
+    m_chosenTalkerCode = TalkerCode(config.readEntry("TalkerCode"), false);
     // Legacy settings.
-    QString s = config->readEntry( "LanguageCode" );
+    QString s = config.readEntry( "LanguageCode" );
     if (!s.isEmpty()) m_chosenTalkerCode.setFullLanguageCode(s);
-    s = config->readEntry( "SynthInName" );
+    s = config.readEntry( "SynthInName" );
     if (!s.isEmpty()) m_chosenTalkerCode.setPlugInName(s);
-    s = config->readEntry( "Gender" );
+    s = config.readEntry( "Gender" );
     if (!s.isEmpty()) m_chosenTalkerCode.setGender(s);
-    s = config->readEntry( "Volume" );
+    s = config.readEntry( "Volume" );
     if (!s.isEmpty()) m_chosenTalkerCode.setVolume(s);
-    s = config->readEntry( "Rate" );
+    s = config.readEntry( "Rate" );
     if (!s.isEmpty()) m_chosenTalkerCode.setRate(s);
     return true;
 }

@@ -97,18 +97,18 @@ EposConf::~EposConf(){
     delete m_progressDlg;
 }
 
-void EposConf::load(KConfig *config, const QString &configGroup){
+void EposConf::load(KConfig *c, const QString &configGroup){
     // kDebug() << "EposConf::load: Running " << endl;
 
-    config->setGroup(configGroup);
-    eposServerPath->setUrl(KUrl::fromPath(config->readEntry("EposServerExePath", "epos")));
-    eposClientPath->setUrl(KUrl::fromPath(config->readEntry("EposClientExePath", "say")));
-    eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
-    eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
-    QString codecString = config->readEntry("Codec", "ISO 8859-2");
+    KConfigGroup config(c, configGroup);
+    eposServerPath->setUrl(KUrl::fromPath(config.readEntry("EposServerExePath", "epos")));
+    eposClientPath->setUrl(KUrl::fromPath(config.readEntry("EposClientExePath", "say")));
+    eposServerOptions->setText(config.readEntry("EposServerOptions", ""));
+    eposClientOptions->setText(config.readEntry("EposClientOptions", ""));
+    QString codecString = config.readEntry("Codec", "ISO 8859-2");
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
-    timeBox->setValue(config->readEntry("time", 100));
-    frequencyBox->setValue(config->readEntry("pitch", 100));
+    timeBox->setValue(config.readEntry("time", 100));
+    frequencyBox->setValue(config.readEntry("pitch", 100));
     characterCodingBox->setCurrentIndex(codec);
 }
 
@@ -123,26 +123,29 @@ QString EposConf::languageCodeToEposLanguage(const QString &languageCode)
     return eposLanguage;
 }
 
-void EposConf::save(KConfig *config, const QString &configGroup){
+void EposConf::save(KConfig *c, const QString &configGroup){
     // kDebug() << "EposConf::save: Running" << endl;
 
-    config->setGroup("Epos");
-    config->writeEntry("EposServerExePath",
+    {
+        KConfigGroup config(c, "Epos");
+        config.writeEntry("EposServerExePath",
+                realFilePath(eposServerPath->url().path()));
+        config.writeEntry("EposClientExePath", 
+                realFilePath(eposClientPath->url().path()));
+        config.writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
+    }
+
+    KConfigGroup config(c, configGroup);
+    config.writeEntry("EposServerExePath", 
         realFilePath(eposServerPath->url().path()));
-    config->writeEntry("EposClientExePath", 
+    config.writeEntry("EposClientExePath", 
         realFilePath(eposClientPath->url().path()));
-    config->writeEntry("Language", languageCodeToEposLanguage(m_languageCode));
-    config->setGroup(configGroup);
-    config->writeEntry("EposServerExePath", 
-        realFilePath(eposServerPath->url().path()));
-    config->writeEntry("EposClientExePath", 
-        realFilePath(eposClientPath->url().path()));
-    config->writeEntry("EposServerOptions", eposServerOptions->text());
-    config->writeEntry("EposClientOptions", eposClientOptions->text());
-    config->writeEntry("time", timeBox->value());
-    config->writeEntry("pitch", frequencyBox->value());
+    config.writeEntry("EposServerOptions", eposServerOptions->text());
+    config.writeEntry("EposClientOptions", eposClientOptions->text());
+    config.writeEntry("time", timeBox->value());
+    config.writeEntry("pitch", frequencyBox->value());
     int codec = characterCodingBox->currentIndex();
-    config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
+    config.writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void EposConf::defaults(){

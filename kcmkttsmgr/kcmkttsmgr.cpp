@@ -575,37 +575,37 @@ void KCMKttsMgr::load()
     m_suppressConfigChanged = true;
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
-    m_config->setGroup("General");
+    KConfigGroup generalConfig(m_config, "General");
 
     // Load the configuration of the text interruption messages and sound
-    textPreMsgCheck->setChecked(m_config->readEntry("TextPreMsgEnabled", textPreMsgCheckValue));
-    textPreMsg->setText(m_config->readEntry("TextPreMsg", textPreMsgValue));
+    textPreMsgCheck->setChecked(generalConfig.readEntry("TextPreMsgEnabled", textPreMsgCheckValue));
+    textPreMsg->setText(generalConfig.readEntry("TextPreMsg", textPreMsgValue));
     textPreMsg->setEnabled(textPreMsgCheck->isChecked());
 
-    textPreSndCheck->setChecked(m_config->readEntry("TextPreSndEnabled", textPreSndCheckValue));
-    textPreSnd->setUrl(KUrl::fromPath(m_config->readEntry("TextPreSnd", textPreSndValue)));
+    textPreSndCheck->setChecked(generalConfig.readEntry("TextPreSndEnabled", textPreSndCheckValue));
+    textPreSnd->setUrl(KUrl::fromPath(generalConfig.readEntry("TextPreSnd", textPreSndValue)));
     textPreSnd->setEnabled(textPreSndCheck->isChecked());
 
-    textPostMsgCheck->setChecked(m_config->readEntry("TextPostMsgEnabled", textPostMsgCheckValue));
-    textPostMsg->setText(m_config->readEntry("TextPostMsg", textPostMsgValue));
+    textPostMsgCheck->setChecked(generalConfig.readEntry("TextPostMsgEnabled", textPostMsgCheckValue));
+    textPostMsg->setText(generalConfig.readEntry("TextPostMsg", textPostMsgValue));
     textPostMsg->setEnabled(textPostMsgCheck->isChecked());
 
-    textPostSndCheck->setChecked(m_config->readEntry("TextPostSndEnabled", textPostSndCheckValue));
-    textPostSnd->setUrl(KUrl::fromPath(m_config->readEntry("TextPostSnd", textPostSndValue)));
+    textPostSndCheck->setChecked(generalConfig.readEntry("TextPostSndEnabled", textPostSndCheckValue));
+    textPostSnd->setUrl(KUrl::fromPath(generalConfig.readEntry("TextPostSnd", textPostSndValue)));
     textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
     // Overall settings.
-    enableKttsdCheckBox->setChecked(m_config->readEntry("EnableKttsd",
+    enableKttsdCheckBox->setChecked(generalConfig.readEntry("EnableKttsd",
         enableKttsdCheckBox->isChecked()));
 
-    autostartMgrCheckBox->setChecked(m_config->readEntry("AutoStartManager", true));
-    autoexitMgrCheckBox->setChecked(m_config->readEntry("AutoExitManager", true));
+    autostartMgrCheckBox->setChecked(generalConfig.readEntry("AutoStartManager", true));
+    autoexitMgrCheckBox->setChecked(generalConfig.readEntry("AutoExitManager", true));
 
     // Notification settings.
-    notifyEnableCheckBox->setChecked(m_config->readEntry("Notify",
+    notifyEnableCheckBox->setChecked(generalConfig.readEntry("Notify",
         notifyEnableCheckBox->isChecked()));
     notifyExcludeEventsWithSoundCheckBox->setChecked(
-        m_config->readEntry("ExcludeEventsWithSound",
+        generalConfig.readEntry("ExcludeEventsWithSound",
         notifyExcludeEventsWithSoundCheckBox->isChecked()));
     slotNotifyClearButton_clicked();
     loadNotifyEventsFromFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml"), true );
@@ -625,7 +625,7 @@ void KCMKttsMgr::load()
     int audioOutputMethod = 0;
 //    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    audioOutputMethod = m_config->readEntry("AudioOutputMethod", audioOutputMethod);
+    audioOutputMethod = generalConfig.readEntry("AudioOutputMethod", audioOutputMethod);
     switch (audioOutputMethod)
     {
         case 0:
@@ -637,12 +637,12 @@ void KCMKttsMgr::load()
         default:
             phononRadioButton->setChecked(true);
     }
-    timeBox->setValue(m_config->readEntry("AudioStretchFactor", timeBoxValue));
+    timeBox->setValue(generalConfig.readEntry("AudioStretchFactor", timeBoxValue));
     timeBox_valueChanged(timeBox->value());
     keepAudioCheckBox->setChecked(
-        m_config->readEntry("KeepAudio", keepAudioCheckBox->isChecked()));
+        generalConfig.readEntry("KeepAudio", keepAudioCheckBox->isChecked()));
     keepAudioPath->setUrl(KUrl::fromPath(
-        m_config->readEntry("KeepAudioPath",
+        generalConfig.readEntry("KeepAudioPath",
         keepAudioPath->url().path())));
     keepAudioPath->setEnabled(keepAudioCheckBox->isChecked());
 
@@ -694,8 +694,7 @@ void KCMKttsMgr::load()
     // Load Filters.
     m_filterListModel.clear();
     m_sbdFilterListModel.clear();
-    m_config->setGroup("General");
-    QStringList filterIDsList = m_config->readEntry("FilterIDs", QStringList(), ',');
+    QStringList filterIDsList = generalConfig.readEntry("FilterIDs", QStringList(), ',');
     // kDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList << endl;
     if (!filterIDsList.isEmpty())
     {
@@ -704,8 +703,8 @@ void KCMKttsMgr::load()
         {
             QString filterID = *it;
             // kDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
-            m_config->setGroup("Filter_" + filterID);
-            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString());
+            KConfigGroup filterConfig(m_config, "Filter_" + filterID);
+            QString desktopEntryName = filterConfig.readEntry("DesktopEntryName", QString());
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
@@ -719,11 +718,11 @@ void KCMKttsMgr::load()
                 fi.id = filterID;
                 fi.plugInName = filterPlugInName;
                 fi.desktopEntryName = desktopEntryName;
-                fi.userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
-                fi.multiInstance = m_config->readEntry("MultiInstance", false);
-                fi.enabled = m_config->readEntry("Enabled", false);
+                fi.userFilterName = filterConfig.readEntry("UserFilterName", filterPlugInName);
+                fi.multiInstance = filterConfig.readEntry("MultiInstance", false);
+                fi.enabled = filterConfig.readEntry("Enabled", false);
                 // Determine if this filter is a Sentence Boundary Detector (SBD).
-                bool isSbd = m_config->readEntry("IsSBD", false);
+                bool isSbd = filterConfig.readEntry("IsSBD", false);
                 if (isSbd)
                     m_sbdFilterListModel.appendRow(fi);
                 else
@@ -769,14 +768,13 @@ void KCMKttsMgr::load()
                         m_sbdFilterListModel.appendRow(fi);
                     else
                         m_filterListModel.appendRow(fi);
-                    m_config->setGroup(groupName);
+                    KConfigGroup filterConfig(m_config, groupName);
                     filterPlugIn->save(m_config, groupName);
-                    m_config->setGroup(groupName);
-                    m_config->writeEntry("DesktopEntryName", desktopEntryName);
-                    m_config->writeEntry("UserFilterName", userFilterName);
-                    m_config->writeEntry("Enabled", isSbd);
-                    m_config->writeEntry("MultiInstance", multiInstance);
-                    m_config->writeEntry("IsSBD", isSbd);
+                    filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
+                    filterConfig.writeEntry("UserFilterName", userFilterName);
+                    filterConfig.writeEntry("Enabled", isSbd);
+                    filterConfig.writeEntry("MultiInstance", multiInstance);
+                    filterConfig.writeEntry("IsSBD", isSbd);
                     filterIDsList.append(filterID);
                 } else m_lastFilterID--;
             } else
@@ -787,8 +785,7 @@ void KCMKttsMgr::load()
     }
     // Rewrite list of FilterIDs in case we added any.
     QString filterIDs = filterIDsList.join(",");
-    m_config->setGroup("General");
-    m_config->writeEntry("FilterIDs", filterIDs);
+    generalConfig.writeEntry("FilterIDs", filterIDs);
     m_config->sync();
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
@@ -803,9 +800,9 @@ void KCMKttsMgr::load()
     // None.
 
     // ALSA settings.
-    m_config->setGroup("ALSAPlayer");
-    KttsUtils::setCbItemFromText(pcmComboBox, m_config->readEntry("PcmName", "default"));
-    pcmCustom->setText(m_config->readEntry("CustomPcmName", ""));
+    KConfigGroup alsaConfig(m_config, "ALSAPlayer");
+    KttsUtils::setCbItemFromText(pcmComboBox, alsaConfig.readEntry("PcmName", "default"));
+    pcmCustom->setText(alsaConfig.readEntry("CustomPcmName", ""));
 
     // Update controls based on new states.
     slotNotifyListView_currentItemChanged();
@@ -834,24 +831,24 @@ void KCMKttsMgr::save()
     m_config->deleteGroup("General", 0);
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
-    m_config->setGroup("General");
+    KConfigGroup generalConfig(m_config, "General");
 
     // Set text interrumption messages and paths
-    m_config->writeEntry("TextPreMsgEnabled", textPreMsgCheck->isChecked());
-    m_config->writeEntry("TextPreMsg", textPreMsg->text());
+    generalConfig.writeEntry("TextPreMsgEnabled", textPreMsgCheck->isChecked());
+    generalConfig.writeEntry("TextPreMsg", textPreMsg->text());
 
-    m_config->writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked()); 
-    m_config->writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
+    generalConfig.writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked()); 
+    generalConfig.writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
 
-    m_config->writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
-    m_config->writeEntry("TextPostMsg", textPostMsg->text());
+    generalConfig.writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
+    generalConfig.writeEntry("TextPostMsg", textPostMsg->text());
 
-    m_config->writeEntry("TextPostSndEnabled", textPostSndCheck->isChecked());
-    m_config->writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
+    generalConfig.writeEntry("TextPostSndEnabled", textPostSndCheck->isChecked());
+    generalConfig.writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
 
     // Overall settings.
-    m_config->writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
-    m_config->writeEntry("AutoExitManager", autoexitMgrCheckBox->isChecked());
+    generalConfig.writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
+    generalConfig.writeEntry("AutoExitManager", autoexitMgrCheckBox->isChecked());
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     // Enable checkbox if at least one Talker is configured.
@@ -867,11 +864,11 @@ void KCMKttsMgr::save()
     else
         enableKttsdCheckBox->setEnabled(true);
 
-    m_config->writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
+    generalConfig.writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
 
     // Notification settings.
-    m_config->writeEntry("Notify", notifyEnableCheckBox->isChecked());
-    m_config->writeEntry("ExcludeEventsWithSound",
+    generalConfig.writeEntry("Notify", notifyEnableCheckBox->isChecked());
+    generalConfig.writeEntry("ExcludeEventsWithSound",
         notifyExcludeEventsWithSoundCheckBox->isChecked());
     saveNotifyEventsToFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml") );
 
@@ -879,17 +876,17 @@ void KCMKttsMgr::save()
     int audioOutputMethod = 0;
     // if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
     if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    m_config->writeEntry("AudioOutputMethod", audioOutputMethod);
-    m_config->writeEntry("AudioStretchFactor", timeBox->value());
-    m_config->writeEntry("KeepAudio", keepAudioCheckBox->isChecked());
-    m_config->writeEntry("KeepAudioPath", keepAudioPath->url().path());
+    generalConfig.writeEntry("AudioOutputMethod", audioOutputMethod);
+    generalConfig.writeEntry("AudioStretchFactor", timeBox->value());
+    generalConfig.writeEntry("KeepAudio", keepAudioCheckBox->isChecked());
+    generalConfig.writeEntry("KeepAudioPath", keepAudioPath->url().path());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
     for (int i = 0; i < m_talkerListModel.rowCount(); ++i)
         talkerIDsList.append(m_talkerListModel.getRow(i).id());
     QString talkerIDs = talkerIDsList.join(",");
-    m_config->writeEntry("TalkerIDs", talkerIDs);
+    generalConfig.writeEntry("TalkerIDs", talkerIDs);
 
     // Erase obsolete Talker_nn sections.
     QStringList groupList = m_config->groupList();
@@ -910,20 +907,19 @@ void KCMKttsMgr::save()
     for (int i = 0; i < m_filterListModel.rowCount(); ++i) {
         FilterItem fi = m_filterListModel.getRow(i);
         filterIDsList.append(fi.id);
-        m_config->setGroup("Filter_" + fi.id);
-        m_config->writeEntry("Enabled", fi.enabled);
-        m_config->writeEntry("IsSBD", false);
+        KConfigGroup filterConfig(m_config, "Filter_" + fi.id);
+        filterConfig.writeEntry("Enabled", fi.enabled);
+        filterConfig.writeEntry("IsSBD", false);
     }
     for (int i = 0; i < m_sbdFilterListModel.rowCount(); ++i) {
         FilterItem fi = m_sbdFilterListModel.getRow(i);
         filterIDsList.append(fi.id);
-        m_config->setGroup("Filter_" + fi.id);
-        m_config->writeEntry("Enabled", fi.enabled);
-        m_config->writeEntry("IsSBD", true);
+        KConfigGroup filterConfig(m_config, "Filter_" + fi.id);
+        filterConfig.writeEntry("Enabled", fi.enabled);
+        filterConfig.writeEntry("IsSBD", true);
     }
     QString filterIDs = filterIDsList.join(",");
-    m_config->setGroup("General");
-    m_config->writeEntry("FilterIDs", filterIDs);
+    generalConfig.writeEntry("FilterIDs", filterIDs);
 
     // Erase obsolete Filter_nn sections.
     for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
@@ -938,9 +934,9 @@ void KCMKttsMgr::save()
     }
 
     // ALSA settings.
-    m_config->setGroup("ALSAPlayer");
-    m_config->writeEntry("PcmName", pcmComboBox->currentText());
-    m_config->writeEntry("CustomPcmName", pcmCustom->text());
+    KConfigGroup alsaConfig(m_config, "ALSAPlayer");
+    alsaConfig.writeEntry("PcmName", pcmComboBox->currentText());
+    alsaConfig.writeEntry("CustomPcmName", pcmCustom->text());
 
     m_config->sync();
 
@@ -1303,17 +1299,16 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     if (!talkerCode.isEmpty())
     {
         // Let plugin save its configuration.
-        m_config->setGroup(QString("Talker_")+talkerID);
         m_loadedTalkerPlugIn->save(m_config, QString("Talker_"+talkerID));
 
         // Record last Talker ID used for next add.
         m_lastTalkerID = talkerID.toInt();
 
         // Record configuration data.  Note, might as well do this now.
-        m_config->setGroup(QString("Talker_")+talkerID);
-        m_config->writeEntry("DesktopEntryName", desktopEntryName);
+        KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
+        talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-        m_config->writeEntry("TalkerCode", talkerCode);
+        talkerConfig.writeEntry("TalkerCode", talkerCode);
         m_config->sync();
 
         // Add to list of Talkers.
@@ -1456,7 +1451,6 @@ void KCMKttsMgr::addFilter( bool sbd)
     if ( !userFilterName.isEmpty() )
     {
         // Let plugin save its configuration.
-        m_config->setGroup(QString("Filter_")+filterID);
         m_loadedFilterPlugIn->save(m_config, QString("Filter_"+filterID));
 
         // Record last Filter ID used for next add.
@@ -1466,12 +1460,12 @@ void KCMKttsMgr::addFilter( bool sbd)
         bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
 
         // Record configuration data.  Note, might as well do this now.
-        m_config->setGroup(QString("Filter_")+filterID);
-        m_config->writeEntry("DesktopEntryName", desktopEntryName);
-        m_config->writeEntry("UserFilterName", userFilterName);
-        m_config->writeEntry("MultiInstance", multiInstance);
-        m_config->writeEntry("Enabled", true);
-        m_config->writeEntry("IsSBD", sbd);
+        KConfigGroup filterConfig(m_config, QString("Filter_"+filterID));
+        filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
+        filterConfig.writeEntry("UserFilterName", userFilterName);
+        filterConfig.writeEntry("MultiInstance", multiInstance);
+        filterConfig.writeEntry("Enabled", true);
+        filterConfig.writeEntry("IsSBD", sbd);
         m_config->sync();
 
         // Add listview item.
@@ -1892,7 +1886,6 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
     // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
-    m_config->setGroup(QString("Talker_")+talkerID);
     m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
     // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID << endl;
     m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
@@ -1915,11 +1908,10 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
     // If plugin was successfully configured, save its configuration.
     if (!talkerCode.isEmpty())
     {
-        m_config->setGroup(QString("Talker_")+talkerID);
         m_loadedTalkerPlugIn->save(m_config, QString("Talker_")+talkerID);
-        m_config->setGroup(QString("Talker_")+talkerID);
         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-        m_config->writeEntry("TalkerCode", talkerCode);
+        KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
+        talkerConfig.writeEntry("TalkerCode", talkerCode);
         m_config->sync();
 
         // Update display.
@@ -1973,7 +1965,6 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     // kDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
-    m_config->setGroup(QString("Filter_")+filterID);
     // kDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID << endl;
     m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
 
@@ -1995,18 +1986,16 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     // If user properly configured the plugin, save the configuration.
     if ( !userFilterName.isEmpty() )
     {
-
         // Let plugin save its configuration.
-        m_config->setGroup(QString("Filter_")+filterID);
         m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
 
         // Save configuration.
-        m_config->setGroup("Filter_"+filterID);
-        m_config->writeEntry("DesktopEntryName", desktopEntryName);
-        m_config->writeEntry("UserFilterName", userFilterName);
-        m_config->writeEntry("Enabled", true);
-        m_config->writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
-        m_config->writeEntry("IsSBD", sbd);
+        KConfigGroup filterConfig(m_config, QString("Filter_")+filterID);
+        filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
+        filterConfig.writeEntry("UserFilterName", userFilterName);
+        filterConfig.writeEntry("Enabled", true);
+        filterConfig.writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
+        filterConfig.writeEntry("IsSBD", sbd);
 
         m_config->sync();
 

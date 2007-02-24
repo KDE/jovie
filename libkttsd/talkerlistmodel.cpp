@@ -188,13 +188,13 @@ void TalkerListModel::clear()
     emit reset();
 }
 
-void TalkerListModel::loadTalkerCodesFromConfig(KConfig* config)
+void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
 {
     // Clear the model and view.
     clear();
     // Iterate through list of the TalkerCode IDs.
-    config->setGroup("General");
-    QStringList talkerIDsList = config->readEntry("TalkerIDs", QStringList(), ',');
+    KConfigGroup config(c, "General");
+    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList(), ',');
     // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList << endl;
     if (!talkerIDsList.isEmpty())
     {
@@ -203,12 +203,12 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* config)
         {
             QString talkerID = *it;
             kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID << endl;
-            config->setGroup(QString("Talker_") + talkerID);
-            QString talkerCode = config->readEntry("TalkerCode");
+            KConfigGroup talkGroup(c, QString("Talker_") + talkerID);
+            QString talkerCode = talkGroup.readEntry("TalkerCode");
             TalkerCode tc = TalkerCode(talkerCode, true);
             kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode << endl;
             tc.setId(talkerID);
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString());
+            QString desktopEntryName = talkGroup.readEntry("DesktopEntryName", QString());
             tc.setDesktopEntryName(desktopEntryName);
             appendRow(tc);
         }

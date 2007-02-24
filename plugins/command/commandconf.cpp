@@ -73,24 +73,24 @@ CommandConf::~CommandConf()
     delete m_progressDlg;
 }
 
-void CommandConf::load(KConfig *config, const QString &configGroup) {
+void CommandConf::load(KConfig *c, const QString &configGroup) {
     // kDebug() << "CommandConf::load: Running" << endl;
-    config->setGroup(configGroup);
-    urlReq->setUrl(KUrl(config->readEntry("Command", "cat -")));
-    stdInButton->setChecked(config->readEntry("StdIn", false));
-    QString codecString = config->readEntry("Codec", "Local");
-    m_languageCode = config->readEntry("LanguageCode", m_languageCode);
+    KConfigGroup config(c, configGroup);
+    urlReq->setUrl(KUrl(config.readEntry("Command", "cat -")));
+    stdInButton->setChecked(config.readEntry("StdIn", false));
+    QString codecString = config.readEntry("Codec", "Local");
+    m_languageCode = config.readEntry("LanguageCode", m_languageCode);
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
     characterCodingBox->setCurrentIndex(codec);
 }
 
-void CommandConf::save(KConfig *config, const QString &configGroup) {
+void CommandConf::save(KConfig *c, const QString &configGroup) {
     // kDebug() << "CommandConf::save: Running" << endl;
-    config->setGroup(configGroup);
-    config->writeEntry("Command", urlReq->url().path());
-    config->writeEntry("StdIn", stdInButton->isChecked());
+    KConfigGroup config(c, configGroup);
+    config.writeEntry("Command", urlReq->url().path());
+    config.writeEntry("StdIn", stdInButton->isChecked());
     int codec = characterCodingBox->currentIndex();
-    config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
+    config.writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void CommandConf::defaults(){

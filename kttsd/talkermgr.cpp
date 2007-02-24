@@ -54,7 +54,7 @@ TalkerMgr::~TalkerMgr()
 /**
  * Load all the configured synth plugins,  populating loadedPlugIns structure.
  */
-int TalkerMgr::loadPlugIns(KConfig* config)
+int TalkerMgr::loadPlugIns(KConfig* c)
 {
     // kDebug() << "Running: TalkerMgr::loadPlugIns()" << endl;
     int good = 0;
@@ -65,8 +65,8 @@ int TalkerMgr::loadPlugIns(KConfig* config)
     m_loadedTalkerCodes.clear();
     m_loadedTalkerIds.clear();
 
-    config->setGroup("General");
-    QStringList talkerIDsList = config->readEntry("TalkerIDs", QStringList(), ',');
+    KConfigGroup config(c, "General");
+    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList(), ',');
     if (!talkerIDsList.isEmpty())
     {
         KLibFactory *factory;
@@ -79,10 +79,10 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             QString talkerID = *it;
 
             // Set the group for the language we're loading
-            config->setGroup("Talker_" + talkerID);
+            KConfigGroup talkerConfig(c, "Talker_" + talkerID);
 
             // Get the DesktopEntryName of the plugin we will try to load.
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString());
+            QString desktopEntryName = talkerConfig.readEntry("DesktopEntryName", QString());
 
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
@@ -91,15 +91,15 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString synthName = config->readEntry("PlugIn", QString());
+                QString synthName = talkerConfig.readEntry("PlugIn", QString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
-                if (!desktopEntryName.isEmpty()) config->writeEntry("DesktopEntryName", desktopEntryName);
+                if (!desktopEntryName.isEmpty()) talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
             }
 
             // Get the talker code.
-            QString talkerCode = config->readEntry("TalkerCode", QString());
+            QString talkerCode = talkerConfig.readEntry("TalkerCode", QString());
 
             // Normalize the talker code.
             QString fullLanguageCode;
@@ -128,7 +128,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                     } else {
                         if (speech->supportsAsync())
                         {
-                            speech->init(config, "Talker_" + talkerID);
+                            speech->init(c, "Talker_" + talkerID);
                             // kDebug() << "Plug in " << desktopEntryName << " created successfully." << endl;
                             m_loadedPlugIns.append(speech);
                         } else {
@@ -137,7 +137,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                             QString threadedPlugInName = QString::fromLatin1("threaded") + desktopEntryName;
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
                                     this, threadedPlugInName.toLatin1());
-                            speechThread->init(config, "Talker_" + talkerCode);
+                            speechThread->init(c, "Talker_" + talkerCode);
                             // kDebug() << "Threaded Plug in " << desktopEntryName << " for language " <<  (*it).right((*it).length()-5) << " created successfully." << endl;
                             m_loadedPlugIns.append(speechThread);
                         }
@@ -306,7 +306,8 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     QString languageCode = langCode;
 
     // Get last TalkerID from config.
-    QStringList talkerIDsList = config->readEntry("TalkerIDs", QStringList(), ',');
+    KConfigGroup generalConfig(config, "General");
+    QStringList talkerIDsList = generalConfig.readEntry("TalkerIDs", QStringList(), ',');
     int lastTalkerID = 0;
     for (int talkerIdNdx = 0; talkerIdNdx < talkerIDsList.count(); ++talkerIdNdx)
     {
@@ -318,7 +319,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     QString talkerID = QString::number(lastTalkerID + 1);
 
     // Query for all the KTTSD SynthPlugins.
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
+    KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
 
     // Iterate thru the possible plug ins.
     for(int i=0; i < offers.count() ; ++i)
@@ -353,19 +354,17 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
                         config->deleteGroup(QString("Talker_")+talkerID);
 
                         // Let plugin save its configuration.
-                        config->setGroup(QString("Talker_")+talkerID);
                         loadedTalkerPlugIn->save(config, QString("Talker_"+talkerID));
 
                         // Record configuration data.
-                        config->setGroup(QString("Talker_")+talkerID);
-                        config->writeEntry("DesktopEntryName", desktopEntryName);
+                        KConfigGroup talkerConfig(config, QString("Talker_")+talkerID);
+                        talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
                         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-                        config->writeEntry("TalkerCode", talkerCode);
+                        talkerConfig.writeEntry("TalkerCode", talkerCode);
 
                         // Add TalkerID to configured list.
                         talkerIDsList.append(talkerID);
-                        config->setGroup("General");
-                        config->writeEntry("TalkerIDs", talkerIDsList.join(","));
+                        generalConfig.writeEntry("TalkerIDs", talkerIDsList.join(","));
                         config->sync();
 
                         // TODO: Now that we have modified the config, need a way to inform

@@ -66,27 +66,27 @@ FliteConf::~FliteConf(){
     delete m_progressDlg;
 }
 
-void FliteConf::load(KConfig *config, const QString &configGroup){
+void FliteConf::load(KConfig *c, const QString &configGroup){
     // kDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
-    config->setGroup(configGroup);
-    QString fliteExe = config->readEntry("FliteExePath", QString());
+    KConfigGroup config(c, configGroup);
+    QString fliteExe = config.readEntry("FliteExePath", QString());
     if (fliteExe.isEmpty())
     {
-        config->setGroup("Flite");
-        fliteExe = config->readEntry("FliteExePath", "flite");
+        KConfigGroup fliteConfig(c, "Flite");
+        fliteExe = fliteConfig.readEntry("FliteExePath", "flite");
     }
     flitePath->setUrl(KUrl::fromPath(fliteExe));
 }
 
-void FliteConf::save(KConfig *config, const QString &configGroup){
+void FliteConf::save(KConfig *c, const QString &configGroup){
     // kDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
-    config->setGroup("Flite");
-    config->writeEntry("FliteExePath", 
+    KConfigGroup fliteConfig(c, "Flite");
+    fliteConfig.writeEntry("FliteExePath",
         realFilePath(flitePath->url().path()));
-    config->setGroup(configGroup);
-    config->writeEntry("FliteExePath",
+    KConfigGroup config(c, configGroup);
+    config.writeEntry("FliteExePath",
         realFilePath(flitePath->url().path()));
 }
 

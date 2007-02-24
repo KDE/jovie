@@ -112,16 +112,16 @@ SbdConf::~SbdConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void SbdConf::load(KConfig* config, const QString& configGroup){
+void SbdConf::load(KConfig* c, const QString& configGroup){
     // kDebug() << "SbdConf::load: Running" << endl;
-    config->setGroup( configGroup );
+    KConfigGroup config( c, configGroup );
     nameLineEdit->setText(
-        config->readEntry("UserFilterName", nameLineEdit->text()) );
+        config.readEntry("UserFilterName", nameLineEdit->text()) );
     reLineEdit->setText(
-        config->readEntry("SentenceDelimiterRegExp", reLineEdit->text()) );
+        config.readEntry("SentenceDelimiterRegExp", reLineEdit->text()) );
     sbLineEdit->setText(
-        config->readEntry("SentenceBoundary", sbLineEdit->text()) );
-    QStringList langCodeList = config->readEntry("LanguageCodes", QStringList(), ',');
+        config.readEntry("SentenceBoundary", sbLineEdit->text()) );
+    QStringList langCodeList = config.readEntry("LanguageCodes", QStringList(), ',');
     if (!langCodeList.isEmpty())
         m_languageCodeList = langCodeList;
     QString language = "";
@@ -132,7 +132,7 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
     }
     languageLineEdit->setText(language);
     appIdLineEdit->setText(
-            config->readEntry("AppID", appIdLineEdit->text()) );
+            config.readEntry("AppID", appIdLineEdit->text()) );
 }
 
 /**
@@ -145,14 +145,14 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void SbdConf::save(KConfig* config, const QString& configGroup){
+void SbdConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "SbdConf::save: Running" << endl;
-    config->setGroup( configGroup );
-    config->writeEntry("UserFilterName", nameLineEdit->text() );
-    config->writeEntry("SentenceDelimiterRegExp", reLineEdit->text() );
-    config->writeEntry("SentenceBoundary", sbLineEdit->text() );
-    config->writeEntry("LanguageCodes", m_languageCodeList );
-    config->writeEntry("AppID", appIdLineEdit->text().replace(" ", "") );
+    KConfigGroup config( c, configGroup );
+    config.writeEntry("UserFilterName", nameLineEdit->text() );
+    config.writeEntry("SentenceDelimiterRegExp", reLineEdit->text() );
+    config.writeEntry("SentenceBoundary", sbLineEdit->text() );
+    config.writeEntry("LanguageCodes", m_languageCodeList );
+    config.writeEntry("AppID", appIdLineEdit->text().replace(" ", "") );
 }
 
 /**

@@ -64,23 +64,23 @@ EposProc::~EposProc(){
 }
 
 /** Initialize the speech */
-bool EposProc::init(KConfig* config, const QString& configGroup)
+bool EposProc::init(KConfig* c, const QString& configGroup)
 {
     // kDebug() << "EposProc::init: Running" << endl;
     // kDebug() << "Initializing plug in: Epos" << endl;
     // Retrieve path to epos executable.
-    config->setGroup(configGroup);
-    m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
-    m_eposClientExePath = config->readEntry("EposClientExePath", "say");
-    m_eposLanguage = config->readEntry("Language", QString());
-    m_time = config->readEntry("time", 100);
-    m_pitch = config->readEntry("pitch", 100);
-    m_eposServerOptions = config->readEntry("EposServerOptions", QString());
-    m_eposClientOptions = config->readEntry("EposClientOptions", QString());
+    KConfigGroup config(c, configGroup);
+    m_eposServerExePath = config.readEntry("EposServerExePath", "epos");
+    m_eposClientExePath = config.readEntry("EposClientExePath", "say");
+    m_eposLanguage = config.readEntry("Language", QString());
+    m_time = config.readEntry("time", 100);
+    m_pitch = config.readEntry("pitch", 100);
+    m_eposServerOptions = config.readEntry("EposServerOptions", QString());
+    m_eposClientOptions = config.readEntry("EposClientOptions", QString());
     kDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
     kDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
 
-    QString codecString = config->readEntry("Codec", "Local");
+    QString codecString = config.readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
     // Start the Epos server if not already started.
     if (!m_eposServerProc)

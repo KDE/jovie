@@ -414,10 +414,10 @@ void HadifixConfPrivate::setDefaults () {
                       100, 100, 100, "Local");
 }
 
-void HadifixConfPrivate::load (KConfig *config, const QString &configGroup) {
-    config->setGroup(configGroup);
+void HadifixConfPrivate::load (KConfig *c, const QString &configGroup) {
+    KConfigGroup config(c, configGroup);
 
-    QString voice = config->readEntry("voice", getVoiceFilename());
+    QString voice = config.readEntry("voice", getVoiceFilename());
 
     HadifixProc::VoiceGender gender;
     gender = HadifixProc::determineGender(defaultMbrolaExec, voice);
@@ -431,27 +431,27 @@ void HadifixConfPrivate::load (KConfig *config, const QString &configGroup) {
     if (voiceCode.left(2) == "hu") defaultCodecName = "ISO 8859-2";
 
     setConfiguration (
-        config->readEntry ("hadifixExec",defaultHadifixExec),
-        config->readEntry ("mbrolaExec", defaultMbrolaExec),
-        config->readEntry ("voice",      voice),
-        config->readEntry("gender", isMale),
-        config->readEntry ("volume",  100),
-        config->readEntry ("time",    100),
-        config->readEntry ("pitch",   100),
-        config->readEntry ("codec",      defaultCodecName)
+        config.readEntry ("hadifixExec",defaultHadifixExec),
+        config.readEntry ("mbrolaExec", defaultMbrolaExec),
+        config.readEntry ("voice",      voice),
+        config.readEntry("gender", isMale),
+        config.readEntry ("volume",  100),
+        config.readEntry ("time",    100),
+        config.readEntry ("pitch",   100),
+        config.readEntry ("codec",      defaultCodecName)
     );
 }
 
-void HadifixConfPrivate::save (KConfig *config, const QString &configGroup) {
-    config->setGroup(configGroup);
-    config->writeEntry ("hadifixExec", PlugInConf::realFilePath(hadifixURL->url().path()));
-    config->writeEntry ("mbrolaExec", PlugInConf::realFilePath(mbrolaURL->url().path()));
-    config->writeEntry ("voice",      getVoiceFilename());
-    config->writeEntry ("gender",     isMaleVoice());
-    config->writeEntry ("volume",     volumeBox->value());
-    config->writeEntry ("time",       timeBox->value());
-    config->writeEntry ("pitch",      frequencyBox->value());
-    config->writeEntry ("codec",      PlugInProc::codecIndexToCodecName(
+void HadifixConfPrivate::save (KConfig *c, const QString &configGroup) {
+    KConfigGroup config(c, configGroup);
+    config.writeEntry ("hadifixExec", PlugInConf::realFilePath(hadifixURL->url().path()));
+    config.writeEntry ("mbrolaExec", PlugInConf::realFilePath(mbrolaURL->url().path()));
+    config.writeEntry ("voice",      getVoiceFilename());
+    config.writeEntry ("gender",     isMaleVoice());
+    config.writeEntry ("volume",     volumeBox->value());
+    config.writeEntry ("time",       timeBox->value());
+    config.writeEntry ("pitch",      frequencyBox->value());
+    config.writeEntry ("codec",      PlugInProc::codecIndexToCodecName(
                                       characterCodingBox->currentIndex(), codecList));
 }
 

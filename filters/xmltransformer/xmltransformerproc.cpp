@@ -70,16 +70,16 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const QStringList& ) :
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
+bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
 {
     // kDebug() << "XmlTransformerProc::init: Running." << endl;
-    config->setGroup( configGroup );
-    m_UserFilterName = config->readEntry( "UserFilterName" );
-    m_xsltFilePath = config->readEntry( "XsltFilePath" );
-    m_xsltprocPath = config->readEntry( "XsltprocPath" );
-    m_rootElementList = config->readEntry( "RootElement", QStringList(), ',' );
-    m_doctypeList = config->readEntry( "DocType", QStringList(), ',' );
-    m_appIdList = config->readEntry( "AppID", QStringList(), ',' );
+    KConfigGroup config( c, configGroup );
+    m_UserFilterName = config.readEntry( "UserFilterName" );
+    m_xsltFilePath = config.readEntry( "XsltFilePath" );
+    m_xsltprocPath = config.readEntry( "XsltprocPath" );
+    m_rootElementList = config.readEntry( "RootElement", QStringList(), ',' );
+    m_doctypeList = config.readEntry( "DocType", QStringList(), ',' );
+    m_appIdList = config.readEntry( "AppID", QStringList(), ',' );
     kDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath << endl;
     kDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath << endl;
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );

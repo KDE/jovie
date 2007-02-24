@@ -50,50 +50,50 @@ bool ConfigData::readConfig()
     // Load configuration
 
     // Set the group general for the configuration of KTTSD itself (no plug ins)
-    m_config->setGroup("General");
+    KConfigGroup config(m_config, "General");
 
     // Load the configuration of the text interruption messages and sound
-    textPreMsgEnabled = m_config->readEntry("TextPreMsgEnabled", false);
-    textPreMsg = m_config->readEntry("TextPreMsg");
+    textPreMsgEnabled = config.readEntry("TextPreMsgEnabled", false);
+    textPreMsg = config.readEntry("TextPreMsg");
 
-    textPreSndEnabled = m_config->readEntry("TextPreSndEnabled", false);
-    textPreSnd = m_config->readEntry("TextPreSnd");
+    textPreSndEnabled = config.readEntry("TextPreSndEnabled", false);
+    textPreSnd = config.readEntry("TextPreSnd");
 
-    textPostMsgEnabled = m_config->readEntry("TextPostMsgEnabled", false);
-    textPostMsg = m_config->readEntry("TextPostMsg");
+    textPostMsgEnabled = config.readEntry("TextPostMsgEnabled", false);
+    textPostMsg = config.readEntry("TextPostMsg");
 
-    textPostSndEnabled = m_config->readEntry("TextPostSndEnabled", false);
-    textPostSnd = m_config->readEntry("TextPostSnd");
-    keepAudio = m_config->readEntry("KeepAudio", false);
-    keepAudioPath = m_config->readEntry("KeepAudioPath",
+    textPostSndEnabled = config.readEntry("TextPostSndEnabled", false);
+    textPostSnd = config.readEntry("TextPostSnd");
+    keepAudio = config.readEntry("KeepAudio", false);
+    keepAudioPath = config.readEntry("KeepAudioPath",
         KStandardDirs::locateLocal("data", "kttsd/audio/"));
 
     // Notification (KNotify).
-    notify = m_config->readEntry("Notify", false);
-    notifyExcludeEventsWithSound = m_config->readEntry("ExcludeEventsWithSound", true);
+    notify = config.readEntry("Notify", false);
+    notifyExcludeEventsWithSound = config.readEntry("ExcludeEventsWithSound", true);
     loadNotifyEventsFromFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml"), true );
 
     // KTTSMgr auto start and auto exit.
-    autoStartManager = m_config->readEntry("AutoStartManager", false);
-    autoExitManager = m_config->readEntry("AutoExitManager", false);
+    autoStartManager = config.readEntry("AutoStartManager", false);
+    autoExitManager = config.readEntry("AutoExitManager", false);
 
     // Default to Phonon (0).
-    playerOption = m_config->readEntry("AudioOutputMethod", 0);
-    
+    playerOption = config.readEntry("AudioOutputMethod", 0);
+
     // Map 50% to 100% onto 2.0 to 0.5.
-    audioStretchFactor = 1.0/(float(m_config->readEntry("AudioStretchFactor", 100))/100.0);
+    audioStretchFactor = 1.0/(float(config.readEntry("AudioStretchFactor", 100))/100.0);
     switch (playerOption)
     {
         case 0:
         case 1: break;
         case 2:
-            m_config->setGroup("ALSAPlayer");
-            sinkName = m_config->readEntry("PcmName", "default");
+            KConfigGroup alsaConfig( m_config, "ALSAPlayer");
+            sinkName = alsaConfig.readEntry("PcmName", "default");
             if ("custom" == sinkName)
-                sinkName = m_config->readEntry("CustomPcmName", "default");
-            periodSize = m_config->readEntry("PeriodSize", 128);
-            periods = m_config->readEntry("Periods", 8);
-            playerDebugLevel = m_config->readEntry("DebugLevel", 1);
+                sinkName = alsaConfig.readEntry("CustomPcmName", "default");
+            periodSize = alsaConfig.readEntry("PeriodSize", 128);
+            periods = alsaConfig.readEntry("Periods", 8);
+            playerDebugLevel = alsaConfig.readEntry("DebugLevel", 1);
             break;
     }
 

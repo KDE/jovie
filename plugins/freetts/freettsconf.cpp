@@ -62,15 +62,15 @@ FreeTTSConf::~FreeTTSConf() {
         delete m_progressDlg;
 }
 
-void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
+void FreeTTSConf::load(KConfig *c, const QString &configGroup) {
     // kDebug() << "FreeTTSConf::load: Running" << endl;
 
-    config->setGroup(configGroup);
-        QString freeTTSJar = config->readEntry("FreeTTSJarPath", QString());
+    KConfigGroup config(c, configGroup);
+        QString freeTTSJar = config.readEntry("FreeTTSJarPath", QString());
         if (freeTTSJar.isEmpty())
         {
-            config->setGroup("FreeTTS");
-            freeTTSJar = config->readEntry("FreeTTSJarPath", QString());
+            KConfigGroup freettsConfig(c, "FreeTTS");
+            freeTTSJar = freettsConfig.readEntry("FreeTTSJarPath", QString());
         }
     if (freeTTSJar.isEmpty())
         freeTTSJar = getLocation("freetts.jar");
@@ -78,17 +78,17 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
     /// If freettsPath is still empty, then we couldn't find the file in the path.
 }
 
-void FreeTTSConf::save(KConfig *config, const QString &configGroup){
+void FreeTTSConf::save(KConfig *c, const QString &configGroup){
     // kDebug() << "FreeTTSConf::save: Running" << endl;
 
-    config->setGroup("FreeTTS");
-    config->writeEntry("FreeTTSJarPath",
+    KConfigGroup freettsConfig(c, "FreeTTS");
+    freettsConfig.writeEntry("FreeTTSJarPath",
         realFilePath(freettsPath->url().path()));
 
-    config->setGroup(configGroup);
+    KConfigGroup config(c, configGroup);
     if(freettsPath->url().path().isEmpty())
     KMessageBox::sorry(0, i18n("Unable to locate freetts.jar in your path.\nPlease specify the path to freetts.jar in the Properties tab before using KDE Text-to-Speech"), i18n("KDE Text-to-Speech"));
-    config->writeEntry("FreeTTSJarPath",
+    config.writeEntry("FreeTTSJarPath",
     realFilePath(freettsPath->url().path()));
 }
 

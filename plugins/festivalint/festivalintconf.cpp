@@ -128,54 +128,56 @@ int FestivalIntConf::voiceCodeToListIndex(const QString& voiceCode) const
     return -1;
 }
 
-void FestivalIntConf::load(KConfig *config, const QString &configGroup){
+void FestivalIntConf::load(KConfig *c, const QString &configGroup){
     //kDebug() << "FestivalIntConf::load: Running" << endl;
-    config->setGroup("FestivalInt");
-    QString exePath = config->readEntry("FestivalExecutablePath", "festival");
+    KConfigGroup festivalConfig(c, "FestivalInt");
+    QString exePath = festivalConfig.readEntry("FestivalExecutablePath", "festival");
     QString exeLocation = getLocation(exePath);
     if (!exeLocation.isEmpty()) exePath = exeLocation;
     exePath = realFilePath(exePath);
-    config->setGroup(configGroup);
-    festivalPath->setUrl(KUrl::fromPath(config->readEntry("FestivalExecutablePath", exePath)));
+
+    KConfigGroup config(c, configGroup);
+    festivalPath->setUrl(KUrl::fromPath(config.readEntry("FestivalExecutablePath", exePath)));
     preloadCheckBox->setChecked(false);
     scanVoices();
-    QString voiceSelected(config->readEntry("Voice"));
+    QString voiceSelected(config.readEntry("Voice"));
     int index = voiceCodeToListIndex(voiceSelected);
     if (index >= 0)
     {
         selectVoiceCombo->setCurrentIndex(index);
         preloadCheckBox->setChecked(m_voiceList[index].preload);
     }
-    volumeBox->setValue(config->readEntry("volume", 100));
-    timeBox->setValue(config->readEntry("time", 100));
-    frequencyBox->setValue(config->readEntry("pitch", 100));
-    preloadCheckBox->setChecked(config->readEntry(
-        "Preload", preloadCheckBox->isChecked()));
-    m_languageCode = config->readEntry("LanguageCode", m_languageCode);
+    volumeBox->setValue(config.readEntry("volume", 100));
+    timeBox->setValue(config.readEntry("time", 100));
+    frequencyBox->setValue(config.readEntry("pitch", 100));
+    preloadCheckBox->setChecked(config.readEntry(
+                "Preload", preloadCheckBox->isChecked()));
+    m_languageCode = config.readEntry("LanguageCode", m_languageCode);
     m_supportsSSML = static_cast<FestivalIntProc::SupportsSSML>(
-        config->readEntry("SupportsSSML", int(FestivalIntProc::ssUnknown)));
+            config.readEntry("SupportsSSML", int(FestivalIntProc::ssUnknown)));
     QString codecName = PlugInProc::codecIndexToCodecName(
-        characterCodingBox->currentIndex(), m_codecList);
-    codecName = config->readEntry("Codec", codecName);
+            characterCodingBox->currentIndex(), m_codecList);
+    codecName = config.readEntry("Codec", codecName);
     int codecNdx = PlugInProc::codecNameToListIndex(codecName, m_codecList);
     characterCodingBox->setCurrentIndex(codecNdx);
 }
 
-void FestivalIntConf::save(KConfig *config, const QString &configGroup){
+void FestivalIntConf::save(KConfig *c, const QString &configGroup){
     // kDebug() << "FestivalIntConf::save: Running" << endl;
-    config->setGroup("FestivalInt");
-    config->writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url().path()));
-    config->setGroup(configGroup);
-    config->writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url().path()));
-    config->writeEntry("Voice", m_voiceList[selectVoiceCombo->currentIndex()].code);
-    config->writeEntry("volume", volumeBox->value());
-    config->writeEntry("time", timeBox->value());
-    config->writeEntry("pitch", frequencyBox->value());
-    config->writeEntry("Preload", preloadCheckBox->isChecked());
-    config->writeEntry("LanguageCode", m_voiceList[selectVoiceCombo->currentIndex()].languageCode);
-    config->writeEntry("SupportsSSML", int(m_supportsSSML));
+    KConfigGroup festivalConfig(c, "FestivalInt");
+    festivalConfig.writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url().path()));
+
+    KConfigGroup config(c, configGroup);
+    config.writeEntry("FestivalExecutablePath", realFilePath(festivalPath->url().path()));
+    config.writeEntry("Voice", m_voiceList[selectVoiceCombo->currentIndex()].code);
+    config.writeEntry("volume", volumeBox->value());
+    config.writeEntry("time", timeBox->value());
+    config.writeEntry("pitch", frequencyBox->value());
+    config.writeEntry("Preload", preloadCheckBox->isChecked());
+    config.writeEntry("LanguageCode", m_voiceList[selectVoiceCombo->currentIndex()].languageCode);
+    config.writeEntry("SupportsSSML", int(m_supportsSSML));
     int codec = characterCodingBox->currentIndex();
-    config->writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
+    config.writeEntry("Codec", PlugInProc::codecIndexToCodecName(codec, m_codecList));
 }
 
 void FestivalIntConf::defaults(){

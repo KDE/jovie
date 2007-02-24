@@ -67,10 +67,10 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
         if ( !relativePath.isEmpty() )
         {
             KConfig* config = new KConfig("data", relativePath, KConfig::NoGlobals );
-            config->setGroup( QString::fromLatin1("!Global!") );
-            QString icon = config->readEntry(QString::fromLatin1("IconName"),
+            KConfigGroup globalConfig( config, QString::fromLatin1("!Global!") );
+            QString icon = globalConfig.readEntry(QString::fromLatin1("IconName"),
                 QString::fromLatin1("misc"));
-            QString description = config->readEntry( QString::fromLatin1("Comment"),
+            QString description = globalConfig.readEntry( QString::fromLatin1("Comment"),
                 i18n("No description available") );
             delete config;
             int index = relativePath.indexOf( '/' );
@@ -103,9 +103,9 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
         QString eventName = eventNames[ndx];
         if ( eventName != "!Global!" )
         {
-            config->setGroup( eventName );
-            QString eventDesc = config->readEntry( QString::fromLatin1( "Comment" ),
-                config->readEntry( QString::fromLatin1( "Name" ),QString()));
+            KConfigGroup eventConfig(config, eventName );
+            QString eventDesc = eventConfig.readEntry( QString::fromLatin1( "Comment" ),
+                eventConfig.readEntry( QString::fromLatin1( "Name" ),QString()));
             int row = eventsListView->rowCount();
             eventsListView->setRowCount(row + 1);
             eventsListView->setItem(row, 0, new QTableWidgetItem(eventDesc));

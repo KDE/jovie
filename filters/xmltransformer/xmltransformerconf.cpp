@@ -90,18 +90,18 @@ XmlTransformerConf::~XmlTransformerConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
+void XmlTransformerConf::load(KConfig* c, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::load: Running" << endl;
-    config->setGroup( configGroup );
-    nameLineEdit->setText( config->readEntry( "UserFilterName", nameLineEdit->text() ) );
-    xsltPath->setUrl( KUrl::fromPath( config->readEntry( "XsltFilePath", xsltPath->url().path() ) ) );
-    xsltprocPath->setUrl( KUrl::fromPath( config->readEntry( "XsltprocPath", xsltprocPath->url().path() ) ) );
+    KConfigGroup config( c, configGroup );
+    nameLineEdit->setText( config.readEntry( "UserFilterName", nameLineEdit->text() ) );
+    xsltPath->setUrl( KUrl::fromPath( config.readEntry( "XsltFilePath", xsltPath->url().path() ) ) );
+    xsltprocPath->setUrl( KUrl::fromPath( config.readEntry( "XsltprocPath", xsltprocPath->url().path() ) ) );
     rootElementLineEdit->setText(
-            config->readEntry( "RootElement", rootElementLineEdit->text() ) );
+            config.readEntry( "RootElement", rootElementLineEdit->text() ) );
     doctypeLineEdit->setText(
-            config->readEntry( "DocType", doctypeLineEdit->text() ) );
+            config.readEntry( "DocType", doctypeLineEdit->text() ) );
     appIdLineEdit->setText(
-            config->readEntry( "AppID", appIdLineEdit->text() ) );
+            config.readEntry( "AppID", appIdLineEdit->text() ) );
 }
 
 /**
@@ -114,15 +114,15 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
+void XmlTransformerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::save: Running" << endl;
-    config->setGroup( configGroup );
-    config->writeEntry( "UserFilterName", nameLineEdit->text() );
-    config->writeEntry( "XsltFilePath", realFilePath( xsltPath->url().path() ) );
-    config->writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url().path() ) );
-    config->writeEntry( "RootElement", rootElementLineEdit->text() );
-    config->writeEntry( "DocType", doctypeLineEdit->text() );
-    config->writeEntry( "AppID", appIdLineEdit->text().replace(" ", "") );
+    KConfigGroup config( c, configGroup );
+    config.writeEntry( "UserFilterName", nameLineEdit->text() );
+    config.writeEntry( "XsltFilePath", realFilePath( xsltPath->url().path() ) );
+    config.writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url().path() ) );
+    config.writeEntry( "RootElement", rootElementLineEdit->text() );
+    config.writeEntry( "DocType", doctypeLineEdit->text() );
+    config.writeEntry( "AppID", appIdLineEdit->text().replace(" ", "") );
 }
 
 /** 

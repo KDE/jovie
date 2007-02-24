@@ -50,16 +50,16 @@ class HadifixProcPrivate {
         delete hadifixProc;
       };
 
-      void load(KConfig *config, const QString &configGroup) {
-         config->setGroup(configGroup);
-         hadifix  = config->readEntry ("hadifixExec",   QString());
-         mbrola   = config->readEntry ("mbrolaExec",    QString());
-         voice    = config->readEntry ("voice",         QString());
-         gender   = config->readEntry("gender", false);
-         volume   = config->readEntry ("volume",     100);
-         time     = config->readEntry ("time",       100);
-         pitch    = config->readEntry ("pitch",      100);
-         codec    = PlugInProc::codecNameToCodec(config->readEntry ("codec", "Local"));
+      void load(KConfig *c, const QString &configGroup) {
+         KConfigGroup config(c, configGroup);
+         hadifix  = config.readEntry ("hadifixExec",   QString());
+         mbrola   = config.readEntry ("mbrolaExec",    QString());
+         voice    = config.readEntry ("voice",         QString());
+         gender   = config.readEntry("gender", false);
+         volume   = config.readEntry ("volume",     100);
+         time     = config.readEntry ("time",       100);
+         pitch    = config.readEntry ("pitch",      100);
+         codec    = PlugInProc::codecNameToCodec(config.readEntry ("codec", "Local"));
       };
 
       QString hadifix;

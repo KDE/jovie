@@ -55,12 +55,12 @@ FliteProc::~FliteProc(){
 }
 
 /** Initialize the speech */
-bool FliteProc::init(KConfig* config, const QString& configGroup){
+bool FliteProc::init(KConfig* c, const QString& configGroup){
     // kDebug() << "Running: FliteProc::init(const QString &lang)" << endl;
     // kDebug() << "Initializing plug in: Flite" << endl;
     // Retrieve path to flite executable.
-    config->setGroup(configGroup);
-    m_fliteExePath = config->readEntry("FliteExePath", "flite");
+    KConfigGroup config(c, configGroup);
+    m_fliteExePath = config.readEntry("FliteExePath", "flite");
     kDebug() << "FliteProc::init: path to flite: " << m_fliteExePath << endl;
     return true;
 }

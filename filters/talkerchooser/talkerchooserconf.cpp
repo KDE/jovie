@@ -102,26 +102,26 @@ TalkerChooserConf::~TalkerChooserConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
+void TalkerChooserConf::load(KConfig* c, const QString& configGroup){
     // kDebug() << "TalkerChooserConf::load: Running" << endl;
-    config->setGroup( configGroup );
-    nameLineEdit->setText( config->readEntry( "UserFilterName", nameLineEdit->text() ) );
+    KConfigGroup config( c, configGroup );
+    nameLineEdit->setText( config.readEntry( "UserFilterName", nameLineEdit->text() ) );
     reLineEdit->setText(
-            config->readEntry("MatchRegExp", reLineEdit->text()) );
+            config.readEntry("MatchRegExp", reLineEdit->text()) );
     appIdLineEdit->setText(
-            config->readEntry("AppIDs", appIdLineEdit->text()) );
+            config.readEntry("AppIDs", appIdLineEdit->text()) );
 
-    m_talkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
+    m_talkerCode = TalkerCode(config.readEntry("TalkerCode"), false);
     // Legacy settings.
-    QString s = config->readEntry( "LanguageCode" );
+    QString s = config.readEntry( "LanguageCode" );
     if (!s.isEmpty()) m_talkerCode.setFullLanguageCode(s);
-    s = config->readEntry( "SynthInName" );
+    s = config.readEntry( "SynthInName" );
     if (!s.isEmpty()) m_talkerCode.setPlugInName(s);
-    s = config->readEntry( "Gender" );
+    s = config.readEntry( "Gender" );
     if (!s.isEmpty()) m_talkerCode.setGender(s);
-    s = config->readEntry( "Volume" );
+    s = config.readEntry( "Volume" );
     if (!s.isEmpty()) m_talkerCode.setVolume(s);
-    s = config->readEntry( "Rate" );
+    s = config.readEntry( "Rate" );
     if (!s.isEmpty()) m_talkerCode.setRate(s);
 
     talkerLineEdit->setText(m_talkerCode.getTranslatedDescription());
@@ -137,13 +137,13 @@ void TalkerChooserConf::load(KConfig* config, const QString& configGroup){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void TalkerChooserConf::save(KConfig* config, const QString& configGroup){
+void TalkerChooserConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "TalkerChooserConf::save: Running" << endl;
-    config->setGroup( configGroup );
-    config->writeEntry( "UserFilterName", nameLineEdit->text() );
-    config->writeEntry( "MatchRegExp", reLineEdit->text() );
-    config->writeEntry( "AppIDs", appIdLineEdit->text().replace(" ", "") );
-    config->writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
+    KConfigGroup config( c, configGroup );
+    config.writeEntry( "UserFilterName", nameLineEdit->text() );
+    config.writeEntry( "MatchRegExp", reLineEdit->text() );
+    config.writeEntry( "AppIDs", appIdLineEdit->text().replace(" ", "") );
+    config.writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
 }
 
 /**

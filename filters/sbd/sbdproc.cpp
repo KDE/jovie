@@ -600,17 +600,17 @@ SbdProc::~SbdProc()
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool SbdProc::init(KConfig* config, const QString& configGroup){
+bool SbdProc::init(KConfig* c, const QString& configGroup){
     // kDebug() << "SbdProc::init: Running" << endl;
-    config->setGroup( configGroup );
-//    m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
-    m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
+    KConfigGroup config(c, configGroup );
+//    m_configuredRe = config.readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
+    m_configuredRe = config.readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
-    QString sb = config->readEntry( "SentenceBoundary", "\\1\t" );
+    QString sb = config.readEntry( "SentenceBoundary", "\\1\t" );
     sb.replace( "\\t", "\t" );
     m_sbdThread->setConfiguredSentenceBoundary( sb );
-    m_appIdList = config->readEntry( "AppID", QStringList(), ',' );
-    m_languageCodeList = config->readEntry( "LanguageCodes", QStringList(), ',' );
+    m_appIdList = config.readEntry( "AppID", QStringList(), ',' );
+    m_languageCodeList = config.readEntry( "LanguageCodes", QStringList(), ',' );
     return true;
 }
 

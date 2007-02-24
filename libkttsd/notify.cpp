@@ -149,11 +149,10 @@ static void notifypresent_init()
 /*static*/ QString NotifyEvent::getEventSrcName(const QString& eventSrc, QString& iconName)
 {
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig* config = new KConfig( "data", configFilename, KConfig::NoGlobals );
-    config->setGroup( QString::fromLatin1( "!Global!" ) );
-    QString appDesc = config->readEntry( "Comment", i18n("No description available") );
-    iconName = config->readEntry( "IconName" );
-    delete config;
+    KConfig config( "data", configFilename, KConfig::NoGlobals );
+    KConfigGroup group( &config, QString::fromLatin1( "!Global!" ) );
+    QString appDesc = group.readEntry( "Comment", i18n("No description available") );
+    iconName = group.readEntry( "IconName" );
     return appDesc;
 }
 
@@ -164,14 +163,13 @@ static void notifypresent_init()
 {
     QString eventName;
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig* config = new KConfig( "data", configFilename, KConfig::NoGlobals );
-    if ( config->hasGroup( event ) )
+    KConfig config( "data", configFilename, KConfig::NoGlobals );
+    if ( config.hasGroup( event ) )
     {
-        config->setGroup( event );
-        eventName = config->readEntry( QString::fromLatin1( "Comment" ),
-            config->readEntry( QString::fromLatin1( "Name" ),QString()));
+        KConfigGroup group( &config,  event );
+        eventName = group.readEntry( QString::fromLatin1( "Comment" ),
+                    group.readEntry( QString::fromLatin1( "Name" ),QString()));
     }
-    delete config;
     return eventName;
 }
 

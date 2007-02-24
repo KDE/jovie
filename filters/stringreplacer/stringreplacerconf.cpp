@@ -125,11 +125,11 @@ StringReplacerConf::~StringReplacerConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void StringReplacerConf::load(KConfig* config, const QString& configGroup){
+void StringReplacerConf::load(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::load: Running" << endl;
     // See if this filter previously save its word list.
-    config->setGroup( configGroup );
-    QString wordsFilename = config->readEntry( "WordListFile" );
+    KConfigGroup config( c, configGroup );
+    QString wordsFilename = config.readEntry( "WordListFile" );
     if ( !wordsFilename.isEmpty() )
     {
         QString errMsg = loadFromFile( wordsFilename, true );
@@ -259,7 +259,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void StringReplacerConf::save(KConfig* config, const QString& configGroup){
+void StringReplacerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::save: Running" << endl;
     QString wordsFilename =
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", true );
@@ -272,8 +272,8 @@ void StringReplacerConf::save(KConfig* config, const QString& configGroup){
     QString errMsg = saveToFile( wordsFilename );
     if ( errMsg.isEmpty() )
     {
-        config->setGroup( configGroup );
-        config->writeEntry( "WordListFile", realFilePath(wordsFilename) );
+        KConfigGroup config( c, configGroup );
+        config.writeEntry( "WordListFile", realFilePath(wordsFilename) );
     }
     else
         kDebug() << "StringReplacerConf::save: " << errMsg << endl;
