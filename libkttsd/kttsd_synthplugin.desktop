@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KTTSD
 Name[x-test]=xxKTTSDxx
+Name[zh_TW]=KTTSd
 Type=ServiceType
 X-KDE-ServiceType=KTTSD/SynthPlugin
 
