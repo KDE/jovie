@@ -313,15 +313,15 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 
     // Give buttons icons.
     // Talkers tab.
-    higherTalkerPriorityButton->setIcon(KIcon("up"));
-    lowerTalkerPriorityButton->setIcon(KIcon("down"));
-    removeTalkerButton->setIcon(KIcon("edittrash"));
+    higherTalkerPriorityButton->setIcon(KIcon("go-up"));
+    lowerTalkerPriorityButton->setIcon(KIcon("go-down"));
+    removeTalkerButton->setIcon(KIcon("edit-trash"));
     configureTalkerButton->setIcon(KIcon("configure"));
 
     // Filters tab.
-    higherFilterPriorityButton->setIcon(KIcon("up"));
-    lowerFilterPriorityButton->setIcon(KIcon("down"));
-    removeFilterButton->setIcon(KIcon("edittrash"));
+    higherFilterPriorityButton->setIcon(KIcon("go-up"));
+    lowerFilterPriorityButton->setIcon(KIcon("go-down"));
+    removeFilterButton->setIcon(KIcon("edit-trash"));
     configureFilterButton->setIcon(KIcon("configure"));
 
     // Notify tab.
@@ -347,7 +347,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
         notifyPresentComboBox->addItem( NotifyPresent::presentDisplayName( ndx ) );
 
-    notifyRemoveButton->setIcon(KIcon("edittrash"));
+    notifyRemoveButton->setIcon(KIcon("edit-trash"));
     notifyTestButton->setIcon(KIcon("speak"));
 
     pcmComboBox->setEditable(false);
@@ -357,9 +357,9 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     sbdPopmenu->setObjectName( "SbdPopupMenu" );
     m_sbdBtnEdit = sbdPopmenu->addAction(
         i18n("&Edit..."), this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
-    m_sbdBtnUp = sbdPopmenu->addAction( KIcon("up"),
+    m_sbdBtnUp = sbdPopmenu->addAction( KIcon("go-up"),
         i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnDown = sbdPopmenu->addAction( KIcon("down"),
+    m_sbdBtnDown = sbdPopmenu->addAction( KIcon("go-down"),
         i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
     m_sbdBtnAdd = sbdPopmenu->addAction(
         i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );

@@ -128,16 +128,16 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 
     actStop = contextMenu()->addAction (
         i18n("&Stop/Delete"), this, SLOT(stopSelected()));
-    actStop->setIcon(KIcon("player_stop"));
+    actStop->setIcon(KIcon("media-playback-stop"));
     actPause = contextMenu()->addAction (
         i18n("&Pause"), this, SLOT(pauseSelected()));
-    actPause->setIcon(KIcon("player_pause"));
+    actPause->setIcon(KIcon("media-playback-pause"));
     actResume = contextMenu()->addAction (
         i18n("&Resume"), this, SLOT(resumeSelected()));
-    actResume->setIcon(KIcon("player_play"));
+    actResume->setIcon(KIcon("media-playback-start"));
     actRepeat = contextMenu()->addAction (
         i18n("R&epeat"), this, SLOT(repeatSelected()));
-    actRepeat->setIcon(KIcon("reload"));
+    actRepeat->setIcon(KIcon("view-refresh"));
     act = contextMenu()->addSeparator();
     actSpeakClipboard = contextMenu()->addAction (
         i18n("Spea&k Clipboard Contents"), this, SLOT(speakClipboardSelected()));
@@ -148,7 +148,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     act = contextMenu()->addSeparator();
     act = contextMenu()->addAction (
         i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
-    act->setIcon(KIcon("contents"));
+    act->setIcon(KIcon("help-contents"));
     act = contextMenu()->addAction (
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
     act->setIcon(KIcon("kttsd"));

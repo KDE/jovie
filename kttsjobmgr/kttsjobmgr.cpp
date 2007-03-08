@@ -154,7 +154,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
 
     QPushButton* btn;
     QString wt;
-    btn = new QPushButton(KIcon("stop"), i18n("Hold"), hbox1);
+    btn = new QPushButton(KIcon("process-stop"), i18n("Hold"), hbox1);
     btn->setObjectName("job_hold");
     wt = i18n(
         "<p>Changes a job to Paused state.  If currently speaking, the job stops speaking.  "
@@ -170,21 +170,21 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
-    btn = new QPushButton(KIcon("redo"), i18n("R&estart"), hbox1);
+    btn = new QPushButton(KIcon("edit-redo"), i18n("R&estart"), hbox1);
     btn->setObjectName("job_restart");
     wt = i18n(
         "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "
         "is the top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
-    btn = new QPushButton(KIcon("edittrash"), i18n("Re&move"), hbox1);
+    btn = new QPushButton(KIcon("edit-trash"), i18n("Re&move"), hbox1);
     btn->setObjectName("job_remove");
     wt = i18n(
         "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "
         "speakable job in the list begins speaking.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
-    btn = new QPushButton(KIcon("down"), i18n("&Later"), hbox1);
+    btn = new QPushButton(KIcon("go-down"), i18n("&Later"), hbox1);
     btn->setObjectName("job_later");
     wt = i18n(
         "<p>Moves a job downward in the list so that it will be spoken later.  If the job "
@@ -192,13 +192,13 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
-    btn = new QPushButton(KIcon("1leftarrow"), i18n("&Previous Sentence"), hbox2);
+    btn = new QPushButton(KIcon("arrow-left"), i18n("&Previous Sentence"), hbox2);
     btn->setObjectName("job_prevsentence");
     wt = i18n(
         "<p>Rewinds a job to the previous sentence.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_prev_sen()));
-    btn = new QPushButton(KIcon("1rightarrow"), i18n("&Next Sentence"), hbox2);
+    btn = new QPushButton(KIcon("arrow-right"), i18n("&Next Sentence"), hbox2);
     btn->setObjectName("job_nextsentence");
     wt = i18n(
         "<p>Advances a job to the next sentence.</p>");
@@ -213,7 +213,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "The job will be spoken by the topmost Talker in the <b>Talkers</b> tab.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
-    btn = new QPushButton(KIcon("fileopen"), i18n("Spea&k File"), hbox3);
+    btn = new QPushButton(KIcon("document-open"), i18n("Spea&k File"), hbox3);
     btn->setObjectName("speak_file");
     wt = i18n(
         "<p>Prompts you for a file name and queues the contents of the file for speaking.  "
