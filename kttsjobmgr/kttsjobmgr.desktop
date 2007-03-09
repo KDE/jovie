@@ -5,6 +5,7 @@ Name=kttsjobmgrpart
 Name[pt_BR]=Componente Ger. de Jobs do Ktts
 Name[x-test]=xxkttsjobmgrpartxx
 Comment=KDE Text-to-speech Job Manager
+Comment[bg]=Мениджър на задачите за синтез на глас
 Comment[ca]=Gestor de treballs de text a veu de KDE
 Comment[cs]=Správce úloh zvukové syntézy KDE
 Comment[da]=KDE's Tekst-til-tale Job-håndtering

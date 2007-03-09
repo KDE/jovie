@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTextEditor KTTSD Plugin
+Name[bg]=Приставка KTextEditor KTTSD
 Name[br]=Lugent KTTSD KTextEditor
 Name[ca]=Connector pel KTTSD del KTextEditor
 Name[cs]=KTextEditor KTTSD modul
@@ -43,6 +44,7 @@ Name[uk]=Втулок KTextEditor KTTSD
 Name[x-test]=xxKTextEditor KTTSD Pluginxx
 Name[zh_TW]=K-文字編輯器的 kttsd 外掛程式
 Comment=Adds a menu entry for speaking the text
+Comment[bg]=Добавяне на операция в менюто за изговаряне на текст
 Comment[ca]=Afegeix una entrada de menú per pronunciar el text
 Comment[cs]=Vložení nabídky pro předčítání textu
 Comment[da]=Tilføjer et menupunkt for at læse teksten op
