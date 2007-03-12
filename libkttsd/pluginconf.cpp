@@ -163,7 +163,7 @@ QString PlugInConf::getLocation(const QString &name) {
         fullName += name;
         fileinfo.setFile(fullName);
         // The user either has the directory of the file in the path...
-        if(fileinfo.isFile() || fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile()) {
+        if(fileinfo.isFile() || (fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile())) {
             return fullName;
 //             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
