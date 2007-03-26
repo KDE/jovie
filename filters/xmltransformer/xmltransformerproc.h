@@ -31,7 +31,7 @@
 // KTTS includes.
 #include "filterproc.h"
 
-class KProcess;
+class K3Process;
 
 class XmlTransformerProc : virtual public KttsFilterProc
 {
@@ -131,9 +131,9 @@ public:
     virtual bool wasModified();
 
 private slots:
-    void slotProcessExited(KProcess*);
-    void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
-    void slotReceivedStderr(KProcess* proc, char* buffer, int buflen);
+    void slotProcessExited(K3Process*);
+    void slotReceivedStdout(K3Process* proc, char* buffer, int buflen);
+    void slotReceivedStderr(K3Process* proc, char* buffer, int buflen);
 
 private:
     // Process output when xsltproc exits.
@@ -150,7 +150,7 @@ private:
     // Processing state.
     int m_state;
     // xsltproc process.
-    KProcess* m_xsltProc;
+    K3Process* m_xsltProc;
     // Input and Output filenames.
     QString m_inFilename;
     QString m_outFilename;

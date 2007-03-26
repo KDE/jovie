@@ -179,20 +179,20 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
     if(!m_festProc)
     {
         // kDebug()<< "FestivalIntProc::startEngine: Creating Festival object" << endl;
-        m_festProc = new KProcess;
+        m_festProc = new K3Process;
         *m_festProc << festivalExePath;
         *m_festProc << "--interactive";
         m_festProc->setEnvironment("LANG", languageCode + '.' + codec->name());
         m_festProc->setEnvironment("LC_CTYPE", languageCode + '.' + codec->name());
         // kDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
-        connect(m_festProc, SIGNAL(processExited(KProcess*)),
-                this, SLOT(slotProcessExited(KProcess*)));
-        connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-                this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-                this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-        connect(m_festProc, SIGNAL(wroteStdin(KProcess*)),
-                this, SLOT(slotWroteStdin(KProcess*)));
+        connect(m_festProc, SIGNAL(processExited(K3Process*)),
+                this, SLOT(slotProcessExited(K3Process*)));
+        connect(m_festProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+                this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+        connect(m_festProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+                this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+        connect(m_festProc, SIGNAL(wroteStdin(K3Process*)),
+                this, SLOT(slotWroteStdin(K3Process*)));
     }
     if (!m_festProc->isRunning())
     {
@@ -202,7 +202,7 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         m_runningPitch = 100;
         m_ready = false;
         m_outputQueue.clear();
-        if (m_festProc->start(KProcess::NotifyOnExit, KProcess::All))
+        if (m_festProc->start(K3Process::NotifyOnExit, K3Process::All))
         {
             // kDebug()<< "FestivalIntProc:startEngine: Festival initialized" << endl;
             m_festivalExePath = festivalExePath;
@@ -461,7 +461,7 @@ void FestivalIntProc::stopText(){
     } else m_state = psIdle;
 }
 
-void FestivalIntProc::slotProcessExited(KProcess*)
+void FestivalIntProc::slotProcessExited(K3Process*)
 {
     // kDebug() << "FestivalIntProc:slotProcessExited: Festival process has exited." << endl;
     m_ready = true;
@@ -499,7 +499,7 @@ void FestivalIntProc::slotProcessExited(KProcess*)
     m_outputQueue.clear();
 }
 
-void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+void FestivalIntProc::slotReceivedStdout(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     // kDebug() << "FestivalIntProc::slotReceivedStdout: Received from Festival: " << buf << endl;
@@ -568,13 +568,13 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     }
 }
 
-void FestivalIntProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
+void FestivalIntProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "FestivalIntProc::slotReceivedStderr: Received error from Festival: " << buf << endl;
 }
 
-void FestivalIntProc::slotWroteStdin(KProcess* /*proc*/)
+void FestivalIntProc::slotWroteStdin(K3Process* /*proc*/)
 {
     // kDebug() << "FestivalIntProc::slotWroteStdin: Running" << endl;
     m_writingStdin = false;

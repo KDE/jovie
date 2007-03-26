@@ -33,7 +33,7 @@
 // KTTS includes.
 #include <pluginproc.h>
 
-class KProcess;
+class K3Process;
 class QTextCodec;
 
 class EposProc : public PlugInProc{
@@ -167,10 +167,10 @@ class EposProc : public PlugInProc{
             int pitch);
     
     private slots:
-        void slotProcessExited(KProcess* proc);
-        void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
-        void slotReceivedStderr(KProcess* proc, char* buffer, int buflen);
-        void slotWroteStdin(KProcess* proc);
+        void slotProcessExited(K3Process* proc);
+        void slotReceivedStdout(K3Process* proc, char* buffer, int buflen);
+        void slotReceivedStderr(K3Process* proc, char* buffer, int buflen);
+        void slotWroteStdin(K3Process* proc);
 
     private:
         
@@ -189,12 +189,12 @@ class EposProc : public PlugInProc{
         /**
         * Epos Server process.
         */
-        KProcess* m_eposServerProc;
+        K3Process* m_eposServerProc;
                 
         /**
          * Epos Client process
          */
-        KProcess* m_eposProc;
+        K3Process* m_eposProc;
         
         /**
         * Epos language setting.  "czech", "slovak", or Null (use default language).

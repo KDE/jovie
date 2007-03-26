@@ -39,7 +39,7 @@
 #include <kmenu.h>
 #include <kaboutapplicationdialog.h>
 #include <ktoolinvocation.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <kconfig.h>
@@ -332,9 +332,9 @@ void KttsMgrTray::repeatSelected()
 
 void KttsMgrTray::configureSelected()
 {
-    KProcess proc;
+    K3Process proc;
     proc << "kcmshell" << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
-    proc.start(KProcess::DontCare);
+    proc.start(K3Process::DontCare);
 }
 
 bool KttsMgrTray::isKttsdRunning()

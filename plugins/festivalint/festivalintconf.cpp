@@ -43,7 +43,7 @@
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
-#include <kprocio.h>
+#include <k3procio.h>
 #include <kprogressdialog.h>
 #include <kicon.h>
 

@@ -28,7 +28,7 @@
 
 #include <kdemacros.h>
 
-class KProcess;
+class K3Process;
 
 class KDE_EXPORT Stretcher : public QObject{
     Q_OBJECT
@@ -80,14 +80,14 @@ class KDE_EXPORT Stretcher : public QObject{
         void stretchFinished();
 
     private slots:
-        void slotProcessExited(KProcess* proc);
+        void slotProcessExited(K3Process* proc);
 
     private:
         // Stretcher state.
         int m_state;
 
         // Sox process.
-        KProcess* m_stretchProc;
+        K3Process* m_stretchProc;
 
         // Output file name.
         QString m_outFilename;

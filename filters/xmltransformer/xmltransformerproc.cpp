@@ -31,7 +31,7 @@
 #include <kconfig.h>
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kdebug.h>
 
 // KTTS includes.
@@ -240,7 +240,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
     m_outFilename = outFile.fileName();
 
     /// Spawn an xsltproc process to apply our stylesheet to input file.
-    m_xsltProc = new KProcess;
+    m_xsltProc = new K3Process;
     *m_xsltProc << m_xsltprocPath;
     *m_xsltProc << "-o" << m_outFilename  << "--novalid"
             << m_xsltFilePath << m_inFilename;
@@ -249,14 +249,14 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
     //     m_xsltProc->args() << endl;
 
     m_state = fsFiltering;
-    connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
-            this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_xsltProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_xsltProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    if (!m_xsltProc->start(KProcess::NotifyOnExit,
-         static_cast<KProcess::Communication>(KProcess::Stdout | KProcess::Stderr)))
+    connect(m_xsltProc, SIGNAL(processExited(K3Process*)),
+            this, SLOT(slotProcessExited(K3Process*)));
+    connect(m_xsltProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+            this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+    connect(m_xsltProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+            this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+    if (!m_xsltProc->start(K3Process::NotifyOnExit,
+         static_cast<K3Process::Communication>(K3Process::Stdout | K3Process::Stderr)))
     {
         kDebug() << "XmlTransformerProc::convert: Error starting xsltproc" << endl;
         m_state = fsIdle;
@@ -364,19 +364,19 @@ void XmlTransformerProc::processOutput()
  */
 /*virtual*/ bool XmlTransformerProc::wasModified() { return m_wasModified; }
 
-void XmlTransformerProc::slotProcessExited(KProcess*)
+void XmlTransformerProc::slotProcessExited(K3Process*)
 {
     // kDebug() << "XmlTransformerProc::slotProcessExited: xsltproc has exited." << endl;
     processOutput();
 }
 
-void XmlTransformerProc::slotReceivedStdout(KProcess*, char* /*buffer*/, int /*buflen*/)
+void XmlTransformerProc::slotReceivedStdout(K3Process*, char* /*buffer*/, int /*buflen*/)
 {
     // QString buf = QString::fromLatin1(buffer, buflen);
     // kDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf << endl;
 }
 
-void XmlTransformerProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
+void XmlTransformerProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf << endl;

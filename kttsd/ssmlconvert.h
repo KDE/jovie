@@ -34,7 +34,7 @@
 #include <QObject>
 #include <QStringList>
 
-class KProcess;
+class K3Process;
 class QString;
 
 class SSMLConvert : public QObject {
@@ -109,11 +109,11 @@ signals:
     void transformFinished();
 
 private slots:
-    void slotProcessExited(KProcess* proc);
+    void slotProcessExited(K3Process* proc);
 
 private:
     /// The XSLT processor.
-    KProcess *m_xsltProc;
+    K3Process *m_xsltProc;
     /// Current talkers.
     QStringList m_talkers;
     // Current state.

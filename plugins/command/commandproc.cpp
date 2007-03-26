@@ -27,7 +27,7 @@
 // KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 
@@ -143,7 +143,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     ts << endl; // Some synths need this, eg. flite.
 
     // 1.b) quote the text as one parameter
-    QString escText = KShellProcess::quote(text);
+    QString escText = K3ShellProcess::quote(text);
 
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
@@ -287,19 +287,19 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
 
     // 3. create a new process
     kDebug() << "CommandProc::synth: running command: " << command << endl;
-    m_commandProc = new KProcess;
+    m_commandProc = new K3Process;
     m_commandProc->setUseShell(true);
     m_commandProc->setEnvironment("LANG", language + '.' + codec->name());
     m_commandProc->setEnvironment("LC_CTYPE", language + '.' + codec->name());
     *m_commandProc << command;
-    connect(m_commandProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_commandProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_commandProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_commandProc, SIGNAL(wroteStdin(KProcess*)),
-        this, SLOT(slotWroteStdin(KProcess* )));
+    connect(m_commandProc, SIGNAL(processExited(K3Process*)),
+        this, SLOT(slotProcessExited(K3Process*)));
+    connect(m_commandProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+        this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+    connect(m_commandProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+        this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+    connect(m_commandProc, SIGNAL(wroteStdin(K3Process*)),
+        this, SLOT(slotWroteStdin(K3Process* )));
 
     // 4. start the process
 
@@ -311,14 +311,14 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         m_state = psSynthing;
     }
     if (stdIn) {
-        m_commandProc->start(KProcess::NotifyOnExit, KProcess::All);
+        m_commandProc->start(K3Process::NotifyOnExit, K3Process::All);
         if (encText.size() > 0)
             m_commandProc->writeStdin(encText, encText.size());
         else
             m_commandProc->closeStdin();
     }
     else
-        m_commandProc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+        m_commandProc->start(K3Process::NotifyOnExit, K3Process::AllOutput);
 }
 
 /**
@@ -363,7 +363,7 @@ void CommandProc::stopText(){
     kDebug() << "CommandProc::stopText: Command stopped." << endl;
 }
 
-void CommandProc::slotProcessExited(KProcess*)
+void CommandProc::slotProcessExited(K3Process*)
 {
     kDebug() << "CommandProc:slotProcessExited: Command process has exited." << endl;
     pluginState prevState = m_state;
@@ -382,19 +382,19 @@ void CommandProc::slotProcessExited(KProcess*)
     }
 }
 
-void CommandProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+void CommandProc::slotReceivedStdout(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "CommandProc::slotReceivedStdout: Received output from Command: " << buf << endl;
 }
 
-void CommandProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
+void CommandProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "CommandProc::slotReceivedStderr: Received error from Command: " << buf << endl;
 }
 
-void CommandProc::slotWroteStdin(KProcess*)
+void CommandProc::slotWroteStdin(K3Process*)
 {
     kDebug() << "CommandProc::slotWroteStdin: closing Stdin" << endl;
     m_commandProc->closeStdin();

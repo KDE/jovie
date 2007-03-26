@@ -29,7 +29,7 @@
 // KDE includes.
 #include <kdeversion.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 
@@ -229,7 +229,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     m_outFilename = outFile.fileName();
 
     /// Spawn an xsltproc process to apply our stylesheet to our SSML file.
-    m_xsltProc = new KProcess;
+    m_xsltProc = new K3Process;
     *m_xsltProc << "xsltproc";
     *m_xsltProc << "-o" << m_outFilename  << "--novalid"
         << m_xsltFilename << m_inFilename;
@@ -237,9 +237,9 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     // kDebug() << "SSMLConvert::transform: executing command: " <<
     //     m_xsltProc->args() << endl;
 
-    connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    if (!m_xsltProc->start(KProcess::NotifyOnExit, KProcess::NoCommunication))
+    connect(m_xsltProc, SIGNAL(processExited(K3Process*)),
+        this, SLOT(slotProcessExited(K3Process*)));
+    if (!m_xsltProc->start(K3Process::NotifyOnExit, K3Process::NoCommunication))
     {
         kDebug() << "SSMLConvert::transform: Error starting xsltproc" << endl;
         return false;
@@ -248,7 +248,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     return true;
 }
 
-void SSMLConvert::slotProcessExited(KProcess* /*proc*/)
+void SSMLConvert::slotProcessExited(K3Process* /*proc*/)
 {
     m_xsltProc->deleteLater();
     m_xsltProc = 0;

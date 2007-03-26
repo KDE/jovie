@@ -27,7 +27,7 @@
 #include <QStringList>
 #include <QMutex>
 
-#include <kprocess.h>
+#include <k3process.h>
 
 #include <pluginproc.h>
 
@@ -211,10 +211,10 @@ class FestivalIntProc : public PlugInProc{
         void queryVoicesFinished(const QStringList &voiceCodes);
 
     private slots:
-        void slotProcessExited(KProcess* proc);
-        void slotReceivedStdout(KProcess* proc, char* buffer, int buflen);
-        void slotReceivedStderr(KProcess* proc, char* buffer, int buflen);
-        void slotWroteStdin(KProcess* proc);
+        void slotProcessExited(K3Process* proc);
+        void slotReceivedStdout(K3Process* proc, char* buffer, int buflen);
+        void slotReceivedStderr(K3Process* proc, char* buffer, int buflen);
+        void slotWroteStdin(K3Process* proc);
 
     private:
         /**
@@ -303,7 +303,7 @@ class FestivalIntProc : public PlugInProc{
         /**
          * Festival process
          */
-        KProcess* m_festProc;
+        K3Process* m_festProc;
 
         /**
         * Synthesis filename.

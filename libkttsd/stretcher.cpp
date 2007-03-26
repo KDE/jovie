@@ -24,7 +24,7 @@
  ******************************************************************************/
 
 // KDE includes.
-#include <kprocess.h>
+#include <k3process.h>
 #include <kdebug.h>
 
 // Stretcher includes.
@@ -61,12 +61,12 @@ bool Stretcher::stretch(const QString &inFilename, const QString &outFilename, f
 {
     if (m_stretchProc) return false;
     m_outFilename = outFilename;
-    m_stretchProc = new KProcess;
+    m_stretchProc = new K3Process;
     QString stretchStr = QString("%1").arg(stretchFactor, 0, 'f', 3);
     *m_stretchProc << "sox" << inFilename << outFilename << "stretch" << stretchStr;
-    connect(m_stretchProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    if (!m_stretchProc->start(KProcess::NotifyOnExit, KProcess::NoCommunication))
+    connect(m_stretchProc, SIGNAL(processExited(K3Process*)),
+        this, SLOT(slotProcessExited(K3Process*)));
+    if (!m_stretchProc->start(K3Process::NotifyOnExit, K3Process::NoCommunication))
     {
         kDebug() << "Stretcher::stretch: Error starting audio stretcher process.  Is sox installed?" << endl;
         return false;
@@ -75,7 +75,7 @@ bool Stretcher::stretch(const QString &inFilename, const QString &outFilename, f
     return true;
 }
 
-void Stretcher::slotProcessExited(KProcess*)
+void Stretcher::slotProcessExited(K3Process*)
 {
     m_stretchProc->deleteLater();
     m_stretchProc = 0;

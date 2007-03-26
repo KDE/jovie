@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 // Epos Plugin includes.
 #include "eposproc.h"
@@ -85,15 +85,15 @@ bool EposProc::init(KConfig* c, const QString& configGroup)
     // Start the Epos server if not already started.
     if (!m_eposServerProc)
     {
-        KProcess* m_eposServerProc = new KProcess;
+        K3Process* m_eposServerProc = new K3Process;
         *m_eposServerProc << m_eposServerExePath;
         if (!m_eposServerOptions.isEmpty())
             *m_eposServerProc << m_eposServerOptions;
-        connect(m_eposServerProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-        m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
+        connect(m_eposServerProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+            this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+        connect(m_eposServerProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+            this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+        m_eposServerProc->start(K3Process::DontCare, K3Process::AllOutput);
     }
 
     kDebug() << "EposProc::init: Initialized with codec: " << codecString << endl;
@@ -169,15 +169,15 @@ void EposProc::synth(
     // Start the Epos server if not already started.
     if (!m_eposServerProc)
     {
-        KProcess* m_eposServerProc = new KProcess;
+        K3Process* m_eposServerProc = new K3Process;
         *m_eposServerProc << eposServerExePath;
         if (!eposServerOptions.isEmpty())
             *m_eposServerProc << eposServerOptions;
-        connect(m_eposServerProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-        m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
+        connect(m_eposServerProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+            this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+        connect(m_eposServerProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+            this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+        m_eposServerProc->start(K3Process::DontCare, K3Process::AllOutput);
     }
 
     // Encode the text.
@@ -189,10 +189,10 @@ void EposProc::synth(
     ts << endl; // Some synths need this, eg. flite.
 
     // Quote the text as one parameter.
-    // QString escText = KShellProcess::quote(encText);
+    // QString escText = K3ShellProcess::quote(encText);
 
     // kDebug()<< "EposProc::synth: Creating Epos object" << endl;
-    m_eposProc = new KProcess;
+    m_eposProc = new K3Process;
     m_eposProc->setUseShell(true);
     QString languageCode;
     if (eposLanguage == "czech")
@@ -231,14 +231,14 @@ void EposProc::synth(
     *m_eposProc << "-";   // Read from StdIn.
     if (!suggestedFilename.isEmpty()) 
         *m_eposProc << " >" + suggestedFilename;
-    connect(m_eposProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_eposProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_eposProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_eposProc, SIGNAL(wroteStdin(KProcess*)),
-        this, SLOT(slotWroteStdin(KProcess* )));
+    connect(m_eposProc, SIGNAL(processExited(K3Process*)),
+        this, SLOT(slotProcessExited(K3Process*)));
+    connect(m_eposProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+        this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+    connect(m_eposProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+        this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+    connect(m_eposProc, SIGNAL(wroteStdin(K3Process*)),
+        this, SLOT(slotWroteStdin(K3Process* )));
     if (suggestedFilename.isEmpty())
         m_state = psSaying;
     else
@@ -247,7 +247,7 @@ void EposProc::synth(
     // Ok, let's rock.
     m_synthFilename = suggestedFilename;
     kDebug() << "EposProc::synth: Synthing text: '" << text << "' using Epos plug in" << endl;
-    if (!m_eposProc->start(KProcess::NotifyOnExit, KProcess::All))
+    if (!m_eposProc->start(K3Process::NotifyOnExit, K3Process::All))
     {
         kDebug() << "EposProc::synth: Error starting Epos process.  Is epos in the PATH?" << endl;
         m_state = psIdle;
@@ -300,7 +300,7 @@ void EposProc::stopText(){
     kDebug() << "EposProc::stopText: Epos stopped." << endl;
 }
 
-void EposProc::slotProcessExited(KProcess*)
+void EposProc::slotProcessExited(K3Process*)
 {
     kDebug() << "EposProc:slotProcessExited: Epos process has exited." << endl;
     pluginState prevState = m_state;
@@ -319,19 +319,19 @@ void EposProc::slotProcessExited(KProcess*)
     }
 }
 
-void EposProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+void EposProc::slotReceivedStdout(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "EposProc::slotReceivedStdout: Received output from Epos: " << buf << endl;
 }
 
-void EposProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
+void EposProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "EposProc::slotReceivedStderr: Received error from Epos: " << buf << endl;
 }
 
-void EposProc::slotWroteStdin(KProcess*)
+void EposProc::slotWroteStdin(K3Process*)
 {
     kDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
     m_eposProc->closeStdin();

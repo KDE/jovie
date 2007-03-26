@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 #include "freettsproc.h" 
 
@@ -92,15 +92,15 @@ void FreeTTSProc::synth(
         m_freettsProc = 0;
     }
 
-    m_freettsProc = new KProcess;
-    connect(m_freettsProc, SIGNAL(processExited(KProcess*)),
-           this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_freettsProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-           this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_freettsProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-           this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_freettsProc, SIGNAL(wroteStdin(KProcess*)),
-           this, SLOT(slotWroteStdin(KProcess* )));
+    m_freettsProc = new K3Process;
+    connect(m_freettsProc, SIGNAL(processExited(K3Process*)),
+           this, SLOT(slotProcessExited(K3Process*)));
+    connect(m_freettsProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+           this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+    connect(m_freettsProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+           this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+    connect(m_freettsProc, SIGNAL(wroteStdin(K3Process*)),
+           this, SLOT(slotWroteStdin(K3Process* )));
     if (synthFilename.isNull())
         m_state = psSaying;
     else
@@ -112,7 +112,7 @@ void FreeTTSProc::synth(
 
     /// As freetts.jar doesn't seem to like being called from an absolute path, 
     /// we need to strip off the path to freetts.jar and pass it to 
-    /// KProcess::setWorkingDirectory()
+    /// K3Process::setWorkingDirectory()
     /// We could just strip off 11 characters from the end of the path to freetts.jar, but thats
     /// not exactly very portable...
     QString filename = QFileInfo(freettsJarPath).baseName().append(QString(".").append(QFileInfo(freettsJarPath).suffix()));
@@ -130,10 +130,10 @@ void FreeTTSProc::synth(
     m_synthFilename = synthFilename;
 
     kDebug() << "FreeTTSProc::synth: Synthing text: '" << saidText << "' using FreeTTS plug in" << endl;
-    if (!m_freettsProc->start(KProcess::NotifyOnExit, KProcess::All)) {
+    if (!m_freettsProc->start(K3Process::NotifyOnExit, K3Process::All)) {
         kDebug() << "FreeTTSProc::synth: Error starting FreeTTS process.  Is freetts.jar in the PATH?" << endl;
         m_state = psIdle;
-        kDebug() << "KProcess args: " << m_freettsProc->args() << endl;
+        kDebug() << "K3Process args: " << m_freettsProc->args() << endl;
         return;
     }
     kDebug()<< "FreeTTSProc:synth: FreeTTS initialized" << endl;
@@ -178,7 +178,7 @@ void FreeTTSProc::stopText() {
     kDebug() << "FreeTTSProc::stopText: FreeTTS stopped." << endl;
 }
 
-void FreeTTSProc::slotProcessExited(KProcess*) {
+void FreeTTSProc::slotProcessExited(K3Process*) {
     kDebug() << "FreeTTSProc:slotProcessExited: FreeTTS process has exited." << endl;
     pluginState prevState = m_state;
     if (m_waitingStop) {
@@ -195,17 +195,17 @@ void FreeTTSProc::slotProcessExited(KProcess*) {
     }
 }
 
-void FreeTTSProc::slotReceivedStdout(KProcess*, char* buffer, int buflen) {
+void FreeTTSProc::slotReceivedStdout(K3Process*, char* buffer, int buflen) {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "FreeTTSProc::slotReceivedStdout: Received output from FreeTTS: " << buf << endl;
 }
 
-void FreeTTSProc::slotReceivedStderr(KProcess*, char* buffer, int buflen) {
+void FreeTTSProc::slotReceivedStderr(K3Process*, char* buffer, int buflen) {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "FreeTTSProc::slotReceivedStderr: Received error from FreeTTS: " << buf << endl;
 }
 
-void FreeTTSProc::slotWroteStdin(KProcess*) {
+void FreeTTSProc::slotWroteStdin(K3Process*) {
     kDebug() << "FreeTTSProc::slotWroteStdin: closing Stdin" << endl;
     m_freettsProc->closeStdin();
 }

@@ -25,7 +25,7 @@
 // KDE includes
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kstandarddirs.h>
 
 #include "hadifixproc.h"
@@ -71,7 +71,7 @@ class HadifixProcPrivate {
       int pitch;
 
       bool waitingStop;      
-      KShellProcess* hadifixProc;
+      K3ShellProcess* hadifixProc;
       volatile pluginState state;
       QTextCodec* codec;
       QString synthFilename;
@@ -175,7 +175,7 @@ void HadifixProc::synth(QString text,
    if (d->hadifixProc) delete d->hadifixProc;
    
    // Create process.
-   d->hadifixProc = new KShellProcess;
+   d->hadifixProc = new K3ShellProcess;
    
    // Set up txt2pho and mbrola commands.
    // kDebug() << "HadifixProc::synth: setting up commands" << endl;
@@ -200,16 +200,16 @@ void HadifixProc::synth(QString text,
    *(d->hadifixProc) << command;
    
    // Connect signals from process.
-   connect(d->hadifixProc, SIGNAL(processExited(KProcess *)),
-     this, SLOT(slotProcessExited(KProcess *)));
-   connect(d->hadifixProc, SIGNAL(wroteStdin(KProcess *)),
-     this, SLOT(slotWroteStdin(KProcess *)));
+   connect(d->hadifixProc, SIGNAL(processExited(K3Process *)),
+     this, SLOT(slotProcessExited(K3Process *)));
+   connect(d->hadifixProc, SIGNAL(wroteStdin(K3Process *)),
+     this, SLOT(slotWroteStdin(K3Process *)));
    
    // Store off name of wave file to be generated.
    d->synthFilename = waveFilename;
    // Set state, busy synthing.
    d->state = psSynthing;
-   if (!d->hadifixProc->start(KProcess::NotifyOnExit, KProcess::Stdin))
+   if (!d->hadifixProc->start(K3Process::NotifyOnExit, K3Process::Stdin))
    {
      kDebug() << "HadifixProc::synth: start process failed." << endl;
      d->state = psIdle;
@@ -319,7 +319,7 @@ bool HadifixProc::supportsAsync() { return true; }
 bool HadifixProc::supportsSynth() { return true; }
 
 
-void HadifixProc::slotProcessExited(KProcess*)
+void HadifixProc::slotProcessExited(K3Process*)
 {
     // kDebug() << "HadifixProc:hadifixProcExited: Hadifix process has exited." << endl;
     pluginState prevState = d->state;
@@ -335,7 +335,7 @@ void HadifixProc::slotProcessExited(KProcess*)
     }
 }
 
-void HadifixProc::slotWroteStdin(KProcess*)
+void HadifixProc::slotWroteStdin(K3Process*)
 {
    // kDebug() << "HadifixProc::slotWroteStdin: closing Stdin" << endl;
    d->hadifixProc->closeStdin();
@@ -360,16 +360,16 @@ HadifixProc::VoiceGender HadifixProc::determineGender(QString mbrola, QString vo
 
    // create a new process
    HadifixProc speech;
-   KShellProcess proc;
+   K3ShellProcess proc;
    proc << command;
-   connect(&proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
-     &speech, SLOT(receivedStdout(KProcess *, char *, int)));
-   connect(&proc, SIGNAL(receivedStderr(KProcess *, char *, int)),
-     &speech, SLOT(receivedStderr(KProcess *, char *, int)));
+   connect(&proc, SIGNAL(receivedStdout(K3Process *, char *, int)),
+     &speech, SLOT(receivedStdout(K3Process *, char *, int)));
+   connect(&proc, SIGNAL(receivedStderr(K3Process *, char *, int)),
+     &speech, SLOT(receivedStderr(K3Process *, char *, int)));
 
    speech.stdOut.clear();
    speech.stdErr.clear();
-   proc.start (KProcess::Block, KProcess::AllOutput);
+   proc.start (K3Process::Block, K3Process::AllOutput);
 
    VoiceGender result;
    if (!speech.stdErr.isNull() && !speech.stdErr.isEmpty()) {
@@ -391,11 +391,11 @@ HadifixProc::VoiceGender HadifixProc::determineGender(QString mbrola, QString vo
    return result;
 }
 
-void HadifixProc::receivedStdout (KProcess *, char *buffer, int buflen) {
+void HadifixProc::receivedStdout (K3Process *, char *buffer, int buflen) {
    stdOut += QString::fromLatin1(buffer, buflen);
 }
 
-void HadifixProc::receivedStderr (KProcess *, char *buffer, int buflen) {
+void HadifixProc::receivedStderr (K3Process *, char *buffer, int buflen) {
    stdErr += QString::fromLatin1(buffer, buflen);
 }
 

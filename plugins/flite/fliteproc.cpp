@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 // Flite Plugin includes.
 #include "fliteproc.h"
@@ -111,15 +111,15 @@ void FliteProc::synth(
         m_fliteProc = 0;
     }
     // kDebug()<< "FliteProc::synth: Creating Flite object" << endl;
-    m_fliteProc = new KProcess;
-    connect(m_fliteProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_fliteProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_fliteProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_fliteProc, SIGNAL(wroteStdin(KProcess*)),
-        this, SLOT(slotWroteStdin(KProcess* )));
+    m_fliteProc = new K3Process;
+    connect(m_fliteProc, SIGNAL(processExited(K3Process*)),
+        this, SLOT(slotProcessExited(K3Process*)));
+    connect(m_fliteProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
+        this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
+    connect(m_fliteProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
+        this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+    connect(m_fliteProc, SIGNAL(wroteStdin(K3Process*)),
+        this, SLOT(slotWroteStdin(K3Process* )));
     if (synthFilename.isNull())
         m_state = psSaying;
     else
@@ -144,7 +144,7 @@ void FliteProc::synth(
     // Ok, let's rock.
     m_synthFilename = synthFilename;
     kDebug() << "FliteProc::synth: Synthing text: '" << saidText << "' using Flite plug in" << endl;
-    if (!m_fliteProc->start(KProcess::NotifyOnExit, KProcess::All))
+    if (!m_fliteProc->start(K3Process::NotifyOnExit, K3Process::All))
     {
         kDebug() << "FliteProc::synth: Error starting Flite process.  Is flite in the PATH?" << endl;
         m_state = psIdle;
@@ -196,7 +196,7 @@ void FliteProc::stopText(){
     kDebug() << "FliteProc::stopText: Flite stopped." << endl;
 }
 
-void FliteProc::slotProcessExited(KProcess*)
+void FliteProc::slotProcessExited(K3Process*)
 {
     kDebug() << "FliteProc:slotProcessExited: Flite process has exited." << endl;
     pluginState prevState = m_state;
@@ -215,19 +215,19 @@ void FliteProc::slotProcessExited(KProcess*)
     }
 }
 
-void FliteProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
+void FliteProc::slotReceivedStdout(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "FliteProc::slotReceivedStdout: Received output from Flite: " << buf << endl;
 }
 
-void FliteProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
+void FliteProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
     kDebug() << "FliteProc::slotReceivedStderr: Received error from Flite: " << buf << endl;
 }
 
-void FliteProc::slotWroteStdin(KProcess*)
+void FliteProc::slotWroteStdin(K3Process*)
 {
     kDebug() << "FliteProc::slotWroteStdin: closing Stdin" << endl;
     m_fliteProc->closeStdin();
