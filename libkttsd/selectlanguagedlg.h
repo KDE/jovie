@@ -73,7 +73,7 @@ class KDE_EXPORT SelectLanguageDlg : public KDialog
         /**
          * Destructor.
          */
-        ~SelectLanguageDlg() { };
+        ~SelectLanguageDlg() { }
         
         /**
          * In single select mode, returns the language user chose.

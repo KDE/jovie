@@ -341,7 +341,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         void configChanged(){
             kDebug() << "PlugInConf::configChanged: Running"<< endl;
             emit changed(true);
-        };
+        }
 
     signals:
         /**

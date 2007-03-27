@@ -122,7 +122,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         void configChanged(){
             // kDebug() << "KttsFilterConf::configChanged: Running"<< endl;
             emit changed(true);
-        };
+        }
 
     signals:
         /**

@@ -61,7 +61,7 @@ public:
     /**
     *   The list of TalkerCodes for this model.
     */
-    const TalkerCode::TalkerCodeList datastore() const { return m_talkerCodes; };
+    const TalkerCode::TalkerCodeList datastore() const { return m_talkerCodes; }
     void setDatastore(TalkerCode::TalkerCodeList talkers = TalkerCode::TalkerCodeList());
     /**
     *   Returns the TalkerCode for a specified row of the model/view.
