@@ -47,8 +47,8 @@ void frequencySlider_valueChanged (int sliderValue) {
 }
 
 void init () {
-   male = KGlobal::iconLoader()->loadIcon("male", K3Icon::Small);
-   female = KGlobal::iconLoader()->loadIcon("female", K3Icon::Small);
+   male = KIconLoader::global()->loadIcon("male", K3Icon::Small);
+   female = KIconLoader::global()->loadIcon("female", K3Icon::Small);
 }
 
 void addVoice (const QString &filename, bool isMale) {

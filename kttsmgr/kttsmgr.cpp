@@ -105,7 +105,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
 {
     setObjectName("kttsmgrsystemtray");
 
-//    QIcon icon = KGlobal::iconLoader()->loadIcon("kttsd", K3Icon::Small);
+//    QIcon icon = KIconLoader::global()->loadIcon("kttsd", K3Icon::Small);
 //    setIcon (icon);
 
     // Start KTTS daemon if enabled and if not already running.
