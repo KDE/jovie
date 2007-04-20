@@ -282,7 +282,7 @@ QDBusMessage KSpeak::placeCall(const QString member, QStringList args)
     for (int i = 0; argc && i < types.count(); ++i) {
         int id = QVariant::nameToType(types.at(i));
         if ((id == QVariant::UserType || id == QVariant::Map) && types.at(i) != "QDBusVariant") {
-            QString msg = i18n("Sorry, can't pass arg of type %1 yet.", types.at(i).constData());
+            QString msg = i18n("Sorry, cannot pass arg of type %1 yet.", types.at(i).constData());
             return QDBusMessage::createError("org.kde.kspeak.InvalidArgument", msg);
         }
         if (id == QVariant::UserType)
