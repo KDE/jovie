@@ -27,7 +27,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QEvent>
-#include <QToolTip>
+
 
 // KDE includes.
 #include <kuniqueapplication.h>
