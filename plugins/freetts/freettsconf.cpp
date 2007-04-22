@@ -17,7 +17,7 @@
 
 // Qt includes.
 #include <QLabel>
-#include <QString>
+
 #include <QStringList>
 #include <QFile>
 #include <QApplication>

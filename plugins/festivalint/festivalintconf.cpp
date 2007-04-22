@@ -26,7 +26,7 @@
 
 // Qt includes.
 #include <QLabel>
-#include <QString>
+
 #include <QStringList>
 #include <QCheckBox>
 #include <QDir>

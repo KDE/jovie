@@ -31,7 +31,7 @@
 #include <QObject>
 #include <QList>
 #include <QEvent>
-#include <QString>
+
 
 // KTTSD includes.
 #include "utt.h"

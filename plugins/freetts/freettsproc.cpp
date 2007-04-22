@@ -15,7 +15,7 @@
  *                                                                             *
  ******************************************************************************/
 
-#include <QString>
+
 #include <QStringList>
 #include <QFileInfo>
 

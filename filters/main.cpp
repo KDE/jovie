@@ -4,7 +4,7 @@
   #LICENSE
 ***********************/
 
-#include <QString>
+
 #include <iostream>
 using namespace std;
 

@@ -22,7 +22,7 @@
 // Qt includes.
 #include <QFile>
 #include <QFileInfo>
-#include <QString>
+
 //Added by qt3to4:
 #include <QTextStream>
 

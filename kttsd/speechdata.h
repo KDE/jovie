@@ -29,7 +29,7 @@
 #define _SPEECHDATA_H_
 
 // Qt includes.
-#include <QString>
+
 #include <QStringList>
 #include <QByteArray>
 #include <QHash>

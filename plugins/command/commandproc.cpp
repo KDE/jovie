@@ -17,7 +17,7 @@
 
 // Qt includes.
 #include <QFile>
-#include <QString>
+
 #include <QStringList>
 #include <QRegExp>
 #include <QTextCodec>

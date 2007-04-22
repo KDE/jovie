@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 // Qt includes
-#include <QString>
+
 #include <QStringList>
 #include <QTextCodec>
 #include <QByteArray>

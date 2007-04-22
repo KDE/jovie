@@ -19,7 +19,7 @@
 #define _COMMANDCONF_H_
 
 // Qt includes.
-#include <QString>
+
 #include <QStringList>
 
 // KDE includes.

@@ -29,7 +29,7 @@
 // Qt includes.
 #include <QFile>
 #include <QFileInfo>
-#include <QString>
+
 
 // KDE includes.
 #include <kglobal.h>

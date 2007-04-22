@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <QString>
+
 #include <QStringList>
 #include <qdom.h>
 #include <QFile>

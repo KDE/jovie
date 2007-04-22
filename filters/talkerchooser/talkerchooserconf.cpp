@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QString>
+
 
 // KDE includes.
 #include <klocale.h>

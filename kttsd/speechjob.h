@@ -25,7 +25,7 @@
 #define _SPEECHJOB_H_
 
 // Qt includes.
-#include <QString>
+
 #include <QStringList>
 #include <QList>
 #include <QByteArray>

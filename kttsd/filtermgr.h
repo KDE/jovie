@@ -28,7 +28,7 @@
 
 // Qt includes.
 #include <QList>
-#include <QString>
+
 
 // KTTS includes.
 #include "filterproc.h"

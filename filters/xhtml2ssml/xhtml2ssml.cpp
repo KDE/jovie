@@ -19,7 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QString>
+
 #include <q3dict.h>
 #include <QtXml>
 #include <QFile>

@@ -28,7 +28,7 @@
 // Qt includes.
 #include <QObject>
 #include <QStringList>
-#include <QString>
+
 
 // KDE includes.
 #include <kdemacros.h>

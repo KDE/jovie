@@ -29,7 +29,7 @@
 #include <sys/poll.h>
 
 // Qt includes.
-#include <QString>
+
 #include <QObject>
 #include <QThread>
 #include <QFile>

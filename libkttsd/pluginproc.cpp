@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 // Qt includes. 
-#include <QString>
+
 #include <QTextCodec>
 
 // KDE includes.

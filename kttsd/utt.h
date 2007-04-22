@@ -27,7 +27,7 @@
 #define _UTT_H_
 
 // Qt includes.
-#include <QString>
+
 
 class SSMLConvert;
 class PlugInProc;

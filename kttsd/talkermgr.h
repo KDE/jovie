@@ -25,7 +25,7 @@
 #define _TALKERMGR_H_
 
 // Qt includes.
-#include <QString>
+
 #include <QStringList>
 #include <qmap.h>
 #include <QList>

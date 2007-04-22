@@ -26,7 +26,7 @@
 #define _APPDATA_H_
 
 // Qt includes.
-#include <QString>
+
 #include <QList>
 
 // KDE includes.

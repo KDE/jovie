@@ -25,7 +25,7 @@
 #define _CONFIGDATA_H_
 
 // Qt includes.
-#include <QString>
+
 #include <QMap>
 
 class KConfig;

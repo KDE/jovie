@@ -26,7 +26,7 @@
 #include <math.h>
 
 // Qt includes.
-#include <QString>
+
 #include <QStringList>
 #include <QTextCodec>
 #include <QFile>

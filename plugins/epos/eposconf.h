@@ -25,7 +25,7 @@
 #define _EPOSCONF_H_
 
 // Qt includes.
-#include <QString>
+
 
 // KDE includes.
 #include <kconfig.h>

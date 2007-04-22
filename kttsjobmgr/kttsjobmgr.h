@@ -25,7 +25,7 @@
 #define _KTTSJOBMGRPART_H_
 
 // Qt includes
-#include <QString>
+
 
 // KDE includes.
 #include <kparts/browserextension.h>
