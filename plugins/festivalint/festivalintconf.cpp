@@ -412,8 +412,8 @@ void FestivalIntConf::scanVoices()
         // Set up a progress dialog.
         m_progressDlg = new KProgressDialog(this,
             i18n("Query Voices"),
-            i18n("Querying Festival for available voices.  This could take up to 15 seconds."),
-            true);
+            i18n("Querying Festival for available voices.  This could take up to 15 seconds."));
+        m_progressDlg->setModal(true);
         m_progressDlg->progressBar()->hide();
         m_progressDlg->setAllowCancel(true);
         // TODO: This is a bug workaround.  Remove when no longer needed.
@@ -575,8 +575,8 @@ void FestivalIntConf::slotTest_clicked()
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(this,
         i18n("Testing"),
-        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."),
-        true);
+        i18n("Testing.  MultiSyn voices require several seconds to load.  Please be patient."));
+    m_progressDlg->setModal(true);
     m_progressDlg->progressBar()->hide();
     m_progressDlg->setAllowCancel(true);
 

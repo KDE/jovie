@@ -613,8 +613,8 @@ void HadifixConf::testButton_clicked () {
     // Tell user to wait.
     d->progressDlg = new KProgressDialog(d, 
         i18n("Testing"),
-        i18n("Testing."),
-        true);
+        i18n("Testing."));
+    d->progressDlg->setModal(true);
     d->progressDlg->progressBar()->hide();
     d->progressDlg->setAllowCancel(true);
 

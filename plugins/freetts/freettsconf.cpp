@@ -173,8 +173,8 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
         // Tell user to wait.
         m_progressDlg = new KProgressDialog(this,
             i18n("Testing"),
-            i18n("Testing."),
-            true);
+            i18n("Testing."));
+        m_progressDlg->setModal(true);
         m_progressDlg->progressBar()->hide();
         m_progressDlg->setAllowCancel(true);
 
