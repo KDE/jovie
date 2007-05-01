@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_phononplugin WITH_PREFIX ${kttsd_phononplugin_PART_SRCS})
 
 
 
-target_link_libraries(kttsd_phononplugin  ${KDE4_KDECORE_LIBS} ${KDE4_PHONONCORE_LIBRARY} kttsd )
+target_link_libraries(kttsd_phononplugin  ${KDE4_KDECORE_LIBS} ${KDE4_PHONON_LIBRARY} kttsd )
 
 install(TARGETS kttsd_phononplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
