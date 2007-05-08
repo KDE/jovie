@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KTTSD Phonon Plugin
 Name[el]=KTTSD πρόσθετο Phonon
+Name[ja]=KTTSD Phonon プラグイン
 Name[nds]=Phonon-Moduul för KTTSD
 Name[pa]=KTTSD ਫੋਨੋਨ ਪਲੱਗਇਨ
 Name[sv]=KTTSD-insticksprogram för Phonon
@@ -9,6 +10,7 @@ Name[x-test]=xxKTTSD Phonon Pluginxx
 Name[zh_TW]=KTTSD Phonon 外掛程式
 Comment=KTTSD Phonon audio plugin
 Comment[el]=KTTSD πρόσθετο ήχου Phonon
+Comment[ja]=KTTSD Phonon オーディオプラグイン
 Comment[nds]=Phonon-Audiomoduul för KTTSD
 Comment[pa]=KTTSD ਫੋਨੋਨ ਆਡੀਓ ਪਲੱਗਇਨ
 Comment[sv]=KTTSD-ljudinsticksprogram för Phonon
