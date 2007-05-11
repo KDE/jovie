@@ -522,7 +522,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
             this, SLOT(configChanged()));
 
     // Others.
-    connect(mainTab, SIGNAL(currentChanged(QWidget*)),
+    connect(mainTab, SIGNAL(currentChanged(int)),
             this, SLOT(slotTabChanged()));
 
     // See if KTTSD is already running, and if so, create jobs tab.
