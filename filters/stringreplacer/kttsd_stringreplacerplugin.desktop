@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=String Replacer
-Name[bg]=Замяна на низове
 Name[ca]=Reemplaçador de cadenes
 Name[cs]=Nahrazení řetězce
 Name[da]=Streng-erstatter
@@ -44,7 +43,6 @@ Name[uk]=Заміна рядків
 Name[x-test]=xxString Replacerxx
 Name[zh_TW]=字串置換器
 Comment=Generic String Replacement Filter Plugin for KTTS
-Comment[bg]=Приставка филтър за замяна на низове за KTTS
 Comment[ca]=Connector del filtre reemplaçador genèric de cadenes pel KTTS
 Comment[cs]=Modul filtru náhrady řetězce KTTS
 Comment[da]=Generisk strengerstatnings-filter-plugin for KTTS

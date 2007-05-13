@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sentence Boundary Detector
-Name[bg]=Детектор на изречения
 Name[ca]=Detector de límit de frase
 Name[cs]=Zjištění vět
 Name[da]=Grænsedetektor for sætninger
@@ -43,7 +42,6 @@ Name[uk]=Виявлення меж речень
 Name[x-test]=xxSentence Boundary Detectorxx
 Name[zh_TW]=句子界限偵測器
 Comment=Sentence Boundary Detection Filter Plugin for KTTS
-Comment[bg]=Приставка филтър за определяне границите на изречението
 Comment[ca]=Connector del filtre detector de límit de frase pel KTTS
 Comment[cs]=Modul filtru zjišťování vět KTTS
 Comment[da]=Grænsedetektor for sætninger, filter-plugin for KTTS
