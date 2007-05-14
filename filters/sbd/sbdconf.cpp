@@ -32,7 +32,6 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
-#include <k3listview.h>
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kpushbutton.h>

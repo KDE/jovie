@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 
-#include <q3dict.h>
 #include <QtXml>
 #include <QFile>
 //Added by qt3to4:
