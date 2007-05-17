@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Application
 Name=kttsmgr
 Name[pt_BR]=Gerenciador ktts
+Name[tr]=Kttsmgr
 GenericName=Text-to-Speech Manager
 GenericName[bg]=Синтез на глас
 GenericName[ca]=Gestor de text a veu
