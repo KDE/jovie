@@ -38,7 +38,6 @@
 
 class SpeechData;
 class Player;
-class QTimer;
 class TalkerMgr;
 
 /**

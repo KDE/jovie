@@ -38,8 +38,6 @@
 // TalkerChooser includes.
 #include "ui_talkerchooserconfwidget.h"
 
-class KDialog;
-class EditReplacementWidget;
 
 class TalkerChooserConf : public KttsFilterConf, public Ui::TalkerChooserConfWidget
 {

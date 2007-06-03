@@ -43,7 +43,6 @@
 
 class PlugInConf;
 class KttsFilterConf;
-class QListWidgetItem;
 class QTreeWidget;
 class QTreeWidgetItem;
 class KAboutData;

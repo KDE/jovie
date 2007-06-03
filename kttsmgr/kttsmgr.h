@@ -32,7 +32,6 @@
 #include "kspeechinterface.h"
 
 class QEvent;
-class QMouseEvent;
 class QAction;
 
 class KttsMgrTray: public KSystemTrayIcon

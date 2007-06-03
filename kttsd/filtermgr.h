@@ -33,7 +33,6 @@
 // KTTS includes.
 #include "filterproc.h"
 
-class KConfig;
 class TalkerCode;
 
 typedef QList<KttsFilterProc*> FilterList;
