@@ -192,8 +192,9 @@ void TalkerCode::normalize()
 {
     QString language = lang;
     if (language.left(1) == "*") language = language.mid(1);
+    QString modifier;
     QString charSet;
-    KGlobal::locale()->splitLocale(language, languageCode, countryCode, charSet);
+    KGlobal::locale()->splitLocale(language, languageCode, countryCode, modifier, charSet);
 }
 
 /**
@@ -221,19 +222,19 @@ void TalkerCode::normalize()
  */
 /*static*/ QString TalkerCode::languageCodeToLanguage(const QString &languageCode)
 {
-    QString twoAlpha;
+    QString langAlpha;
     QString countryCode;
     QString language;
     if (languageCode == "other")
         language = i18n("Other");
     else
     {
-        splitFullLanguageCode(languageCode, twoAlpha, countryCode);
-        language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
+        splitFullLanguageCode(languageCode, langAlpha, countryCode);
+        language = KGlobal::locale()->languageCodeToName(langAlpha);
     }
     if (!countryCode.isEmpty())
     {
-        QString countryName = KGlobal::locale()->twoAlphaToCountryName(countryCode);
+        QString countryName = KGlobal::locale()->countryCodeToName(countryCode);
         // Some abbreviations to save screen space.
         if (countryName == i18nc("full country name", "United States of America"))
             countryName = i18nc("abbreviated country name", "USA");

@@ -188,8 +188,9 @@ QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& coun
 {
     QString locale = languageCode;
     QString langCode;
+    QString modifier;
     QString charSet;
-    KGlobal::locale()->splitLocale(locale, langCode, countryCode, charSet);
+    KGlobal::locale()->splitLocale(locale, langCode, countryCode, modifier, charSet);
     return langCode;
 }
 

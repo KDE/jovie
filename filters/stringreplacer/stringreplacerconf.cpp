@@ -194,7 +194,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx )
     {
         if (!language.isEmpty()) language += ',';
-        language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
+        language += KGlobal::locale()->languageCodeToName(m_languageCodeList[ndx]);
     }
     languageLineEdit->setText(language);
 
@@ -406,7 +406,7 @@ QString StringReplacerConf::userPlugInName()
     {
         QString language;
         if (m_languageCodeList.count() == 1)
-            language = KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[0]);
+            language = KGlobal::locale()->languageCodeToName(m_languageCodeList[0]);
         if (m_languageCodeList.count() > 1)
             language = i18n("Multiple Languages");
         if (!language.isEmpty())
@@ -443,7 +443,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
         if (!language.isEmpty()) language += ',';
-        language += KGlobal::locale()->twoAlphaToLanguageName(m_languageCodeList[ndx]);
+        language += KGlobal::locale()->languageCodeToName(m_languageCodeList[ndx]);
     }
     QString s1 = languageLineEdit->text();
     languageLineEdit->setText(language);

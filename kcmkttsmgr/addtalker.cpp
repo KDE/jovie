@@ -55,10 +55,11 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char*
     if (!m_langToSynthMap.contains(languageCode))
     {
         QString countryCode;
+        QString modifier;
         QString charSet;
-        QString twoAlpha;
-        KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
-        languageCode = twoAlpha;
+        QString langAlpha;
+        KGlobal::locale()->splitLocale(languageCode, langAlpha, countryCode, modifier, charSet);
+        languageCode = langAlpha;
     }
     // If there is still not a synth that supports the language code, default to "other".
     if (!m_langToSynthMap.contains(languageCode)) languageCode = "other";
@@ -129,19 +130,20 @@ void AddTalker::setSynthToLangMap(SynthToLangMap synthToLangMap)
 // Converts a language code plus optional country code to language description.
 QString AddTalker::languageCodeToLanguage(const QString &languageCode)
 {
-    QString twoAlpha;
+    QString langAlpha;
     QString countryCode;
+    QString modifier;
     QString charSet;
     QString language;
     if (languageCode == "other")
         language = i18n("Other");
     else
     {
-        KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
-        language = KGlobal::locale()->twoAlphaToLanguageName(twoAlpha);
+        KGlobal::locale()->splitLocale(languageCode, langAlpha, countryCode, modifier, charSet);
+        language = KGlobal::locale()->languageCodeToName(langAlpha);
     }
     if (!countryCode.isEmpty())
-        language += " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode) + ')';
+        language += " (" + KGlobal::locale()->countryCodeToName(countryCode) + ')';
     return language;
 }
 

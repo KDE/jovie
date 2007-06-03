@@ -60,7 +60,7 @@ SelectLanguageDlg::SelectLanguageDlg(
         m_langList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     else
         m_langList->setSelectionMode(QAbstractItemView::SingleSelection);
-    QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
+    QStringList allLocales = KGlobal::locale()->allLanguagesList();
     QString locale;
     QString language;
     const int allLocalesCount = allLocales.count();
