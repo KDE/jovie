@@ -172,7 +172,7 @@ class KCMKttsMgr :
                 m_changed = true;
                 emit changed(true);
             }
-        };
+        }
 
     protected slots:
         /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */

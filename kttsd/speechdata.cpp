@@ -65,7 +65,7 @@ public:
         jobLists.insert(KSpeech::jpWarning, new TJobList());
         jobLists.insert(KSpeech::jpMessage, new TJobList());
         jobLists.insert(KSpeech::jpText, new TJobList());
-    };
+    }
 
     ~SpeechDataPrivate()
     {

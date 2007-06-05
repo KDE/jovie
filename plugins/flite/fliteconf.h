@@ -104,7 +104,7 @@ class FliteConf : public PlugInConf, public Ui::FliteConfWidget {
         void configChanged(){
             // kDebug() << "FliteConf::configChanged: Running" << endl;
             emit changed(true);
-        };
+        }
         void slotFliteTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();

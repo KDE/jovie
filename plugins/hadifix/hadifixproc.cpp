@@ -44,11 +44,11 @@ class HadifixProcPrivate {
          time = 100;
          pitch = 100;
          codec = 0;
-      };
+      }
 
       ~HadifixProcPrivate() {
         delete hadifixProc;
-      };
+      }
 
       void load(KConfig *c, const QString &configGroup) {
          KConfigGroup config(c, configGroup);
@@ -60,7 +60,7 @@ class HadifixProcPrivate {
          time     = config.readEntry ("time",       100);
          pitch    = config.readEntry ("pitch",      100);
          codec    = PlugInProc::codecNameToCodec(config.readEntry ("codec", "Local"));
-      };
+      }
 
       QString hadifix;
       QString mbrola;

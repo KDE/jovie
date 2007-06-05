@@ -119,7 +119,7 @@ class FestivalIntConf : public PlugInConf, public Ui::FestivalIntConfWidget {
         void configChanged(){
             // kDebug() << "FestivalIntConf::configChanged: Running" << endl;
             emit changed(true);
-        };
+        }
         void slotTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();

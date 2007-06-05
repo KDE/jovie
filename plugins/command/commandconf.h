@@ -98,7 +98,7 @@ class CommandConf : public PlugInConf, public Ui::CommandConfWidget {
         void configChanged(){
             // kDebug() << "CommandConf::configChanged: Running" << endl;
             emit changed(true);
-        };
+        }
         void slotCommandTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();

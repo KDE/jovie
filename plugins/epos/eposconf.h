@@ -104,7 +104,7 @@ class EposConf : public PlugInConf, public Ui::EposConfWidget {
         void configChanged(){
             kDebug() << "EposConf::configChanged: Running" << endl;
             emit changed(true);
-        };
+        }
         void slotEposTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();

@@ -102,7 +102,7 @@ class FreeTTSConf : public PlugInConf, public Ui::FreeTTSConfWidget {
      private slots:
         void configChanged(bool t = true) { 
             emit changed(t); 
-        };
+        }
         void slotFreeTTSTest_clicked();
         void slotSynthFinished();
         void slotSynthStopped();

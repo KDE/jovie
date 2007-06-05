@@ -76,7 +76,7 @@ public:
     /**
     *   The list of Jobs for this model.
     */
-    const JobInfoList datastore() const { return m_jobs; };
+    const JobInfoList datastore() const { return m_jobs; }
     void setDatastore(JobInfoList jobs = JobInfoList());
     /**
     *   Returns the JobInfo for a specified row of the model/view.

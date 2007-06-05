@@ -38,8 +38,8 @@ public:
         sentenceNum(0),
         seq(0),
         refCount(0)
-    {};
-    ~SpeechJobPrivate() {};
+    {}
+    ~SpeechJobPrivate() {}
     friend class SpeechJob;
 
 protected:

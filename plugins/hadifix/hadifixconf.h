@@ -133,7 +133,7 @@ class HadifixConf : public PlugInConf {
         QString getTalkerCode();
 
     public slots:
-        void configChanged(bool t = true){emit changed(t);};
+        void configChanged(bool t = true){emit changed(t);}
 
     private slots:
         virtual void voiceButton_clicked();
