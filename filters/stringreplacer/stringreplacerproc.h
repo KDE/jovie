@@ -29,7 +29,6 @@
 #include <QObject>
 #include <QTextStream>
 #include <QRegExp>
-#include <QStringList>
 #include <QList>
 
 // KTTS includes.

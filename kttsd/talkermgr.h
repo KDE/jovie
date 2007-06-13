@@ -26,7 +26,6 @@
 
 // Qt includes.
 
-#include <QStringList>
 #include <qmap.h>
 #include <QList>
 

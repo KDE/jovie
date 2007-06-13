@@ -26,7 +26,6 @@
 #define _EPOSPROC_H_
 
 // Qt includes.
-#include <QStringList>
 #include <QMutex>
 #include <QByteArray>
 

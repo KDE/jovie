@@ -18,7 +18,6 @@
 
 // Qt includes
 
-#include <QStringList>
 #include <QTextCodec>
 #include <QByteArray>
 

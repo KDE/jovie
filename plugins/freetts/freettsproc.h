@@ -19,7 +19,6 @@
 #define _FREETTSPROC_H_
 
 
-#include <QStringList>
 #include <QMutex>
 
 #include <pluginproc.h>

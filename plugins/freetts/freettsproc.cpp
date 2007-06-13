@@ -16,7 +16,6 @@
  ******************************************************************************/
 
 
-#include <QStringList>
 #include <QFileInfo>
 
 #include <kdebug.h>

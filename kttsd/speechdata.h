@@ -30,7 +30,6 @@
 
 // Qt includes.
 
-#include <QStringList>
 #include <QByteArray>
 #include <QHash>
 #include <QList>

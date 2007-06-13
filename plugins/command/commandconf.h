@@ -20,7 +20,6 @@
 
 // Qt includes.
 
-#include <QStringList>
 
 // KDE includes.
 #include <kconfig.h>

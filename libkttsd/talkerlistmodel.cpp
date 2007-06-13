@@ -24,7 +24,6 @@
 *******************************************************************************/
 
 // Qt includes.
-#include <QStringList>
 
 // KDE includes.
 #include "klocale.h"

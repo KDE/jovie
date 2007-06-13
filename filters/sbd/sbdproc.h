@@ -47,7 +47,6 @@
 
 // Qt includes.
 #include <QObject>
-#include <QStringList>
 #include <QThread>
 #include <QEvent>
 #include <QStack>

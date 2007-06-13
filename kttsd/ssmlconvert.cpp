@@ -21,7 +21,6 @@
 
 // Qt includes.
 
-#include <QStringList>
 #include <qdom.h>
 #include <QFile>
 #include <QTextStream>

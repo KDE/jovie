@@ -26,7 +26,6 @@
 
 // Qt includes.
 
-#include <QStringList>
 #include <QList>
 #include <QByteArray>
 

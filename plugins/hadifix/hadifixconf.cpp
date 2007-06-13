@@ -22,7 +22,6 @@
 #include <QLabel>
 #include <QGroupBox>
 
-#include <QStringList>
 #include <QDir>
 #include <QFileInfo>
 #include <QFile>

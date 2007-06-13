@@ -23,7 +23,6 @@
 
 // Qt includes.
 
-#include <QStringList>
 
 // KDE includes.
 #include <kdebug.h>

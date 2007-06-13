@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "xmlelement.h"
-#include <QStringList>
 #include <iostream>
 
 /// Constructors

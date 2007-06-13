@@ -19,7 +19,6 @@
 #define _FREETTSCONF_H_
 
 // Qt includes.
-#include <QStringList>
 
 // KDE includes.
 #include <kdebug.h>

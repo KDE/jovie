@@ -2,7 +2,6 @@
 #define _HADIFIXCONF_H_
 
 // Qt includes.
-#include <QStringList>
 
 // KTTS includes.
 #include <pluginconf.h>
