@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KTTSD Phonon Plugin
 Name[ca]=Connector Phonon pel KTTSD
+Name[de]=KTTSD Phonon Modul
 Name[el]=KTTSD πρόσθετο Phonon
 Name[es]=Extensión Phonon de KTTSD
 Name[fa]=وصلۀ KTTSD Phonon
@@ -15,6 +16,7 @@ Name[x-test]=xxKTTSD Phonon Pluginxx
 Name[zh_TW]=KTTSD Phonon 外掛程式
 Comment=KTTSD Phonon audio plugin
 Comment[ca]=Connector d'àudio Phonon pel KTTSD
+Comment[de]=KTTSD Phonon Audiomodul
 Comment[el]=KTTSD πρόσθετο ήχου Phonon
 Comment[es]=Extensión de audio Phonon de KTTSD
 Comment[fa]=وصلۀ صوتی KTTSD Phonon
