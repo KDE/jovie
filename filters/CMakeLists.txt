@@ -13,13 +13,10 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 # kde4_automoc(${testfilter_SRCS})
 
-# if(KDE4_BUILD_TESTS)
-
-# kde4_add_executable(testfilter ${testfilter_SRCS})
+# kde4_add_test_executable(testfilter ${testfilter_SRCS})
 
 # target_link_libraries(testfilter  ${KDE4_KDECORE_LIBS} kttsd )
 
-# endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 
