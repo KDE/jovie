@@ -27,7 +27,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QEvent>
-
+#include <QProcess>
 
 // KDE includes.
 #include <kuniqueapplication.h>
@@ -39,7 +39,6 @@
 #include <kmenu.h>
 #include <kaboutapplicationdialog.h>
 #include <ktoolinvocation.h>
-#include <k3process.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <kconfig.h>
@@ -332,9 +331,9 @@ void KttsMgrTray::repeatSelected()
 
 void KttsMgrTray::configureSelected()
 {
-    K3Process proc;
-    proc << "kcmshell" << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
-    proc.start(K3Process::DontCare);
+    QStringList lst;
+	lst << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
+	QProcess::startDetached("kcmshell",lst);
 }
 
 bool KttsMgrTray::isKttsdRunning()
