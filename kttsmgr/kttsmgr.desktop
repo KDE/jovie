@@ -83,6 +83,5 @@ Comment[tr]=KDE Metinden Konuşmaya yöneticisi
 Comment[uk]=Менеджер KDE для синтезу мовлення з тексту
 Comment[x-test]=xxKDE Text-to-speech Managerxx
 Comment[zh_TW]=KDE 文字轉語音管理員
-MimeTypes=
 Terminal=false
 Categories=Qt;KDE;Utility;Accessibility;
