@@ -21,32 +21,29 @@ using namespace std;
 #include "filterproc.h"
 #include "talkercode.h"
 
-static const KCmdLineOptions options[] =
-{
-    { "+pluginName", I18N_NOOP("Name of a KTTSD filter plugin (required)"), 0 },
-    { "t", 0, 0 },
-    { "talker <talker>", I18N_NOOP("Talker code passed to filter"), "en" }, 
-    { "a", 0, 0 },
-    { "appid <appID>", I18N_NOOP("DCOP application ID passed to filter"), "testfilter" },
-    { "g", 0, 0 },
-    { "group <filterID>",
-        I18N_NOOP("Config file group name passed to filter"), "testfilter" },
-    { "list", I18N_NOOP("Display list of available Filter PlugIns and exit"), 0 },
-    { "b", 0, 0 },
-    { "break", I18N_NOOP("Display tabs as \\t, otherwise they are removed"), 0 },
-    { "list", I18N_NOOP("Display list of available filter plugins and exit"), 0 }
-};
-
 int main(int argc, char *argv[])
 {
     KAboutData aboutdata(
-        "testfilter", I18N_NOOP("testfilter"),
-        "0.1.0", I18N_NOOP("A utility for testing KTTSD filter plugins."),
-         KAboutData::License_GPL, "(C) 2005, Gary Cramblitt <garycramblitt@comcast.net>");
-    aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
+        "testfilter", 0, ki18n("testfilter"),
+        "0.1.0", ki18n("A utility for testing KTTSD filter plugins."),
+         KAboutData::License_GPL, ki18n("(C) 2005, Gary Cramblitt <garycramblitt@comcast.net>"));
+    aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
     // Tell which options are supported
+
+    KCmdLineOptions options;
+    options.add("+pluginName", ki18n("Name of a KTTSD filter plugin (required)"));
+    options.add("t");
+    options.add("talker <talker>", ki18n("Talker code passed to filter"), "en");
+    options.add("a");
+    options.add("appid <appID>", ki18n("DCOP application ID passed to filter"), "testfilter");
+    options.add("g");
+    options.add("group <filterID>", ki18n("Config file group name passed to filter"), "testfilter");
+    options.add("list", ki18n("Display list of available Filter PlugIns and exit"));
+    options.add("b");
+    options.add("break", ki18n("Display tabs as \\t, otherwise they are removed"));
+    options.add("list", ki18n("Display list of available filter plugins and exit"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KApplication app( false, false );

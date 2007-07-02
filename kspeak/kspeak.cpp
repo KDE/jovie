@@ -148,7 +148,7 @@ KSpeak::KSpeak(KCmdLineArgs* args, QObject* parent) :
     // kDebug() << "kspeak AppID = " << m_vars["_APPID"] << endl;
 
     // Input filename.
-    m_inputFilename = QFile::decodeName(args->arg(0));
+    m_inputFilename = args->arg(0);
 
     // Store command-line arguments and count.
     m_vars["_ARGCOUNT"] = QString().setNum(args->count() - 1);

@@ -34,43 +34,40 @@
 // kspeak includes.
 #include "kspeak.h"
 
-static const KCmdLineOptions options[] =
-{
-    { "e", 0, 0 },
-    { "echo", I18N_NOOP("Echo commands. [off]"), 0},
-    { "r", 0, 0 },
-    { "replies", I18N_NOOP("Show KTTSD D-Bus replies. [off]"), 0},
-    { "s", 0, 0 },
-    { "signals", I18N_NOOP("Show KTTSD D-Bus signals. [off]"), 0},
-    { "k", 0, 0 },
-    { "startkttsd", I18N_NOOP("Start KTTSD if not already running. [off]"), 0},
-    { "x", 0, 0 },
-    { "nostoponerror", I18N_NOOP("Continue on error."), 0},
-    { "+scriptfile", I18N_NOOP("Name of script to run.  Use '-' for stdin."), 0},
-    { "!+[args...]", I18N_NOOP("Optional arguments passed to script."), 0},
-    { "", I18N_NOOP("Type 'help' for kspeak commands."), 0},
-    KCmdLineLastOption // End of options.
-};
-
 /**
  * Main routine.
  */
 int main(int argc, char *argv[])
 {
     KAboutData aboutdata(
-        "kspeak", I18N_NOOP("kspeak"),
-        "0.1.0", I18N_NOOP("A utility for sending speech commands to KTTSD service via D-Bus."),
-         KAboutData::License_GPL, "(C) 2006, Gary Cramblitt <garycramblitt@comcast.net>");
-    aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
+        "kspeak", 0, ki18n("kspeak"),
+        "0.1.0", ki18n("A utility for sending speech commands to KTTSD service via D-Bus."),
+         KAboutData::License_GPL, ki18n("(C) 2006, Gary Cramblitt <garycramblitt@comcast.net>"));
+    aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
 
     KCmdLineArgs::init(argc, argv, &aboutdata);
     // Tell which options are supported
+
+    KCmdLineOptions options;
+    options.add("e");
+    options.add("echo", ki18n("Echo commands. [off]"));
+    options.add("r");
+    options.add("replies", ki18n("Show KTTSD D-Bus replies. [off]"));
+    options.add("s");
+    options.add("signals", ki18n("Show KTTSD D-Bus signals. [off]"));
+    options.add("k");
+    options.add("startkttsd", ki18n("Start KTTSD if not already running. [off]"));
+    options.add("x");
+    options.add("nostoponerror", ki18n("Continue on error."));
+    options.add("+scriptfile", ki18n("Name of script to run.  Use '-' for stdin."));
+    options.add("!+[args...]", ki18n("Optional arguments passed to script."));
+    options.add("", ki18n("Type 'help' for kspeak commands."));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app(false);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->count() == 0) KCmdLineArgs::usage(i18n("No script file specified"));
+    if (args->count() == 0) KCmdLineArgs::usageError(i18n("No script file specified"));
 
     // Create KSpeak object.
     KSpeak kspeak(args, 0);

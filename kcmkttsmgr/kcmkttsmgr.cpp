@@ -1115,14 +1115,14 @@ QString KCMKttsMgr::quickHelp() const{
 
 const KAboutData* KCMKttsMgr::aboutData() const{
     KAboutData *about =
-    new KAboutData(I18N_NOOP("kttsd"), I18N_NOOP("KCMKttsMgr"),
-        0, 0, KAboutData::License_GPL,
-        I18N_NOOP("(c) 2002, José Pablo Ezequiel Fernández"));
+    new KAboutData(I18N_NOOP("kttsd"), 0, ki18n("KCMKttsMgr"),
+        0, KLocalizedString(), KAboutData::License_GPL,
+        ki18n("(c) 2002, José Pablo Ezequiel Fernández"));
 
-    about->addAuthor("José Pablo Ezequiel Fernández", I18N_NOOP("Author") , "pupeno@kde.org");
-    about->addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer") , "garycramblitt@comcast.net");
-    about->addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"), "ojschmidt@kde.org");
-    about->addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
+    about->addAuthor(ki18n("José Pablo Ezequiel Fernández"), ki18n("Author") , "pupeno@kde.org");
+    about->addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer") , "garycramblitt@comcast.net");
+    about->addAuthor(ki18n("Olaf Schmidt"), ki18n("Contributor"), "ojschmidt@kde.org");
+    about->addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
 
     return about;
 }

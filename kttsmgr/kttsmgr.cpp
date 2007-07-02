@@ -47,29 +47,29 @@
 // KTTSMgr includes.
 #include "kttsmgr.h"
 
-static const KCmdLineOptions options[] =
-{
-    { "a", 0, 0 },
-    { "autoexit", I18N_NOOP("Exit when speaking is finished"), 0 },
-    KCmdLineLastOption
-};
-
 int main (int argc, char *argv[])
 {
     KGlobal::locale()->setMainCatalog("kttsd");
 
-    KAboutData aboutdata("kttsmgr", I18N_NOOP("KTTSMgr"),
-        "0.4.0", I18N_NOOP("Text-to-Speech Manager"),
-        KAboutData::License_GPL, "(C) 2002, José Pablo Ezequiel Fernández");
-    aboutdata.addAuthor("José Pablo Ezequiel Fernández",I18N_NOOP("Original Author"),"pupeno@pupeno.com");
-    aboutdata.addAuthor("Gary Cramblitt", I18N_NOOP("Maintainer"),"garycramblitt@comcast.net");
-    aboutdata.addAuthor("Gunnar Schmi Dt", I18N_NOOP("Contributor"),"gunnar@schmi-dt.de");
-    aboutdata.addAuthor("Olaf Schmidt", I18N_NOOP("Contributor"),"ojschmidt@kde.org");
-    aboutdata.addAuthor("Paul Giannaros", I18N_NOOP("Contributor"), "ceruleanblaze@gmail.com");
-    aboutdata.addCredit("Jorge Luis Arzola", I18N_NOOP("Testing"), "arzolacub@hotmail.com");
-    aboutdata.addCredit("David Powell", I18N_NOOP("Testing"), "achiestdragon@gmail.com");
+    KAboutData aboutdata("kttsmgr", 0, ki18n("KTTSMgr"),
+        "0.4.0", ki18n("Text-to-Speech Manager"),
+        KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
+    aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
+    aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
+    aboutdata.addAuthor(ki18n("Gunnar Schmi Dt"), ki18n("Contributor"),"gunnar@schmi-dt.de");
+    aboutdata.addAuthor(ki18n("Olaf Schmidt"), ki18n("Contributor"),"ojschmidt@kde.org");
+    aboutdata.addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
+    aboutdata.addCredit(ki18n("Jorge Luis Arzola"), ki18n("Testing"), "arzolacub@hotmail.com");
+    aboutdata.addCredit(ki18n("David Powell"), ki18n("Testing"), "achiestdragon@gmail.com");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
+
+
+    KCmdLineOptions options;
+
+    options.add("a");
+
+    options.add("autoexit", ki18n("Exit when speaking is finished"));
 
     KCmdLineArgs::addCmdLineOptions( options );
 
