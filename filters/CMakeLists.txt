@@ -11,7 +11,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 # set(testfilter_SRCS main.cpp )
 
-# kde4_automoc(${testfilter_SRCS})
 
 # kde4_add_test_executable(testfilter ${testfilter_SRCS})
 

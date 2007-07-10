@@ -19,7 +19,6 @@ set(kttsd_SRCS
    speechjob.cpp 
    kspeechadaptor_p.cpp )
 
-kde4_automoc(${kttsd_SRCS})
 
 kde4_add_executable(kttsd_bin ${kttsd_SRCS})
 
