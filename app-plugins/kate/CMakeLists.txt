@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kate/interfaces  )
 
 set(ktexteditor_kttsd_PART_SRCS katekttsd.cpp )
 
-kde4_automoc(${ktexteditor_kttsd_PART_SRCS})
-
 kde4_add_plugin(ktexteditor_kttsd ${ktexteditor_kttsd_PART_SRCS})
 
 

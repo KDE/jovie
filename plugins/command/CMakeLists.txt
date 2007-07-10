@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_commandplugin_PART_SRCS commandconf.cpp commandproc.cpp commandplugin.cpp )
 
-kde4_automoc(${kttsd_commandplugin_PART_SRCS})
-
 kde4_add_ui_files(kttsd_commandplugin_PART_SRCS commandconfwidget.ui )
 
 kde4_add_plugin(kttsd_commandplugin WITH_PREFIX ${kttsd_commandplugin_PART_SRCS})

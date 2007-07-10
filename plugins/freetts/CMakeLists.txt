@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_freettsplugin_PART_SRCS freettsconf.cpp freettsproc.cpp freettsplugin.cpp )
 
-kde4_automoc(${kttsd_freettsplugin_PART_SRCS})
-
 kde4_add_ui_files(kttsd_freettsplugin_PART_SRCS freettsconfigwidget.ui )
 
 kde4_add_plugin(kttsd_freettsplugin WITH_PREFIX ${kttsd_freettsplugin_PART_SRCS})

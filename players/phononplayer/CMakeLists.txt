@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_phononplugin_PART_SRCS phononplugin.cpp phononplayer.cpp )
 
-kde4_automoc(${kttsd_phononplugin_PART_SRCS})
-
 kde4_add_plugin(kttsd_phononplugin WITH_PREFIX ${kttsd_phononplugin_PART_SRCS})
 
 

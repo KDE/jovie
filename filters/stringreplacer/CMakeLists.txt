@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerproc.cpp stringreplacerplugin.cpp )
 
-kde4_automoc(${kttsd_stringreplacerplugin_PART_SRCS})
-
 kde4_add_ui_files(kttsd_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
 
 kde4_add_plugin(kttsd_stringreplacerplugin WITH_PREFIX ${kttsd_stringreplacerplugin_PART_SRCS})

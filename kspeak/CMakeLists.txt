@@ -4,8 +4,6 @@ set(kspeak_SRCS
 
 qt4_add_dbus_interfaces(kspeak_SRCS ${DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml )
 
-kde4_automoc(${kspeak_SRCS})
-
 kde4_add_executable(kspeak ${kspeak_SRCS})
 
 target_link_libraries(kspeak

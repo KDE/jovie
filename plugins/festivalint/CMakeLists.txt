@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_festivalintplugin_PART_SRCS festivalintconf.cpp festivalintproc.cpp festivalintplugin.cpp )
 
-kde4_automoc(${kttsd_festivalintplugin_PART_SRCS})
-
 kde4_add_ui_files(kttsd_festivalintplugin_PART_SRCS festivalintconfwidget.ui )
 
 kde4_add_plugin(kttsd_festivalintplugin WITH_PREFIX ${kttsd_festivalintplugin_PART_SRCS})

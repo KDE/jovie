@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 set(kttsd_alsaplugin_PART_SRCS alsaplugin.cpp alsaplayer.cpp )
 
-kde4_automoc(${kttsd_alsaplugin_PART_SRCS})
-
 kde4_add_plugin(kttsd_alsaplugin WITH_PREFIX ${kttsd_alsaplugin_PART_SRCS})
 
 
