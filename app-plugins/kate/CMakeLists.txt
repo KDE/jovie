@@ -10,7 +10,7 @@ kde4_add_plugin(ktexteditor_kttsd ${ktexteditor_kttsd_PART_SRCS})
 
 
 
-target_link_libraries(ktexteditor_kttsd  ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} )
+target_link_libraries(ktexteditor_kttsd  ${KDE4_KTEXTEDITOR_LIBS} )
 
 install(TARGETS ktexteditor_kttsd  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
