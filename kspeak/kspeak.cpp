@@ -446,9 +446,7 @@ QString KSpeak::stateToStr(int state)
  */
 QStringList KSpeak::parseArgs(const QString& argsStr)
 {
-    int error = 0;
-    QStringList args = KShell::splitArgs(argsStr, KShell::NoOptions, &error);
-    return args;
+    return KShell::splitArgs(argsStr);
 }
 
 /**
