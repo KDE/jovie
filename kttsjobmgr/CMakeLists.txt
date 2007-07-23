@@ -8,7 +8,7 @@ set(kttsjobmgrpart_PART_SRCS
     jobinfolistmodel.cpp
     kttsjobmgr.cpp )
 
-qt4_add_dbus_interfaces(kttsjobmgrpart_PART_SRCS ${DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml )
+qt4_add_dbus_interfaces(kttsjobmgrpart_PART_SRCS ${DBUS_INTERFACES_INSTALL_DIR}/org.kde.KSpeech.xml )
 
 kde4_add_plugin(kttsjobmgrpart WITH_PREFIX ${kttsjobmgrpart_PART_SRCS})
 

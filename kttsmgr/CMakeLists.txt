@@ -7,7 +7,7 @@
 set(kttsmgr_SRCS 
     kttsmgr.cpp )
 
-qt4_add_dbus_interfaces(kttsmgr_SRCS ${DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml )
+qt4_add_dbus_interfaces(kttsmgr_SRCS ${DBUS_INTERFACES_INSTALL_DIR}/org.kde.KSpeech.xml )
 
 
 kde4_add_executable(kttsmgr ${kttsmgr_SRCS})
@@ -21,4 +21,4 @@ install(TARGETS kttsmgr  DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kttsmgr.desktop  DESTINATION  ${XDG_APPS_DIR} )
+install( FILES kttsmgr.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
