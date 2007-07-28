@@ -40,6 +40,7 @@ Name[uk]=Втулок ALSA для KTTSD
 Name[x-test]=xxKTTSD ALSA Pluginxx
 Name[zh_TW]=KTTSd ALSA 外掛程式
 Comment=KTTSD ALSA audio plugin
+Comment[bg]=Аудио приставка на KTTSD за ALSA
 Comment[br]=Lugent klevet ALSA evit KTTSD
 Comment[ca]=Connector d'àudio ALSA pel KTTSD
 Comment[cs]=KTTSD ALSA zvukový modul

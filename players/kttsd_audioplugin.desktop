@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KTTSD/AudioPlugin
 Comment=Audio Plugin for KTTSD
+Comment[bg]=Аудио приставка на KTTSD
 Comment[br]=Lugent klevet evit KTTSD
 Comment[ca]=Connector d'àudio pel KTTSD
 Comment[cs]=Zvukový modul KTTSD

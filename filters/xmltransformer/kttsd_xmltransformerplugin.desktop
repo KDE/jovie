@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XML Transformer
+Name[bg]=Трансформиране на XML
 Name[ca]=Transformador XML
 Name[cs]=XML transformace
 Name[da]=XML Transformatør
@@ -38,6 +39,7 @@ Name[uk]=Перетворення XML
 Name[x-test]=xxXML Transformerxx
 Name[zh_TW]=XML 轉換器
 Comment=Generic XML Tranformation Filter Plugin for KTTS
+Comment[bg]=Приставка филтър за трансформиране на XML за KTTS
 Comment[ca]=Connector del filtre genèric del transformador XML pel KTTS
 Comment[cs]=Modul filtru obecné XML transformace KTTS
 Comment[da]=Generisk XML Tranformationsfilter-plugin for KTTS
