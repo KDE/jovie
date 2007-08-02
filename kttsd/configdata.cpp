@@ -105,16 +105,16 @@ void ConfigData::loadNotifyEventsFromFile( const QString& filename, bool clear)
     // Open existing event list.
     QFile file( filename );
     if ( !file.open( QIODevice::ReadOnly ) ) {
-        kDebug() << "SpeechData::loadNotifyEventsFromFile: Unable to open file " << filename << endl;
+        kDebug() << "SpeechData::loadNotifyEventsFromFile: Unable to open file " << filename;
         return;
     }
     // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
     QDomDocument doc( "" );
     if ( !doc.setContent( &file ) ) {
         file.close();
-        kDebug() << "SpeechData::loadNotifyEventsFromFile: File not in proper XML format. " << filename << endl;
+        kDebug() << "SpeechData::loadNotifyEventsFromFile: File not in proper XML format. " << filename;
     }
-    // kDebug() << "StringReplacerConf::load: document successfully parsed." << endl;
+    // kDebug() << "StringReplacerConf::load: document successfully parsed.";
     file.close();
 
     if ( clear ) {

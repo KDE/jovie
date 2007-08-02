@@ -102,7 +102,7 @@ class FliteConf : public PlugInConf, public Ui::FliteConfWidget {
 
     private slots:
         void configChanged(){
-            // kDebug() << "FliteConf::configChanged: Running" << endl;
+            // kDebug() << "FliteConf::configChanged: Running";
             emit changed(true);
         }
         void slotFliteTest_clicked();

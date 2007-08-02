@@ -46,13 +46,13 @@ XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QStringList &args
     KttsFilterConf(parent)
 {
     Q_UNUSED(args);
-    kDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
+    kDebug() << "XmlTransformerConf::XmlTransformerConf: Running";
 
     // Create configuration widget.
     setupUi(this);
 
     // Set up defaults.
-    kDebug() << "XmlTransformerConf:: setting up defaults" << endl;
+    kDebug() << "XmlTransformerConf:: setting up defaults";
     defaults();
 
     // Connect signals.
@@ -74,7 +74,7 @@ XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QStringList &args
 * Destructor.
 */
 XmlTransformerConf::~XmlTransformerConf(){
-    // kDebug() << "XmlTransformerConf::~XmlTransformerConf: Running" << endl;
+    // kDebug() << "XmlTransformerConf::~XmlTransformerConf: Running";
 }
 
 /**
@@ -91,7 +91,7 @@ XmlTransformerConf::~XmlTransformerConf(){
 *                    loading your configuration.
 */
 void XmlTransformerConf::load(KConfig* c, const QString& configGroup){
-    // kDebug() << "XmlTransformerConf::load: Running" << endl;
+    // kDebug() << "XmlTransformerConf::load: Running";
     KConfigGroup config( c, configGroup );
     nameLineEdit->setText( config.readEntry( "UserFilterName", nameLineEdit->text() ) );
     xsltPath->setUrl( KUrl::fromPath( config.readEntry( "XsltFilePath", xsltPath->url().path() ) ) );
@@ -115,7 +115,7 @@ void XmlTransformerConf::load(KConfig* c, const QString& configGroup){
 *                    saving your configuration.
 */
 void XmlTransformerConf::save(KConfig* c, const QString& configGroup){
-    // kDebug() << "XmlTransformerConf::save: Running" << endl;
+    // kDebug() << "XmlTransformerConf::save: Running";
     KConfigGroup config( c, configGroup );
     config.writeEntry( "UserFilterName", nameLineEdit->text() );
     config.writeEntry( "XsltFilePath", realFilePath( xsltPath->url().path() ) );
@@ -133,7 +133,7 @@ void XmlTransformerConf::save(KConfig* c, const QString& configGroup){
 * be applied to the on-screen widgets; not to the config file.
 */
 void XmlTransformerConf::defaults(){
-    // kDebug() << "XmlTransformerConf::defaults: Running" << endl;
+    // kDebug() << "XmlTransformerConf::defaults: Running";
     // Default name.
     nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
@@ -146,7 +146,7 @@ void XmlTransformerConf::defaults(){
     doctypeLineEdit->setText( "" );
     // Default App ID to blank.
     appIdLineEdit->setText( "" );
-    // kDebug() << "XmlTransformerConf::defaults: Exiting" << endl;
+    // kDebug() << "XmlTransformerConf::defaults: Exiting";
 }
 
 /**

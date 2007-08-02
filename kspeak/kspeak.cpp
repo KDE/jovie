@@ -58,9 +58,9 @@ StdinReader::~StdinReader()
     if (0 != m_waitForInputRequest) {
         m_quit = true;
         m_waitForInputRequest->wakeOne();
-        // kDebug() << "Waiting for StdinReader thread to exit." << endl;
+        // kDebug() << "Waiting for StdinReader thread to exit.";
         wait();
-        // kDebug() << "StdinReader thread has exited." << endl;
+        // kDebug() << "StdinReader thread has exited.";
         delete m_mutexForInputRequest;
         delete m_waitForInputRequest;
     }
@@ -114,7 +114,7 @@ void StdinReader::run()
     m_mutexForInputRequest = 0;
     delete m_waitForInputRequest;
     m_waitForInputRequest = 0;
-    // kDebug() << "StdinReader stopping" << endl;
+    // kDebug() << "StdinReader stopping";
 }
 
 // ====================================================================
@@ -145,7 +145,7 @@ KSpeak::KSpeak(KCmdLineArgs* args, QObject* parent) :
 
     // Store AppID variable.
     m_vars["_APPID"] = m_kspeech->connection().baseService();
-    // kDebug() << "kspeak AppID = " << m_vars["_APPID"] << endl;
+    // kDebug() << "kspeak AppID = " << m_vars["_APPID"];
 
     // Input filename.
     m_inputFilename = args->arg(0);
@@ -208,7 +208,7 @@ void KSpeak::checkWaitForSignal(const QString& signalName, const QString& appId,
     QString data1Str = QString().setNum(data1);
     if ("*" != m_waitingSignal[3] && data1Str != m_waitingSignal[3]) return;
     if ("*" != m_waitingSignal[4] && data2Str != m_waitingSignal[4]) return;
-    // kDebug() << "WAIT for signal matched" << endl;
+    // kDebug() << "WAIT for signal matched";
     if (m_waitTimer.isActive()) m_waitTimer.stop();
     m_waitingSignal = QStringList();
     m_stdinReader->requestInput();
@@ -572,12 +572,12 @@ QString KSpeak::dbusReplyToPrintable(const QDBusMessage& reply, const QString& c
 bool KSpeak::isKttsdRunning(bool autoStart)
 {
     // See if KTTSD is running.
-    // kDebug() << "Checking for running KTTSD." << endl;
+    // kDebug() << "Checking for running KTTSD.";
     bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
     // if (kttsdRunning)
-    //     kDebug() << "KTTSD is already running" << endl;
+    //     kDebug() << "KTTSD is already running";
     // else
-    //     kDebug() << "KTTSD is not running." << endl;
+    //     kDebug() << "KTTSD is not running.";
 
     // If not running, and autostart requested, start KTTSD.
     if (!kttsdRunning && autoStart) {
@@ -593,7 +593,7 @@ bool KSpeak::isKttsdRunning(bool autoStart)
 void KSpeak::processCommand(const QString& inputLine)
 {
     QString line = inputLine.trimmed();
-    // kDebug() << "Line read: " << line << endl;
+    // kDebug() << "Line read: " << line;
 
     bool requestMoreInput = true;
     if (line.isEmpty()) {
@@ -605,13 +605,13 @@ void KSpeak::processCommand(const QString& inputLine)
         // If filling a buffer, fill it until BUFFEREND is seen.
         if (!m_fillingBuffer.isEmpty()) {
             if ("BUFFEREND" == line.trimmed().toUpper()) {
-                // kDebug() << "End buffer filling for " << m_fillingBuffer << endl;
+                // kDebug() << "End buffer filling for " << m_fillingBuffer;
                 // Remove first space.
                 m_vars["_BUF"].remove(0, 1);
                 if ("_BUF" != m_fillingBuffer) m_vars[m_fillingBuffer] = m_vars["_BUF"];
                 m_fillingBuffer = QString();
             } else {
-                // kDebug() << "Appending to buffer " << m_fillingBuffer << " data = " << line << endl;
+                // kDebug() << "Appending to buffer " << m_fillingBuffer << " data = " << line;
                 m_vars["_BUF"] += ' ' + line;
             }
         } else {
@@ -624,7 +624,7 @@ void KSpeak::processCommand(const QString& inputLine)
                 // Look for assignment statement. left = right
                 QString left = line.section("=", 0, 0).trimmed();
                 QString right = line.section("=", 1).trimmed();
-                // kDebug() << "left = right: " << left << " = " << right << endl;
+                // kDebug() << "left = right: " << left << " = " << right;
                 if (right.isEmpty()) {
                     right = left;
                     left = QString();
@@ -634,14 +634,14 @@ void KSpeak::processCommand(const QString& inputLine)
                 // cmd arg arg...
                 QString cmd = right.section(" ", 0, 0).trimmed();
                 QString args = right.section(" ", 1).trimmed();
-                // kDebug() << "cmd: " << cmd << " args: " << args << endl;
+                // kDebug() << "cmd: " << cmd << " args: " << args;
     
                 // Variable substitution.
                 foreach (QString var, m_vars.keys()) {
-                    // kDebug() << var << ": " + m_vars[var].toString() << endl;
+                    // kDebug() << var << ": " + m_vars[var].toString();
                     args.replace("$(" + var + ")", m_vars[var]);
                 }
-                // kDebug() << "post variable substitution: " << cmd << " " << args << endl;
+                // kDebug() << "post variable substitution: " << cmd << " " << args;
     
                 // If echo is on, output command.
                 if (m_echo) *m_out << "> " << cmd << ' ' << args << endl;
@@ -696,7 +696,7 @@ void KSpeak::processCommand(const QString& inputLine)
                     // Pad waiting signal string list.
                     while (m_waitingSignal.size() < 5)
                         m_waitingSignal.append("*");
-                    // kDebug() << "WAIT" << m_waitingSignal << endl;
+                    // kDebug() << "WAIT" << m_waitingSignal;
                     requestMoreInput = false;
                     if (m_waitTimer.interval() > 0)
                         m_waitTimer.start();
@@ -739,7 +739,7 @@ void KSpeak::startInput()
     }
     // Create Stdin Reader object which runs in another thread.
     // It emits lineReady for each input line.
-    // kDebug() << "KSpeak::startInput: creating StdinReader" << endl;
+    // kDebug() << "KSpeak::startInput: creating StdinReader";
     m_stdinReader = new StdinReader(m_inputFilename, this);
     connect(m_stdinReader, SIGNAL(lineReady(const QString&)),
         this, SLOT(processCommand(const QString&)), Qt::QueuedConnection);

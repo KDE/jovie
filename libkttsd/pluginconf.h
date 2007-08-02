@@ -339,7 +339,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * and should emit the @ref changed signal.
         */
         void configChanged(){
-            kDebug() << "PlugInConf::configChanged: Running"<< endl;
+            kDebug() << "PlugInConf::configChanged: Running";
             emit changed(true);
         }
 

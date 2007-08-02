@@ -72,7 +72,7 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const QStringList& ) :
  */
 bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
 {
-    // kDebug() << "XmlTransformerProc::init: Running." << endl;
+    // kDebug() << "XmlTransformerProc::init: Running.";
     KConfigGroup config( c, configGroup );
     m_UserFilterName = config.readEntry( "UserFilterName" );
     m_xsltFilePath = config.readEntry( "XsltFilePath" );
@@ -80,8 +80,8 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
     m_rootElementList = config.readEntry( "RootElement", QStringList(), ',' );
     m_doctypeList = config.readEntry( "DocType", QStringList(), ',' );
     m_appIdList = config.readEntry( "AppID", QStringList(), ',' );
-    kDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath << endl;
-    kDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath << endl;
+    kDebug() << "XmlTransformerProc::init: m_xsltprocPath = " << m_xsltprocPath;
+    kDebug() << "XmlTransformerProc::init: m_xsltFilePath = " << m_xsltFilePath;
     return ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() );
 }
 
@@ -109,11 +109,11 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
 /*virtual*/ QString XmlTransformerProc::convert(const QString& inputText, TalkerCode* talkerCode,
     const QString& appId)
 {
-    // kDebug() << "XmlTransformerProc::convert: Running." << endl;
+    // kDebug() << "XmlTransformerProc::convert: Running.";
     // If not properly configured, do nothing.
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() )
     {
-        kDebug() << "XmlTransformerProc::convert: not properly configured" << endl;
+        kDebug() << "XmlTransformerProc::convert: not properly configured";
         return inputText;
     }
     // Asynchronously convert and wait for completion.
@@ -145,12 +145,12 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
 {
     m_wasModified = false;
 
-    // kDebug() << "XmlTransformerProc::asyncConvert: Running." << endl;
+    // kDebug() << "XmlTransformerProc::asyncConvert: Running.";
     m_text = inputText;
     // If not properly configured, do nothing.
     if ( m_xsltFilePath.isEmpty() || m_xsltprocPath.isEmpty() )
     {
-        kDebug() << "XmlTransformerProc::asyncConvert: not properly configured." << endl;
+        kDebug() << "XmlTransformerProc::asyncConvert: not properly configured.";
         return false;
     }
 
@@ -158,7 +158,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
     // If not correct XML type, or DOCTYPE, do nothing.
     if ( !m_rootElementList.isEmpty() )
     {
-        // kDebug() << "XmlTransformerProc::asyncConvert:: searching for root elements " << m_rootElementList << endl;
+        // kDebug() << "XmlTransformerProc::asyncConvert:: searching for root elements " << m_rootElementList;
         for ( int ndx=0; ndx < m_rootElementList.count(); ++ndx )
         {
             if ( KttsUtils::hasRootElement( inputText, m_rootElementList[ndx] ) )
@@ -169,7 +169,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
         }
         if ( !found && m_doctypeList.isEmpty() )
         {
-            kDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList << endl;
+            kDebug() << "XmlTransformerProc::asyncConvert: Did not find root element(s)" << m_rootElementList;
             return false;
         }
     }
@@ -185,7 +185,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
         }
         if ( !found )
         {
-            // kDebug() << "XmlTransformerProc::asyncConvert: Did not find doctype(s)" << m_doctypeList << endl;
+            // kDebug() << "XmlTransformerProc::asyncConvert: Did not find doctype(s)" << m_doctypeList;
             return false;
         }
     }
@@ -207,7 +207,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
         }
         if ( !found )
         {
-            // kDebug() << "XmlTransformerProc::asyncConvert: Did not find appId(s)" << m_appIdList << endl;
+            // kDebug() << "XmlTransformerProc::asyncConvert: Did not find appId(s)" << m_appIdList;
             return false;
         }
     }
@@ -258,7 +258,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
     if (!m_xsltProc->start(K3Process::NotifyOnExit,
          static_cast<K3Process::Communication>(K3Process::Stdout | K3Process::Stderr)))
     {
-        kDebug() << "XmlTransformerProc::convert: Error starting xsltproc" << endl;
+        kDebug() << "XmlTransformerProc::convert: Error starting xsltproc";
         m_state = fsIdle;
         return false;
     }
@@ -274,14 +274,14 @@ void XmlTransformerProc::processOutput()
     if (m_xsltProc->normalExit())
         exitStatus = m_xsltProc->exitStatus();
     else
-        kDebug() << "XmlTransformerProc::processOutput: xsltproc was killed." << endl;
+        kDebug() << "XmlTransformerProc::processOutput: xsltproc was killed.";
 
     delete m_xsltProc;
     m_xsltProc = 0;
 
     if (exitStatus != 0)
     {
-        kDebug() << "XmlTransformerProc::processOutput: xsltproc abnormal exit.  Status = " << exitStatus << endl;
+        kDebug() << "XmlTransformerProc::processOutput: xsltproc abnormal exit.  Status = " << exitStatus;
         m_state = fsFinished;
         QFile::remove(m_outFilename);
         emit filteringFinished();
@@ -292,7 +292,7 @@ void XmlTransformerProc::processOutput()
     QFile readfile(m_outFilename);
     if(!readfile.open(QIODevice::ReadOnly)) {
         /// uhh yeah... Issues writing to the output file.
-        kDebug() << "XmlTransformerProc::processOutput: Could not read file " << m_outFilename << endl;
+        kDebug() << "XmlTransformerProc::processOutput: Could not read file " << m_outFilename;
         m_state = fsFinished;
         emit filteringFinished();
     }
@@ -300,7 +300,7 @@ void XmlTransformerProc::processOutput()
     m_text = rstream.readAll();
     readfile.close();
 
-    kDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
+    kDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath;
 
     // Clean up.
     QFile::remove(m_outFilename);
@@ -322,7 +322,7 @@ void XmlTransformerProc::processOutput()
             if ( !m_xsltProc->wait( 15 ) )
             {
                 m_xsltProc->kill();
-                kDebug() << "XmlTransformerProc::waitForFinished: After waiting 15 seconds, xsltproc process seems to hung.  Killing it." << endl;
+                kDebug() << "XmlTransformerProc::waitForFinished: After waiting 15 seconds, xsltproc process seems to hung.  Killing it.";
                 processOutput();
             }
         }
@@ -366,19 +366,19 @@ void XmlTransformerProc::processOutput()
 
 void XmlTransformerProc::slotProcessExited(K3Process*)
 {
-    // kDebug() << "XmlTransformerProc::slotProcessExited: xsltproc has exited." << endl;
+    // kDebug() << "XmlTransformerProc::slotProcessExited: xsltproc has exited.";
     processOutput();
 }
 
 void XmlTransformerProc::slotReceivedStdout(K3Process*, char* /*buffer*/, int /*buflen*/)
 {
     // QString buf = QString::fromLatin1(buffer, buflen);
-    // kDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf << endl;
+    // kDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf;
 }
 
 void XmlTransformerProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf << endl;
+    kDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf;
 }
 

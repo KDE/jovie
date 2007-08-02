@@ -28,7 +28,7 @@
 /** Constructor */
 FreeTTSProc::FreeTTSProc( QObject* parent, const QStringList& /*args*/) : 
     PlugInProc( parent, "freettsproc" ) {
-    kDebug() << "Running: FreeTTSProc::FreeTTSProc" << endl;
+    kDebug() << "Running: FreeTTSProc::FreeTTSProc";
     m_state = psIdle;
     m_waitingStop = false;
     m_freettsProc = 0;
@@ -36,7 +36,7 @@ FreeTTSProc::FreeTTSProc( QObject* parent, const QStringList& /*args*/) :
 
 /** Desctructor */
 FreeTTSProc::~FreeTTSProc() {
-    kDebug() << "Running: FreeTTSProc::~FreeTTSProc" << endl;
+    kDebug() << "Running: FreeTTSProc::~FreeTTSProc";
     if (m_freettsProc) {
         stopText();
         delete m_freettsProc;
@@ -45,11 +45,11 @@ FreeTTSProc::~FreeTTSProc() {
 
 /** Initializate the speech */
 bool FreeTTSProc::init(KConfig *config, const QString &configGroup) {
-    kDebug() << "Running: FreeTTSProc::init()" << endl;
-    kDebug() << "Initializing plug in: FreeTTS" << endl;
+    kDebug() << "Running: FreeTTSProc::init()";
+    kDebug() << "Initializing plug in: FreeTTS";
     KConfigGroup group = config->group(configGroup);
     m_freettsJarPath = group.readEntry("FreeTTSJarPath", "freetts.jar");
-    kDebug() << "FreeTTSProc::init: path to freetts.jar: " << m_freettsJarPath << endl;
+    kDebug() << "FreeTTSProc::init: path to freetts.jar: " << m_freettsJarPath;
     return true;
 }
 
@@ -74,7 +74,7 @@ void FreeTTSProc::sayText(const QString &text) {
  * If the plugin supports asynchronous operation, it should return immediately.
  */
 void FreeTTSProc::synthText(const QString& text, const QString& suggestedFilename) {
-    kDebug() << "Running: FreeTTSProc::synthText" << endl;
+    kDebug() << "Running: FreeTTSProc::synthText";
     synth(text, suggestedFilename, m_freettsJarPath);
 }
 
@@ -83,7 +83,7 @@ void FreeTTSProc::synth(
     const QString &synthFilename,
     const QString& freettsJarPath) {
 
-    kDebug() << "Running: FreeTTSProc::synth" << endl;
+    kDebug() << "Running: FreeTTSProc::synth";
 
     if (m_freettsProc) {
         if (m_freettsProc->isRunning()) m_freettsProc->kill();
@@ -118,8 +118,8 @@ void FreeTTSProc::synth(
     QString freettsJarDir = freettsJarPath.left((freettsJarPath.length() - filename.length()) - 1);
 
     m_freettsProc->setWorkingDirectory(freettsJarDir);
-    kDebug() << "FreeTTSProc::synthText: moved to directory '" << freettsJarDir << "'" << endl;
-    kDebug() << "FreeTTSProc::synthText: Running file: '" << filename << "'" << endl;
+    kDebug() << "FreeTTSProc::synthText: moved to directory '" << freettsJarDir << "'";
+    kDebug() << "FreeTTSProc::synthText: Running file: '" << filename << "'";
     *m_freettsProc << "java" << "-jar" << filename;
 
     /// Dump audio into synthFilename
@@ -128,14 +128,14 @@ void FreeTTSProc::synth(
 
     m_synthFilename = synthFilename;
 
-    kDebug() << "FreeTTSProc::synth: Synthing text: '" << saidText << "' using FreeTTS plug in" << endl;
+    kDebug() << "FreeTTSProc::synth: Synthing text: '" << saidText << "' using FreeTTS plug in";
     if (!m_freettsProc->start(K3Process::NotifyOnExit, K3Process::All)) {
-        kDebug() << "FreeTTSProc::synth: Error starting FreeTTS process.  Is freetts.jar in the PATH?" << endl;
+        kDebug() << "FreeTTSProc::synth: Error starting FreeTTS process.  Is freetts.jar in the PATH?";
         m_state = psIdle;
-        kDebug() << "K3Process args: " << m_freettsProc->args() << endl;
+        kDebug() << "K3Process args: " << m_freettsProc->args();
         return;
     }
-    kDebug()<< "FreeTTSProc:synth: FreeTTS initialized" << endl;
+    kDebug()<< "FreeTTSProc:synth: FreeTTS initialized";
     m_freettsProc->writeStdin(saidText.toLatin1(), saidText.length());
 }
 
@@ -144,7 +144,7 @@ void FreeTTSProc::synth(
  * @returns                    The filename of the last synth'd text
  */
 QString FreeTTSProc::getFilename() {
-    kDebug() << "FreeTTSProc::getFilename: returning " << m_synthFilename << endl;
+    kDebug() << "FreeTTSProc::getFilename: returning " << m_synthFilename;
     return m_synthFilename;
 }
 
@@ -164,21 +164,21 @@ QString FreeTTSProc::getFilename() {
  * operation.
  */
 void FreeTTSProc::stopText() {
-    kDebug() << "FreeTTSProc::stopText:: Running" << endl;
+    kDebug() << "FreeTTSProc::stopText:: Running";
     if (m_freettsProc) {
         if (m_freettsProc->isRunning()) {
-            kDebug() << "FreeTTSProc::stopText: killing FreeTTS." << endl;
+            kDebug() << "FreeTTSProc::stopText: killing FreeTTS.";
             m_waitingStop = true;
             m_freettsProc->kill();
         } 
         else m_state = psIdle;
     }
     else m_state = psIdle;
-    kDebug() << "FreeTTSProc::stopText: FreeTTS stopped." << endl;
+    kDebug() << "FreeTTSProc::stopText: FreeTTS stopped.";
 }
 
 void FreeTTSProc::slotProcessExited(K3Process*) {
-    kDebug() << "FreeTTSProc:slotProcessExited: FreeTTS process has exited." << endl;
+    kDebug() << "FreeTTSProc:slotProcessExited: FreeTTS process has exited.";
     pluginState prevState = m_state;
     if (m_waitingStop) {
         m_waitingStop = false;
@@ -196,16 +196,16 @@ void FreeTTSProc::slotProcessExited(K3Process*) {
 
 void FreeTTSProc::slotReceivedStdout(K3Process*, char* buffer, int buflen) {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kDebug() << "FreeTTSProc::slotReceivedStdout: Received output from FreeTTS: " << buf << endl;
+    kDebug() << "FreeTTSProc::slotReceivedStdout: Received output from FreeTTS: " << buf;
 }
 
 void FreeTTSProc::slotReceivedStderr(K3Process*, char* buffer, int buflen) {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kDebug() << "FreeTTSProc::slotReceivedStderr: Received error from FreeTTS: " << buf << endl;
+    kDebug() << "FreeTTSProc::slotReceivedStderr: Received error from FreeTTS: " << buf;
 }
 
 void FreeTTSProc::slotWroteStdin(K3Process*) {
-    kDebug() << "FreeTTSProc::slotWroteStdin: closing Stdin" << endl;
+    kDebug() << "FreeTTSProc::slotWroteStdin: closing Stdin";
     m_freettsProc->closeStdin();
 }
 

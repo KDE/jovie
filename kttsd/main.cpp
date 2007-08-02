@@ -56,16 +56,16 @@ int main (int argc, char *argv[]){
     KUniqueApplication app;
 
     if(!KUniqueApplication::start()){
-        kDebug() << "KTTSD is already running" << endl;
+        kDebug() << "KTTSD is already running";
         return (0);
     }
 
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
-    kDebug() << "main: Creating KTTSD Service" << endl;
+    kDebug() << "main: Creating KTTSD Service";
     KSpeech* service = new KSpeech();
 
-    // kDebug() << "Entering event loop." << endl;
+    // kDebug() << "Entering event loop.";
     return app.exec();
     delete service;
 }

@@ -285,7 +285,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
     m_kspeech(0)
 {
 
-    // kDebug() << "KCMKttsMgr constructor running." << endl;
+    // kDebug() << "KCMKttsMgr constructor running.";
 
     // Initialize some variables.
     m_config = 0;
@@ -393,7 +393,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
         pcmCustom->setEnabled(pcmComboBox->currentText() == "custom");
         QStringList pcmList = player->getPluginList("");
         pcmList.append("custom");
-        kDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
+        kDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList;
         pcmComboBox->clear();
         pcmComboBox->addItems(pcmList);
     }
@@ -554,7 +554,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
 * Destructor.
 */
 KCMKttsMgr::~KCMKttsMgr(){
-    // kDebug() << "KCMKttsMgr::~KCMKttsMgr: Running" << endl;
+    // kDebug() << "KCMKttsMgr::~KCMKttsMgr: Running";
     delete m_config;
 }
 
@@ -568,7 +568,7 @@ KCMKttsMgr::~KCMKttsMgr(){
 */
 void KCMKttsMgr::load()
 {
-    // kDebug() << "KCMKttsMgr::load: Running" << endl;
+    // kDebug() << "KCMKttsMgr::load: Running";
 
     m_changed = false;
     // Don't emit changed() signal while loading.
@@ -695,14 +695,14 @@ void KCMKttsMgr::load()
     m_filterListModel.clear();
     m_sbdFilterListModel.clear();
     QStringList filterIDsList = generalConfig.readEntry("FilterIDs", QStringList(), ',');
-    // kDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList << endl;
+    // kDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList;
     if (!filterIDsList.isEmpty())
     {
         QStringList::ConstIterator itEnd = filterIDsList.constEnd();
         for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
         {
             QString filterID = *it;
-            // kDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
+            // kDebug() << "KCMKttsMgr::load: filterID = " << filterID;
             KConfigGroup filterConfig(m_config, "Filter_" + filterID);
             QString desktopEntryName = filterConfig.readEntry("DesktopEntryName", QString());
             // If a DesktopEntryName is not in the config file, it was configured before
@@ -753,7 +753,7 @@ void KCMKttsMgr::load()
                 QString userFilterName = filterPlugIn->userPlugInName();
                 if (!userFilterName.isEmpty())
                 {
-                    kDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName << endl;
+                    kDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName;
                     bool multiInstance = filterPlugIn->supportsMultiInstance();
                     FilterItem fi;
                     fi.id = filterID;
@@ -824,7 +824,7 @@ void KCMKttsMgr::load()
 */
 void KCMKttsMgr::save()
 {
-    // kDebug() << "KCMKttsMgr::save: Running" << endl;
+    // kDebug() << "KCMKttsMgr::save: Running";
     m_changed = false;
 
     // Clean up config.
@@ -948,7 +948,7 @@ void KCMKttsMgr::save()
         // If KTTSD is running, reinitialize it.
         if (m_kspeech)
         {
-            kDebug() << "Restarting KTTSD" << endl;
+            kDebug() << "Restarting KTTSD";
             m_kspeech->reinit();
         }
     }
@@ -979,7 +979,7 @@ void KCMKttsMgr::slotTabChanged()
 * uses when started without a config file.
 */
 void KCMKttsMgr::defaults() {
-    // kDebug() << "Running: KCMKttsMgr::defaults: Running"<< endl;
+    // kDebug() << "Running: KCMKttsMgr::defaults: Running";
 
     int currentPageIndex = mainTab->currentIndex();
     bool changed = false;
@@ -1097,7 +1097,7 @@ void KCMKttsMgr::defaults() {
 * not needed in this case.
 */
 void KCMKttsMgr::init(){
-    // kDebug() << "KCMKttsMgr::init: Running" << endl;
+    // kDebug() << "KCMKttsMgr::init: Running";
 }
 
 /**
@@ -1105,7 +1105,7 @@ void KCMKttsMgr::init(){
 * That is displayed in the sidebar in the KControl
 */
 QString KCMKttsMgr::quickHelp() const{
-    // kDebug() << "KCMKttsMgr::quickHelp: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::quickHelp: Running";
     return i18n(
         "<h1>Text-to-Speech</h1>"
         "<p>This is the configuration for the text-to-speech dcop service</p>"
@@ -1134,7 +1134,7 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 */
 PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
 {
-    // kDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::loadPlugin: Running";
 
     // Find the plugin.
 	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin",
@@ -1155,7 +1155,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
                 return plugIn;
             } else {
                 // Something went wrong, returning null.
-                kDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to instantiate PlugInConf class for plugin " << name << endl;
+                kDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to instantiate PlugInConf class for plugin " << name;
                 return NULL;
             }
         } else {
@@ -1178,7 +1178,7 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
  */
 KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 {
-    // kDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::loadPlugin: Running";
 
     // Find the plugin.
 	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
@@ -1202,17 +1202,17 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
                 return plugIn;
             } else {
                 // Something went wrong, returning null.
-                kDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to instantiate KttsFilterConf class for plugin " << plugInName << " error: " << errorNo << endl;
+                kDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to instantiate KttsFilterConf class for plugin " << plugInName << " error: " << errorNo;
                 return NULL;
             }
         } else {
             // Something went wrong, returning null.
-            kDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to create Factory object for plugin " << plugInName << endl;
+            kDebug() << "KCMKttsMgr::loadFilterPlugin: Unable to create Factory object for plugin " << plugInName;
             return NULL;
         }
     }
     // The plug in was not found (unexpected behaviour, returns null).
-    kDebug() << "KCMKttsMgr::loadFilterPlugin: KTrader did not return an offer for plugin " << plugInName << endl;
+    kDebug() << "KCMKttsMgr::loadFilterPlugin: KTrader did not return an offer for plugin " << plugInName;
     return NULL;
 }
 
@@ -1340,7 +1340,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         m_configDlg = 0;
     }
 
-    // kDebug() << "KCMKttsMgr::addTalker: done." << endl;
+    // kDebug() << "KCMKttsMgr::addTalker: done.";
 }
 
 void KCMKttsMgr::slotAddNormalFilterButton_clicked()
@@ -1391,7 +1391,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     }
 
     // If no choice (shouldn't happen), bail out.
-    // kDebug() << "KCMKttsMgr::addFilter: filterPluginNames = " << filterPlugInNames << endl;
+    // kDebug() << "KCMKttsMgr::addFilter: filterPluginNames = " << filterPlugInNames;
     if (filterPlugInNames.count() == 0) return;
 
     // If exactly one choice, skip selection dialog, otherwise display list to user to select from.
@@ -1411,7 +1411,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     } else
         filterPlugInName = filterPlugInNames[0];
 
-    // kDebug() << "KCMKttsMgr::addFilter: filterPlugInName = " << filterPlugInName << endl;
+    // kDebug() << "KCMKttsMgr::addFilter: filterPlugInName = " << filterPlugInName;
 
     // Assign a new Filter ID for the filter.  Wraps around to 1.
     QString filterID = QString::number(m_lastFilterID + 1);
@@ -1500,14 +1500,14 @@ void KCMKttsMgr::addFilter( bool sbd)
     delete m_configDlg;
     m_configDlg = 0;
 
-    // kDebug() << "KCMKttsMgr::addFilter: done." << endl;
+    // kDebug() << "KCMKttsMgr::addFilter: done.";
 }
 
 /**
 * Remove talker.
 */
 void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
-    // kDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::removeTalker: Running";
 
     // Get the selected talker.
     QModelIndex modelIndex = talkersView->currentIndex();
@@ -1541,7 +1541,7 @@ void KCMKttsMgr::slotRemoveSbdFilterButton_clicked()
 */
 void KCMKttsMgr::removeFilter( bool sbd )
 {
-    // kDebug() << "KCMKttsMgr::removeFilter: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::removeFilter: Running";
 
     FilterListModel* model;
     QTreeView* lView;
@@ -1561,7 +1561,7 @@ void KCMKttsMgr::removeFilter( bool sbd )
         updateFilterButtons();
 
     // Delete the filter from the configuration file?
-    kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file." << endl;
+    kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file.";
     m_config->deleteGroup(QString("Filter_")+filterID, 0);
 
     // Emit configuraton changed.
@@ -1644,7 +1644,7 @@ void KCMKttsMgr::slotLowerSbdFilterPriorityButton_clicked()
 * Update the status of the Talker buttons.
 */
 void KCMKttsMgr::updateTalkerButtons(){
-    // kDebug() << "KCMKttsMgr::updateTalkerButtons: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::updateTalkerButtons: Running";
     QModelIndex modelIndex = talkersView->currentIndex();
     if (modelIndex.isValid()) {
         removeTalkerButton->setEnabled(true);
@@ -1657,14 +1657,14 @@ void KCMKttsMgr::updateTalkerButtons(){
         higherTalkerPriorityButton->setEnabled(false);
         lowerTalkerPriorityButton->setEnabled(false);
     }
-    // kDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting"<< endl;
+    // kDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting";
 }
 
 /**
 * Update the status of the normal Filter buttons.
 */
 void KCMKttsMgr::updateFilterButtons(){
-    // kDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::updateFilterButtons: Running";
     QModelIndex modelIndex = filtersView->currentIndex();
     if (modelIndex.isValid()) {
         removeFilterButton->setEnabled(true);
@@ -1677,14 +1677,14 @@ void KCMKttsMgr::updateFilterButtons(){
         higherFilterPriorityButton->setEnabled(false);
         lowerFilterPriorityButton->setEnabled(false);
     }
-    // kDebug() << "KCMKttsMgr::updateFilterButtons: Exiting"<< endl;
+    // kDebug() << "KCMKttsMgr::updateFilterButtons: Exiting";
 }
 
 /**
  * Update the status of the SBD buttons.
  */
 void KCMKttsMgr::updateSbdButtons(){
-    // kDebug() << "KCMKttsMgr::updateSbdButtons: Running"<< endl;
+    // kDebug() << "KCMKttsMgr::updateSbdButtons: Running";
     QModelIndex modelIndex = sbdsView->currentIndex();
     if (modelIndex.isValid()) {
         m_sbdBtnEdit->setEnabled( true );
@@ -1697,7 +1697,7 @@ void KCMKttsMgr::updateSbdButtons(){
         m_sbdBtnDown->setEnabled( false );
         m_sbdBtnRemove->setEnabled( false );
     }
-    // kDebug() << "KCMKttsMgr::updateSbdButtons: Exiting"<< endl;
+    // kDebug() << "KCMKttsMgr::updateSbdButtons: Exiting";
 }
 
 /**
@@ -1712,17 +1712,17 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
     // See if KTTSD is running.
     bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
 
-    // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning << endl;
+    // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning;
     // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
     if (enableKttsdCheckBox->isChecked())
     {
         if (!kttsdRunning)
         {
-            // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting KTTSD" << endl;
+            // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting KTTSD";
             QString error;
             if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
             {
-                kDebug() << "Starting KTTSD failed with message " << error << endl;
+                kDebug() << "Starting KTTSD failed with message " << error;
                 enableKttsdCheckBox->setChecked(false);
                 notifyTestButton->setEnabled(false);
                 
@@ -1737,7 +1737,7 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
     {
         if (kttsdRunning)
             {
-                // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping KTTSD" << endl;
+                // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping KTTSD";
                 m_kspeech->kttsdExit();
                 configChanged();
             }
@@ -1808,7 +1808,7 @@ void KCMKttsMgr::slotPcmComboBox_activated()
 */
 void KCMKttsMgr::kttsdStarted()
 {
-    // kDebug() << "KCMKttsMgr::kttsdStarted: Running" << endl;
+    // kDebug() << "KCMKttsMgr::kttsdStarted: Running";
     bool kttsdLoaded = (m_jobMgrPart != 0);
     // Load Job Manager Part library.
     if (!kttsdLoaded)
@@ -1822,7 +1822,7 @@ void KCMKttsMgr::kttsdStarted()
             kttsdLoaded = true;
         }
         else
-            kDebug() << "KCMKttsMgr::kttsdStarted: Could not create kttsjobmgr part." << endl;
+            kDebug() << "KCMKttsMgr::kttsdStarted: Could not create kttsjobmgr part.";
     }
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded)
@@ -1854,7 +1854,7 @@ void KCMKttsMgr::kttsdStarted()
 */
 void KCMKttsMgr::kttsdExiting()
 {
-    // kDebug() << "KCMKttsMgr::kttsdExiting: Running" << endl;
+    // kDebug() << "KCMKttsMgr::kttsdExiting: Running";
     if (m_jobMgrPart)
     {
         mainTab->removeTab(wpJobs);
@@ -1883,11 +1883,11 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
     QString languageCode = tc.fullLanguageCode();
     m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     if (!m_loadedTalkerPlugIn) return;
-    // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully." << endl;
+    // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully.";
 
     // Tell plugin to load its configuration.
     m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID << endl;
+    // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID;
     m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
 
     // Display configuration dialog.
@@ -1962,10 +1962,10 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     if (desktopEntryName.isEmpty()) return;
     m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
-    // kDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
+    // kDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully.";
 
     // Tell plugin to load its configuration.
-    // kDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID << endl;
+    // kDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID;
     m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
 
     // Display configuration dialog.
@@ -2046,7 +2046,7 @@ void KCMKttsMgr::configureTalker()
         sinkName = pcmComboBox->currentText();
     }
     float audioStretchFactor = 1.0/(float(timeBox->value())/100.0);
-    // kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName << endl;
+    // kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName;
     TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", 
         playerOption, audioStretchFactor, sinkName);
     m_loadedTalkerPlugIn->setPlayer(testPlayer);
@@ -2211,7 +2211,7 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
         file.close();
         return i18n("File not in proper XML format.");
     }
-    // kDebug() << "StringReplacerConf::load: document successfully parsed." << endl;
+    // kDebug() << "StringReplacerConf::load: document successfully parsed.";
     file.close();
 
     // Clear list view.

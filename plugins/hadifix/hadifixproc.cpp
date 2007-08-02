@@ -79,13 +79,13 @@ class HadifixProcPrivate {
 /** Constructor */
 HadifixProc::HadifixProc( QObject* parent, const QStringList &) : 
    PlugInProc( parent, "hadifixproc" ){
-   // kDebug() << "HadifixProc::HadifixProc: Running" << endl;
+   // kDebug() << "HadifixProc::HadifixProc: Running";
    d = 0;
 }
 
 /** Destructor */
 HadifixProc::~HadifixProc(){
-   // kDebug() << "HadifixProc::~HadifixProc: Running" << endl;
+   // kDebug() << "HadifixProc::~HadifixProc: Running";
 
    if (d != 0) {
       delete d;
@@ -95,7 +95,7 @@ HadifixProc::~HadifixProc(){
 
 /** Initializate the speech */
 bool HadifixProc::init(KConfig *config, const QString &configGroup){
-   // kDebug() << "HadifixProc::init: Initializing plug in: Hadifix" << endl;
+   // kDebug() << "HadifixProc::init: Initializing plug in: Hadifix";
 
    if (d == 0)
       d = new HadifixProcPrivate();
@@ -114,7 +114,7 @@ bool HadifixProc::init(KConfig *config, const QString &configGroup){
 */
 void HadifixProc::sayText(const QString& /*text*/)
 {
-    kDebug() << "HadifixProc::sayText: Warning, sayText not implemented." << endl;
+    kDebug() << "HadifixProc::sayText: Warning, sayText not implemented.";
     return;
 }
     
@@ -157,7 +157,7 @@ void HadifixProc::synth(QString text,
                         QTextCodec *codec,
                         const QString waveFilename)
 {
-   // kDebug() << "HadifixProc::synth: Saying text: '" << text << "' using Hadifix plug in" << endl;
+   // kDebug() << "HadifixProc::synth: Saying text: '" << text << "' using Hadifix plug in";
    if (d == 0)
    {
       d = new HadifixProcPrivate();
@@ -170,14 +170,14 @@ void HadifixProc::synth(QString text,
       return;
 
    // If process exists, delete it so we can create a new one.
-   // kDebug() << "HadifixProc::synth: creating process" << endl;
+   // kDebug() << "HadifixProc::synth: creating process";
    if (d->hadifixProc) delete d->hadifixProc;
    
    // Create process.
    d->hadifixProc = new K3ShellProcess;
    
    // Set up txt2pho and mbrola commands.
-   // kDebug() << "HadifixProc::synth: setting up commands" << endl;
+   // kDebug() << "HadifixProc::synth: setting up commands";
    QString hadifixCommand = d->hadifixProc->quote(hadifix);
    if (isMale)
       hadifixCommand += " -m";
@@ -192,8 +192,8 @@ void HadifixProc::synth(QString text,
    mbrolaCommand += ' ' + d->hadifixProc->quote(voice);
    mbrolaCommand += " - " + d->hadifixProc->quote(waveFilename);
 
-   // kDebug() << "HadifixProc::synth: Hadifix command: " << hadifixCommand << endl;
-   // kDebug() << "HadifixProc::synth: Mbrola command: " << mbrolaCommand << endl;
+   // kDebug() << "HadifixProc::synth: Hadifix command: " << hadifixCommand;
+   // kDebug() << "HadifixProc::synth: Mbrola command: " << mbrolaCommand;
 
    QString command = hadifixCommand + '|' + mbrolaCommand;
    *(d->hadifixProc) << command;
@@ -210,13 +210,13 @@ void HadifixProc::synth(QString text,
    d->state = psSynthing;
    if (!d->hadifixProc->start(K3Process::NotifyOnExit, K3Process::Stdin))
    {
-     kDebug() << "HadifixProc::synth: start process failed." << endl;
+     kDebug() << "HadifixProc::synth: start process failed.";
      d->state = psIdle;
    } else {
      QByteArray encodedText;
      if (codec) {
        encodedText = codec->fromUnicode(text);
-       // kDebug() << "HadifixProc::synth: encoding using " << codec->name() << endl;
+       // kDebug() << "HadifixProc::synth: encoding using " << codec->name();
      } else
        encodedText = text.toLatin1();  // Should not happen, but just in case.
      // Send the text to be synthesized to process.
@@ -251,18 +251,18 @@ QString HadifixProc::getFilename() { return d->synthFilename; }
 * operation.
 */
 void HadifixProc::stopText(){
-    // kDebug() << "Running: HadifixProc::stopText()" << endl;
+    // kDebug() << "Running: HadifixProc::stopText()";
     if (d->hadifixProc)
     {
         if (d->hadifixProc->isRunning())
         {
-            // kDebug() << "HadifixProc::stopText: killing Hadifix shell." << endl;
+            // kDebug() << "HadifixProc::stopText: killing Hadifix shell.";
             d->waitingStop = true;
             d->hadifixProc->kill();
         } else d->state = psIdle;
     } else d->state = psIdle;
     // d->state = psIdle;
-    // kDebug() << "HadifixProc::stopText: Hadifix stopped." << endl;
+    // kDebug() << "HadifixProc::stopText: Hadifix stopped.";
 }
 
 /**
@@ -320,7 +320,7 @@ bool HadifixProc::supportsSynth() { return true; }
 
 void HadifixProc::slotProcessExited(K3Process*)
 {
-    // kDebug() << "HadifixProc:hadifixProcExited: Hadifix process has exited." << endl;
+    // kDebug() << "HadifixProc:hadifixProcExited: Hadifix process has exited.";
     pluginState prevState = d->state;
     if (d->waitingStop)
     {
@@ -336,7 +336,7 @@ void HadifixProc::slotProcessExited(K3Process*)
 
 void HadifixProc::slotWroteStdin(K3Process*)
 {
-   // kDebug() << "HadifixProc::slotWroteStdin: closing Stdin" << endl;
+   // kDebug() << "HadifixProc::slotWroteStdin: closing Stdin";
    d->hadifixProc->closeStdin();
 }
 

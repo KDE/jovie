@@ -328,7 +328,7 @@ void KttsJobMgrPart::slot_job_resume()
 void KttsJobMgrPart::slot_job_restart()
 {
     int jobNum = getCurrentJobNum();
-    // kDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum << endl;
+    // kDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum;
     if (jobNum)
     {
         int seq = m_kspeech->moveRelSentence(jobNum, 0);
@@ -407,7 +407,7 @@ void KttsJobMgrPart::slot_job_change_talker()
 
 void KttsJobMgrPart::slot_speak_clipboard()
 {
-    // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: running" << endl;
+    // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: running";
 
     // Get the clipboard object.
     QClipboard *cb = QApplication::clipboard();
@@ -444,7 +444,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
     {
         m_kspeech->say(text, sayOptions);
         // int jobNum = m_kspeech->say(text, sayOptions);
-        // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum << endl;
+        // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum;
         // Set flag so that the job we just created will be selected when textSet signal is received.
         m_selectOnTextSet = true;
     }
@@ -550,7 +550,7 @@ void KttsJobMgrPart::refreshJob(int jobNum)
 */
 void KttsJobMgrPart::refreshJobList()
 {
-    // kDebug() << "KttsJobMgrPart::refreshJobList: Running" << endl;
+    // kDebug() << "KttsJobMgrPart::refreshJobList: Running";
     m_jobListModel->clear();
     JobInfoList jobInfoList;
     enableJobActions(false);
@@ -558,9 +558,9 @@ void KttsJobMgrPart::refreshJobList()
     for (int ndx = 0; ndx < jobNums.count(); ++ndx)
     {
         QString jobNumStr = jobNums[ndx];
-        kDebug() << "jobNumStr = " << jobNumStr << endl;
+        kDebug() << "jobNumStr = " << jobNumStr;
         int jobNum = jobNumStr.toInt(0, 10);
-        kDebug() << "jobNum = " << jobNum << endl;
+        kDebug() << "jobNum = " << jobNum;
         JobInfo* job = retrieveJobInfo(jobNum);
         if (job)
             jobInfoList.append(*job);
@@ -603,7 +603,7 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
         // Otherwise, retrieve Talker ID from KTTSD and cache it.
         QString talkerID = m_kspeech->talkerToTalkerId(talkerCode);
         m_talkerCodesToTalkerIDs[talkerCode] = talkerID;
-        // kDebug() << "KttsJobMgrPart::cachedTalkerCodeToTalkerID: talkerCode = " << talkerCode << " talkerID = " << talkerID << endl;
+        // kDebug() << "KttsJobMgrPart::cachedTalkerCodeToTalkerID: talkerCode = " << talkerCode << " talkerID = " << talkerID;
         return talkerID;
     }
 }

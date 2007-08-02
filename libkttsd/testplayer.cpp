@@ -88,7 +88,7 @@ void TestPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkName; }
  */
 void TestPlayer::play(const QString &waveFile)
 {
-    // kDebug() << "TestPlayer::play: running" << endl;
+    // kDebug() << "TestPlayer::play: running";
     // Create a Stretcher object to adjust the audio Speed.
     QString playFile = waveFile;
     QString tmpFile;
@@ -108,11 +108,11 @@ void TestPlayer::play(const QString &waveFile)
     }
 
     // Create player object based on player option.
-    // kDebug() << "TestPlayer::play: creating Player object with playerOption " << m_playerOption << endl;
+    // kDebug() << "TestPlayer::play: creating Player object with playerOption " << m_playerOption;
     m_player = createPlayerObject(m_playerOption);
     // If player object could not be created, avoid crash is the best we can do!
     if (!m_player) return;
-    // kDebug() << "TestPlayer::play: starting playback." << endl;
+    // kDebug() << "TestPlayer::play: starting playback.";
     m_player->startPlay(playFile);
 
     // TODO: The following hunk of code would ideally be unnecessary.  We would just
@@ -121,7 +121,7 @@ void TestPlayer::play(const QString &waveFile)
     // this seems to be necessary.  The call to processEvents is problematic because
     // it can cause re-entrancy.
     while (m_player->playing()) qApp->processEvents();
-    // kDebug() << "TestPlayer::play: stopping playback." << endl;
+    // kDebug() << "TestPlayer::play: stopping playback.";
     m_player->stop();
     delete m_player;
     m_player = 0;
@@ -159,14 +159,14 @@ Player* TestPlayer::createPlayerObject(int playerOption)
 
     if(offers.count() == 1)
     {
-        // kDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library() << endl;
+        // kDebug() << "TestPlayer::createPlayerObject: Loading " << offers[0]->library();
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if (factory)
             player = 
                 KLibLoader::createInstance<Player>(
                     offers[0]->library().toLatin1(), this, QStringList(offers[0]->library().toLatin1()));
         else
-            kDebug() << "TestPlayer::createPlayerObject: Could not create factory." << endl;
+            kDebug() << "TestPlayer::createPlayerObject: Could not create factory.";
     }
     if (player == 0)
         kDebug() << "TestPlayer::createPlayerObject: Could not load " + plugInName +
@@ -188,7 +188,7 @@ QString TestPlayer::makeSuggestedFilename()
     tempFile->open();
     QString waveFile = tempFile->fileName();
     delete tempFile;
-    // kDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
+    // kDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile;
     return PlugInConf::realFilePath(waveFile);
 }
 

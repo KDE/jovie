@@ -45,7 +45,7 @@
 FliteConf::FliteConf( QWidget* parent, const QStringList& /*args*/) :
     PlugInConf(parent, "fliteconf")
 {
-    // kDebug() << "FliteConf::FliteConf: Running" << endl;
+    // kDebug() << "FliteConf::FliteConf: Running";
     m_fliteProc = 0;
     m_progressDlg = 0;
 
@@ -60,14 +60,14 @@ FliteConf::FliteConf( QWidget* parent, const QStringList& /*args*/) :
 
 /** Destructor */
 FliteConf::~FliteConf(){
-    // kDebug() << "Running: FliteConf::~FliteConf()" << endl;
+    // kDebug() << "Running: FliteConf::~FliteConf()";
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_fliteProc;
     delete m_progressDlg;
 }
 
 void FliteConf::load(KConfig *c, const QString &configGroup){
-    // kDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
+    // kDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)";
 
     KConfigGroup config(c, configGroup);
     QString fliteExe = config.readEntry("FliteExePath", QString());
@@ -80,7 +80,7 @@ void FliteConf::load(KConfig *c, const QString &configGroup){
 }
 
 void FliteConf::save(KConfig *c, const QString &configGroup){
-    // kDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
+    // kDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)";
 
     KConfigGroup fliteConfig(c, "Flite");
     fliteConfig.writeEntry("FliteExePath",
@@ -91,7 +91,7 @@ void FliteConf::save(KConfig *c, const QString &configGroup){
 }
 
 void FliteConf::defaults(){
-    // kDebug() << "FliteConf::defaults: Running" << endl;
+    // kDebug() << "FliteConf::defaults: Running";
     flitePath->setUrl(KUrl::fromPath("flite"));
 }
 
@@ -124,7 +124,7 @@ QString FliteConf::getTalkerCode()
 
 void FliteConf::slotFliteTest_clicked()
 {
-    // kDebug() << "FliteConf::slotFliteTest_clicked(): Running" << endl;
+    // kDebug() << "FliteConf::slotFliteTest_clicked(): Running";
     // If currently synthesizing, stop it.
     if (m_fliteProc)
         m_fliteProc->stopText();

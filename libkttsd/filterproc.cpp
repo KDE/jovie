@@ -34,7 +34,7 @@
 KttsFilterProc::KttsFilterProc( QObject *parent) :
         QObject(parent) 
 {
-    // kDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
+    // kDebug() << "KttsFilterProc::KttsFilterProc: Running";
 }
 
 /**
@@ -42,7 +42,7 @@ KttsFilterProc::KttsFilterProc( QObject *parent) :
  */
 KttsFilterProc::~KttsFilterProc()
 {
-    // kDebug() << "KttsFilterProc::~KttsFilterProc: Running" << endl;
+    // kDebug() << "KttsFilterProc::~KttsFilterProc: Running";
 }
 
 /**
@@ -55,7 +55,7 @@ KttsFilterProc::~KttsFilterProc()
  * separate configuration files of their own.
  */
 bool KttsFilterProc::init(const KConfigGroup &){
-    // kDebug() << "PlugInProc::init: Running" << endl;
+    // kDebug() << "PlugInProc::init: Running";
     return false;
 }
 

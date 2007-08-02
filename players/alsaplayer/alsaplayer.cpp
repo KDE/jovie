@@ -182,7 +182,7 @@ void AlsaPlayerThread::startPlay(const QString &file)
 void AlsaPlayerThread::pause()
 {
     if (isRunning()) {
-        kDebug() << "Pause requested" << endl;
+        kDebug() << "Pause requested";
         QMutexLocker locker(&m_mutex);
         if (handle) {
             // Some hardware can pause; some can't.  canPause is set in set_params.
@@ -584,13 +584,13 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
     case 8:
         if (hwdata.format != DEFAULT_FORMAT &&
             hwdata.format != SND_PCM_FORMAT_U8)
-            kDebug() << "Warning: format is changed to U8" << endl;
+            kDebug() << "Warning: format is changed to U8";
         hwdata.format = SND_PCM_FORMAT_U8;
         break;
     case 16:
         if (hwdata.format != DEFAULT_FORMAT &&
             hwdata.format != SND_PCM_FORMAT_S16_LE)
-            kDebug() << "Warning: format is changed to S16_LE" << endl;
+            kDebug() << "Warning: format is changed to S16_LE";
         hwdata.format = SND_PCM_FORMAT_S16_LE;
         break;
     case 24:
@@ -598,13 +598,13 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
         case 3:
             if (hwdata.format != DEFAULT_FORMAT &&
                 hwdata.format != SND_PCM_FORMAT_S24_3LE)
-                kDebug() << "Warning: format is changed to S24_3LE" << endl;
+                kDebug() << "Warning: format is changed to S24_3LE";
             hwdata.format = SND_PCM_FORMAT_S24_3LE;
             break;
         case 4:
             if (hwdata.format != DEFAULT_FORMAT &&
                 hwdata.format != SND_PCM_FORMAT_S24_LE)
-                kDebug() << "Warning: format is changed to S24_LE" << endl;
+                kDebug() << "Warning: format is changed to S24_LE";
             hwdata.format = SND_PCM_FORMAT_S24_LE;
             break;
         default:
@@ -676,19 +676,19 @@ int AlsaPlayerThread::test_au(int fd, char *buffer)
     case AU_FMT_ULAW:
         if (hwdata.format != DEFAULT_FORMAT &&
             hwdata.format != SND_PCM_FORMAT_MU_LAW)
-            kDebug() << "Warning: format is changed to MU_LAW" << endl;
+            kDebug() << "Warning: format is changed to MU_LAW";
         hwdata.format = SND_PCM_FORMAT_MU_LAW;
         break;
     case AU_FMT_LIN8:
         if (hwdata.format != DEFAULT_FORMAT &&
             hwdata.format != SND_PCM_FORMAT_U8)
-            kDebug() << "Warning: format is changed to U8" << endl;
+            kDebug() << "Warning: format is changed to U8";
         hwdata.format = SND_PCM_FORMAT_U8;
         break;
     case AU_FMT_LIN16:
         if (hwdata.format != DEFAULT_FORMAT &&
             hwdata.format != SND_PCM_FORMAT_S16_BE)
-            kDebug() << "Warning: format is changed to S16_BE" << endl;
+            kDebug() << "Warning: format is changed to S16_BE";
         hwdata.format = SND_PCM_FORMAT_S16_BE;
         break;
     default:
@@ -796,7 +796,7 @@ void AlsaPlayerThread::set_params(void)
     if ((float)rate * 1.05 < hwdata.rate || (float)rate * 0.95 > hwdata.rate) {
         kDebug() << "Warning: rate is not accurate (requested = " << rate << "Hz, got = " <<
             hwdata.rate << ")" << endl;
-        kDebug() << "         please, try the plug plugin (-Dplug:" << snd_pcm_name << ")" << endl;
+        kDebug() << "         please, try the plug plugin (-Dplug:" << snd_pcm_name << ")";
     }
 
     period_size = m_defPeriodSize;
@@ -899,7 +899,7 @@ void AlsaPlayerThread::xrun()
             snd_pcm_status_dump(status, log);
         }
         if (stream == SND_PCM_STREAM_CAPTURE) {
-            kDebug() << "capture stream format change? attempting recover..." << endl;
+            kDebug() << "capture stream format change? attempting recover...";
             if ((res = snd_pcm_prepare(handle))<0) {
                 kError() << "xrun(DRAINING): prepare error: " << snd_strerror(res) << endl;
                 stopAndExit();
@@ -921,17 +921,17 @@ void AlsaPlayerThread::suspend(void)
 {
     int res;
 
-    kDebug() << "Suspended. Trying resume. " << endl;
+    kDebug() << "Suspended. Trying resume. ";
     while ((res = snd_pcm_resume(handle)) == -EAGAIN)
         sleep(1);    /* wait until suspend flag is released */
     if (res < 0) {
-        kDebug() << "Failed. Restarting stream. " << endl;
+        kDebug() << "Failed. Restarting stream. ";
         if ((res = snd_pcm_prepare(handle)) < 0) {
             kError() << "suspend: prepare error: " << snd_strerror(res) << endl;
             stopAndExit();
         }
     }
-    kDebug() << "Suspend done." << endl;
+    kDebug() << "Suspend done.";
 }
 
 /* peak handler */
@@ -1022,7 +1022,7 @@ ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
         } else if (-ESTRPIPE == r) {
             suspend();
         } else if (-EBUSY == r){
-            kDebug() << "WARNING: sleeping while PCM BUSY" << endl;
+            kDebug() << "WARNING: sleeping while PCM BUSY";
             usleep(1000);
             continue;
         } else if (r < 0) {
@@ -1045,7 +1045,7 @@ ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
             return -1;
         }
         else if (err == 1){
-            kDebug () << "Playback stopped" << endl;
+            kDebug () << "Playback stopped";
             /* Drop the playback on the sound device (probably
                still in progress up till now) */
             err = snd_pcm_drop(handle);
@@ -1117,7 +1117,7 @@ void AlsaPlayerThread::voc_pcm_flush(void)
         size_t b;
         if (sleep_min == 0) {
             if (snd_pcm_format_set_silence(hwdata.format, audiobuf + buffer_pos, chunk_bytes - buffer_pos * 8 / bits_per_sample) < 0)
-                kDebug() << "voc_pcm_flush - silence error" << endl;
+                kDebug() << "voc_pcm_flush - silence error";
             b = chunk_size;
         } else {
             b = buffer_pos * 8 / bits_per_frame;
@@ -1151,7 +1151,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
     if (data == NULL) {
         stopAndExit();
     }
-    kDebug() << "Playing Creative Labs Channel file '" << name << "'..." << endl;
+    kDebug() << "Playing Creative Labs Channel file '" << name << "'...";
     /* first we waste the rest of header, ugly but we don't need seek */
     while (ofs > (ssize_t)chunk_bytes) {
         if ((size_t)safe_read(fd, buf, chunk_bytes) != chunk_bytes) {
@@ -1575,7 +1575,7 @@ int AlsaPlayerThread::wait_for_poll(int draining)
 
             if (SND_PCM_STATE_XRUN == state){
                 if (!draining){
-                    kDebug() << "WARNING: Buffer underrun detected!" << endl;
+                    kDebug() << "WARNING: Buffer underrun detected!";
                     xrun();
                     return 0;
                 }else{

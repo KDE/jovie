@@ -353,7 +353,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             QString s = parsePlainText( n.toText().data(), re );
             // QString d = s;
             // d.replace("\t", "\\t");
-            // kDebug() << "SbdThread::parseSsmlNode: parsedPlainText = [" << d << "]" << endl;
+            // kDebug() << "SbdThread::parseSsmlNode: parsedPlainText = [" << d << "]";
             QStringList sentenceList = s.split( '\t', QString::SkipEmptyParts);
             int lastNdx = sentenceList.count() - 1;
             for ( int ndx=0; ndx < lastNdx; ++ndx )
@@ -471,7 +471,7 @@ QString SbdThread::parseCode( const QString& inputText )
 // Parses plain text.
 QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
 {
-    // kDebug() << "SbdThread::parsePlainText: parsing " << inputText << " with re " << re << endl;
+    // kDebug() << "SbdThread::parsePlainText: parsing " << inputText << " with re " << re;
     QRegExp sentenceDelimiter = QRegExp( re );
     QString temp = inputText;
     // Replace sentence delimiters with tab.
@@ -485,14 +485,14 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     temp.replace(QRegExp(" +\\t"), "\t");
     // Remove blank lines.
     temp.replace(QRegExp("\t\t+"),"\t");
-    // kDebug() << "SbdThread::parsePlainText: returning " << temp << endl;
+    // kDebug() << "SbdThread::parsePlainText: returning " << temp;
     return temp;
 }
 
 // This is where the real work takes place.
 /*virtual*/ void SbdThread::run()
 {
-    // kDebug() << "SbdThread::run: processing text = " << m_text << endl;
+    // kDebug() << "SbdThread::run: processing text = " << m_text;
 
     // TODO: Determine if we should do anything or not.
     m_wasModified = true;
@@ -519,7 +519,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     // Replace spaces, tabs, and formfeeds with a single space.
     m_text.replace(QRegExp("[ \\t\\f]+"), " ");
     
-    // kDebug() << "SbdThread::run: textType = " << textType << endl;
+    // kDebug() << "SbdThread::run: textType = " << textType;
 
     // Perform the filtering based on type of text.
     switch ( textType )
@@ -540,7 +540,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     // Clear app-specified sentence delimiter.  App must call setSbRegExp for each conversion.
     m_re.clear();
 
-    // kDebug() << "SbdThread::run: filtered text = " << m_text << endl;
+    // kDebug() << "SbdThread::run: filtered text = " << m_text;
 
     // Result is in m_text;
 
@@ -554,7 +554,7 @@ bool SbdThread::event ( QEvent * e )
 {
     if ( e->type() == (QEvent::User + 301) )
     {
-        // kDebug() << "SbdThread::event: emitting filteringFinished signal." << endl;
+        // kDebug() << "SbdThread::event: emitting filteringFinished signal.";
         emit filteringFinished();
         return true;
     }
@@ -569,7 +569,7 @@ bool SbdThread::event ( QEvent * e )
 SbdProc::SbdProc( QObject *parent, const QStringList& /*args*/) :
     KttsFilterProc(parent) 
 {
-    // kDebug() << "SbdProc::SbdProc: Running" << endl;
+    // kDebug() << "SbdProc::SbdProc: Running";
     m_sbdThread = new SbdThread(this);
     connect( m_sbdThread, SIGNAL(filteringFinished()), this, SLOT(slotSbdThreadFilteringFinished()) );
 }
@@ -579,7 +579,7 @@ SbdProc::SbdProc( QObject *parent, const QStringList& /*args*/) :
  */
 SbdProc::~SbdProc()
 {
-    // kDebug() << "SbdProc::~SbdProc: Running" << endl;
+    // kDebug() << "SbdProc::~SbdProc: Running";
     if ( m_sbdThread )
     {
         if ( m_sbdThread->isRunning() )
@@ -601,7 +601,7 @@ SbdProc::~SbdProc()
  * separate configuration files of their own.
  */
 bool SbdProc::init(KConfig* c, const QString& configGroup){
-    // kDebug() << "SbdProc::init: Running" << endl;
+    // kDebug() << "SbdProc::init: Running";
     KConfigGroup config(c, configGroup );
 //    m_configuredRe = config.readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
     m_configuredRe = config.readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
@@ -648,7 +648,7 @@ bool SbdProc::init(KConfig* c, const QString& configGroup){
     if ( asyncConvert( inputText, talkerCode, appId) )
     {
         waitForFinished();
-        // kDebug() << "SbdProc::convert: returning " << getOutput() << endl;
+        // kDebug() << "SbdProc::convert: returning " << getOutput();
         return getOutput();
     } else return inputText;
 }
@@ -670,7 +670,7 @@ bool SbdProc::init(KConfig* c, const QString& configGroup){
 /*virtual*/ bool SbdProc::asyncConvert(const QString& inputText, TalkerCode* talkerCode,
     const QString& appId)
 {
-    // kDebug() << "SbdProc::asyncConvert: running" << endl;
+    // kDebug() << "SbdProc::asyncConvert: running";
     m_sbdThread->setWasModified( false );
     // If language doesn't match, return input unmolested.
     if ( !m_languageCodeList.isEmpty() )
@@ -720,9 +720,9 @@ bool SbdProc::init(KConfig* c, const QString& configGroup){
 {
     if ( m_sbdThread->isRunning() )
     {
-        // kDebug() << "SbdProc::waitForFinished: waiting" << endl;
+        // kDebug() << "SbdProc::waitForFinished: waiting";
         m_sbdThread->wait();
-        // kDebug() << "SbdProc::waitForFinished: finished waiting" << endl;
+        // kDebug() << "SbdProc::waitForFinished: finished waiting";
         m_state = fsFinished;
     }
 }
@@ -783,7 +783,7 @@ bool SbdProc::init(KConfig* c, const QString& configGroup){
 void SbdProc::slotSbdThreadFilteringFinished()
 {
     m_state = fsFinished;
-    // kDebug() << "SbdProc::slotSbdThreadFilteringFinished: emitting filterFinished signal." << endl;
+    // kDebug() << "SbdProc::slotSbdThreadFilteringFinished: emitting filterFinished signal.";
     emit filteringFinished();
 }
 

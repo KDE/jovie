@@ -87,7 +87,7 @@ bool ThreadedPlugInThread::init(KConfig *config, const QString &configGroup)
 */
 void ThreadedPlugInThread::sayText(const QString &text)
 {
-    kDebug() << "ThreadedPlugInThread::sayText running with text " << text << endl;
+    kDebug() << "ThreadedPlugInThread::sayText running with text " << text;
     waitThreadNotBusy();
     m_action = paSayText;
     m_text = text;
@@ -138,7 +138,7 @@ void ThreadedPlugInThread::stopText()
     // If thread is busy, call stopText and wait for thread to stop being busy.
     if (m_threadRunningMutex.locked())
     {
-        kDebug() << "ThreadedPlugInThread::stopText:: calling m_plugin->stopText" << endl;
+        kDebug() << "ThreadedPlugInThread::stopText:: calling m_plugin->stopText";
         m_plugin->stopText();
         // Set flag that will force state to idle once the plugin finishes.
         m_waitingStop = true;
@@ -226,9 +226,9 @@ void ThreadedPlugInThread::run()
         if (!m_threadRunningMutex.locked()) m_threadRunningMutex.lock();
         // Go to sleep until asked to do something.
         // Mutex unlocks as we go to sleep and locks as we wake up.
-        kDebug() << "ThreadedPlugInThread::run going to sleep." << endl;
+        kDebug() << "ThreadedPlugInThread::run going to sleep.";
         m_waitCondition.wait(&m_threadRunningMutex);
-        kDebug() << "ThreadedPlugInThread::run waking up." << endl;
+        kDebug() << "ThreadedPlugInThread::run waking up.";
         // Woken up.
         // See if we've been told to exit.
         if (m_requestExit) 
@@ -247,9 +247,9 @@ void ThreadedPlugInThread::run()
                     m_stateMutex.lock();
                     m_state = psSaying;
                     m_stateMutex.unlock();
-                    kDebug() << "ThreadedPlugInThread::run calling sayText" << endl;
+                    kDebug() << "ThreadedPlugInThread::run calling sayText";
                     m_plugin->sayText(m_text);
-                    kDebug() << "ThreadedPlugInThread::run back from sayText" << endl;
+                    kDebug() << "ThreadedPlugInThread::run back from sayText";
                     m_stateMutex.lock();
                     if (m_state == psSaying) m_state = psFinished;
                     m_stateMutex.unlock();
@@ -264,9 +264,9 @@ void ThreadedPlugInThread::run()
                     m_stateMutex.unlock();
                     QString filename = m_filename;
                     m_filename.clear();
-                    kDebug() << "ThreadedPlugInThread::run calling synthText" << endl;
+                    kDebug() << "ThreadedPlugInThread::run calling synthText";
                     m_plugin->synthText(m_text, filename);
-                    kDebug() << "ThreadedPlugInThread::run back from synthText" << endl;
+                    kDebug() << "ThreadedPlugInThread::run back from synthText";
                     m_filename = m_plugin->getFilename();
                     m_stateMutex.lock();
                     if (m_state == psSynthing) m_state = psFinished;

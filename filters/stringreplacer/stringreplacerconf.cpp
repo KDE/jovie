@@ -64,7 +64,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
     m_editWidget(0)
 {
     Q_UNUSED(args);
-    // kDebug() << "StringReplacerConf::StringReplacerConf: Running" << endl;
+    // kDebug() << "StringReplacerConf::StringReplacerConf: Running";
 
     // Create configuration widget.
     setupUi(this);
@@ -109,7 +109,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args
 * Destructor.
 */
 StringReplacerConf::~StringReplacerConf(){
-    // kDebug() << "StringReplacerConf::~StringReplacerConf: Running" << endl;
+    // kDebug() << "StringReplacerConf::~StringReplacerConf: Running";
 }
 
 /**
@@ -126,7 +126,7 @@ StringReplacerConf::~StringReplacerConf(){
 *                    loading your configuration.
 */
 void StringReplacerConf::load(KConfig* c, const QString& configGroup){
-    // kDebug() << "StringReplacerConf::load: Running" << endl;
+    // kDebug() << "StringReplacerConf::load: Running";
     // See if this filter previously save its word list.
     KConfigGroup config( c, configGroup );
     QString wordsFilename = config.readEntry( "WordListFile" );
@@ -134,7 +134,7 @@ void StringReplacerConf::load(KConfig* c, const QString& configGroup){
     {
         QString errMsg = loadFromFile( wordsFilename, true );
         if ( !errMsg.isEmpty() )
-            kDebug() << "StringReplacerConf::load: " << errMsg << endl;
+            kDebug() << "StringReplacerConf::load: " << errMsg;
         enableDisableButtons();
     }
 }
@@ -154,7 +154,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         file.close();
         return i18n("File not in proper XML format.");
     }
-    // kDebug() << "StringReplacerConf::load: document successfully parsed." << endl;
+    // kDebug() << "StringReplacerConf::load: document successfully parsed.";
     file.close();
 
     // Clear list view.
@@ -164,7 +164,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     QDomNodeList nameList = doc.elementsByTagName( "name" );
     QDomNode nameNode = nameList.item( 0 );
     nameLineEdit->setText( nameNode.toElement().text() );
-    // kDebug() << "StringReplacerConf::load: name = " << nameNode.toElement().text() << endl;
+    // kDebug() << "StringReplacerConf::load: name = " << nameNode.toElement().text();
 
     // Language Codes setting.  List may be single element of comma-separated values,
     // or multiple elements.
@@ -217,7 +217,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     const int wordListCount = wordList.count();
     for ( int wordIndex = 0; wordIndex < wordListCount; ++wordIndex )
     {
-        // kDebug() << "StringReplacerConf::load: start parsing of word " << wordIndex << endl;
+        // kDebug() << "StringReplacerConf::load: start parsing of word " << wordIndex;
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
@@ -260,12 +260,12 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
 *                    saving your configuration.
 */
 void StringReplacerConf::save(KConfig* c, const QString& configGroup){
-    // kDebug() << "StringReplacerConf::save: Running" << endl;
+    // kDebug() << "StringReplacerConf::save: Running";
     QString wordsFilename =
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", true );
     if ( wordsFilename.isEmpty() )
     {
-        kDebug() << "StringReplacerConf::save: no save location" << endl;
+        kDebug() << "StringReplacerConf::save: no save location";
         return;
     }
     wordsFilename += configGroup;
@@ -276,13 +276,13 @@ void StringReplacerConf::save(KConfig* c, const QString& configGroup){
         config.writeEntry( "WordListFile", realFilePath(wordsFilename) );
     }
     else
-        kDebug() << "StringReplacerConf::save: " << errMsg << endl;
+        kDebug() << "StringReplacerConf::save: " << errMsg;
 }
 
 // Saves word list and settings to a file.
 QString StringReplacerConf::saveToFile(const QString& filename)
 {
-    // kDebug() << "StringReplacerConf::saveToFile: saving to file " << wordsFilename << endl;
+    // kDebug() << "StringReplacerConf::saveToFile: saving to file " << wordsFilename;
 
     QFile file( filename );
     if ( !file.open( QIODevice::WriteOnly ) )
@@ -356,7 +356,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     ts.setCodec( "UTF-8" );
     ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     ts << doc.toString();
-    // kDebug() << "StringReplacerConf::saveToFile: writing out " << doc.toString() << endl;
+    // kDebug() << "StringReplacerConf::saveToFile: writing out " << doc.toString();
     file.close();
 
     return QString();
@@ -370,7 +370,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
 * be applied to the on-screen widgets; not to the config file.
 */
 void StringReplacerConf::defaults(){
-    // kDebug() << "StringReplacerConf::defaults: Running" << endl;
+    // kDebug() << "StringReplacerConf::defaults: Running";
     // Default language is none.
     m_languageCodeList.clear();
     languageLineEdit->setText( "" );
@@ -380,7 +380,7 @@ void StringReplacerConf::defaults(){
     // Default App ID is blank.
     appIdLineEdit->setText( "" );
     enableDisableButtons();
-    // kDebug() << "StringReplacerConf::defaults: Exiting" << endl;
+    // kDebug() << "StringReplacerConf::defaults: Exiting";
 }
 
 /**

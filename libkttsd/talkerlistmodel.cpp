@@ -194,18 +194,18 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
     // Iterate through list of the TalkerCode IDs.
     KConfigGroup config(c, "General");
     QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList(), ',');
-    // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList << endl;
+    // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList;
     if (!talkerIDsList.isEmpty())
     {
         QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
         for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
         {
             QString talkerID = *it;
-            kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID << endl;
+            kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID;
             KConfigGroup talkGroup(c, QString("Talker_") + talkerID);
             QString talkerCode = talkGroup.readEntry("TalkerCode");
             TalkerCode tc = TalkerCode(talkerCode, true);
-            kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode << endl;
+            kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode;
             tc.setId(talkerID);
             QString desktopEntryName = talkGroup.readEntry("DesktopEntryName", QString());
             tc.setDesktopEntryName(desktopEntryName);

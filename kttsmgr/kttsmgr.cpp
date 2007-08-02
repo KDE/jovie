@@ -81,7 +81,7 @@ int main (int argc, char *argv[])
 
     if(!KUniqueApplication::start())
     {
-        kDebug() << "kttsmgr is already running" << endl;
+        kDebug() << "kttsmgr is already running";
         return (0);
     }
 
@@ -116,7 +116,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
         {
             QString error;
             if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
-                kDebug() << "Starting KTTSD failed with message " << error << endl;
+                kDebug() << "Starting KTTSD failed with message " << error;
             else
                 isKttsdRunning();
         }
@@ -173,7 +173,7 @@ bool KttsMgrTray::event(QEvent *event)
         status += "<br/><br/>";
         status += getStatus();
         status += "</qt>";
-        // kDebug() << "KttsMgrTray::event status = " << status << endl;
+        // kDebug() << "KttsMgrTray::event status = " << status;
         setToolTip(status);
     }
     return false;
@@ -197,7 +197,7 @@ void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
         int jobNum = m_kspeech->getCurrentJob();
         if (jobNum != 0)
         {
-            // kDebug() << "KttsMgrTray::getStatus: jobNum = " << jobNum << endl;
+            // kDebug() << "KttsMgrTray::getStatus: jobNum = " << jobNum;
             jobState = m_kspeech->getJobState(jobNum);
         }
     }
@@ -212,7 +212,7 @@ void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
 
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
-    // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
+    // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running";
     QStringList jobNumsList = m_kspeech->getJobNumbers(KSpeech::jpAll);
     uint jobNumsListCount = jobNumsList.count();
     // Since there can only be 2 Finished jobs at a time, more than 2 jobs means at least
@@ -262,7 +262,7 @@ QString KttsMgrTray::getStatus()
         int jobNum = m_kspeech->getCurrentJob();
         if (jobNum != 0)
         {
-            // kDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
+            // kDebug() << "KttsMgrTray::getStatus: job = " << job;
             int jobState = m_kspeech->getJobState(jobNum);
             int sentenceCount = m_kspeech->getSentenceCount(jobNum);
             int seq = m_kspeech->moveRelSentence(jobNum, 0);
@@ -297,7 +297,7 @@ void KttsMgrTray::helpSelected()
 
 void KttsMgrTray::quitSelected()
 {
-    // kDebug() << "Running KttsMgrTray::quitSelected" << endl;
+    // kDebug() << "Running KttsMgrTray::quitSelected";
     kapp->quit();
 }
 

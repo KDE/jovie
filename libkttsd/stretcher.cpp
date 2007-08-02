@@ -68,7 +68,7 @@ bool Stretcher::stretch(const QString &inFilename, const QString &outFilename, f
         this, SLOT(slotProcessExited(K3Process*)));
     if (!m_stretchProc->start(K3Process::NotifyOnExit, K3Process::NoCommunication))
     {
-        kDebug() << "Stretcher::stretch: Error starting audio stretcher process.  Is sox installed?" << endl;
+        kDebug() << "Stretcher::stretch: Error starting audio stretcher process.  Is sox installed?";
         return false;
     }
     m_state = ssStretching;

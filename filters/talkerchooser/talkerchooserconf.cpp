@@ -51,7 +51,7 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList & args)
     KttsFilterConf(parent)
 {
     Q_UNUSED(args);
-    // kDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
+    // kDebug() << "TalkerChooserConf::TalkerChooserConf: Running";
 
     // Create configuration widget.
     setupUi(this);
@@ -86,7 +86,7 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QStringList & args)
 * Destructor.
 */
 TalkerChooserConf::~TalkerChooserConf(){
-    // kDebug() << "TalkerChooserConf::~TalkerChooserConf: Running" << endl;
+    // kDebug() << "TalkerChooserConf::~TalkerChooserConf: Running";
 }
 
 /**
@@ -103,7 +103,7 @@ TalkerChooserConf::~TalkerChooserConf(){
 *                    loading your configuration.
 */
 void TalkerChooserConf::load(KConfig* c, const QString& configGroup){
-    // kDebug() << "TalkerChooserConf::load: Running" << endl;
+    // kDebug() << "TalkerChooserConf::load: Running";
     KConfigGroup config( c, configGroup );
     nameLineEdit->setText( config.readEntry( "UserFilterName", nameLineEdit->text() ) );
     reLineEdit->setText(
@@ -138,7 +138,7 @@ void TalkerChooserConf::load(KConfig* c, const QString& configGroup){
 *                    saving your configuration.
 */
 void TalkerChooserConf::save(KConfig* c, const QString& configGroup){
-    // kDebug() << "TalkerChooserConf::save: Running" << endl;
+    // kDebug() << "TalkerChooserConf::save: Running";
     KConfigGroup config( c, configGroup );
     config.writeEntry( "UserFilterName", nameLineEdit->text() );
     config.writeEntry( "MatchRegExp", reLineEdit->text() );
@@ -154,7 +154,7 @@ void TalkerChooserConf::save(KConfig* c, const QString& configGroup){
 * be applied to the on-screen widgets; not to the config file.
 */
 void TalkerChooserConf::defaults(){
-    // kDebug() << "TalkerChooserConf::defaults: Running" << endl;
+    // kDebug() << "TalkerChooserConf::defaults: Running";
     // Default name.
     nameLineEdit->setText( i18n("Talker Chooser") );
     // Default regular expression is blank.

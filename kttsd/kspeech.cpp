@@ -109,14 +109,14 @@ protected:
 KSpeech::KSpeech(QObject *parent) :
     QObject(parent), d(new KSpeechPrivate())
 {
-    kDebug() << "KSpeech::KSpeech Running" << endl;
+    kDebug() << "KSpeech::KSpeech Running";
     new KSpeechAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
     ready();
 }
 
 KSpeech::~KSpeech(){
-    kDebug() << "KSpeech::~KSpeech:: Stopping KTTSD service" << endl;
+    kDebug() << "KSpeech::~KSpeech:: Stopping KTTSD service";
     if (d->speaker) d->speaker->requestExit();
     delete d;
     announceEvent("~KSpeech", "kttsdExiting");
@@ -232,7 +232,7 @@ void KSpeech::setIsSystemManager(bool isSystemManager)
 
 int KSpeech::say(const QString &text, int options) {
     if (!d->speaker) return 0;
-    // kDebug() << "KSpeech::say: Adding '" << text << "' to queue." << endl;
+    // kDebug() << "KSpeech::say: Adding '" << text << "' to queue.";
     int jobNum = d->speechData->say(callingAppId(), text, options);
     d->speaker->doUtterances();
     return jobNum;
@@ -240,7 +240,7 @@ int KSpeech::say(const QString &text, int options) {
 
 int KSpeech::sayFile(const QString &filename, const QString &encoding)
 {
-    // kDebug() << "KSpeech::setFile: Running" << endl;
+    // kDebug() << "KSpeech::setFile: Running";
     if (!d->speaker) return 0;
     QFile file(filename);
     int jobNum = 0;
@@ -411,10 +411,10 @@ void KSpeech::kttsdExit()
 void KSpeech::reinit()
 {
     // Restart ourself.
-    kDebug() << "KSpeech::reinit: Running" << endl;
+    kDebug() << "KSpeech::reinit: Running";
     if (d->speaker)
     {
-        kDebug() << "KSpeech::reinit: Stopping KTTSD service" << endl;
+        kDebug() << "KSpeech::reinit: Stopping KTTSD service";
         if (d->speaker->isSpeaking())
             d->speaker->pause("kttsd");
         d->speaker->requestExit();
@@ -443,7 +443,7 @@ bool KSpeech::initializeConfigData()
 bool KSpeech::ready()
 {
     if (d->speaker) return true;
-    kDebug() << "KSpeech::ready: Starting KTTSD service" << endl;
+    kDebug() << "KSpeech::ready: Starting KTTSD service";
     if (!initializeSpeechData()) return false;
     if (!initializeTalkerMgr()) return false;
     if (!initializeSpeaker()) return false;
@@ -468,7 +468,7 @@ bool KSpeech::initializeSpeechData()
         // if (!connectDCOPSignal(0, 0, 
         //    "notifySignal(QString,QString,QString,QString,QString,int,int,int,int)",
         //    "notificationSignal(QString,QString,QString,QString,QString,int,int,int,int)",
-        //    false)) kDebug() << "KTTSD:initializeSpeechData: connectDCOPSignal for knotify failed" << endl;
+        //    false)) kDebug() << "KTTSD:initializeSpeechData: connectDCOPSignal for knotify failed";
     }
     if (!d->configData) initializeConfigData();
     d->speechData->setConfigData(d->configData);
@@ -510,7 +510,7 @@ bool KSpeech::initializeTalkerMgr()
             d->talkerMgr = 0;
             delete d->speechData;
             d->speechData = 0;
-            kDebug() << "KSpeech::initializeTalkerMgr: no Talkers have been configured." << endl;
+            kDebug() << "KSpeech::initializeTalkerMgr: no Talkers have been configured.";
             // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
             QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
             KMessageBox::ButtonCode msgResult;
@@ -535,7 +535,7 @@ bool KSpeech::initializeTalkerMgr()
 
 bool KSpeech::initializeSpeaker()
 {
-    // kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker" << endl;
+    // kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker";
 
     if (!d->talkerMgr) initializeTalkerMgr();
 
@@ -718,7 +718,7 @@ int KSpeech::applyDefaultJobNum(int jobNum)
 
 void KSpeech::announceEvent(const QString& slotName, const QString& eventName)
 {
-    kDebug() << "KSpeech::" << slotName << ": emitting DBUS signal " << eventName << endl;
+    kDebug() << "KSpeech::" << slotName << ": emitting DBUS signal " << eventName;
 }
 
 void KSpeech::announceEvent(const QString& slotName, const QString& eventName, const QString& appId,

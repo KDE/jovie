@@ -58,7 +58,7 @@ SbdConf::SbdConf( QWidget *parent, const QStringList &args) :
     KttsFilterConf(parent)
 {
     Q_UNUSED(args);
-    // kDebug() << "SbdConf::SbdConf: Running" << endl;
+    // kDebug() << "SbdConf::SbdConf: Running";
 
     // Create configuration widget.
     setupUi(this);
@@ -95,7 +95,7 @@ SbdConf::SbdConf( QWidget *parent, const QStringList &args) :
 * Destructor.
 */
 SbdConf::~SbdConf(){
-    // kDebug() << "SbdConf::~SbdConf: Running" << endl;
+    // kDebug() << "SbdConf::~SbdConf: Running";
 }
 
 /**
@@ -112,7 +112,7 @@ SbdConf::~SbdConf(){
 *                    loading your configuration.
 */
 void SbdConf::load(KConfig* c, const QString& configGroup){
-    // kDebug() << "SbdConf::load: Running" << endl;
+    // kDebug() << "SbdConf::load: Running";
     KConfigGroup config( c, configGroup );
     nameLineEdit->setText(
         config.readEntry("UserFilterName", nameLineEdit->text()) );
@@ -145,7 +145,7 @@ void SbdConf::load(KConfig* c, const QString& configGroup){
 *                    saving your configuration.
 */
 void SbdConf::save(KConfig* c, const QString& configGroup){
-    // kDebug() << "SbdConf::save: Running" << endl;
+    // kDebug() << "SbdConf::save: Running";
     KConfigGroup config( c, configGroup );
     config.writeEntry("UserFilterName", nameLineEdit->text() );
     config.writeEntry("SentenceDelimiterRegExp", reLineEdit->text() );
@@ -162,14 +162,14 @@ void SbdConf::save(KConfig* c, const QString& configGroup){
 * be applied to the on-screen widgets; not to the config file.
 */
 void SbdConf::defaults(){
-    // kDebug() << "SbdConf::defaults: Running" << endl;
+    // kDebug() << "SbdConf::defaults: Running";
     nameLineEdit->setText( i18n("Standard Sentence Boundary Detector") );
     reLineEdit->setText( "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     sbLineEdit->setText( "\\1\\t" );
     m_languageCodeList.clear();
     languageLineEdit->setText( "" );
     appIdLineEdit->setText( "" );
-    // kDebug() << "SbdConf::defaults: Exiting" << endl;
+    // kDebug() << "SbdConf::defaults: Exiting";
 }
 
 /**

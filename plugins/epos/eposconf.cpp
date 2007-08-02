@@ -50,7 +50,7 @@
 EposConf::EposConf( QWidget* parent, const QStringList& /*args*/) :
     PlugInConf(parent, "eposconf")
 {
-    // kDebug() << "EposConf::EposConf: Running" << endl;
+    // kDebug() << "EposConf::EposConf: Running";
     m_eposProc = 0;
     m_progressDlg = 0;
 
@@ -91,14 +91,14 @@ EposConf::EposConf( QWidget* parent, const QStringList& /*args*/) :
 
 /** Destructor */
 EposConf::~EposConf(){
-    // kDebug() << "Running: EposConf::~EposConf()" << endl;
+    // kDebug() << "Running: EposConf::~EposConf()";
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_eposProc;
     delete m_progressDlg;
 }
 
 void EposConf::load(KConfig *c, const QString &configGroup){
-    // kDebug() << "EposConf::load: Running " << endl;
+    // kDebug() << "EposConf::load: Running ";
 
     KConfigGroup config(c, configGroup);
     eposServerPath->setUrl(KUrl::fromPath(config.readEntry("EposServerExePath", "epos")));
@@ -124,7 +124,7 @@ QString EposConf::languageCodeToEposLanguage(const QString &languageCode)
 }
 
 void EposConf::save(KConfig *c, const QString &configGroup){
-    // kDebug() << "EposConf::save: Running" << endl;
+    // kDebug() << "EposConf::save: Running";
 
     {
         KConfigGroup config(c, "Epos");
@@ -149,7 +149,7 @@ void EposConf::save(KConfig *c, const QString &configGroup){
 }
 
 void EposConf::defaults(){
-    // kDebug() << "EposConf::defaults: Running" << endl;
+    // kDebug() << "EposConf::defaults: Running";
     eposServerPath->setUrl(KUrl("epos"));
     eposClientPath->setUrl(KUrl("say"));
     eposServerOptions->setText("");
@@ -195,7 +195,7 @@ QString EposConf::getTalkerCode()
 
 void EposConf::slotEposTest_clicked()
 {
-    // kDebug() << "EposConf::slotEposTest_clicked(): Running" << endl;
+    // kDebug() << "EposConf::slotEposTest_clicked(): Running";
     // If currently synthesizing, stop it.
     if (m_eposProc)
         m_eposProc->stopText();

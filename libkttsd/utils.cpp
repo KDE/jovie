@@ -109,7 +109,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
         doc = doc.trimmed();
     }
     // Match the doctype statement if it exists.
-    // kDebug() << "KttsUtils::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name << endl;
+    // kDebug() << "KttsUtils::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name;
     return (doc.startsWith("<!DOCTYPE " + name));
 }
 

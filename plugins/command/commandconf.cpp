@@ -40,7 +40,7 @@
 CommandConf::CommandConf( QWidget* parent, const QStringList& /*args*/) :
     PlugInConf(parent, "commandconf")
 {
-    // kDebug() << "CommandConf::CommandConf: Running" << endl;
+    // kDebug() << "CommandConf::CommandConf: Running";
     m_commandProc = 0;
     m_progressDlg = 0;
 
@@ -67,14 +67,14 @@ CommandConf::CommandConf( QWidget* parent, const QStringList& /*args*/) :
 /** Destructor */
 CommandConf::~CommandConf()
 {
-    // kDebug() << "CommandConf::~CommandConf: Running" << endl;
+    // kDebug() << "CommandConf::~CommandConf: Running";
     if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
     delete m_commandProc;
     delete m_progressDlg;
 }
 
 void CommandConf::load(KConfig *c, const QString &configGroup) {
-    // kDebug() << "CommandConf::load: Running" << endl;
+    // kDebug() << "CommandConf::load: Running";
     KConfigGroup config(c, configGroup);
     urlReq->setUrl(KUrl(config.readEntry("Command", "cat -")));
     stdInButton->setChecked(config.readEntry("StdIn", false));
@@ -85,7 +85,7 @@ void CommandConf::load(KConfig *c, const QString &configGroup) {
 }
 
 void CommandConf::save(KConfig *c, const QString &configGroup) {
-    // kDebug() << "CommandConf::save: Running" << endl;
+    // kDebug() << "CommandConf::save: Running";
     KConfigGroup config(c, configGroup);
     config.writeEntry("Command", urlReq->url().path());
     config.writeEntry("StdIn", stdInButton->isChecked());
@@ -94,7 +94,7 @@ void CommandConf::save(KConfig *c, const QString &configGroup) {
 }
 
 void CommandConf::defaults(){
-    // kDebug() << "CommandConf::defaults: Running" << endl;
+    // kDebug() << "CommandConf::defaults: Running";
     urlReq->setUrl(KUrl("cat -"));
     stdInButton->setChecked(false);
     characterCodingBox->setCurrentIndex(0);
@@ -131,7 +131,7 @@ QString CommandConf::getTalkerCode()
 
 void CommandConf::slotCommandTest_clicked()
 {
-    // kDebug() << "CommandConf::slotCommandTest_clicked(): " << endl;
+    // kDebug() << "CommandConf::slotCommandTest_clicked(): ";
     // If currently synthesizing, stop it.
     if (m_commandProc)
         m_commandProc->stopText();

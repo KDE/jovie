@@ -41,7 +41,7 @@
 CommandProc::CommandProc( QObject* parent, const QStringList& /*args*/) : 
     PlugInProc( parent, "commandproc" )
 {
-    kDebug() << "CommandProc::CommandProc: Running" << endl;
+    kDebug() << "CommandProc::CommandProc: Running";
     m_commandProc = 0;
     m_state = psIdle;
     m_stdin = true;
@@ -52,7 +52,7 @@ CommandProc::CommandProc( QObject* parent, const QStringList& /*args*/) :
 /** Destructor */
 CommandProc::~CommandProc()
 {
-    kDebug() << "CommandProc::~CommandProc: Running" << endl;
+    kDebug() << "CommandProc::~CommandProc: Running";
     if (m_commandProc)
     {
         if (m_commandProc->isRunning()) m_commandProc->kill();
@@ -64,7 +64,7 @@ CommandProc::~CommandProc()
 
 /** Initialize */
 bool CommandProc::init(KConfig *c, const QString &configGroup){
-    kDebug() << "CommandProc::init: Initializing plug in: Command " << endl;
+    kDebug() << "CommandProc::init: Initializing plug in: Command ";
 
     KConfigGroup config(c, configGroup);
     m_ttsCommand = config.readEntry("Command", "cat -");
@@ -76,7 +76,7 @@ bool CommandProc::init(KConfig *c, const QString &configGroup){
 
     QString codecString = config.readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
-    kDebug() << "CommandProc::init: Initialized with command: " << m_ttsCommand << " codec: " << codecString << endl;
+    kDebug() << "CommandProc::init: Initialized with command: " << m_ttsCommand << " codec: " << codecString;
     return true;
 }
 
@@ -285,7 +285,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     }
 
     // 3. create a new process
-    kDebug() << "CommandProc::synth: running command: " << command << endl;
+    kDebug() << "CommandProc::synth: running command: " << command;
     m_commandProc = new K3Process;
     m_commandProc->setUseShell(true);
     m_commandProc->setEnvironment("LANG", language + '.' + codec->name());
@@ -329,7 +329,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
 */
 QString CommandProc::getFilename()
 {
-    kDebug() << "CommandProc::getFilename: returning " << m_synthFilename << endl;
+    kDebug() << "CommandProc::getFilename: returning " << m_synthFilename;
     return m_synthFilename;
 }
 
@@ -349,22 +349,22 @@ QString CommandProc::getFilename()
 * operation.
 */
 void CommandProc::stopText(){
-    kDebug() << "CommandProc::stopText: Running" << endl;
+    kDebug() << "CommandProc::stopText: Running";
     if (m_commandProc)
     {
         if (m_commandProc->isRunning())
         {
-            kDebug() << "CommandProc::stopText: killing Command." << endl;
+            kDebug() << "CommandProc::stopText: killing Command.";
             m_waitingStop = true;
             m_commandProc->kill();
         } else m_state = psIdle;
     }else m_state = psIdle;
-    kDebug() << "CommandProc::stopText: Command stopped." << endl;
+    kDebug() << "CommandProc::stopText: Command stopped.";
 }
 
 void CommandProc::slotProcessExited(K3Process*)
 {
-    kDebug() << "CommandProc:slotProcessExited: Command process has exited." << endl;
+    kDebug() << "CommandProc:slotProcessExited: Command process has exited.";
     pluginState prevState = m_state;
     if (m_waitingStop)
     {
@@ -384,18 +384,18 @@ void CommandProc::slotProcessExited(K3Process*)
 void CommandProc::slotReceivedStdout(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kDebug() << "CommandProc::slotReceivedStdout: Received output from Command: " << buf << endl;
+    kDebug() << "CommandProc::slotReceivedStdout: Received output from Command: " << buf;
 }
 
 void CommandProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
 {
     QString buf = QString::fromLatin1(buffer, buflen);
-    kDebug() << "CommandProc::slotReceivedStderr: Received error from Command: " << buf << endl;
+    kDebug() << "CommandProc::slotReceivedStderr: Received error from Command: " << buf;
 }
 
 void CommandProc::slotWroteStdin(K3Process*)
 {
-    kDebug() << "CommandProc::slotWroteStdin: closing Stdin" << endl;
+    kDebug() << "CommandProc::slotWroteStdin: closing Stdin";
     m_commandProc->closeStdin();
 }
 

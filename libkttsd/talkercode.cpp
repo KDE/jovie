@@ -355,7 +355,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     const QString& talker,
     bool assumeDefaultLang)
 {
-    // kDebug() << "TalkerCode::findClosestMatchingTalker: matching on talker code " << talker << endl;
+    // kDebug() << "TalkerCode::findClosestMatchingTalker: matching on talker code " << talker;
     // If nothing to match on, winner is top in the list.
     if (talker.isEmpty()) return 0;
     // Parse the given talker.
@@ -372,11 +372,11 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     for (int ndx = 0; ndx < talkersCount; ++ndx)
     {
         priorityMatch[ndx] = 0;
-        // kDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode() << endl;
+        // kDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode();
         if (parsedTalkerCode.languageCode() == talkers[ndx].languageCode())
         {
             ++priorityMatch[ndx];
-            // kDebug() << "TalkerCode::findClosestMatchingTalker: Match on language " << parsedTalkerCode.languageCode() << endl;
+            // kDebug() << "TalkerCode::findClosestMatchingTalker: Match on language " << parsedTalkerCode.languageCode();
         }
         if (parsedTalkerCode.countryCode().left(1) == "*")
             if (parsedTalkerCode.countryCode().mid(1) ==
@@ -479,7 +479,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     }
     // If no winner found, use the first talker.
     if (winner < 0) winner = 0;
-    // kDebug() << "TalkerCode::findClosestMatchingTalker: returning winner = " << winner << endl;
+    // kDebug() << "TalkerCode::findClosestMatchingTalker: returning winner = " << winner;
     return winner;
 }
 

@@ -42,7 +42,7 @@ TalkerChooserProc::TalkerChooserProc( QObject *parent, const QStringList& args )
     KttsFilterProc(parent) 
 {
     Q_UNUSED(args);
-    // kDebug() << "TalkerChooserProc::TalkerChooserProc: Running" << endl;
+    // kDebug() << "TalkerChooserProc::TalkerChooserProc: Running";
 }
 
 /**
@@ -50,7 +50,7 @@ TalkerChooserProc::TalkerChooserProc( QObject *parent, const QStringList& args )
  */
 TalkerChooserProc::~TalkerChooserProc()
 {
-    // kDebug() << "TalkerChooserProc::~TalkerChooserProc: Running" << endl;
+    // kDebug() << "TalkerChooserProc::~TalkerChooserProc: Running";
 }
 
 /**
@@ -63,7 +63,7 @@ TalkerChooserProc::~TalkerChooserProc()
  * separate configuration files of their own.
  */
 bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
-    // kDebug() << "PlugInProc::init: Running" << endl;
+    // kDebug() << "PlugInProc::init: Running";
     KConfigGroup config( c, configGroup );
     m_re = config.readEntry( "MatchRegExp" );
     m_appIdList = config.readEntry( "AppIDs", QStringList(), ',' );
@@ -128,7 +128,7 @@ bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
         }
         if ( !found )
         {
-            // kDebug() << "TalkerChooserProc::convert: appId not found" << endl;
+            // kDebug() << "TalkerChooserProc::convert: appId not found";
             return inputText;
         }
     }

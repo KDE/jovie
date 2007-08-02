@@ -67,7 +67,7 @@ StringReplacerProc::StringReplacerProc( QObject *parent, const QStringList& ) :
  * separate configuration files of their own.
  */
 bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
-    // kDebug() << "StringReplacerProc::init: Running" << endl;
+    // kDebug() << "StringReplacerProc::init: Running";
     QString wordsFilename =
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false );
     if ( wordsFilename.isEmpty() ) return false;
@@ -206,7 +206,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
         }
         if ( !found )
         {
-            // kDebug() << "StringReplacerProc::convert: appId not found" << endl;
+            // kDebug() << "StringReplacerProc::convert: appId not found";
             return inputText;
         }
     }
@@ -214,7 +214,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     const int listCount = m_matchList.count();
     for ( int index = 0; index < listCount; ++index )
     {
-        //kDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index] << endl;
+        //kDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index];
         newText.replace( m_matchList[index], m_substList[index] );
     }
     m_wasModified = true;

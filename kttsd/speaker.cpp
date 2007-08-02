@@ -190,7 +190,7 @@ Speaker::Speaker(
     QObject(parent), 
     d(new SpeakerPrivate(speechData, talkerMgr))
 {
-    // kDebug() << "Running: Speaker::Speaker()" << endl;
+    // kDebug() << "Running: Speaker::Speaker()";
     d->timer = new QTimer(this);
     // Connect timer timeout signal.
     connect(d->timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
@@ -218,7 +218,7 @@ Speaker::Speaker(
 }
 
 Speaker::~Speaker(){
-    // kDebug() << "Running: Speaker::~Speaker()" << endl;
+    // kDebug() << "Running: Speaker::~Speaker()";
     d->timer->stop();
     delete d->timer;
     if (!d->uttQueue.isEmpty())
@@ -236,13 +236,13 @@ void Speaker::setConfigData(ConfigData* configData)
 }
 
 void Speaker::requestExit(){
-    // kDebug() << "Speaker::requestExit: Running" << endl;
+    // kDebug() << "Speaker::requestExit: Running";
     d->exitRequested = true;
 }
 
 void Speaker::doUtterances()
 {
-    // kDebug() << "Running: Speaker::doUtterances()" << endl;
+    // kDebug() << "Running: Speaker::doUtterances()";
 
     // Used to prevent exiting prematurely.
     d->again = true;
@@ -253,7 +253,7 @@ void Speaker::doUtterances()
 
         if (d->exitRequested)
         {
-            // kDebug() << "Speaker::run: exiting due to request 1." << endl;
+            // kDebug() << "Speaker::run: exiting due to request 1.";
             return;
         }
 
@@ -264,7 +264,7 @@ void Speaker::doUtterances()
         // If Screen Reader Output is waiting, we need to process it ASAP.
         d->again = getNextUtterance(KSpeech::jpScreenReaderOutput);
 
-        kDebug() << "Speaker::doUtterances: queue dump:" << endl;
+        kDebug() << "Speaker::doUtterances: queue dump:";
         for (it = d->uttQueue.begin(); it != d->uttQueue.end(); ++it)
         {
             QString pluginState = "no plugin";
@@ -356,7 +356,7 @@ void Speaker::doUtterances()
                             // Don't bother stretching if SSML.
                             // TODO: This is because sox mangles SSML pitch settings.  Would be nice
                             // to figure out how to avoid this.
-                            kDebug() << "Speaker::doUtterances: state usSynthed" << endl;
+                            kDebug() << "Speaker::doUtterances: state usSynthed";
                             if (d->configData->audioStretchFactor == 1.0 || it->isSsml())
                             {
                                 it->setState(Utt::usStretched);
@@ -403,7 +403,7 @@ void Speaker::doUtterances()
                         }
                         case Utt::usStretched:
                         {
-                            kDebug() << "Speaker::doUtterances: state usStretched" << endl;
+                            kDebug() << "Speaker::doUtterances: state usStretched";
                             // If first in queue, start playback.
                             if (it == itBegin)
                             {
@@ -425,7 +425,7 @@ void Speaker::doUtterances()
                         }
                         case Utt::usPlaying:
                         {
-                            kDebug() << "Speaker::doUtterances: state usPlaying" << endl;
+                            kDebug() << "Speaker::doUtterances: state usPlaying";
                             playing = true;
                             break;
                         }
@@ -461,7 +461,7 @@ void Speaker::doUtterances()
                                         d->currentJobNum = it->job()->jobNum();
                                         it->setState(Utt::usSaying);
                                         prePlaySignals(it);
-                                        // kDebug() << "Async synthesis and audibilizing." << endl;
+                                        // kDebug() << "Async synthesis and audibilizing.";
                                         playing = true;
                                         it->plugin()->sayText(it->sentence());
                                         d->again = true;
@@ -483,10 +483,10 @@ void Speaker::doUtterances()
                             // reader output, it would be nice to call the synth's
                             // stopText() method.  However, some of the current plugins
                             // have horrible startup times, so we won't do that for now.
-                            kDebug() << "Speaker::doUtterances: state usWaitingSynth" << endl;
+                            kDebug() << "Speaker::doUtterances: state usWaitingSynth";
                             if (it->plugin()->getState() == psIdle)
                             {
-                                // kDebug() << "Async synthesis." << endl;
+                                // kDebug() << "Async synthesis.";
                                 it->setState(Utt::usSynthing);
                                 ++synthingCnt;
                                 it->plugin()->synthText(it->sentence(),
@@ -500,7 +500,7 @@ void Speaker::doUtterances()
                         }
                         case Utt::usSaying:
                         {
-                            kDebug() << "Speaker::doUtterances: state usSaying" << endl;
+                            kDebug() << "Speaker::doUtterances: state usSaying";
                             // See if synthesis and audibilizing is finished.
                             if (it->plugin()->getState() == psFinished)
                             {
@@ -517,12 +517,12 @@ void Speaker::doUtterances()
                         }
                         case Utt::usSynthing:
                         {
-                            kDebug() << "Speaker::doUtterances: state usSynthing" << endl;
+                            kDebug() << "Speaker::doUtterances: state usSynthing";
                             // See if synthesis is completed.
                             if (it->plugin()->getState() == psFinished)
                             {
                                 it->setAudioUrl(KStandardDirs::realFilePath(it->plugin()->getFilename()));
-                                kDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl() << endl;
+                                kDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl();
                                 it->plugin()->ackFinished();
                                 it->setState(Utt::usSynthed);
                                 d->again = true;
@@ -559,7 +559,7 @@ void Speaker::doUtterances()
     }
     if (!d->exitRequested)
         d->speechData->deleteExpiredJobs();
-    // kDebug() << "Speaker::doUtterances: exiting." << endl;
+    // kDebug() << "Speaker::doUtterances: exiting.";
 }
 
 bool Speaker::isSpeaking()
@@ -622,10 +622,10 @@ void Speaker::pause(const QString& appId)
         Q_ASSERT(d->speechData->isApplicationPaused(pausedUtt->appId()));
         if (pausedUtt->audioPlayer() && pausedUtt->audioPlayer()->playing()) {
             d->timer->stop();
-            kDebug() << "Speaker::pause: pausing audio player" << endl;
+            kDebug() << "Speaker::pause: pausing audio player";
             pausedUtt->audioPlayer()->pause();
             pausedUtt->setState(Utt::usPaused);
-            kDebug() << "Speaker::pause: Setting utterance state to usPaused" << endl;
+            kDebug() << "Speaker::pause: Setting utterance state to usPaused";
             return;
         }
         // Audio player has finished, but timeout hasn't had a chance
@@ -653,7 +653,7 @@ int Speaker::moveRelSentence(int jobNum, int n)
         // TODO: More efficient way to advance one or two sentences, since there is a
         // good chance those utterances are already in the queue and synthesized.
         int sentenceNum = d->speechData->moveRelSentence(jobNum, n);
-        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to: " << sentenceNum << endl;
+        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to: " << sentenceNum;
         doUtterances();
         return sentenceNum;
     }
@@ -852,7 +852,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
             if (plugin->supportsAsync())
                 if ((plugin->getState() == psSaying) || (plugin->getState() == psSynthing))
                 {
-                    kDebug() << "Speaker::deleteUtterance calling stopText" << endl;
+                    kDebug() << "Speaker::deleteUtterance calling stopText";
                     plugin->stopText();
                 }
             break;
@@ -905,7 +905,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
 
 bool Speaker::startPlayingUtterance(uttIterator it)
 {
-    // kDebug() << "Speaker::startPlayingUtterance running" << endl;
+    // kDebug() << "Speaker::startPlayingUtterance running";
     if (Utt::usPlaying == it->state()) return false;
     if (it->audioUrl().isEmpty()) return false;
     bool started = false;
@@ -956,7 +956,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
             break;
 
         case Utt::usPaused:
-            // kDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
+            // kDebug() << "Speaker::startPlayingUtterance: resuming play";
             it->audioPlayer()->startPlay(QString());  // resume
             it->setState(Utt::usPlaying);
             d->timer->start(timerInterval);
@@ -994,7 +994,7 @@ QString Speaker::makeSuggestedFilename()
     tempFile->open();
     QString waveFile = tempFile->fileName();
     delete tempFile;
-    kDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
+    kDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile;
     return KStandardDirs::realFilePath(waveFile);
 }
 
@@ -1026,7 +1026,7 @@ Player* Speaker::createPlayerObject()
 
     if(offers.count() == 1)
     {
-        kDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library() << endl;
+        kDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library();
         KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
         if (factory)
             player = 
@@ -1045,7 +1045,7 @@ Player* Speaker::createPlayerObject()
             return createPlayerObject();
         }
         else
-            kDebug() << "Speaker::createPlayerObject: Could not load KDE (Phonon) plugin.  Is KDEDIRS set  correctly?" << endl;
+            kDebug() << "Speaker::createPlayerObject: Could not load KDE (Phonon) plugin.  Is KDEDIRS set  correctly?";
     }
     if (player) {
         player->setSinkName(d->configData->sinkName);
@@ -1169,7 +1169,7 @@ bool Speaker::event ( QEvent * e )
     // and 107 (error; keepGoing=False).
     if ((e->type() >= (QEvent::User + 101)) && (e->type() <= (QEvent::User + 105)))
     {
-        // kDebug() << "Speaker::event: received event." << endl;
+        // kDebug() << "Speaker::event: received event.";
         doUtterances();
         return true;
     }

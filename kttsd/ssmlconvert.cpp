@@ -123,16 +123,16 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     */
     QString talklang, talkvoice, talkgender, talkvolume, talkrate, talkname;
 
-    kDebug() << "SSMLConvert::appropriateTalker: BEFORE LANGUAGE SEARCH: " << matches.join(" ") << endl;;
+    kDebug() << "SSMLConvert::appropriateTalker: BEFORE LANGUAGE SEARCH: " << matches.join(" ");;
     /**
     * Language searching
     */
     if(root.hasAttribute("xml:lang")) {
         QString lang = root.attribute("xml:lang");
-        kDebug() << "SSMLConvert::appropriateTalker: xml:lang found (" << lang << ")" << endl;
+        kDebug() << "SSMLConvert::appropriateTalker: xml:lang found (" << lang << ")";
         /// If it is set to en*, then match all english speakers. They all sound the same anyways.
         if(lang.contains("en-")) {
-            kDebug() << "SSMLConvert::appropriateTalker: English" << endl;
+            kDebug() << "SSMLConvert::appropriateTalker: English";
             lang = "en";
         }
         /// Find all hits and place them in matches. We don't search for the closing " because if
@@ -140,11 +140,11 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
         matches = matches.filter("lang=\"" + lang);
     }
     else {
-        kDebug() << "SSMLConvert::appropriateTalker: no xml:lang found. Defaulting to en.." << endl;
+        kDebug() << "SSMLConvert::appropriateTalker: no xml:lang found. Defaulting to en..";
         matches = matches.filter("lang=\"en");
     }
 
-    kDebug() << "SSMLConvert::appropriateTalker: AFTER LANGUAGE SEARCH: " << matches.join(" ") << endl;;
+    kDebug() << "SSMLConvert::appropriateTalker: AFTER LANGUAGE SEARCH: " << matches.join(" ");;
 
     /**
     * Gender searching
@@ -153,7 +153,7 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     */
     if(root.hasAttribute("gender")) {
         QString gender = root.attribute("gender");
-        kDebug() << "SSMLConvert::appropriateTalker: gender found (" << gender << ")" << endl;
+        kDebug() << "SSMLConvert::appropriateTalker: gender found (" << gender << ")";
         /// If the gender found is not 'male' or 'female' then ignore it.
         if(!(gender == "male" || gender == "female")) {
             /// Make sure that we don't strip away all the talkers because of no matches.
@@ -162,7 +162,7 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
         }
     }
     else {
-        kDebug() << "SSMLConvert::appropriateTalker: no gender found." << endl;
+        kDebug() << "SSMLConvert::appropriateTalker: no gender found.";
     }
 
     /**
@@ -176,13 +176,13 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     if(matches.filter("synthesizer=\"Festival Interactive").count() >= 1 ||
     matches.filter("synthesizer=\"Hadifix").count() >= 1) {
 
-        kDebug() << "SSMLConvert::appropriateTalker: Prosody allowed" << endl;
+        kDebug() << "SSMLConvert::appropriateTalker: Prosody allowed";
         QStringList tmpmatches = matches.filter("synthesizer=\"Festival Interactive");
         matches = matches.filter("synthesizer=\"Hadifix");
         matches = tmpmatches + matches;
     }
     else
-        kDebug() << "SSMLConvert::appropriateTalker: No prosody-supporting talkers found" << endl;
+        kDebug() << "SSMLConvert::appropriateTalker: No prosody-supporting talkers found";
 
     /// Return the first match that complies. Maybe a discrete way to 
     /// choose between all the matches could be offered in the future. Some form of preference.
@@ -240,7 +240,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
         this, SLOT(slotProcessExited(K3Process*)));
     if (!m_xsltProc->start(K3Process::NotifyOnExit, K3Process::NoCommunication))
     {
-        kDebug() << "SSMLConvert::transform: Error starting xsltproc" << endl;
+        kDebug() << "SSMLConvert::transform: Error starting xsltproc";
         return false;
     }
     m_state = tsTransforming;
@@ -269,14 +269,14 @@ QString SSMLConvert::getOutput()
     QFile readfile(m_outFilename);
     if(!readfile.open(QIODevice::ReadOnly)) {
         /// uhh yeah... Issues writing to the SSML file.
-        kDebug() << "SSMLConvert::slotProcessExited: Could not read file " << m_outFilename << endl;
+        kDebug() << "SSMLConvert::slotProcessExited: Could not read file " << m_outFilename;
         return QString();
     }
     QTextStream rstream(&readfile);
     QString convertedData = rstream.readAll();
     readfile.close();
 
-    // kDebug() << "SSMLConvert::slotProcessExited: Read SSML file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilename << endl;
+    // kDebug() << "SSMLConvert::slotProcessExited: Read SSML file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilename;
 
     // Clean up.
     QFile::remove(m_inFilename);
