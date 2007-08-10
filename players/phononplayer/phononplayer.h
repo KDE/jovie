@@ -34,7 +34,8 @@
 #include "player.h"
 
 namespace Phonon {
-class AudioPlayer;
+class MediaObject;
+class AudioOutput;
 }
 
 class KDE_EXPORT PhononPlayer : virtual public Player
@@ -63,7 +64,8 @@ public:
     virtual void seekPosition(int position);
 
 protected:
-    Phonon::AudioPlayer* m_audioPlayer;
+    Phonon::MediaObject* m_audioPlayer;
+    Phonon::AudioOutput* m_audioOutput;
 };
 
 #endif      // PHONONPLAYER_H

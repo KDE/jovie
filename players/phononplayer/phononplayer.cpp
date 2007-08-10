@@ -24,7 +24,8 @@
 // Qt includes.
 
 // KDE includes.
-#include <phonon/audioplayer.h>
+#include <Phonon/AudioOutput>
+#include <Phonon/MediaObject>
 #include <kurl.h>
 
 // KTTS includes.
@@ -35,17 +36,19 @@
 PhononPlayer::PhononPlayer(QObject* parent, const QStringList& args) :
     Player(parent, "phononplayer", args)
 {
-    m_audioPlayer = new Phonon::AudioPlayer(Phonon::AccessibilityCategory, this);
+    m_audioPlayer = new Phonon::MediaObject(this);
+    m_audioOutput = new Phonon::AudioOutput(Phonon::AccessibilityCategory, this);
+    Phonon::createPath(m_audioPlayer, m_audioOutput);
 }
 
 PhononPlayer::~PhononPlayer()
 {
-    delete m_audioPlayer;
 }
 
 /*virtual*/ void PhononPlayer::startPlay(const QString& file)
 {
-    m_audioPlayer->play(KUrl::fromPath(file));
+    m_audioPlayer->setCurrentSource(file);
+    m_audioPlayer->play();
 }
 
 /*virtual*/ void PhononPlayer::pause()
@@ -60,22 +63,22 @@ PhononPlayer::~PhononPlayer()
 
 /*virtual*/ void PhononPlayer::setVolume(float volume)
 {
-    m_audioPlayer->setVolume(volume);
+    m_audioOutput->setVolume(volume);
 }
 
 /*virtual*/ float PhononPlayer::volume() const
 {
-    return m_audioPlayer->volume();
+    return m_audioOutput->volume();
 }
 
 /*virtual*/ bool PhononPlayer::playing() const
 {
-    return m_audioPlayer->isPlaying();
+    return (m_audioPlayer->state() == Phonon::PlayingState || m_audioPlayer->state() == Phonon::BufferingState);
 }
 
 /*virtual*/ bool PhononPlayer::paused() const
 {
-    return m_audioPlayer->isPaused();
+    return m_audioPlayer->state() == Phonon::PausedState;
 }
 
 /*virtual*/ int PhononPlayer::totalTime() const
