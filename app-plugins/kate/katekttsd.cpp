@@ -100,11 +100,11 @@ void KateKttsdPluginView::slotReadOut()
 	QDBusInterface kttsd( "org.kde.KSpeech", "/KSpeech", "org.kde.KSpeech" );
 	QDBusReply<bool> reply = kttsd.call("setText", text,"");
     if ( !reply.isValid())
-       QMessageBox::warning( 0, i18n( "DBUS Call Failed" ),
-                                 i18n( "The DBUS call setText failed." ));
+       QMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
+                                 i18n( "The D-Bus call setText failed." ));
 	reply = kttsd.call("startText", 0);
     if ( !reply.isValid())
-       QMessageBox::warning( 0, i18n( "DBUS Call Failed" ),
-                                i18n( "The DBUS call startText failed." ));
+       QMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
+                                i18n( "The D-Bus call startText failed." ));
 }
 
