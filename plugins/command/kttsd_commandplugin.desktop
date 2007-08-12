@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Command
+Name[ar]=سطر الأوامر
 Name[be]=Каманда
 Name[br]=Urzhiad
 Name[ca]=Ordre
@@ -42,6 +43,7 @@ Name[uk]=Команда
 Name[x-test]=xxCommandxx
 Name[zh_TW]=命令
 Comment=Generic speech synthesizer from command line
+Comment[ar]=محلل النطق العام من سطر الأوامر
 Comment[bg]=Общ синтезатор на глас от командния ред
 Comment[ca]=Sintetitzador de veu genèric des de la línia d'ordres
 Comment[cs]=Hlasový syntetizátor pro příkazovou řádku

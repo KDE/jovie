@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Festival Interactive
+Name[ar]=Festival تفاعلي
 Name[da]=Festival Interaktiv
 Name[el]=Διαδραστικό Festival
 Name[eu]=Festival interaktiboa
@@ -23,6 +24,7 @@ Name[tg]=Фестивали Интерактив
 Name[tr]=Etkileşimli Festival
 Name[x-test]=xxFestival Interactivexx
 Comment=Festival speech synthetizer
+Comment[ar]=محلل نطق Festival
 Comment[bg]=Синтезатор на глас Festival
 Comment[ca]=Sintetitzador de veu Festival
 Comment[cs]=Hlasový syntetizér Festival

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=FreeTTS
+Name[ar]=نص-إلى-صوت المجاني
 Name[x-test]=xxFreeTTSxx
 Comment=FreeTTS speech synthesizer
+Comment[ar]=محلل نطق نص-إلى-صوت المجاني
 Comment[bg]=Синтезатор на глас FreeTTS
 Comment[ca]=Sintetitzador de veu FreeTTS
 Comment[cs]=Hlasový syntetizér FreeTTS

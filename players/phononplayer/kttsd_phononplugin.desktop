@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KTTSD Phonon Plugin
+Name[ar]=ملحق Phonon لـ KTTSD
 Name[bg]=KTTSD aKode Plugin
 Name[ca]=Connector Phonon pel KTTSD
 Name[de]=KTTSD Phonon Modul
@@ -19,6 +20,7 @@ Name[sv]=KTTSD-insticksprogram för Phonon
 Name[x-test]=xxKTTSD Phonon Pluginxx
 Name[zh_TW]=KTTSD Phonon 外掛程式
 Comment=KTTSD Phonon audio plugin
+Comment[ar]=ملحق Phonon الصوتي لـ KTTSD
 Comment[bg]=Аудио приставка на KTTSD за aKode
 Comment[ca]=Connector d'àudio Phonon pel KTTSD
 Comment[de]=KTTSD Phonon Audiomodul

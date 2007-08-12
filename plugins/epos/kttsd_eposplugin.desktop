@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Epos TTS Synthesis System
+Name[ar]=نظام تحليل Epos TTS
 Name[ca]=Sistema de síntesi Epos TTS
 Name[cs]=Epos TTS
 Name[da]=Epos TTS Synthesis-system
@@ -38,6 +39,7 @@ Name[tr]=Epos TTS Bireşim Sistemi
 Name[x-test]=xxEpos TTS Synthesis Systemxx
 Name[zh_TW]=Epos TTS 合成系統
 Comment=Epos TTS speech synthesizer
+Comment[ar]=محلل نطق Epos TTS
 Comment[bg]=Синтезатор на глас Epos TTS
 Comment[ca]=Sintetitzador de veu Epos TTS
 Comment[cs]=Hlasový syntetizér Epos TTS

@@ -6,6 +6,7 @@ Icon=kttsd
 
 
 Name=Text-to-Speech
+Name[ar]=نص-إلى-صوت
 Name[bg]=Синтез на глас
 Name[ca]=Text a veu
 Name[cs]=Hlasová syntéza
@@ -49,6 +50,7 @@ Name[uk]=Синтез мовлення з тексту
 Name[x-test]=xxText-to-Speechxx
 Name[zh_TW]=文字轉語音
 Comment=Text-to-Speech Control Module
+Comment[ar]=وحدة تحكم نص-إلى-صوت
 Comment[bg]=Модул за синтез на глас
 Comment[ca]=Mòdul de control de text a veu
 Comment[cs]=Modul ovládání hlasové syntézy
@@ -99,6 +101,7 @@ StartupWMClass=
 
 Categories=Qt;KDE;X-KDE-settings-accessibility;
 Keywords=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
+Keywords[ar]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,نص,إلى,صوت,تحدث,محلل,تحليل,festival,command,freetts,proklam,عبر,صوت
 Keywords[bg]=Keywords=синтез, глас, говор, текст, kttsd, kcmkttsmgr, kttsmgr, tts, ttsd, ktts, text, to, speech, speak, synthesizer, synth, festival, command, freetts, proklam, via, voice
 Keywords[br]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,skrid,da,prezegenn,komz,synthesizer,synth,festival,urzhiad,freetts,proklam,via,mouezh
 Keywords[ca]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,a,veu,parla,sintetitzador,síntesi,festival,ordre,freetts,proklam,via,veu

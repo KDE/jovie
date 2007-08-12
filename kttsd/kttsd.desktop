@@ -10,6 +10,7 @@ Name=KTTSD
 Name[x-test]=xxKTTSDxx
 Name[zh_TW]=KTTSd
 Comment=KDE Text To Speech Daemon
+Comment[ar]=عفريت نص-إلى-صوت لـ كي دي إي
 Comment[bg]=Демон за управление на модула за синтез на глас
 Comment[ca]=Dimoni de text a veu de KDE
 Comment[cs]=Démon hlasové syntézy KDE

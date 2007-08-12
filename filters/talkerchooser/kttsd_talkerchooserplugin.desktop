@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Talker Chooser
+Name[ar]=منتقي المتكلم
 Name[bg]=Избор на глас
 Name[ca]=Selector de parla
 Name[cs]=Výběr hlasu
@@ -41,6 +42,7 @@ Name[uk]=Вибір диктора
 Name[x-test]=xxTalker Chooserxx
 Name[zh_TW]=語音選擇器
 Comment=Generic Talker Chooser Filter Plugin for KTTS
+Comment[ar]=ملحق تصفية منتقي المتكلم العام لـ KTTS
 Comment[bg]=Приставка за избор на глас за KTTS
 Comment[ca]=Connector del filtre selector genèric de parla pel KTTS
 Comment[cs]=Modul filtru výběru hlasu KTTS

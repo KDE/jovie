@@ -4,6 +4,7 @@ Type=Service
 Name=kttsjobmgrpart
 Name[x-test]=xxkttsjobmgrpartxx
 Comment=KDE Text-to-speech Job Manager
+Comment[ar]=مدير أعمال نص-إلى-صوت لكدي
 Comment[bg]=Мениджър на задачите за синтез на глас
 Comment[ca]=Gestor de treballs de text a veu de KDE
 Comment[cs]=Správce úloh zvukové syntézy KDE
