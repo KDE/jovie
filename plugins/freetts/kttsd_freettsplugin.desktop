@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=FreeTTS
 Name[ar]=نص-إلى-صوت المجاني
+Name[vi]=Văn bản sang Tiếng nói Tự do
 Name[x-test]=xxFreeTTSxx
 Comment=FreeTTS speech synthesizer
 Comment[ar]=محلل نطق نص-إلى-صوت المجاني
@@ -43,6 +44,7 @@ Comment[ta]=FreeTTS பேச்சு கூட்டிணைப்பான�
 Comment[tg]=Таҳлилгари овози FreeTTS
 Comment[tr]=FreeTTS konuşma bireştirici
 Comment[uk]=Синтезатор мовлення FreeTTS
+Comment[vi]=Trình tổng hợp tiếng nói Tự do
 Comment[x-test]=xxFreeTTS speech synthesizerxx
 Comment[zh_TW]=FreeTTS 語音合成器
 Type=Service

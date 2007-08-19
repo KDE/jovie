@@ -47,6 +47,7 @@ Name[ta]=உரையில் இருந்து பேச்சுக்க
 Name[tg]=Таҳлили овоз
 Name[tr]=Metinden Konuşmaya
 Name[uk]=Синтез мовлення з тексту
+Name[vi]=Văn bản sang Tiếng nói
 Name[x-test]=xxText-to-Speechxx
 Name[zh_TW]=文字轉語音
 Comment=Text-to-Speech Control Module
@@ -90,6 +91,7 @@ Comment[ta]=உரையில் இருந்து பேச்சு க�
 Comment[tg]=Танзими таҳлили овоз
 Comment[tr]=Metinden Konuşmaya Kontrol Modülü
 Comment[uk]=Модуль керування синтезом мовлення з тексту
+Comment[vi]=Mô đun Điều khiển Văn bản sang Tiếng nói
 Comment[x-test]=xxText-to-Speech Control Modulexx
 Comment[zh_TW]=文字轉語音控制模組
 
@@ -134,6 +136,7 @@ Keywords[sr@latin]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,s
 Keywords[sv]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,till,tal,läsa,syntes,synt,festival,kommando,freetts,proklam,via,röst
 Keywords[tg]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,овоз,ибора,таҳлили овоз
 Keywords[uk]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,мовлення,синтез,голос,текст,команда,через
+Keywords[vi]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,văn bản,sang,tiếng nói,nói,tổng hợp,tạp,festival,lệnh,freets,proklam,qua,giọng nói
 Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
 
 X-KDE-FactoryName=kttsd
