@@ -25,8 +25,7 @@
 #define _TALKERMGR_H_
 
 // Qt includes.
-
-#include <qmap.h>
+#include <QMap>
 #include <QList>
 
 // KTTS includes.

@@ -12,6 +12,9 @@
 // slider = alpha * (log(percent)-log(50))
 // with alpha = 1000/(log(200)-log(50))
 
+#ifndef HADIFIXCONFIGUI_UI_H
+#define HADIFIXCONFIGUI_UI_H
+
 int percentToSlider (int percentValue) {
    double alpha = 1000 / (log(200) - log(50));
    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
@@ -114,3 +117,5 @@ bool isMaleVoice() {
 void changed (const QString &) {
    emit changed (true);
 }
+
+#endif // HADIFIXCONFIGUI_UI_H

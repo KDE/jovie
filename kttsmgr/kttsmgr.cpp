@@ -170,7 +170,7 @@ bool KttsMgrTray::event(QEvent *event)
     if (event->type() == QEvent::ToolTip) {
         QString status = "<qt><b>KTTSMgr</b> - ";
         status += i18n("<qt>Text-to-Speech Manager");
-        status += "<br/><br/>";
+        status += "<br /><br />";
         status += getStatus();
         status += "</qt>";
         // kDebug() << "KttsMgrTray::event status = " << status;

@@ -24,9 +24,7 @@
 // Qt includes.
 #include <QFile>
 #include <QFileInfo>
-
 #include <QDomDocument>
-#include <QFile>
 #include <QRadioButton>
 #include <QTextStream>
 #include <QTableWidget>

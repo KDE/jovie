@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *******************************************************************************/
 
-#ifndef JOBLISTMODEL_H
-#define JOBLISTMODEL_H
+#ifndef JOBINFOLISTMODEL_H
+#define JOBINFOLISTMODEL_H
 
 // Qt includes.
 #include <QAbstractListModel>
@@ -122,4 +122,4 @@ private:
     JobInfoList m_jobs;
 };
 
-#endif          // JOBLISTMODEL_H
+#endif // JOBINFOLISTMODEL_H

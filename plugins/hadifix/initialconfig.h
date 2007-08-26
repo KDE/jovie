@@ -3,6 +3,10 @@
  * necessary because both hadifix and mbrola do not have standard
  * installation directories.
  */
+
+#ifndef INITIALCONFIG_H
+#define INITIALCONFIG_H
+
 void findInitialConfig() {
     QString hadifixDataPath = findHadifixDataPath();
 
@@ -161,3 +165,4 @@ QStringList findSubdirs (const QStringList &baseDirs) {
     return result;
 }
 
+#endif // INITIALCONFIG_H

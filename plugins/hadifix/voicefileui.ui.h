@@ -7,6 +7,8 @@
 ** place of a destructor.
 *****************************************************************************/
 
+#ifndef VOICEFILEUI_UI_H
+#define VOICEFILEUI_UI_H
 
 void VoiceFileWidget::genderButton_clicked()
 {
@@ -33,3 +35,5 @@ void VoiceFileWidget::genderButton_clicked()
                     details, i18n("Trying to Determine the Gender - Hadifix Plug In"));
     }
 }
+
+#endif // VOICEFILEUI_UI_H
