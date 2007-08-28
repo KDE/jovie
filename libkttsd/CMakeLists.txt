@@ -21,7 +21,8 @@ kde4_add_library(kttsd SHARED ${kttsd_LIB_SRCS})
 target_link_libraries(kttsd
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KUTILS_LIBS} )
+    ${KDE4_KUTILS_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kttsd PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS kttsd  DESTINATION ${LIB_INSTALL_DIR} )

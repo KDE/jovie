@@ -23,16 +23,16 @@
 // KDE includes.
 #include <kconfig.h>
 #include <klocale.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 // KTTS includes.
 #include "notify.h"
 
 static QStringList* s_actionNames = 0;
-static KStaticDeleter<QStringList> s_actionNames_sd;
+static K3StaticDeleter<QStringList> s_actionNames_sd;
 
 static QStringList* s_actionDisplayNames = 0;
-static KStaticDeleter<QStringList> s_actionDisplayNames_sd;
+static K3StaticDeleter<QStringList> s_actionDisplayNames_sd;
 
 static void notifyaction_init()
 {
@@ -85,10 +85,10 @@ static void notifyaction_init()
 // --------------------------------------------------------------------
 
 static QStringList* s_presentNames = 0;
-static KStaticDeleter<QStringList> s_presentNames_sd;
+static K3StaticDeleter<QStringList> s_presentNames_sd;
 
 static QStringList* s_presentDisplayNames = 0;
-static KStaticDeleter<QStringList> s_presentDisplayNames_sd;
+static K3StaticDeleter<QStringList> s_presentDisplayNames_sd;
 
 static void notifypresent_init()
 {
