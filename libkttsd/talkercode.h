@@ -43,7 +43,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Copy Constructor.
          */
-        explicit TalkerCode(TalkerCode* talker, bool normal=false);
+        TalkerCode(TalkerCode* talker, bool normal=false);
 
         /**
          * Destructor.
