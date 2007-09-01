@@ -243,7 +243,7 @@ class KDE_EXPORT PlugInProc : public QObject{
         /**
         * Constructor.
         */
-        explicit PlugInProc( QObject *parent = 0, const char *name = 0);
+        PlugInProc( QObject *parent = 0, const char *name = 0);
 
         /**
         * Destructor.
