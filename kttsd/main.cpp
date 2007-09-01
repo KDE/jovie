@@ -37,7 +37,7 @@
 int main (int argc, char *argv[]){
     KLocale::setMainCatalog("kttsd");
     KAboutData aboutdata("kttsd", 0, ki18n("kttsd"),
-         "0.4.0", ki18n("Text-to-speech synthesis deamon"),
+         "0.4.0", ki18n("Text-to-speech synthesis daemon"),
          KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");

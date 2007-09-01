@@ -608,7 +608,7 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
             hwdata.format = SND_PCM_FORMAT_S24_LE;
             break;
         default:
-            kError () << "can't play WAVE-files with sample " << 
+            kError () << "can not play WAVE-files with sample " << 
                 LE_SHORT (f->bit_p_spl) << " bits in " << LE_SHORT (f->byte_p_spl)
                 << "(" << hwdata.channels << " channels)" << endl;
             stopAndExit();
@@ -835,7 +835,7 @@ void AlsaPlayerThread::set_params(void)
     }
 
     if (chunk_size == buffer_size)
-        kdDebug() << "WARNING: Shouldn't use chunk_size equal to buffer_size (" << chunk_size
+        kdDebug() << "WARNING: Should not use chunk_size equal to buffer_size (" << chunk_size
             << ").  Continuing anyway." << endl;
 
     DBG << "Final buffer_size = " <<

@@ -1522,7 +1522,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
 
     updateTalkerButtons();
 
-    // Emit configuraton changed.
+    // Emit configuration changed.
     configChanged();
 }
 
@@ -1564,7 +1564,7 @@ void KCMKttsMgr::removeFilter( bool sbd )
     kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file.";
     m_config->deleteGroup(QString("Filter_")+filterID, 0);
 
-    // Emit configuraton changed.
+    // Emit configuration changed.
     configChanged();
 }
 

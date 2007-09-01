@@ -426,7 +426,7 @@
                       <string>&amp;Load this voice when starting KTTSD</string>
                     </property>
                     <property name="whatsThis" stdset="0" >
-                      <string>If checked, Festival will be started and this voice will be loaded when the Text-to-Speech Deamon (KTTSD) is started.  Check when a voice requires a long time to load in Festival (for example, multisyn voices), otherwise, leave unchecked.</string>
+                      <string>If checked, Festival will be started and this voice will be loaded when the Text-to-Speech Daemon (KTTSD) is started.  Check when a voice requires a long time to load in Festival (for example, multisyn voices), otherwise, leave unchecked.</string>
                     </property>
                   </widget>
                 </item>
