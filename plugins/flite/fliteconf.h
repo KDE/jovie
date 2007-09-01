@@ -45,7 +45,7 @@ class FliteConf : public PlugInConf, public Ui::FliteConfWidget {
 
     public:
         /** Constructor */
-        FliteConf( QWidget* parent = 0, const QStringList &args = QStringList());
+        explicit FliteConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~FliteConf();

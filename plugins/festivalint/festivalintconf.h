@@ -58,7 +58,7 @@ class FestivalIntConf : public PlugInConf, public Ui::FestivalIntConfWidget {
 
     public:
         /** Constructor */
-        FestivalIntConf( QWidget* parent = 0, const QStringList &args = QStringList());
+        explicit FestivalIntConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~FestivalIntConf();

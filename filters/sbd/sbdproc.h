@@ -244,7 +244,7 @@ class SbdProc : virtual public KttsFilterProc
         /**
          * Constructor.
          */
-        SbdProc( QObject *parent, const QStringList &args = QStringList() );
+        explicit SbdProc( QObject *parent, const QStringList &args = QStringList() );
 
         /**
          * Destructor.

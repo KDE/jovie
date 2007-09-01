@@ -37,7 +37,7 @@ class KDE_EXPORT Stretcher : public QObject{
         /**
          * Constructor.
          */
-        Stretcher(QObject *parent = 0, const char *name = 0);
+        explicit Stretcher(QObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor.

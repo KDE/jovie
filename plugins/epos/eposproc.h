@@ -42,7 +42,7 @@ class EposProc : public PlugInProc{
         /**
          * Constructor
          */
-        EposProc( QObject* parent = 0, const QStringList &args = QStringList());
+        explicit EposProc( QObject* parent = 0, const QStringList &args = QStringList());
 
         /**
          * Destructor

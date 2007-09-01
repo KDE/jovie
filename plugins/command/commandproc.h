@@ -32,7 +32,7 @@ class CommandProc : public PlugInProc{
 
     public:
         /** Constructor */
-        CommandProc( QObject* parent = 0, const QStringList &args = QStringList());
+        explicit CommandProc( QObject* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~CommandProc();

@@ -39,7 +39,7 @@ class FreeTTSConf : public PlugInConf, public Ui::FreeTTSConfWidget {
 
     public:
         /** Constructor */
-        FreeTTSConf( QWidget* parent = 0, const QStringList &args = QStringList());
+        explicit FreeTTSConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~FreeTTSConf();

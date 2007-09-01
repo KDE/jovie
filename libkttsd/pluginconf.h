@@ -213,7 +213,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         /**
         * Constructor 
         */
-        PlugInConf( QWidget *parent = 0, const char *name = 0);
+        explicit PlugInConf( QWidget *parent = 0, const char *name = 0);
 
         /**
         * Destructor 

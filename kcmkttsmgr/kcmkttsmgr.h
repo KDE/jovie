@@ -66,7 +66,7 @@ class FilterListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    FilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
+    explicit FilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
 
     FilterList datastore() { return m_filters; }
     void setDatastore(FilterList filters = FilterList()) { m_filters = filters; }
@@ -93,7 +93,7 @@ class SbdFilterListModel : public FilterListModel
 {
     Q_OBJECT
 public:
-    SbdFilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
+    explicit SbdFilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
 
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;

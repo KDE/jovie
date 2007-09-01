@@ -32,7 +32,7 @@ public:
     /**
     * Constructor
     */
-    FreeTTSProc( QObject* parent = 0, const QStringList &args = QStringList());
+    explicit FreeTTSProc( QObject* parent = 0, const QStringList &args = QStringList());
 
     /**
     * Destructor

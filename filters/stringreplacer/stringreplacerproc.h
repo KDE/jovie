@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    StringReplacerProc( QObject *parent, const QStringList &args = QStringList() );
+    explicit StringReplacerProc( QObject *parent, const QStringList &args = QStringList() );
 
     /**
      * Destructor.

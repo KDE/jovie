@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    TalkerChooserProc( QObject *parent, const QStringList &args = QStringList() );
+    explicit TalkerChooserProc( QObject *parent, const QStringList &args = QStringList() );
 
     /**
      * Destructor.

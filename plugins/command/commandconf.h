@@ -38,7 +38,7 @@ class CommandConf : public PlugInConf, public Ui::CommandConfWidget {
 
     public:
         /** Constructor */
-        CommandConf( QWidget* parent = 0, const QStringList &args = QStringList());
+        explicit CommandConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~CommandConf();

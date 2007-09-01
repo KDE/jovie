@@ -45,7 +45,7 @@ class KDE_EXPORT TalkerListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    TalkerListModel(TalkerCode::TalkerCodeList talkers = TalkerCode::TalkerCodeList(), QObject *parent = 0);
+    explicit TalkerListModel(TalkerCode::TalkerCodeList talkers = TalkerCode::TalkerCodeList(), QObject *parent = 0);
 
     // Inherited method overrides.
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

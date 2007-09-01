@@ -37,7 +37,7 @@ class HadifixProc : public PlugInProc{
     };
     
     /** Constructor */
-    HadifixProc( QObject* parent = 0, const QStringList &args = QStringList());
+    explicit HadifixProc( QObject* parent = 0, const QStringList &args = QStringList());
     
     /** Destructor */
     ~HadifixProc();

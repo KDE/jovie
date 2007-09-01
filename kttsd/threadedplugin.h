@@ -57,7 +57,7 @@ class ThreadedPlugInThread : public QThread
         /**
         * Constructor.
         */
-        ThreadedPlugInThread(PlugInProc* plugin, QObject *parent = 0);
+        explicit ThreadedPlugInThread(PlugInProc* plugin, QObject *parent = 0);
 
         /**
         * Destructor.
@@ -252,7 +252,7 @@ class ThreadedPlugIn : public PlugInProc
         /**
         * Constructor.
         */
-        ThreadedPlugIn(PlugInProc* plugin, QObject *parent = 0, const char *name = 0);
+        explicit ThreadedPlugIn(PlugInProc* plugin, QObject *parent = 0, const char *name = 0);
 
         /**
         * Destructor.

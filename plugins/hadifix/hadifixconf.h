@@ -79,7 +79,7 @@ class HadifixConf : public PlugInConf {
 
     public:
         /** Constructor */
-        HadifixConf( QWidget* parent = 0, const QStringList &args = QStringList());
+        explicit HadifixConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~HadifixConf();

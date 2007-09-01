@@ -94,7 +94,7 @@ class KSpeak : public QObject
     Q_OBJECT
 
 public:
-    KSpeak(KCmdLineArgs* args, QObject* parent = 0);
+    explicit KSpeak(KCmdLineArgs* args, QObject* parent = 0);
     ~KSpeak();
 
     bool echo();

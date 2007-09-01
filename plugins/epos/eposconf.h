@@ -45,7 +45,7 @@ class EposConf : public PlugInConf, public Ui::EposConfWidget {
 
     public:
         /** Constructor */
-        EposConf( QWidget* parent = 0, const QStringList &args = QStringList());
+        explicit EposConf( QWidget* parent = 0, const QStringList &args = QStringList());
 
         /** Destructor */
         ~EposConf();

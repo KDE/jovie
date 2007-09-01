@@ -43,7 +43,7 @@ class KDE_EXPORT PhononPlayer : virtual public Player
     Q_OBJECT
 
 public:
-    PhononPlayer(QObject* parent = 0, const QStringList& args=QStringList() );
+    explicit PhononPlayer(QObject* parent = 0, const QStringList& args=QStringList() );
     virtual ~PhononPlayer();
 
     virtual void startPlay(const QString& file);

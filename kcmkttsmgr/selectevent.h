@@ -36,7 +36,7 @@ public:
     * @param parent             Parent KDialog.
     * @param initEventSrc       Event source to start with.
     */
-    SelectEvent(QWidget* parent = 0, const QString& initEventSrc = QString() );
+    explicit SelectEvent(QWidget* parent = 0, const QString& initEventSrc = QString() );
 
     /**
     * Destructor.

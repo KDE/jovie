@@ -39,7 +39,7 @@ class FliteProc : public PlugInProc{
         /**
          * Constructor
          */
-        FliteProc( QObject* parent = 0, const QStringList &args = QStringList());
+        explicit FliteProc( QObject* parent = 0, const QStringList &args = QStringList());
 
         /**
          * Destructor

@@ -40,7 +40,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         /**
         * Constructor 
         */
-        KttsFilterConf( QWidget *parent = 0, const char *name = 0);
+        explicit KttsFilterConf( QWidget *parent = 0, const char *name = 0);
 
         /**
         * Destructor 

@@ -30,9 +30,9 @@ class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginVi
     Q_OBJECT
 
     public:
-        KateKttsdPlugin( QObject *parent = 0,
-                         const char* name = 0,
-                         const QStringList &args = QStringList() );
+        explicit KateKttsdPlugin( QObject *parent = 0,
+                    		  const char* name = 0,
+                		  const QStringList &args = QStringList() );
         virtual ~KateKttsdPlugin();
 
         void addView (KTextEditor::View *view);
@@ -47,7 +47,7 @@ class KateKttsdPluginView : public QObject, public KXMLGUIClient
     Q_OBJECT
 
     public:
-        KateKttsdPluginView( KTextEditor::View *view, const char *name=0 );
+        explicit KateKttsdPluginView( KTextEditor::View *view, const char *name=0 );
         ~KateKttsdPluginView() {};
 
     public slots:

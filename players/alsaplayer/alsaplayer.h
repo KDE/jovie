@@ -178,7 +178,7 @@ class KDE_EXPORT AlsaPlayer : public Player
 {
     Q_OBJECT
 public:
-    AlsaPlayer(QObject* parent = 0, const QStringList& args=QStringList());
+    explicit AlsaPlayer(QObject* parent = 0, const QStringList& args=QStringList());
     ~AlsaPlayer();
 
     virtual void startPlay(const QString& file);

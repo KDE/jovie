@@ -60,7 +60,7 @@ class KDE_EXPORT JobInfoListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    JobInfoListModel(JobInfoList jobs = JobInfoList(), QObject *parent = 0);
+    explicit JobInfoListModel(JobInfoList jobs = JobInfoList(), QObject *parent = 0);
 
     // Inherited method overrides.
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
