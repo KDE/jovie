@@ -36,6 +36,8 @@ typedef QList<PlugInProc*> PlugInList;
 
 class TalkerMgr: public QObject
 {
+    Q_OBJECT
+
 public:
 
     /**
