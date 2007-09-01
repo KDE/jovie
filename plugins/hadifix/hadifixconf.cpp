@@ -209,9 +209,9 @@ QString HadifixConfPrivate::findHadifixDataPath () {
 
                 if (s.startsWith("DATAPATH")) {
                     s = s.mid(8, s.length()-8).trimmed();
-                    if (s.startsWith("=")) {
+                    if (s.startsWith('=')) {
                         s = s.mid(1, s.length()-1).trimmed();
-                        if (s.startsWith("/"))
+                        if (s.startsWith('/'))
                             return s;
                         else {
                             QFileInfo info (QFileInfo(*it).path() + '/' + s);

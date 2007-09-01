@@ -328,14 +328,14 @@ QDBusMessage KSpeak::placeCall(const QString member, QStringList args)
 void KSpeak::printMethodHelp(const QMetaMethod& mm)
 {
     QByteArray rt = mm.typeName();
-    if (!rt.isEmpty()) rt = "<" + rt + "> = ";
+    if (!rt.isEmpty()) rt = '<' + rt + "> = ";
     QByteArray signature = mm.signature();
     QByteArray mn = signature.left(signature.indexOf("("));
     QList<QByteArray> ptl = mm.parameterTypes();
     QList<QByteArray> pnl = mm.parameterNames();
     QStringList params;
     for (int i = 0; i < ptl.size(); ++i)
-        params.append("<" + ptl[i] + ">" + pnl[i]);
+        params.append('<' + ptl[i] + '>' + pnl[i]);
     *m_out << rt << mn << " " << params.join(" ") << endl;
 }
 
@@ -616,7 +616,7 @@ void KSpeak::processCommand(const QString& inputLine)
             }
         } else {
             // An @ in column one is a comment sent to output.
-            if (line.startsWith("@")) {
+            if (line.startsWith('@')) {
                 line.remove(0, 1);
                 *m_out << qPrintable(line) << endl;
             } else {
@@ -639,7 +639,7 @@ void KSpeak::processCommand(const QString& inputLine)
                 // Variable substitution.
                 foreach (QString var, m_vars.keys()) {
                     // kDebug() << var << ": " + m_vars[var].toString();
-                    args.replace("$(" + var + ")", m_vars[var]);
+                    args.replace("$(" + var + ')', m_vars[var]);
                 }
                 // kDebug() << "post variable substitution: " << cmd << " " << args;
     

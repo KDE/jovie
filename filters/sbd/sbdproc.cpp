@@ -367,7 +367,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             {
                 result += startSentence();
                 result += makeSentence( sentenceList[lastNdx] );
-                if ( s.endsWith( "\t" ) ) result += endSentence();
+                if ( s.endsWith( '\t' ) ) result += endSentence();
             }
             break; }
         case QDomNode::CDATASectionNode: {          // = 4
@@ -385,7 +385,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
             {
                 result += startSentence();
                 result += makeSentence( makeCDATA( sentenceList[lastNdx] ) );
-                if ( s.endsWith( "\t" ) ) result += endSentence();
+                if ( s.endsWith( '\t' ) ) result += endSentence();
             }
             break; }
         case QDomNode::EntityReferenceNode: {       // = 5

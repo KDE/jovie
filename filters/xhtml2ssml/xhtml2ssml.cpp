@@ -92,7 +92,7 @@ QString XHTMLToSSMLParser::convertedText() {
 /// @returns                     true if the syntax of the line was okay and the parsing succeeded - false otherwise.
 bool XHTMLToSSMLParser::readFileConfigEntry(const QString &line) {
     // comments
-    if(line.trimmed().startsWith("#")) {
+    if(line.trimmed().startsWith('#')) {
         return true;
     }
     // break into QStringList
