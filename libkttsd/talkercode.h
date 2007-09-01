@@ -27,8 +27,8 @@
 #define _TALKERCODE_H_
 
 // Qt includes.
-
 #include <QList>
+#include <QString>
 
 // KDE includes.
 #include <kdemacros.h>
