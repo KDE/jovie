@@ -39,7 +39,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Constructor.
          */
-        explicit TalkerCode(const QString &code=QString(), bool normal=false);
+        TalkerCode(const QString &code=QString(), bool normal=false);
         /**
          * Copy Constructor.
          */
