@@ -18,8 +18,7 @@
 #ifndef _FREETTSPROC_H_
 #define _FREETTSPROC_H_
 
-
-#include <QMutex>
+#include <QtCore/QMutex>
 
 #include <pluginproc.h>
 

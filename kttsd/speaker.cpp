@@ -27,10 +27,10 @@
 // System includes.
 
 // Qt includes. 
-#include <QFile>
-#include <QTimer>
-#include <QDir>
-#include <QApplication>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
+#include <QtCore/QDir>
+#include <QtGui/QApplication>
 
 // KDE includes.
 #include <kdebug.h>

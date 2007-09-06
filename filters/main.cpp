@@ -4,11 +4,10 @@
   #LICENSE
 ***********************/
 
-
 #include <iostream>
 using namespace std;
 
-#include <QTextStream>
+#include <QtCore/QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>

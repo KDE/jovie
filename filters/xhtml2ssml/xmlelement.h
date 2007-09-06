@@ -18,11 +18,10 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef XMLELEMENT_H
 #define XMLELEMENT_H
 
-#include <qmap.h>
+#include <QtCore/QMap>
 
 class QString;
 

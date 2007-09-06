@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QComboBox>
-#include <QHeaderView>
+#include <QtGui/QComboBox>
+#include <QtGui/QHeaderView>
 
 // KDE includes
 #include <kstandarddirs.h>

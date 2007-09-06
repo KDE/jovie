@@ -19,16 +19,14 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include <QtXml>
-#include <QFile>
-//Added by qt3to4:
-#include <QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
+
 #include <iostream>
 
 #include "xmlelement.h"
 #include "xhtml2ssml.h"
-
 
 /// Document parsing begin. Init stuff here.
 bool XHTMLToSSMLParser::startDocument() {

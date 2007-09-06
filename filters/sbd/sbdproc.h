@@ -46,10 +46,10 @@
 #define _SBDPROC_H_
 
 // Qt includes.
-#include <QObject>
-#include <QThread>
-#include <QEvent>
-#include <QStack>
+#include <QtCore/QObject>
+#include <QtCore/QThread>
+#include <QtCore/QEvent>
+#include <QtCore/QStack>
 
 // KTTS includes.
 #include "filterproc.h"

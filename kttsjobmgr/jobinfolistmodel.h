@@ -25,8 +25,8 @@
 #define JOBINFOLISTMODEL_H
 
 // Qt includes.
-#include <QAbstractListModel>
-#include <QModelIndex>
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QModelIndex>
 
 // KDE includes.
 #include <kdemacros.h>

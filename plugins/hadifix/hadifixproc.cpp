@@ -18,8 +18,8 @@
 
 // Qt includes
 
-#include <QTextCodec>
-#include <QByteArray>
+#include <QtCore/QTextCodec>
+#include <QtCore/QByteArray>
 
 // KDE includes
 #include <kdebug.h>

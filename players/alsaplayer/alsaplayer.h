@@ -29,12 +29,11 @@
 #include <sys/poll.h>
 
 // Qt includes.
-
-#include <QObject>
-#include <QThread>
-#include <QFile>
-#include <QMutex>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QThread>
+#include <QtCore/QFile>
+#include <QtCore/QMutex>
+#include <QtCore/QByteArray>
 
 // KDE includes.
 #include <kdemacros.h>

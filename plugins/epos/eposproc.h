@@ -26,8 +26,8 @@
 #define _EPOSPROC_H_
 
 // Qt includes.
-#include <QMutex>
-#include <QByteArray>
+#include <QtCore/QMutex>
+#include <QtCore/QByteArray>
 
 // KTTS includes.
 #include <pluginproc.h>

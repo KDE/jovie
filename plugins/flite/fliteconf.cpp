@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QFile>
-#include <QApplication>
-#include <QProgressBar>
+#include <QtCore/QFile>
+#include <QtGui/QApplication>
+#include <QtGui/QProgressBar>
 
 // KDE includes.
 #include <klocale.h>

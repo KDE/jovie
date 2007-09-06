@@ -15,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include <kdebug.h>
-#include <QComboBox>
+
+#include <QtGui/QComboBox>
 
 #include "utils.h"
 

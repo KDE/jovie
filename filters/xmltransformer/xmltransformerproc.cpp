@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QFile>
-#include <QRegExp>
-#include <QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QRegExp>
+#include <QtCore/QTextStream>
 
 // KDE includes.
 #include <kdeversion.h>

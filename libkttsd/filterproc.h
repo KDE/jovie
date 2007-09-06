@@ -26,8 +26,7 @@
 #define _FILTERPROC_H_
 
 // Qt includes.
-#include <QObject>
-
+#include <QtCore/QObject>
 
 // KDE includes.
 #include <kdemacros.h>

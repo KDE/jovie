@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QRegExp>
+#include <QtCore/QRegExp>
 
 // KDE includes.
 #include <kdebug.h>

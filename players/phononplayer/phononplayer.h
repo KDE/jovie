@@ -25,7 +25,7 @@
 #define PHONONPLAYER_H
 
 // Qt includes.
-#include <QObject>
+#include <QtCore/QObject>
 
 // KDE includes.
 #include <kdemacros.h>

@@ -1,8 +1,8 @@
 
-#include <QApplication>
-#include <QFile>
+#include <QtGui/QApplication>
+#include <QtCore/QFile>
 #include <QtXml>
-#include <qmap.h>
+#include <QtCore/QMap>
 #include <iostream>
 #include "xhtml2ssml.h"
 #include "xmlelement.h"

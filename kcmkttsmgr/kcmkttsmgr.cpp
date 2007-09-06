@@ -24,17 +24,17 @@
 #include <math.h>
 
 // Qt includes.
-#include <QWidget>
-#include <QTabWidget>
-#include <QCheckBox>
-#include <QLayout>
-#include <QRadioButton>
-#include <QSlider>
-#include <QLabel>
-#include <QTreeWidget>
-#include <QHeaderView>
-#include <QTextStream>
-#include <QMenu>
+#include <QtGui/QWidget>
+#include <QtGui/QTabWidget>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLayout>
+#include <QtGui/QRadioButton>
+#include <QtGui/QSlider>
+#include <QtGui/QLabel>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QHeaderView>
+#include <QtCore/QTextStream>
+#include <QtGui/QMenu>
 
 // KDE includes.
 #include <kparts/componentfactory.h>

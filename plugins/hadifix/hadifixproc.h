@@ -18,7 +18,7 @@
 #ifndef _HADIFIXPROC_H_
 #define _HADIFIXPROC_H_
 
-#include <QStringList> 
+#include <QtCore/QStringList> 
 
 #include <pluginproc.h>
 

@@ -27,8 +27,7 @@
 #define _FILTERMGR_H_
 
 // Qt includes.
-#include <QList>
-
+#include <QtCore/QList>
 
 // KTTS includes.
 #include "filterproc.h"

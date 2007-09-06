@@ -16,10 +16,10 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <QCheckBox>
-#include <QFile>
-#include <QApplication>
-#include <QTextCodec>
+#include <QtGui/QCheckBox>
+#include <QtCore/QFile>
+#include <QtGui/QApplication>
+#include <QtCore/QTextCodec>
 
 // KDE includes.
 #include <kdebug.h>
@@ -28,6 +28,7 @@
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <kprogressdialog.h>
+
 // KTTS includes.
 #include <pluginconf.h>
 #include <testplayer.h>

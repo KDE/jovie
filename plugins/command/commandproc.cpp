@@ -16,12 +16,11 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <QFile>
-
-#include <QRegExp>
-#include <QTextCodec>
-#include <QStack>
-#include <QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QRegExp>
+#include <QtCore/QTextCodec>
+#include <QtCore/QStack>
+#include <QtCore/QTextStream>
 
 // KDE includes.
 #include <kdebug.h>

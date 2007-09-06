@@ -20,10 +20,9 @@
  ***************************************************************************/
 
 // Qt includes.
-
-#include <qdom.h>
-#include <QFile>
-#include <QTextStream>
+#include <QtXml/qdom.h>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 
 // KDE includes.
 #include <kdeversion.h>

@@ -25,7 +25,7 @@
 #define _XMLTRANSFORMERPROC_H_
 
 // Qt includes.
-#include <QObject>
+#include <QtCore/QObject>
 
 // KTTS includes.
 #include "filterproc.h"

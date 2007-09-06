@@ -25,9 +25,8 @@
 #define _SPEECHJOB_H_
 
 // Qt includes.
-
-#include <QList>
-#include <QByteArray>
+#include <QtCore/QList>
+#include <QtCore/QByteArray>
 
 // KDE includes.
 #include <kspeech.h>

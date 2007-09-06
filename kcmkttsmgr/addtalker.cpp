@@ -23,8 +23,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QRadioButton>
-#include <QDialog>
+#include <QtGui/QRadioButton>
+#include <QtGui/QDialog>
 
 // KDE includes.
 #include <kcombobox.h>

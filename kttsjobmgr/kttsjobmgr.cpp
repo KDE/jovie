@@ -22,15 +22,15 @@
  ******************************************************************************/
 
 // QT includes.
-#include <QObject>
-#include <QLabel>
-#include <QSplitter>
-#include <QClipboard>
-#include <QPushButton>
-#include <QList>
-#include <QTreeView>
-#include <QMimeData>
-#include <QtDBus>
+#include <QtCore/QObject>
+#include <QtGui/QLabel>
+#include <QtGui/QSplitter>
+#include <QtGui/QClipboard>
+#include <QtGui/QPushButton>
+#include <QtCore/QList>
+#include <QtGui/QTreeView>
+#include <QtCore/QMimeData>
+#include <QtDBus/QtDBus>
 
 // KDE includes.
 #include <kcomponentdata.h>

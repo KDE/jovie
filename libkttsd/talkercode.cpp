@@ -27,10 +27,12 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
+
 // TalkerCode includes.
 #include "talkercode.h"
-//Added by qt3to4:
-#include <QVector>
+
+#include <QtCore/QVector>
+
 /**
  * Constructor.
  */

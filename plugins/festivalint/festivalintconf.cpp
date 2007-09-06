@@ -25,14 +25,13 @@
 #include <math.h>
 
 // Qt includes.
-#include <QLabel>
-
-#include <QCheckBox>
-#include <QDir>
-#include <QSlider>
-#include <qdom.h>
-#include <QTextCodec>
-#include <QPixmap>
+#include <QtGui/QLabel>
+#include <QtGui/QCheckBox>
+#include <QtCore/QDir>
+#include <QtGui/QSlider>
+#include <QtXml/qdom.h>
+#include <QtCore/QTextCodec>
+#include <QtGui/QPixmap>
 
 // KDE includes.
 #include <kdebug.h>

@@ -19,7 +19,7 @@
 #define _COMMANDPROC_H_
 
 // Qt includes.
-#include <QStringList> 
+#include <QtCore/QStringList> 
 
 // KTTS includes.
 #include <pluginproc.h>

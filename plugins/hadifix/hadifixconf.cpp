@@ -18,15 +18,14 @@
 #include <math.h>
 
 // Qt includes. 
-#include <QLayout>
-#include <QLabel>
-#include <QGroupBox>
-
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
-#include <QVBoxLayout>
-#include <QTextStream>
+#include <QtGui/QLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QGroupBox>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
+#include <QtGui/QVBoxLayout>
+#include <QtCore/QTextStream>
 
 // KDE includes.
 #include <ktemporaryfile.h>

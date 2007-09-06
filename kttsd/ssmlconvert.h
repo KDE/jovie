@@ -31,7 +31,7 @@
  */
 
 // Qt includes
-#include <QObject>
+#include <QtCore/QObject>
 
 class K3Process;
 class QString;

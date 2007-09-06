@@ -24,9 +24,9 @@
 #ifndef _THREADEDPLUGIN_H_
 #define _THREADEDPLUGIN_H_
 
-#include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
 
 #include "pluginproc.h"
 

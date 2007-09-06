@@ -24,8 +24,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QTableWidget>
-#include <QHeaderView>
+#include <QtGui/QTableWidget>
+#include <QtGui/QHeaderView>
 
 // KDE includes.
 #include <kdialog.h>

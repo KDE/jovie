@@ -27,10 +27,10 @@
 #define KSPEAK_H
 
 // Qt includes.
-#include <QObject>
-#include <QHash>
-#include <QThread>
-#include <QTimer>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
+#include <QtCore/QThread>
+#include <QtCore/QTimer>
 
 // KDE includes.
 #include <kcmdlineargs.h>

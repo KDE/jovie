@@ -25,10 +25,9 @@
 #include <math.h>
 
 // Qt includes.
-
-#include <QThread>
-#include <QTextCodec>
-#include <QByteArray>
+#include <QtCore/QThread>
+#include <QtCore/QTextCodec>
+#include <QtCore/QByteArray>
 
 // KDE includes.
 #include <kdebug.h>

@@ -28,10 +28,9 @@
 #define _SPEAKER_H_
 
 // Qt includes.
-#include <QObject>
-#include <QList>
-#include <QEvent>
-
+#include <QtCore/QObject>
+#include <QtCore/QList>
+#include <QtCore/QEvent>
 
 // KTTSD includes.
 #include "utt.h"

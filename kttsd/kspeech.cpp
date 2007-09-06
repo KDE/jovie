@@ -24,11 +24,11 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QApplication>
-#include <QClipboard>
-#include <QTextStream>
-#include <QTextCodec>
-#include <QFile>
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
+#include <QtCore/QTextStream>
+#include <QtCore/QTextCodec>
+#include <QtCore/QFile>
 
 // KDE includes.
 #include <kdebug.h>

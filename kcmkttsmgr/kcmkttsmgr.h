@@ -25,9 +25,9 @@
 #define KCMKTTSMGR_H
 
 // Qt includes.
-#include <QMap>
-#include <QAbstractListModel>
-#include <QModelIndex>
+#include <QtCore/QMap>
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QModelIndex>
 
 // KDE includes.
 #include <kcmodule.h>

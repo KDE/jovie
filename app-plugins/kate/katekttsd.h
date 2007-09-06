@@ -23,7 +23,8 @@
 #include <ktexteditor/plugin.h>
 #include <ktexteditor/view.h>
 #include <kxmlguiclient.h>
-#include <QObject>
+
+#include <QtCore/QObject>
 
 class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginViewInterface
 {

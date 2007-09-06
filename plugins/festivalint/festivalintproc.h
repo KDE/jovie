@@ -24,7 +24,7 @@
 #ifndef _FESTIVALINTPROC_H_
 #define _FESTIVALINTPROC_H_
 
-#include <QMutex>
+#include <QtCore/QMutex>
 
 #include <k3process.h>
 

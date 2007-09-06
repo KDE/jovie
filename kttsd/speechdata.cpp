@@ -29,11 +29,11 @@
 #include <stdlib.h>
 
 // Qt includes.
-#include <QRegExp>
-#include <QPair>
-#include <QDomDocument>
-#include <QFile>
-#include <QtDBus>
+#include <QtCore/QRegExp>
+#include <QtCore/QPair>
+#include <QtXml/QDomDocument>
+#include <QtCore/QFile>
+#include <QtDBus/QtDBus>
 
 // KDE includes.
 #include <kdebug.h>

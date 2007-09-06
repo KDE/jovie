@@ -27,8 +27,7 @@
 #define _SELECTLANGUAGEDLG_H_
 
 // Qt includes.
-#include <QWidget>
-
+#include <QtGui/QWidget>
 
 // KDE includes.
 #include <kdialog.h>

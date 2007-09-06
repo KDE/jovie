@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QTableWidget>
-#include <QHeaderView>
+#include <QtGui/QCheckBox>
+#include <QtGui/QRadioButton>
+#include <QtGui/QTableWidget>
+#include <QtGui/QHeaderView>
 
 // KDE includes.
 #include <kdialog.h>

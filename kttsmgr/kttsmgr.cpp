@@ -23,11 +23,11 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QImage>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QProcess>
+#include <QtGui/QImage>
+#include <QtGui/QPixmap>
+#include <QtGui/QMouseEvent>
+#include <QtCore/QEvent>
+#include <QtCore/QProcess>
 
 // KDE includes.
 #include <kuniqueapplication.h>

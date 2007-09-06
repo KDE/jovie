@@ -16,10 +16,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QLabel>
-
-#include <QFile>
-#include <QApplication>
+#include <QtGui/QLabel>
+#include <QtCore/QFile>
+#include <QtGui/QApplication>
 
 // KDE includes.
 #include <kdialog.h>

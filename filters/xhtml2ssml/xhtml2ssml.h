@@ -18,12 +18,11 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef _XHTML2SSML_H_
 #define _XHTML2SSML_H_
 
 #include <QtXml>
-#include <qmap.h>
+#include <QtCore/QMap>
 
 typedef QMap<QString, QString> QStringMap;
 class QString;

@@ -24,14 +24,13 @@
  ******************************************************************************/
 
 // Qt includes.
-
-#include <QFile>
-#include <QTextStream>
-#include <QtDBus>
-#include <QMetaMethod>
-#include <QTimer>
-#include <QWaitCondition>
-#include <QMutex>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
+#include <QtDBus/QtDBus>
+#include <QtCore/QMetaMethod>
+#include <QtCore/QTimer>
+#include <QtCore/QWaitCondition>
+#include <QtCore/QMutex>
 
 // KDE includes.
 #include <kdebug.h>

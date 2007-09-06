@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QDomDocument>
-#include <QFile>
+#include <QtXml/QDomDocument>
+#include <QtCore/QFile>
 
 // KDE includes.
 #include <kconfig.h>

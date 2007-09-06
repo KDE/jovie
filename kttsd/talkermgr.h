@@ -25,8 +25,8 @@
 #define _TALKERMGR_H_
 
 // Qt includes.
-#include <QMap>
-#include <QList>
+#include <QtCore/QMap>
+#include <QtCore/QList>
 
 // KTTS includes.
 #include "talkercode.h"

@@ -25,10 +25,10 @@
 #include <math.h>
 
 // Qt includes.
-#include <QFile>
-#include <QApplication>
-#include <QTextCodec>
-#include <QSlider>
+#include <QtCore/QFile>
+#include <QtGui/QApplication>
+#include <QtCore/QTextCodec>
+#include <QtGui/QSlider>
 
 // KDE includes.
 #include <kdialog.h>
@@ -38,6 +38,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kprogressdialog.h>
+
 // KTTS includes.
 #include <testplayer.h>
 

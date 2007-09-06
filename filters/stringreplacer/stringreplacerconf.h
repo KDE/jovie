@@ -25,7 +25,7 @@
 #define _STRINGREPLACERCONF_H_
 
 // Qt includes.
-#include <QWidget>
+#include <QtGui/QWidget>
 
 // KDE includes.
 #include <kconfig.h>

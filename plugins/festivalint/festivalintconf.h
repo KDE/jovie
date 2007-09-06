@@ -25,7 +25,7 @@
 #define _FESTIVALINTCONF_H_
 
 // Qt includes.
-#include <QList>
+#include <QtCore/QList>
 
 // KDE includes.
 #include <kconfig.h>

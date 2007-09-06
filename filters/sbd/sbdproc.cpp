@@ -22,11 +22,10 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QRegExp>
-#include <qdom.h>
-#include <QApplication>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QtCore/QRegExp>
+#include <QtXml/qdom.h>
+#include <QtGui/QApplication>
+#include <QtCore/QCustomEvent>
 
 // KDE includes.
 #include <kdebug.h>

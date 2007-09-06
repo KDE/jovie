@@ -26,8 +26,7 @@
 #define _APPDATA_H_
 
 // Qt includes.
-
-#include <QList>
+#include <QtCore/QList>
 
 // KDE includes.
 #include <kspeech.h>

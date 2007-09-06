@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QFile>
-#include <QFileInfo>
-#include <QDomDocument>
-#include <QRadioButton>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtXml/QDomDocument>
+#include <QtGui/QRadioButton>
 
 // KDE includes.
 #include <kglobal.h>

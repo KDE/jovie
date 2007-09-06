@@ -29,12 +29,11 @@
 #define _SPEECHDATA_H_
 
 // Qt includes.
-
-#include <QByteArray>
-#include <QHash>
-#include <QList>
-#include <QMultiHash>
-#include <QMap>
+#include <QtCore/QByteArray>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QMultiHash>
+#include <QtCore/QMap>
 
 // KDE includes.
 #include <kconfig.h>

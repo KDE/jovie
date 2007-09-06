@@ -23,14 +23,16 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <QFile>
-#include <QApplication>
+#include <QtCore/QFile>
+#include <QtGui/QApplication>
+
 // KDE includes.
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <kparts/componentfactory.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
+
 // KTTS includes.
 #include "player.h"
 #include "stretcher.h"

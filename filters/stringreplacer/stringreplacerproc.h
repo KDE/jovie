@@ -26,10 +26,10 @@
 #define _STRINGREPLACERPROC_H_
 
 // Qt includes.
-#include <QObject>
-#include <QTextStream>
-#include <QRegExp>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QTextStream>
+#include <QtCore/QRegExp>
+#include <QtCore/QList>
 
 // KTTS includes.
 #include "filterproc.h"

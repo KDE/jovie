@@ -15,8 +15,7 @@
  *                                                                             *
  ******************************************************************************/
 
-
-#include <QFileInfo>
+#include <QtCore/QFileInfo>
 
 #include <kdebug.h>
 #include <kconfig.h>

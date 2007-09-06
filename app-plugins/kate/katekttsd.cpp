@@ -18,13 +18,13 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <QMessageBox>
-#include <QTimer>
-#include <QtDBus>
+#include <QtGui/QMessageBox>
+#include <QtCore/QTimer>
+#include <QtDBus/QtDBus>
+
 // KDE includes.
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/selectioninterface.h>
-
 #include <kaction.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

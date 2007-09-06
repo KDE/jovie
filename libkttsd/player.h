@@ -22,9 +22,9 @@
 #define PLAYER_H
 
 // Qt includes.
-#include <QObject>
-#include <QStringList>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtCore/QByteArray>
 
 // KDE includes.
 #include <kdemacros.h>
