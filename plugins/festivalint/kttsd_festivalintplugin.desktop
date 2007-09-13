@@ -34,6 +34,7 @@ Comment[nl]=Festival spraaksynthetizer
 Comment[pt]=O sintetizador de fala Festival
 Comment[pt_BR]=O sintetizador de fala Festival
 Comment[sv]=Festival talsyntes
+Comment[zh_TW]=Festival 語音合成器
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin
 X-KDE-Library=libkttsd_festivalintplugin
