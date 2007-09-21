@@ -46,6 +46,7 @@ Comment[tr]=FreeTTS konuşma bireştirici
 Comment[uk]=Синтезатор мовлення FreeTTS
 Comment[vi]=Trình tổng hợp tiếng nói Tự do
 Comment[x-test]=xxFreeTTS speech synthesizerxx
+Comment[zh_CN]=FreeTTS 语音合成器
 Comment[zh_TW]=FreeTTS 語音合成器
 Type=Service
 ServiceTypes=KTTSD/SynthPlugin

@@ -8,6 +8,7 @@ X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
 Name=KTTSD
 Name[x-test]=xxKTTSDxx
+Name[zh_CN]=K 语音精灵
 Name[zh_TW]=KTTSd
 Comment=KDE Text To Speech Daemon
 Comment[ar]=عفريت نص-إلى-صوت لـ كي دي إي
@@ -52,5 +53,6 @@ Comment[tr]=KDE Metinden Konuşmaya Artalan Süreci
 Comment[uk]=Демон KDE синтезу мовлення з тексту
 Comment[vi]=Trình nền Văn bản sang Tiếng nói KDE
 Comment[x-test]=xxKDE Text To Speech Daemonxx
+Comment[zh_CN]=KDE 文本到语音守护进程
 Comment[zh_TW]=KDE 文字轉語音的常駐精靈
 
