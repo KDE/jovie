@@ -41,7 +41,6 @@
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kicon.h>
-#include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
@@ -53,6 +52,9 @@
 #include <ktoolinvocation.h>
 #include <kdialog.h>
 #include <kspeech.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
+
 
 // KTTS includes.
 #include "talkercode.h"
@@ -95,8 +97,9 @@ const int timeBoxValue = 100;
 const bool keepAudioCheckBoxValue = false;
 
 // Make this a plug in.
-typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
-K_EXPORT_COMPONENT_FACTORY( kttsd, KCMKttsMgrFactory("kttsd") )
+K_PLUGIN_FACTORY(KCMKttsMgrFactory, registerPlugin<KCMKttsMgr>();)
+K_EXPORT_PLUGIN(KCMKttsMgrFactory("kttsd"))
+
 
 // ----------------------------------------------------------------------------
 
@@ -280,7 +283,7 @@ QVariant SbdFilterListModel::headerData(int section, Qt::Orientation orientation
 /**
 * Constructor.
 */
-KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QStringList &) :
+KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     KCModule(KCMKttsMgrFactory::componentData(), parent/*, name*/),
     m_kspeech(0)
 {

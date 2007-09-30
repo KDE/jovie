@@ -109,7 +109,7 @@ class KCMKttsMgr :
     Q_OBJECT
 
     public:
-        KCMKttsMgr(QWidget *parent, const QStringList &);
+        KCMKttsMgr(QWidget *parent, const QVariantList &);
 
         ~KCMKttsMgr();
 

@@ -97,7 +97,7 @@ Comment[x-test]=xxText-to-Speech Control Modulexx
 Comment[zh_CN]=文本到语音(TTS)控制模块
 Comment[zh_TW]=文字轉語音控制模組
 
-ServiceTypes=Application,KCModule
+ServiceTypes=KCModule
 DocPath=kttsd
 NoDisplay=false
 StartupNotify=false
@@ -142,9 +142,7 @@ Keywords[vi]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,văn bản,sang,tiếng nói
 Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
 Keywords[zh_CN]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizersynth,festival,command,freetts,proklam,via,voice,文本到语音,文本,语音
 
-X-KDE-FactoryName=kttsd
 X-KDE-ParentApp=kcontrol
 X-KDE-SubstituteUID=false
-X-KDE-ModuleType=Library
-X-KDE-Library=kttsd
+X-KDE-Library=kcm_kttsd
 Terminal=false
