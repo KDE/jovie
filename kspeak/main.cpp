@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     kspeak.setStopOnError(args->isSet("stoponerror"));
     kspeak.setShowReply(args->isSet("replies"));
     kspeak.setShowSignals(args->isSet("signals"));
-    if (!kspeak.isKttsdRunning(args->isSet("startkttsd"))) exit (1);
+    if (!kspeak.isKttsdRunning(args->isSet("startkttsd"))) return 1;
 
     // Main event loop.
     int result = app.exec();

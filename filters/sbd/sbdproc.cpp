@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 
 // KTTS includes.
 #include "utils.h"

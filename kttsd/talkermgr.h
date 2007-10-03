@@ -27,6 +27,7 @@
 // Qt includes.
 #include <QtCore/QMap>
 #include <QtCore/QList>
+#include <QtCore/QStringList>
 
 // KTTS includes.
 #include "talkercode.h"

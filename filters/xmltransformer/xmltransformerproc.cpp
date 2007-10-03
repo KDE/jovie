@@ -29,6 +29,7 @@
 // KDE includes.
 #include <kdeversion.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 #include <k3process.h>
