@@ -24,6 +24,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <k3staticdeleter.h>
+#include <kconfiggroup.h>
 
 // KTTS includes.
 #include "notify.h"
@@ -148,7 +149,7 @@ static void notifypresent_init()
 /*static*/ QString NotifyEvent::getEventSrcName(const QString& eventSrc, QString& iconName)
 {
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig config( "data", configFilename, KConfig::NoGlobals );
+    KConfig config( configFilename, KConfig::CascadeConfig, "data" );
     KConfigGroup group( &config, QString::fromLatin1( "!Global!" ) );
     QString appDesc = group.readEntry( "Comment", i18n("No description available") );
     iconName = group.readEntry( "IconName" );
@@ -162,7 +163,7 @@ static void notifypresent_init()
 {
     QString eventName;
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig config( "data", configFilename, KConfig::NoGlobals );
+    KConfig config( configFilename, KConfig::CascadeConfig, "data" );
     if ( config.hasGroup( event ) )
     {
         KConfigGroup group( &config,  event );

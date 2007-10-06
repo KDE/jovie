@@ -32,6 +32,7 @@
 // KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kstandarddirs.h>
 
 // KTTS includes.

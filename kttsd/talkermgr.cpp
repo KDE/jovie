@@ -28,6 +28,7 @@
 #include <kparts/componentfactory.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
+#include <kconfiggroup.h>
 
 // KTTS includes.
 #include "pluginconf.h"
