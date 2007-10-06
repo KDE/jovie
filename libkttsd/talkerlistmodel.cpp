@@ -29,6 +29,7 @@
 #include "klocale.h"
 #include "kconfig.h"
 #include "kdebug.h"
+#include "kconfiggroup.h"
 
 // TalkerListWidget includes.
 #include "talkerlistmodel.h"
