@@ -31,6 +31,8 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 
+#include <stdlib.h>
+
 // kspeak includes.
 #include "kspeak.h"
 
