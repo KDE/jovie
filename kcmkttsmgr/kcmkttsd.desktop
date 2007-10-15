@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Exec=kcmshell kcmkttsd
+Exec=kcmshell4 kcmkttsd
 Icon=kttsd
 
 

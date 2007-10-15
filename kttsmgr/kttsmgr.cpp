@@ -333,7 +333,7 @@ void KttsMgrTray::configureSelected()
 {
     QStringList lst;
 	lst << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
-	QProcess::startDetached("kcmshell",lst);
+	QProcess::startDetached("kcmshell4",lst);
 }
 
 bool KttsMgrTray::isKttsdRunning()
