@@ -177,7 +177,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "is the top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
-    btn = new QPushButton(KIcon("edit-trash"), i18n("Re&move"), hbox1);
+    btn = new QPushButton(KIcon("user-trash"), i18n("Re&move"), hbox1);
     btn->setObjectName("job_remove");
     wt = i18n(
         "<p>Deletes the job.  If it is currently speaking, it stops speaking.  The next "

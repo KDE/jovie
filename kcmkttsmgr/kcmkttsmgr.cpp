@@ -318,13 +318,13 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     // Talkers tab.
     higherTalkerPriorityButton->setIcon(KIcon("go-up"));
     lowerTalkerPriorityButton->setIcon(KIcon("go-down"));
-    removeTalkerButton->setIcon(KIcon("edit-trash"));
+    removeTalkerButton->setIcon(KIcon("user-trash"));
     configureTalkerButton->setIcon(KIcon("configure"));
 
     // Filters tab.
     higherFilterPriorityButton->setIcon(KIcon("go-up"));
     lowerFilterPriorityButton->setIcon(KIcon("go-down"));
-    removeFilterButton->setIcon(KIcon("edit-trash"));
+    removeFilterButton->setIcon(KIcon("user-trash"));
     configureFilterButton->setIcon(KIcon("configure"));
 
     // Notify tab.
@@ -350,7 +350,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
         notifyPresentComboBox->addItem( NotifyPresent::presentDisplayName( ndx ) );
 
-    notifyRemoveButton->setIcon(KIcon("edit-trash"));
+    notifyRemoveButton->setIcon(KIcon("user-trash"));
     notifyTestButton->setIcon(KIcon("speak"));
 
     pcmComboBox->setEditable(false);
