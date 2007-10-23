@@ -194,7 +194,7 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
     clear();
     // Iterate through list of the TalkerCode IDs.
     KConfigGroup config(c, "General");
-    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList(), ',');
+    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList());
     // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList;
     if (!talkerIDsList.isEmpty())
     {

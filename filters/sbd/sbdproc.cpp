@@ -609,8 +609,8 @@ bool SbdProc::init(KConfig* c, const QString& configGroup){
     QString sb = config.readEntry( "SentenceBoundary", "\\1\t" );
     sb.replace( "\\t", "\t" );
     m_sbdThread->setConfiguredSentenceBoundary( sb );
-    m_appIdList = config.readEntry( "AppID", QStringList(), ',' );
-    m_languageCodeList = config.readEntry( "LanguageCodes", QStringList(), ',' );
+    m_appIdList = config.readEntry( "AppID", QStringList() );
+    m_languageCodeList = config.readEntry( "LanguageCodes", QStringList() );
     return true;
 }
 
