@@ -73,7 +73,7 @@ bool FilterMgr::init()
     // Load each of the filters and initialize.
     KSharedConfig::Ptr pConfig = KSharedConfig::openConfig( "kttsdrc" );
     KConfigGroup config( pConfig, "General");
-    QStringList filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
+    QStringList filterIDsList = config.readEntry("FilterIDs", QStringList());
     // kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
@@ -88,7 +88,7 @@ bool FilterMgr::init()
         config.writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
         config.changeGroup("General");
         config.writeEntry("FilterIDs", "1");
-        filterIDsList = config.readEntry("FilterIDs", QStringList(), ',');
+        filterIDsList = config.readEntry("FilterIDs", QStringList());
     }
     if ( !filterIDsList.isEmpty() )
     {

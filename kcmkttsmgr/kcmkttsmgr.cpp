@@ -697,7 +697,7 @@ void KCMKttsMgr::load()
     // Load Filters.
     m_filterListModel.clear();
     m_sbdFilterListModel.clear();
-    QStringList filterIDsList = generalConfig.readEntry("FilterIDs", QStringList(), ',');
+    QStringList filterIDsList = generalConfig.readEntry("FilterIDs", QStringList());
     // kDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList;
     if (!filterIDsList.isEmpty())
     {

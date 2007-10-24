@@ -66,7 +66,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
         QString relativePath = *it;
         if ( !relativePath.isEmpty() )
         {
-            KConfig* config = new KConfig(relativePath, KConfig::CascadeConfig, "data" );
+            KConfig* config = new KConfig(relativePath, KConfig::NoGlobals, "data" );
             KConfigGroup globalConfig( config, QString::fromLatin1("!Global!") );
             QString icon = globalConfig.readEntry(QString::fromLatin1("IconName"),
                 QString::fromLatin1("misc"));
@@ -95,7 +95,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     eventsListView->setRowCount(0);
     QString eventSrc = m_eventSrcNames[index];
     QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
-    KConfig* config = new KConfig( configFilename, KConfig::CascadeConfig, "data" );
+    KConfig* config = new KConfig( configFilename, KConfig::NoGlobals, "data" );
     QStringList eventNames = config->groupList();
     uint eventNamesCount = eventNames.count();
     for (uint ndx = 0; ndx < eventNamesCount; ++ndx)

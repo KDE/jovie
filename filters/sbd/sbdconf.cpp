@@ -118,7 +118,7 @@ void SbdConf::load(KConfig* c, const QString& configGroup){
         config.readEntry("SentenceDelimiterRegExp", reLineEdit->text()) );
     sbLineEdit->setText(
         config.readEntry("SentenceBoundary", sbLineEdit->text()) );
-    QStringList langCodeList = config.readEntry("LanguageCodes", QStringList(), ',');
+    QStringList langCodeList = config.readEntry("LanguageCodes", QStringList());
     if (!langCodeList.isEmpty())
         m_languageCodeList = langCodeList;
     QString language = "";
