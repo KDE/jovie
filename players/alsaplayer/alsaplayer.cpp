@@ -53,6 +53,8 @@
 // AlsaPlayer includes.
 #include "alsaplayer.h"
 
+#include <assert.h>
+
 #define DBG if (m_debugLevel >= 2) kDebug() << timestamp()
 
 QString AlsaPlayerThread::timestamp() const
