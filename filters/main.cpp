@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     KAboutData aboutdata(
         "testfilter", 0, ki18n("testfilter"),
         "0.1.0", ki18n("A utility for testing KTTSD filter plugins."),
-         KAboutData::License_GPL, ki18n("Copyright 2005, Gary Cramblitt <email>garycramblitt@comcast.net</email>"));
+         KAboutData::License_GPL, ki18n("Copyright 2005, Gary Cramblitt <garycramblitt@comcast.net>"));
     aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
