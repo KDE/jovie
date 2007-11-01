@@ -96,6 +96,6 @@ Type=Service
 ServiceTypes=KTextEditor/Plugin
 X-KDE-Library=ktexteditor_kttsd
 X-Kate-Version=2.2
-MimeType=text/plain
+MimeType=text/plain;
 Icon=kttsd
 author=Olaf Jan Schmidt, ojschmidt@kde.org
