@@ -163,7 +163,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "down in the list.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_hold()));
-    btn = new QPushButton(KIcon("exec"), i18n("Resume"), hbox1);
+    btn = new QPushButton(KIcon("system-run"), i18n("Resume"), hbox1);
     btn->setObjectName("job_resume");
     wt = i18n(
         "<p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the "
