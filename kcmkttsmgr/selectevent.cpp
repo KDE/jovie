@@ -47,7 +47,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
 
     // Load list of event sources (applications).
     QStringList fullpaths =
-        KGlobal::dirs()->findAllResources("data", "*/eventsrc", KStandardDirs::NoDuplicates);
+        KGlobal::dirs()->findAllResources("data", "*/*.notifyrc", KStandardDirs::NoDuplicates);
     QStringList::ConstIterator it = fullpaths.begin();
     QStringList relativePaths;
     for ( ; it != fullpaths.end(); ++it)
@@ -67,7 +67,7 @@ SelectEvent::SelectEvent(QWidget* parent, const QString& initEventSrc) :
         if ( !relativePath.isEmpty() )
         {
             KConfig* config = new KConfig(relativePath, KConfig::NoGlobals, "data" );
-            KConfigGroup globalConfig( config, QString::fromLatin1("!Global!") );
+            KConfigGroup globalConfig( config, QString::fromLatin1("Global") );
             QString icon = globalConfig.readEntry(QString::fromLatin1("IconName"),
                 QString::fromLatin1("misc"));
             QString description = globalConfig.readEntry( QString::fromLatin1("Comment"),
@@ -94,7 +94,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
 {
     eventsListView->setRowCount(0);
     QString eventSrc = m_eventSrcNames[index];
-    QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
+    QString configFilename = eventSrc + "/" + eventSrc + QString::fromLatin1( ".notifyrc" );
     KConfig* config = new KConfig( configFilename, KConfig::NoGlobals, "data" );
     QStringList eventNames = config->groupList();
     uint eventNamesCount = eventNames.count();
