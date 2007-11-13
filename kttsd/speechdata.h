@@ -401,11 +401,6 @@ private:
     void doFiltering();
 
     /**
-    * Loads notify events from a file.  Clearing data if clear is True.
-    */
-    void loadNotifyEventsFromFile( const QString& filename, bool clear);
-
-    /**
     * Checks to see if an application has active jobs, and if not and
     * the application has exited, deletes the app and all its jobs.
     * @param appId          DBUS sender id of the application.

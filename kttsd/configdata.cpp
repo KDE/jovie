@@ -33,7 +33,6 @@
 
 // KTTS includes.
 #include "talkercode.h"
-#include "notify.h"
 
 // ConfigData includes.
 #include "configdata.h"
@@ -70,10 +69,6 @@ bool ConfigData::readConfig()
     keepAudioPath = config.readEntry("KeepAudioPath",
         KStandardDirs::locateLocal("data", "kttsd/audio/"));
 
-    // Notification (KNotify).
-    notify = config.readEntry("Notify", false);
-    notifyExcludeEventsWithSound = config.readEntry("ExcludeEventsWithSound", true);
-    loadNotifyEventsFromFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml"), true );
 
     // KTTSMgr auto start and auto exit.
     autoStartManager = config.readEntry("AutoStartManager", false);
@@ -102,66 +97,3 @@ bool ConfigData::readConfig()
     return true;
 }
 
-void ConfigData::loadNotifyEventsFromFile( const QString& filename, bool clear)
-{
-    // Open existing event list.
-    QFile file( filename );
-    if ( !file.open( QIODevice::ReadOnly ) ) {
-        kDebug() << "SpeechData::loadNotifyEventsFromFile: Unable to open file " << filename;
-        return;
-    }
-    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
-    QDomDocument doc( "" );
-    if ( !doc.setContent( &file ) ) {
-        file.close();
-        kDebug() << "SpeechData::loadNotifyEventsFromFile: File not in proper XML format. " << filename;
-    }
-    // kDebug() << "StringReplacerConf::load: document successfully parsed.";
-    file.close();
-
-    if ( clear ) {
-        notifyDefaultPresent = NotifyPresent::Passive;
-        notifyDefaultOptions.action = NotifyAction::SpeakMsg;
-        notifyDefaultOptions.talker.clear();
-        notifyDefaultOptions.customMsg.clear();
-        notifyAppMap.clear();
-    }
-
-    // Event list.
-    QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
-    const int eventListCount = eventList.count();
-    for (int eventIndex = 0; eventIndex < eventListCount; ++eventIndex)
-    {
-        QDomNode eventNode = eventList.item(eventIndex);
-        QDomNodeList propList = eventNode.childNodes();
-        QString eventSrc;
-        QString event;
-        QString actionName;
-        QString message;
-        TalkerCode talkerCode;
-        const int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; ++propIndex) {
-            QDomNode propNode = propList.item(propIndex);
-            QDomElement prop = propNode.toElement();
-            if (prop.tagName() == "eventSrc") eventSrc = prop.text();
-            if (prop.tagName() == "event") event = prop.text();
-            if (prop.tagName() == "action") actionName = prop.text();
-            if (prop.tagName() == "message") message = prop.text();
-            if (prop.tagName() == "talker") talkerCode = TalkerCode(prop.text(), false);
-        }
-        NotifyOptions notifyOptions;
-        notifyOptions.action = NotifyAction::action( actionName );
-        notifyOptions.talker = talkerCode.getTalkerCode();
-        notifyOptions.customMsg = message;
-        if ( eventSrc != "default" ){
-            notifyOptions.eventName = NotifyEvent::getEventName( eventSrc, event );
-            NotifyEventMap notifyEventMap = notifyAppMap[ eventSrc ];
-            notifyEventMap[ event ] = notifyOptions;
-            notifyAppMap[ eventSrc ] = notifyEventMap;
-        } else {
-            notifyOptions.eventName.clear();
-            notifyDefaultPresent = NotifyPresent::present( event );
-            notifyDefaultOptions = notifyOptions;
-        }
-    }
-}

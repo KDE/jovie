@@ -29,25 +29,6 @@
 
 class KConfig;
 
-/**
- * Struct used to keep notification options.
- */
-struct NotifyOptions {
-    QString eventName;
-    int action;
-    QString talker;
-    QString customMsg;
-};
-
-/**
- * A list of notification options for a single app, indexed by event.
- */
-typedef QMap<QString, NotifyOptions> NotifyEventMap;
-
-/**
- * A list of notification event maps for all apps, indexed by app.
- */
-typedef QMap<QString, NotifyEventMap> NotifyAppMap;
 
 class ConfigData
 {
@@ -143,15 +124,7 @@ public:
     bool keepAudio;
     QString keepAudioPath;
 
-    /**
-    * Notification settings.
-    */
-    bool notify;
-    bool notifyExcludeEventsWithSound;
-    NotifyAppMap notifyAppMap;
-    int notifyDefaultPresent;
-    NotifyOptions notifyDefaultOptions;
-
+    
     /**
     * Automatically start KTTSMgr whenever speaking.
     */
@@ -199,10 +172,6 @@ private:
     */
     bool readConfig();
     
-    /**
-    * Read application notification options from file.
-    */
-    void loadNotifyEventsFromFile( const QString& filename, bool clear);
     
     KConfig* m_config;
 };

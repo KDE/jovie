@@ -64,8 +64,6 @@
 #include "player.h"
 #include "selecttalkerdlg.h"
 #include "selectlanguagedlg.h"
-#include "selectevent.h"
-#include "notify.h"
 #include "utils.h"
 
 // KCMKttsMgr includes.
@@ -77,8 +75,6 @@
 const bool autostartMgrCheckBoxValue = true;
 const bool autoexitMgrCheckBoxValue = true;
 
-const bool notifyEnableCheckBoxValue = false;
-const bool notifyExcludeEventsWithSoundCheckBoxValue = true;
 
 const bool textPreMsgCheckValue = true;
 const QString textPreMsgValue = i18n("Text interrupted. Message.");
@@ -327,48 +323,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     removeFilterButton->setIcon(KIcon("user-trash"));
     configureFilterButton->setIcon(KIcon("configure"));
 
-    // Notify tab.
-    notifyListView->setColumnCount(7);
-    notifyListView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    notifyListView->setSelectionMode(QAbstractItemView::SingleSelection);
-    QStringList notifyListViewHeaders;
-    notifyListViewHeaders << i18n("Application/Event");
-    notifyListViewHeaders << i18n("Action");
-    notifyListViewHeaders << i18n("Talker");
-    notifyListView->setHeaderLabels( notifyListViewHeaders );
-    QHeaderView* header = notifyListView->header();
-    header->setSectionHidden( nlvcEventSrc, true );
-    header->setSectionHidden( nlvcEvent, true );
-    header->setSectionHidden( nlvcAction, true );
-    header->setSectionHidden( nlvcTalker, true );
-    header->setResizeMode( QHeaderView::Interactive );
-    header->setStretchLastSection( true );
-    notifyActionComboBox->clear();
-    for (int ndx = 0; ndx < NotifyAction::count(); ++ndx)
-        notifyActionComboBox->addItem( NotifyAction::actionDisplayName( ndx ) );
-    notifyPresentComboBox->clear();
-    for (int ndx = 0; ndx < NotifyPresent::count(); ++ndx)
-        notifyPresentComboBox->addItem( NotifyPresent::presentDisplayName( ndx ) );
-
-    notifyRemoveButton->setIcon(KIcon("user-trash"));
-    notifyTestButton->setIcon(KIcon("speak"));
-
-    pcmComboBox->setEditable(false);
-
-    // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
-    QMenu* sbdPopmenu = new QMenu( this );
-    sbdPopmenu->setObjectName( "SbdPopupMenu" );
-    m_sbdBtnEdit = sbdPopmenu->addAction(
-        i18n("&Edit..."), this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
-    m_sbdBtnUp = sbdPopmenu->addAction( KIcon("go-up"),
-        i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnDown = sbdPopmenu->addAction( KIcon("go-down"),
-        i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnAdd = sbdPopmenu->addAction(
-        i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
-    m_sbdBtnRemove = sbdPopmenu->addAction(
-        i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
-    sbdButton->setMenu( sbdPopmenu );
 
     TestPlayer* testPlayer;
     Player* player;
@@ -456,33 +410,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
 
-    // Notify tab.
-    connect(notifyEnableCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNotifyEnableCheckBox_toggled(bool)));
-    connect(notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(notifyAddButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyAddButton_clicked()));
-    connect(notifyRemoveButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyRemoveButton_clicked()));
-    connect(notifyClearButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyClearButton_clicked()));
-    connect(notifyLoadButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyLoadButton_clicked()));
-    connect(notifySaveButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifySaveButton_clicked()));
-    connect(notifyListView, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
-            this, SLOT(slotNotifyListView_currentItemChanged()));
-    connect(notifyPresentComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNotifyPresentComboBox_activated(int)));
-    connect(notifyActionComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNotifyActionComboBox_activated(int)));
-    connect(notifyTestButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyTestButton_clicked()));
-    connect(notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotNotifyMsgLineEdit_textChanged(const QString&)));
-    connect(notifyTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyTalkerButton_clicked()));
 
     // Interruption tab.
     connect(textPreMsgCheck, SIGNAL(toggled(bool)),
@@ -542,8 +469,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
         filtersView->resizeColumnToContents(i);
     for (int i = 0; i < m_talkerListModel.columnCount(); ++i)
         talkersView->resizeColumnToContents(i);
-    for (int i = 0; i < (notifyListView->model()->columnCount() - 1); ++i)
-        notifyListView->resizeColumnToContents(i);
 
     // Switch to Talkers tab if none configured,
     // otherwise switch to Jobs tab if it is active.
@@ -604,24 +529,6 @@ void KCMKttsMgr::load()
     autostartMgrCheckBox->setChecked(generalConfig.readEntry("AutoStartManager", true));
     autoexitMgrCheckBox->setChecked(generalConfig.readEntry("AutoExitManager", true));
 
-    // Notification settings.
-    notifyEnableCheckBox->setChecked(generalConfig.readEntry("Notify",
-        notifyEnableCheckBox->isChecked()));
-    notifyExcludeEventsWithSoundCheckBox->setChecked(
-        generalConfig.readEntry("ExcludeEventsWithSound",
-        notifyExcludeEventsWithSoundCheckBox->isChecked()));
-    slotNotifyClearButton_clicked();
-    loadNotifyEventsFromFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml"), true );
-    slotNotifyEnableCheckBox_toggled( notifyEnableCheckBox->isChecked() );
-    // Auto-expand and position on the Default item.
-    QTreeWidgetItem* item = findTreeWidgetItem( notifyListView, "default", nlvcEventSrc );
-    if ( item )
-        if ( item->childCount() > 0 ) {
-            notifyListView->setItemExpanded( item, true );
-            item = item->child(0);
-        }
-    if ( item )
-        notifyListView->scrollToItem( item );
 
     // Audio Output.
     // Default to Phonon.
@@ -808,7 +715,6 @@ void KCMKttsMgr::load()
     pcmCustom->setText(alsaConfig.readEntry("CustomPcmName", ""));
 
     // Update controls based on new states.
-    slotNotifyListView_currentItemChanged();
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
@@ -869,11 +775,6 @@ void KCMKttsMgr::save()
 
     generalConfig.writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
 
-    // Notification settings.
-    generalConfig.writeEntry("Notify", notifyEnableCheckBox->isChecked());
-    generalConfig.writeEntry("ExcludeEventsWithSound",
-        notifyExcludeEventsWithSoundCheckBox->isChecked());
-    saveNotifyEventsToFile(KStandardDirs::locateLocal("config", "kttsd_notifyevents.xml") );
 
     // Audio Output.
     int audioOutputMethod = 0;
@@ -1000,22 +901,6 @@ void KCMKttsMgr::defaults() {
                 changed = true;
                 autoexitMgrCheckBox->setChecked(
                     autoexitMgrCheckBoxValue);
-            }
-            break;
-
-        case wpNotify:
-            if (notifyEnableCheckBox->isChecked() != notifyEnableCheckBoxValue)
-            {
-                changed = true;
-                notifyEnableCheckBox->setChecked(notifyEnableCheckBoxValue);
-                notifyGroup->setChecked( notifyEnableCheckBoxValue );
-            }
-            if (notifyExcludeEventsWithSoundCheckBox->isChecked() !=
-                notifyExcludeEventsWithSoundCheckBoxValue )
-            {
-                changed = true;
-                notifyExcludeEventsWithSoundCheckBox->setChecked(
-                    notifyExcludeEventsWithSoundCheckBoxValue );
             }
             break;
 
@@ -1727,7 +1612,6 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
             {
                 kDebug() << "Starting KTTSD failed with message " << error;
                 enableKttsdCheckBox->setChecked(false);
-                notifyTestButton->setEnabled(false);
                 
             } else {
                 configChanged();
@@ -1831,8 +1715,6 @@ void KCMKttsMgr::kttsdStarted()
     if (kttsdLoaded)
     {
         enableKttsdCheckBox->setChecked(true);
-        // Enable/disable notify Test button.
-        slotNotifyListView_currentItemChanged();
         m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
         m_kspeech->setParent(this);
         m_kspeech->setApplicationName("KCMKttsMgr");
@@ -1846,7 +1728,6 @@ void KCMKttsMgr::kttsdStarted()
 
     } else {
         enableKttsdCheckBox->setChecked(false);
-        notifyTestButton->setEnabled(false);
         delete m_kspeech;
         m_kspeech = 0;
     }
@@ -1865,7 +1746,6 @@ void KCMKttsMgr::kttsdExiting()
         m_jobMgrPart = 0;
     }
     enableKttsdCheckBox->setChecked(false);
-    notifyTestButton->setEnabled(false);
     delete m_kspeech;
     m_kspeech = 0;
     kttsdVersion->setText(i18n("KTTSD not running"));
@@ -2197,482 +2077,6 @@ QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName
         return QString();
 }
 
-/**
- * Loads notify events from a file.  Clearing listview if clear is True.
- */
-QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clear)
-{
-    // Open existing event list.
-    QFile file( filename );
-    if ( !file.open( QIODevice::ReadOnly ) )
-    {
-        return i18n("Unable to open file.") + filename;
-    }
-    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
-    QDomDocument doc( "" );
-    if ( !doc.setContent( &file ) ) {
-        file.close();
-        return i18n("File not in proper XML format.");
-    }
-    // kDebug() << "StringReplacerConf::load: document successfully parsed.";
-    file.close();
-
-    // Clear list view.
-    if ( clear ) notifyListView->clear();
-
-    // Event list.
-    QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
-    const int eventListCount = eventList.count();
-    for (int eventIndex = 0; eventIndex < eventListCount; ++eventIndex)
-    {
-        QDomNode eventNode = eventList.item(eventIndex);
-        QDomNodeList propList = eventNode.childNodes();
-        QString eventSrc;
-        QString event;
-        QString actionName;
-        QString message;
-        TalkerCode talkerCode;
-        const int propListCount = propList.count();
-        for (int propIndex = 0; propIndex < propListCount; ++propIndex)
-        {
-            QDomNode propNode = propList.item(propIndex);
-            QDomElement prop = propNode.toElement();
-            if (prop.tagName() == "eventSrc") eventSrc = prop.text();
-            if (prop.tagName() == "event") event = prop.text();
-            if (prop.tagName() == "action") actionName = prop.text();
-            if (prop.tagName() == "message") message = prop.text();
-            if (prop.tagName() == "talker") talkerCode = TalkerCode(prop.text(), false);
-        }
-        addNotifyItem(eventSrc, event, NotifyAction::action( actionName ), message, talkerCode);
-    }
-    return QString();
-}
-
-/**
- * Saves notify events to a file.
- */
-QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
-{
-    QFile file( filename );
-    if ( !file.open( QIODevice::WriteOnly ) )
-        return i18n("Unable to open file ") + filename;
-
-    QDomDocument doc( "" );
-
-    QDomElement root = doc.createElement( "notifyEventList" );
-    doc.appendChild( root );
-
-    // Events.
-    QTreeWidget* lv = notifyListView;
-    const int lvCount = lv->topLevelItemCount();
-    for (int i = 0; i < lvCount; ++i) {
-        QTreeWidgetItem* topItem = lv->topLevelItem(i);
-        const int itemCount = topItem->childCount();
-        for (int j = 0; j < itemCount; ++j) {
-            QTreeWidgetItem* item = topItem->child(j);
-
-            QDomElement wordTag = doc.createElement( "notifyEvent" );
-            root.appendChild( wordTag );
-
-            QDomElement propTag = doc.createElement( "eventSrc" );
-            wordTag.appendChild( propTag);
-            QDomText t = doc.createTextNode( item->text(nlvcEventSrc) );
-            propTag.appendChild( t );
-
-            propTag = doc.createElement( "event" );
-            wordTag.appendChild( propTag);
-            t = doc.createTextNode( item->text(nlvcEvent) );
-            propTag.appendChild( t );
-
-            propTag = doc.createElement( "action" );
-            wordTag.appendChild( propTag);
-            t = doc.createTextNode( item->text(nlvcAction) );
-            propTag.appendChild( t );
-
-            if ( item->text(nlvcAction) == NotifyAction::actionName( NotifyAction::SpeakCustom ) )
-            {
-                propTag = doc.createElement( "message" );
-                wordTag.appendChild( propTag);
-                QString msg = item->text(nlvcActionName);
-                int msglen = msg.length();
-                msg = msg.mid( 1, msglen-2 );
-                t = doc.createCDATASection( msg );
-                propTag.appendChild( t );
-            }
-
-            propTag = doc.createElement( "talker" );
-            wordTag.appendChild( propTag);
-            t = doc.createCDATASection( item->text(nlvcTalker) );
-            propTag.appendChild( t );
-        }
-    }
-
-    // Write it all out.
-    QTextStream ts( &file );
-    ts.setCodec( "UTF-8" );
-    ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    ts << doc.toString();
-    file.close();
-
-    return QString();
-}
-
-void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
-{
-    notifyExcludeEventsWithSoundCheckBox->setEnabled( checked );
-    notifyGroup->setEnabled( checked );
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if ( !item ) return;        // should not happen
-    item->setText( nlvcEvent, NotifyPresent::presentName( index ) );
-    item->setText( nlvcEventName, NotifyPresent::presentDisplayName( index ) );
-    bool enableIt = ( index != NotifyPresent::None);
-    notifyActionComboBox->setEnabled( enableIt );
-    notifyTalkerButton->setEnabled( enableIt );
-    if (!enableIt)
-    {
-        notifyTalkerLabel->clear();
-    } else {
-        if ( notifyTalkerLabel->text().isEmpty() )
-        {
-            notifyTalkerLabel->setText( i18n("default") );
-        }
-    }
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyListView_currentItemChanged()
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if ( item )
-    {
-        bool topLevel = !item->parent();
-        if ( topLevel )
-        {
-            notifyPresentComboBox->setEnabled( false );
-            notifyActionComboBox->setEnabled( false );
-            notifyTestButton->setEnabled( false );
-            notifyMsgLineEdit->setEnabled( false );
-            notifyMsgLineEdit->clear();
-            notifyTalkerButton->setEnabled( false );
-            notifyTalkerLabel->clear();
-            bool defaultItem = ( item->text(nlvcEventSrc) == "default" );
-            notifyRemoveButton->setEnabled( !defaultItem );
-        } else {
-            bool defaultItem = ( item->parent()->text(nlvcEventSrc) == "default" );
-            notifyPresentComboBox->setEnabled( defaultItem );
-            if ( defaultItem )
-                notifyPresentComboBox->setCurrentIndex( NotifyPresent::present( item->text( nlvcEvent ) ) );
-            notifyActionComboBox->setEnabled( true );
-            int action = NotifyAction::action( item->text( nlvcAction ) );
-            notifyActionComboBox->setCurrentIndex( action );
-            notifyTalkerButton->setEnabled( true );
-            TalkerCode talkerCode( item->text( nlvcTalker ) );
-            notifyTalkerLabel->setText( talkerCode.getTranslatedDescription() );
-            if ( action == NotifyAction::SpeakCustom )
-            {
-                notifyMsgLineEdit->setEnabled( true );
-                QString msg = item->text( nlvcActionName );
-                int msglen = msg.length();
-                msg = msg.mid( 1, msglen-2 );
-                notifyMsgLineEdit->setText( msg );
-            } else {
-                notifyMsgLineEdit->setEnabled( false );
-                notifyMsgLineEdit->clear();
-            }
-            notifyRemoveButton->setEnabled( !defaultItem );
-            notifyTestButton->setEnabled(
-                action != NotifyAction::DoNotSpeak &&
-                enableKttsdCheckBox->isChecked());
-        }
-    } else {
-        notifyPresentComboBox->setEnabled( false );
-        notifyActionComboBox->setEnabled( false );
-        notifyTestButton->setEnabled( false );
-        notifyMsgLineEdit->setEnabled( false );
-        notifyMsgLineEdit->clear();
-        notifyTalkerButton->setEnabled( false );
-        notifyTalkerLabel->clear();
-        notifyRemoveButton->setEnabled( false );
-    }
-}
-
-void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if ( item )
-        if ( !item->parent() ) item = 0;
-    if ( !item ) return;  // This shouldn't happen.
-    item->setText( nlvcAction, NotifyAction::actionName( index ) );
-    item->setText( nlvcActionName, NotifyAction::actionDisplayName( index ) );
-    if ( index == NotifyAction::SpeakCustom )
-        item->setText( nlvcActionName, "\"" + notifyMsgLineEdit->text() + "\"" );
-    if ( index == NotifyAction::DoNotSpeak )
-        item->setIcon( nlvcActionName, KIcon("nospeak") );
-    else
-        item->setIcon( nlvcActionName, KIcon("speak") );
-    slotNotifyListView_currentItemChanged();
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if ( item )
-        if ( item->parent() ) item = 0;
-    if ( !item ) return;  // This shouldn't happen.
-    if ( notifyActionComboBox->currentIndex() != NotifyAction::SpeakCustom) return;
-    item->setText( nlvcActionName, "\"" + text + "\"" );
-    notifyTestButton->setEnabled(
-        !text.isEmpty() && enableKttsdCheckBox->isChecked());
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyTestButton_clicked()
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if (item)
-    {
-        QString msg;
-        int action = NotifyAction::action(item->text(nlvcAction));
-        switch (action)
-        {
-            case NotifyAction::SpeakEventName:
-                msg = item->text(nlvcEventName);
-                break;
-            case NotifyAction::SpeakMsg:
-                msg = i18n("sample notification message");
-                break;
-            case NotifyAction::SpeakCustom:
-                msg = notifyMsgLineEdit->text();
-                msg.replace("%a", i18n("sample application"));
-                msg.replace("%e", i18n("sample event"));
-                msg.replace("%m", i18n("sample notification message"));
-                break;
-        }
-        if (!msg.isEmpty()) {
-            m_kspeech->setDefaultTalker(item->text(nlvcTalker));
-            int savePriority = m_kspeech->defaultPriority();
-            m_kspeech->setDefaultPriority(KSpeech::jpMessage);
-            m_kspeech->say(msg, 0);
-            m_kspeech->setDefaultPriority(savePriority);
-        }
-    }
-}
-
-void KCMKttsMgr::slotNotifyTalkerButton_clicked()
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if ( item )
-        if ( !item->parent() ) item = 0;
-    if ( !item ) return;  // This shouldn't happen.
-    QString talkerCode = item->text( nlvcTalker );
-    SelectTalkerDlg dlg( this, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
-    int dlgResult = dlg.exec();
-    if ( dlgResult != KDialog::Accepted ) return;
-    item->setText( nlvcTalker, dlg.getSelectedTalkerCode() );
-    QString talkerName = dlg.getSelectedTranslatedDescription();
-    item->setText( nlvcTalkerName, talkerName );
-    notifyTalkerLabel->setText( talkerName );
-    configChanged();
-}
-
-/**
- * Adds an item to the notify listview.
- * message is only needed if action = naSpeakCustom.
- */
-QTreeWidgetItem* KCMKttsMgr::addNotifyItem(
-    const QString& eventSrc,
-    const QString& event,
-    int action,
-    const QString& message,
-    TalkerCode& talkerCode)
-{
-    QTreeWidget* lv = notifyListView;
-    QTreeWidgetItem* item = 0;
-    QString iconName;
-    QString eventSrcName;
-    if (eventSrc == "default")
-        eventSrcName = i18n("Default (all other events)");
-    else
-        eventSrcName = NotifyEvent::getEventSrcName(eventSrc, iconName);
-    QString eventName;
-    if (eventSrc == "default")
-        eventName = NotifyPresent::presentDisplayName( event );
-    else
-    {
-        if (event == "default")
-            eventName = i18n("All other %1 events", eventSrcName);
-        else
-            eventName = NotifyEvent::getEventName(eventSrc, event);
-    }
-    QString actionName = NotifyAction::actionName( action );
-    QString actionDisplayName = NotifyAction::actionDisplayName( action );
-    if (action == NotifyAction::SpeakCustom) actionDisplayName = "\"" + message + "\"";
-    QString talkerName = talkerCode.getTranslatedDescription();
-    if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
-    {
-        QTreeWidgetItem* parentItem = findTreeWidgetItem(lv, eventSrcName, nlvcEventSrcName);
-        if (!parentItem)
-        {
-            parentItem = new QTreeWidgetItem(lv);
-            parentItem->setText( nlvcEventSrcName, eventSrcName );
-            parentItem->setText( nlvcEventSrc, eventSrc );
-            if ( !iconName.isEmpty() )
-                parentItem->setIcon( nlvcEventSrcName, KIcon(iconName) );
-        }
-        // No duplicates.
-        item = findTreeWidgetItem( lv, event, nlvcEvent );
-        if ( !item || item->parent() != parentItem ) {
-            item = new QTreeWidgetItem(parentItem);
-            item->setText( nlvcEventName, eventName );
-            item->setText( nlvcActionName, actionDisplayName );
-            item->setText( nlvcTalkerName, talkerName );
-            item->setText( nlvcEventSrc, eventSrc );
-            item->setText( nlvcEvent, event );
-            item->setText( nlvcAction, actionName );
-            item->setText( nlvcTalker, talkerCode.getTalkerCode() );
-        }
-        if ( action == NotifyAction::DoNotSpeak )
-            item->setIcon( nlvcActionName, KIcon("nospeak") );
-        else
-            item->setIcon( nlvcActionName, KIcon("speak") );
-    }
-    return item;
-}
-
-/**
-* A convenience method that finds an item in a TreeViewWidget, assuming there is at most
-* one occurrence of the item.  Returns 0 if not found.
-* @param tw                     The TreeViewWidget to search.
-* @param sought                 The string sought.
-* @param col                    Column of the TreeViewWidget to search.
-* @return                       The item of the TreeViewWidget found or null if not found.
-*
-* An exact match is performed.
-*/
-QTreeWidgetItem* KCMKttsMgr::findTreeWidgetItem(QTreeWidget* tw, const QString& sought, int col)
-{
-    QList<QTreeWidgetItem *> twList = tw->findItems(sought, Qt::MatchExactly, col);
-    if (twList.isEmpty()) return 0;
-    return twList[0];
-}
-
-void KCMKttsMgr::slotNotifyAddButton_clicked()
-{
-    QTreeWidget* lv = notifyListView;
-    QTreeWidgetItem* item = lv->currentItem();
-    QString eventSrc;
-    if ( item ) eventSrc = item->text( nlvcEventSrc );
-    KDialog* dlg = new KDialog(this);
-    dlg->setCaption(i18n("Select Event"));
-    dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
-    dlg->setDefaultButton(KDialog::Cancel);
-    SelectEvent* selectEventWidget = new SelectEvent( dlg, eventSrc );
-    dlg->setMainWidget( selectEventWidget );
-//    dlg->setInitialSize( QSize(500, 400) );
-    // dlg->setHelp("select-plugin", "kttsd");
-    int dlgResult = dlg->exec();
-    eventSrc = selectEventWidget->getEventSrc();
-    QString event = selectEventWidget->getEvent();
-    delete dlg;
-    if ( dlgResult != QDialog::Accepted ) return;
-    if ( eventSrc.isEmpty() || event.isEmpty() ) return;
-    // Use Default action, message, and talker.
-    QString actionName;
-    int action = NotifyAction::DoNotSpeak;
-    QString msg;
-    TalkerCode talkerCode;
-    item = findTreeWidgetItem( lv, "default", nlvcEventSrc );
-    if ( item )
-    {
-        if ( item->childCount() > 0 ) item = item->child(0);
-        if ( item )
-        {
-            actionName = item->text( nlvcAction );
-            action = NotifyAction::action( actionName );
-            talkerCode = TalkerCode( item->text( nlvcTalker ) );
-            if (action == NotifyAction::SpeakCustom )
-            {
-                msg = item->text(nlvcActionName);
-                int msglen = msg.length();
-                msg = msg.mid( 1, msglen-2 );
-            }
-        }
-    }
-    item = addNotifyItem( eventSrc, event, action, msg, talkerCode );
-    lv->scrollToItem( item );
-    lv->setCurrentItem( item );
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyClearButton_clicked()
-{
-    QTreeWidget* lv = notifyListView;
-    lv->clear();
-    TalkerCode talkerCode = QString();
-    QTreeWidgetItem* item = addNotifyItem(
-        QString("default"),
-        NotifyPresent::presentName(NotifyPresent::Passive),
-        NotifyAction::SpeakEventName,
-        QString(),
-        talkerCode );
-    lv->scrollToItem( item );
-    lv->setCurrentItem( item );
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyRemoveButton_clicked()
-{
-    QTreeWidgetItem* item = notifyListView->currentItem();
-    if (!item) return;
-    QTreeWidgetItem* parentItem = item->parent();
-    delete item;
-    if (parentItem)
-    {
-        if (parentItem->childCount() == 0) delete parentItem;
-    }
-    // Update display.
-    slotNotifyListView_currentItemChanged();
-    configChanged();
-}
-
-void KCMKttsMgr::slotNotifyLoadButton_clicked()
-{
-    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/notify/");
-    QString dataDir;
-    if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
-    QString filename = KFileDialog::getOpenFileName(
-        dataDir,
-        "*.xml|" + i18nc("file type", "Notification Event List") + " (*.xml)",
-        this,
-        "event_loadfile");
-    if ( filename.isEmpty() ) return;
-    QString errMsg = loadNotifyEventsFromFile( filename, true );
-    slotNotifyListView_currentItemChanged();
-    if ( !errMsg.isEmpty() )
-        KMessageBox::sorry( this, errMsg, i18n("Error Opening File") );
-    else
-        configChanged();
-}
-
-void KCMKttsMgr::slotNotifySaveButton_clicked()
-{
-    QString filename = KFileDialog::getSaveFileName(
-        KGlobal::dirs()->saveLocation( "data" ,"kttsd/notify/", false ),
-        "*.xml|" + i18nc("file type", "Notification Event List") + " (*.xml)",
-        this,
-        "event_savefile");
-    if ( filename.isEmpty() ) return;
-    QString errMsg = saveNotifyEventsToFile( filename );
-    slotNotifyListView_currentItemChanged();
-    if ( !errMsg.isEmpty() )
-        KMessageBox::sorry( this, errMsg, i18n("Error Opening File") );
-}
 
 void KCMKttsMgr::slotFilterListView_clicked(const QModelIndex & index)
 {

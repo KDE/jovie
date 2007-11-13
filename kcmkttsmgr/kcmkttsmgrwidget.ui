@@ -6,47 +6,67 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>467</width>
-    <height>338</height>
+    <width>578</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>7</hsizetype>
-    <vsizetype>7</vsizetype>
+   <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>6</number>
    </property>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="mainTab" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>7</vsizetype>
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
        <string>&amp;General</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>9</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>6</number>
        </property>
        <item row="4" column="0" >
@@ -74,11 +94,20 @@
        </item>
        <item row="2" column="0" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <spacer>
@@ -141,26 +170,45 @@
        <string>&amp;Talkers</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>8</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>8</number>
+       </property>
+       <property name="rightMargin" >
+        <number>8</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>8</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>6</number>
        </property>
        <item row="0" column="1" >
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QPushButton" name="addTalkerButton" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -176,9 +224,7 @@
          <item>
           <widget class="QPushButton" name="higherTalkerPriorityButton" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -191,9 +237,7 @@
          <item>
           <widget class="QPushButton" name="lowerTalkerPriorityButton" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -209,9 +253,7 @@
             <bool>false</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -230,9 +272,7 @@
             <bool>false</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -270,362 +310,68 @@
      </widget>
      <widget class="QWidget" name="TabPage" >
       <attribute name="title" >
-       <string>&amp;Notifications</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>8</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="1" column="0" >
-        <widget class="QGroupBox" name="notifyGroup" >
-         <property name="title" >
-          <string/>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="4" column="0" >
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="notifyTalkerLabelLabel" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>The Talker that will speak the notification.  The "default" Talker is the topmost talker listed on the Talkers tab.</string>
-              </property>
-              <property name="text" >
-               <string>Talke&amp;r:</string>
-              </property>
-              <property name="buddy" >
-               <cstring>notifyTalkerLabel</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="notifyTalkerLabel" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="frameShape" >
-               <enum>QFrame::Box</enum>
-              </property>
-              <property name="text" >
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="notifyTalkerButton" >
-              <property name="whatsThis" >
-               <string>Click to select the Talker to speak the notification.</string>
-              </property>
-              <property name="text" >
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0" >
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="notifyPresentLabel" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>Applies only to the default event.  Does not affect application-specific events.  Only events that display in the manner which you select will be spoken.</string>
-              </property>
-              <property name="text" >
-               <string>Notifications to speak:</string>
-              </property>
-              <property name="buddy" >
-               <cstring>notifyPresentComboBox</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="notifyPresentComboBox" >
-              <property name="whatsThis" >
-               <string>Applies only to the default event.  Does not affect application-specific events.  Only events that display in the manner which you select will be spoken.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0" >
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="notifyAddButton" >
-              <property name="whatsThis" >
-               <string>Click to configure notification for a specific application event.</string>
-              </property>
-              <property name="text" >
-               <string>Add...</string>
-              </property>
-              <property name="shortcut" >
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="notifyRemoveButton" >
-              <property name="whatsThis" >
-               <string>Click to remove a specific notification event from the list.  You cannot remove the default event.</string>
-              </property>
-              <property name="text" >
-               <string>Re&amp;move</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType" >
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" >
-               <size>
-                <width>152</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="notifyClearButton" >
-              <property name="whatsThis" >
-               <string>Removes all the application specific events.  The default event remains.</string>
-              </property>
-              <property name="text" >
-               <string>Cl&amp;ear</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="notifyLoadButton" >
-              <property name="whatsThis" >
-               <string>Click to read configured notification events from a file.</string>
-              </property>
-              <property name="text" >
-               <string>&amp;Load...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="notifySaveButton" >
-              <property name="whatsThis" >
-               <string>Click to write all the configured application events to a file.</string>
-              </property>
-              <property name="text" >
-               <string>&amp;Save...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="3" column="0" >
-           <layout class="QGridLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item row="0" column="2" >
-             <widget class="QPushButton" name="notifyTestButton" >
-              <property name="toolTip" >
-               <string>Click to test notification</string>
-              </property>
-              <property name="whatsThis" >
-               <string>Click this button to test the notification.  A sample message will be spoken.  Note: The Text-to-Speech system must be enabled.</string>
-              </property>
-              <property name="text" >
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" >
-             <widget class="QLabel" name="notifyActionLabel" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
-              </property>
-              <property name="text" >
-               <string>Ac&amp;tion:</string>
-              </property>
-              <property name="buddy" >
-               <cstring>notifyActionComboBox</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3" >
-             <widget class="QLineEdit" name="notifyMsgLineEdit" >
-              <property name="whatsThis" >
-               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1" >
-             <widget class="QComboBox" name="notifyActionComboBox" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="whatsThis" >
-               <string>&lt;qt>Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl>&lt;dt>%e&lt;/dt>&lt;dd>Name of the event&lt;/dd>&lt;dt>%a&lt;/dt>&lt;dd>Application that sent the event&lt;/dd>&lt;dt>%m&lt;/dt>&lt;dd>The message sent by the application&lt;/dd>&lt;/dl>&lt;/qt></string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QTreeWidget" name="notifyListView" />
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0" >
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QCheckBox" name="notifyEnableCheckBox" >
-           <property name="whatsThis" >
-            <string>When checked and KTTS is enabled, notification events from applications sent via KNotify will be spoken according to the options you set on this tab.</string>
-           </property>
-           <property name="text" >
-            <string>Speak notifications (&amp;KNotify)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>16</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="notifyExcludeEventsWithSoundCheckBox" >
-           <property name="whatsThis" >
-            <string>When checked, notification events that have a sound will not be spoken.</string>
-           </property>
-           <property name="text" >
-            <string>E&amp;xclude notifications with a sound</string>
-           </property>
-           <property name="checked" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="TabPage" >
-      <attribute name="title" >
        <string>&amp;Filters</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>6</number>
        </property>
        <item row="0" column="0" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QTreeView" name="filtersView" />
          </item>
          <item>
           <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QPushButton" name="addFilterButton" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -641,9 +387,7 @@
            <item>
             <widget class="QPushButton" name="higherFilterPriorityButton" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -659,9 +403,7 @@
            <item>
             <widget class="QPushButton" name="lowerFilterPriorityButton" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -680,9 +422,7 @@
               <bool>false</bool>
              </property>
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -701,9 +441,7 @@
               <bool>false</bool>
              </property>
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -738,29 +476,45 @@
        </item>
        <item row="1" column="0" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QTreeView" name="sbdsView" />
          </item>
          <item>
           <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QPushButton" name="sbdButton" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -800,18 +554,42 @@
        <string>&amp;Interruption</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>6</number>
        </property>
        <item row="0" column="0" >
         <layout class="QGridLayout" >
-         <property name="margin" >
+         <property name="leftMargin" >
           <number>6</number>
          </property>
-         <property name="spacing" >
+         <property name="topMargin" >
+          <number>6</number>
+         </property>
+         <property name="rightMargin" >
+          <number>6</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>6</number>
+         </property>
+         <property name="horizontalSpacing" >
+          <number>6</number>
+         </property>
+         <property name="verticalSpacing" >
           <number>6</number>
          </property>
          <item row="1" column="1" >
@@ -820,9 +598,7 @@
             <bool>true</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -855,9 +631,7 @@
          <item row="1" column="0" >
           <widget class="QCheckBox" name="textPreSndCheck" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -895,9 +669,7 @@
             <bool>true</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -955,18 +727,28 @@
        <string>A&amp;udio</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>9</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>6</number>
        </property>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="audioButtonGroup" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>3</hsizetype>
-           <vsizetype>5</vsizetype>
+          <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -978,19 +760,40 @@
           <string>Out&amp;put Using</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>9</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>6</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>6</number>
           </property>
           <item row="1" column="1" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="pcmLabel" >
@@ -1011,9 +814,7 @@
                <bool>false</bool>
               </property>
               <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -1103,11 +904,20 @@
        </item>
        <item row="2" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QCheckBox" name="keepAudioCheckBox" >
@@ -1125,9 +935,7 @@
             <bool>true</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1141,18 +949,25 @@
        </item>
        <item row="1" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="timeLabel" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1174,9 +989,7 @@
             <bool>true</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1187,11 +1000,11 @@
            <property name="suffix" >
             <string> %</string>
            </property>
-           <property name="maximum" >
-            <number>200</number>
-           </property>
            <property name="minimum" >
             <number>50</number>
+           </property>
+           <property name="maximum" >
+            <number>200</number>
            </property>
            <property name="value" >
             <number>100</number>
@@ -1257,6 +1070,7 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -1269,18 +1083,6 @@
   <tabstop>lowerTalkerPriorityButton</tabstop>
   <tabstop>configureTalkerButton</tabstop>
   <tabstop>removeTalkerButton</tabstop>
-  <tabstop>notifyEnableCheckBox</tabstop>
-  <tabstop>notifyExcludeEventsWithSoundCheckBox</tabstop>
-  <tabstop>notifyAddButton</tabstop>
-  <tabstop>notifyRemoveButton</tabstop>
-  <tabstop>notifyClearButton</tabstop>
-  <tabstop>notifyLoadButton</tabstop>
-  <tabstop>notifySaveButton</tabstop>
-  <tabstop>notifyPresentComboBox</tabstop>
-  <tabstop>notifyActionComboBox</tabstop>
-  <tabstop>notifyTestButton</tabstop>
-  <tabstop>notifyMsgLineEdit</tabstop>
-  <tabstop>notifyTalkerButton</tabstop>
   <tabstop>addFilterButton</tabstop>
   <tabstop>higherFilterPriorityButton</tabstop>
   <tabstop>lowerFilterPriorityButton</tabstop>

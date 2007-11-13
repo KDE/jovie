@@ -6,13 +6,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd ${CMAKE_BINARY_DIR}/ktts
 
 set(kcm_kttsd_PART_SRCS 
    kcmkttsmgr.cpp 
-   addtalker.cpp 
-   selectevent.cpp )
+   addtalker.cpp )
 
 
 qt4_add_dbus_interfaces(kcm_kttsd_PART_SRCS ${DBUS_INTERFACES_INSTALL_DIR}/org.kde.KSpeech.xml )
 
-kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui selecteventwidget.ui )
+kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui addtalkerwidget.ui )
 
 kde4_add_plugin(kcm_kttsd ${kcm_kttsd_PART_SRCS})
 

@@ -42,7 +42,6 @@
 
 // KTTS includes.
 #include "talkermgr.h"
-#include "notify.h"
 #include "configdata.h"
 
 // SpeechData includes.

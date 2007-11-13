@@ -41,8 +41,6 @@
 #include <kaboutdata.h>
 #include <kspeech.h>
 
-// KTTS includes.
-#include "notify.h"
 
 // KTTSD includes.
 #include "configdata.h"
@@ -464,11 +462,6 @@ bool KSpeech::initializeSpeechData()
         connect (d->speechData, SIGNAL(filteringFinished()),
             this, SLOT(slotFilteringFinished()));
         
-        // TODO: Hook KNotify signal.
-        // if (!connectDCOPSignal(0, 0, 
-        //    "notifySignal(QString,QString,QString,QString,QString,int,int,int,int)",
-        //    "notificationSignal(QString,QString,QString,QString,QString,int,int,int,int)",
-        //    false)) kDebug() << "KTTSD:initializeSpeechData: connectDCOPSignal for knotify failed";
     }
     if (!d->configData) initializeConfigData();
     d->speechData->setConfigData(d->configData);
@@ -550,134 +543,6 @@ bool KSpeech::initializeSpeaker()
     return true;
 }
 
-/**
-* This signal is emitted by KNotify when a notification event occurs.
-*    ds << event << fromApp << text << sound << file << present << level
-*       << winId << eventId;
-* default_presentation contains these ORed events: None=0, Sound=1, Messagebox=2, Logfile=4, Stderr=8,
-* PassivePopup=16, Execute=32, Taskbar=64
-*/
-void KSpeech::notificationSignal( const QString& event, const QString& fromApp,
-    const QString &text, const QString& sound, const QString& /*file*/,
-    const int present, const int /*level*/, const int /*windId*/, const int /*eventId*/)
-{
-    if (!d->speaker) return;
-    // kDebug() << "KTTSD:notificationSignal: event: " << event << " fromApp: " << fromApp << 
-    //     " text: " << text << " sound: " << sound << " file: " << file << " present: " << present <<
-    //    " level: " << level << " windId: " << windId << " eventId: " << eventId << endl;
-    if ( d->configData->notify )
-        if ( !d->configData->notifyExcludeEventsWithSound || sound.isEmpty() )
-        {
-            bool found = false;
-            NotifyOptions notifyOptions;
-            QString msg;
-            QString talker;
-            // Check for app-specific action.
-            if ( d->configData->notifyAppMap.contains( fromApp ) )
-            {
-                NotifyEventMap notifyEventMap = d->configData->notifyAppMap[ fromApp ];
-                if ( notifyEventMap.contains( event ) )
-                {
-                    found = true;
-                    notifyOptions = notifyEventMap[ event ];
-                } else {
-                    // Check for app-specific default.
-                    if ( notifyEventMap.contains( "default" ) )
-                    {
-                        found = true;
-                        notifyOptions = notifyEventMap[ "default" ];
-                        notifyOptions.eventName.clear();
-                    }
-                }
-            }
-            // If no app-specific action, try default.
-            if ( !found )
-            {
-                enum {   //this enum was previously in KNotifyClient
-                    Default = -1,
-                    None = 0,
-                    Sound = 1,
-                    Messagebox = 2,
-                    Logfile = 4,
-                    Stderr = 8,
-                    PassivePopup = 16,
-                    Execute = 32,
-                    Taskbar = 64
-                };
-                switch ( d->configData->notifyDefaultPresent )
-                {
-                    case NotifyPresent::None:
-                        found = false;
-                        break;
-                    case NotifyPresent::Dialog:
-                        found = (
-                            (present & Messagebox)
-                            &&
-                            !(present & PassivePopup)
-                            );
-                        break;
-                    case NotifyPresent::Passive:
-                        found = (
-                            !(present & Messagebox)
-                            &&
-                            (present & PassivePopup)
-                            );
-                        break;
-                    case NotifyPresent::DialogAndPassive:
-                        found = (
-                            (present & Messagebox)
-                            &&
-                            (present & PassivePopup)
-                            );
-                        break;
-                    case NotifyPresent::All:
-                        found = true;
-                        break;
-                }
-                if ( found )
-                    notifyOptions = d->configData->notifyDefaultOptions;
-            }
-            if ( found )
-            {
-                int action = notifyOptions.action;
-                talker = notifyOptions.talker;
-                switch ( action )
-                {
-                    case NotifyAction::DoNotSpeak:
-                        break;
-                    case NotifyAction::SpeakEventName:
-                        if (notifyOptions.eventName.isEmpty())
-                            msg = NotifyEvent::getEventName( fromApp, event );
-                        else
-                            msg = notifyOptions.eventName;
-                        break;
-                    case NotifyAction::SpeakMsg:
-                        msg = text;
-                        break;
-                    case NotifyAction::SpeakCustom:
-                        msg = notifyOptions.customMsg;
-                        msg.replace( "%a", fromApp );
-                        msg.replace( "%m", text );
-                        if ( msg.contains( "%e" ) )
-                        {
-                            if ( notifyOptions.eventName.isEmpty() )
-                                msg.replace( "%e", NotifyEvent::getEventName( fromApp, event ) );
-                            else
-                                msg.replace( "%e", notifyOptions.eventName );
-                        }
-                        break;
-                }
-            }
-            // Queue msg if we should speak something.
-            if ( !msg.isEmpty() )
-            {
-                QString fromApps = fromApp + ",knotify";
-                d->speechData->getAppData(fromApp)->setDefaultTalker(talker);
-                d->speechData->say(fromApp, msg, 0);
-                d->speaker->doUtterances();
-            }
-        }
-}
 
 void KSpeech::slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state)
 {

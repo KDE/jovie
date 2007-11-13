@@ -653,15 +653,6 @@ Q_SIGNALS: // SIGNALS
     */
     void marker(const QString &appId, int jobNum, int markerType, const QString &markerData);
 
-protected:
-
-    /**
-    * This signal is emitted by KNotify when a notification event occurs.
-    */
-    void notificationSignal(const QString &event, const QString &fromApp,
-                            const QString &text, const QString &sound, const QString &file,
-                            const int present, const int level, const int winId, const int eventId );
-
 private slots:
     void slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
     void slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData);

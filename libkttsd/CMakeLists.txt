@@ -10,8 +10,7 @@ set(kttsd_LIB_SRCS
    utils.cpp 
    talkerlistmodel.cpp 
    selecttalkerdlg.cpp 
-   selectlanguagedlg.cpp 
-   notify.cpp )
+   selectlanguagedlg.cpp) 
 
 kde4_add_ui_files(kttsd_LIB_SRCS selecttalkerwidget.ui )
 

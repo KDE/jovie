@@ -194,23 +194,10 @@ class KCMKttsMgr :
         {
             wpGeneral = 0,          // General tab.
             wpTalkers = 1,          // Talkers tab.
-            wpNotify = 2,           // Notify tab.
-            wpFilters = 3,          // Filters tab.
-            wpInterruption = 4,     // Interruption tab.
-            wpAudio = 5,            // Audio tab.
-            wpJobs = 6              // Jobs tab.
-        };
-
-        enum NotifyListViewColumn
-        {
-            nlvcEventSrcName = 0,
-            nlvcEventName = 0,
-            nlvcActionName = 1,
-            nlvcTalkerName = 2,
-            nlvcEventSrc = 3,      // hidden
-            nlvcEvent = 4,         // hidden
-            nlvcAction = 5,        // hidden
-            nlvcTalker = 6         // hidden
+            wpFilters = 2,          // Filters tab.
+            wpInterruption = 3,     // Interruption tab.
+            wpAudio = 4,            // Audio tab.
+            wpJobs = 5              // Jobs tab.
         };
 
         /**
@@ -287,26 +274,6 @@ class KCMKttsMgr :
          */
         QString FilterDesktopEntryNameToName(const QString& desktopEntryName);
 
-        /**
-         * Loads notify events from a file.  Clearing listview if clear is True.
-         */
-        QString loadNotifyEventsFromFile( const QString& filename, bool clear);
-
-        /**
-         * Saves notify events to a file.
-         */
-        QString saveNotifyEventsToFile(const QString& filename);
-
-        /**
-         * Adds an item to the notify treeview.
-         * message is only needed if action = nactSpeakCustom.
-         */
-        QTreeWidgetItem* addNotifyItem(
-            const QString& eventSrc,
-            const QString& event,
-            int action,
-            const QString& message,
-            TalkerCode& talkerCode);
 
         /**
         * A convenience method that finds an item in a TreeViewWidget, assuming there is at most
@@ -406,11 +373,6 @@ class KCMKttsMgr :
         */
         SynthToLangMap m_synthToLangMap;
 
-        /**
-        * Default Talker Code for notifications.
-        */
-        QString m_defaultNotifyTalkerCode;
-
     private slots:
         /**
         * Update the status of the Talker/Filter buttons.
@@ -444,21 +406,6 @@ class KCMKttsMgr :
         void slotLowerTalkerPriorityButton_clicked();
         void slotConfigureTalkerButton_clicked();
 
-        /**
-        * Notify tab slots.
-        */
-        void slotNotifyEnableCheckBox_toggled(bool checked);
-        void slotNotifyAddButton_clicked();
-        void slotNotifyRemoveButton_clicked();
-        void slotNotifyClearButton_clicked();
-        void slotNotifyLoadButton_clicked();
-        void slotNotifySaveButton_clicked();
-        void slotNotifyListView_currentItemChanged();
-        void slotNotifyPresentComboBox_activated(int index);
-        void slotNotifyActionComboBox_activated(int index);
-        void slotNotifyTestButton_clicked();
-        void slotNotifyMsgLineEdit_textChanged(const QString& text);
-        void slotNotifyTalkerButton_clicked();
 
         /**
         * Filters tab slots.
