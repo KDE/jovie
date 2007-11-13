@@ -45,6 +45,6 @@ Comment[tr]=KDE Metinden Konuşmaya Görev Yöneticisi
 Comment[uk]=Менеджер завдань KDE для синтезу мовлення з тексту
 Comment[vi]=Trình quản lý Tác vụ Văn bản sang Tiếng nói KDE
 Comment[x-test]=xxKDE Text-to-speech Job Managerxx
-Comment[zh_CN]=KDE 文本到语音任务管理器
+Comment[zh_CN]=KDE 语音合成任务管理器
 Comment[zh_TW]=KDE 文字轉語音工作管理員
 ServiceTypes=KParts/ReadOnlyPart

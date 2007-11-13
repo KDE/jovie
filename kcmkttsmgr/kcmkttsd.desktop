@@ -49,7 +49,7 @@ Name[tr]=Metinden Konuşmaya
 Name[uk]=Синтез мовлення з тексту
 Name[vi]=Văn bản sang Tiếng nói
 Name[x-test]=xxText-to-Speechxx
-Name[zh_CN]=文本到语音(TTS)
+Name[zh_CN]=语音合成(TTS)
 Name[zh_TW]=文字轉語音
 Comment=Text-to-Speech Control Module
 Comment[ar]=وحدة تحكم نص-إلى-صوت
@@ -94,7 +94,7 @@ Comment[tr]=Metinden Konuşmaya Kontrol Modülü
 Comment[uk]=Модуль керування синтезом мовлення з тексту
 Comment[vi]=Mô đun Điều khiển Văn bản sang Tiếng nói
 Comment[x-test]=xxText-to-Speech Control Modulexx
-Comment[zh_CN]=文本到语音(TTS)控制模块
+Comment[zh_CN]=语音合成(TTS)控制模块
 Comment[zh_TW]=文字轉語音控制模組
 
 ServiceTypes=KCModule
@@ -140,7 +140,7 @@ Keywords[tg]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthes
 Keywords[uk]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,мовлення,синтез,голос,текст,команда,через
 Keywords[vi]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,văn bản,sang,tiếng nói,nói,tổng hợp,tạp,festival,lệnh,freets,proklam,qua,giọng nói
 Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
-Keywords[zh_CN]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizersynth,festival,command,freetts,proklam,via,voice,文本到语音,文本,语音
+Keywords[zh_CN]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizersynth,festival,command,freetts,proklam,via,voice,语音合成,文本,语音
 
 X-KDE-ParentApp=kcontrol
 X-KDE-SubstituteUID=false
