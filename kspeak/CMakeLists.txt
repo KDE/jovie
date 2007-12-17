@@ -9,5 +9,5 @@ kde4_add_executable(kspeak ${kspeak_SRCS})
 target_link_libraries(kspeak
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KUTILS_LIBS} )
-
+#Why it's not installed ?
 # install(TARGETS kspeak DESTINATION ${BIN_INSTALL_DIR} )
