@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Hadifix
+Name[hi]=हैडिफ़िक्स
 Name[ne]=ह्याडिफिक्स
 Name[x-test]=xxHadifixxx
 Name[zh_CN]=Hadidix
@@ -19,6 +20,7 @@ Comment[fi]=Saksalainen hadifix teksti puheeksi -järjestelmä
 Comment[fr]=Système allemand de synthèse vocale hadifix
 Comment[ga]=Córas téacs-go-caint Gearmáinise hadifix
 Comment[gl]=Sistema alemao de texto-para-fala hadifix
+Comment[hi]=जर्मन हैडिफ़िक्स पाठ से वार्ता तंत्र
 Comment[hu]=Hadifix szövegfelolvasó (Mbrola-alapú)
 Comment[is]=Þýska hadifix texti-í-tal kerfið
 Comment[it]=Sistema di pronuncia tedesca Hadifix
@@ -35,6 +37,7 @@ Comment[pl]=Niemiecki system syntezy mowy hadifix
 Comment[pt]=O sistema alemão de texto-para-fala Hadifix
 Comment[pt_BR]=Sistema alemão de conversão de texto para fala Hadifix
 Comment[ru]=Немецкая система синтеза речи Hadifix
+Comment[sk]=Nemecký text-na-reč systém hadifix
 Comment[sl]=Nemški sistem besedila v govor hadifix
 Comment[sr]=Hadifix, немачки систем за текст-у-говор
 Comment[sr@latin]=Hadifix, nemački sistem za tekst-u-govor
