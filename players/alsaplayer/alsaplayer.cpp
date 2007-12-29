@@ -806,20 +806,20 @@ void AlsaPlayerThread::set_params(void)
     err = snd_pcm_hw_params_set_period_size_near(handle, hwparams, &period_size, &dir);
     if (err < 0) {
         kDebug() << "Setting period_size to " << period_size << " failed, but continuing: "
-            << snd_strerror(err) << endl;
+            << snd_strerror(err);
     }
 
     periods = m_defPeriods;
     dir = 1;
     err = snd_pcm_hw_params_set_periods_near(handle, hwparams, &periods, &dir);
     if (err < 0)
-        kdDebug() << "Unable to set number of periods to " << periods << ", but continuing: "
-            << snd_strerror(err) << endl;
+        kDebug() << "Unable to set number of periods to " << periods << ", but continuing: "
+            << snd_strerror(err);
 
     /* Install hw parameters. */
     err = snd_pcm_hw_params(handle, hwparams);
     if (err < 0) {
-        kdDebug() << "Unable to install hw params: " << snd_strerror(err) << endl;
+        kDebug() << "Unable to install hw params: " << snd_strerror(err);
         snd_pcm_hw_params_dump(hwparams, log);
         stopAndExit();
     }
@@ -832,13 +832,13 @@ void AlsaPlayerThread::set_params(void)
     chunk_size = periods * period_size;
 
     if (0 == chunk_size) {
-        kError() << "Invalid periods or period_size.  Cannot continue." << endl;
+        kError() << "Invalid periods or period_size.  Cannot continue.";
         stopAndExit();
     }
 
     if (chunk_size == buffer_size)
-        kdDebug() << "WARNING: Should not use chunk_size equal to buffer_size (" << chunk_size
-            << ").  Continuing anyway." << endl;
+        kDebug() << "WARNING: Should not use chunk_size equal to buffer_size (" << chunk_size
+            << ").  Continuing anyway." ;
 
     DBG << "Final buffer_size = " <<
         buffer_size << " chunk_size = " << chunk_size << " periods = " << periods
@@ -1028,7 +1028,7 @@ ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
             usleep(1000);
             continue;
         } else if (r < 0) {
-            kError() << "write error: " << snd_strerror(r) << endl;
+            kError() << "write error: " << snd_strerror(r);
             stopAndExit();
         }
         if (r > 0) {
@@ -1096,7 +1096,7 @@ void AlsaPlayerThread::voc_write_silence(unsigned x)
     // buf = (char *) malloc(chunk_bytes);
     buf = buffer.data();
     if (buf == NULL) {
-        kError() << "can't allocate buffer for silence" << endl;
+        kError() << "can't allocate buffer for silence";
         return;        /* not fatal error */
     }
     snd_pcm_format_set_silence(hwdata.format, buf, chunk_size * hwdata.channels);
@@ -1270,7 +1270,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 #endif
                 if (filepos >= 0) {    /* if < 0, one seek fails, why test another */
                     if ((filepos = lseek64(fd, 0, 1)) < 0) {
-                        kError() << "can't play loops; " << name << "isn't seekable" << endl;
+                        kError() << "can't play loops; " << name << "isn't seekable";
                         repeat = 0;
                     } else {
                         filepos -= in_buffer;    /* set filepos after repeat */
@@ -1330,7 +1330,7 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
         if (l) {
             if (output) {
                 if (write(2, data, l) != l) {    /* to stderr */
-                    kError() << "write error" << endl;
+                    kError() << "write error";
                     stopAndExit();
                 }
             } else {
