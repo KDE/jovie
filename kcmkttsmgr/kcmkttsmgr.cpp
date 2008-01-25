@@ -323,6 +323,20 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     removeFilterButton->setIcon(KIcon("user-trash"));
     configureFilterButton->setIcon(KIcon("configure"));
 
+    // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
+    QMenu* sbdPopmenu = new QMenu( this );
+    sbdPopmenu->setObjectName( "SbdPopupMenu" );
+    m_sbdBtnEdit = sbdPopmenu->addAction(
+        i18n("&Edit..."), this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
+    m_sbdBtnUp = sbdPopmenu->addAction( KIcon("go-up"),
+        i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
+    m_sbdBtnDown = sbdPopmenu->addAction( KIcon("go-down"),
+        i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
+    m_sbdBtnAdd = sbdPopmenu->addAction(
+        i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
+    m_sbdBtnRemove = sbdPopmenu->addAction(
+        i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
+    sbdButton->setMenu( sbdPopmenu );
 
     TestPlayer* testPlayer;
     Player* player;
