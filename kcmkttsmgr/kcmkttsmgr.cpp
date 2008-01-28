@@ -1189,7 +1189,6 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         // Did user Cancel?
         if (!m_loadedTalkerPlugIn)
         {
-            m_configDlg->setMainWidget(0);
             delete m_configDlg;
             m_configDlg = 0;
             return;
@@ -1237,7 +1236,6 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     m_loadedTalkerPlugIn = 0;
     if (m_configDlg)
     {
-        m_configDlg->setMainWidget(0);
         delete m_configDlg;
         m_configDlg = 0;
     }
@@ -1340,7 +1338,6 @@ void KCMKttsMgr::addFilter( bool sbd)
     // Did user Cancel?
     if (!m_loadedFilterPlugIn)
     {
-        m_configDlg->setMainWidget(0);
         delete m_configDlg;
         m_configDlg = 0;
         return;
@@ -1398,7 +1395,6 @@ void KCMKttsMgr::addFilter( bool sbd)
     // Don't need plugin in memory anymore.
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
-    m_configDlg->setMainWidget(0);
     delete m_configDlg;
     m_configDlg = 0;
 
@@ -1793,7 +1789,6 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
     // Did user Cancel?
     if (!m_loadedTalkerPlugIn)
     {
-        m_configDlg->setMainWidget(0);
         delete m_configDlg;
         m_configDlg = 0;
         return;
@@ -1820,7 +1815,6 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
 
     delete m_loadedTalkerPlugIn;
     m_loadedTalkerPlugIn = 0;
-    m_configDlg->setMainWidget(0);
     delete m_configDlg;
     m_configDlg = 0;
 }
@@ -1871,7 +1865,6 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     // Did user Cancel?
     if (!m_loadedFilterPlugIn)
     {
-        m_configDlg->setMainWidget(0);
         delete m_configDlg;
         m_configDlg = 0;
         return;
@@ -1910,7 +1903,6 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
 
     delete m_loadedFilterPlugIn;
     m_loadedFilterPlugIn = 0;
-    m_configDlg->setMainWidget(0);
     delete m_configDlg;
     m_configDlg = 0;
 }
