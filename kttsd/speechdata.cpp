@@ -85,8 +85,8 @@ public:
         }
         pooledFilterMgrs.clear();
 
-        foreach (AppData* appData, appData)
-            delete appData;
+        foreach (AppData* applicationData, appData)
+            delete applicationData;
         appData.clear();
     }
 
