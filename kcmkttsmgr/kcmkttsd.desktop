@@ -2,7 +2,14 @@
 Type=Service
 Exec=kcmshell4 kcmkttsd
 Icon=kttsd
+X-KDE-ServiceTypes=KCModule,KCModuleInit
+X-DocPath=kcontrol/kttsd/index.html
 
+X-KDE-Library=kcm_kttsd
+X-KDE-Init-Symbol=KCMKttsdMgr
+X-KDE-ParentApp=kcontrol
+
+X-KDE-System-Settings-Parent-Category=accessibility
 
 Name=Text-to-Speech
 Name[ar]=نص-إلى-صوت
