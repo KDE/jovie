@@ -563,7 +563,7 @@ QString KSpeak::dbusReplyToPrintable(const QDBusMessage& reply, const QString& c
 {
     QStringList sl = dbusReplyToStringList(reply, cmd);
     QStringList pl;
-    foreach (QString s, sl)
+    foreach (const QString &s, sl)
         pl.append(qPrintable(s));
     return pl.join("\n");
 }
@@ -636,7 +636,7 @@ void KSpeak::processCommand(const QString& inputLine)
                 // kDebug() << "cmd: " << cmd << " args: " << args;
     
                 // Variable substitution.
-                foreach (QString var, m_vars.keys()) {
+                foreach (const QString &var, m_vars.keys()) {
                     // kDebug() << var << ": " + m_vars[var].toString();
                     args.replace("$(" + var + ')', m_vars[var]);
                 }
