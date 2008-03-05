@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=kcmshell4 kcmkttsd
-Icon=kttsd
+Icon=preferences-desktop-text-to-speech
 X-KDE-ServiceTypes=KCModule,KCModuleInit
 X-DocPath=kcontrol/kttsd/index.html
 

@@ -228,7 +228,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "The job will be spoken using the selected Talker.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
-    btn = new QPushButton(KIcon("reload_page"), i18n("&Refresh"), hbox3);
+    btn = new QPushButton(KIcon("view-refresh"), i18n("&Refresh"), hbox3);
     btn->setObjectName("refresh");
     wt = i18n(
         "<p>Refresh the list of jobs.</p>");
