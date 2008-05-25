@@ -24,7 +24,7 @@ target_link_libraries(kttsd
     ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kttsd PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-install(TARGETS kttsd  DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kttsd  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############
