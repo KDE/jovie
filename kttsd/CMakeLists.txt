@@ -28,7 +28,7 @@ target_link_libraries(kttsd_bin
     ${KDE4_KDECORE_LIBS}
     kttsd )
 
-install(TARGETS kttsd_bin  DESTINATION ${BIN_INSTALL_DIR} )
+install(TARGETS kttsd_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############
