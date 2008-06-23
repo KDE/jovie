@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Name=Text-to-Speech
 Name[bg]=Синтез на глас
@@ -99,7 +98,7 @@ StartupNotify=false
 StartupWMClass=
 Exec=kcmshell kcmkttsd
 Icon=kttsd
-Categories=Qt;KDE;X-KDE-settings-accessibility;
+Categories=Qt;KDE;Utility;Accessibility;
 Keywords=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
 Keywords[bg]=синтез, глас, говор, текст, kttsd, kcmkttsmgr, kttsmgr, tts, ttsd, ktts, text, to, speech, speak, synthesizer, synth, festival, command, freetts, proklam, via, voice
 Keywords[br]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,skrid,da,prezegenn,komz,synthesizer,synth,festival,urzhiad,freetts,proklam,via,mouezh

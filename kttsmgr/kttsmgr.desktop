@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Name=kttsmgr
 Name[pt_BR]=Gerenciador ktts
@@ -50,7 +49,7 @@ GenericName[uk]=Менеджер для синтезу мовлення з те�
 GenericName[vi]=Trình quản lý Văn bản sang Tiếng nói
 GenericName[zh_TW]=文字轉語音管理員
 Icon=kttsd
-Exec=kttsmgr -caption "%c" %i %m %u
+Exec=kttsmgr -caption "%c" %i %u
 Comment=KDE Text-to-speech Manager
 Comment[bg]=Мениджър на синтезатора на глас
 Comment[ca]=Gestor de text a veu de KDE
@@ -95,6 +94,5 @@ Comment[tr]=KDE Metinden Konuşmaya yöneticisi
 Comment[uk]=Менеджер KDE для синтезу мовлення з тексту
 Comment[vi]=Trình quản lý Văn bản sang Tiếng nói KDE
 Comment[zh_TW]=KDE 文字轉語音管理員
-MimeTypes=
 Terminal=false
 Categories=Qt;KDE;Utility;Accessibility;
