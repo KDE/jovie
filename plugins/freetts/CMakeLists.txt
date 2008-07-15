@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_freettsplugin WITH_PREFIX ${kttsd_freettsplugin_PART_SRCS}
 
 
 
-target_link_libraries(kttsd_freettsplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_freettsplugin  ${KDE4_KDECORE_LIBS} kttsd ${KDE4_KDE3SUPPORT_LIBS} )
 
 install(TARGETS kttsd_freettsplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

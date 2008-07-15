@@ -14,7 +14,7 @@ kde4_add_plugin(kttsd_talkerchooserplugin WITH_PREFIX ${kttsd_talkerchooserplugi
 
 
 
-target_link_libraries(kttsd_talkerchooserplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_talkerchooserplugin  ${KDE4_KIO_LIBS} kttsd )
 
 install(TARGETS kttsd_talkerchooserplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

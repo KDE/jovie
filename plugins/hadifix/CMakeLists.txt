@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_hadifixplugin WITH_PREFIX ${kttsd_hadifixplugin_PART_SRCS}
 
 
 
-target_link_libraries(kttsd_hadifixplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_hadifixplugin  ${KDE4_KDECORE_LIBS} kttsd ${KDE4_KDE3SUPPORT_LIBS})
 
 install(TARGETS kttsd_hadifixplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
