@@ -85,7 +85,7 @@ int main (int argc, char *argv[])
         return (0);
     }
 
-    QPixmap icon = KIconLoader::global()->loadIcon("kttsd", KIconLoader::Panel);
+    QPixmap icon = KIconLoader::global()->loadIcon("preferences-desktop-text-to-speech", KIconLoader::Panel);
     aboutdata.setProgramLogo(icon.toImage());
 
     KttsMgrTray* tray = new KttsMgrTray();
@@ -99,12 +99,12 @@ int main (int argc, char *argv[])
 /* ------------------  KttsMgrTray class ----------------------- */
 
 KttsMgrTray::KttsMgrTray(QWidget *parent):
-    KSystemTrayIcon("kttsd", parent),
+    KSystemTrayIcon("preferences-desktop-text-to-speech", parent),
     m_kspeech(0)
 {
     setObjectName("kttsmgrsystemtray");
 
-//    QIcon icon = KIconLoader::global()->loadIcon("kttsd", KIconLoader::Small);
+//    QIcon icon = KIconLoader::global()->loadIcon("preferences-desktop-text-to-speech", KIconLoader::Small);
 //    setIcon (icon);
 
     // Start KTTS daemon if enabled and if not already running.
@@ -150,7 +150,7 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     act->setIcon(KIcon("help-contents"));
     act = contextMenu()->addAction (
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
-    act->setIcon(KIcon("kttsd"));
+    act->setIcon(KIcon("preferences-desktop-text-to-speech"));
 
     connect(this, SIGNAL(quitSelected()),
                   SLOT(quitSelected()));
