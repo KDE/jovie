@@ -3,9 +3,9 @@ if(KDE4_KTTSD_PHONON)
         add_subdirectory(phononplayer)
 endif(KDE4_KTTSD_PHONON)
 
-if(KDE4_KTTSD_ALSA)
+if(ASOUND_LIBRARY AND KDE4_KTTSD_ALSA)
 	add_subdirectory(alsaplayer)
-endif(KDE4_KTTSD_ALSA)
+endif(ASOUND_LIBRARY AND KDE4_KTTSD_ALSA)
 
 
 

@@ -1,6 +1,7 @@
 project(kttsd)
 
 include(KttsdConfigureChecks.cmake)
+include(FindAlsa)
 
 configure_file (config-kttsd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kttsd.h )
 
