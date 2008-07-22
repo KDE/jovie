@@ -211,8 +211,8 @@ void EposProc::synth(
     // Map 50% to 200% onto 0 to 1000.
     // slider = alpha * (log(percent)-log(50))
     // with alpha = 1000/(log(200)-log(50))
-    double alpha = 1000 / (log(200) - log(50));
-    int slider = (int)floor (0.5 + alpha * (log(time)-log(50)));
+    double alpha = 1000 / (log(200.0) - log(50.0));
+    int slider = (int)floor (0.5 + alpha * (log((double)time)-log(50.0)));
     // Center at 0.
     slider = slider - 500;
     // Map -500 to 500 onto 45 to -45 then shift to 130 to 40 (85 midpoint).

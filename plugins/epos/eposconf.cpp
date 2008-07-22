@@ -285,13 +285,13 @@ void EposConf::slotSynthStopped()
 // with alpha = 1000/(log(200)-log(50))
 
 int EposConf::percentToSlider(int percentValue) {
-    double alpha = 1000 / (log(200) - log(50));
-    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
+    double alpha = 1000 / (log(200.0) - log(50.0));
+    return (int)floor (0.5 + alpha * (log((double)percentValue)-log(50.0L)));
 }
 
 int EposConf::sliderToPercent(int sliderValue) {
-    double alpha = 1000 / (log(200) - log(50));
-    return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
+    double alpha = 1000 / (log(200.0) - log(50.0));
+    return (int)floor(0.5 + exp (sliderValue/alpha + log(50.0)));
 }
 
 void EposConf::timeBox_valueChanged(int percentValue) {

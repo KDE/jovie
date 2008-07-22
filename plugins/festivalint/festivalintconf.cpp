@@ -695,13 +695,13 @@ void FestivalIntConf::slotSelectVoiceCombo_activated()
 // with alpha = 1000/(log(200)-log(50))
 
 int FestivalIntConf::percentToSlider(int percentValue) {
-    double alpha = 1000 / (log(200) - log(50));
-    return (int)floor (0.5 + alpha * (log(percentValue)-log(50)));
+    double alpha = 1000 / (log(200.0) - log(50.0));
+    return (int)floor (0.5 + alpha * (log((float)percentValue)-log(50.0)));
 }
 
 int FestivalIntConf::sliderToPercent(int sliderValue) {
-    double alpha = 1000 / (log(200) - log(50));
-    return (int)floor(0.5 + exp (sliderValue/alpha + log(50)));
+    double alpha = 1000 / (log(200.0) - log(50.0));
+    return (int)floor(0.5 + exp (sliderValue/alpha + log(50.0)));
 }
 
 void FestivalIntConf::volumeBox_valueChanged(int percentValue) {
