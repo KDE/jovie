@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_sbdplugin WITH_PREFIX ${kttsd_sbdplugin_PART_SRCS})
 
 
 
-target_link_libraries(kttsd_sbdplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_sbdplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kttsd )
 
 install(TARGETS kttsd_sbdplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

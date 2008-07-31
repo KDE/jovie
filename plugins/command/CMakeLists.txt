@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_commandplugin WITH_PREFIX ${kttsd_commandplugin_PART_SRCS}
 
 
 
-target_link_libraries(kttsd_commandplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_commandplugin  ${KDE4_KDECORE_LIBS} kttsd  ${KDE4_KDE3SUPPORT_LIBS})
 
 install(TARGETS kttsd_commandplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

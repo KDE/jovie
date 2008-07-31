@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_festivalintplugin WITH_PREFIX ${kttsd_festivalintplugin_PA
 
 
 
-target_link_libraries(kttsd_festivalintplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_festivalintplugin  ${KDE4_KDECORE_LIBS} kttsd ${KDE4_KDE3SUPPORT_LIBS} )
 
 install(TARGETS kttsd_festivalintplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_xmltransformerplugin WITH_PREFIX ${kttsd_xmltransformerplu
 
 
 
-target_link_libraries(kttsd_xmltransformerplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_xmltransformerplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} kttsd )
 
 install(TARGETS kttsd_xmltransformerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

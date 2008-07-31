@@ -12,7 +12,7 @@ kde4_add_plugin(kttsd_stringreplacerplugin WITH_PREFIX ${kttsd_stringreplacerplu
 
 
 
-target_link_libraries(kttsd_stringreplacerplugin  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(kttsd_stringreplacerplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kttsd )
 
 install(TARGETS kttsd_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
