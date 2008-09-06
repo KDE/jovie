@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="ktexteditor_kttsd" library="ktexteditor_kttsd" version="2">
+<gui name="ktexteditor_kttsd" library="ktexteditor_kttsd" version="2">
     <MenuBar>
-        <Menu name="tools"><Text>&amp;Tools</Text>
+        <Menu name="tools"><text>&amp;Tools</text>
             <Action name="tools_kttsd" />
         </Menu>
     </MenuBar>
     <ToolBar name="mainToolBar"><text>Main Toolbar</text>
         <Action name="tools_kttsd" />
     </ToolBar>
-</kpartplugin>
+</gui>
