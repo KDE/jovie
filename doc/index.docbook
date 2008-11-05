@@ -1326,8 +1326,8 @@ enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 
 <para>The String Replacer filter will only apply itself to the text
 if all non-blank conditions are met in the 
-<guilabel>Apply This Filter When</guilabel> box.
-if all the boxes are blank, the filter will apply to all text.</para>
+<guilabel>Apply This Filter When</guilabel> box. 
+If all the boxes are blank, the filter will apply to all text.</para>
 
 <para>All matching is case insensitive.</para>
 
@@ -1926,7 +1926,7 @@ Where can I get a synth for my language?</para>
 might also help.  If you find a free synthesis engine that supports your
 desired language, and want to add support for it to &ktts;, please
 contact the development team.  Open source engines are especially welcome.
-If you know of a commercial synth, perhaps you can pursuade the vendor
+If you know of a commercial synth, perhaps you can persuade the vendor
 to donate a free copy to the &ktts; development team.
 In the meantime, you may be able to get
 the synth working using the <guilabel>Command</guilabel> plugin.
