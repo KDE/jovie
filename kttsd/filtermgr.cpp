@@ -22,6 +22,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// FilterMgr includes.
+#include "filtermgr.h"
+#include "filtermgr.moc"
+
 // Qt includes
 #include <QtCore/QCoreApplication>
 
@@ -33,10 +37,6 @@
 #include <kparts/componentfactory.h>
 #include <klocale.h>
 #include <kservicetypetrader.h>
-
-// FilterMgr includes.
-#include "filtermgr.h"
-#include "filtermgr.moc"
 
 /**
  * Constructor.

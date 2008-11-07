@@ -23,6 +23,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Utt includes.
+#include "utt.h"
+
 // Qt includes.
 
 // KDE includes.
@@ -33,9 +36,6 @@
 
 // KTTSD includes.
 #include "speechjob.h"
-
-// Utt includes.
-#include "utt.h"
 
 class UttPrivate
 {

@@ -23,6 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+#include "selectlanguagedlg.h"
+
 // Qt includes.
 #include <QtGui/QTableWidget>
 #include <QtGui/QHeaderView>
@@ -34,7 +36,6 @@
 
 // KTTS includes.
 #include "talkercode.h"
-#include "selectlanguagedlg.h"
 #include "selectlanguagedlg.moc"
 
 SelectLanguageDlg::SelectLanguageDlg(

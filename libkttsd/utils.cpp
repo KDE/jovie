@@ -15,11 +15,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "utils.h"
+
 #include <kdebug.h>
 
 #include <QtGui/QComboBox>
-
-#include "utils.h"
 
 KttsUtils::KttsUtils() {
 }

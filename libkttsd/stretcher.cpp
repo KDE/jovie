@@ -23,13 +23,13 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// KDE includes.
-#include <k3process.h>
-#include <kdebug.h>
-
 // Stretcher includes.
 #include "stretcher.h"
 #include "stretcher.moc"
+
+// KDE includes.
+#include <k3process.h>
+#include <kdebug.h>
 
 /**
  * Constructor.

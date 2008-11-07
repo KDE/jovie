@@ -22,6 +22,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// TestPlayer includes.
+#include "testplayer.h"
+
 // Qt includes.
 #include <QtCore/QFile>
 #include <QtGui/QApplication>
@@ -37,9 +40,6 @@
 #include "player.h"
 #include "stretcher.h"
 #include "pluginconf.h"
-
-// TestPlayer includes.
-#include "testplayer.h"
 
 /**
  * Constructor.

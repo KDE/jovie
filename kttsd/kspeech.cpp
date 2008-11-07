@@ -23,6 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+#include <kspeech.h>
+
 // Qt includes.
 #include <QtGui/QApplication>
 #include <QtGui/QClipboard>
@@ -39,7 +41,6 @@
 #include <kfiledialog.h>
 #include <krun.h>
 #include <kaboutdata.h>
-#include <kspeech.h>
 
 
 // KTTSD includes.

@@ -15,18 +15,17 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes. 
+// PlugInProc includes.
+#include "pluginproc.h"
+#include "pluginproc.moc"
 
+// Qt includes.
 #include <QtCore/QTextCodec>
 
 // KDE includes.
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
-
-// PlugInProc includes.
-#include "pluginproc.h"
-#include "pluginproc.moc"
 
 /**
 * Constructor

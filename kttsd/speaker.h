@@ -32,9 +32,13 @@
 #include <QtCore/QList>
 #include <QtCore/QEvent>
 
+#include <kspeech.h>
+
 // KTTSD includes.
+#include "pluginproc.h"
 #include "utt.h"
 
+class ConfigData;
 class SpeechData;
 class Player;
 class TalkerMgr;

@@ -15,6 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
+// PluginConf includes.
+#include "pluginconf.h"
+#include "pluginconf.moc"
+
 // C++ library includes.
 #include <stdlib.h>
 #include <sys/param.h>
@@ -30,10 +34,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-
-// PluginConf includes.
-#include "pluginconf.h"
-#include "pluginconf.moc"
 
 /**
 * Constructor 

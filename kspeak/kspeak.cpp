@@ -23,6 +23,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// kspeak includes.
+#include "kspeak.h"
+
 // Qt includes.
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
@@ -41,9 +44,6 @@
 
 // KTTS includes.
 #include <kspeech.h>
-
-// kspeak includes.
-#include "kspeak.h"
 
 // ====================================================================
 
@@ -608,7 +608,7 @@ void KSpeak::processCommand(const QString& inputLine)
                 // Remove first space.
                 m_vars["_BUF"].remove(0, 1);
                 if ("_BUF" != m_fillingBuffer) m_vars[m_fillingBuffer] = m_vars["_BUF"];
-                m_fillingBuffer = QString();
+                m_fillingBuffer.clear();
             } else {
                 // kDebug() << "Appending to buffer " << m_fillingBuffer << " data = " << line;
                 m_vars["_BUF"] += ' ' + line;
@@ -626,7 +626,7 @@ void KSpeak::processCommand(const QString& inputLine)
                 // kDebug() << "left = right: " << left << " = " << right;
                 if (right.isEmpty()) {
                     right = left;
-                    left = QString();
+                    left.clear();
                 }
     
                 // Obtain command, which is first word, and arguments that follow.
@@ -660,7 +660,7 @@ void KSpeak::processCommand(const QString& inputLine)
                         m_fillingBuffer = left;
                     else
                         m_fillingBuffer = "_BUF";
-                    m_vars["_BUF"] = QString();
+                    m_vars["_BUF"].clear();
                 } else if ("SET" == ucCmd) {
                     QString ucArgs = args.toUpper();
                     QString property = ucArgs.section(" ", 0, 0).trimmed();

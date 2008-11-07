@@ -21,6 +21,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// PhononPlayer includes.
+#include "phononplayer.h"
+
 // Qt includes.
 
 // KDE includes.
@@ -29,9 +32,6 @@
 #include <kurl.h>
 
 // KTTS includes.
-
-// PhononPlayer includes.
-#include "phononplayer.h"
 
 PhononPlayer::PhononPlayer(QObject* parent, const QStringList& args) :
     Player(parent, "phononplayer", args)

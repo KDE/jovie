@@ -26,6 +26,8 @@
 #ifndef _STRETCHER_H_
 #define _STRETCHER_H_
 
+#include <QObject>
+
 #include <kdemacros.h>
 
 class K3Process;

@@ -24,6 +24,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Speaker includes.
+#include "speaker.h"
+#include "speaker.moc"
+
 // System includes.
 
 // Qt includes. 
@@ -43,7 +47,6 @@
 //#include <kio/job.h>
 
 // KTTS includes.
-#include "pluginproc.h"
 #include "player.h"
 #include "utils.h"
 #include "talkercode.h"
@@ -53,10 +56,6 @@
 #include "speechdata.h"
 #include "talkermgr.h"
 #include "ssmlconvert.h"
-
-// Speaker includes.
-#include "speaker.h"
-#include "speaker.moc"
 
 
 /**

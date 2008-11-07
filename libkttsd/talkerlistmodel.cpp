@@ -23,6 +23,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *******************************************************************************/
 
+// TalkerListWidget includes.
+#include "talkerlistmodel.h"
+#include "talkerlistmodel.moc"
+
 // Qt includes.
 
 // KDE includes.
@@ -30,10 +34,6 @@
 #include "kconfig.h"
 #include "kdebug.h"
 #include "kconfiggroup.h"
-
-// TalkerListWidget includes.
-#include "talkerlistmodel.h"
-#include "talkerlistmodel.moc"
 
 // ----------------------------------------------------------------------------
 

@@ -22,16 +22,17 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// TalkerCode includes.
+#include "talkercode.h"
+
+// Qt includes.
+#include <QtCore/QVector>
+
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
-
-// TalkerCode includes.
-#include "talkercode.h"
-
-#include <QtCore/QVector>
 
 /**
  * Constructor.

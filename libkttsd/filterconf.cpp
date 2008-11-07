@@ -22,6 +22,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// PluginConf includes.
+#include "filterconf.h"
+#include "filterconf.moc"
+
 // C++ library includes.
 #include <stdlib.h>
 #include <sys/param.h>
@@ -33,10 +37,6 @@
 // KDE includes.
 #include <kglobal.h>
 #include <klocale.h>
-
-// PluginConf includes.
-#include "filterconf.h"
-#include "filterconf.moc"
 
 /**
 * Constructor 

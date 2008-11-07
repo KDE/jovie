@@ -21,6 +21,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// ConfigData includes.
+#include "configdata.h"
+
 // Qt includes.
 #include <QtXml/QDomDocument>
 #include <QtCore/QFile>
@@ -33,9 +36,6 @@
 
 // KTTS includes.
 #include "talkercode.h"
-
-// ConfigData includes.
-#include "configdata.h"
 
 ConfigData::ConfigData(KConfig* config) : m_config(config)
 {

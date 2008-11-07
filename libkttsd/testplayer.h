@@ -25,6 +25,9 @@
 #ifndef _TESTPLAYER_H_
 #define _TESTPLAYER_H_
 
+// Qt includes.
+#include <QObject>
+
 // KDE includes.
 #include <kdemacros.h>
 

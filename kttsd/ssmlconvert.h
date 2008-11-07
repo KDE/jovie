@@ -32,6 +32,7 @@
 
 // Qt includes
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 class K3Process;
 class QString;

@@ -24,6 +24,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+#include "selecttalkerdlg.h"
+
 // Qt includes.
 #include <QtGui/QCheckBox>
 #include <QtGui/QRadioButton>
@@ -42,7 +44,6 @@
 // KTTS includes.
 #include "utils.h"
 #include "talkerlistmodel.h"
-#include "selecttalkerdlg.h"
 #include "selectlanguagedlg.h"
 #include "selecttalkerdlg.moc"
 

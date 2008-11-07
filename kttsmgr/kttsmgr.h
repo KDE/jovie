@@ -26,6 +26,7 @@
 #define KTTSMGR_H
 
 // KDE includes.
+#include <kmenu.h>
 #include <ksystemtrayicon.h>
 
 // KTTS includes.

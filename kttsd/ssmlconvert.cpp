@@ -19,6 +19,10 @@
  *                                                                         *
  ***************************************************************************/
 
+// SSMLConvert includes.
+#include "ssmlconvert.h"
+#include "ssmlconvert.moc"
+
 // Qt includes.
 #include <QtXml/qdom.h>
 #include <QtCore/QFile>
@@ -30,10 +34,6 @@
 #include <k3process.h>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
-
-// SSMLConvert includes.
-#include "ssmlconvert.h"
-#include "ssmlconvert.moc"
 
 /// Constructor.
 SSMLConvert::SSMLConvert() {

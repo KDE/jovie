@@ -24,6 +24,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// AlsaPlayer includes.
+#include "alsaplayer.h"
+
+#include <assert.h>
+
 // #include <sys/wait.h>
 // System includes.
 #include <config-kttsd.h>
@@ -49,11 +54,6 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-
-// AlsaPlayer includes.
-#include "alsaplayer.h"
-
-#include <assert.h>
 
 #define DBG if (m_debugLevel >= 2) kDebug() << timestamp()
 

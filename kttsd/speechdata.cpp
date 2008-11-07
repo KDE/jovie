@@ -25,6 +25,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// SpeechData includes.
+#include "speechdata.h"
+#include "speechdata.moc"
+
 // C++ includes.
 #include <stdlib.h>
 
@@ -43,10 +47,6 @@
 // KTTS includes.
 #include "talkermgr.h"
 #include "configdata.h"
-
-// SpeechData includes.
-#include "speechdata.h"
-#include "speechdata.moc"
 
 /* -------------------------------------------------------------------------- */
 

@@ -26,6 +26,7 @@
 
 // Qt includes.
 #include <QtCore/QMap>
+#include <QtCore/QString>
 
 class KConfig;
 

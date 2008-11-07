@@ -17,6 +17,10 @@
  *                                                                         *
  ***************************************************************************/
 
+// KateKttsdPlugin includes.
+#include "katekttsd.h"
+#include "katekttsd.moc"
+
 // Qt includes.
 #include <QtGui/QMessageBox>
 #include <QtCore/QTimer>
@@ -30,10 +34,6 @@
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 #include <ktoolinvocation.h>
-
-// KateKttsdPlugin includes.
-#include "katekttsd.h"
-#include "katekttsd.moc"
 
 K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
