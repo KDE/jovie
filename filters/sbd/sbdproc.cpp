@@ -458,7 +458,7 @@ QString SbdThread::parseCode( const QString& inputText )
 {
     QString temp = inputText;
     // Replace newlines with tabs.
-    temp.replace("\n","\t");
+    temp.replace('\n','\t');
     // Remove leading spaces.
     temp.replace(QRegExp("\\t +"), "\t");
     // Remove trailing spaces.
@@ -477,8 +477,8 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     // Replace sentence delimiters with tab.
     temp.replace(sentenceDelimiter, m_configuredSentenceBoundary);
     // Replace remaining newlines with spaces.
-    temp.replace("\n"," ");
-    temp.replace("\r"," ");
+    temp.replace('\n',' ');
+    temp.replace('\r',' ');
     // Remove leading spaces.
     temp.replace(QRegExp("\\t +"), "\t");
     // Remove trailing spaces.

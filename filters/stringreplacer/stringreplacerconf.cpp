@@ -308,10 +308,10 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     }
 
     // Application ID
-    QString appId = appIdLineEdit->text().replace(" ", "");
+    QString appId = appIdLineEdit->text().remove(' ');
     if ( !appId.isEmpty() )
     {
-        QStringList appIdList = appId.split( ",", QString::SkipEmptyParts );
+        QStringList appIdList = appId.split( ',', QString::SkipEmptyParts );
         for ( int ndx=0; ndx < appIdList.count(); ++ndx )
         {
             QDomElement appIdElem = doc.createElement( "appid" );
@@ -453,7 +453,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         s2.replace( s1, language );
         s2.replace( i18n("Multiple Languages"), language );
     }
-    s2.replace(" ()", "");
+    s2.remove(" ()");
     if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ')';
     nameLineEdit->setText(s2);
     configChanged();

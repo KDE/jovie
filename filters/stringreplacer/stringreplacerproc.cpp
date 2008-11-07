@@ -68,7 +68,7 @@ StringReplacerProc::StringReplacerProc( QObject *parent, const QStringList& ) :
  * separate configuration files of their own.
  */
 bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
-    // kDebug() << "StringReplacerProc::init: Running";
+    kDebug() << "StringReplacerProc::init: Running";
     QString wordsFilename =
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false );
     if ( wordsFilename.isEmpty() ) return false;
@@ -79,9 +79,13 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     // Open existing word list.
     QFile file( wordsFilename );
     if ( !file.open( QIODevice::ReadOnly ) )
+    {
+        kDebug() << "StringReplacerProc::init: couldn't open file " << wordsFilename;
         return false;
+    }
     QDomDocument doc( "" );
     if ( !doc.setContent( &file ) ) {
+        kDebug() << "StringReplacerProc::init: couldn't get xml from file " << wordsFilename;
         file.close();
         return false;
     }
@@ -177,15 +181,15 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     if ( !m_languageCodeList.isEmpty() )
     {
         QString languageCode = talkerCode->languageCode();
-        // kDebug() << "StringReplacerProc::convert: converting " << inputText << 
-        //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+        kDebug() << "StringReplacerProc::convert: converting " << inputText <<
+            " if language code " << languageCode << " matches " << m_languageCodeList << endl;
         if ( !m_languageCodeList.contains( languageCode ) )
         {
             if ( !talkerCode->countryCode().isEmpty() )
             {
                 languageCode += '_' + talkerCode->countryCode();
-                // kDebug() << "StringReplacerProc::convert: converting " << inputText << 
-                //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+                 kDebug() << "StringReplacerProc::convert: converting " << inputText << 
+                    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
                 if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
             } else return inputText;
         }
@@ -193,8 +197,8 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     // If appId doesn't match, return input unmolested.
     if ( !m_appIdList.isEmpty() )
     {
-        // kDebug() << "StringReplacerProc::convert: converting " << inputText << " if appId "
-        //     << appId << " matches " << m_appIdList << endl;
+         kDebug() << "StringReplacerProc::convert: converting " << inputText << " if appId "
+             << appId << " matches " << m_appIdList << endl;
         bool found = false;
         QString appIdStr = appId;
         for ( int ndx=0; ndx < m_appIdList.count(); ++ndx )
@@ -207,7 +211,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
         }
         if ( !found )
         {
-            // kDebug() << "StringReplacerProc::convert: appId not found";
+             kDebug() << "StringReplacerProc::convert: appId not found";
             return inputText;
         }
     }
@@ -215,7 +219,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     const int listCount = m_matchList.count();
     for ( int index = 0; index < listCount; ++index )
     {
-        //kDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index];
+        kDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index];
         newText.replace( m_matchList[index], m_substList[index] );
     }
     m_wasModified = true;

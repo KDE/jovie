@@ -320,10 +320,10 @@ void FestivalIntProc::synth(
 
     // Encode quotation characters.
     saidText.replace("\\\"", "#!#!");
-    saidText.replace("\"", "\\\"");
+    saidText.replace('\"', "\\\"");
     saidText.replace("#!#!", "\\\"");
     // Remove certain comment characters.
-    saidText.replace("--", "");
+    saidText.remove("--");
 
     // Ok, let's rock.
     if (synthFilename.isNull())
@@ -522,7 +522,7 @@ void FestivalIntProc::slotReceivedStdout(K3Process*, char* buffer, int buflen)
                     // Extract contents between parens.
                     buf = buf.mid(1, rightParen - 1);
                     // Space separated list.
-                    voiceCodesList = buf.split( " ", QString::SkipEmptyParts);
+                    voiceCodesList = buf.split( ' ', QString::SkipEmptyParts);
                     emitQueryVoicesFinished = true;
                 }
             }

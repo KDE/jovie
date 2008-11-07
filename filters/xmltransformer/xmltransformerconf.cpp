@@ -122,7 +122,7 @@ void XmlTransformerConf::save(KConfig* c, const QString& configGroup){
     config.writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url().path() ) );
     config.writeEntry( "RootElement", rootElementLineEdit->text() );
     config.writeEntry( "DocType", doctypeLineEdit->text() );
-    config.writeEntry( "AppID", appIdLineEdit->text().replace(" ", "") );
+    config.writeEntry( "AppID", appIdLineEdit->text().remove(' ') );
 }
 
 /** 

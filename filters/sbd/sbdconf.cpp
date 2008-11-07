@@ -149,7 +149,7 @@ void SbdConf::save(KConfig* c, const QString& configGroup){
     config.writeEntry("SentenceDelimiterRegExp", reLineEdit->text() );
     config.writeEntry("SentenceBoundary", sbLineEdit->text() );
     config.writeEntry("LanguageCodes", m_languageCodeList );
-    config.writeEntry("AppID", appIdLineEdit->text().replace(" ", "") );
+    config.writeEntry("AppID", appIdLineEdit->text().remove(' ') );
 }
 
 /**

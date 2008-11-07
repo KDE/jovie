@@ -142,7 +142,7 @@ void TalkerChooserConf::save(KConfig* c, const QString& configGroup){
     KConfigGroup config( c, configGroup );
     config.writeEntry( "UserFilterName", nameLineEdit->text() );
     config.writeEntry( "MatchRegExp", reLineEdit->text() );
-    config.writeEntry( "AppIDs", appIdLineEdit->text().replace(" ", "") );
+    config.writeEntry( "AppIDs", appIdLineEdit->text().remove(' ') );
     config.writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
 }
 

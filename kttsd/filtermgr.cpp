@@ -74,7 +74,7 @@ bool FilterMgr::init()
     KSharedConfig::Ptr pConfig = KSharedConfig::openConfig( "kttsdrc" );
     KConfigGroup config( pConfig, "General");
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList());
-    // kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
+     kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
     {
@@ -114,7 +114,7 @@ bool FilterMgr::init()
             }
             if (config.readEntry("Enabled",false) || config.readEntry("IsSBD",false))
             {
-                // kDebug() << "FilterMgr::init: filterID = " << filterID;
+                kDebug() << "FilterMgr::init: filterID = " << filterID;
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
                 if ( filterProc )
                 {
