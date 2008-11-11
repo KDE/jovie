@@ -14,6 +14,12 @@
  *                                                                         *
  ***************************************************************************/
 
+// Hadifix includes.
+#include "hadifixproc.h"
+#include "hadifixconf.h"
+#include "hadifixconf.moc"
+#include "ui_voicefileui.h"
+
 // System includes.
 #include <math.h>
 
@@ -44,12 +50,6 @@
 #include <pluginconf.h>
 #include <testplayer.h>
 #include <talkercode.h>
-
-// Hadifix includes.
-#include "hadifixproc.h"
-#include "hadifixconf.h"
-#include "hadifixconf.moc"
-#include "ui_voicefileui.h"
 
 // ====================================================================
 // HadifixConfPrivate

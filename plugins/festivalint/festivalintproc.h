@@ -25,6 +25,7 @@
 #define _FESTIVALINTPROC_H_
 
 #include <QtCore/QMutex>
+#include <QtCore/QStringList>
 
 #include <k3process.h>
 

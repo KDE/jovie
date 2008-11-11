@@ -21,6 +21,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Flite Plugin includes.
+#include "fliteconf.h"
+#include "fliteconf.moc"
+#include "fliteproc.h"
+
 // Qt includes.
 #include <QtCore/QFile>
 #include <QtGui/QApplication>
@@ -35,11 +40,6 @@
 
 // KTTS includes.
 #include <testplayer.h>
-
-// Flite Plugin includes.
-#include "fliteproc.h"
-#include "fliteconf.h"
-#include "fliteconf.moc"
 
 /** Constructor */
 FliteConf::FliteConf( QWidget* parent, const QStringList& /*args*/) :

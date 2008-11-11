@@ -1,7 +1,7 @@
 /***************************************************************************
   Class of utility functions.
   -------------------
-  Copyright : (C) 2004 Paul Giannaros
+  Copyright : (C) 2004 Paul Giannaros <ceruleanblaze@gmail.com>
   -------------------
   Original author: Paul Giannaros <ceruleanblaze@gmail.com>
   Current Maintainer: Paul Giannaros <ceruleanblaze@gmail.com>

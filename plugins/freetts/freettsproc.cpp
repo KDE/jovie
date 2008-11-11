@@ -1,7 +1,7 @@
 /****************************************************************************
     Main speaking functions for the FreeTTS Plug in
     -------------------
-    Copyright : (C) 2004 Paul Giannaros
+    Copyright : (C) 2004 Paul Giannaros <ceruleanblaze@gmail.com>
     -------------------
     Original author: Paul Giannaros <ceruleanblaze@gmail.com>
     Current Maintainer: Paul Giannaros <ceruleanblaze@gmail.com>
@@ -15,6 +15,8 @@
  *                                                                             *
  ******************************************************************************/
 
+#include "freettsproc.h" 
+
 #include <QtCore/QFileInfo>
 
 #include <kdebug.h>
@@ -22,8 +24,6 @@
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <k3process.h>
-
-#include "freettsproc.h" 
 
 /** Constructor */
 FreeTTSProc::FreeTTSProc( QObject* parent, const QStringList& /*args*/) : 

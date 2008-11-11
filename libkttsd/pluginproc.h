@@ -1,7 +1,7 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   This file is the template for the processing plug ins.
   -------------------
-  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
+  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>

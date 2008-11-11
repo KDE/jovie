@@ -1,7 +1,7 @@
 /******************************************************************************
     Configuration widget and functions for FreeTTS (interactive) plug in
     -------------------
-    Copyright : (C) 2004 Paul Giannaros
+    Copyright : (C) 2004 Paul Giannaros <ceruleanblaze@gmail.com>
     -------------------
     Original author: Paul Giannaros <ceruleanblaze@gmail.com>
     Current Maintainer: Paul Giannaros <ceruleanblaze@gmail.com>
@@ -14,6 +14,10 @@
  *     the Free Software Foundation; version 2 of the License.                *
  *                                                                            *
  ******************************************************************************/
+
+// FreeTTS includes.
+#include "freettsconf.h"
+#include "ui_freettsconfigwidget.h"
 
 // Qt includes.
 #include <QtGui/QLabel>
@@ -31,10 +35,6 @@
 // KTTS includes.
 #include <pluginconf.h>
 #include <testplayer.h>
-
-// FreeTTS includes.
-#include "freettsconf.h"
-#include "ui_freettsconfigwidget.h"
 
 /** Constructor */
 FreeTTSConf::FreeTTSConf( QWidget* parent, const QStringList&/*args*/) :

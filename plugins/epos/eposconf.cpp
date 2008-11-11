@@ -21,6 +21,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Epos Plugin includes.
+#include "eposconf.h"
+#include "eposproc.h"
+#include "eposconf.moc"
+
 // C++ includes.
 #include <math.h>
 
@@ -41,11 +46,6 @@
 
 // KTTS includes.
 #include <testplayer.h>
-
-// Epos Plugin includes.
-#include "eposproc.h"
-#include "eposconf.h"
-#include "eposconf.moc"
 
 /** Constructor */
 EposConf::EposConf( QWidget* parent, const QStringList& /*args*/) :

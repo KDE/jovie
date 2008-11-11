@@ -21,6 +21,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// FestivalInt includes.
+#include "festivalintproc.h"
+#include "festivalintconf.h"
+#include "festivalintconf.moc"
+
 // C++ includes.
 #include <math.h>
 
@@ -47,11 +52,6 @@
 
 // KTTS includes.
 #include "testplayer.h"
-
-// FestivalInt includes.
-#include "festivalintproc.h"
-#include "festivalintconf.h"
-#include "festivalintconf.moc"
 
 /** Constructor */
 FestivalIntConf::FestivalIntConf( QWidget* parent, const QStringList& /*args*/) :

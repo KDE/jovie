@@ -28,6 +28,7 @@
 // Qt includes.
 #include <QtCore/QMutex>
 #include <QtCore/QByteArray>
+#include <QtCore/QStringList>
 
 // KTTS includes.
 #include <pluginproc.h>

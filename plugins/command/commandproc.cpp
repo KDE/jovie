@@ -1,7 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Main speaking functions for the Command Plug in
   -------------------
-  Copyright : (C) 2002 by Gunnar Schmi Dt and 2004 by Gary Cramblitt
+  Copyright : (C) 2002 by Gunnar Schmi Dt <kmouth@schmi-dt.de>
+  Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: Gunnar Schmi Dt <kmouth@schmi-dt.de>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
@@ -14,6 +15,10 @@
  *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  ***************************************************************************/
+
+// Command Plugin includes.
+#include "commandproc.h"
+#include "commandproc.moc"
 
 // Qt includes.
 #include <QtCore/QFile>
@@ -32,10 +37,6 @@
 
 // KTTS includes.
 #include <pluginproc.h>
-
-// Command Plugin includes.
-#include "commandproc.h"
-#include "commandproc.moc"
 
 /** Constructor */
 CommandProc::CommandProc( QObject* parent, const QStringList& /*args*/) : 

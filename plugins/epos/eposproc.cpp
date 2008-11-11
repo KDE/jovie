@@ -22,6 +22,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Epos Plugin includes.
+#include "eposproc.h"
+#include "eposproc.moc"
+ 
 // C++ includes.
 #include <math.h>
 
@@ -37,10 +41,6 @@
 #include <kstandarddirs.h>
 #include <k3process.h>
 
-// Epos Plugin includes.
-#include "eposproc.h"
-#include "eposproc.moc"
- 
 /** Constructor */
 EposProc::EposProc( QObject* parent, const QStringList& ) : 
     PlugInProc( parent, "eposproc" ){

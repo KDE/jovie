@@ -38,6 +38,7 @@ class KAboutData;
 class KttsJobMgrBrowserExtension;
 class KVBox;
 class KTextEdit;
+class JobInfo;
 class JobInfoListModel;
 
 class KttsJobMgrPart:

@@ -1,7 +1,7 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   This file is the templates for the configuration plug ins.
   -------------------
-  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
+  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>

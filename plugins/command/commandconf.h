@@ -1,7 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Configuration for the Command Plug in
   -------------------
-  Copyright : (C) 2002,2004 by Gunnar Schmi Dt and Gary Cramblitt
+  Copyright : (C) 2002 by Gunnar Schmi Dt <kmouth@schmi-dt.de>
+  Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: Gunnar Schmi Dt <kmouth@schmi-dt.de>
   Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>

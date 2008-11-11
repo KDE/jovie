@@ -990,7 +990,7 @@ void AlsaPlayerThread::compute_max_peak(char *data, size_t count)
         perc = max_peak / (max / 100);
     else
         perc = max_peak * 100 / max;
-    for (val = 0; val < 20; val++)
+    for (val = 0; val < 20; ++val)
         if (val <= perc / 5)
             kDebug() << '#';
         else

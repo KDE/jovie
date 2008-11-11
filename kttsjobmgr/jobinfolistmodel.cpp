@@ -23,6 +23,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *******************************************************************************/
 
+// JobInfoListModel includes.
+#include "jobinfolistmodel.h"
+#include "jobinfolistmodel.moc"
+
 // Qt includes.
 
 // KDE includes.
@@ -31,10 +35,6 @@
 #include <kspeech.h>
 
 // KTTS includes.
-
-// JobInfoListModel includes.
-#include "jobinfolistmodel.h"
-#include "jobinfolistmodel.moc"
 
 
 // ----------------------------------------------------------------------------

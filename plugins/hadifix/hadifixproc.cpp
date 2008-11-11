@@ -16,6 +16,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "hadifixproc.h"
+#include "hadifixproc.moc"
+
 // Qt includes
 
 #include <QtCore/QTextCodec>
@@ -27,9 +30,6 @@
 #include <kconfiggroup.h>
 #include <k3process.h>
 #include <kstandarddirs.h>
-
-#include "hadifixproc.h"
-#include "hadifixproc.moc"
 
 class HadifixProcPrivate {
    friend class HadifixProc;

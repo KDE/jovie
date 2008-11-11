@@ -1,7 +1,7 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   KControl module for KTTSD configuration and Job Management
   -------------------
-  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández
+  Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Copyright : (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
@@ -19,6 +19,10 @@
 // Note to programmers.  There is a subtle difference between a plugIn name and a 
 // synthesizer name.  The latter is a translated name, for example, "Festival Interactivo",
 // while the former is alway an English name, example "Festival Interactive".
+
+// KCMKttsMgr includes.
+#include "kcmkttsmgr.h"
+#include "kcmkttsmgr.moc"
 
 // C++ includes.
 #include <math.h>
@@ -65,10 +69,6 @@
 #include "selecttalkerdlg.h"
 #include "selectlanguagedlg.h"
 #include "utils.h"
-
-// KCMKttsMgr includes.
-#include "kcmkttsmgr.h"
-#include "kcmkttsmgr.moc"
 
 // Some constants.
 // Defaults set when clicking Defaults button.

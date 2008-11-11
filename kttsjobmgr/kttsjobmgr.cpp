@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// KttsJobMgr includes.
+#include "kttsjobmgr.h"
+#include "kttsjobmgr.moc"
+
 // QT includes.
 #include <QtCore/QObject>
 #include <QtGui/QLabel>
@@ -50,10 +54,6 @@
 #include "talkercode.h"
 #include "selecttalkerdlg.h"
 #include "jobinfolistmodel.h"
-
-// KttsJobMgr includes.
-#include "kttsjobmgr.h"
-#include "kttsjobmgr.moc"
 
 typedef KParts::GenericFactory<KttsJobMgrPart> KttsJobMgrPartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkttsjobmgrpart, KttsJobMgrPartFactory )

@@ -1,7 +1,7 @@
 /******************************************************************************
     Main speaking functions for the FreeTTS Plug in
     -------------------
-    Copyright : (C) 2004 Paul Giannaros
+    Copyright : (C) 2004 Paul Giannaros <ceruleanblaze@gmail.com>
     -------------------
     Original author: Paul Giannaros <ceruleanblaze@gmail.com>
     Current Maintainer: Paul Giannaros <ceruleanblaze@gmail.com>
@@ -19,6 +19,7 @@
 #define _FREETTSPROC_H_
 
 #include <QtCore/QMutex>
+#include <QtCore/QStringList>
 
 #include <pluginproc.h>
 

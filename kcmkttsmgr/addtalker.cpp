@@ -22,6 +22,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// KTTS includes.
+#include "addtalker.h"
+
 // Qt includes.
 #include <QtGui/QRadioButton>
 #include <QtGui/QDialog>
@@ -31,9 +34,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-
-// KTTS includes.
-#include "addtalker.h"
 
 AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char* name, Qt::WFlags fl)
     : QWidget(parent)

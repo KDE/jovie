@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Flite Plugin includes.
+#include "fliteproc.h"
+#include "fliteproc.moc"
+
 // Qt includes.
 
 
@@ -30,10 +34,6 @@
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <k3process.h>
-
-// Flite Plugin includes.
-#include "fliteproc.h"
-#include "fliteproc.moc"
 
 /** Constructor */
 FliteProc::FliteProc( QObject* parent, const QStringList& ) :
