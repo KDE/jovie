@@ -534,8 +534,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
     size_t blimit = 0;
     WaveFmtBody *f;
     WaveChunkHeader *c;
-    u_int type;
-    u_int len;
+    uint type;
+    uint len;
 
     if (size < sizeof(WaveHeader))
         return -1;
@@ -631,7 +631,7 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
     size -= len;
 
     while (1) {
-        u_int type, len;
+        uint type, len;
 
         check_wavefile_space(buffer, sizeof(WaveChunkHeader), blimit);
         test_wavefile_read(fd, buffer, &size, sizeof(WaveChunkHeader), __LINE__);
@@ -1065,7 +1065,7 @@ ssize_t AlsaPlayerThread::pcm_write(char *data, size_t count)
  *  ok, let's play a .voc file
  */
 
-ssize_t AlsaPlayerThread::voc_pcm_write(u_char *data, size_t count)
+ssize_t AlsaPlayerThread::voc_pcm_write(uchar *data, size_t count)
 {
     ssize_t result = count, r;
     size_t size;
@@ -1104,7 +1104,7 @@ void AlsaPlayerThread::voc_write_silence(unsigned x)
         l = x;
         if (l > chunk_size)
             l = chunk_size;
-        if (voc_pcm_write((u_char*)buf, l) != (ssize_t)l) {
+        if (voc_pcm_write((uchar*)buf, l) != (ssize_t)l) {
             kError() << "write error" << endl;
             stopAndExit();
         }
@@ -1137,9 +1137,9 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
     VocVoiceData *vd;
     VocExtBlock *eb;
     size_t nextblock, in_buffer;
-    u_char *data, *buf;
+    uchar *data, *buf;
     char was_extended = 0, output = 0;
-    u_short *sp, repeat = 0;
+    ushort *sp, repeat = 0;
     size_t silence;
     off64_t filepos = 0;
 
@@ -1147,8 +1147,8 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 #define COUNT1(x)    in_buffer -= x; data += x
 
     QByteArray buffer(64 * 1024, '\0');
-    // data = buf = (u_char *)malloc(64 * 1024);
-    data = buf = (u_char*)buffer.data();
+    // data = buf = (uchar *)malloc(64 * 1024);
+    data = buf = (uchar*)buffer.data();
     buffer_pos = 0;
     if (data == NULL) {
         stopAndExit();
@@ -1235,8 +1235,8 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
 #endif
                 break;
             case 3:    /* a silence block, no data, only a count */
-                sp = (u_short *) data;
-                COUNT1(sizeof(u_short));
+                sp = (ushort *) data;
+                COUNT1(sizeof(ushort));
                 hwdata.rate = (int) (*data);
                 COUNT1(1);
                 hwdata.rate = 1000000 / (256 - hwdata.rate);
@@ -1248,8 +1248,8 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
                 voc_write_silence(*sp);
                 break;
             case 4:    /* a marker for syncronisation, no effect */
-                sp = (u_short *) data;
-                COUNT1(sizeof(u_short));
+                sp = (ushort *) data;
+                COUNT1(sizeof(ushort));
 #if 0
                 MSG("Marker %d", *sp);
 #endif
@@ -1263,8 +1263,8 @@ void AlsaPlayerThread::voc_play(int fd, int ofs, const char* name)
             case 6:    /* repeat marker, says repeatcount */
                 /* my specs don't say it: maybe this can be recursive, but
                    I don't think somebody use it */
-                repeat = *(u_short *) data;
-                COUNT1(sizeof(u_short));
+                repeat = *(ushort *) data;
+                COUNT1(sizeof(ushort));
 #if 0
                 MSG("Repeat loop %d times", repeat);
 #endif

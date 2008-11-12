@@ -107,7 +107,7 @@ private:
     void suspend(void);
     void compute_max_peak(char *data, size_t count);
     ssize_t pcm_write(char *data, size_t count);
-    ssize_t voc_pcm_write(u_char *data, size_t count);
+    ssize_t voc_pcm_write(uchar *data, size_t count);
     void voc_write_silence(unsigned x);
     void voc_pcm_flush(void);
     void voc_play(int fd, int ofs, const char *name);
