@@ -50,6 +50,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QEvent>
 #include <QtCore/QStack>
+#include <QtCore/QStringList>
 
 // KTTS includes.
 #include "filterproc.h"

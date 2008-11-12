@@ -30,6 +30,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QRegExp>
 #include <QtCore/QList>
+#include <QtCore/QStringList>
 
 // KTTS includes.
 #include "filterproc.h"

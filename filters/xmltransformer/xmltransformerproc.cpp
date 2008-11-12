@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// XmlTransformer includes.
+#include "xmltransformerproc.h"
+#include "xmltransformerproc.moc"
+
 // Qt includes.
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
@@ -38,10 +42,6 @@
 // KTTS includes.
 #include "filterproc.h"
 #include "utils.h"
-
-// XmlTransformer includes.
-#include "xmltransformerproc.h"
-#include "xmltransformerproc.moc"
 
 /**
  * Constructor.

@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// Talker Chooser includes.
+#include "talkerchooserproc.h"
+#include "talkerchooserproc.moc"
+
 // Qt includes.
 #include <QtCore/QRegExp>
 
@@ -31,10 +35,6 @@
 
 // KTTS includes.
 #include "talkercode.h"
-
-// Talker Chooser includes.
-#include "talkerchooserproc.h"
-#include "talkerchooserproc.moc"
 
 /**
  * Constructor.

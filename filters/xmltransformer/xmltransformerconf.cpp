@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// XmlTransformer includes.
+#include "xmltransformerconf.h"
+#include "xmltransformerconf.moc"
+
 // Qt includes.
 
 
@@ -34,10 +38,6 @@
 
 // KTTS includes.
 #include "filterconf.h"
-
-// XmlTransformer includes.
-#include "xmltransformerconf.h"
-#include "xmltransformerconf.moc"
 
 /**
 * Constructor 

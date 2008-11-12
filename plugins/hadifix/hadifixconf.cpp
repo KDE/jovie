@@ -15,9 +15,9 @@
  ***************************************************************************/
 
 // Hadifix includes.
-#include "hadifixproc.h"
 #include "hadifixconf.h"
 #include "hadifixconf.moc"
+#include "hadifixproc.h"
 #include "ui_voicefileui.h"
 
 // System includes.

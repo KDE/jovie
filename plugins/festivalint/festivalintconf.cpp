@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // FestivalInt includes.
-#include "festivalintproc.h"
 #include "festivalintconf.h"
 #include "festivalintconf.moc"
+#include "festivalintproc.h"
 
 // C++ includes.
 #include <math.h>

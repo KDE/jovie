@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// SBD includes.
+#include "sbdconf.h"
+#include "sbdconf.moc"
+
 // Qt includes.
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -44,10 +48,6 @@
 // KTTS includes.
 #include "filterconf.h"
 #include "selectlanguagedlg.h"
-
-// SBD includes.
-#include "sbdconf.h"
-#include "sbdconf.moc"
 
 /**
 * Constructor

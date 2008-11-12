@@ -21,6 +21,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
+// StringReplacer includes.
+#include "stringreplacerconf.h"
+#include "stringreplacerconf.moc"
+
 // Qt includes.
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -48,10 +52,6 @@
 // KTTS includes.
 #include "selectlanguagedlg.h"
 #include "filterconf.h"
-
-// StringReplacer includes.
-#include "stringreplacerconf.h"
-#include "stringreplacerconf.moc"
 
 /**
 * Constructor 
