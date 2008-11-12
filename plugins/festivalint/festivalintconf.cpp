@@ -472,7 +472,7 @@ void FestivalIntConf::scanVoices()
         KIcon maleIcon("male");
         KIcon femaleIcon("female");
         QStringList::ConstIterator itEnd = m_supportedVoiceCodes.constEnd();
-        for(QStringList::ConstIterator it = m_supportedVoiceCodes.begin(); it != itEnd; ++it )
+        for(QStringList::ConstIterator it = m_supportedVoiceCodes.constBegin(); it != itEnd; ++it )
         {
             QString code = *it;
             bool found = false;
