@@ -21,7 +21,7 @@
 #include <kdemacros.h>
 
 class QString;
-class QComboBox;
+class KComboBox;
 
 class KDE_EXPORT KttsUtils {
 
@@ -53,7 +53,7 @@ public:
      * Sets the current item in the given combobox to the item with the given text.
      * If item with the text not found, does nothing.
      */
-    static void setCbItemFromText(QComboBox* cb, const QString& text);
+    static void setCbItemFromText(KComboBox* cb, const QString& text);
 
 };
 

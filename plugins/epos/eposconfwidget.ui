@@ -434,14 +434,14 @@
               <number>6</number>
              </property>
              <item>
-              <widget class="QLineEdit" name="eposServerOptions" >
+              <widget class="KLineEdit" name="eposServerOptions" >
                <property name="whatsThis" >
                 <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not use "-o".</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="eposClientOptions" >
+              <widget class="KLineEdit" name="eposClientOptions" >
                <property name="whatsThis" >
                 <string>Specify options to be passed to Epos client.  To see available options, enter "say -h" in a terminal.  Do not use "-o".</string>
                </property>

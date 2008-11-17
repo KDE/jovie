@@ -44,7 +44,7 @@
 KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent){
     setObjectName(name);
     // kDebug() << "KttsFilterConf::KttsFilterConf: Running";
-    QString systemPath(getenv("PATH"));
+    QString systemPath(qgetenv("PATH"));
     // kDebug() << "Path is " << systemPath;
     m_path = systemPath.split( ':');
 }

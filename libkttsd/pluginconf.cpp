@@ -41,7 +41,7 @@
 PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent){
     setObjectName(name);
     kDebug() << "PlugInConf::PlugInConf: Running";
-    QString systemPath(getenv("PATH"));
+    QString systemPath(qgetenv("PATH"));
     // kDebug() << "Path is " << systemPath;
     m_path = systemPath.split( ':');
     m_player = 0;

@@ -18,8 +18,7 @@
 #include "utils.h"
 
 #include <kdebug.h>
-
-#include <QtGui/QComboBox>
+#include <kcombobox.h>
 
 KttsUtils::KttsUtils() {
 }
@@ -117,7 +116,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
  * Sets the current item in the given combobox to the item with the given text.
  * If item with the text not found, does nothing.
  */
-/*static*/ void KttsUtils::setCbItemFromText(QComboBox* cb, const QString& text)
+/*static*/ void KttsUtils::setCbItemFromText(KComboBox* cb, const QString& text)
 {
     const int itemCount = cb->count();
     for (int ndx = 0; ndx < itemCount; ++ndx)

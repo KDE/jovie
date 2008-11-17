@@ -195,8 +195,8 @@ void TalkerChooserConf::slotReEditorButton_clicked()
 {
     // Show Regular Expression Editor dialog if it is installed.
     if ( !m_reEditorInstalled ) return;
-    QDialog *editorDialog =
-        KServiceTypeTrader::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
+    KDialog *editorDialog =
+        KServiceTypeTrader::createInstanceFromQuery<KDialog>( "KRegExpEditor/KRegExpEditor" );
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
