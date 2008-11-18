@@ -28,6 +28,7 @@
 #include <kuniqueapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
+#include <kcrash.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -59,6 +60,8 @@ int main (int argc, char *argv[]){
         kDebug() << "KTTSD is already running";
         return (0);
     }
+
+    KCrash::setFlags(KCrash::AutoRestart);
 
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
