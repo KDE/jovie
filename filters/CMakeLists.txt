@@ -10,12 +10,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 ########### next target ###############
 
-# set(testfilter_SRCS main.cpp )
+set(testfilter_SRCS main.cpp )
 
 
-# kde4_add_executable(testfilter TEST ${testfilter_SRCS})
+kde4_add_executable(testfilter TEST ${testfilter_SRCS})
 
-# target_link_libraries(testfilter  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(testfilter  ${KDE4_KDECORE_LIBS} kttsd )
 
 
 ########### install files ###############

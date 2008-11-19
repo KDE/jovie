@@ -9,12 +9,13 @@ using namespace std;
 
 #include <QtCore/QTextStream>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
-#include <ktrader.h>
+#include <kconfiggroup.h>
 #include <kparts/componentfactory.h>
 
 #include "filterproc.h"
@@ -45,11 +46,11 @@ int main(int argc, char *argv[])
     options.add("list", ki18n("Display list of available filter plugins and exit"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KApplication app( false, false );
+    KApplication app;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
+    KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
 
     if (args->isSet("list"))
     {
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
         for(int ndx=0; ndx < offersCount ; ++ndx)
         {
             QString name = offers[ndx]->name();
-            cout << name.latin1() << endl;
+            cout << name.data() << endl;
         }
         return 0;
     }
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
     QString filterName;
     if (args->count() > 0) filterName = args->arg(0);
     QString talker = args->getOption("talker");
-    QCString appId = args->getOption("appid");
+    QString appId = args->getOption("appid");
     QString groupName = args->getOption("group");
 
     if (filterName.isEmpty()) kError(1) << "No filter name given." << endl;
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
         {
             // When the entry is found, load the plug in
             // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(offers[ndx]->library().latin1());
+            KLibFactory *factory = KLibLoader::self()->factory(offers[ndx]->library());
             if(factory)
             {
                 // If the factory is created successfully, instantiate the KttsFilterConf class for the
@@ -86,23 +87,24 @@ int main(int argc, char *argv[])
                 int errorNo;
                 KttsFilterProc *plugIn =
                     KLibLoader::createInstance<KttsFilterProc>(
-                    offers[ndx]->library().latin1(), NULL, offers[ndx]->library().latin1(),
-                        QStringList(), &errorNo);
+                    offers[ndx]->library(), NULL, QStringList(offers[ndx]->library()),
+                        &errorNo);
                     if(plugIn)
                     {
                         KConfig* config = new KConfig("kttsdrc");
-                        config->setGroup( "General" );
-                        plugIn->init( config, groupName );
+                        KConfigGroup group = config->group("General");
+                        group = group.group(groupName);
+                        plugIn->init( group);
                         QTextStream inp ( stdin,  QIODevice::ReadOnly );
                         QString text;
-                        text = inp.read();
+                        text = inp.readLine();
                         TalkerCode* talkerCode = new TalkerCode( talker );
                         text = plugIn->convert( text, talkerCode, appId );
                         if ( args->isSet("break") ) 
                             text.replace( '\t', "\\t" );
                         else
                             text.remove( '\t');
-                        cout << text.latin1() << endl;
+                        cout << text.data() << endl;
                         delete config;
                         delete plugIn;
                         return 0;
