@@ -49,7 +49,7 @@ class StringReplacerConf : public KttsFilterConf, public Ui::StringReplacerConfW
         /**
         * Constructor 
         */
-        explicit StringReplacerConf( QWidget *parent, const QStringList &args = QStringList() );
+        explicit StringReplacerConf( QWidget *parent, const QVariantList &args = QVariantList() );
 
         /**
         * Destructor 

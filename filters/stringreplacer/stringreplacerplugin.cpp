@@ -21,12 +21,18 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#include <kgenericfactory.h>
+ // KDE includes.
+#include <KPluginFactory>
+#include <KPluginLoader>
+
+// KTTS includes.
+#include "filterproc.h"
 
 #include "stringreplacerconf.h"
 #include "stringreplacerproc.h"
 
-typedef K_TYPELIST_2( StringReplacerProc, StringReplacerConf ) StringReplacerPlugin;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_stringreplacerplugin,
-    KGenericFactory<StringReplacerPlugin>("kttsd") )
+K_PLUGIN_FACTORY(StringReplacePluginFactory, registerPlugin<StringReplacerProc>(); registerPlugin<StringReplacerConf>();)
+K_EXPORT_PLUGIN(StringReplacePluginFactory("kttsd"))
+//K_EXPORT_COMPONENT_FACTORY( libkttsd_stringreplacerplugin,
+//    KGenericFactory<StringReplacerPlugin>("kttsd") )
 

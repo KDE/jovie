@@ -26,7 +26,6 @@
 
 // Qt includes.
 #include <QtGui/QWidget>
-#include <QtCore/QStringList>
 
 // KDE includes.
 #include <kconfig.h>
@@ -46,7 +45,7 @@ class XmlTransformerConf : public KttsFilterConf, public Ui::XmlTransformerConfW
         /**
         * Constructor 
         */
-        explicit XmlTransformerConf( QWidget *parent, const QStringList &args = QStringList() );
+        explicit XmlTransformerConf( QWidget *parent, const QVariantList &args);
 
         /**
         * Destructor 

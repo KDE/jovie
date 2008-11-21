@@ -21,11 +21,18 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#include <kgenericfactory.h>
+ // KDE includes.
+#include <KPluginFactory>
+#include <KPluginLoader>
+
+// KTTS includes.
+#include "filterproc.h"
 
 #include "xmltransformerconf.h"
 #include "xmltransformerproc.h"
 
-typedef K_TYPELIST_2( XmlTransformerProc, XmlTransformerConf ) XmlTransformerPlugin;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_xmltransformerplugin,
-    KGenericFactory<XmlTransformerPlugin>("kttsd") )
+K_PLUGIN_FACTORY(XmlTransformerPluginFactory, registerPlugin<XmlTransformerProc>(); registerPlugin<XmlTransformerConf>();)
+K_EXPORT_PLUGIN(XmlTransformerPluginFactory("kttsd"))
+//typedef K_TYPELIST_2( XmlTransformerProc, XmlTransformerConf ) XmlTransformerPlugin;
+//K_EXPORT_COMPONENT_FACTORY( libkttsd_xmltransformerplugin,
+//    KGenericFactory<XmlTransformerPlugin>("kttsd") )

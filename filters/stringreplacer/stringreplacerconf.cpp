@@ -56,8 +56,8 @@
 /**
 * Constructor 
 */
-StringReplacerConf::StringReplacerConf( QWidget *parent, const QStringList& args ) :
-    KttsFilterConf(parent),
+StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& args ) :
+    KttsFilterConf(parent, args),
     m_editDlg(0),
     m_editWidget(0)
 {

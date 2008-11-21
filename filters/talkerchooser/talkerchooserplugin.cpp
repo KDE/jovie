@@ -21,12 +21,19 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#include <kgenericfactory.h>
+ // KDE includes.
+#include <KPluginFactory>
+#include <KPluginLoader>
+
+// KTTS includes.
+#include "filterproc.h"
 
 #include "talkerchooserconf.h"
 #include "talkerchooserproc.h"
 
-typedef K_TYPELIST_2( TalkerChooserProc, TalkerChooserConf ) TalkerChooserPlugin;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_talkerchooserplugin,
-    KGenericFactory<TalkerChooserPlugin>("kttsd") )
+K_PLUGIN_FACTORY(TalkerChooserPluginFactory, registerPlugin<TalkerChooserProc>(); registerPlugin<TalkerChooserConf>();)
+K_EXPORT_PLUGIN(TalkerChooserPluginFactory("kttsd"))
+//typedef K_TYPELIST_2( TalkerChooserProc, TalkerChooserConf ) TalkerChooserPlugin;
+//K_EXPORT_COMPONENT_FACTORY( libkttsd_talkerchooserplugin,
+//    KGenericFactory<TalkerChooserPlugin>("kttsd") )
 

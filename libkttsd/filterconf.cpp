@@ -41,8 +41,8 @@
 /**
 * Constructor 
 */
-KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent){
-    setObjectName(name);
+KttsFilterConf::KttsFilterConf( QWidget *parent, const QVariantList &) : QWidget(parent){
+    //setObjectName(name);
     // kDebug() << "KttsFilterConf::KttsFilterConf: Running";
     QString systemPath(qgetenv("PATH"));
     // kDebug() << "Path is " << systemPath;

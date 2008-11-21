@@ -22,12 +22,19 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#include <kgenericfactory.h>
+ // KDE includes.
+#include <KPluginFactory>
+#include <KPluginLoader>
+
+// KTTS includes.
+#include "filterproc.h"
 
 #include "sbdconf.h"
 #include "sbdproc.h"
 
-typedef K_TYPELIST_2( SbdProc, SbdConf ) SbdPlugin;
-K_EXPORT_COMPONENT_FACTORY( libkttsd_sbdplugin,
-    KGenericFactory<SbdPlugin>("kttsd") )
+K_PLUGIN_FACTORY(SbdPluginFactory, registerPlugin<SbdProc>(); registerPlugin<SbdConf>();)
+K_EXPORT_PLUGIN(SbdPluginFactory("kttsd"))
+//typedef K_TYPELIST_2( SbdProc, SbdConf ) SbdPlugin;
+//K_EXPORT_COMPONENT_FACTORY( libkttsd_sbdplugin,
+//    KGenericFactory<SbdPlugin>("kttsd") )
 

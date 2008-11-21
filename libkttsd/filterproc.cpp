@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 // KDE includes.
-// #include <kdebug.h>
+#include <kdebug.h>
 
 // FilterProc includes.
 #include "filterproc.h"
@@ -31,7 +31,7 @@
 /**
  * Constructor.
  */
-KttsFilterProc::KttsFilterProc( QObject *parent) :
+KttsFilterProc::KttsFilterProc( QObject *parent, const QVariantList &) :
         QObject(parent) 
 {
     // kDebug() << "KttsFilterProc::KttsFilterProc: Running";
@@ -55,7 +55,7 @@ KttsFilterProc::~KttsFilterProc()
  * separate configuration files of their own.
  */
 bool KttsFilterProc::init(const KConfigGroup &){
-    // kDebug() << "PlugInProc::init: Running";
+    kDebug() << "PlugInProc::init: Running";
     return false;
 }
 

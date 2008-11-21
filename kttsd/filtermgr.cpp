@@ -42,7 +42,7 @@
  * Constructor.
  */
 FilterMgr::FilterMgr( QObject *parent) :
-    KttsFilterProc(parent)
+    KttsFilterProc(parent, QVariantList())
 {
     // kDebug() << "FilterMgr::FilterMgr: Running";
     m_state = fsIdle;

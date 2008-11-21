@@ -48,7 +48,7 @@ class TalkerChooserConf : public KttsFilterConf, public Ui::TalkerChooserConfWid
         /**
         * Constructor 
         */
-        explicit TalkerChooserConf( QWidget *parent, const QStringList &args = QStringList() );
+        explicit TalkerChooserConf( QWidget *parent, const QVariantList &args);
 
         /**
         * Destructor 

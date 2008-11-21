@@ -27,6 +27,7 @@
 
 // Qt includes.
 #include <QtCore/QObject>
+#include <QtCore/QVariantList>
 
 // KDE includes.
 #include <kdemacros.h>
@@ -50,7 +51,7 @@ public:
     /**
      * Constructor.
      */
-    KttsFilterProc( QObject *parent );
+    KttsFilterProc( QObject *parent, const QVariantList &);
 
     /**
      * Destructor.

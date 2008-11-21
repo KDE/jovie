@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    explicit TalkerChooserProc( QObject *parent, const QStringList &args = QStringList() );
+    explicit TalkerChooserProc( QObject *parent, const QVariantList &args);
 
     /**
      * Destructor.

@@ -4,9 +4,6 @@
   #LICENSE
 ***********************/
 
-#include <iostream>
-using namespace std;
-
 #include <QtCore/QTextStream>
 
 #include <kapplication.h>
@@ -56,10 +53,9 @@ int main(int argc, char *argv[])
     {
         // Iterate thru the offers to list the plugins.
         const int offersCount = offers.count();
-        for(int ndx=0; ndx < offersCount ; ++ndx)
+        for (int ndx=0; ndx < offersCount ; ++ndx)
         {
-            QString name = offers[ndx]->name();
-            cout << name.data() << endl;
+            kDebug() << offers[ndx]->name();
         }
         return 0;
     }
@@ -73,27 +69,27 @@ int main(int argc, char *argv[])
     if (filterName.isEmpty()) kError(1) << "No filter name given." << endl;
 
     const int offersCount = offers.count();
-    for(int ndx=0; ndx < offersCount ; ++ndx)
+    for (int ndx=0; ndx < offersCount ; ++ndx)
     {
-        if(offers[ndx]->name() == filterName)
+        if (offers[ndx]->name() == filterName)
         {
             // When the entry is found, load the plug in
             // First create a factory for the library
-            KLibFactory *factory = KLibLoader::self()->factory(offers[ndx]->library());
-            if(factory)
+            KPluginLoader loader(offers[ndx]->library());
+            KPluginFactory *factory = loader.factory();
+            if (factory)
             {
                 // If the factory is created successfully, instantiate the KttsFilterConf class for the
                 // specific plug in to get the plug in configuration object.
                 int errorNo;
-                KttsFilterProc *plugIn =
-                    KLibLoader::createInstance<KttsFilterProc>(
-                    offers[ndx]->library(), NULL, QStringList(offers[ndx]->library()),
-                        &errorNo);
-                    if(plugIn)
+                KttsFilterProc *plugIn = factory->create<KttsFilterProc>();
+                    //KLibLoader::createInstance<KttsFilterProc>(
+                    //offers[ndx]->library(), NULL, QStringList(offers[ndx]->library()),
+                    //    &errorNo);
+                    if (plugIn)
                     {
                         KConfig* config = new KConfig("kttsdrc");
-                        KConfigGroup group = config->group("General");
-                        group = group.group(groupName);
+                        KConfigGroup group = config->group(groupName);
                         plugIn->init( group);
                         QTextStream inp ( stdin,  QIODevice::ReadOnly );
                         QString text;
@@ -104,14 +100,20 @@ int main(int argc, char *argv[])
                             text.replace( '\t', "\\t" );
                         else
                             text.remove( '\t');
-                        cout << text.data() << endl;
+                        kDebug() << text;
                         delete config;
                         delete plugIn;
                         return 0;
-                    } else
+                    }
+                    else
+                    {
                         kError(2) << "Unable to create instance from library." << endl;
-            } else
+                    }
+            }
+            else
+            {
                 kError(3) << "Unable to create factory." << endl;
+            }
         }
     }
     kError(4) << "Unable to find a plugin named " << filterName << endl;

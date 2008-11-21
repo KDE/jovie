@@ -42,8 +42,8 @@
 /**
 * Constructor 
 */
-XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QStringList &args) :
-    KttsFilterConf(parent)
+XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QVariantList &args) :
+    KttsFilterConf(parent, args)
 {
     Q_UNUSED(args);
     kDebug() << "XmlTransformerConf::XmlTransformerConf: Running";

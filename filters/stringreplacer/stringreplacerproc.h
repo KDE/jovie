@@ -29,7 +29,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QTextStream>
 #include <QtCore/QRegExp>
-#include <QtCore/QList>
 #include <QtCore/QStringList>
 
 // KTTS includes.
@@ -43,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    explicit StringReplacerProc( QObject *parent, const QStringList &args = QStringList() );
+    explicit StringReplacerProc( QObject *parent, QVariantList list = QVariantList() );
 
     /**
      * Destructor.
