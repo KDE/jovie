@@ -67,7 +67,7 @@ public:
      * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
      * separate configuration files of their own.
      */
-    virtual bool init(const KConfigGroup &config);
+    virtual bool init(KConfig *config, const QString &configGroup);
 
     /**
      * Returns True if this filter is a Sentence Boundary Detector.

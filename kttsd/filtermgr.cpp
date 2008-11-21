@@ -73,6 +73,7 @@ bool FilterMgr::init()
     // Load each of the filters and initialize.
     KSharedConfig::Ptr pConfig = KSharedConfig::openConfig( "kttsdrc" );
     KConfigGroup config( pConfig, "General");
+    KConfig* rawconfig = new KConfig("kttsdrc");
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList());
      kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
     // If no filters have been configured, automatically configure the standard SBD.
@@ -118,7 +119,7 @@ bool FilterMgr::init()
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
                 if ( filterProc )
                 {
-                    filterProc->init( pConfig->group( groupName ) );
+                    filterProc->init( rawconfig, groupName );
                     m_filterList.append( filterProc );
                 }
                 if (config.readEntry("DocType").contains("html") ||

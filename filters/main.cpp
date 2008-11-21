@@ -52,10 +52,9 @@ int main(int argc, char *argv[])
     if (args->isSet("list"))
     {
         // Iterate thru the offers to list the plugins.
-        const int offersCount = offers.count();
-        for (int ndx=0; ndx < offersCount ; ++ndx)
+        foreach (const KService::Ptr service, offers)
         {
-            kDebug() << offers[ndx]->name();
+            kDebug() << service->name();
         }
         return 0;
     }
@@ -68,29 +67,27 @@ int main(int argc, char *argv[])
 
     if (filterName.isEmpty()) kError(1) << "No filter name given." << endl;
 
-    const int offersCount = offers.count();
-    for (int ndx=0; ndx < offersCount ; ++ndx)
+    QVariantList list;
+    foreach (const KService::Ptr service, offers)
     {
-        if (offers[ndx]->name() == filterName)
+        if (service->name() == filterName)
         {
             // When the entry is found, load the plug in
             // First create a factory for the library
-            KPluginLoader loader(offers[ndx]->library());
+            KPluginLoader loader(service->library());
             KPluginFactory *factory = loader.factory();
             if (factory)
             {
                 // If the factory is created successfully, instantiate the KttsFilterConf class for the
                 // specific plug in to get the plug in configuration object.
-                int errorNo;
-                KttsFilterProc *plugIn = factory->create<KttsFilterProc>();
+                KttsFilterProc *plugIn = factory->create<KttsFilterProc>(NULL, list);
                     //KLibLoader::createInstance<KttsFilterProc>(
-                    //offers[ndx]->library(), NULL, QStringList(offers[ndx]->library()),
+                    //service->library(), NULL, QStringList(service->library()),
                     //    &errorNo);
                     if (plugIn)
                     {
                         KConfig* config = new KConfig("kttsdrc");
-                        KConfigGroup group = config->group(groupName);
-                        plugIn->init( group);
+                        plugIn->init( config, groupName);
                         QTextStream inp ( stdin,  QIODevice::ReadOnly );
                         QString text;
                         text = inp.readLine();
