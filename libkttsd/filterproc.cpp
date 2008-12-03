@@ -22,11 +22,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// KDE includes.
-#include <kdebug.h>
-
 // FilterProc includes.
 #include "filterproc.h"
+
+// KDE includes.
+#include <kdebug.h>
 
 /**
  * Constructor.
