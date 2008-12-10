@@ -3,7 +3,7 @@ Type=Service
 Exec=kcmshell4 kcmkttsd
 Icon=preferences-desktop-text-to-speech
 X-KDE-ServiceTypes=KCModule,KCModuleInit
-X-DocPath=kcontrol/kttsd/index.html
+X-DocPath=kttsd/index.html
 
 X-KDE-Library=kcm_kttsd
 X-KDE-Init-Symbol=KCMKttsdMgr
@@ -110,8 +110,6 @@ Comment[x-test]=xxText-to-Speech Control Modulexx
 Comment[zh_CN]=语音合成(TTS)控制模块
 Comment[zh_TW]=文字轉語音控制模組
 
-ServiceTypes=KCModule
-X-DocPath=kttsd
 NoDisplay=false
 StartupNotify=false
 StartupWMClass=
