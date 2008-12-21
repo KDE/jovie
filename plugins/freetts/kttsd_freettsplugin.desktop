@@ -2,6 +2,7 @@
 Name=FreeTTS
 Name[ar]=نص-إلى-صوت المجاني
 Name[hi]=फ्रीटीटीएस
+Name[ml]=ഫ്രീ ടിടിഎസ്
 Name[vi]=Văn bản sang Tiếng nói Tự do
 Name[x-test]=xxFreeTTSxx
 Comment=FreeTTS speech synthesizer
@@ -29,6 +30,7 @@ Comment[km]=កម្មវិធី​សង្គ្រោះ​ការន�
 Comment[ko]=FreeTTS 음성 합성기
 Comment[lv]=FreeTTS runas sintezators
 Comment[mk]=FreeTTS синтетизатор на говор
+Comment[ml]=ഫ്രീ ടിടിഎസ് സംസാരസങ്കലനോപാധി‍
 Comment[ms]=Pensintesis tutur FreeTTS
 Comment[nb]=FreeTTS talesyntetisering
 Comment[nds]=Blicksnuut FreeTTS

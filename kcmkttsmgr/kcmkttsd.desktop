@@ -39,6 +39,7 @@ Name[km]=អត្ថបទ​ដែល​ត្រូវ​និយាយ
 Name[ko]=텍스트 읽어주기
 Name[lv]=Teksta izrunāšana
 Name[mk]=Текст-во-говор
+Name[ml]=ലേഖനം വായനയാക്കാന്‍
 Name[ms]=Teks-ke-Tutur
 Name[nb]=Tekst-til-tale
 Name[nds]=Vörleser
@@ -88,6 +89,7 @@ Comment[km]=ម៉ូឌុល​ត្រួត​ពិនិត្យ​​�
 Comment[ko]=텍스트 읽어주기 제어 모듈
 Comment[lv]=Teksta izrunāšanas kontroles modulis
 Comment[mk]=Контролен модул за текст-во-говор
+Comment[ml]=ലേഖന - വായനാ നിയന്ത്രണ ഘടകം
 Comment[ms]=Modul Kawalan Teks-ke-Tutur
 Comment[nb]=Styremodul for tekst-til-tale
 Comment[nds]=Kuntrullmoduul för den Vörleser

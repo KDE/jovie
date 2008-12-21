@@ -23,6 +23,7 @@ Name[km]=ឧបករណ៍​ជ្រើស​អ្នក​និយាយ
 Name[ko]=화자 선택기
 Name[lv]=Runātāja izvēle
 Name[mk]=Избирач на говорникот
+Name[ml]=സംസാരിയെ തെരഞ്ഞെടുക്കുന്നവന്‍
 Name[ms]=Pemilih Penutur
 Name[nb]=Snakkervelger
 Name[nds]=Snacker-Köör
@@ -70,6 +71,7 @@ Comment[km]=កម្មវិធី​ជំនួយ​ឧបករណ៍​�
 Comment[ko]=KTTS 일반적 화자 선택기 플러그인
 Comment[lv]=Vispārējs runātāja izvēles spraudnis priekš KTTS
 Comment[mk]=Филтер за KTTS за избирач на општ говорник
+Comment[ml]=കെടിടിഎസ്സിന് വേണ്ടി ശബ്ദകര്‍ത്താവിനെ തെരഞ്ഞെടുക്കുന്ന സാമാന്യ‌ അരിപ്പപ്രയോഗം
 Comment[ms]=Plugin Penapis Pemilih Penutur Generik bagi KTTS
 Comment[nb]=Filter-programtillegg til KTTS for snakkervalg
 Comment[nds]=KTTS-Filtermoduul för dat Utsöken vun den Snacker

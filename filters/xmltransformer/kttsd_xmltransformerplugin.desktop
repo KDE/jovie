@@ -23,6 +23,7 @@ Name[km]=កម្មវិធី​ប្លែង XML
 Name[ko]=XML 변형 도구
 Name[lv]=XML transformators
 Name[mk]=XML-трансформирач
+Name[ml]=എക്സ്‌എംഎല്‍ ട്രാന്സ്‌ഫോര്‍മര്‍
 Name[ms]=Transformer XML
 Name[nds]=XML-Ümwanneln
 Name[ne]=XML रुपान्तरणकर्ता
@@ -68,6 +69,7 @@ Comment[km]=កម្មវិធី​ជំនួយ​តម្រង​ក�
 Comment[ko]=KTTS 일반적 XML 변형 도구
 Comment[lv]=Vispārējs XML transformācijas filtra spraudnis priekš KTTS
 Comment[mk]=Филтер за KTTS за трансформација на општ XML
+Comment[ml]=കെടിടിഎസ്സിന്റെ എക്സ്‌എംഎല്‍ പരിണാമത്തിനായുള്ള സാമാന്യ‌ അരിപ്പസംയോജകം
 Comment[ms]=Plugin Penapis Transformasi XML Generik bagi KTTS
 Comment[nb]=Filter-programtillegg til KTTS for alminnelig XML-transformasjon
 Comment[nds]=KTTS-Filtermoduul för dat Ümwanneln vun XML

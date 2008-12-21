@@ -7,6 +7,7 @@ X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
 Name=KTTSD
 Name[hi]=केटीटीएसडी
+Name[ml]=കെടിടിഎസ്ഡി
 Name[x-test]=xxKTTSDxx
 Name[zh_CN]=K 语音精灵
 Name[zh_TW]=KTTSd
@@ -36,6 +37,7 @@ Comment[km]=ដេមិន​អត្ថបទ​ដែល​ត្រូវ�
 Comment[ko]=KDE 텍스트 읽어주기 데몬
 Comment[lv]=KDE teksta izrunāšanas programma
 Comment[mk]=Даемон на KDE за текст-во-говор
+Comment[ml]=കെഡിഇ ലേഖന - വായനാ നിരന്തരപ്രവൃത്തി
 Comment[ms]=Daemon Teks Ke Tutur KDE
 Comment[nb]=KDE tekst-til-tale-nisse
 Comment[nds]=Vörlees-Dämoon vun KDE
