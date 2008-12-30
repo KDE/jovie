@@ -2,14 +2,6 @@
  <author>Gary Cramblitt</author>
  <class>KCMKttsMgrWidget</class>
  <widget class="KCModule" name="KCMKttsMgrWidget" >
-  <property name="geometry" >
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>578</width>
-    <height>445</height>
-   </rect>
-  </property>
   <property name="sizePolicy" >
    <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
     <horstretch>0</horstretch>
@@ -17,12 +9,6 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item row="0" column="0" >
     <widget class="KTabWidget" name="mainTab" >
      <property name="sizePolicy" >
@@ -39,12 +25,6 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="4" column="0" >
         <widget class="QLabel" name="kttsdVersion" >
          <property name="text" >
@@ -62,20 +42,14 @@
          </property>
          <property name="sizeHint" stdset="0" >
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
        </item>
        <item row="2" column="0" >
         <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
           <spacer>
            <property name="orientation" >
@@ -87,7 +61,7 @@
            <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
-             <height>20</height>
+             <height>0</height>
             </size>
            </property>
           </spacer>
@@ -137,22 +111,10 @@
        <string>Talkers</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>8</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="1" >
         <layout class="QVBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
-          <widget class="QPushButton" name="addTalkerButton" >
+          <widget class="KPushButton" name="addTalkerButton" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
@@ -168,7 +130,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="higherTalkerPriorityButton" >
+          <widget class="KPushButton" name="higherTalkerPriorityButton" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
@@ -181,7 +143,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="lowerTalkerPriorityButton" >
+          <widget class="KPushButton" name="lowerTalkerPriorityButton" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
@@ -194,7 +156,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="configureTalkerButton" >
+          <widget class="KPushButton" name="configureTalkerButton" >
            <property name="enabled" >
             <bool>false</bool>
            </property>
@@ -213,7 +175,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="removeTalkerButton" >
+          <widget class="KPushButton" name="removeTalkerButton" >
            <property name="enabled" >
             <bool>false</bool>
            </property>
@@ -241,8 +203,8 @@
            </property>
            <property name="sizeHint" stdset="0" >
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>0</width>
+             <height>0</height>
             </size>
            </property>
           </spacer>
@@ -259,33 +221,15 @@
        <string>Filters</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
           <widget class="QTreeView" name="filtersView" />
          </item>
          <item>
           <layout class="QVBoxLayout" >
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <item>
-            <widget class="QPushButton" name="addFilterButton" >
+            <widget class="KPushButton" name="addFilterButton" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                <horstretch>0</horstretch>
@@ -301,7 +245,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="higherFilterPriorityButton" >
+            <widget class="KPushButton" name="higherFilterPriorityButton" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                <horstretch>0</horstretch>
@@ -317,7 +261,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="lowerFilterPriorityButton" >
+            <widget class="KPushButton" name="lowerFilterPriorityButton" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                <horstretch>0</horstretch>
@@ -333,7 +277,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="configureFilterButton" >
+            <widget class="KPushButton" name="configureFilterButton" >
              <property name="enabled" >
               <bool>false</bool>
              </property>
@@ -352,7 +296,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="removeFilterButton" >
+            <widget class="KPushButton" name="removeFilterButton" >
              <property name="enabled" >
               <bool>false</bool>
              </property>
@@ -380,8 +324,8 @@
              </property>
              <property name="sizeHint" stdset="0" >
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>0</width>
+               <height>0</height>
               </size>
              </property>
             </spacer>
@@ -392,25 +336,13 @@
        </item>
        <item row="1" column="0" >
         <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
           <widget class="QTreeView" name="sbdsView" />
          </item>
          <item>
           <layout class="QVBoxLayout" >
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <item>
-            <widget class="QPushButton" name="sbdButton" >
+            <widget class="KPushButton" name="sbdButton" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                <horstretch>0</horstretch>
@@ -435,8 +367,8 @@
              </property>
              <property name="sizeHint" stdset="0" >
               <size>
-               <width>20</width>
-               <height>11</height>
+               <width>0</width>
+               <height>0</height>
               </size>
              </property>
             </spacer>
@@ -452,20 +384,8 @@
        <string>Interruption</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>6</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
          <item row="1" column="1" >
           <widget class="KUrlRequester" name="textPreSnd" >
            <property name="enabled" >
@@ -588,8 +508,8 @@
          </property>
          <property name="sizeHint" stdset="0" >
           <size>
-           <width>21</width>
-           <height>180</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -601,12 +521,6 @@
        <string>Audio</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="audioButtonGroup" >
          <property name="sizePolicy" >
@@ -622,20 +536,8 @@
           <string>Out&amp;put Using</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="1" column="1" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="pcmLabel" >
               <property name="enabled" >
@@ -721,8 +623,8 @@
          </property>
          <property name="sizeHint" stdset="0" >
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -737,20 +639,14 @@
          </property>
          <property name="sizeHint" stdset="0" >
           <size>
-           <width>140</width>
-           <height>20</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
        </item>
        <item row="2" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
           <widget class="QCheckBox" name="keepAudioCheckBox" >
            <property name="whatsThis" >
@@ -781,12 +677,6 @@
        </item>
        <item row="1" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
           <widget class="QLabel" name="timeLabel" >
            <property name="sizePolicy" >
@@ -870,9 +760,12 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="6" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
