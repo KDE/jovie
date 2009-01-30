@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _PLUGINCONF_H_
-#define _PLUGINCONF_H_
+#ifndef PLUGINCONF_H
+#define PLUGINCONF_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -375,4 +375,4 @@ class KDE_EXPORT PlugInConf : public QWidget{
         TestPlayer* m_player;
 };
 
-#endif  //_PLUGINCONF_H_
+#endif  //PLUGINCONF_H

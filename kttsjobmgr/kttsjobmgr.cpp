@@ -170,7 +170,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         "top speakable job in the list, it begins speaking.</p>");
     btn->setWhatsThis(wt);
     connect (btn, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
-    btn = new QPushButton(KIcon("edit-redo"), i18n("R&estart"), hbox1);
+    btn = new QPushButton(KIcon("edit-redo"), i18nc("Restart a job to the beginning", "R&estart"), hbox1);
     btn->setObjectName("job_restart");
     wt = i18n(
         "<p>Rewinds a job to the beginning and changes its state to Waiting.  If the job "

@@ -168,8 +168,8 @@ bool KttsMgrTray::event(QEvent *event)
     // To make it work on all platforms, would have to constantly monitor status and update,
     // which would suck up huge amounts of CPU.
     if (event->type() == QEvent::ToolTip) {
-        QString status = "<qt><b>KTTSMgr</b> - ";
-        status += i18n("<qt>Text-to-Speech Manager");
+        QString status = "<qt><b>KTTSMgr</b> - <qt>";
+        status += i18n("Text-to-Speech Manager");
         status += "<br /><br />";
         status += getStatus();
         status += "</qt>";
@@ -244,11 +244,11 @@ QString KttsMgrTray::stateToStr(int state)
     switch( state )
     {
         case KSpeech::jsQueued: return        i18n("Queued");
-        case KSpeech::jsSpeakable: return     i18n("Waiting");
+        case KSpeech::jsSpeakable: return     i18nc("Waiting for an action", "Waiting");
         case KSpeech::jsSpeaking: return      i18n("Speaking");
         case KSpeech::jsPaused: return        i18n("Paused");
-        case KSpeech::jsFinished: return      i18n("Finished");
-        default: return                       i18n("Unknown");
+        case KSpeech::jsFinished: return      i18nc("Finished the job", "Finished");
+        default: return                       i18nc("State is unknown", "Unknown");
     }
 }
 

@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ******************************************************************************/
 
-#ifndef _KSPEECH_H_
-#define _KSPEECH_H_
+#ifndef KSPEECH_H
+#define KSPEECH_H
 
 // Qt includes
 #include <QtCore/QObject>
@@ -712,4 +712,4 @@ private:
     KSpeechPrivate* d;
 };
 
-#endif // _KSPEECH_H_
+#endif // KSPEECH_H

@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _XMLTRANSFORMERPROC_H_
-#define _XMLTRANSFORMERPROC_H_
+#ifndef XMLTRANSFORMERPROC_H
+#define XMLTRANSFORMERPROC_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -164,4 +164,4 @@ private:
     bool m_wasModified;
 };
 
-#endif      // _XMLTRANSFORMERPROC_H_
+#endif      // XMLTRANSFORMERPROC_H

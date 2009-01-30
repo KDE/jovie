@@ -77,4 +77,4 @@ protected:
 
 };
 
-#endif
+#endif // PLAYER_H

@@ -22,8 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _APPDATA_H_
-#define _APPDATA_H_
+#ifndef APPDATA_H
+#define APPDATA_H
 
 // Qt includes.
 #include <QtCore/QList>
@@ -217,4 +217,4 @@ private:
     AppDataPrivate* d;    
 };
 
-#endif
+#endif // APPDATA_H

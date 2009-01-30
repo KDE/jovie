@@ -22,8 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _EPOSPROC_H_
-#define _EPOSPROC_H_
+#ifndef EPOSPROC_H
+#define EPOSPROC_H
 
 // Qt includes.
 #include <QtCore/QMutex>
@@ -239,4 +239,4 @@ class EposProc : public PlugInProc{
         
 };
 
-#endif // _EPOSPROC_H_
+#endif // EPOSPROC_H

@@ -14,7 +14,8 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; version 2 of the License.               *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -79,7 +80,7 @@ QString XMLElement::toQString() {
 }
 
 XMLElement XMLElement::fromQString(const QString &str) {
-    QStringList sections = str.split( " ");
+    QStringList sections = str.split( ' ');
     QString tagname = sections[0];
     XMLElement e(tagname.latin1());
     
@@ -88,7 +89,7 @@ XMLElement XMLElement::fromQString(const QString &str) {
     if(sections.count()) {
         const int sectionsCount = sections.count();
         for(int i = 0; i < sectionsCount; ++i) {
-            QStringList list = sections[i].split( "=");
+            QStringList list = sections[i].split( '=');
             if(list.count() != 2) {
                 std::cerr << "XMLElement::fromQString: Cannot convert list: " << list.join("|") << ". `" << str << "' is not in valid format.\n";
                 return XMLElement(" ");

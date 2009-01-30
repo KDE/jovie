@@ -1,5 +1,7 @@
 [Desktop Entry]
 NoDisplay=true
+Type=Link
+
 Name=The text-to-speech system seems to be functioning properly.
 Name[ar]=نظام نص-إلى-صوت يعمل بشكل جيد ظاهرياً.
 Name[bg]=Системата за синтез на глас изглежда, че функционира нормално.

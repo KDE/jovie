@@ -24,8 +24,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _SPEAKER_H_
-#define _SPEAKER_H_
+#ifndef SPEAKER_H
+#define SPEAKER_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -299,4 +299,4 @@ private:
     SpeakerPrivate* d;
 };
 
-#endif // _SPEAKER_H_
+#endif // SPEAKER_H

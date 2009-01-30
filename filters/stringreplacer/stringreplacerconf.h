@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _STRINGREPLACERCONF_H_
-#define _STRINGREPLACERCONF_H_
+#ifndef STRINGREPLACERCONF_H
+#define STRINGREPLACERCONF_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -156,4 +156,4 @@ class StringReplacerConf : public KttsFilterConf, public Ui::StringReplacerConfW
         QStringList m_languageCodeList;
 };
 
-#endif  //_STRINGREPLACERCONF_H_
+#endif  //STRINGREPLACERCONF_H

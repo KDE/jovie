@@ -24,8 +24,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _SELECTTALKERDLG_H_
-#define _SELECTTALKERDLG_H_
+#ifndef SELECTTALKERDLG_H
+#define SELECTTALKERDLG_H
 
 // KDE includes.
 #include <kdialog.h>
@@ -105,4 +105,4 @@ class KDE_EXPORT SelectTalkerDlg : public KDialog
         TalkerCode m_talkerCode;
 };
 
-#endif                      // _SELECTTALKERDLG_H_
+#endif                      // SELECTTALKERDLG_H

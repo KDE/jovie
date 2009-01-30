@@ -122,7 +122,7 @@ QVariant JobInfoListModel::headerData(int section, Qt::Orientation orientation, 
         case 1: return i18n("Owner");
         case 2: return i18n("Priority");
         case 3: return i18n("Talker ID");
-        case 4: return i18n("State");
+        case 4: return i18nc("State of the section", "State");
         case 5: return i18n("Position");
         case 6: return i18n("Sentences");
     };
@@ -197,12 +197,12 @@ QString JobInfoListModel::stateToStr(int state) const
     {
         case KSpeech::jsQueued: return        i18n("Queued");
         case KSpeech::jsFiltering: return     i18n("Filtering");
-        case KSpeech::jsSpeakable: return     i18n("Waiting");
+        case KSpeech::jsSpeakable: return     i18nc("Waiting for a job", "Waiting");
         case KSpeech::jsSpeaking: return      i18n("Speaking");
         case KSpeech::jsPaused: return        i18n("Paused");
         case KSpeech::jsInterrupted: return   i18n("Interrupted");
-        case KSpeech::jsFinished: return      i18n("Finished");
-        default: return                       i18n("Unknown");
+        case KSpeech::jsFinished: return      i18nc("The job is finished", "Finished");
+        default: return                       i18nc("The state is unknown", "Unknown");
     }
 }
 
@@ -215,12 +215,12 @@ QString JobInfoListModel::priorityToStr(int priority) const
 {
     switch (priority)
     {
-        case KSpeech::jpAll: return                 i18n("All");
+        case KSpeech::jpAll: return                 i18nc("Job priorty: All", "All");
         case KSpeech::jpScreenReaderOutput: return  i18n("Screen Reader");
-        case KSpeech::jpWarning: return             i18n("Warning");
+        case KSpeech::jpWarning: return             i18nc("Prioritylevel: warning", "Warning");
         case KSpeech::jpMessage: return             i18n("Message");
         case KSpeech::jpText: return                i18n("Text");
-        default: return                             i18n("Unknown");
+        default: return                             i18nc("Prioritylevel: unknown", "Unknown");
     }
 }
 

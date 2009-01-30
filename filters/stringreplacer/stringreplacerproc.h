@@ -22,8 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _STRINGREPLACERPROC_H_
-#define _STRINGREPLACERPROC_H_
+#ifndef STRINGREPLACERPROC_H
+#define STRINGREPLACERPROC_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -91,4 +91,4 @@ private:
     bool m_wasModified;
 };
 
-#endif      // _STRINGREPLACERPROC_H_
+#endif      // STRINGREPLACERPROC_H

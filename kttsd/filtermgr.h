@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FILTERMGR_H_
-#define _FILTERMGR_H_
+#ifndef FILTERMGR_H
+#define FILTERMGR_H
 
 // Qt includes.
 #include <QtCore/QList>
@@ -193,4 +193,4 @@ class FilterMgr : public KttsFilterProc
         bool m_supportsHTML;
 };
 
-#endif      // _FILTERMGR_H_
+#endif      // FILTERMGR_H

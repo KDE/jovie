@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _STRETCHER_H_
-#define _STRETCHER_H_
+#ifndef STRETCHER_H
+#define STRETCHER_H
 
 #include <QObject>
 
@@ -95,4 +95,4 @@ class KDE_EXPORT Stretcher : public QObject{
         QString m_outFilename;
 };
 
-#endif      // _STRETCHER_H_
+#endif      // STRETCHER_H

@@ -692,14 +692,16 @@ bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
     QString sentence;
     Utt::uttType utType;
     KSpeech::JobPriority priority;
-    if (KSpeech::jpAll == requestedPriority)
-        foreach (priority, d->currentJobs.keys()) {
+    if (KSpeech::jpAll == requestedPriority) {
+	//As the variabele priority is used further on, we can't make it a reference type
+        foreach (priority, d->currentJobs.keys()){ //krazy:exclude=foreach
             d->currentJobs[priority] = d->speechData->getNextSpeakableJob(priority);
             if (d->currentJobs[priority])
                 sentence = d->currentJobs[priority]->getNextSentence();
             if (!sentence.isEmpty())
                 break;
-        }
+	}
+    }
     else {
         priority = requestedPriority;
         d->currentJobs[priority] = d->speechData->getNextSpeakableJob(priority);

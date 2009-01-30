@@ -140,7 +140,7 @@
                 <item>
                   <widget class="QPushButton" name="freettsTest" >
                     <property name="text" >
-                      <string>Test</string>
+                      <string comment="Test the settings">Test</string>
                     </property>
                   </widget>
                 </item>

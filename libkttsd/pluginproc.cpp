@@ -182,11 +182,11 @@ QString PlugInProc::getSsmlXsltFilename()
 {
     // kDebug() << "PlugInConf::buildCodecList: Running";
     QStringList codecList;
-    QString local = i18n("Local")+" (";
+    QString local = i18nc("Local charset", "Local")+" (";
     local += QTextCodec::codecForLocale()->name();
     local += ')';
     codecList.append(local);
-    codecList.append(i18n("Latin1"));
+    codecList.append(i18nc("Latin charset", "Latin1"));
     codecList.append(i18n("Unicode"));
     QList<QByteArray> availableCodecs = QTextCodec::availableCodecs();
     for (int i = 0; i < availableCodecs.size(); ++i )

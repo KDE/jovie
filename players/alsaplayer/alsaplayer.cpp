@@ -125,7 +125,7 @@ void AlsaPlayerThread::startPlay(const QString &file)
 
 /*virtual*/ void AlsaPlayerThread::run()
 {
-    QString pName = m_pcmName.section(" ", 0, 0);
+    QString pName = m_pcmName.section(' ', 0, 0);
     pcm_name = qstrdup(pName.toAscii().constData());
     DBG << "pName = " << pcm_name << endl;
     int err;

@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _TALKERMGR_H_
-#define _TALKERMGR_H_
+#ifndef TALKERMGR_H
+#define TALKERMGR_H
 
 // Qt includes.
 #include <QtCore/QMap>
@@ -159,4 +159,4 @@ private:
     mutable QMap<QString,int> m_talkerToPlugInCache;
 };
 
-#endif      // _TALKERMGR_H_
+#endif      // TALKERMGR_H

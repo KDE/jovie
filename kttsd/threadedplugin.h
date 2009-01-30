@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _THREADEDPLUGIN_H_
-#define _THREADEDPLUGIN_H_
+#ifndef THREADEDPLUGIN_H
+#define THREADEDPLUGIN_H
 
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
@@ -340,4 +340,4 @@ class ThreadedPlugIn : public PlugInProc
         ThreadedPlugInThread* m_ThreadedPluginThread;
 };
 
-#endif // _THREADEDPLUGIN_H_
+#endif // THREADEDPLUGIN_H

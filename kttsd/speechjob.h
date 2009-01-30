@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _SPEECHJOB_H_
-#define _SPEECHJOB_H_
+#ifndef SPEECHJOB_H
+#define SPEECHJOB_H
 
 // Qt includes.
 #include <QtCore/QList>
@@ -146,4 +146,4 @@ private:
     SpeechJobPrivate* d;
 };
 
-#endif      // _SPEECHJOB_H_
+#endif      // SPEECHJOB_H

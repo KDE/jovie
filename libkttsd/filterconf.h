@@ -22,8 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FILTERCONF_H_
-#define _FILTERCONF_H_
+#ifndef FILTERCONF_H
+#define FILTERCONF_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -145,4 +145,4 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         QStringList m_path;
 };
 
-#endif  //_FILTERCONF_H_
+#endif  //FILTERCONF_H

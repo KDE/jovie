@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _KTTSJOBMGRPART_H_
-#define _KTTSJOBMGRPART_H_
+#ifndef KTTSJOBMGRPART_H
+#define KTTSJOBMGRPART_H
 
 // Qt includes
 
@@ -191,4 +191,4 @@ public:
     virtual ~KttsJobMgrBrowserExtension();
 };
 
-#endif    // _KTTSJOBMGRPART_H_
+#endif    // KTTSJOBMGRPART_H

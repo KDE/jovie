@@ -17,8 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _PLUGINPROC_H_
-#define _PLUGINPROC_H_
+#ifndef PLUGINPROC_H
+#define PLUGINPROC_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -465,4 +465,4 @@ class KDE_EXPORT PlugInProc : public QObject{
         void error(bool keepGoing, const QString &msg);
 };
 
-#endif // _PLUGINPROC_H_
+#endif // PLUGINPROC_H

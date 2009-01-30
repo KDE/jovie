@@ -22,11 +22,11 @@
 #include "katekttsd.moc"
 
 // Qt includes.
-#include <QtGui/QMessageBox>
 #include <QtCore/QTimer>
 #include <QtDBus/QtDBus>
 
 // KDE includes.
+#include <kmessagebox.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/selectioninterface.h>
 #include <kaction.h>
@@ -95,16 +95,16 @@ void KateKttsdPluginView::slotReadOut()
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
-            QMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
+            KMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
     }
 	QDBusInterface kttsd( "org.kde.KSpeech", "/KSpeech", "org.kde.KSpeech" );
 	QDBusReply<bool> reply = kttsd.call("setText", text,"");
     if ( !reply.isValid())
-       QMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
+       KMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
                                  i18n( "The D-Bus call setText failed." ));
 	reply = kttsd.call("startText", 0);
     if ( !reply.isValid())
-       QMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
+       KMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
                                 i18n( "The D-Bus call startText failed." ));
 }
 

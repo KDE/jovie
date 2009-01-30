@@ -22,8 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FILTERPROC_H_
-#define _FILTERPROC_H_
+#ifndef FILTERPROC_H
+#define FILTERPROC_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -176,4 +176,4 @@ signals:
     void error(bool keepGoing, const QString &msg);
 };
 
-#endif      // _FILTERPROC_H_
+#endif      // FILTERPROC_H

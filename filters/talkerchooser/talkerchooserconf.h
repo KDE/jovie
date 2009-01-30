@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _TALKERCHOOSERCONF_H_
-#define _TALKERCHOOSERCONF_H_
+#ifndef TALKERCHOOSERCONF_H
+#define TALKERCHOOSERCONF_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -127,4 +127,4 @@ class TalkerChooserConf : public KttsFilterConf, public Ui::TalkerChooserConfWid
         TalkerCode                  m_talkerCode;
 };
 
-#endif  //_TALKERCHOOSERCONF_H_
+#endif  //TALKERCHOOSERCONF_H

@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _EPOSCONF_H_
-#define _EPOSCONF_H_
+#ifndef EPOSCONF_H
+#define EPOSCONF_H
 
 // Qt includes.
 
@@ -134,4 +134,4 @@ class EposConf : public PlugInConf, public Ui::EposConfWidget {
         // List of displayed codec names.
         QStringList m_codecList;
 };
-#endif // _EPOSCONF_H_
+#endif // EPOSCONF_H

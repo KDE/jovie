@@ -22,7 +22,7 @@
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
-       <string>General</string>
+       <string comment="General, as title of window">General</string>
       </attribute>
       <layout class="QGridLayout" >
        <item row="4" column="0" >

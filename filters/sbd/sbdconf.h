@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _SBDCONF_H_
-#define _SBDCONF_H_
+#ifndef SBDCONF_H
+#define SBDCONF_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -130,4 +130,4 @@ class SbdConf : public KttsFilterConf, public Ui::SbdConfWidget
         QStringList m_languageCodeList;
 };
 
-#endif  //_SBDCONF_H_
+#endif  //SBDCONF_H

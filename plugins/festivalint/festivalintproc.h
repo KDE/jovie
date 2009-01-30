@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FESTIVALINTPROC_H_
-#define _FESTIVALINTPROC_H_
+#ifndef FESTIVALINTPROC_H
+#define FESTIVALINTPROC_H
 
 #include <QtCore/QMutex>
 #include <QtCore/QStringList>
@@ -358,4 +358,4 @@ class FestivalIntProc : public PlugInProc{
         SupportsSSML m_supportsSSML;
 };
 
-#endif // _FESTIVALINTPROC_H_
+#endif // FESTIVALINTPROC_H

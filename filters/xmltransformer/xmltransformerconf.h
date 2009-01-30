@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _XMLTRANSFORMERCONF_H_
-#define _XMLTRANSFORMERCONF_H_
+#ifndef XMLTRANSFORMERCONF_H
+#define XMLTRANSFORMERCONF_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -115,4 +115,4 @@ class XmlTransformerConf : public KttsFilterConf, public Ui::XmlTransformerConfW
     private:
 };
 
-#endif  //_XMLTRANSFORMERCONF_H_
+#endif  //XMLTRANSFORMERCONF_H

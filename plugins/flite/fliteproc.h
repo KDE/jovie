@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FLITEPROC_H_
-#define _FLITEPROC_H_
+#ifndef FLITEPROC_H
+#define FLITEPROC_H
 
 // Qt includes.
 #include <QtCore/QMutex>
@@ -183,4 +183,4 @@ class FliteProc : public PlugInProc{
         bool m_waitingStop;
 };
 
-#endif // _FLITEPROC_H_
+#endif // FLITEPROC_H

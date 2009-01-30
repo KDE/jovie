@@ -236,7 +236,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             (wordType=="RegExp"?i18nc("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
         int tableRow = substLView->rowCount();
         QString matchCaseStr = 
-            (matchCase=="Yes"?i18n("Yes"):i18n("No"));  
+            (matchCase=="Yes"?i18nc("Yes or no", "Yes"):i18nc("Yes or no", "No"));  
         substLView->setRowCount( tableRow + 1 );
         substLView->setItem( tableRow, 0, new QTableWidgetItem( wordTypeStr ) );
         substLView->setItem( tableRow, 1, new QTableWidgetItem( matchCaseStr ) );
@@ -335,7 +335,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
         propTag = doc.createElement( "case" );
         wordTag.appendChild( propTag);
         t = doc.createTextNode(
-            substLView->item(row, 2)->text()==i18n("Yes")?"Yes":"No" );
+            substLView->item(row, 2)->text()==i18nc("Yes or no", "Yes")?"Yes":"No" );
         propTag.appendChild( t );      
 
         propTag = doc.createElement( "match" );
@@ -578,7 +578,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
             m_editWidget->regexpRadioButton->setChecked( true );
             m_editWidget->matchButton->setEnabled( m_reEditorInstalled );
         }
-        if ( substLView->item(row, 1)->text() == i18n("Yes") )
+        if ( substLView->item(row, 1)->text() == i18nc("Yes or no", "Yes") )
             m_editWidget->matchCaseCheckBox->setChecked( true );
         m_editWidget->matchLineEdit->setText( substLView->item(row, 2)->text() );
         m_editWidget->substLineEdit->setText( substLView->item(row, 3)->text() );
@@ -606,7 +606,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     QString substType = i18n( "Word" );
     if ( m_editWidget->regexpRadioButton->isChecked() ) 
         substType = i18nc("Abbreviation for 'Regular Expression'", "RegExp");
-    QString matchCase = m_editWidget->matchCaseCheckBox->isChecked()?i18n("Yes"):i18n("No");
+    QString matchCase = m_editWidget->matchCaseCheckBox->isChecked()?i18nc("Yes or no", "Yes"):i18nc("Yes or no", "No");
     QString match = m_editWidget->matchLineEdit->text();
     QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;

@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _UTT_H_
-#define _UTT_H_
+#ifndef UTT_H
+#define UTT_H
 
 // Qt includes.
 #include <QString>
@@ -211,4 +211,4 @@ private:
     UttPrivate* d;
 };
 
-#endif
+#endif // UTT_H

@@ -12,7 +12,8 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; version 2 of the License.               *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -329,7 +330,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     m_sbdBtnEdit = sbdPopmenu->addAction(
         i18n("&Edit..."), this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
     m_sbdBtnUp = sbdPopmenu->addAction( KIcon("go-up"),
-        i18n("U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
+        i18nc("One slot up", "U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
     m_sbdBtnDown = sbdPopmenu->addAction( KIcon("go-down"),
         i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
     m_sbdBtnAdd = sbdPopmenu->addAction(
@@ -613,7 +614,7 @@ void KCMKttsMgr::load()
     }
 
     // Add "Other" language.
-    m_languagesToCodes[i18n("Other")] = "other";
+    m_languagesToCodes[i18nc("Other language", "Other")] = "other";
 
     // Load Filters.
     m_filterListModel.clear();

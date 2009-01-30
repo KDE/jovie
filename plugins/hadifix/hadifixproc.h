@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
  
-#ifndef _HADIFIXPROC_H_
-#define _HADIFIXPROC_H_
+#ifndef HADIFIXPROC_H
+#define HADIFIXPROC_H
 
 #include <QtCore/QStringList> 
 

@@ -350,11 +350,11 @@ void KSpeak::printHelp(const QString& member)
     const QMetaObject *mo = m_kspeech->metaObject();
 
     if (member.isEmpty()) {
-        *m_out << i18n("Enter HELP <option> where <option> may be:") << endl;
+        *m_out << i18n("Enter HELP &lt;option&gt; where &lt;option&gt; may be:") << endl;
         *m_out << i18n("  COMMANDS to list local commands understood by kspeak.") << endl;
         *m_out << i18n("  SIGNALS to list KTTSD signals sent via D-Bus.") << endl;
         *m_out << i18n("  MEMBERS to list all commands that may be sent to KTTSD via D-Bus.") << endl;
-        *m_out << i18n("  <member> to show a single command that may be sent to KTTSD via D-Bus.") << endl;
+        *m_out << i18n("  &lt;member&gt; to show a single command that may be sent to KTTSD via D-Bus.") << endl;
         *m_out << i18n("Options may be entered in lower- or uppercase.  Examples:") << endl;
         *m_out << i18n("  help commands") << endl;
         *m_out << i18n("  help say") << endl;
@@ -369,7 +369,7 @@ void KSpeak::printHelp(const QString& member)
         *m_out << "SET REPLIES OFF      " << i18n("Do not display KTTSD return values.") << endl;
         *m_out << "SET SIGNALS ON       " << i18n("Display signals emitted by KTTSD.") << endl;
         *m_out << "SET SIGNALS OFF      " << i18n("Do not display KTTSD signals.") << endl;
-        *m_out << "SET WTIMEOUT <msec>  " << i18n("Set the WAIT timeout to <msec> milliseconds. 0 waits forever.") << endl;
+        *m_out << "SET WTIMEOUT <msec>  " << i18n("Set the WAIT timeout to &lt;msec&gt; milliseconds. 0 waits forever.") << endl;
         *m_out << "BUFFERBEGIN          " << i18n("Start filling a buffer.") << endl;
         *m_out << "BUFFEREND            " << i18n("Stop filling buffer.") << endl;
         *m_out << i18n("  Example buffer usage:") << endl;
@@ -378,9 +378,9 @@ void KSpeak::printHelp(const QString& member)
         *m_out << "    for Linux and Unix workstations." << endl;
         *m_out << "    BUFFEREND" << endl;
         *m_out << "    say \"$(mybuf)\" 0" << endl;
-        *m_out << "PAUSE <msec>         " << i18n("Pause <msec> milliseconds.  Example") << endl;
+        *m_out << "PAUSE <msec>         " << i18n("Pause &lt;msec&gt; milliseconds.  Example") << endl;
         *m_out << "  pause 500" << endl;
-        *m_out << "WAIT <signal> <args> " << i18n("Wait for <signal> with (optional) <args> arguments.  Example:")  << endl;
+        *m_out << "WAIT <signal> <args> " << i18n("Wait for &lt;signal&gt; with (optional) &lt;args&gt; arguments.  Example:")  << endl;
         *m_out << "  set wtimeout 5000" << endl;
         *m_out << "  wait marker" << endl;
     } else if ("MEMBERS" == member.toUpper()) {
@@ -427,13 +427,13 @@ QString KSpeak::stateToStr(int state)
     {
         case KSpeech::jsQueued: return        i18n("Queued");
         case KSpeech::jsFiltering: return     i18n("Filtering");
-        case KSpeech::jsSpeakable: return     i18n("Waiting");
+        case KSpeech::jsSpeakable: return     i18nc("Waiting for a job", "Waiting");
         case KSpeech::jsSpeaking: return      i18n("Speaking");
         case KSpeech::jsPaused: return        i18n("Paused");
         case KSpeech::jsInterrupted: return   i18n("Interrupted");
-        case KSpeech::jsFinished: return      i18n("Finished");
-        case KSpeech::jsDeleted: return       i18n("Deleted");
-        default: return                       i18n("Unknown");
+        case KSpeech::jsFinished: return      i18nc("Finished the job", "Finished");
+        case KSpeech::jsDeleted: return       i18nc("Deleted the job", "Deleted");
+        default: return                       i18nc("Job state unknown", "Unknown");
     }
 }
 
@@ -529,7 +529,7 @@ QString KSpeak::jobInfoToString(QByteArray& jobInfo)
 QStringList KSpeak::dbusReplyToStringList(const QDBusMessage& reply, const QString& cmd)
 {
     QStringList sl;
-    foreach (QVariant v, reply.arguments()) {
+    foreach (QVariant v, reply.arguments()) { //krazy:exclude=foreach
         if (QVariant::StringList == v.userType()) {
             sl.append(v.toStringList().join(","));
         } else {
@@ -621,8 +621,8 @@ void KSpeak::processCommand(const QString& inputLine)
             } else {
     
                 // Look for assignment statement. left = right
-                QString left = line.section("=", 0, 0).trimmed();
-                QString right = line.section("=", 1).trimmed();
+                QString left = line.section('=', 0, 0).trimmed();
+                QString right = line.section('=', 1).trimmed();
                 // kDebug() << "left = right: " << left << " = " << right;
                 if (right.isEmpty()) {
                     right = left;
@@ -631,8 +631,8 @@ void KSpeak::processCommand(const QString& inputLine)
     
                 // Obtain command, which is first word, and arguments that follow.
                 // cmd arg arg...
-                QString cmd = right.section(" ", 0, 0).trimmed();
-                QString args = right.section(" ", 1).trimmed();
+                QString cmd = right.section(' ', 0, 0).trimmed();
+                QString args = right.section(' ', 1).trimmed();
                 // kDebug() << "cmd: " << cmd << " args: " << args;
     
                 // Variable substitution.
@@ -663,8 +663,8 @@ void KSpeak::processCommand(const QString& inputLine)
                     m_vars["_BUF"].clear();
                 } else if ("SET" == ucCmd) {
                     QString ucArgs = args.toUpper();
-                    QString property = ucArgs.section(" ", 0, 0).trimmed();
-                    QString value = ucArgs.section(" ", 1).trimmed();
+                    QString property = ucArgs.section(' ', 0, 0).trimmed();
+                    QString value = ucArgs.section(' ', 1).trimmed();
                     bool onOff = ("ON" == value) ? true : false;
                     if ("ECHO" == property)
                         m_echo = onOff;

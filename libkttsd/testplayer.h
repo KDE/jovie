@@ -22,8 +22,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _TESTPLAYER_H_
-#define _TESTPLAYER_H_
+#ifndef TESTPLAYER_H
+#define TESTPLAYER_H
 
 // Qt includes.
 #include <QObject>
@@ -121,4 +121,4 @@ class KDE_EXPORT TestPlayer : public QObject{
         Player* m_player;
 };
 
-#endif      // _TESTPLAYER_H_
+#endif      // TESTPLAYER_H

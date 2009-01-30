@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FLITECONF_H_
-#define _FLITECONF_H_
+#ifndef FLITECONF_H
+#define FLITECONF_H
 
 // Qt includes.
 
@@ -119,4 +119,4 @@ class FliteConf : public PlugInConf, public Ui::FliteConfWidget {
         // Progress dialog.
         KProgressDialog* m_progressDlg;
 };
-#endif // _FLITECONF_H_
+#endif // FLITECONF_H

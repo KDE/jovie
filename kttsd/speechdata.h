@@ -25,8 +25,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _SPEECHDATA_H_
-#define _SPEECHDATA_H_
+#ifndef SPEECHDATA_H
+#define SPEECHDATA_H
 
 // Qt includes.
 #include <QtCore/QByteArray>
@@ -411,4 +411,4 @@ private:
     SpeechDataPrivate* d;
 };
 
-#endif // _SPEECHDATA_H_
+#endif // SPEECHDATA_H

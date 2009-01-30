@@ -206,7 +206,7 @@ QString HadifixConfPrivate::findHadifixDataPath () {
                 QString s = stream.readLine().trimmed();
                 // look for a line "DATAPATH=..."
 
-                if (s.startsWith("DATAPATH")) {
+                if (s.startsWith(QString("DATAPATH"))) {
                     s = s.mid(8, s.length()-8).trimmed();
                     if (s.startsWith('=')) {
                         s = s.mid(1, s.length()-1).trimmed();
@@ -301,7 +301,7 @@ QStringList HadifixConfPrivate::findVoices(QString mbrolaExec, const QString &ha
                 QTextStream stream(&file);
                 if (!stream.atEnd()) {
                     QString s = stream.readLine();
-                    if (s.startsWith("MBROLA"))
+                    if (s.startsWith(QString("MBROLA")))
                         if (HadifixProc::determineGender(mbrolaExec, filename)
                             != HadifixProc::NoVoice)
                         result += filename;

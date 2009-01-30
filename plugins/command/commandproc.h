@@ -17,8 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _COMMANDPROC_H_
-#define _COMMANDPROC_H_
+#ifndef COMMANDPROC_H
+#define COMMANDPROC_H
 
 // Qt includes.
 #include <QtCore/QStringList> 
@@ -199,4 +199,4 @@ class CommandProc : public PlugInProc{
         bool m_waitingStop;
 };
 
-#endif  // _COMMANDPROC_H_
+#endif  // COMMANDPROC_H

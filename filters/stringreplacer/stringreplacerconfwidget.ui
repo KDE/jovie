@@ -181,7 +181,7 @@
         <string>Click to load a word list from a file.</string>
        </property>
        <property name="text" >
-        <string>Load</string>
+        <string comment="Load a word list from a file">Load</string>
        </property>
       </widget>
      </item>
@@ -217,7 +217,7 @@
         <string>Click to empty the word list.</string>
        </property>
        <property name="text" >
-        <string>Clear</string>
+        <string comment="Clear the word list">Clear</string>
        </property>
       </widget>
      </item>

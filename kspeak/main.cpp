@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     KAboutData aboutdata(
         "kspeak", 0, ki18n("kspeak"),
         "0.1.0", ki18n("A utility for sending speech commands to KTTSD service via D-Bus."),
-         KAboutData::License_GPL, ki18n("Copyright 2006, Gary Cramblitt <garycramblitt@comcast.net>"));
+         KAboutData::License_GPL, ki18n("Copyright 2006, Gary Cramblitt &lt;garycramblitt@comcast.net&gt;"));
     aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
 
     KCmdLineArgs::init(argc, argv, &aboutdata);

@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _SELECTLANGUAGEDLG_H_
-#define _SELECTLANGUAGEDLG_H_
+#ifndef SELECTLANGUAGEDLG_H
+#define SELECTLANGUAGEDLG_H
 
 // Qt includes.
 #include <QtGui/QWidget>
@@ -101,4 +101,4 @@ class KDE_EXPORT SelectLanguageDlg : public KDialog
         QTableWidget* m_langList;
 };
 
-#endif                      // _SELECTLANGUAGEDLG_H_
+#endif                      // SELECTLANGUAGEDLG_H

@@ -42,8 +42,8 @@
 
  ******************************************************************************/
 
-#ifndef _SBDPROC_H_
-#define _SBDPROC_H_
+#ifndef SBDPROC_H
+#define SBDPROC_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -363,4 +363,4 @@ class SbdProc : virtual public KttsFilterProc
         QString m_configuredRe;
 };
 
-#endif      // _SBDPROC_H_
+#endif      // SBDPROC_H

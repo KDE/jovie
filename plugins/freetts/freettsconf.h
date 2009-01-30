@@ -16,8 +16,8 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef _FREETTSCONF_H_
-#define _FREETTSCONF_H_
+#ifndef FREETTSCONF_H
+#define FREETTSCONF_H
 
 // Qt includes.
 

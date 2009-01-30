@@ -20,8 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _SSMLCONVERT_H_
-#define _SSMLCONVERT_H_
+#ifndef SSMLCONVERT_H
+#define SSMLCONVERT_H
 
 /**
  * SsmlConvert class: 
@@ -127,4 +127,4 @@ private:
     QString m_outFilename;
 };
 
-#endif      // _SSMLCONVERT_H_
+#endif      // SSMLCONVERT_H

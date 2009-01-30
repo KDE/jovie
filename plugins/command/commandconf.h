@@ -17,8 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _COMMANDCONF_H_
-#define _COMMANDCONF_H_
+#ifndef COMMANDCONF_H
+#define COMMANDCONF_H
 
 // Qt includes.
 
@@ -116,4 +116,4 @@ class CommandConf : public PlugInConf, public Ui::CommandConfWidget {
         // Codec list.
         QStringList m_codecList;
 };
-#endif      // _COMMANDCONF_H_
+#endif      // COMMANDCONF_H

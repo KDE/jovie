@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _FESTIVALINTCONF_H_
-#define _FESTIVALINTCONF_H_
+#ifndef FESTIVALINTCONF_H
+#define FESTIVALINTCONF_H
 
 // Qt includes.
 #include <QtCore/QList>
@@ -180,4 +180,4 @@ class FestivalIntConf : public PlugInConf, public Ui::FestivalIntConfWidget {
         // Whether Festival supports SSML or not.
         FestivalIntProc::SupportsSSML m_supportsSSML;
 };
-#endif // _FESTIVALINTCONF_H_
+#endif // FESTIVALINTCONF_H

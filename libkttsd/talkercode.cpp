@@ -151,7 +151,7 @@ QString TalkerCode::getTranslatedDescription() const
     if (!m_volume.isEmpty()) code += ' ' + translatedVolume(stripPrefer(m_volume, prefer));
     if (!m_rate.isEmpty()) code += ' ' + translatedRate(stripPrefer(m_rate, prefer));
     code = code.trimmed();
-    if (code.isEmpty()) code = i18n("default");
+    if (code.isEmpty()) code = i18nc("Default language code", "default");
     return code;
 }
 
@@ -229,7 +229,7 @@ void TalkerCode::normalize()
     QString countryCode;
     QString language;
     if (languageCode == "other")
-        language = i18n("Other");
+        language = i18nc("Other language", "Other");
     else
     {
         splitFullLanguageCode(languageCode, langAlpha, countryCode);
@@ -254,18 +254,18 @@ void TalkerCode::normalize()
 /*static*/ QString TalkerCode::translatedGender(const QString &gender)
 {
     if (gender == "male")
-        return i18n("male");
+        return i18nc("Male gender", "male");
     else if (gender == "female")
-        return i18n("female");
+        return i18nc("Female gender", "female");
     else if (gender == "neutral")
         return i18nc("neutral gender", "neutral");
     else return gender;
 }
 /*static*/ QString TalkerCode::untranslatedGender(const QString &gender)
 {
-    if (gender == i18n("male"))
+    if (gender == i18nc("Male gender", "male"))
         return "male";
-    else if (gender == i18n("female"))
+    else if (gender == i18nc("Female gender", "female"))
         return "female";
     else if (gender == i18nc("neutral gender", "neutral"))
         return "neutral";

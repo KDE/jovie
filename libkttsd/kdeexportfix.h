@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _KDEEXPORTFIX_H_
-#define _KDEEXPORTFIX_H_
+#ifndef KDEEXPORTFIX_H
+#define KDEEXPORTFIX_H
 
 #include <kdeversion.h>
 #if KDE_VERSION < KDE_MAKE_VERSION (3,3,2)
@@ -25,4 +25,4 @@
 #define KDE_EXPORT
 #endif
 
-#endif      // _KDEEXPORTFIX_H_
+#endif      // KDEEXPORTFIX_H

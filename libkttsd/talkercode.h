@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _TALKERCODE_H_
-#define _TALKERCODE_H_
+#ifndef TALKERCODE_H
+#define TALKERCODE_H
 
 // Qt includes.
 #include <QtCore/QList>
@@ -202,4 +202,4 @@ class KDE_EXPORT TalkerCode
         QString m_desktopEntryName;
 };
 
-#endif      // _TALKERCODE_H_
+#endif      // TALKERCODE_H

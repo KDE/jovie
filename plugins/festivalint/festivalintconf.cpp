@@ -302,7 +302,7 @@ void FestivalIntConf::setDefaultVoice(int currentVoiceIndex)
         {
             for(index = 0 ; index < m_voiceList.count(); ++index)
             {
-                if (m_voiceList[index].name != i18n("Unknown"))
+                if (m_voiceList[index].name != i18nc("The voice is unknown", "Unknown"))
                 {
                     found = true;
                     break;
@@ -510,7 +510,7 @@ void FestivalIntConf::scanVoices()
             {
                 voiceStruct voiceTemp;
                 voiceTemp.code = code;
-                voiceTemp.name = i18n("Unknown");
+                voiceTemp.name = i18nc("The voice is unknown", "Unknown");
                 voiceTemp.languageCode = m_languageCode;
                 voiceTemp.codecName = "ISO 8858-1";
                 voiceTemp.gender = "neutral";

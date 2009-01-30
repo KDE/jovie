@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _TALKERCHOOSERPROC_H_
-#define _TALKERCHOOSERPROC_H_
+#ifndef TALKERCHOOSERPROC_H
+#define TALKERCHOOSERPROC_H
 
 // Qt includes.
 #include <QtCore/QObject>
@@ -88,4 +88,4 @@ private:
     TalkerCode      m_chosenTalkerCode;
 };
 
-#endif      // _TALKERCHOOSERPROC_H_
+#endif      // TALKERCHOOSERPROC_H

@@ -136,7 +136,7 @@ QString AddTalker::languageCodeToLanguage(const QString &languageCode)
     QString charSet;
     QString language;
     if (languageCode == "other")
-        language = i18n("Other");
+        language = i18nc("Other language", "Other");
     else
     {
         KGlobal::locale()->splitLocale(languageCode, langAlpha, countryCode, modifier, charSet);

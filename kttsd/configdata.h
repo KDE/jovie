@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _CONFIGDATA_H_
-#define _CONFIGDATA_H_
+#ifndef CONFIGDATA_H
+#define CONFIGDATA_H
 
 // Qt includes.
 #include <QtCore/QMap>
@@ -177,4 +177,4 @@ private:
     KConfig* m_config;
 };
 
-#endif
+#endif // CONFIGDATA_H

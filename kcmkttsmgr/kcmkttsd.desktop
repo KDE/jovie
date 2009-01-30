@@ -159,7 +159,5 @@ X-KDE-Keywords[vi]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,văn bản,sang,tiến
 X-KDE-Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
 X-KDE-Keywords[zh_CN]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizersynth,festival,command,freetts,proklam,via,voice,语音合成,文本,语音
 
-X-KDE-ParentApp=kcontrol
 X-KDE-SubstituteUID=false
-X-KDE-Library=kcm_kttsd
 Terminal=false

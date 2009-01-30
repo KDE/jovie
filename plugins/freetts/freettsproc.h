@@ -16,8 +16,8 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef _FREETTSPROC_H_
-#define _FREETTSPROC_H_
+#ifndef FREETTSPROC_H
+#define FREETTSPROC_H
 
 #include <QtCore/QMutex>
 #include <QtCore/QStringList>
@@ -175,5 +175,5 @@ private:
     bool m_waitingStop;
 };
 
-#endif // _FREETTSPROC_H_
+#endif // FREETTSPROC_H
 
