@@ -357,7 +357,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * is contained in any directory in the PATH, it returns the full path to it.
         * @param name        The name of the file to search for.
         * @returns           The path to the file on success, a blank QString
-        *                    if its not found.
+        *                    if it is not found.
         */
         QString getLocation(const QString &name);
 

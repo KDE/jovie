@@ -53,7 +53,7 @@
 (defvar ktts_wavefiles nil)
 
 (define (ktts_save_record_wave utt)
-"Saves the waveform and records its so it can be joined into a 
+"Saves the waveform and records it so it can be joined into
 a single waveform at the end."
   (let ((fn (make_tmp_filename)))
     (utt.save.wave utt fn)

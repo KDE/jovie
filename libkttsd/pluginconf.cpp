@@ -147,7 +147,7 @@ QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }
 * Return the full path to any program in the $PATH environmental variable
 * @param name        The name of the file to search for.
 * @returns           The path to the file on success, a blank QString
-*                    if its not found.
+*                    if it is not found.
 */
 QString PlugInConf::getLocation(const QString &name) {
     // Iterate over the path and see if 'name' exists in it. Return the
