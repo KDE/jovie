@@ -35,11 +35,17 @@
 
 class QTreeView;
 class KAboutData;
+class KPushButton;
 class KttsJobMgrBrowserExtension;
 class KVBox;
 class KTextEdit;
 class JobInfo;
 class JobInfoListModel;
+
+namespace Ui
+{
+    class kttsjobmgr;
+}
 
 class KttsJobMgrPart:
     public KParts::ReadOnlyPart
@@ -156,19 +162,10 @@ private:
     /**
     * Job ListView.
     */
-    QTreeView* m_jobListView;
     JobInfoListModel* m_jobListModel;
     KttsJobMgrBrowserExtension *m_extension;
-
-    /**
-    * Current sentence box.
-    */
-    KTextEdit* m_currentSentence;
-
-    /**
-    * Box containing buttons.
-    */
-    KVBox* m_buttonBox;
+    Ui::kttsjobmgr * m_ui;
+    QList<KPushButton*> m_jobButtons;
 
     /**
     * This flag is set to True whenever we want to select the next job that

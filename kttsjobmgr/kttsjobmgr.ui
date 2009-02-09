@@ -1,0 +1,202 @@
+<ui version="4.0" >
+ <class>kttsjobmgr</class>
+ <widget class="QWidget" name="kttsjobmgr" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>490</width>
+    <height>448</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Jobs</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" >
+   <item>
+    <widget class="QSplitter" name="splitter" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QTreeView" name="m_jobListView" >
+      <property name="whatsThis" >
+       <string>&lt;p>These are all the text jobs.  The &lt;b>State&lt;/b> column may be:
+        &lt;ul>
+        &lt;li>&lt;b>Queued&lt;/b> - the job is waiting and will not be spoken until its state is changed to &lt;b>Waiting&lt;/b> by clicking the &lt;b>Resume&lt;/b> or &lt;b>Restart&lt;/b> buttons.&lt;/li>
+        &lt;li>&lt;b>Waiting&lt;/b> - the job is ready to be spoken.  It will be spoken when the jobs preceding it in the list have finished.&lt;/li>
+        &lt;li>&lt;b>Speaking&lt;/b> - the job is speaking.  The &lt;b>Position&lt;/b> column shows the current sentence of the job being spoken.  You may pause a speaking job by clicking the &lt;b>Hold&lt;/b> button.&lt;/li>
+        &lt;li>&lt;b>Paused&lt;/b> - the job is currently paused.  Paused jobs prevent jobs below them from speaking.  Use the &lt;b>Resume&lt;/b> or &lt;b>Restart&lt;/b> buttons to resume speaking the job, or click &lt;b>Later&lt;/b> to move the job down in the list.&lt;/li>
+        &lt;li>&lt;b>Finished&lt;/b> - the job has finished speaking.  When a second job finishes, this one will be deleted.  You may click &lt;b>Restart&lt;/b> to repeat the job.&lt;/li>
+        &lt;/ul>
+        &lt;em>Note&lt;/em>: Messages, Warnings, and Screen Reader Output do not appear in this list.  See the Handbook for more information.
+        &lt;/p></string>
+      </property>
+      <property name="rootIsDecorated" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QWidget" name="" >
+      <layout class="QVBoxLayout" name="verticalLayout" >
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout" >
+         <item>
+          <widget class="KPushButton" name="job_hold" >
+           <property name="whatsThis" >
+            <string>&lt;p>Changes a job to Paused state.  If currently speaking, the job stops speaking. Paused jobs prevent jobs that follow them from speaking, so either click &lt;b>Resume&lt;/b> to make the job speakable, or click &lt;b>Later&lt;/b> to move it down in the list.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>Hold</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="job_resume" >
+           <property name="whatsThis" >
+            <string>&lt;p>Resumes a paused job or changes a Queued job to Waiting.  If the job is the top speakable job in the list, it begins speaking.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>Resume</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="job_restart" >
+           <property name="whatsThis" >
+            <string>&lt;p>Rewinds a job to the beginning and changes its state to Waiting.  If the job is the top speakable job in the list, it begins speaking.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string comment="Restart a job to the beginning" >R&amp;estart</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="job_remove" >
+           <property name="whatsThis" >
+            <string>&lt;p>Deletes the job.  If it is currently speaking, it stops speaking.  The next speakable job in the list begins speaking.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>Re&amp;move</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="job_later" >
+           <property name="whatsThis" >
+            <string>&lt;p>Moves a job downward in the list so that it will be spoken later.  If the job is currently speaking, its state changes to Paused.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>&amp;Later</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" >
+         <item>
+          <widget class="KPushButton" name="job_prevsentence" >
+           <property name="whatsThis" >
+            <string>&lt;p>Rewinds a job to the previous sentence.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>&amp;Previous Sentence</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="job_nextsentence" >
+           <property name="whatsThis" >
+            <string>&lt;p>Advances a job to the next sentence.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>&amp;Next Sentence</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3" >
+         <item>
+          <widget class="KPushButton" name="speak_clipboard" >
+           <property name="whatsThis" >
+            <string>&lt;p>Queues the current contents of the clipboard for speaking and sets its state to Waiting.  If the job is the topmost in the list, it begins speaking.  The job will be spoken by the topmost Talker in the &lt;b>Talkers&lt;/b> tab.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>&amp;Speak Clipboard</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="speak_file" >
+           <property name="whatsThis" >
+            <string>&lt;p>Prompts you for a file name and queues the contents of the file for speaking.  You must click the &lt;b>Resume&lt;/b> button before the job will be speakable.  The job will be spoken by the topmost Talker in the &lt;b>Talkers&lt;/b> tab.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>Spea&amp;k File</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="job_changetalker" >
+           <property name="whatsThis" >
+            <string>&lt;p>Prompts you with a list of your configured Talkers from the &lt;b>Talkers&lt;/b> tab.  The job will be spoken using the selected Talker.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>Change Talker</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KPushButton" name="refresh" >
+           <property name="whatsThis" >
+            <string>&lt;p>Refresh the list of jobs.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>&amp;Refresh</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Current Sentence</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KTextEdit" name="m_currentSentence" >
+         <property name="whatsThis" >
+          <string>&lt;p>The text of the sentence currently speaking.&lt;/p></string>
+         </property>
+         <property name="horizontalScrollBarPolicy" >
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
