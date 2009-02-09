@@ -3,8 +3,8 @@
   advance, change Talker, etc.
   -------------------
   Copyright : (C) 2004,2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
   -------------------
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -98,6 +98,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_jobButtons << m_ui->job_resume;
     m_jobButtons << m_ui->job_restart;
     m_jobButtons << m_ui->job_remove;
+    m_jobButtons << m_ui->job_removeall;
     m_jobButtons << m_ui->job_later;
     m_jobButtons << m_ui->job_prevsentence;
     m_jobButtons << m_ui->job_nextsentence;
@@ -111,6 +112,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     connect (m_ui->job_restart, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
     m_ui->job_remove->setIcon(KIcon("user-trash"));
     connect (m_ui->job_remove, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
+    m_ui->job_removeall->setIcon(KIcon("user-trash"));
+    connect (m_ui->job_removeall, SIGNAL(clicked()), this, SLOT(slot_job_remove_all()));
     m_ui->job_later->setIcon(KIcon("go-down"));
     connect (m_ui->job_later, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
@@ -240,6 +243,12 @@ void KttsJobMgrPart::slot_job_remove()
         m_kspeech->removeJob(jobNum);
         m_ui->m_currentSentence->clear();
     }
+}
+
+void KttsJobMgrPart::slot_job_remove_all()
+{
+    m_kspeech->removeAllJobs();
+    m_ui->m_currentSentence->clear();
 }
 
 void KttsJobMgrPart::slot_job_move()

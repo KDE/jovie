@@ -3,8 +3,8 @@
   advance, change Talker, etc. 
   -------------------
   Copyright : (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
   -------------------
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -102,6 +102,7 @@ private slots:
     void slot_job_resume();
     void slot_job_restart();
     void slot_job_remove();
+    void slot_job_remove_all();
     void slot_job_move();
     void slot_job_change_talker();
     void slot_speak_clipboard();
