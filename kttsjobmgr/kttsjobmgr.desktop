@@ -2,6 +2,8 @@
 Type=Service
 Name=kttsjobmgrpart
 Name[hi]=केटीटीएसजॉबमैनेजरपार्ट
+Name[sr]=КТТС‑менаџер послова део
+Name[sr@latin]=KTTS‑menadžer poslova deo
 Name[x-test]=xxkttsjobmgrpartxx
 Comment=KDE Text-to-speech Job Manager
 Comment[ar]=مدير أعمال نص-إلى-صوت لكدي
@@ -44,6 +46,8 @@ Comment[ro]=Gestionar de sarcini Text-în-vorbire KDE
 Comment[ru]=Управление заданиями по синтезу речи
 Comment[sk]=KDE text-na-reč manažér úloh
 Comment[sl]=Upravitelj opravil besedila v govor za KDE
+Comment[sr]=КДЕ‑ов менаџер послова за текст‑у‑говор
+Comment[sr@latin]=KDE‑ov menadžer poslova za tekst‑u‑govor
 Comment[sv]=KDE:s text-till-tal jobbhantering
 Comment[ta]=கேடியி உரையில் இருந்து பேச்சு பணி மேலாளர்
 Comment[tg]=Идоракунии фармоишҳо бо воситаи таҳлили овоз
