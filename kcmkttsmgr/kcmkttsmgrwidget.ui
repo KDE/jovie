@@ -84,7 +84,7 @@
        <item row="1" column="0" >
         <widget class="QCheckBox" name="autostartMgrCheckBox" >
          <property name="whatsThis" >
-          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em>Note&lt;em>: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
+          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em>Note&lt;/em>: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
          </property>
          <property name="text" >
           <string>Sta&amp;rt minimized in system tray when speaking</string>
