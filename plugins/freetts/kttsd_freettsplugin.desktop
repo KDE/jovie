@@ -2,6 +2,7 @@
 Name=FreeTTS
 Name[ar]=نص-إلى-صوت المجاني
 Name[hi]=फ्रीटीटीएस
+Name[hne]=फ्रीटीटीएस
 Name[ml]=ഫ്രീ ടിടിഎസ്
 Name[sr]=ФриТТС
 Name[vi]=Văn bản sang Tiếng nói Tự do
@@ -23,6 +24,7 @@ Comment[fr]=Synthèse vocale FreeTTS
 Comment[ga]=Sintéiseoir cainte FreeTTS
 Comment[gl]=Sintetizador de voces FreeTTS
 Comment[hi]=फ्रीटीटीएस स्पीच सिंथेसाइजर
+Comment[hne]=फ्रीटीटीएस स्पीच सिंथेसाइजर
 Comment[hu]=FreeTTS beszédszintetizátor
 Comment[is]=FreeTTS talgerfill
 Comment[it]=Sintetizzatore vocale FreeTTS

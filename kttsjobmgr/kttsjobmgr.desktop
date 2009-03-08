@@ -2,6 +2,7 @@
 Type=Service
 Name=kttsjobmgrpart
 Name[hi]=केटीटीएसजॉबमैनेजरपार्ट
+Name[hne]=केटीटीएसजाबमैनेजरपार्ट
 Name[sr]=КТТС‑менаџер послова део
 Name[sr@latin]=KTTS‑menadžer poslova deo
 Name[x-test]=xxkttsjobmgrpartxx
@@ -22,6 +23,7 @@ Comment[fr]=Gestionnaire de tâches de synthèse vocale pour KDE
 Comment[ga]=Bainisteoir Jabanna Téacs-go-Caint KDE
 Comment[gl]=Xestor de traballos de Texto-para-Voz de KDE
 Comment[hi]=केडीई पाठ से वार्ता कार्य प्रबंधक
+Comment[hne]=केडीई पाठ से वार्ता काम प्रबंधक
 Comment[hu]=KDE-s kezelőprogram szövegfelolvasáshoz
 Comment[is]=KDE texti-í-tal verkstjóri
 Comment[it]=Gestore dei processi di pronuncia di KDE
