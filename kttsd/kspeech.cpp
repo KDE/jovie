@@ -400,8 +400,10 @@ void KSpeech::showManagerDialog()
 
 void KSpeech::kttsdExit()
 {
-    d->speechData->removeAllJobs("kttsd");
-    d->speaker->removeAllJobs("kttsd");
+    if(d->speechData)
+       d->speechData->removeAllJobs("kttsd");
+    if(d->speaker)
+       d->speaker->removeAllJobs("kttsd");
     announceEvent("kttsdExit", "kttsdExiting");
     kttsdExiting();
     qApp->quit();
