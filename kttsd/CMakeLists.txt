@@ -25,7 +25,8 @@ kde4_add_executable(kttsd_bin ${kttsd_SRCS})
 set_target_properties(kttsd_bin PROPERTIES OUTPUT_NAME kttsd)
 
 target_link_libraries(kttsd_bin
-    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
     kttsd )
 
 install(TARGETS kttsd_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
