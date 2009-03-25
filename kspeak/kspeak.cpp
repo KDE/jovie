@@ -378,7 +378,7 @@ void KSpeak::printHelp(const QString& member)
         *m_out << "    for Linux and Unix workstations." << endl;
         *m_out << "    BUFFEREND" << endl;
         *m_out << "    say \"$(mybuf)\" 0" << endl;
-        *m_out << "PAUSE <msec>         " << i18n("Pause &lt;msec&gt; milliseconds.  Example") << endl;
+        *m_out << "PAUSE <msec>         " << i18n("Pause &lt;msec&gt; milliseconds.  Example:") << endl;
         *m_out << "  pause 500" << endl;
         *m_out << "WAIT <signal> <args> " << i18n("Wait for &lt;signal&gt; with (optional) &lt;args&gt; arguments.  Example:")  << endl;
         *m_out << "  set wtimeout 5000" << endl;
