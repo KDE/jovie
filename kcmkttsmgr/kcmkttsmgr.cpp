@@ -1635,7 +1635,11 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
         if (kttsdRunning)
             {
                 // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping KTTSD";
+		if(!m_kspeech)
+		   m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
                 m_kspeech->kttsdExit();
+		delete m_kspeech;
+		m_kspeech = 0;
                 configChanged();
             }
     }
