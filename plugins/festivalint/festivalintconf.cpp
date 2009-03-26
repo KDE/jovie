@@ -559,6 +559,8 @@ void FestivalIntConf::slotTest_clicked()
     kDebug() << "FestivalIntConf::slotTest_clicked: tmpWaveFile = " << tmpWaveFile;
 
     // Get the code for the selected voice.
+    if(selectVoiceCombo->currentIndex() < 0 )
+	    return; //TODO add a messagebox
     QString voiceCode = m_voiceList[selectVoiceCombo->currentIndex()].code;
 
     // Get language code for the selected voice.
