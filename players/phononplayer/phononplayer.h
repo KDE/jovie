@@ -27,8 +27,6 @@
 // Qt includes.
 #include <QtCore/QObject>
 
-// KDE includes.
-#include <kdemacros.h>
 
 // KTTS includes.
 #include "player.h"
@@ -38,7 +36,7 @@ class MediaObject;
 class AudioOutput;
 }
 
-class KDE_EXPORT PhononPlayer : virtual public Player
+class PhononPlayer : virtual public Player
 {
     Q_OBJECT
 
