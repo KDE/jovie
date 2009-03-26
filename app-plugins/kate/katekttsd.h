@@ -23,16 +23,16 @@
 #include <ktexteditor/plugin.h>
 #include <ktexteditor/view.h>
 #include <kxmlguiclient.h>
+#include <kate/plugin.h>
 
 #include <QtCore/QObject>
 
-class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginViewInterface
+class KateKttsdPlugin : public Kate::Plugin, public KTextEditor::PluginViewInterface
 {
     Q_OBJECT
 
     public:
         explicit KateKttsdPlugin( QObject *parent = 0,
-                    		  const char* name = 0,
                 		  const QStringList &args = QStringList() );
         virtual ~KateKttsdPlugin();
 

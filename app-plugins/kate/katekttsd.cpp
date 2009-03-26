@@ -27,8 +27,6 @@
 
 // KDE includes.
 #include <kmessagebox.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/selectioninterface.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -37,8 +35,8 @@
 
 K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
-KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const char* name, const QStringList& )
-    : KTextEditor::Plugin ( (KTextEditor::Document*) parent, name )
+KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const QStringList& )
+    : Kate::Plugin ( (Kate::Application *)parent, "kate-kttsd" )
 {
 }
 
@@ -73,7 +71,10 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
 {
     view->insertChildClient( this );
     setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
-    (void) new KAction( i18n("Speak Text"), "kttsd", 0, this, SLOT(slotReadOut()), actionCollection(), "tools_kttsd" );
+    KAction *a = actionCollection()->addAction("tools_kttsd");
+    a->setText(i18n("Speak Text"));
+    connect( a, SIGNAL(triggered(bool)), plugin, SLOT(slotReadOut()) );
+
     setXMLFile( "ktexteditor_kttsdui.rc" );
 }
 
