@@ -4,7 +4,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
 
 ########### next target ###############
 
-set(kttsd_hadifixplugin_PART_SRCS hadifixconf.cpp hadifixproc.cpp hadifixplugin.cpp )
+set(kttsd_hadifixplugin_PART_SRCS hadifixconfdlg.cpp hadifixconf.cpp hadifixproc.cpp hadifixplugin.cpp )
 
 kde4_add_ui_files(kttsd_hadifixplugin_PART_SRCS hadifixconfigui.ui voicefileui.ui )
 

@@ -2,7 +2,7 @@
     begin                : Mon Okt 14 2002
     copyright            : (C) 2002 by Gunnar Schmi Dt
     email                : gunnar@schmi-dt.de
-    current mainainer:   : Gary Cramblitt <garycramblitt@comcast.net> 
+    current mainainer:   : Gary Cramblitt <garycramblitt@comcast.net>
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,12 +18,11 @@
 #include "hadifixconf.h"
 #include "hadifixconf.moc"
 #include "hadifixproc.h"
-#include "ui_voicefileui.h"
-
+#include "hadifixconfdlg.h"
 // System includes.
 #include <math.h>
 
-// Qt includes. 
+// Qt includes.
 #include <QtGui/QLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QGroupBox>
@@ -458,7 +457,7 @@ void HadifixConfPrivate::save (KConfig *c, const QString &configGroup) {
 // HadifixConf
 
 /** Constructor */
-HadifixConf::HadifixConf( QWidget* parent, const QStringList &) : 
+HadifixConf::HadifixConf( QWidget* parent, const QStringList &) :
     PlugInConf( parent, "hadifixconf" ){
     // kDebug() << "HadifixConf::HadifixConf: Running";
     QVBoxLayout *layout = new QVBoxLayout (this);
@@ -563,23 +562,9 @@ QString HadifixConf::getTalkerCode()
 }
 
 void HadifixConf::voiceButton_clicked () {
-    KDialog *dialog = new KDialog (this);
-    dialog->setCaption(i18n("Voice File - Hadifix Plugin"));
-    dialog->setButtons(KDialog::Ok|KDialog::Cancel);
-    // TODO: Workaround for KDialog bug.  Remove when no longer needed.
-    dialog->setDefaultButton(KDialog::Cancel);
-    
-    QWidget *w = new QWidget(dialog);
-    Ui::VoiceFileWidget voicefile;
-    voicefile.setupUi(w);
-    dialog->setMainWidget(w);
-
-    voicefile.femaleOption->setChecked(!d->isMaleVoice());
-    voicefile.maleOption->setChecked(d->isMaleVoice());
-    voicefile.voiceFileURL->setUrl(KUrl::fromPath(d->getVoiceFilename()));
-
+    HadifixConfDialog *dialog = new HadifixConfDialog( this,d->isMaleVoice(),d->getVoiceFilename() );
     if (dialog->exec() == QDialog::Accepted) {
-        d->setVoice (voicefile.voiceFileURL->url().path(), voicefile.maleOption->isChecked());
+        d->setVoice (dialog->path(), dialog->voice());
         d->setDefaultEncodingFromVoice();
         emit changed(true);
     }
@@ -610,7 +595,7 @@ void HadifixConf::testButton_clicked () {
     QString tmpWaveFile = tempFile.fileName();
 
     // Tell user to wait.
-    d->progressDlg = new KProgressDialog(d, 
+    d->progressDlg = new KProgressDialog(d,
         i18n("Testing"),
         i18n("Testing."));
     d->progressDlg->setModal(true);
@@ -619,7 +604,7 @@ void HadifixConf::testButton_clicked () {
 
     // Speak a German sentence as hadifix is a German tts
     // TODO: Actually, Hadifix does support English (and other languages?) as well,
-    // If you install the right voice files.  The hard part is finding and installing 
+    // If you install the right voice files.  The hard part is finding and installing
     // a working txt2pho for the desired language.  There seem to be some primitive french,
     // italian, and a few others, written in perl, but they have many issues.
     // Go to the mbrola website and click on "TTS" to learn more.
