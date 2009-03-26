@@ -404,9 +404,10 @@ void HadifixConfPrivate::setDefaults () {
         }
         if (it == defaultVoices.end()) it = defaultVoices.begin();
     }
+    if( it == defaultVoices.end() )
+	    return;
     HadifixProc::VoiceGender gender;
     gender = HadifixProc::determineGender(defaultMbrolaExec, *it);
-
     setConfiguration (defaultHadifixExec, defaultMbrolaExec,
                       *it, gender == HadifixProc::MaleGender,
                       100, 100, 100, "Local");
