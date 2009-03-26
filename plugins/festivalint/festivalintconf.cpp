@@ -205,7 +205,7 @@ QString FestivalIntConf::getTalkerCode()
     QString exePath = realFilePath(festivalPath->url().path());
     if (exePath.isEmpty()) return QString();
     if (getLocation(exePath).isEmpty()) return QString();
-    if (m_voiceList.count() == 0) return QString();
+    if (m_voiceList.isEmpty()) return QString();
     QString normalTalkerCode;
     voiceStruct voiceTemp = m_voiceList[selectVoiceCombo->currentIndex()];
     // Determine volume attribute.  soft < 75% <= medium <= 125% < loud.
