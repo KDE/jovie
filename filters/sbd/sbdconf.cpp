@@ -231,11 +231,16 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         QStringList(m_languageCodeList),
         SelectLanguageDlg::MultipleSelect,
         SelectLanguageDlg::BlankAllowed);
-    int dlgResult = dlg->exec();
-    if (dlgResult == QDialog::Accepted)
+    if (dlg->exec())
+    {
         m_languageCodeList = dlg->selectedLanguageCodes();
+    }
+    else
+    {
+        delete dlg;
+	return;
+    }
     delete dlg;
-    if (dlgResult != QDialog::Accepted) return;
     QString language("");
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
