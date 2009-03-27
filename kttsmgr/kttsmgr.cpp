@@ -350,6 +350,7 @@ bool KttsMgrTray::isKttsdRunning()
             if (args->isSet("autoexit"))
                 connect(m_kspeech, SIGNAL(jobStateChanged(const QString&, int, int)),
                     this, SLOT(jobStateChanged(const QString&, int, int)));
+	    args->clear();
         }
     } else {
         delete m_kspeech;
