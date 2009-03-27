@@ -86,15 +86,25 @@ void Stretcher::slotProcessExited(K3Process*)
 /**
  * Returns the state of the Stretcher.
  */
-int Stretcher::getState() { return m_state; }
+int Stretcher::getState() const 
+{ 
+    return m_state; 
+}
 
 /**
  * Returns the output filename (as given in call to stretch).
  */
-QString Stretcher::getOutFilename() { return m_outFilename; }
+QString Stretcher::getOutFilename()  const
+{ 
+    return m_outFilename; 
+}
 
 /**
  * Acknowledges the finished stretching.
  */
-void Stretcher::ackFinished() { m_state = ssIdle; }
+void Stretcher::ackFinished()  
+{ 
+    m_state = ssIdle; 
+}
+
 

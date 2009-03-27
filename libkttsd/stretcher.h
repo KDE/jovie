@@ -63,12 +63,12 @@ class KDE_EXPORT Stretcher : public QObject{
         /**
         * Returns the state of the Stretcher.
         */
-        int getState();
+        int getState() const;
 
         /**
          * Returns the output filename (as given in call to stretch).
          */
-        QString getOutFilename();
+        QString getOutFilename() const;
 
         /**
         * Acknowledges the finished stretching.
