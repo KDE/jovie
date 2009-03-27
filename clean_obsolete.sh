@@ -32,7 +32,7 @@ set -x
 # libktts removed.  See kdeaccessibility/kttsd/kcmkttsmgr/Makefile.am
 # for example how to build without it.
 # on or about 20 Dec 2004.
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libktts
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libktts
 $LIBTOOL --mode=uninstall $PREFIX/lib/libktts
 
 # ServiceType kttsd.desktop renamed to kttsd_synthplugin.desktop,
@@ -43,14 +43,14 @@ rm -f $PREFIX/share/servicetypes/kttsd.desktop
 
 # kcm_kttsmgr removed.  Use kcm_kttsd instead.
 # Change made on or about 18 Dec 2004.
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/kcm_kttsmgr
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/kcm_kttsmgr
 rm -f $PREFIX/share/applnk/Settings/Accessibility/kcmkttsmgr.desktop
 rm -f $PREFIX/share/applications/kde/kcmkttsmgr.desktop
 
 # Renamed libkttsjobmgr to libkttsjobmgrpart per kdelibs/NAMING convention
 # on or about 19 Oct 2004:
 
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libkttsjobmgr
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libkttsjobmgr
 
 # The following installed files were renamed
 # on or about 19 Oct 2004:
@@ -79,13 +79,13 @@ rm -f $PREFIX/share/services/flite.desktop
 rm -f $PREFIX/share/services/epos-kttsdplugin.desktop
 rm -f $PREFIX/share/services/freetts.desktop
 
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfestivalplugin
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfestivalintplugin
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libcommandplugin
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libhadifixplugin
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfliteplugin
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libeposkttsdplugin
-$LIBTOOL --mode=uninstall $PREFIX/lib/kde3/libfreettsplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libfestivalplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libfestivalintplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libcommandplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libhadifixplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libfliteplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libeposkttsdplugin
+$LIBTOOL --mode=uninstall $PREFIX/lib/kde4/libfreettsplugin
 
 # The following library was changed from unversioned to versioned
 # on or about 13 Oct 2004, 
@@ -96,10 +96,10 @@ $LIBTOOL --mode=uninstall $PREFIX/lib/libktts
 # on or about 4 Sep 2004.
 
 rm -f $PREFIX/share/services/hadifax.desktop
-$LIBTOOL --mode=uninstall /lib/kde3/libhadifaxplugin
+$LIBTOOL --mode=uninstall /lib/kde4/libhadifaxplugin
 
 # Clean up the library cache.
 
 $LIBTOOL --mode=finish -n $PREFIX/lib
-$LIBTOOL --mode=finish -n $PREFIX/lib/kde3/
+$LIBTOOL --mode=finish -n $PREFIX/lib/kde4/
 
