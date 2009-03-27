@@ -19,7 +19,7 @@ kttsjobmgr
 
 kcmkttsd
   A KControl module for configuring the KTTS System. kcmkttsd runs in the
-KDE Control Center or start it with the command "kcmshell kcmkttsd".
+KDE Control Center or start it with the command "kcmshell4 kcmkttsd".
 
 ktexteditor_kttsd
   A plugin for the KDE Advanced Text Editor that permits you to speak an entire
