@@ -128,6 +128,7 @@ bool FilterMgr::init()
             }
         }
     }
+    delete rawconfig;
     return true;
 }
 
