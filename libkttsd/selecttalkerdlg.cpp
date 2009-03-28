@@ -147,7 +147,10 @@ SelectTalkerDlg::SelectTalkerDlg(
     m_widget->talkersView->setMinimumHeight( 120 );
 }
 
-SelectTalkerDlg::~SelectTalkerDlg() { }
+SelectTalkerDlg::~SelectTalkerDlg() 
+{
+   delete m_widget;	
+}
 
 QString SelectTalkerDlg::getSelectedTalkerCode()
 {
