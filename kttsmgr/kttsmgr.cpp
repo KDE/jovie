@@ -51,7 +51,7 @@ int main (int argc, char *argv[])
 {
     KGlobal::locale()->setMainCatalog("kttsd");
 
-    KAboutData aboutdata("kttsmgr", 0, ki18n("KTTSMgr"),
+    KAboutData aboutdata("preferences-desktop-text-to-speech", 0, ki18n("KTTSMgr"),
         "0.4.0", ki18n("Text-to-Speech Manager"),
         KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
@@ -103,9 +103,6 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     m_kspeech(0)
 {
     setObjectName("kttsmgrsystemtray");
-
-//    QIcon icon = KIconLoader::global()->loadIcon("preferences-desktop-text-to-speech", KIconLoader::Small);
-//    setIcon (icon);
 
     // Start KTTS daemon if enabled and if not already running.
     KConfig _config( "kttsdrc" );
