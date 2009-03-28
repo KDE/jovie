@@ -4,6 +4,7 @@
   Copyright:
   (C) 2003-2004 by Olaf Schmidt <ojschmidt@kde.org>
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Laurent Montel <montel@kde.org>
 
   Original Author: Olaf Schmidt <ojschmidt@kde.org>
  ***************************************************************************/
