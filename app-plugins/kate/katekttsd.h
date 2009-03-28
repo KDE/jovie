@@ -23,32 +23,28 @@
 #include <ktexteditor/plugin.h>
 #include <ktexteditor/view.h>
 #include <kxmlguiclient.h>
+#include <kate/plugin.h>
 
 #include <QtCore/QObject>
 
-class KateKttsdPlugin : public KTextEditor::Plugin
+class KateKttsdPlugin : public Kate::Plugin
 {
     Q_OBJECT
 
     public:
         explicit KateKttsdPlugin( QObject *parent = 0,
                 		  const QStringList &args = QStringList() );
-        virtual ~KateKttsdPlugin();
-
-        void addView (KTextEditor::View *view);
-        void removeView (KTextEditor::View *view);
-
-    private:
-        QList<class KateKttsdPluginView*> m_views;
+        virtual ~KateKttsdPlugin() {};
+        Kate::PluginView *createView(Kate::MainWindow *mainWindow);
 };
 
-class KateKttsdPluginView : public QObject, public KXMLGUIClient
+class KateKttsdPluginView : public Kate::PluginView, public KXMLGUIClient
 {
     Q_OBJECT
 
     public:
-        explicit KateKttsdPluginView( KTextEditor::View *view, const char *name=0 );
-        ~KateKttsdPluginView() {};
+        explicit KateKttsdPluginView(Kate::MainWindow *mw );
+    ~KateKttsdPluginView();
 
     public slots:
         void slotReadOut();

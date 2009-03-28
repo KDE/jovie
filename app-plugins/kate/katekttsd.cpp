@@ -34,64 +34,49 @@
 #include <ktoolinvocation.h>
 #include <KActionCollection>
 #include <KAboutData>
+#include <kate/mainwindow.h>
+
 
 K_EXPORT_COMPONENT_FACTORY( kate_kttsd, KGenericFactory<KateKttsdPlugin>( "kate_kttsd" ) )
 
 
-KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const QStringList& )
-    : KTextEditor::Plugin ( parent )
-{
-qDebug()<<" KateKttsdPlugin::KateKttsdPlugin";
-}
-
-KateKttsdPlugin::~KateKttsdPlugin()
+KateKttsdPlugin::KateKttsdPlugin(QObject *parent, const QStringList&)
+    : Kate::Plugin ((Kate::Application*)parent)
 {
 }
 
-
-void KateKttsdPlugin::addView(KTextEditor::View *view)
+Kate::PluginView *KateKttsdPlugin::createView (Kate::MainWindow *mainWindow)
 {
-    KateKttsdPluginView *nview = new KateKttsdPluginView (view, "KTTSD Plugin");
-    KGlobal::locale()->insertCatalog("kttsd");
-    m_views.append (nview);
+    return new KateKttsdPluginView(mainWindow);
 }
 
-void KateKttsdPlugin::removeView(KTextEditor::View *view)
+KateKttsdPluginView::KateKttsdPluginView( Kate::MainWindow *mw )
+    : Kate::PluginView (mw),
+    KXMLGUIClient( )
 {
-    int z=0;
-    // Loop written for the unlikely case of a view being added more than once
-    while (z < m_views.count())
-    {
-        KateKttsdPluginView *nview = m_views.at(z );
-        if (nview->parentClient() == view)
-        {
-            m_views.removeAll (nview);
-            delete nview;
-        }
-        else
-            ++z;
-    }
-    KGlobal::locale()->removeCatalog("kttsd");
-}
-
-
-KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *name )
-    : QObject( view ),
-    KXMLGUIClient( view )
-{
-    setObjectName( name );
-    view->insertChildClient( this );
+    //setObjectName( name );
+    //view->insertChildClient( this );
     setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
     KAction *a = actionCollection()->addAction("tools_kttsd");
     a->setText(i18n("Speak Text"));
     connect( a, SIGNAL(triggered(bool)), this, SLOT(slotReadOut()) );
 
     setXMLFile( "plugins/kate_kttsd/ui.rc" );
+    mainWindow()->guiFactory()->addClient(this);
+
 }
+
+KateKttsdPluginView::~KateKttsdPluginView()
+{
+    mainWindow()->guiFactory()->removeClient( this );
+}
+
 
 void KateKttsdPluginView::slotReadOut()
 {
-    KTextEditor::View *v = (KTextEditor::View*)parent();
+    KTextEditor::View *v = mainWindow()->activeView();
+    if ( !v )
+        return;
     KTextEditor::Document *doc = v->document();
     QString text;
     if ( v->selection() )
@@ -108,14 +93,11 @@ void KateKttsdPluginView::slotReadOut()
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
             KMessageBox::error(0, i18n( "Starting KTTSD Failed"), error );
     }
-    QDBusInterface kttsd( "org.kde.KSpeech", "/KSpeech", "org.kde.KSpeech" );
-    QDBusReply<bool> reply = kttsd.call("setText", text,"");
+    QDBusInterface kttsd( "org.kde.kttsd", "/KSpeech", "org.kde.KSpeech" );
+
+    QDBusReply<int> reply = kttsd.call("say", text,0);
     if ( !reply.isValid())
         KMessageBox::error( 0, i18n( "D-Bus Call Failed" ),
-                              i18n( "The D-Bus call setText failed." ));
-    reply = kttsd.call("startText", 0);
-    if ( !reply.isValid())
-        KMessageBox::error( 0, i18n( "D-Bus Call Failed" ),
-                              i18n( "The D-Bus call startText failed." ));
+                              i18n( "The D-Bus call say failed." ));
 }
 
