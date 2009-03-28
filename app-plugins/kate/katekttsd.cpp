@@ -55,6 +55,7 @@ KateKttsdPluginView::KateKttsdPluginView( Kate::MainWindow *mw )
     : Kate::PluginView (mw),
     KXMLGUIClient( )
 {
+    KGlobal::locale()->insertCatalog("kttsd");
     setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
     KAction *a = actionCollection()->addAction("tools_kttsd");
     a->setText(i18n("Speak Text"));
