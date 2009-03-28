@@ -60,6 +60,7 @@ KateKttsdPluginView::KateKttsdPluginView( Kate::MainWindow *mw )
     setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
     KAction *a = actionCollection()->addAction("tools_kttsd");
     a->setText(i18n("Speak Text"));
+    a->setIcon(KIcon("preferences-desktop-text-to-speech"));
     connect( a, SIGNAL(triggered(bool)), this, SLOT(slotReadOut()) );
 
     setXMLFile( "plugins/kate_kttsd/ui.rc" );
