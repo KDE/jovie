@@ -51,7 +51,7 @@ int main (int argc, char *argv[])
 {
     KGlobal::locale()->setMainCatalog("kttsd");
 
-    KAboutData aboutdata("preferences-desktop-text-to-speech", 0, ki18n("KTTSMgr"),
+    KAboutData aboutdata("kttsmgr", 0, ki18n("KTTSMgr"),
         "0.4.0", ki18n("Text-to-Speech Manager"),
         KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
@@ -61,6 +61,7 @@ int main (int argc, char *argv[])
     aboutdata.addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
     aboutdata.addCredit(ki18n("Jorge Luis Arzola"), ki18n("Testing"), "arzolacub@hotmail.com");
     aboutdata.addCredit(ki18n("David Powell"), ki18n("Testing"), "achiestdragon@gmail.com");
+    aboutdata.setProgramIconName("preferences-desktop-text-to-speech");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
 
