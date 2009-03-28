@@ -168,7 +168,7 @@ KttsJobMgrPart::~KttsJobMgrPart()
 {
     KGlobal::locale()->removeCatalog("kttsd");
     closeUrl();
-    delete m_jobListModel;
+    delete m_ui;
 }
 
 bool KttsJobMgrPart::openFile()
