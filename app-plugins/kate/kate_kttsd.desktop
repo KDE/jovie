@@ -2,9 +2,8 @@
 Encoding=UTF-8
 Type=Service
 ServiceTypes=Kate/Plugin
-X-KDE-Library=ktexteditor_kttsd
+X-KDE-Library=kate_kttsd
 X-Kate-Version=3.0
-MimeType=text/plain;
 Icon=kttsd
 Name=KTextEditor KTTSD Plugin
 Name[ar]=ملحق KTTSD لمحرر نصوص كي

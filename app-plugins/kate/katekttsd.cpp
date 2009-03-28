@@ -33,12 +33,15 @@
 #include <kgenericfactory.h>
 #include <ktoolinvocation.h>
 #include <KActionCollection>
+#include <KAboutData>
 
-K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
+K_EXPORT_COMPONENT_FACTORY( kate_kttsd, KGenericFactory<KateKttsdPlugin>( "kate_kttsd" ) )
+
 
 KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const QStringList& )
     : KTextEditor::Plugin ( parent )
 {
+qDebug()<<" KateKttsdPlugin::KateKttsdPlugin";
 }
 
 KateKttsdPlugin::~KateKttsdPlugin()
@@ -83,7 +86,7 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
     a->setText(i18n("Speak Text"));
     connect( a, SIGNAL(triggered(bool)), this, SLOT(slotReadOut()) );
 
-    setXMLFile( "ktexteditor_kttsdui.rc" );
+    setXMLFile( "plugins/kate_kttsd/ui.rc" );
 }
 
 void KateKttsdPluginView::slotReadOut()

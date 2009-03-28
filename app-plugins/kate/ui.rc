@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<gui name="ktexteditor_kttsd" library="ktexteditor_kttsd" version="2">
+<gui name="kate_kttsd" library="kate_kttsd" version="3">
     <MenuBar>
         <Menu name="tools"><text>&amp;Tools</text>
             <Action name="tools_kttsd" />
