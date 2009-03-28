@@ -1,4 +1,11 @@
 [Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kate/Plugin
+X-KDE-Library=ktexteditor_kttsd
+X-Kate-Version=3.0
+MimeType=text/plain;
+Icon=kttsd
 Name=KTextEditor KTTSD Plugin
 Name[ar]=ملحق KTTSD لمحرر نصوص كي
 Name[bg]=Приставка KTextEditor KTTSD
@@ -109,10 +116,4 @@ Comment[vi]=Thêm danh mục thực đơn cho việc đọc văn bản
 Comment[x-test]=xxAdds a menu entry for speaking the textxx
 Comment[zh_CN]=添加可读出文本的菜单项
 Comment[zh_TW]=新增朗讀文字的目錄
-Type=Service
-ServiceTypes=KTextEditor/Plugin
-X-KDE-Library=ktexteditor_kttsd
-X-Kate-Version=2.2
-MimeType=text/plain;
-Icon=kttsd
 author=Olaf Jan Schmidt, ojschmidt@kde.org

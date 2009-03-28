@@ -23,11 +23,10 @@
 #include <ktexteditor/plugin.h>
 #include <ktexteditor/view.h>
 #include <kxmlguiclient.h>
-#include <kate/plugin.h>
 
 #include <QtCore/QObject>
 
-class KateKttsdPlugin : public Kate::Plugin, public KTextEditor::PluginViewInterface
+class KateKttsdPlugin : public KTextEditor::Plugin
 {
     Q_OBJECT
 
@@ -40,7 +39,7 @@ class KateKttsdPlugin : public Kate::Plugin, public KTextEditor::PluginViewInter
         void removeView (KTextEditor::View *view);
 
     private:
-        QPtrList<class KateKttsdPluginView> m_views;
+        QList<class KateKttsdPluginView*> m_views;
 };
 
 class KateKttsdPluginView : public QObject, public KXMLGUIClient

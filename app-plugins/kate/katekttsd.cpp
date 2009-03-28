@@ -20,7 +20,7 @@
 // KateKttsdPlugin includes.
 #include "katekttsd.h"
 #include "katekttsd.moc"
-
+#include <ktexteditor/document.h>
 // Qt includes.
 #include <QtCore/QTimer>
 #include <QtDBus/QtDBus>
@@ -32,11 +32,12 @@
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 #include <ktoolinvocation.h>
+#include <KActionCollection>
 
 K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
 KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const QStringList& )
-    : Kate::Plugin ( (Kate::Application *)parent, "kate-kttsd" )
+    : KTextEditor::Plugin ( parent )
 {
 }
 
@@ -54,26 +55,33 @@ void KateKttsdPlugin::addView(KTextEditor::View *view)
 
 void KateKttsdPlugin::removeView(KTextEditor::View *view)
 {
-    for (uint z=0; z < m_views.count(); ++z)
-        if (m_views.at(z)->parentClient() == view)
+    int z=0;
+    // Loop written for the unlikely case of a view being added more than once
+    while (z < m_views.count())
     {
-        KateKttsdPluginView *nview = m_views.at(z);
-        m_views.remove (nview);
-        delete nview;
+        KateKttsdPluginView *nview = m_views.at(z );
+        if (nview->parentClient() == view)
+        {
+            m_views.removeAll (nview);
+            delete nview;
+        }
+        else
+            ++z;
     }
     KGlobal::locale()->removeCatalog("kttsd");
 }
 
 
 KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *name )
-    : QObject( view, name ),
+    : QObject( view ),
     KXMLGUIClient( view )
 {
+    setObjectName( name );
     view->insertChildClient( this );
     setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
     KAction *a = actionCollection()->addAction("tools_kttsd");
     a->setText(i18n("Speak Text"));
-    connect( a, SIGNAL(triggered(bool)), plugin, SLOT(slotReadOut()) );
+    connect( a, SIGNAL(triggered(bool)), this, SLOT(slotReadOut()) );
 
     setXMLFile( "ktexteditor_kttsdui.rc" );
 }
@@ -81,31 +89,30 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
 void KateKttsdPluginView::slotReadOut()
 {
     KTextEditor::View *v = (KTextEditor::View*)parent();
-    KTextEditor::SelectionInterface *si = KTextEditor::selectionInterface( v->document() );
+    KTextEditor::Document *doc = v->document();
     QString text;
-
-    if ( si->hasSelection() )
-      text = si->selection();
-    else {
-        KTextEditor::EditInterface *ei = KTextEditor::editInterface( v->document() );
-        text = ei->text();
+    if ( v->selection() )
+    {
+        text = v->selectionText();
     }
+    else
+        text = doc->text();
 
     // If KTTSD not running, start it.
-    if (!QDBus::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
+    if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
-            KMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
+            KMessageBox::error(0, i18n( "Starting KTTSD Failed"), error );
     }
-	QDBusInterface kttsd( "org.kde.KSpeech", "/KSpeech", "org.kde.KSpeech" );
-	QDBusReply<bool> reply = kttsd.call("setText", text,"");
+    QDBusInterface kttsd( "org.kde.KSpeech", "/KSpeech", "org.kde.KSpeech" );
+    QDBusReply<bool> reply = kttsd.call("setText", text,"");
     if ( !reply.isValid())
-       KMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
-                                 i18n( "The D-Bus call setText failed." ));
-	reply = kttsd.call("startText", 0);
+        KMessageBox::error( 0, i18n( "D-Bus Call Failed" ),
+                              i18n( "The D-Bus call setText failed." ));
+    reply = kttsd.call("startText", 0);
     if ( !reply.isValid())
-       KMessageBox::warning( 0, i18n( "D-Bus Call Failed" ),
-                                i18n( "The D-Bus call startText failed." ));
+        KMessageBox::error( 0, i18n( "D-Bus Call Failed" ),
+                              i18n( "The D-Bus call startText failed." ));
 }
 
