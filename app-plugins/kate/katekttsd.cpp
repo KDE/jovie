@@ -55,8 +55,6 @@ KateKttsdPluginView::KateKttsdPluginView( Kate::MainWindow *mw )
     : Kate::PluginView (mw),
     KXMLGUIClient( )
 {
-    //setObjectName( name );
-    //view->insertChildClient( this );
     setComponentData( KGenericFactory<KateKttsdPlugin>::componentData() );
     KAction *a = actionCollection()->addAction("tools_kttsd");
     a->setText(i18n("Speak Text"));
@@ -87,14 +85,20 @@ void KateKttsdPluginView::slotReadOut()
     }
     else
         text = doc->text();
+    if ( text.isEmpty() )
+        return;
 
     // If KTTSD not running, start it.
     if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
+        {
             KMessageBox::error(0, i18n( "Starting KTTSD Failed"), error );
+            return;
+        }
     }
+
     QDBusInterface kttsd( "org.kde.kttsd", "/KSpeech", "org.kde.KSpeech" );
 
     QDBusReply<int> reply = kttsd.call("say", text,0);
