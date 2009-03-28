@@ -488,6 +488,8 @@ ssize_t AlsaPlayerThread::safe_read(int fd, void *buf, size_t count)
 int AlsaPlayerThread::test_vocfile(void *buffer)
 {
     VocHeader *vp = (VocHeader*)buffer;
+    if( !vp )
+	return -1;
 
     if (!memcmp(vp->magic, VOC_MAGIC_STRING, 20)) {
         vocminor = LE_SHORT(vp->version) & 0xFF;
@@ -539,6 +541,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 
     if (size < sizeof(WaveHeader))
         return -1;
+    if( !h )
+	return -1;
     if (h->magic != WAV_RIFF || h->type != WAV_WAVE)
         return -1;
     if (size > sizeof(WaveHeader)) {
@@ -668,7 +672,8 @@ ssize_t AlsaPlayerThread::test_wavefile(int fd, char *_buffer, size_t size)
 int AlsaPlayerThread::test_au(int fd, char *buffer)
 {
     AuHeader *ap = (AuHeader*)buffer;
-
+    if( !ap )
+	return -1;
     if (ap->magic != AU_MAGIC)
         return -1;
     if (BE_INT(ap->hdr_size) > 128 || BE_INT(ap->hdr_size) < 24)
