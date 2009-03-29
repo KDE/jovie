@@ -125,7 +125,8 @@ void FreeTTSProc::synth(
 
     /// Dump audio into synthFilename
 
-    if (!synthFilename.isNull()) *m_freettsProc << "-dumpAudio" << synthFilename;
+    if (!synthFilename.isNull()) 
+	*m_freettsProc << "-dumpAudio" << synthFilename;
 
     m_synthFilename = synthFilename;
 
@@ -134,7 +135,9 @@ void FreeTTSProc::synth(
         kDebug() << "FreeTTSProc::synth: Error starting FreeTTS process.  Is freetts.jar in the PATH?";
         m_state = psIdle;
         kDebug() << "K3Process args: " << m_freettsProc->args();
-        return;
+        delete m_freettsProc;
+	m_freettsProc =0;
+	return;
     }
     kDebug()<< "FreeTTSProc:synth: FreeTTS initialized";
     m_freettsProc->writeStdin(saidText.toLatin1(), saidText.length());
