@@ -3,7 +3,6 @@ set(kate_kttsd_PART_SRCS katekttsd.cpp )
 
 kde4_add_plugin(kate_kttsd ${kate_kttsd_PART_SRCS})
 
-#target_link_libraries(kate_kttsd  ${KDE4_KTEXTEDITOR_LIBS} )
 target_link_libraries(kate_kttsd ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kateinterfaces )
 
 
