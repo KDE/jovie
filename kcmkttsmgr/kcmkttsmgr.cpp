@@ -379,9 +379,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
 
-    // Load configuration.
-    load();
-
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
     // General tab.
@@ -2064,9 +2061,10 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-	KService::List  offers =  KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
+    const KService::List  offers =  KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
-        if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
+        if (offers[ndx]->name() == name) 
+		return offers[ndx]->desktopEntryName();
     return QString();
 }
 
