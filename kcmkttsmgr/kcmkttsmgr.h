@@ -114,37 +114,37 @@ class KCMKttsMgr :
         ~KCMKttsMgr();
 
         /**
-        * This method is invoked whenever the module should read its 
-        * configuration (most of the times from a config file) and update the 
-        * user interface. This happens when the user clicks the "Reset" button in 
-        * the control center, to undo all of his changes and restore the currently 
+        * This method is invoked whenever the module should read its
+        * configuration (most of the times from a config file) and update the
+        * user interface. This happens when the user clicks the "Reset" button in
+        * the control center, to undo all of his changes and restore the currently
         * valid settings. NOTE that this is not called after the modules is loaded,
         * so you probably want to call this method in the constructor.
         */
         void load();
 
         /**
-        * This function gets called when the user wants to save the settings in 
-        * the user interface, updating the config files or wherever the 
-        * configuration is stored. The method is called when the user clicks "Apply" 
+        * This function gets called when the user wants to save the settings in
+        * the user interface, updating the config files or wherever the
+        * configuration is stored. The method is called when the user clicks "Apply"
         * or "Ok".
         */
         void save();
 
         /**
         * This function is called to set the settings in the module to sensible
-        * default values. It gets called when hitting the "Default" button. The 
-        * default values should probably be the same as the ones the application 
+        * default values. It gets called when hitting the "Default" button. The
+        * default values should probably be the same as the ones the application
         * uses when started without a config file.
         */
         void defaults();
 
         /**
         * This is a static method which gets called to realize the modules settings
-        * durign the startup of KDE. NOTE that most modules do not implement this 
-        * method, but modules like the keyboard and mouse modules, which directly 
-        * interact with the X-server, need this method. As this method is static, 
-        * it can avoid to create an instance of the user interface, which is often 
+        * durign the startup of KDE. NOTE that most modules do not implement this
+        * method, but modules like the keyboard and mouse modules, which directly
+        * interact with the X-server, need this method. As this method is static,
+        * it can avoid to create an instance of the user interface, which is often
         * not needed in this case.
         */
         static void init();
@@ -162,7 +162,7 @@ class KCMKttsMgr :
 
     public slots:
         /**
-        * This slot is used to emit the signal changed when any widget changes the configuration 
+        * This slot is used to emit the signal changed when any widget changes the configuration
         */
         void configChanged()
         {
@@ -175,7 +175,7 @@ class KCMKttsMgr :
         }
 
     protected slots:
-        /** DCOP Methods connected to DCOP Signals emitted by KTTSD. */
+        /** DCOP Methods connected to D-Bus Signals emitted by KTTSD. */
         /** Most of these are not used */
 
         /**
@@ -187,8 +187,8 @@ class KCMKttsMgr :
         */
         virtual void kttsdExiting();
 
-        // virtual void resizeEvent( QResizeEvent ev );
-
+        void slotServiceUnregistered( const QString & );
+        void slotServiceOwnerChanged( const QString &, const QString &, const QString & );
     private:
         enum widgetPages
         {
@@ -286,7 +286,7 @@ class KCMKttsMgr :
         * An exact match is performed.
         */
         QTreeWidgetItem* findTreeWidgetItem(QTreeWidget* tw, const QString& sought, int col);
-        
+
         /**
         * DBUS KSpeech Interface.
         */

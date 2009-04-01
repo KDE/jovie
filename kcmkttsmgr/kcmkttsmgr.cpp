@@ -16,7 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Note to programmers.  There is a subtle difference between a plugIn name and a 
+// Note to programmers.  There is a subtle difference between a plugIn name and a
 // synthesizer name.  The latter is a translated name, for example, "Festival Interactivo",
 // while the former is alway an English name, example "Festival Interactive".
 
@@ -253,7 +253,7 @@ QVariant SbdFilterListModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole)
         return m_filters.at(index.row()).userFilterName;
-    else 
+    else
         return QVariant();
 }
 
@@ -487,7 +487,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
         mainTab->setCurrentIndex(wpTalkers);
     else if (enableKttsdCheckBox->isChecked())
         mainTab->setCurrentIndex(wpJobs);
-} 
+}
 
 /**
 * Destructor.
@@ -498,8 +498,8 @@ KCMKttsMgr::~KCMKttsMgr(){
 }
 
 /**
-* This method is invoked whenever the module should read its 
-* configuration (most of the times from a config file) and update the 
+* This method is invoked whenever the module should read its
+* configuration (most of the times from a config file) and update the
 * user interface. This happens when the user clicks the "Reset" button in
 * the control center, to undo all of his changes and restore the currently
 * valid settings. NOTE that this is not called after the modules is loaded,
@@ -699,7 +699,7 @@ void KCMKttsMgr::load()
                     filterIDsList.append(filterID);
                 } else m_lastFilterID--;
             } else
-                kDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName 
+                kDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName
                     << " DesktopEntryName " << desktopEntryName << endl;
             delete filterPlugIn;
         }
@@ -737,9 +737,9 @@ void KCMKttsMgr::load()
 }
 
 /**
-* This function gets called when the user wants to save the settings in 
-* the user interface, updating the config files or wherever the 
-* configuration is stored. The method is called when the user clicks "Apply" 
+* This function gets called when the user wants to save the settings in
+* the user interface, updating the config files or wherever the
+* configuration is stored. The method is called when the user clicks "Apply"
 * or "Ok".
 */
 void KCMKttsMgr::save()
@@ -757,7 +757,7 @@ void KCMKttsMgr::save()
     generalConfig.writeEntry("TextPreMsgEnabled", textPreMsgCheck->isChecked());
     generalConfig.writeEntry("TextPreMsg", textPreMsg->text());
 
-    generalConfig.writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked()); 
+    generalConfig.writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked());
     generalConfig.writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
 
     generalConfig.writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
@@ -889,8 +889,8 @@ void KCMKttsMgr::slotTabChanged()
 
 /**
 * This function is called to set the settings in the module to sensible
-* default values. It gets called when hitting the "Default" button. The 
-* default values should probably be the same as the ones the application 
+* default values. It gets called when hitting the "Default" button. The
+* default values should probably be the same as the ones the application
 * uses when started without a config file.
 */
 void KCMKttsMgr::defaults() {
@@ -1619,7 +1619,7 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
             {
                 kDebug() << "Starting KTTSD failed with message " << error;
                 enableKttsdCheckBox->setChecked(false);
-                
+
             } else {
                 configChanged();
                 kttsdStarted();
@@ -1735,6 +1735,11 @@ void KCMKttsMgr::kttsdStarted()
             this, SLOT(kttsdStarted()));
         connect(m_kspeech, SIGNAL(kttsdExiting()),
             this, SLOT(kttsdExiting()));
+        connect( QDBusConnection::sessionBus().interface(), SIGNAL( serviceUnregistered( const QString & ) ),
+                 this, SLOT( slotServiceUnregistered( const QString & ) ) );
+        connect( QDBusConnection::sessionBus().interface(), SIGNAL( serviceOwnerChanged( const QString &, const QString &, const QString & ) ),
+                 this, SLOT( slotServiceOwnerChanged( const QString &, const QString &, const QString & ) ) );
+
         kttsdVersion->setText(i18n("KTTSD Version: %1", m_kspeech->version()));
 
     } else {
@@ -1742,6 +1747,23 @@ void KCMKttsMgr::kttsdStarted()
         delete m_kspeech;
         m_kspeech = 0;
     }
+}
+
+void KCMKttsMgr::slotServiceUnregistered( const QString &service )
+{
+  if ( service == QLatin1String( "org.kde.kttsd" ) )
+  {
+    kttsdExiting();
+  }
+
+}
+
+void KCMKttsMgr::slotServiceOwnerChanged( const QString &service, const QString &, const QString &newOwner )
+{
+  if ( service == QLatin1String( "org.kde.kttsd" ) && newOwner.isEmpty() )
+  {
+    kttsdExiting();
+  }
 }
 
 /**
@@ -1757,6 +1779,7 @@ void KCMKttsMgr::kttsdExiting()
         m_jobMgrPart = 0;
     }
     enableKttsdCheckBox->setChecked(false);
+    disconnect( QDBusConnection::sessionBus().interface(), 0, this, 0 );
     delete m_kspeech;
     m_kspeech = 0;
     kttsdVersion->setText(i18n("KTTSD not running"));
@@ -1937,7 +1960,7 @@ void KCMKttsMgr::configureTalker()
     }
     float audioStretchFactor = 1.0/(float(timeBox->value())/100.0);
     // kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName;
-    TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer", 
+    TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer",
         playerOption, audioStretchFactor, sinkName);
     m_loadedTalkerPlugIn->setPlayer(testPlayer);
     // Display the dialog.
@@ -2063,7 +2086,7 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
     if (name.isEmpty()) return QString();
     const KService::List  offers =  KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
-        if (offers[ndx]->name() == name) 
+        if (offers[ndx]->name() == name)
 		return offers[ndx]->desktopEntryName();
     return QString();
 }
