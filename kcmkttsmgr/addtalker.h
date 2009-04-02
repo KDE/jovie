@@ -54,12 +54,12 @@ public:
     /**
     * Returns user's chosen language code.
     */
-    QString getLanguageCode();
+    QString getLanguageCode() const;
 
     /**
     * Returns user's chosen synthesizer.
     */
-    QString getSynthesizer();
+    QString getSynthesizer() const;
 
 
 private:

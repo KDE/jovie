@@ -85,7 +85,7 @@ AddTalker::~AddTalker()
 /**
 * Returns user's chosen language code.
 */
-QString AddTalker::getLanguageCode()
+QString AddTalker::getLanguageCode() const
 {
      return m_languageToLanguageCodeMap[languageSelection->currentText()];
 }
@@ -93,7 +93,10 @@ QString AddTalker::getLanguageCode()
 /**
 * Returns user's chosen synthesizer.
 */
-QString AddTalker::getSynthesizer() { return synthesizerSelection->currentText(); }
+QString AddTalker::getSynthesizer() const 
+{ 
+	return synthesizerSelection->currentText(); 
+}
 
 // Set the synthesizer-to-languages map.
 // @param synthToLang        QMap of supported language codes indexed by synthesizer.
