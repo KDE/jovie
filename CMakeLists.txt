@@ -15,7 +15,6 @@ add_subdirectory( kttsd )
 add_subdirectory( kttsjobmgr ) 
 add_subdirectory( kcmkttsmgr ) 
 add_subdirectory( kttsmgr ) 
-add_subdirectory( app-plugins ) 
 add_subdirectory( kspeak )
 add_subdirectory( icons ) 
 
