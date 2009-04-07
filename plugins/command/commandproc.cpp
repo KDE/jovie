@@ -33,6 +33,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <k3process.h>
+#include <KShell>
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
 
@@ -144,7 +145,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     ts << endl; // Some synths need this, eg. flite.
 
     // 1.b) quote the text as one parameter
-    QString escText = K3ShellProcess::quote(text);
+    QString escText = KShell::quoteArg(text);
 
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
