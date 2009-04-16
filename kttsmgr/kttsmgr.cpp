@@ -79,7 +79,7 @@ int main (int argc, char *argv[])
     KUniqueApplication::setOrganizationDomain("kde.org");
     KUniqueApplication::setApplicationName("KttsMgr");
     KUniqueApplication app;
-
+    app.setQuitOnLastWindowClosed( false );
     if(!KUniqueApplication::start())
     {
         kDebug() << "kttsmgr is already running";
