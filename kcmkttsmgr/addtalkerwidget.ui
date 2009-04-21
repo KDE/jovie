@@ -1,7 +1,5 @@
 <ui version="4.0" >
  <author>Gary Cramblitt</author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>AddTalkerWidget</class>
  <widget class="QWidget" name="AddTalkerWidget" >
   <property name="geometry" >
@@ -231,7 +229,6 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>KComboBox</class>

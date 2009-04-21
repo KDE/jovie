@@ -1,7 +1,5 @@
 <ui version="4.0" >
  <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>SbdConfWidget</class>
  <widget class="QWidget" name="SbdConfWidget" >
   <property name="geometry" >
@@ -316,7 +314,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
    <class>KPushButton</class>

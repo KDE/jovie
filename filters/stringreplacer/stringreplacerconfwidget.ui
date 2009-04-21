@@ -1,7 +1,6 @@
 <ui version="4.0" >
  <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
  <comment>Widget for configuring String Replacer Filter for KTTSD.</comment>
- <exportmacro></exportmacro>
  <class>StringReplacerConfWidget</class>
  <widget class="QWidget" name="StringReplacerConfWidget" >
   <property name="geometry" >
@@ -393,7 +392,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
    <class>KPushButton</class>

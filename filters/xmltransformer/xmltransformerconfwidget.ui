@@ -1,7 +1,5 @@
 <ui version="4.0" >
  <author>Gary Cramblitt &lt;garycramblitt@comcast.net></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>XmlTransformerConfWidget</class>
  <widget class="QWidget" name="XmlTransformerConfWidget" >
   <property name="geometry" >
@@ -268,7 +266,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>

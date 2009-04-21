@@ -1,7 +1,5 @@
 <ui version="4.0" stdsetdef="1" >
   <author>Gary Cramblitt</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
   <class>FliteConfWidget</class>
   <widget class="QWidget" name="FliteConfWidget" >
     <property name="geometry" >
@@ -146,7 +144,6 @@
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
     <includes>
     <include location="global" >kurlrequester.h</include>
   </includes>
