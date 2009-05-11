@@ -27,6 +27,7 @@
 
 // Qt includes.
 #include <QtCore/QFile>
+#include <QtCore/QLatin1String>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
 
@@ -223,7 +224,7 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
     QTextStream wstream (&inFile);
     // TODO: Is encoding an issue here?
     // If input does not have xml processing instruction, add it.
-    if (!inputText.startsWith("<?xml")) wstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    if (!inputText.startsWith(QLatin1String("<?xml"))) wstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     // FIXME: Temporary Fix until Konqi returns properly formatted xhtml with & coded as &amp;
     // This will change & inside a CDATA section, which is not good, and also within comments and
     // processing instructions, which is OK because we don't speak those anyway.
