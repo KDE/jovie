@@ -110,8 +110,9 @@ KSpeech::KSpeech(QObject *parent) :
 {
     kDebug() << "KSpeech::KSpeech Running";
     new KSpeechAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
-    ready();
+    if (ready()) {
+        QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
+    }
 }
 
 KSpeech::~KSpeech(){
@@ -119,7 +120,7 @@ KSpeech::~KSpeech(){
     if (d->speaker) d->speaker->requestExit();
     delete d;
     announceEvent("~KSpeech", "kttsdExiting");
-    kttsdExiting();
+    emit kttsdExiting();
 }
 
 /* ---- DBUS exported functions ------------------------------------------ */
@@ -405,7 +406,7 @@ void KSpeech::kttsdExit()
     if(d->speaker)
        d->speaker->removeAllJobs("kttsd");
     announceEvent("kttsdExit", "kttsdExiting");
-    kttsdExiting();
+    emit kttsdExiting();
     qApp->quit();
 }
 
@@ -419,12 +420,15 @@ void KSpeech::reinit()
         if (d->speaker->isSpeaking())
             d->speaker->pause("kttsd");
         d->speaker->requestExit();
+        QDBusConnection::sessionBus().unregisterObject("/KSpeech");
     }
     delete d->speaker;
     d->speaker = 0;
     delete d->talkerMgr;
     d->talkerMgr = 0;
-    ready();
+    if (ready()) {
+        QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
+    }
 }
 
 void KSpeech::setCallingAppId(const QString& appId)
@@ -450,7 +454,7 @@ bool KSpeech::ready()
     if (!initializeSpeaker()) return false;
     d->speaker->doUtterances();
     announceEvent("ready", "kttsdStarted");
-    kttsdStarted();
+    emit kttsdStarted();
     return true;
 }
 
