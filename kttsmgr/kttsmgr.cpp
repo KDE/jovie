@@ -252,7 +252,9 @@ QString KttsMgrTray::stateToStr(int state)
 
 QString KttsMgrTray::getStatus()
 {
-    if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
+    if (!isKttsdRunning())
+        return i18n("Text-to-Speech System is not running");
+
     int jobCount = m_kspeech->getJobCount(KSpeech::jpAll);
     QString status = i18np("1 job", "%1 jobs", jobCount);
     if (jobCount > 0)
@@ -277,10 +279,10 @@ void KttsMgrTray::speakClipboardSelected()
     {
         QString error;
         if (KToolInvocation::startServiceByDesktopName("kttsd", QString(), &error) != 0)
-	{
+        {
             kError() << "Starting KTTSD failed with message " << error << endl;
-	    return; 
-	}
+            return; 
+        }
     }
     if( isKttsdRunning() ) 
        m_kspeech->sayClipboard();
@@ -352,7 +354,7 @@ bool KttsMgrTray::isKttsdRunning()
             if (args->isSet("autoexit"))
                 connect(m_kspeech, SIGNAL(jobStateChanged(const QString&, int, int)),
                     this, SLOT(jobStateChanged(const QString&, int, int)));
-	    args->clear();
+            args->clear();
         }
     } else {
         delete m_kspeech;

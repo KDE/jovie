@@ -29,11 +29,12 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 
+// KDE includes.
+#include <kdemacros.h>
+#include <kconfig.h>
+
 // KTTS includes.
 #include "talkercode.h"
-#include "pluginproc.h"
-
-typedef QList<PlugInProc*> PlugInList;
 
 class TalkerMgr: public QObject
 {
@@ -42,9 +43,9 @@ class TalkerMgr: public QObject
 public:
 
     /**
-     * Constructor.
+     * singleton accessor
      */
-    explicit TalkerMgr(QObject *parent = 0, const char *name = 0);
+    static TalkerMgr * Instance();
 
     /**
      * Destructor.
@@ -52,21 +53,11 @@ public:
     ~TalkerMgr();
 
     /**
-     * Load all the configured plug ins populating loadedPlugIns
-     */
-    int loadPlugIns(KConfig* config);
-
-    /**
      * Get a list of the talkers configured in KTTS.
      * @return               A QStringList of fully-specified talker codes, one
-     *                       for each talker user has configured.
+     *                       for each talker available in speech-dispatcher
      */
     QStringList getTalkers();
-
-    /**
-     * Returns a list of all the loaded plugins.
-     */
-    PlugInList getLoadedPlugIns();
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.
@@ -76,17 +67,7 @@ public:
      * If a plugin has not been loaded to match the talker, returns the default
      * plugin.
      */
-    int talkerToPluginIndex(const QString& talker) const;
-
-    /**
-     * Given a talker code, returns pointer to the closest matching plugin.
-     * @param talker          The talker (language) code.
-     * @return                Pointer to closest matching plugin.
-     *
-     * If a plugin has not been loaded to match the talker, returns the default
-     * plugin.
-     */
-    PlugInProc* talkerToPlugin(const QString& talker) const;
+    //int talkerToPluginIndex(const QString& talker) const;
 
     /**
      * Given a talker code, returns the parsed TalkerCode of the closest matching Talker.
@@ -146,17 +127,19 @@ public:
 private:
 
     /**
+     * Constructor.
+     */
+    explicit TalkerMgr(QObject *parent = 0);
+
+    /**
      * Array of the loaded plug ins for different Talkers.
      * Array of parsed Talker Codes for the plugins.
      */
-    PlugInList m_loadedPlugIns;
+    //PlugInList m_loadedPlugIns;
     QStringList m_loadedTalkerIds;
     TalkerCode::TalkerCodeList m_loadedTalkerCodes;
 
-    /**
-     * Cache of talker codes and index of closest matching Talker.
-     */
-    mutable QMap<QString,int> m_talkerToPlugInCache;
+    static TalkerMgr * m_instance;
 };
 
 #endif      // TALKERMGR_H

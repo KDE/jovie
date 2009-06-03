@@ -45,7 +45,6 @@
 
 // KTTSD includes.
 #include "configdata.h"
-#include "speechdata.h"
 #include "talkermgr.h"
 #include "speaker.h"
 
@@ -57,19 +56,13 @@
 class KSpeechPrivate
 {
     KSpeechPrivate() :
-        configData(NULL),
-        talkerMgr(NULL),
-        speechData(NULL),
-        speaker(NULL)
+        configData(NULL)
     {
     }
     
     ~KSpeechPrivate()
     {
         delete configData;
-        delete talkerMgr;
-        delete speechData;
-        delete speaker;
     }
 
     friend class KSpeech;
@@ -84,21 +77,6 @@ protected:
     * Configuration data.
     */
     ConfigData* configData;
-    
-    /*
-    * TalkerMgr keeps a list of all the Talkers (synth plugins).
-    */
-    TalkerMgr* talkerMgr;
-
-    /*
-    * SpeechData containing all the data and the manipulating methods for all KTTSD
-    */
-    SpeechData* speechData;
-
-    /*
-    * Speaker that will be run as another thread, actually saying the messages, warnings, and texts
-    */
-    Speaker* speaker;
 };
 
 /* KSpeech Class ========================================================= */
@@ -117,7 +95,8 @@ KSpeech::KSpeech(QObject *parent) :
 
 KSpeech::~KSpeech(){
     kDebug() << "KSpeech::~KSpeech:: Stopping KTTSD service";
-    if (d->speaker) d->speaker->requestExit();
+    if (Speaker::Instance())
+        Speaker::Instance()->requestExit();
     delete d;
     announceEvent("~KSpeech", "kttsdExiting");
     emit kttsdExiting();
@@ -127,7 +106,7 @@ KSpeech::~KSpeech(){
 
 bool KSpeech::isSpeaking() const
 {
-    return d->speaker->isSpeaking();
+    return Speaker::Instance()->isSpeaking();
 }
 
 QString KSpeech::version() const
@@ -137,111 +116,108 @@ QString KSpeech::version() const
 
 QString KSpeech::applicationName()
 {
-    return d->speechData->getAppData(callingAppId())->applicationName();
+    return Speaker::Instance()->getAppData(callingAppId())->applicationName();
 }
 
 void KSpeech::setApplicationName(const QString &applicationName)
 {
-    d->speechData->getAppData(callingAppId())->setApplicationName(applicationName);
+    Speaker::Instance()->getAppData(callingAppId())->setApplicationName(applicationName);
 }
 
 QString KSpeech::defaultTalker()
 {
-    return d->speechData->getAppData(callingAppId())->defaultTalker();
+    return Speaker::Instance()->getAppData(callingAppId())->defaultTalker();
 }
 
 void KSpeech::setDefaultTalker(const QString &defaultTalker)
 {
-    d->speechData->getAppData(callingAppId())->setDefaultTalker(defaultTalker);
+    Speaker::Instance()->getAppData(callingAppId())->setDefaultTalker(defaultTalker);
 }
 
 int KSpeech::defaultPriority()
 {
-    return d->speechData->getAppData(callingAppId())->defaultPriority();
+    return Speaker::Instance()->getAppData(callingAppId())->defaultPriority();
 }
 
 void KSpeech::setDefaultPriority(int defaultPriority)
 {
-    d->speechData->getAppData(callingAppId())->setDefaultPriority((JobPriority)defaultPriority);
+    Speaker::Instance()->getAppData(callingAppId())->setDefaultPriority((JobPriority)defaultPriority);
 }
 
 QString KSpeech::sentenceDelimiter()
 {
-    return d->speechData->getAppData(callingAppId())->sentenceDelimiter();
+    return Speaker::Instance()->getAppData(callingAppId())->sentenceDelimiter();
 }
 
 void KSpeech::setSentenceDelimiter(const QString &sentenceDelimiter)
 {
-    d->speechData->getAppData(callingAppId())->setSentenceDelimiter(sentenceDelimiter);
+    Speaker::Instance()->getAppData(callingAppId())->setSentenceDelimiter(sentenceDelimiter);
 }
 
 bool KSpeech::filteringOn()
 {
-    return d->speechData->getAppData(callingAppId())->filteringOn();
+    return Speaker::Instance()->getAppData(callingAppId())->filteringOn();
 }
 
 void KSpeech::setFilteringOn(bool filteringOn)
 {
-    d->speechData->getAppData(callingAppId())->setFilteringOn(filteringOn);
+    Speaker::Instance()->getAppData(callingAppId())->setFilteringOn(filteringOn);
 }
 
 bool KSpeech::autoConfigureTalkersOn()
 {
-    return d->speechData->getAppData(callingAppId())->autoConfigureTalkersOn();
+    return Speaker::Instance()->getAppData(callingAppId())->autoConfigureTalkersOn();
 }
 
 void KSpeech::setAutoConfigureTalkersOn(bool autoConfigureTalkersOn)
 {
-    d->speechData->getAppData(callingAppId())->setAutoConfigureTalkersOn(autoConfigureTalkersOn);
+    Speaker::Instance()->getAppData(callingAppId())->setAutoConfigureTalkersOn(autoConfigureTalkersOn);
 }
 
 bool KSpeech::isApplicationPaused()
 {
-    return d->speechData->isApplicationPaused(callingAppId());
+    return Speaker::Instance()->isApplicationPaused(callingAppId());
 }
 
 QString KSpeech::htmlFilterXsltFile()
 {
-    return d->speechData->getAppData(callingAppId())->htmlFilterXsltFile();
+    return Speaker::Instance()->getAppData(callingAppId())->htmlFilterXsltFile();
 }
 
 void KSpeech::setHtmlFilterXsltFile(const QString &htmlFilterXsltFile)
 {
-    d->speechData->getAppData(callingAppId())->setHtmlFilterXsltFile(htmlFilterXsltFile);
+    Speaker::Instance()->getAppData(callingAppId())->setHtmlFilterXsltFile(htmlFilterXsltFile);
 }
 
 QString KSpeech::ssmlFilterXsltFile()
 {
-    return d->speechData->getAppData(callingAppId())->ssmlFilterXsltFile();
+    return Speaker::Instance()->getAppData(callingAppId())->ssmlFilterXsltFile();
 }
 
 void KSpeech::setSsmlFilterXsltFile(const QString &ssmlFilterXsltFile)
 {
-    d->speechData->getAppData(callingAppId())->setSsmlFilterXsltFile(ssmlFilterXsltFile);
+    Speaker::Instance()->getAppData(callingAppId())->setSsmlFilterXsltFile(ssmlFilterXsltFile);
 }
 
 bool KSpeech::isSystemManager()
 {
-    return d->speechData->getAppData(callingAppId())->isSystemManager();
+    return Speaker::Instance()->getAppData(callingAppId())->isSystemManager();
 }
 
 void KSpeech::setIsSystemManager(bool isSystemManager)
 {
-    d->speechData->getAppData(callingAppId())->setIsSystemManager(isSystemManager);
+    Speaker::Instance()->getAppData(callingAppId())->setIsSystemManager(isSystemManager);
 }
 
 int KSpeech::say(const QString &text, int options) {
-    if (!d->speaker) return 0;
     // kDebug() << "KSpeech::say: Adding '" << text << "' to queue.";
-    int jobNum = d->speechData->say(callingAppId(), text, options);
-    d->speaker->doUtterances();
-    return jobNum;
+    return Speaker::Instance()->say(callingAppId(), text, options);
 }
 
 int KSpeech::sayFile(const QString &filename, const QString &encoding)
 {
     // kDebug() << "KSpeech::setFile: Running";
-    if (!d->speaker) return 0;
+    if (!Speaker::Instance()) return 0;
     QFile file(filename);
     int jobNum = 0;
     if ( file.open(QIODevice::ReadOnly) )
@@ -252,9 +228,9 @@ int KSpeech::sayFile(const QString &filename, const QString &encoding)
             QTextCodec* codec = QTextCodec::codecForName(encoding.toLatin1());
             if (codec) stream.setCodec(codec);
         }
-        jobNum = d->speechData->say(callingAppId(), stream.readAll(), 0);
+        jobNum = Speaker::Instance()->say(callingAppId(), stream.readAll(), 0);
         file.close();
-        d->speaker->doUtterances();
+        //Speaker::Instance()->doUtterances();
     }
     return jobNum;
 }
@@ -270,86 +246,79 @@ int KSpeech::sayClipboard()
     // Speak it.
     if (!text.isNull())
     {
-        int jobNum = d->speechData->say(callingAppId(), text, 0);
-        d->speaker->doUtterances();
-        return jobNum;
+        return Speaker::Instance()->say(callingAppId(), text, 0);
     } else
         return 0;
 }
 
 void KSpeech::pause()
 {
-    if (!d->speaker) return;
-    d->speechData->pause(callingAppId());
-    d->speaker->pause(callingAppId());
+    Speaker::Instance()->pause(callingAppId());
 }
 
 void KSpeech::resume()
 {
-    if (!d->speaker) return;
-    d->speechData->resume(callingAppId());
-    d->speaker->doUtterances();
+    Speaker::Instance()->resume(callingAppId());
 }
 
 void KSpeech::removeJob(int jobNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    d->speaker->removeJob(jobNum);
+    Speaker::Instance()->removeJob(jobNum);
 }
 
 void KSpeech::removeAllJobs()
 {
-    d->speaker->removeAllJobs(callingAppId());
+    Speaker::Instance()->removeAllJobs(callingAppId());
 }
 
 int KSpeech::getSentenceCount(int jobNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    return d->speechData->sentenceCount(jobNum);
+    return Speaker::Instance()->sentenceCount(jobNum);
 }
 
 int KSpeech::getCurrentJob()
 {
-    return d->speaker->getCurrentJobNum();
+    return Speaker::Instance()->getCurrentJobNum();
 }
 
 int KSpeech::getJobCount(int priority)
 {
-    return d->speechData->jobCount(callingAppId(), (JobPriority)priority);
+    return Speaker::Instance()->jobCount(callingAppId(), (JobPriority)priority);
 }
 
 QStringList KSpeech::getJobNumbers(int priority)
 {
-    return d->speechData->jobNumbers(callingAppId(), (JobPriority)priority);
+    return Speaker::Instance()->jobNumbers(callingAppId(), (JobPriority)priority);
 }
 
 int KSpeech::getJobState(int jobNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    return d->speechData->jobState(jobNum);
+    return Speaker::Instance()->jobState(jobNum);
 }
 
 QByteArray KSpeech::getJobInfo(int jobNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    return d->speechData->jobInfo(jobNum);
+    return Speaker::Instance()->jobInfo(jobNum);
 }
 
 QString KSpeech::getJobSentence(int jobNum, int sentenceNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    return d->speechData->jobSentence(jobNum, sentenceNum);
+    return Speaker::Instance()->jobSentence(jobNum, sentenceNum);
 }
 
 QStringList KSpeech::getTalkerCodes()
 {
-    if (!d->talkerMgr) return QStringList();
-    return d->talkerMgr->getTalkers();
+    return TalkerMgr::Instance()->getTalkers();
 }
 
 QString KSpeech::talkerToTalkerId(const QString &talker)
 {
-    return d->talkerMgr->talkerCodeToTalkerId(talker);
+    return TalkerMgr::Instance()->talkerCodeToTalkerId(talker);
 }
 
 int KSpeech::getTalkerCapabilities1(const QString &talker)
@@ -376,19 +345,19 @@ QStringList KSpeech::getTalkerVoices(const QString &talker)
 void KSpeech::changeJobTalker(int jobNum, const QString &talker)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    d->speechData->setTalker(jobNum, talker);
+    Speaker::Instance()->setTalker(jobNum, talker);
 }
 
 void KSpeech::moveJobLater(int jobNum)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    d->speaker->moveJobLater(jobNum);
+    Speaker::Instance()->moveJobLater(jobNum);
 }
 
 int KSpeech::moveRelSentence(int jobNum, int n)
 {
     jobNum = applyDefaultJobNum(jobNum);
-    int sentenceNum = d->speaker->moveRelSentence(jobNum, n);
+    int sentenceNum = Speaker::Instance()->moveRelSentence(jobNum, n);
     return sentenceNum;
 }
 
@@ -401,10 +370,7 @@ void KSpeech::showManagerDialog()
 
 void KSpeech::kttsdExit()
 {
-    if(d->speechData)
-       d->speechData->removeAllJobs("kttsd");
-    if(d->speaker)
-       d->speaker->removeAllJobs("kttsd");
+   Speaker::Instance()->removeAllJobs("kttsd");
     announceEvent("kttsdExit", "kttsdExiting");
     emit kttsdExiting();
     qApp->quit();
@@ -414,18 +380,11 @@ void KSpeech::reinit()
 {
     // Restart ourself.
     kDebug() << "KSpeech::reinit: Running";
-    if (d->speaker)
-    {
-        kDebug() << "KSpeech::reinit: Stopping KTTSD service";
-        if (d->speaker->isSpeaking())
-            d->speaker->pause("kttsd");
-        d->speaker->requestExit();
-        QDBusConnection::sessionBus().unregisterObject("/KSpeech");
-    }
-    delete d->speaker;
-    d->speaker = 0;
-    delete d->talkerMgr;
-    d->talkerMgr = 0;
+    kDebug() << "KSpeech::reinit: Stopping KTTSD service";
+    if (Speaker::Instance()->isSpeaking())
+        Speaker::Instance()->pause("kttsd");
+    Speaker::Instance()->requestExit();
+    QDBusConnection::sessionBus().unregisterObject("/KSpeech");
     if (ready()) {
         QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
     }
@@ -440,19 +399,24 @@ void KSpeech::setCallingAppId(const QString& appId)
 
 bool KSpeech::initializeConfigData()
 {
-    if (d->configData) delete d->configData;
+    if (d->configData) {
+        delete d->configData;
+    }
     d->configData = new ConfigData(KGlobal::config().data());
     return true;
 }
 
 bool KSpeech::ready()
 {
-    if (d->speaker) return true;
+    // TODO: add a check here to see if kttsd is ready (Speaker::Instance() will always be true...)
+    if (Speaker::Instance())
+        return true;
     kDebug() << "KSpeech::ready: Starting KTTSD service";
-    if (!initializeSpeechData()) return false;
-    if (!initializeTalkerMgr()) return false;
-    if (!initializeSpeaker()) return false;
-    d->speaker->doUtterances();
+//    if (!initializeSpeechData()) return false;
+    if (!initializeTalkerMgr())
+        return false;
+    if (!initializeSpeaker())
+        return false;
     announceEvent("ready", "kttsdStarted");
     emit kttsdStarted();
     return true;
@@ -460,93 +424,72 @@ bool KSpeech::ready()
 
 bool KSpeech::initializeSpeechData()
 {
-    // Create speechData object.
-    if (!d->speechData)
-    {
-        d->speechData = new SpeechData();
-        connect (d->speechData, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
-            this, SLOT(slotJobStateChanged(const QString&, int, KSpeech::JobState)));
-        connect (d->speechData, SIGNAL(filteringFinished()),
-            this, SLOT(slotFilteringFinished()));
-        
-    }
-    if (!d->configData) initializeConfigData();
-    d->speechData->setConfigData(d->configData);
-
-    // Establish ourself as a System Manager application.
-    d->speechData->getAppData("kttsd")->setIsSystemManager(true);
-    
     return true;
 }
 
 bool KSpeech::initializeTalkerMgr()
 {
-    if (!d->talkerMgr)
-    {
-        if (!d->speechData) initializeSpeechData();
-
-        d->talkerMgr = new TalkerMgr(this, "kttsdtalkermgr");
-        int load = d->talkerMgr->loadPlugIns(d->configData->config());
-        // If no Talkers configured, try to autoconfigure one, first in the user's
-        // desktop language, but if that fails, fallback to English.
-        if (load < 0)
-        {
-            QString languageCode = KGlobal::locale()->language();
-            if (d->talkerMgr->autoconfigureTalker(languageCode, d->configData->config()))
-                load = d->talkerMgr->loadPlugIns(d->configData->config());
-            else
-            {
-                if (d->talkerMgr->autoconfigureTalker("en", d->configData->config()))
-                    load = d->talkerMgr->loadPlugIns(d->configData->config());
-            }
-        }
-        if (load < 0)
-        {
-            // TODO: Would really like to eliminate ALL GUI stuff from kttsd.  Find
-            // a better way to do this.
-            delete d->speaker;
-            d->speaker = 0;
-            delete d->talkerMgr;
-            d->talkerMgr = 0;
-            delete d->speechData;
-            d->speechData = 0;
-            kDebug() << "KSpeech::initializeTalkerMgr: no Talkers have been configured.";
-            // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
-            QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
-            KMessageBox::ButtonCode msgResult;
-            if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
-            {
-                if (KMessageBox::questionYesNo(
-                    0,
-                    i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
-                        "Would you like to configure it now?"),
-                    i18n("KTTS Not Configured"),
-                    KGuiItem(i18n("Configure")),
-                    KGuiItem(i18n("Do Not Configure")),
-                    dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
-            }
-            if (msgResult == KMessageBox::Yes) showManagerDialog();
-            return false;
-        }
-    }
-    d->speechData->setTalkerMgr(d->talkerMgr);
+    //int load = TalkerMgr::Instance()->loadPlugIns(d->configData->config());
+    //// If no Talkers configured, try to autoconfigure one, first in the user's
+    //// desktop language, but if that fails, fallback to English.
+    //if (load < 0)
+    //{
+    //    QString languageCode = KGlobal::locale()->language();
+    //    if (TalkerMgr::Instance()->autoconfigureTalker(languageCode, d->configData->config()))
+    //        load = TalkerMgr::Instance()->loadPlugIns(d->configData->config());
+    //    else
+    //    {
+    //        if (TalkerMgr::Instance()->autoconfigureTalker("en", d->configData->config()))
+    //            load = TalkerMgr::Instance()->loadPlugIns(d->configData->config());
+    //    }
+    //}
+    //if (load < 0)
+    //{
+    //    // TODO: Would really like to eliminate ALL GUI stuff from kttsd.  Find
+    //    // a better way to do this.
+    //    kDebug() << "KSpeech::initializeTalkerMgr: no Talkers have been configured.";
+    //    // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
+    //    QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
+    //    KMessageBox::ButtonCode msgResult;
+    //    if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
+    //    {
+    //        if (KMessageBox::questionYesNo(
+    //            0,
+    //            i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
+    //                "Would you like to configure it now?"),
+    //            i18n("KTTS Not Configured"),
+    //            KGuiItem(i18n("Configure")),
+    //            KGuiItem(i18n("Do Not Configure")),
+    //            dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
+    //    }
+    //    if (msgResult == KMessageBox::Yes) showManagerDialog();
+    //    return false;
+    //}
     return true;
 }
 
 bool KSpeech::initializeSpeaker()
 {
-    // kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker";
+    kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker";
 
-    if (!d->talkerMgr) initializeTalkerMgr();
-
-    // Create speaker object and load plug ins;
-    d->speaker = new Speaker(d->speechData, d->talkerMgr, this);
-
-    connect (d->speaker, SIGNAL(marker(const QString&, int, KSpeech::MarkerType, const QString&)),
+    connect (Speaker::Instance(), SIGNAL(marker(const QString&, int, KSpeech::MarkerType, const QString&)),
         this, SLOT(slotMarker(const QString&, int, KSpeech::MarkerType, const QString&)));
         
-    d->speaker->setConfigData(d->configData);
+    Speaker::Instance()->setConfigData(d->configData);
 
+    // Create speechData object.
+    connect (Speaker::Instance(), SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
+        this, SLOT(slotJobStateChanged(const QString&, int, KSpeech::JobState)));
+    connect (Speaker::Instance(), SIGNAL(filteringFinished()),
+        this, SLOT(slotFilteringFinished()));
+
+    if (!d->configData)
+        initializeConfigData();
+    Speaker::Instance()->setConfigData(d->configData);
+
+    // Establish ourself as a System Manager application.
+    Speaker::Instance()->getAppData("kttsd")->setIsSystemManager(true);
+    
     return true;
 }
 
@@ -565,7 +508,7 @@ void KSpeech::slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType m
 
 void KSpeech::slotFilteringFinished()
 {
-    d->speaker->doUtterances();
+    //Speaker::Instance()->doUtterances();
 }
 
 QString KSpeech::callingAppId()
@@ -581,9 +524,9 @@ int KSpeech::applyDefaultJobNum(int jobNum)
     int jNum = jobNum;
     if (!jNum)
     {
-        jNum = d->speechData->findJobNumByAppId(callingAppId());
+        jNum = Speaker::Instance()->findJobNumByAppId(callingAppId());
         if (!jNum) jNum = getCurrentJob();
-        if (!jNum) jNum = d->speechData->findJobNumByAppId(QString());
+        if (!jNum) jNum = Speaker::Instance()->findJobNumByAppId(QString());
     }
     return jNum;
 }
@@ -606,6 +549,3 @@ void KSpeech::announceEvent(const QString& slotName, const QString& eventName, c
     kDebug() << "KSpeech::" << slotName << ": emitting DBUS signal " << eventName <<
         " with appId " << appId << " job number " << jobNum << " and state " << SpeechJob::jobStateToStr(state) << endl;
 }
-
-#include "kspeech.moc"
-

@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2403)
+
 set(kspeak_SRCS 
     kspeak.cpp
     main.cpp )

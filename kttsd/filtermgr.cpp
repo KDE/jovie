@@ -48,7 +48,7 @@ FilterMgr::FilterMgr( QObject *parent) :
     m_state = fsIdle;
     m_noSBD = false;
     m_supportsHTML = false;
-    m_talkerCode = 0;
+    //m_talkerCode = 0;
 }
 
 /**
@@ -164,7 +164,7 @@ bool FilterMgr::init()
 QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const QString& appId)
 {
     m_text = inputText;
-    m_talkerCode = talkerCode;
+    //m_talkerCode = talkerCode;
     m_appId = appId;
     m_filterIndex = -1;
     m_filterProc = 0;
@@ -190,7 +190,7 @@ QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, con
 bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QString& appId)
 {
     m_text = inputText;
-    m_talkerCode = talkerCode;
+    //m_talkerCode = talkerCode;
     m_appId = appId;
     m_filterIndex = -1;
     m_filterProc = 0;

@@ -62,10 +62,8 @@
 
 // KTTS includes.
 #include "talkercode.h"
-#include "pluginconf.h"
 #include "filterconf.h"
 #include "testplayer.h"
-#include "player.h"
 #include "selecttalkerdlg.h"
 #include "selectlanguagedlg.h"
 #include "utils.h"
@@ -87,10 +85,6 @@ const QString textPostMsgValue = i18n("Resuming text.");
 
 const bool textPostSndCheckValue = false;
 const QString textPostSndValue = "";
-
-const int timeBoxValue = 100;
-
-const bool keepAudioCheckBoxValue = false;
 
 // Make this a plug in.
 K_PLUGIN_FACTORY(KCMKttsMgrFactory, registerPlugin<KCMKttsMgr>();)
@@ -338,44 +332,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
         i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
     sbdButton->setMenu( sbdPopmenu );
 
-    TestPlayer* testPlayer;
-    Player* player;
-
-    // If Phonon is available, enable its radio button.
-    // Determine if available by loading its plugin.  If it fails, not available.
-    testPlayer = new TestPlayer();
-    player = testPlayer->createPlayerObject(0);
-    if (player)
-    {
-        phononRadioButton->setEnabled(true);
-    }
-    delete player;
-    delete testPlayer;
-
-    // If ALSA is available, enable its radio button.
-    // Determine if available by loading its plugin.  If it fails, not available.
-    testPlayer = new TestPlayer();
-    player = testPlayer->createPlayerObject(2);
-    if (player)
-    {
-        alsaRadioButton->setEnabled(true);
-        pcmLabel->setEnabled(true);
-        pcmComboBox->setEnabled(true);
-        pcmCustom->setEnabled(pcmComboBox->currentText() == "custom");
-        QStringList pcmList = player->getPluginList("");
-        pcmList.append("custom");
-        kDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList;
-        pcmComboBox->clear();
-        pcmComboBox->addItems(pcmList);
-    }
-    delete player;
-    delete testPlayer;
-
-    // Set up Keep Audio Path KURLRequestor.
-    keepAudioPath->setMode(KFile::Directory);
-    keepAudioPath->setUrl(KUrl::fromPath(
-        KStandardDirs::locateLocal("data", "kttsd/audio/")));
-
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
 
@@ -438,28 +394,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     connect(textPostSndCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotTextPostSndCheck_toggled(bool)));
     connect(textPostSnd, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-
-    // Audio tab.
-    connect(phononRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotPhononRadioButton_toggled(bool)));
-    connect(alsaRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotAlsaRadioButton_toggled(bool)));
-    connect(pcmComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotPcmComboBox_activated()));
-    connect(pcmComboBox, SIGNAL(activated(int)),
-            this, SLOT(configChanged()));
-    connect(timeBox, SIGNAL(valueChanged(int)),
-            this, SLOT(timeBox_valueChanged(int)));
-    connect(timeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(timeSlider_valueChanged(int)));
-    connect(timeBox, SIGNAL(valueChanged(int)),
-            this, SLOT(configChanged()));
-    connect(timeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(configChanged()));
-    connect(keepAudioCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(keepAudioCheckBox_toggled(bool)));
-    connect(keepAudioPath, SIGNAL(textChanged(const QString&)),
             this, SLOT(configChanged()));
 
     // Others.
@@ -540,33 +474,6 @@ void KCMKttsMgr::load()
     autostartMgrCheckBox->setChecked(generalConfig.readEntry("AutoStartManager", true));
     autoexitMgrCheckBox->setChecked(generalConfig.readEntry("AutoExitManager", true));
 
-
-    // Audio Output.
-    // Default to Phonon.
-    int audioOutputMethod = 0;
-//    if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
-    if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    audioOutputMethod = generalConfig.readEntry("AudioOutputMethod", audioOutputMethod);
-    switch (audioOutputMethod)
-    {
-        case 0:
-            phononRadioButton->setChecked(true);
-            break;
-        case 2:
-            alsaRadioButton->setChecked(true);
-            break;
-        default:
-            phononRadioButton->setChecked(true);
-    }
-    timeBox->setValue(generalConfig.readEntry("AudioStretchFactor", timeBoxValue));
-    timeBox_valueChanged(timeBox->value());
-    keepAudioCheckBox->setChecked(
-        generalConfig.readEntry("KeepAudio", keepAudioCheckBox->isChecked()));
-    keepAudioPath->setUrl(KUrl::fromPath(
-        generalConfig.readEntry("KeepAudioPath",
-        keepAudioPath->url().path())));
-    keepAudioPath->setEnabled(keepAudioCheckBox->isChecked());
-
     // Last filter ID.  Used to generate a new ID for an added filter.
     m_lastFilterID = 0;
 
@@ -584,30 +491,27 @@ void KCMKttsMgr::load()
         m_languagesToCodes[language] = fullLanguageCode;
     }
 
-    // Query for all the KCMKTTSD SynthPlugins and store the list in offers.
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
-
     // Iterate thru the possible plug ins getting their language support codes.
-    for(int i=0; i < offers.count() ; ++i)
-    {
-        QString synthName = offers[i]->name();
-        QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
-        // Add language codes to the language-to-language code map.
-        QStringList::ConstIterator endLanguages(languageCodes.constEnd());
-        for( QStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
-        {
-            QString language = TalkerCode::languageCodeToLanguage(*it);
-            m_languagesToCodes[language] = *it;
-        }
+    //for(int i=0; i < offers.count() ; ++i)
+    //{
+    //    QString synthName = offers[i]->name();
+    //    QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
+    //    // Add language codes to the language-to-language code map.
+    //    QStringList::ConstIterator endLanguages(languageCodes.constEnd());
+    //    for( QStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
+    //    {
+    //        QString language = TalkerCode::languageCodeToLanguage(*it);
+    //        m_languagesToCodes[language] = *it;
+    //    }
 
-        // All plugins support "Other".
-        // TODO: Eventually, this should not be necessary, since all plugins will know
-        // the languages they support and report them in call to getSupportedLanguages().
-        if (!languageCodes.contains("other")) languageCodes.append("other");
+    //    // All plugins support "Other".
+    //    // TODO: Eventually, this should not be necessary, since all plugins will know
+    //    // the languages they support and report them in call to getSupportedLanguages().
+    //    if (!languageCodes.contains("other")) languageCodes.append("other");
 
-        // Add supported language codes to synthesizer-to-language map.
-        m_synthToLangMap[synthName] = languageCodes;
-    }
+    //    // Add supported language codes to synthesizer-to-language map.
+    //    m_synthToLangMap[synthName] = languageCodes;
+    //}
 
     // Add "Other" language.
     m_languagesToCodes[i18nc("Other language", "Other")] = "other";
@@ -655,82 +559,72 @@ void KCMKttsMgr::load()
 
     // Add at least one unchecked instance of each available filter plugin if there is
     // not already at least one instance and the filter can autoconfig itself.
-    offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
-    for (int i=0; i < offers.count() ; ++i)
-    {
-        QString filterPlugInName = offers[i]->name();
-        QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
-        if (!desktopEntryName.isEmpty() && (countFilterPlugins(filterPlugInName) == 0))
-        {
-            // Must load plugin to determine if it supports multiple instances
-            // and to see if it can autoconfigure itself.
-            KttsFilterConf* filterPlugIn = loadFilterPlugin(desktopEntryName);
-            if (filterPlugIn)
-            {
-                ++m_lastFilterID;
-                QString filterID = QString::number(m_lastFilterID);
-                QString groupName = "Filter_" + filterID;
-                filterPlugIn->load(m_config, groupName);
-                QString userFilterName = filterPlugIn->userPlugInName();
-                if (!userFilterName.isEmpty())
-                {
-                    kDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName;
-                    bool multiInstance = filterPlugIn->supportsMultiInstance();
-                    FilterItem fi;
-                    fi.id = filterID;
-                    fi.userFilterName = userFilterName;
-                    fi.plugInName = filterPlugInName;
-                    fi.desktopEntryName = desktopEntryName;
-                    fi.enabled = true;
-                    fi.multiInstance = multiInstance;
-                    // Determine if plugin is an SBD filter.
-                    bool isSbd = filterPlugIn->isSBD();
-                    if (isSbd)
-                        m_sbdFilterListModel.appendRow(fi);
-                    else
-                        m_filterListModel.appendRow(fi);
-                    KConfigGroup filterConfig(m_config, groupName);
-                    filterPlugIn->save(m_config, groupName);
-                    filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
-                    filterConfig.writeEntry("UserFilterName", userFilterName);
-                    filterConfig.writeEntry("Enabled", isSbd);
-                    filterConfig.writeEntry("MultiInstance", multiInstance);
-                    filterConfig.writeEntry("IsSBD", isSbd);
-                    filterIDsList.append(filterID);
-                } else m_lastFilterID--;
-            } else
-                kDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName
-                    << " DesktopEntryName " << desktopEntryName << endl;
-            delete filterPlugIn;
-        }
-    }
+    //offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
+    //for (int i=0; i < offers.count() ; ++i)
+    //{
+    //    QString filterPlugInName = offers[i]->name();
+    //    QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+    //    if (!desktopEntryName.isEmpty() && (countFilterPlugins(filterPlugInName) == 0))
+    //    {
+    //        // Must load plugin to determine if it supports multiple instances
+    //        // and to see if it can autoconfigure itself.
+    //        KttsFilterConf* filterPlugIn = loadFilterPlugin(desktopEntryName);
+    //        if (filterPlugIn)
+    //        {
+    //            ++m_lastFilterID;
+    //            QString filterID = QString::number(m_lastFilterID);
+    //            QString groupName = "Filter_" + filterID;
+    //            filterPlugIn->load(m_config, groupName);
+    //            QString userFilterName = filterPlugIn->userPlugInName();
+    //            if (!userFilterName.isEmpty())
+    //            {
+    //                kDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName;
+    //                bool multiInstance = filterPlugIn->supportsMultiInstance();
+    //                FilterItem fi;
+    //                fi.id = filterID;
+    //                fi.userFilterName = userFilterName;
+    //                fi.plugInName = filterPlugInName;
+    //                fi.desktopEntryName = desktopEntryName;
+    //                fi.enabled = true;
+    //                fi.multiInstance = multiInstance;
+    //                // Determine if plugin is an SBD filter.
+    //                bool isSbd = filterPlugIn->isSBD();
+    //                if (isSbd)
+    //                    m_sbdFilterListModel.appendRow(fi);
+    //                else
+    //                    m_filterListModel.appendRow(fi);
+    //                KConfigGroup filterConfig(m_config, groupName);
+    //                filterPlugIn->save(m_config, groupName);
+    //                filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
+    //                filterConfig.writeEntry("UserFilterName", userFilterName);
+    //                filterConfig.writeEntry("Enabled", isSbd);
+    //                filterConfig.writeEntry("MultiInstance", multiInstance);
+    //                filterConfig.writeEntry("IsSBD", isSbd);
+    //                filterIDsList.append(filterID);
+    //            } else m_lastFilterID--;
+    //        } else
+    //            kDebug() << "KCMKttsMgr::load: Unable to load filter plugin " << filterPlugInName
+    //                << " DesktopEntryName " << desktopEntryName << endl;
+    //        delete filterPlugIn;
+    //    }
+    //}
     // Rewrite list of FilterIDs in case we added any.
     QString filterIDs = filterIDsList.join(",");
     generalConfig.writeEntry("FilterIDs", filterIDs);
     m_config->sync();
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
-    if (m_talkerListModel.rowCount() == 0)
-    {
-        enableKttsdCheckBox->setChecked(false);
-        enableKttsdCheckBox->setEnabled(false);
-        slotEnableKttsd_toggled(false);
-    }
-
-    // Phonon settings.
-    // None.
-
-    // ALSA settings.
-    KConfigGroup alsaConfig(m_config, "ALSAPlayer");
-    KttsUtils::setCbItemFromText(pcmComboBox, alsaConfig.readEntry("PcmName", "default"));
-    pcmCustom->setText(alsaConfig.readEntry("CustomPcmName", ""));
+    //if (m_talkerListModel.rowCount() == 0)
+    //{
+    //    enableKttsdCheckBox->setChecked(false);
+    //    enableKttsdCheckBox->setEnabled(false);
+    //    slotEnableKttsd_toggled(false);
+    //}
 
     // Update controls based on new states.
     updateTalkerButtons();
     updateFilterButtons();
     updateSbdButtons();
-    slotPhononRadioButton_toggled(phononRadioButton->isChecked());
-    slotAlsaRadioButton_toggled(alsaRadioButton->isChecked());
 
     m_changed = false;
     m_suppressConfigChanged = false;
@@ -758,13 +652,13 @@ void KCMKttsMgr::save()
     generalConfig.writeEntry("TextPreMsg", textPreMsg->text());
 
     generalConfig.writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked());
-    generalConfig.writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
+    //generalConfig.writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
 
     generalConfig.writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
     generalConfig.writeEntry("TextPostMsg", textPostMsg->text());
 
     generalConfig.writeEntry("TextPostSndEnabled", textPostSndCheck->isChecked());
-    generalConfig.writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
+    //generalConfig.writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
 
     // Overall settings.
     generalConfig.writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
@@ -773,28 +667,18 @@ void KCMKttsMgr::save()
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     // Enable checkbox if at least one Talker is configured.
     bool enableKttsdWasToggled = false;
-    if (m_talkerListModel.rowCount() == 0)
-    {
-        enableKttsdWasToggled = enableKttsdCheckBox->isChecked();
-        enableKttsdCheckBox->setChecked(false);
-        enableKttsdCheckBox->setEnabled(false);
+    //if (m_talkerListModel.rowCount() == 0)
+    //{
+        //enableKttsdWasToggled = enableKttsdCheckBox->isChecked();
+        //enableKttsdCheckBox->setChecked(false);
+        //enableKttsdCheckBox->setEnabled(false);
         // Might as well zero LastTalkerID as well.
-        m_lastTalkerID = 0;
-    }
-    else
+        //m_lastTalkerID = 0;
+    //}
+    //else
         enableKttsdCheckBox->setEnabled(true);
 
     generalConfig.writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
-
-
-    // Audio Output.
-    int audioOutputMethod = 0;
-    // if (gstreamerRadioButton->isChecked()) audioOutputMethod = 1;
-    if (alsaRadioButton->isChecked()) audioOutputMethod = 2;
-    generalConfig.writeEntry("AudioOutputMethod", audioOutputMethod);
-    generalConfig.writeEntry("AudioStretchFactor", timeBox->value());
-    generalConfig.writeEntry("KeepAudio", keepAudioCheckBox->isChecked());
-    generalConfig.writeEntry("KeepAudioPath", keepAudioPath->url().path());
 
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
@@ -847,11 +731,6 @@ void KCMKttsMgr::save()
                 m_config->deleteGroup(groupName, 0);
         }
     }
-
-    // ALSA settings.
-    KConfigGroup alsaConfig(m_config, "ALSAPlayer");
-    alsaConfig.writeEntry("PcmName", pcmComboBox->currentText());
-    alsaConfig.writeEntry("CustomPcmName", pcmCustom->text());
 
     m_config->sync();
 
@@ -957,32 +836,6 @@ void KCMKttsMgr::defaults() {
                 textPostSnd->setUrl(KUrl::fromPath(textPostSndValue));
             }
             break;
-
-        case wpAudio:
-            // Default to Phonon.
-            if (!phononRadioButton->isChecked())
-            {
-                changed = true;
-                phononRadioButton->setChecked(true);
-            }
-            if (timeBox->value() != timeBoxValue)
-            {
-                changed = true;
-                timeBox->setValue(timeBoxValue);
-            }
-            if (keepAudioCheckBox->isChecked() !=
-                 keepAudioCheckBoxValue)
-            {
-                changed = true;
-                keepAudioCheckBox->setChecked(keepAudioCheckBoxValue);
-            }
-            if (keepAudioPath->url().path() != KStandardDirs::locateLocal("data", "kttsd/audio/"))
-            {
-                changed = true;
-                keepAudioPath->setUrl(KUrl::fromPath(
-                    KStandardDirs::locateLocal("data", "kttsd/audio/")));
-            }
-            keepAudioPath->setEnabled(keepAudioCheckBox->isEnabled());
     }
     if (changed) configChanged();
 }
@@ -1024,50 +877,6 @@ const KAboutData* KCMKttsMgr::aboutData() const{
     about->addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
 
     return about;
-}
-
-/**
-* Loads the configuration plug in for a named talker plug in and type.
-* @param name             DesktopEntryName of the Synthesizer.
-* @return                 Pointer to the configuration plugin for the Talker.
-*/
-PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
-{
-    // kDebug() << "KCMKttsMgr::loadPlugin: Running";
-
-    // Find the plugin.
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin",
-        QString("DesktopEntryName == '%1'").arg(name));
-
-    if (offers.count() == 1)
-    {
-        // When the entry is found, load the plug in
-        // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
-        if(factory){
-            // If the factory is created successfully, instantiate the PlugInConf class for the
-            // specific plug in to get the plug in configuration object.
-            PlugInConf *plugIn = KLibLoader::createInstance<PlugInConf>(
-                    offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()));
-            if(plugIn){
-                // If everything went ok, return the plug in pointer.
-                return plugIn;
-            } else {
-                // Something went wrong, returning null.
-                kDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to instantiate PlugInConf class for plugin " << name;
-                return NULL;
-            }
-        } else {
-            // Something went wrong, returning null.
-            kDebug() << "KCMKttsMgr::loadTalkerPlugin: Unable to create Factory object for plugin "
-                << name << endl;
-            return NULL;
-        }
-    }
-    // The plug in was not found (unexpected behaviour, returns null).
-    kDebug() << "KCMKttsMgr::loadTalkerPlugin: KTrader did not return an offer for plugin "
-        << name << endl;
-    return NULL;
 }
 
 /**
@@ -1137,7 +946,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
     {
-        SelectLanguageDlg* dlg = new SelectLanguageDlg(
+        QPointer<SelectLanguageDlg> dlg = new SelectLanguageDlg(
             this,
             i18n("Select Language"),
             QStringList(),
@@ -1169,73 +978,73 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     if (desktopEntryName.isEmpty()) return;
 
     // Load the plugin.
-    m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
-    if (!m_loadedTalkerPlugIn) return;
+    //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
+    //if (!m_loadedTalkerPlugIn) return;
 
-    // Give plugin the user's language code and permit plugin to autoconfigure itself.
-    m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
+    //// Give plugin the user's language code and permit plugin to autoconfigure itself.
+    //m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
+    //m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
 
-    // If plugin was able to configure itself, it returns a full talker code.
-    // If not, display configuration dialog for user to configure the plugin.
-    QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
-    if (talkerCode.isEmpty())
-    {
-        // Display configuration dialog.
-        configureTalker();
-        // Did user Cancel?
-        if (!m_loadedTalkerPlugIn)
-        {
-            delete m_configDlg;
-            m_configDlg = 0;
-            return;
-        }
-        talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
-    }
+    //// If plugin was able to configure itself, it returns a full talker code.
+    //// If not, display configuration dialog for user to configure the plugin.
+    //QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
+    //if (talkerCode.isEmpty())
+    //{
+    //    // Display configuration dialog.
+    //    configureTalker();
+    //    // Did user Cancel?
+    //    if (!m_loadedTalkerPlugIn)
+    //    {
+    //        delete m_configDlg;
+    //        m_configDlg = 0;
+    //        return;
+    //    }
+    //    talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
+    //}
 
-    // If still no Talker Code, abandon.
-    if (!talkerCode.isEmpty())
-    {
-        // Let plugin save its configuration.
-        m_loadedTalkerPlugIn->save(m_config, QString("Talker_"+talkerID));
+    //// If still no Talker Code, abandon.
+    //if (!talkerCode.isEmpty())
+    //{
+    //    // Let plugin save its configuration.
+    //    m_loadedTalkerPlugIn->save(m_config, QString("Talker_"+talkerID));
 
-        // Record last Talker ID used for next add.
-        m_lastTalkerID = talkerID.toInt();
+    //    // Record last Talker ID used for next add.
+    //    m_lastTalkerID = talkerID.toInt();
 
-        // Record configuration data.  Note, might as well do this now.
-        KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
-        talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
-        talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-        talkerConfig.writeEntry("TalkerCode", talkerCode);
-        m_config->sync();
+    //    // Record configuration data.  Note, might as well do this now.
+    //    KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
+    //    talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
+    //    talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
+    //    talkerConfig.writeEntry("TalkerCode", talkerCode);
+    //    m_config->sync();
 
-        // Add to list of Talkers.
-        TalkerCode tc = TalkerCode(talkerCode);
-        tc.setId(talkerID);
-        tc.setDesktopEntryName(desktopEntryName);
-        m_talkerListModel.appendRow(tc);
+    //    // Add to list of Talkers.
+    //    TalkerCode tc = TalkerCode(talkerCode);
+    //    tc.setId(talkerID);
+    //    tc.setDesktopEntryName(desktopEntryName);
+    //    m_talkerListModel.appendRow(tc);
 
-        // Make sure visible.
-        const QModelIndex modelIndex = m_talkerListModel.index(m_talkerListModel.rowCount(),
-            0, QModelIndex());
-        talkersView->scrollTo(modelIndex);
+    //    // Make sure visible.
+    //    const QModelIndex modelIndex = m_talkerListModel.index(m_talkerListModel.rowCount(),
+    //        0, QModelIndex());
+    //    talkersView->scrollTo(modelIndex);
 
-        // Select the new item, update buttons.
-        talkersView->setCurrentIndex(modelIndex);
-        updateTalkerButtons();
+    //    // Select the new item, update buttons.
+    //    talkersView->setCurrentIndex(modelIndex);
+    //    updateTalkerButtons();
 
-        // Inform Control Center that change has been made.
-        configChanged();
-    }
+    //    // Inform Control Center that change has been made.
+    //    configChanged();
+    //}
 
-    // Don't need plugin in memory anymore.
-    delete m_loadedTalkerPlugIn;
-    m_loadedTalkerPlugIn = 0;
-    if (m_configDlg)
-    {
-        delete m_configDlg;
-        m_configDlg = 0;
-    }
+    //// Don't need plugin in memory anymore.
+    //delete m_loadedTalkerPlugIn;
+    //m_loadedTalkerPlugIn = 0;
+    //if (m_configDlg)
+    //{
+    //    delete m_configDlg;
+    //    m_configDlg = 0;
+    //}
 
     // kDebug() << "KCMKttsMgr::addTalker: done.";
 }
@@ -1674,34 +1483,6 @@ void KCMKttsMgr::slotTextPostSndCheck_toggled(bool checked)
 }
 
 /**
-* This signal is emitted whenever user checks/unchecks the Phonon radio button.
-*/
-void KCMKttsMgr::slotPhononRadioButton_toggled(bool state)
-{
-    Q_UNUSED(state);
-    configChanged();
-}
-
-/**
-* This signal is emitted whenever user checks/unchecks the ALSA radio button.
-*/
-void KCMKttsMgr::slotAlsaRadioButton_toggled(bool state)
-{
-    pcmLabel->setEnabled(state);
-    pcmComboBox->setEnabled(state);
-    pcmCustom->setEnabled(state && pcmComboBox->currentText() == "custom");
-    configChanged();
-}
-
-/**
- * This is emitted whenever user activates the ALSA pcm combobox.
- */
-void KCMKttsMgr::slotPcmComboBox_activated()
-{
-    pcmCustom->setEnabled(pcmComboBox->currentText() == "custom");
-}
-
-/**
 * This slot is called whenever KTTSD starts or restarts.
 */
 void KCMKttsMgr::kttsdStarted()
@@ -1790,57 +1571,57 @@ void KCMKttsMgr::kttsdExiting()
 */
 void KCMKttsMgr::slotConfigureTalkerButton_clicked()
 {
-    // Get highlighted plugin from Talker ListView and load into memory.
-    QModelIndex modelIndex = talkersView->currentIndex();
-    if (!modelIndex.isValid()) return;
-    TalkerCode tc = m_talkerListModel.getRow(modelIndex.row());
-    QString talkerID = tc.id();
-    QString synthName = tc.plugInName();
-    QString desktopEntryName = tc.desktopEntryName();
-    QString languageCode = tc.fullLanguageCode();
-    m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
-    if (!m_loadedTalkerPlugIn) return;
-    // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully.";
+    //// Get highlighted plugin from Talker ListView and load into memory.
+    //QModelIndex modelIndex = talkersView->currentIndex();
+    //if (!modelIndex.isValid()) return;
+    //TalkerCode tc = m_talkerListModel.getRow(modelIndex.row());
+    //QString talkerID = tc.id();
+    //QString synthName = tc.plugInName();
+    //QString desktopEntryName = tc.desktopEntryName();
+    //QString languageCode = tc.fullLanguageCode();
+    //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
+    //if (!m_loadedTalkerPlugIn) return;
+    //// kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully.";
 
-    // Tell plugin to load its configuration.
-    m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    // kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID;
-    m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
+    //// Tell plugin to load its configuration.
+    //m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
+    //// kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID;
+    //m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
 
-    // Display configuration dialog.
-    configureTalker();
+    //// Display configuration dialog.
+    //configureTalker();
 
-    // Did user Cancel?
-    if (!m_loadedTalkerPlugIn)
-    {
-        delete m_configDlg;
-        m_configDlg = 0;
-        return;
-    }
+    //// Did user Cancel?
+    //if (!m_loadedTalkerPlugIn)
+    //{
+    //    delete m_configDlg;
+    //    m_configDlg = 0;
+    //    return;
+    //}
 
-    // Get Talker Code.  Note that plugin may return a code different from before.
-    QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
+    //// Get Talker Code.  Note that plugin may return a code different from before.
+    //QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
 
-    // If plugin was successfully configured, save its configuration.
-    if (!talkerCode.isEmpty())
-    {
-        m_loadedTalkerPlugIn->save(m_config, QString("Talker_")+talkerID);
-        talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-        KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
-        talkerConfig.writeEntry("TalkerCode", talkerCode);
-        m_config->sync();
+    //// If plugin was successfully configured, save its configuration.
+    //if (!talkerCode.isEmpty())
+    //{
+    //    m_loadedTalkerPlugIn->save(m_config, QString("Talker_")+talkerID);
+    //    talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
+    //    KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
+    //    talkerConfig.writeEntry("TalkerCode", talkerCode);
+    //    m_config->sync();
 
-        // Update display.
-        tc.setTalkerCode(talkerCode);
-        m_talkerListModel.updateRow(modelIndex.row(), tc);
-        // Inform Control Center that configuration has changed.
-        configChanged();
-    }
+    //    // Update display.
+    //    tc.setTalkerCode(talkerCode);
+    //    m_talkerListModel.updateRow(modelIndex.row(), tc);
+    //    // Inform Control Center that configuration has changed.
+    //    configChanged();
+    //}
 
-    delete m_loadedTalkerPlugIn;
-    m_loadedTalkerPlugIn = 0;
-    delete m_configDlg;
-    m_configDlg = 0;
+    //delete m_loadedTalkerPlugIn;
+    //m_loadedTalkerPlugIn = 0;
+    //delete m_configDlg;
+    //m_configDlg = 0;
 }
 
 void KCMKttsMgr::slotConfigureNormalFilterButton_clicked()
@@ -1925,8 +1706,6 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
         configChanged();
     }
 
-    delete m_loadedFilterPlugIn;
-    m_loadedFilterPlugIn = 0;
     delete m_configDlg;
     m_configDlg = 0;
 }
@@ -1937,40 +1716,26 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
 */
 void KCMKttsMgr::configureTalker()
 {
-    if (!m_loadedTalkerPlugIn) return;
-    m_configDlg = new KDialog(this);
-    m_configDlg->setCaption(i18n("Talker Configuration"));
-    m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
-    m_configDlg->setDefaultButton(KDialog::Cancel);
-    m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
-    m_configDlg->setHelp("configure-plugin", "kttsd");
-    m_configDlg->enableButtonOk(false);
-    connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
-    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));
-    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
-    // Create a Player object for the plugin to use for testing.
-    int playerOption = 0;
-    QString sinkName;
-    if (phononRadioButton->isChecked()) {
-        playerOption = 0;
-    }
-    if (alsaRadioButton->isChecked()) {
-        playerOption = 2;
-        sinkName = pcmComboBox->currentText();
-    }
-    float audioStretchFactor = 1.0/(float(timeBox->value())/100.0);
-    // kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName;
-    TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer",
-        playerOption, audioStretchFactor, sinkName);
-    m_loadedTalkerPlugIn->setPlayer(testPlayer);
-    // Display the dialog.
-    m_configDlg->exec();
-    // Done with Player object.
-    if (m_loadedTalkerPlugIn)
-    {
-        delete testPlayer;
-        m_loadedTalkerPlugIn->setPlayer(0);
-    }
+    //if (!m_loadedTalkerPlugIn) return;
+    //m_configDlg = new KDialog(this);
+    //m_configDlg->setCaption(i18n("Talker Configuration"));
+    //m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
+    //m_configDlg->setDefaultButton(KDialog::Cancel);
+    ////m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
+    //m_configDlg->setHelp("configure-plugin", "kttsd");
+    //m_configDlg->enableButtonOk(false);
+    //connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
+    //connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));
+    //connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
+    //// Create a Player object for the plugin to use for testing.
+    //int playerOption = 0;
+    //QString sinkName;
+    //// kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName;
+    ////TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer",
+    ////    playerOption, audioStretchFactor, sinkName);
+    ////m_loadedTalkerPlugIn->setPlayer(testPlayer);
+    //// Display the dialog.
+    //m_configDlg->exec();
 }
 
 /**
@@ -2013,12 +1778,6 @@ int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
     return cnt;
 }
 
-void KCMKttsMgr::keepAudioCheckBox_toggled(bool checked)
-{
-    keepAudioPath->setEnabled(checked);
-    configChanged();
-}
-
 // Basically the slider values are logarithmic (0,...,1000) whereas percent
 // values are linear (50%,...,200%).
 //
@@ -2035,17 +1794,9 @@ int KCMKttsMgr::sliderToPercent(int sliderValue) {
     return (int)floor(0.5 + exp (sliderValue/alpha + log(50.0)));
 }
 
-void KCMKttsMgr::timeBox_valueChanged(int percentValue) {
-    timeSlider->setValue (percentToSlider (percentValue));
-}
-
-void KCMKttsMgr::timeSlider_valueChanged(int sliderValue) {
-    timeBox->setValue (sliderToPercent (sliderValue));
-}
-
 void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
 {
-    m_configDlg->enableButtonOk(!m_loadedTalkerPlugIn->getTalkerCode().isEmpty());
+    //m_configDlg->enableButtonOk(!m_loadedTalkerPlugIn->getTalkerCode().isEmpty());
 }
 
 void KCMKttsMgr::slotConfigFilterDlg_ConfigChanged()
@@ -2055,7 +1806,7 @@ void KCMKttsMgr::slotConfigFilterDlg_ConfigChanged()
 
 void KCMKttsMgr::slotConfigTalkerDlg_DefaultClicked()
 {
-    m_loadedTalkerPlugIn->defaults();
+    //m_loadedTalkerPlugIn->defaults();
 }
 
 void KCMKttsMgr::slotConfigFilterDlg_DefaultClicked()
@@ -2065,8 +1816,8 @@ void KCMKttsMgr::slotConfigFilterDlg_DefaultClicked()
 
 void KCMKttsMgr::slotConfigTalkerDlg_CancelClicked()
 {
-    delete m_loadedTalkerPlugIn;
-    m_loadedTalkerPlugIn = 0;
+    //delete m_loadedTalkerPlugIn;
+    //m_loadedTalkerPlugIn = 0;
 }
 
 void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()

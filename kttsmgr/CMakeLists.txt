@@ -1,4 +1,6 @@
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2401)
+
 set(kttsmgr_SRCS 
     kttsmgr.cpp )
 

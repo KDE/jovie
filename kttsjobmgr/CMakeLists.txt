@@ -1,4 +1,6 @@
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2402)
+
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd ${CMAKE_BINARY_DIR}/kttsd/libkttsd )
 
 

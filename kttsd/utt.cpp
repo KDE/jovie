@@ -31,7 +31,6 @@
 // KDE includes.
 
 // KTTS includes.
-#include <pluginproc.h>
 #include <utils.h>
 
 // KTTSD includes.
@@ -48,11 +47,8 @@ public:
         seq(0),
         isSsml(false),
         state(Utt::usNone),
-        transformer(NULL),
-        plugin(NULL),
-        audioStretcher(NULL),
-        audioUrl(QString()),
-        audioPlayer(NULL) {}
+        transformer(NULL)
+{}
         
     ~UttPrivate() {}
     
@@ -67,14 +63,6 @@ protected:
     bool isSsml;                 /* True if the utterance contains SSML markup. */
     Utt::uttState state;         /* Processing state of the utterance. */
     SSMLConvert* transformer;    /* XSLT transformer. */
-    PlugInProc* plugin;          /* The plugin that synthesizes the utterance. */
-    Stretcher* audioStretcher;   /* Audio stretcher object.  Adjusts speed. */
-    QString audioUrl;            /* Filename containing synthesized audio.  Null if
-                                    plugin has not yet synthesized the utterance, or if
-                                    plugin does not support synthesis. */
-    Player* audioPlayer;         /* The audio player audibilizing the utterance.  Null
-                                    if not currently audibilizing or if plugin doesn't
-                                    support synthesis. */
 };
 
 Utt::Utt() : d(new UttPrivate()){}
@@ -82,8 +70,7 @@ Utt::Utt() : d(new UttPrivate()){}
 Utt::Utt(uttType utType,
     const QString& appId,
     SpeechJob* job,
-    const QString& sentence,
-    PlugInProc* pluginproc) :
+    const QString& sentence) :
     
     d(new UttPrivate())
 {
@@ -92,7 +79,6 @@ Utt::Utt(uttType utType,
     d->job = job;
     if (job) job->incRefCount();
     d->sentence = sentence;
-    d->plugin = pluginproc;
     if (job)
         d->seq = job->seq();
     if (sentence.isEmpty())
@@ -103,12 +89,11 @@ Utt::Utt(uttType utType,
 /**
 * Constructs a sound icon type of utterance.
 */
-Utt::Utt(uttType utType, const QString& appId, const QString& audioUrl) :
+Utt::Utt(uttType utType, const QString& appId) :
     d(new UttPrivate())
 {
     d->utType = utType;
     d->appId = appId;
-    d->audioUrl = audioUrl;
     setInitialState();    
 }
 
@@ -154,16 +139,10 @@ void Utt::setState(uttState state)
             case usWaitingTransform:
             case usTransforming:
             case usWaitingSay:
-            case usWaitingSynth:
                 break;
             case usSaying:
                 d->job->setSentenceNum(d->seq);
                 d->job->setState(KSpeech::jsSpeaking);
-                break;
-            case usSynthing:
-            case usSynthed:
-            case usStretching:
-            case usStretched:
                 break;
             case usPlaying:
                 d->job->setSentenceNum(d->seq);
@@ -184,15 +163,6 @@ void Utt::setState(uttState state)
 
 SSMLConvert* Utt::transformer() const { return d->transformer; }
 void Utt::setTransformer(SSMLConvert* transformer) { d->transformer = transformer; }
-PlugInProc* Utt::plugin() const { return d->plugin; }
-void Utt::setPlugin(PlugInProc* plugin) { d->plugin = plugin; }
-Stretcher* Utt::audioStretcher() const { return d->audioStretcher; }
-void Utt::setAudioStretcher(Stretcher* stretcher) { d->audioStretcher = stretcher; }
-QString Utt::audioUrl() const { return d->audioUrl; }
-void Utt::setAudioUrl(const QString& audioUrl) { d->audioUrl = audioUrl; }
-
-Player* Utt::audioPlayer() const { return d->audioPlayer; }
-void Utt::setAudioPlayer(Player* player) { d->audioPlayer = player; }
 
 bool Utt::detectSsml()
 {
@@ -209,15 +179,7 @@ void Utt::setInitialState()
         d->state = usWaitingTransform;
         return;
     }
-    if (d->plugin) {
-        if (d->plugin->supportsSynth())
-            d->state = usWaitingSynth;
-        else
-            d->state = usWaitingSay;
-    } else {
-        if (!d->audioUrl.isEmpty() && (utInterruptSnd == d->utType || utResumeSnd == d->utType))
-            d->state = usStretched;
-    }
+    d->state = usWaitingSay;
 }
 
 /*static*/
@@ -246,12 +208,7 @@ QString Utt::uttStateToStr(uttState state)
         case usWaitingTransform:    return "usWaitingTransform";
         case usTransforming:        return "usTransforming";
         case usWaitingSay:          return "usWaitingSay";
-        case usWaitingSynth:        return "usWaitingSynth";
         case usSaying:              return "usSaying";
-        case usSynthing:            return "usSynthing";
-        case usSynthed:             return "usSynthed";
-        case usStretching:          return "usStretching";
-        case usStretched:           return "usStretched";
         case usPlaying:             return "usPlaying";
         case usPaused:              return "usPaused";
         case usPreempted:           return "usPreempted";

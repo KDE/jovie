@@ -2,10 +2,11 @@
   Speaker class.
   
   This class is in charge of getting the messages, warnings and text from
-  the queue and calling the plugins to actually speak the texts.
+  the queue and calling speech-dispatcher to actually speak the texts.
   -------------------
   Copyright:
   (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -32,9 +33,9 @@
 
 // Qt includes. 
 #include <QtCore/QFile>
-#include <QtCore/QTimer>
 #include <QtCore/QDir>
 #include <QtGui/QApplication>
+#include <QtDBus/QtDBus>
 
 // KDE includes.
 #include <kdebug.h>
@@ -47,39 +48,23 @@
 //#include <kio/job.h>
 
 // KTTS includes.
-#include "player.h"
 #include "utils.h"
 #include "talkercode.h"
-#include "stretcher.h"
 
 // KTTSD includes.
-#include "speechdata.h"
 #include "talkermgr.h"
 #include "ssmlconvert.h"
 
 
 /**
-* The Speaker class takes sentences from the text queue, messages from the
-* messages queue, warnings from the warnings queue, and Screen Reader
-* output and places them into an internal "utterance queue".  It then
-* loops through this queue, farming the work off to the plugins.
-* It tries to optimize processing so as to keep the plugins busy as
-* much as possible, while ensuring that only one stream of audio is
-* heard at any one time.
+* The Speaker class manages all speech requests coming in from DBus, does any
+* filtering, and passes the resulting text on to speech-dispatcher through its
+* C api.
 *
-* The message queues are maintained in the SpeechData class.
+* The message queues are maintained in speech-dispatcher itself.
 *
 * Text jobs in the text queue each have a state (queued, speakable,
-* speaking, paused, finished).  Each plugin has a state (idle, saying, synthing,
-* or finished).  And finally, each utterance has a state (waiting, saying,
-* synthing, playing, finished).  It can be confusing if you are not aware
-* of all these states.
-*
-* Speaker takes some pains to ensure speech is spoken in the correct order,
-* namely Screen Reader Output has the highest priority, Warnings are next,
-* Messages are next, and finally regular text jobs.  Since Screen Reader
-* Output, Warnings, and Messages can be queued in the middle of a text
-* job, Speaker must be prepared to reorder utterances in its queue.
+* speaking, paused, finished).
 *
 * At the same time, it must issue the signals to inform programs
 * what is happening.
@@ -109,43 +94,85 @@
 *   Screen Reader Output.  Meanwhile, while one of the utterances might
 *   have a paused state, others from the same job could be synthing, waiting,
 *   or finished.
-* - There can be more than one Audio Player object in existence at one time, although
-*   there must never be more than one actually playing at one time.  For
-*   example, an Audio Player playing an utterance from a text job can be
-*   in a paused state, while another Audio Player is playing a Screen Reader
-*   Output utterance.  Finally, since some plugins do their own audio, it
-*   might be that none of the Audio Player objects are playing.
 */
 
 
 class SpeakerPrivate
 {
-    SpeakerPrivate(SpeechData* speechData, TalkerMgr* talkerMgr) :
-        speechData(speechData),
-        talkerMgr(talkerMgr),
+    SpeakerPrivate() :
         configData(NULL),
         exitRequested(false),
         again(false),
-        timer(NULL),
-        currentJobNum(0)
+        currentJobNum(0),
+        connection(NULL),
+        lastJobNum(0),
+        talkerMgr(NULL),
+        supportsHTML(false)
     {
+        connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
+        if (connection == NULL)
+        {
+            kError() << "could not get a connection to speech-dispatcher"<< endl;
+        }
+        else
+        {
+            kDebug() << "successfully opened connection to speech dispatcher";
+            connection->callback_begin = connection->callback_end = 
+                connection->callback_cancel = connection->callback_pause = 
+                connection->callback_resume = Speaker::speechdCallback;
+
+            spd_set_notification_on(connection, SPD_BEGIN);
+            spd_set_notification_on(connection, SPD_END);
+            spd_set_notification_on(connection, SPD_CANCEL);
+            spd_set_notification_on(connection, SPD_PAUSE);
+            spd_set_notification_on(connection, SPD_RESUME);
+            char ** modulenames = spd_list_modules(connection);
+            while (modulenames != NULL && modulenames[0] != NULL)
+            {
+                outputModules << modulenames[0];
+                modulenames++;
+                kDebug() << "added module " << outputModules.last();
+            }
+        }
+
+        // from speechdata class
+        jobLists.insert(KSpeech::jpScreenReaderOutput, new TJobList());
+        jobLists.insert(KSpeech::jpWarning, new TJobList());
+        jobLists.insert(KSpeech::jpMessage, new TJobList());
+        jobLists.insert(KSpeech::jpText, new TJobList());
     }
     
-    ~SpeakerPrivate() { }
+    ~SpeakerPrivate()
+    {
+        spd_close(connection);
+        connection = NULL;
+        
+        // from speechdata class
+        // kDebug() << "Running: SpeechDataPrivate::~SpeechDataPrivate";
+        // Walk through jobs and emit jobStateChanged signal for each job.
+        foreach (SpeechJob* job, allJobs)
+            delete job;
+        allJobs.clear();
+
+        foreach (TJobListPtr jobList, jobLists)
+            jobList->clear();
+        jobLists.clear();
+
+        foreach (PooledFilterMgr* pooledFilterMgr, pooledFilterMgrs) {
+            delete pooledFilterMgr->filterMgr;
+            delete pooledFilterMgr->talkerCode;
+            delete pooledFilterMgr;
+        }
+        pooledFilterMgrs.clear();
+
+        foreach (AppData* applicationData, appData)
+            delete applicationData;
+        appData.clear();
+    }
     
     friend class Speaker;
     
 protected:
-    /**
-    * SpeechData local pointer
-    */
-    SpeechData* speechData;
-
-    /**
-    * TalkerMgr local pointer.
-    */
-    TalkerMgr* talkerMgr;
-    
     /**
     * Configuration Data object.
     */
@@ -157,9 +184,9 @@ protected:
     volatile bool exitRequested;
 
     /**
-    * Queue of utterances we are currently processing.
+    * list of output modules speech-dispatcher has
     */
-    QList<Utt> uttQueue;
+    QStringList outputModules;
 
     /**
     * Used to prevent doUtterances from prematurely exiting.
@@ -167,71 +194,299 @@ protected:
     bool again;
 
     /**
-    * Timer for monitoring audio player.
-    */
-    QTimer* timer;
-
-    /**
     * Current Text job being played.
     */
     int currentJobNum;
 
-    QMap<KSpeech::JobPriority, SpeechJob*> currentJobs;
+    SPDConnection * connection;
+    
+    // from speechdata class
+    /**
+    * All jobs.
+    */
+    QHash<int, SpeechJob*> allJobs;
+
+    /**
+    * List of jobs for each job priority type.
+    */
+    QMap<KSpeech::JobPriority, TJobListPtr> jobLists;
+
+    /**
+    * Application data.
+    */
+    mutable QMap<QString, AppData*> appData;
+
+    /**
+    * The last job queued by any App.
+    */
+    int lastJobNum;
+
+    /**
+    * TalkerMgr object local pointer.
+    */
+    TalkerMgr* talkerMgr;
+
+    /**
+    * Pool of FilterMgrs.
+    */
+    QMultiHash<int, PooledFilterMgr*> pooledFilterMgrs;
+
+    /**
+    * Job counter.  Each new job increments this counter.
+    */
+    int jobCounter;
+
+    /**
+    * True if at least one XML Transformer plugin for html is enabled.
+    */
+    bool supportsHTML;
 };
 
 /* Public Methods ==========================================================*/
 
-Speaker::Speaker(
-    SpeechData*speechData,
-    TalkerMgr* talkerMgr,
-    QObject *parent) :
-    
-    QObject(parent), 
-    d(new SpeakerPrivate(speechData, talkerMgr))
+Speaker * Speaker::m_instance = NULL;
+
+Speaker * Speaker::Instance()
+{
+    if (m_instance == NULL)
+    {
+        m_instance = new Speaker();
+    }
+    return m_instance;
+}
+
+void Speaker::speechdCallback(size_t msg_id, size_t client_id, SPDNotificationType type)
+{
+    kDebug() << "speechdCallback called with messageid: " << msg_id << " and type: " << type;
+}
+
+Speaker::Speaker() :
+    d(new SpeakerPrivate())
 {
     // kDebug() << "Running: Speaker::Speaker()";
-    d->timer = new QTimer(this);
-    // Connect timer timeout signal.
-    connect(d->timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
-
-    // Connect plugins to slots.
-    PlugInList plugins = d->talkerMgr->getLoadedPlugIns();
-    const int pluginsCount = plugins.count();
-    for (int ndx = 0; ndx < pluginsCount; ++ndx)
-    {
-        PlugInProc* speech = plugins.at(ndx);
-        connect(speech, SIGNAL(synthFinished()),
-            this, SLOT(slotSynthFinished()));
-        connect(speech, SIGNAL(sayFinished()),
-            this, SLOT(slotSayFinished()));
-        connect(speech, SIGNAL(stopped()),
-            this, SLOT(slotStopped()));
-        connect(speech, SIGNAL(error(bool, const QString&)),
-            this, SLOT(slotError(bool, const QString&)));
-    }
-    
-    d->currentJobs.insert(KSpeech::jpScreenReaderOutput, NULL);
-    d->currentJobs.insert(KSpeech::jpWarning, NULL);
-    d->currentJobs.insert(KSpeech::jpMessage, NULL);
-    d->currentJobs.insert(KSpeech::jpText, NULL);
+    // Connect ServiceUnregistered signal from DBUS so we know when apps have exited.
+    connect (QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
+        this, SLOT(slotServiceUnregistered(const QString&)));
 }
 
 Speaker::~Speaker(){
-    // kDebug() << "Running: Speaker::~Speaker()";
-    d->timer->stop();
-    delete d->timer;
-    if (!d->uttQueue.isEmpty())
-    {
-        uttIterator it;
-        for (it = d->uttQueue.begin(); it != d->uttQueue.end(); )
-            it = deleteUtterance(it);
-    }
+    kDebug() << "Running: Speaker::~Speaker()";
     delete d;
 }
 
 void Speaker::setConfigData(ConfigData* configData)
 {
     d->configData = configData;
+
+    // from speechdata
+    // Clear the pool of filter managers so that filters re-init themselves.
+    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+    while (it != d->pooledFilterMgrs.end()) {
+        PooledFilterMgr* pooledFilterMgr = it.value();
+        delete pooledFilterMgr->filterMgr;
+        delete pooledFilterMgr->talkerCode;
+        delete pooledFilterMgr;
+        ++it;
+    }
+    d->pooledFilterMgrs.clear();
+
+    // Create an initial FilterMgr for the pool to save time later.
+    PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
+    FilterMgr* filterMgr = new FilterMgr();
+    filterMgr->init();
+    d->supportsHTML = filterMgr->supportsHTML();
+    pooledFilterMgr->filterMgr = filterMgr;
+    pooledFilterMgr->busy = false;
+    pooledFilterMgr->job = 0;
+    pooledFilterMgr->talkerCode = 0;
+    // Connect signals from FilterMgr.
+    connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
+    connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
+    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+}
+
+AppData* Speaker::getAppData(const QString& appId) const
+{
+    if (!d->appData.contains(appId))
+        d->appData.insert(appId, new AppData(appId));
+    return d->appData[appId];
+}
+
+void Speaker::releaseAppData(const QString& appId)
+{
+    if (d->appData.contains(appId))
+        delete d->appData.take(appId);
+}
+
+//bool Speaker::isSsml(const QString &text)
+//{
+//    /// This checks to see if the root tag of the text is a <speak> tag.
+//    QDomDocument ssml;
+//    ssml.setContent(text, false);  // No namespace processing.
+//    /// Check to see if this is SSML
+//    QDomElement root = ssml.documentElement();
+//    return (root.tagName() == "speak");
+//}
+
+QStringList Speaker::moduleNames()
+{
+    return d->outputModules;
+}
+
+//QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL*/)
+//{
+//    // There has to be a better way
+//    // kDebug() << "I'm getting: "<< text << " from application " << appId;
+//    if (isSsml(text)) {
+//        QStringList tempList(text);
+//        return tempList;
+//    }
+//    // See if app has specified a custom sentence delimiter and use it, otherwise use default.
+//    QRegExp sentenceDelimiter(getAppData(appId)->sentenceDelimiter());
+//    QString temp = text;
+//    // Replace spaces, tabs, and formfeeds with a single space.
+//    temp.replace(QRegExp("[ \\t\\f]+"), " ");
+//    // Replace sentence delimiters with tab.
+//    temp.replace(sentenceDelimiter, "\\1\t");
+//    // Replace remaining newlines with spaces.
+//    temp.replace('\n',' ');
+//    temp.replace('\r',' ');
+//    // Remove leading spaces.
+//    temp.replace(QRegExp("\\t +"), "\t");
+//    // Remove trailing spaces.
+//    temp.replace(QRegExp(" +\\t"), "\t");
+//    // Remove blank lines.
+//    temp.replace(QRegExp("\t\t+"),"\t");
+//    // Split into sentences.
+//    QStringList tempList = temp.split( '\t', QString::SkipEmptyParts);
+
+////    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
+////        kDebug() << "'" << *it << "'";
+////    }
+//    return tempList;
+//}
+
+int Speaker::say(const QString& appId, const QString& text, int sayOptions)
+{
+    int jobNum = 0;
+
+    AppData* appData = getAppData(appId);
+    KSpeech::JobPriority priority = appData->defaultPriority();
+    kDebug() << "Speaker::say priority = " << priority;
+    //kDebug() << "Running: Speaker::say appId = " << appId << " text = " << text;
+    //QString talker = appData->defaultTalker();
+
+    SPDPriority spdpriority = SPD_PROGRESS; // default to least priority
+    switch (priority)
+    {
+        case KSpeech::jpScreenReaderOutput: /**< Screen Reader job. SPD_IMPORTANT */
+            spdpriority = SPD_IMPORTANT;
+            break;
+        case KSpeech::jpWarning: /**< Warning job. SPD_NOTIFICATION */
+            spdpriority = SPD_NOTIFICATION;
+            break;
+        case KSpeech::jpMessage: /**< Message job.SPD_MESSAGE */
+            spdpriority = SPD_MESSAGE;
+            break;
+        case KSpeech::jpText: /**< Text job. SPD_TEXT */
+            spdpriority = SPD_TEXT;
+            break;
+        case KSpeech::jpProgress: /**< Progress report. SPD_PROGRESS added KDE 4.4 */
+            spdpriority = SPD_PROGRESS;
+            break;
+    }
+
+    SpeechJob* job = new SpeechJob(priority);
+    connect(job, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
+        this, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)));
+
+    switch (sayOptions)
+    {
+        case KSpeech::soNone: /**< No options specified.  Autodetected. */
+            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
+            break;
+        case KSpeech::soPlainText: /**< The text contains plain text. */
+            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
+            break;
+        case KSpeech::soHtml: /**< The text contains HTML markup. */
+            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
+            break;
+        case KSpeech::soSsml: /**< The text contains SSML markup. */
+            spd_set_data_mode(d->connection, SPD_DATA_SSML);
+            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
+            spd_set_data_mode(d->connection, SPD_DATA_TEXT);
+            break;
+        case KSpeech::soChar: /**< The text should be spoken as individual characters. */
+            spd_set_spelling(d->connection, SPD_SPELL_ON);
+            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
+            spd_set_spelling(d->connection, SPD_SPELL_OFF);
+            break;
+        case KSpeech::soKey: /**< The text contains a keyboard symbolic key name. */
+            jobNum = spd_key(d->connection, spdpriority, text.toUtf8().data());
+            break;
+        case KSpeech::soSoundIcon: /**< The text is the name of a sound icon. */
+            jobNum = spd_sound_icon(d->connection, spdpriority, text.toUtf8().data());
+            break;
+    }
+
+    job->setJobNum(jobNum);
+    job->setAppId(appId);
+    //job->setTalker(talker);
+    //// Note: Set state last so job is fully populated when jobStateChanged signal is emitted.
+    d->allJobs.insert(jobNum, job);
+    d->jobLists[priority]->append(jobNum);
+    appData->jobList()->append(jobNum);
+    d->lastJobNum = jobNum;
+    //if (!appData->filteringOn()) {
+    //    QStringList tempList = parseText(text, appId);
+    //    job->setSentences(tempList);
+    //    job->setState(KSpeech::jsSpeakable);
+    //} else {
+    //    job->setSentences(QStringList());
+    //    startJobFiltering(job, text, (KSpeech::jpScreenReaderOutput == priority));
+    //    emit jobStateChanged(appId, jobNum, KSpeech::jsQueued);
+    //}
+
+    return jobNum;
+}
+
+SpeechJob* Speaker::findLastJobByAppId(const QString& appId) const
+{
+    int jobNum = findJobNumByAppId(appId);
+    if (jobNum)
+        return d->allJobs[jobNum];
+    else
+        return NULL;
+}
+
+int Speaker::findJobNumByAppId(const QString& appId) const
+{
+    if (appId.isEmpty())
+        return d->lastJobNum;
+    else
+        return getAppData(appId)->lastJobNum();
+}
+
+/**
+* Given a jobNum, returns the first job with that jobNum.
+* @return               Pointer to the job.
+* If no such job, returns 0.
+*/
+SpeechJob* Speaker::findJobByJobNum(int jobNum) const
+{
+    if (d->allJobs.contains(jobNum))
+        return d->allJobs[jobNum];
+    else
+        return NULL;
+}
+
+QString Speaker::getAppIdByJobNum(int jobNum) const
+{
+    QString appId;
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job)
+        appId = job->appId();
+    return appId;
 }
 
 void Speaker::requestExit(){
@@ -239,824 +494,519 @@ void Speaker::requestExit(){
     d->exitRequested = true;
 }
 
-void Speaker::doUtterances()
-{
-    // kDebug() << "Running: Speaker::doUtterances()";
+//void Speaker::doUtterances()
+//{
+    //// kDebug() << "Running: Speaker::doUtterances()";
 
-    // Used to prevent exiting prematurely.
-    d->again = true;
+    //// Used to prevent exiting prematurely.
+    //d->again = true;
 
-    while(d->again && !d->exitRequested)
-    {
-        d->again = false;
+    //while(d->again && !d->exitRequested)
+    //{
+    //    d->again = false;
 
-        if (d->exitRequested)
-        {
-            // kDebug() << "Speaker::run: exiting due to request 1.";
-            return;
-        }
+    //    if (d->exitRequested)
+    //    {
+    //        // kDebug() << "Speaker::run: exiting due to request 1.";
+    //        return;
+    //    }
 
-        uttIterator it;
-        uttIterator itBegin;
-        uttIterator itEnd = 0;  // Init to zero to avoid compiler warning.
+    //    uttIterator it;
+    //    uttIterator itBegin;
+    //    uttIterator itEnd = 0;  // Init to zero to avoid compiler warning.
 
-        // If Screen Reader Output is waiting, we need to process it ASAP.
-        d->again = getNextUtterance(KSpeech::jpScreenReaderOutput);
+    //    // If Screen Reader Output is waiting, we need to process it ASAP.
+    //    d->again = getNextUtterance(KSpeech::jpScreenReaderOutput);
 
-        kDebug() << "Speaker::doUtterances: queue dump:";
-        for (it = d->uttQueue.begin(); it != d->uttQueue.end(); ++it)
-        {
-            QString pluginState = "no plugin";
-            if (it->plugin()) pluginState = pluginStateToStr(it->plugin()->getState());
-            QString jobState = "no job";
-            if (it->job())
-                jobState = SpeechJob::jobStateToStr(it->job()->state());
-            kDebug() << 
-                "  State: " << Utt::uttStateToStr(it->state()) << 
-                "," << pluginState <<
-                "," << jobState <<
-                " Type: " << Utt::uttTypeToStr(it->utType()) << 
-                " Text: " << it->sentence() << endl;
-         }
+    //    kDebug() << "Speaker::doUtterances: queue dump:";
+    //    for (it = d->uttQueue.begin(); it != d->uttQueue.end(); ++it)
+    //    {
+    //        QString jobState = "no job";
+    //        if (it->job())
+    //            jobState = SpeechJob::jobStateToStr(it->job()->state());
+    //        kDebug() << 
+    //            "  State: " << Utt::uttStateToStr(it->state()) << 
+    //            "," << jobState <<
+    //            " Type: " << Utt::uttTypeToStr(it->utType()) << 
+    //            " Text: " << it->sentence() << endl;
+    //     }
 
-        if (!d->uttQueue.isEmpty())
-        {
-            // Delete utterances that are finished.
-            it = d->uttQueue.begin();
-            while (it != d->uttQueue.end())
-            {
-                if (Utt::usFinished == it->state())
-                    it = deleteUtterance(it);
-                else
-                    ++it;
-            }
-            // Loop through utterance queue.
-            int waitingCnt = 0;
-            int waitingMsgCnt = 0;
-            int transformingCnt = 0;
-            bool playing = false;
-            int synthingCnt = 0;
-            itEnd = d->uttQueue.end();
-            itBegin = d->uttQueue.begin();
-            for (it = itBegin; it != itEnd; ++it)
-            {
-                // Skip the utterance if application is paused.
-                if (!d->speechData->isApplicationPaused(it->appId()))
-                {
-                    Utt::uttState utState = it->state();
-                    Utt::uttType utType = it->utType();
-                    switch (utState)
-                    {
-                        case Utt::usNone:
-                        {
-                            it->setInitialState();
-                            d->again = true;
-                            break;
-                        }
-                        case Utt::usWaitingTransform:
-                        {
-                            // Create an XSLT transformer and transform the text.
-                            SSMLConvert* transformer = new SSMLConvert();
-                            it->setTransformer(transformer);
-                            connect(transformer, SIGNAL(transformFinished()),
-                                this, SLOT(slotTransformFinished()));
-                            if (transformer->transform(it->sentence(),
-                                it->plugin()->getSsmlXsltFilename()))
-                            {
-                                it->setState(Utt::usTransforming);
-                                ++transformingCnt;
-                            }
-                            else
-                            {
-                                // If an error occurs transforming, skip it.
-                                it->setState(Utt::usTransforming);
-                                it->setInitialState();
-                            }
-                            d->again = true;
-                            break;
-                        }
-                        case Utt::usTransforming:
-                        {
-                            // See if transformer is finished.
-                            if (it->transformer()->getState() == SSMLConvert::tsFinished)
-                            {
-                                // Get the transformed text.
-                                it->setSentence(it->transformer()->getOutput());
-                                // Set next state (usWaitingSynth or usWaitingSay)
-                                it->setInitialState();
-                                d->again = true;
-                                --transformingCnt;
-                            }
-                            break;
-                        }
-                        case Utt::usSynthed:
-                        {
-                            // Don't bother stretching if factor is 1.0.
-                            // Don't bother stretching if SSML.
-                            // TODO: This is because sox mangles SSML pitch settings.  Would be nice
-                            // to figure out how to avoid this.
-                            kDebug() << "Speaker::doUtterances: state usSynthed";
-                            if (d->configData->audioStretchFactor == 1.0 || it->isSsml())
-                            {
-                                it->setState(Utt::usStretched);
-                                d->again = true;
-                            }
-                            else
-                            {
-                                Stretcher* stretcher = new Stretcher();
-                                it->setAudioStretcher(stretcher);
-                                connect(stretcher, SIGNAL(stretchFinished()),
-                                    this, SLOT(slotStretchFinished()));
-                                if (stretcher->stretch(it->audioUrl(), makeSuggestedFilename(),
-                                    d->configData->audioStretchFactor))
-                                {
-                                    it->setState(Utt::usStretching);
-                                    d->again = true;  // Is this needed?
-                                }
-                                else
-                                {
-                                    // If stretch failed, it is most likely caused by sox not being
-                                    // installed.  Just skip it.
-                                    it->setState(Utt::usStretched);
-                                    d->again = true;
-                                    delete stretcher;
-                                    it->setAudioStretcher(NULL);
-                                }
-                            }
-                            break;
-                        }
-                        case Utt::usStretching:
-                        {
-                            // See if Stretcher is finished.
-                            Stretcher* stretcher = it->audioStretcher();
-                            if (stretcher->getState() == Stretcher::ssFinished)
-                            {
-                                QFile::remove(it->audioUrl());
-                                it->setAudioUrl(stretcher->getOutFilename());
-                                it->setState(Utt::usStretched);
-                                delete stretcher;
-                                it->setAudioStretcher(NULL);
-                                d->again = true;
-                            }
-                            break;
-                        }
-                        case Utt::usStretched:
-                        {
-                            kDebug() << "Speaker::doUtterances: state usStretched";
-                            // If first in queue, start playback.
-                            if (it == itBegin)
-                            {
-                                if (startPlayingUtterance(it))
-                                {
-                                    playing = true;
-                                    d->again = true;
-                                } else {
-                                    ++waitingCnt;
-                                    if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                        ++waitingMsgCnt;
-                                }
-                            } else {
-                                ++waitingCnt;
-                                if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                    ++waitingMsgCnt;
-                            }
-                            break;
-                        }
-                        case Utt::usPlaying:
-                        {
-                            kDebug() << "Speaker::doUtterances: state usPlaying";
-                            playing = true;
-                            break;
-                        }
-                        case Utt::usPaused: 
-                        case Utt::usPreempted:
-                        {
-                            if (!playing) 
-                            {
-                                if (startPlayingUtterance(it))
-                                {
-                                    playing = true;
-                                    d->again = true;
-                                } else {
-                                    ++waitingCnt;
-                                    if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                        ++waitingMsgCnt;
-                                }
-                            } else {
-                                ++waitingCnt;
-                                if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                    ++waitingMsgCnt;
-                            }
-                            break;
-                        }
-                        case Utt::usWaitingSay:
-                        {
-                            // If first in queue, start it.
-                            if (it == itBegin)
-                            {
-                                    if (it->plugin()->getState() == psIdle)
-                                    {
-                                        // Set job to speaking state and set sentence number.
-                                        d->currentJobNum = it->job()->jobNum();
-                                        it->setState(Utt::usSaying);
-                                        prePlaySignals(it);
-                                        // kDebug() << "Async synthesis and audibilizing.";
-                                        playing = true;
-                                        it->plugin()->sayText(it->sentence());
-                                        d->again = true;
-                                    } else {
-                                        ++waitingCnt;
-                                        if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                            ++waitingMsgCnt;
-                                    }
-                            } else {
-                                ++waitingCnt;
-                                if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                    ++waitingMsgCnt;
-                            }
-                            break;
-                        }
-                        case Utt::usWaitingSynth:
-                        {
-                            // TODO: If the synth is busy and the waiting text is screen
-                            // reader output, it would be nice to call the synth's
-                            // stopText() method.  However, some of the current plugins
-                            // have horrible startup times, so we won't do that for now.
-                            kDebug() << "Speaker::doUtterances: state usWaitingSynth";
-                            if (it->plugin()->getState() == psIdle)
-                            {
-                                // kDebug() << "Async synthesis.";
-                                it->setState(Utt::usSynthing);
-                                ++synthingCnt;
-                                it->plugin()->synthText(it->sentence(),
-                                    makeSuggestedFilename());
-                                d->again = true;
-                            }
-                            ++waitingCnt;
-                            if (Utt::utMessage == utType || Utt::utMessage == utType)
-                                ++waitingMsgCnt;
-                            break;
-                        }
-                        case Utt::usSaying:
-                        {
-                            kDebug() << "Speaker::doUtterances: state usSaying";
-                            // See if synthesis and audibilizing is finished.
-                            if (it->plugin()->getState() == psFinished)
-                            {
-                                it->plugin()->ackFinished();
-                                it->setState(Utt::usFinished);
-                                d->again = true;
-                            } else {
-                                playing = true;
-                                ++waitingCnt;
-                                if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                    ++waitingMsgCnt;
-                            }
-                            break;
-                        }
-                        case Utt::usSynthing:
-                        {
-                            kDebug() << "Speaker::doUtterances: state usSynthing";
-                            // See if synthesis is completed.
-                            if (it->plugin()->getState() == psFinished)
-                            {
-                                it->setAudioUrl(KStandardDirs::realFilePath(it->plugin()->getFilename()));
-                                kDebug() << "Speaker::doUtterances: synthesized filename: " << it->audioUrl();
-                                it->plugin()->ackFinished();
-                                it->setState(Utt::usSynthed);
-                                d->again = true;
-                            } else ++synthingCnt;
-                            ++waitingCnt;
-                            if (Utt::utWarning == utType || Utt::utMessage == utType)
-                                ++waitingMsgCnt;
-                            break;
-                        }
-                        case Utt::usFinished: break;
-                    }
-                }
-            }
-            // See if there are any messages or warnings to process.
-            // We keep up to 2 such utterances in the queue.
-            if ((waitingMsgCnt < 2) && (transformingCnt < 3))
-            {
-                if (getNextUtterance(KSpeech::jpWarning))
-                    d->again = true;
-                else
-                    if (getNextUtterance(KSpeech::jpMessage))
-                        d->again = true;
-            }
-            // Try to keep at least two utterances in the queue waiting to be played,
-            // and no more than 3 transforming at one time.
-            if ((waitingCnt < 2) && (transformingCnt < 3))
-                if (getNextUtterance(KSpeech::jpAll))
-                    d->again = true;
-        } else {
-            // See if another utterance is ready to be worked on.
-            // If so, loop again since we've got work to do.
-            d->again = getNextUtterance(KSpeech::jpAll);
-        }
-    }
-    if (!d->exitRequested)
-        d->speechData->deleteExpiredJobs();
-    // kDebug() << "Speaker::doUtterances: exiting.";
-}
+    //    if (!d->uttQueue.isEmpty())
+    //    {
+    //        // Delete utterances that are finished.
+    //        it = d->uttQueue.begin();
+    //        while (it != d->uttQueue.end())
+    //        {
+    //            if (Utt::usFinished == it->state())
+    //                it = deleteUtterance(it);
+    //            else
+    //                ++it;
+    //        }
+    //        // Loop through utterance queue.
+    //        int waitingCnt = 0;
+    //        int waitingMsgCnt = 0;
+    //        int transformingCnt = 0;
+    //        bool playing = false;
+    //        int synthingCnt = 0;
+    //        itEnd = d->uttQueue.end();
+    //        itBegin = d->uttQueue.begin();
+    //        for (it = itBegin; it != itEnd; ++it)
+    //        {
+    //            // Skip the utterance if application is paused.
+    //            if (!Speaker::Instance()->isApplicationPaused(it->appId()))
+    //            {
+    //                Utt::uttState utState = it->state();
+    //                Utt::uttType utType = it->utType();
+    //                switch (utState)
+    //                {
+    //                    case Utt::usNone:
+    //                    {
+    //                        it->setInitialState();
+    //                        d->again = true;
+    //                        break;
+    //                    }
+    //                    case Utt::usWaitingTransform:
+    //                    {
+    //                        // Create an XSLT transformer and transform the text.
+    //                        SSMLConvert* transformer = new SSMLConvert();
+    //                        it->setTransformer(transformer);
+    //                        connect(transformer, SIGNAL(transformFinished()),
+    //                            this, SLOT(slotTransformFinished()));
+    //                        if (transformer->transform(it->sentence(),
+    //                            it->plugin()->getSsmlXsltFilename()))
+    //                        {
+    //                            it->setState(Utt::usTransforming);
+    //                            ++transformingCnt;
+    //                        }
+    //                        else
+    //                        {
+    //                            // If an error occurs transforming, skip it.
+    //                            it->setState(Utt::usTransforming);
+    //                            it->setInitialState();
+    //                        }
+    //                        d->again = true;
+    //                        break;
+    //                    }
+    //                    case Utt::usTransforming:
+    //                    {
+    //                        // See if transformer is finished.
+    //                        if (it->transformer()->getState() == SSMLConvert::tsFinished)
+    //                        {
+    //                            // Get the transformed text.
+    //                            it->setSentence(it->transformer()->getOutput());
+    //                            // Set next state (usWaitingSynth or usWaitingSay)
+    //                            it->setInitialState();
+    //                            d->again = true;
+    //                            --transformingCnt;
+    //                        }
+    //                        break;
+    //                    }
+    //                    case Utt::usPlaying:
+    //                    {
+    //                        kDebug() << "Speaker::doUtterances: state usPlaying";
+    //                        playing = true;
+    //                        break;
+    //                    }
+    //                    case Utt::usPaused: 
+    //                    case Utt::usPreempted:
+    //                    {
+    //                        if (!playing) 
+    //                        {
+    //                            if (startPlayingUtterance(it))
+    //                            {
+    //                                playing = true;
+    //                                d->again = true;
+    //                            } else {
+    //                                ++waitingCnt;
+    //                                if (Utt::utWarning == utType || Utt::utMessage == utType)
+    //                                    ++waitingMsgCnt;
+    //                            }
+    //                        } else {
+    //                            ++waitingCnt;
+    //                            if (Utt::utWarning == utType || Utt::utMessage == utType)
+    //                                ++waitingMsgCnt;
+    //                        }
+    //                        break;
+    //                    }
+    //                    case Utt::usWaitingSay:
+    //                    {
+    //                        // If first in queue, start it.
+    //                        if (it == itBegin)
+    //                        {
+    //                                if (it->plugin()->getState() == psIdle)
+    //                                {
+    //                                    // Set job to speaking state and set sentence number.
+    //                                    d->currentJobNum = it->job()->jobNum();
+    //                                    it->setState(Utt::usSaying);
+    //                                    prePlaySignals(it);
+    //                                    // kDebug() << "Async synthesis and audibilizing.";
+    //                                    playing = true;
+    //                                    it->plugin()->sayText(it->sentence());
+    //                                    d->again = true;
+    //                                } else {
+    //                                    ++waitingCnt;
+    //                                    if (Utt::utWarning == utType || Utt::utMessage == utType)
+    //                                        ++waitingMsgCnt;
+    //                                }
+    //                        } else {
+    //                            ++waitingCnt;
+    //                            if (Utt::utWarning == utType || Utt::utMessage == utType)
+    //                                ++waitingMsgCnt;
+    //                        }
+    //                        break;
+    //                    }
+    //                    case Utt::usSaying:
+    //                    {
+    //                        kDebug() << "Speaker::doUtterances: state usSaying";
+    //                        // See if synthesis and audibilizing is finished.
+    //                        if (it->plugin()->getState() == psFinished)
+    //                        {
+    //                            it->plugin()->ackFinished();
+    //                            it->setState(Utt::usFinished);
+    //                            d->again = true;
+    //                        } else {
+    //                            playing = true;
+    //                            ++waitingCnt;
+    //                            if (Utt::utWarning == utType || Utt::utMessage == utType)
+    //                                ++waitingMsgCnt;
+    //                        }
+    //                        break;
+    //                    }
+    //                    case Utt::usFinished: break;
+    //                }
+    //            }
+    //        }
+    //        // See if there are any messages or warnings to process.
+    //        // We keep up to 2 such utterances in the queue.
+    //        if ((waitingMsgCnt < 2) && (transformingCnt < 3))
+    //        {
+    //            if (getNextUtterance(KSpeech::jpWarning))
+    //                d->again = true;
+    //            else
+    //                if (getNextUtterance(KSpeech::jpMessage))
+    //                    d->again = true;
+    //        }
+    //        // Try to keep at least two utterances in the queue waiting to be played,
+    //        // and no more than 3 transforming at one time.
+    //        if ((waitingCnt < 2) && (transformingCnt < 3))
+    //            if (getNextUtterance(KSpeech::jpAll))
+    //                d->again = true;
+    //    } else {
+    //        // See if another utterance is ready to be worked on.
+    //        // If so, loop again since we've got work to do.
+    //        d->again = getNextUtterance(KSpeech::jpAll);
+    //    }
+    //}
+    //if (!d->exitRequested)
+    //    Speaker::Instance()->deleteExpiredJobs();
+    //// kDebug() << "Speaker::doUtterances: exiting.";
+//}
 
 bool Speaker::isSpeaking()
 {
-    return (KSpeech::jsSpeaking == d->speechData->jobState(d->currentJobNum));
+    return (KSpeech::jsSpeaking == jobState(d->currentJobNum));
 }
 
-int Speaker::getCurrentJobNum() { return d->currentJobNum; }
-
-void Speaker::removeJob(int jobNum)
-{
-    deleteUtteranceByJobNum(jobNum);
-    d->speechData->removeJob(jobNum);
-    doUtterances();
+int Speaker::getCurrentJobNum()
+{ 
+    return d->currentJobNum;
 }
 
-void Speaker::removeAllJobs(const QString& appId)
-{
-    AppData* appData = d->speechData->getAppData(appId);
-    if (appData->isSystemManager()) {
-        uttIterator it = d->uttQueue.begin();
-        while (it != d->uttQueue.end())
-            it = deleteUtterance(it);
-    } else {
-        uttIterator it = d->uttQueue.begin();
-        while (it != d->uttQueue.end()) {
-            if (it->appId() == appId)
-                it = deleteUtterance(it);
-            else
-                ++it;
-        }
-    }
-    d->speechData->removeAllJobs(appId);
-    doUtterances();
-}
+//void Speaker::moveJobLater(int jobNum)
+//{
+//    SpeechJob* job = SpeechData::Instance()->3(jobNum);
+//    if (job)
+//        pause(job->appId());
+//    deleteUtteranceByJobNum(jobNum);
+//    SpeechData::Instance()->moveJobLater(jobNum);
+//    doUtterances();
+//}
 
-void Speaker::pause(const QString& appId)
-{
-    Utt* pausedUtt = NULL;
-    AppData* appData = d->speechData->getAppData(appId);
-    if (appData->isSystemManager()) {
-        uttIterator it = d->uttQueue.begin();
-        while (it != d->uttQueue.end())
-            if (Utt::usPlaying == it->state()) {
-                pausedUtt = &(*it);
-                break;
-            } else
-                ++it;
-    } else {
-        uttIterator it = d->uttQueue.begin();
-        while (it != d->uttQueue.end())
-            if (it->appId() == appId && Utt::usPlaying == it->state()) {
-                pausedUtt = &(*it);
-                break;
-            } else
-                ++it;
-    }
-              
-    if (pausedUtt) {
-        Q_ASSERT(d->speechData->isApplicationPaused(pausedUtt->appId()));
-        if (pausedUtt->audioPlayer() && pausedUtt->audioPlayer()->playing()) {
-            d->timer->stop();
-            kDebug() << "Speaker::pause: pausing audio player";
-            pausedUtt->audioPlayer()->pause();
-            pausedUtt->setState(Utt::usPaused);
-            kDebug() << "Speaker::pause: Setting utterance state to usPaused";
-            return;
-        }
-        // Audio player has finished, but timeout hasn't had a chance
-        // to clean up.  So do nothing, and let timeout do the cleanup.
-        doUtterances();
-    }
-}
-
-void Speaker::moveJobLater(int jobNum)
-{
-    SpeechJob* job = d->speechData->findJobByJobNum(jobNum);
-    if (job)
-        pause(job->appId());
-    deleteUtteranceByJobNum(jobNum);
-    d->speechData->moveJobLater(jobNum);
-    doUtterances();
-}
-
-int Speaker::moveRelSentence(int jobNum, int n)
-{
-    if (0 == n)
-        return d->speechData->jobSentenceNum(jobNum);
-    else {
-        deleteUtteranceByJobNum(jobNum);
-        // TODO: More efficient way to advance one or two sentences, since there is a
-        // good chance those utterances are already in the queue and synthesized.
-        int sentenceNum = d->speechData->moveRelSentence(jobNum, n);
-        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to: " << sentenceNum;
-        doUtterances();
-        return sentenceNum;
-    }
-}
+//int Speaker::moveRelSentence(int jobNum, int n)
+//{
+//    if (0 == n)
+//        return SpeechData::Instance()->jobSentenceNum(jobNum);
+//    else {
+//        deleteUtteranceByJobNum(jobNum);
+//        // TODO: More efficient way to advance one or two sentences, since there is a
+//        // good chance those utterances are already in the queue and synthesized.
+//        int sentenceNum = SpeechData::Instance()->moveRelSentence(jobNum, n);
+//        kDebug() << "Speaker::moveRelTextSentence: job num: " << jobNum << " moved to: " << sentenceNum;
+//        doUtterances();
+//        return sentenceNum;
+//    }
+//}
 
 /* Private Methods ==========================================================*/
 
-QString Speaker::pluginStateToStr(pluginState state)
-{
-    switch( state )
-    {
-        case psIdle:         return "psIdle";
-        case psSaying:       return "psSaying";
-        case psSynthing:     return "psSynthing";
-        case psFinished:     return "psFinished";
-    }
-    return QString();
-}
+//QString Speaker::pluginStateToStr(pluginState state)
+//{
+//    switch( state )
+//    {
+//        case psIdle:         return "psIdle";
+//        case psSaying:       return "psSaying";
+//        case psSynthing:     return "psSynthing";
+//        case psFinished:     return "psFinished";
+//    }
+//    return QString();
+//}
 
-void Speaker::deleteUtteranceByJobNum(int jobNum)
-{
-    uttIterator it = d->uttQueue.begin();
-    while (it != d->uttQueue.end())
-    {
-        if (it->job() && it->job()->jobNum() == jobNum)
-            it = deleteUtterance(it);
-        else
-            ++it;
-    }
-    if (d->currentJobNum == jobNum) d->currentJobNum = 0;
-}
+//void Speaker::deleteUtteranceByJobNum(int jobNum)
+//{
+//    uttIterator it = d->uttQueue.begin();
+//    while (it != d->uttQueue.end())
+//    {
+//        if (it->job() && it->job()->jobNum() == jobNum)
+//            it = deleteUtterance(it);
+//        else
+//            ++it;
+//    }
+//    if (d->currentJobNum == jobNum) d->currentJobNum = 0;
+//}
 
-bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
-{
-    Utt* utt = NULL;
-    QString appId;
-    QString sentence;
-    Utt::uttType utType;
-    KSpeech::JobPriority priority;
-    if (KSpeech::jpAll == requestedPriority) {
-	//As the variabele priority is used further on, we can't make it a reference type
-        foreach (priority, d->currentJobs.keys()){ //krazy:exclude=foreach
-            d->currentJobs[priority] = d->speechData->getNextSpeakableJob(priority);
-            if (d->currentJobs[priority])
-                sentence = d->currentJobs[priority]->getNextSentence();
-            if (!sentence.isEmpty())
-                break;
-	}
-    }
-    else {
-        priority = requestedPriority;
-        d->currentJobs[priority] = d->speechData->getNextSpeakableJob(priority);
-        if (d->currentJobs[priority])
-            sentence = d->currentJobs[priority]->getNextSentence();
-    }
-    if (!sentence.isEmpty()) {
-        switch (priority) {
-            case KSpeech::jpAll:    // should not happen.
-                Q_ASSERT(0);
-                break;
-            case KSpeech::jpScreenReaderOutput:
-                utType = Utt::utScreenReader;
-                break;
-            case KSpeech::jpWarning:
-                utType = Utt::utWarning;
-                break;
-            case KSpeech::jpMessage:
-                utType = Utt::utMessage;
-                break;
-            case KSpeech::jpText:
-                utType = Utt::utText;
-                break;
-        }
-        appId = d->currentJobs[priority]->appId();
-        SpeechJob* job = d->currentJobs[priority];
-        utt = new Utt(utType, appId, job, sentence, d->talkerMgr->talkerToPlugin(job->talker()));
-        utt->setSeq(job->seq());
-    }
+//bool Speaker::getNextUtterance(KSpeech::JobPriority requestedPriority)
+//{
+//    //Utt* utt = NULL;
+//    //QString appId;
+//    //QString sentence;
+//    //Utt::uttType utType;
+//    //KSpeech::JobPriority priority;
+//    //if (KSpeech::jpAll == requestedPriority) {
+//	////As the variabele priority is used further on, we can't make it a reference type
+//    //    foreach (priority, d->currentJobs.keys()){ //krazy:exclude=foreach
+//    //        d->currentJobs[priority] = SpeechData::Instance()->getNextSpeakableJob(priority);
+//    //        if (d->currentJobs[priority])
+//    //            sentence = d->currentJobs[priority]->getNextSentence();
+//    //        if (!sentence.isEmpty())
+//    //            break;
+//	//}
+//    //}
+//    //else {
+//    //    priority = requestedPriority;
+//    //    d->currentJobs[priority] = SpeechData::Instance()->getNextSpeakableJob(priority);
+//    //    if (d->currentJobs[priority])
+//    //        sentence = d->currentJobs[priority]->getNextSentence();
+//    //}
+//    //if (!sentence.isEmpty()) {
+//    //    switch (priority) {
+//    //        case KSpeech::jpAll:    // should not happen.
+//    //            Q_ASSERT(0);
+//    //            break;
+//    //        case KSpeech::jpScreenReaderOutput:
+//    //            utType = Utt::utScreenReader;
+//    //            break;
+//    //        case KSpeech::jpWarning:
+//    //            utType = Utt::utWarning;
+//    //            break;
+//    //        case KSpeech::jpMessage:
+//    //            utType = Utt::utMessage;
+//    //            break;
+//    //        case KSpeech::jpText:
+//    //            utType = Utt::utText;
+//    //            break;
+//    //    }
+//    //    appId = d->currentJobs[priority]->appId();
+//    //    SpeechJob* job = d->currentJobs[priority];
+//    //    utt = new Utt(utType, appId, job, sentence);
+//    //    utt->setSeq(job->seq());
+//    //}
 
-    bool r = (utt != NULL);
+//    //bool r = (utt != NULL);
 
-    if (utt)
-    {
-        // Screen Reader Outputs need to be processed ASAP.
-        if (Utt::utScreenReader == utType)
-        {
-            d->uttQueue.insert(d->uttQueue.begin(), *utt);
-            // Delete any other Screen Reader Outputs in the queue.
-            // Only one Screen Reader Output at a time.
-            uttIterator it = d->uttQueue.begin();
-            ++it;
-            while (it != d->uttQueue.end())
-            {
-                if (Utt::utScreenReader == it->utType())
-                    it = deleteUtterance(it);
-                else
-                    ++it;
-            }
-        }
-        // If the new utterance is a Warning or Message...
-        if ((Utt::utWarning == utType) || (Utt::utMessage == utType))
-        {
-            uttIterator itEnd = d->uttQueue.end();
-            uttIterator it = d->uttQueue.begin();
-            bool interrupting = false;
-            if (it != itEnd)
-            {
-                // New Warnings go after Screen Reader Output, other Warnings,
-                // Interruptions, and in-process text,
-                // but before Resumes, waiting text or signals.
-                if (Utt::utWarning == utType)
-                    while ( it != itEnd && 
-                            ((Utt::utScreenReader == it->utType()) || 
-                            (Utt::utWarning == it->utType()) ||
-                            (Utt::utInterruptMsg == it->utType()) ||
-                            (Utt::utInterruptSnd == it->utType()))) ++it;
-                // New Messages go after Screen Reader Output, Warnings, other Messages,
-                // Interruptions, and in-process text,
-                // but before Resumes, waiting text or signals.
-                if (Utt::utMessage == utType)
-                    while ( it != itEnd && 
-                            ((Utt::utScreenReader == it->utType()) ||
-                            (Utt::utWarning == it->utType()) ||
-                            (Utt::utMessage == it->utType()) ||
-                            (Utt::utInterruptMsg == it->utType()) ||
-                            (Utt::utInterruptSnd == it->utType()))) ++it;
-                if (it != itEnd)
-                    if (Utt::utText == it->utType() &&
-                        ((Utt::usPlaying == it->state()) ||
-                        (Utt::usSaying == it->state()))) ++it;
-                // If now pointing at a text message, we are interrupting.
-                // Insert optional Interruption message and sound.
-                if (it != itEnd) interrupting = (Utt::utText == it->utType() && Utt::usPaused != it->state());
-                if (interrupting)
-                {
-                    if (d->configData->textPreSndEnabled)
-                    {
-                        Utt intrUtt(Utt::utInterruptSnd, appId, d->configData->textPreSnd);
-                        it = d->uttQueue.insert(it, intrUtt);
-                        ++it;
-                    }
-                    if (d->configData->textPreMsgEnabled)
-                    {
-                        Utt intrUtt(Utt::utInterruptMsg, appId, NULL, d->configData->textPreMsg, d->talkerMgr->talkerToPlugin(""));;
-                        it = d->uttQueue.insert(it, intrUtt);
-                        ++it;
-                    }
-                }
-            }
-            // Insert the new message or warning.
-            it = d->uttQueue.insert(it, *utt);
-            ++it;
-            // Resumption message and sound.
-            if (interrupting)
-            {
-                if (d->configData->textPostSndEnabled)
-                {
-                    Utt resUtt(Utt::utResumeSnd, appId, d->configData->textPostSnd);
-                    it = d->uttQueue.insert(it, resUtt);
-                    ++it;
-                }
-                if (d->configData->textPostMsgEnabled)
-                {
-                    Utt resUtt(Utt::utResumeMsg, appId, NULL, d->configData->textPostMsg, d->talkerMgr->talkerToPlugin(""));
-                    it = d->uttQueue.insert(it, resUtt);
-                }
-            }
-        }
-        // If a text message...
-        if (Utt::utText == utt->utType())
-            d->uttQueue.append(*utt);
-    }
+//    //if (utt)
+//    //{
+//    //    // Screen Reader Outputs need to be processed ASAP.
+//    //    if (Utt::utScreenReader == utType)
+//    //    {
+//    //        d->uttQueue.insert(d->uttQueue.begin(), *utt);
+//    //        // Delete any other Screen Reader Outputs in the queue.
+//    //        // Only one Screen Reader Output at a time.
+//    //        uttIterator it = d->uttQueue.begin();
+//    //        ++it;
+//    //        while (it != d->uttQueue.end())
+//    //        {
+//    //            if (Utt::utScreenReader == it->utType())
+//    //                it = deleteUtterance(it);
+//    //            else
+//    //                ++it;
+//    //        }
+//    //    }
+//    //    // If the new utterance is a Warning or Message...
+//    //    if ((Utt::utWarning == utType) || (Utt::utMessage == utType))
+//    //    {
+//    //        uttIterator itEnd = d->uttQueue.end();
+//    //        uttIterator it = d->uttQueue.begin();
+//    //        bool interrupting = false;
+//    //        if (it != itEnd)
+//    //        {
+//    //            // New Warnings go after Screen Reader Output, other Warnings,
+//    //            // Interruptions, and in-process text,
+//    //            // but before Resumes, waiting text or signals.
+//    //            if (Utt::utWarning == utType)
+//    //                while ( it != itEnd && 
+//    //                        ((Utt::utScreenReader == it->utType()) || 
+//    //                        (Utt::utWarning == it->utType()) ||
+//    //                        (Utt::utInterruptMsg == it->utType()) ||
+//    //                        (Utt::utInterruptSnd == it->utType()))) ++it;
+//    //            // New Messages go after Screen Reader Output, Warnings, other Messages,
+//    //            // Interruptions, and in-process text,
+//    //            // but before Resumes, waiting text or signals.
+//    //            if (Utt::utMessage == utType)
+//    //                while ( it != itEnd && 
+//    //                        ((Utt::utScreenReader == it->utType()) ||
+//    //                        (Utt::utWarning == it->utType()) ||
+//    //                        (Utt::utMessage == it->utType()) ||
+//    //                        (Utt::utInterruptMsg == it->utType()) ||
+//    //                        (Utt::utInterruptSnd == it->utType()))) ++it;
+//    //            if (it != itEnd)
+//    //                if (Utt::utText == it->utType() &&
+//    //                    ((Utt::usPlaying == it->state()) ||
+//    //                    (Utt::usSaying == it->state()))) ++it;
+//    //            // If now pointing at a text message, we are interrupting.
+//    //            // Insert optional Interruption message and sound.
+//    //            if (it != itEnd) interrupting = (Utt::utText == it->utType() && Utt::usPaused != it->state());
+//    //            if (interrupting)
+//    //            {
+//    //                if (d->configData->textPreSndEnabled)
+//    //                {
+//    //                    Utt intrUtt(Utt::utInterruptSnd, appId, d->configData->textPreSnd);
+//    //                    it = d->uttQueue.insert(it, intrUtt);
+//    //                    ++it;
+//    //                }
+//    //                if (d->configData->textPreMsgEnabled)
+//    //                {
+//    //                    Utt intrUtt(Utt::utInterruptMsg, appId, NULL, d->configData->textPreMsg, TalkerMgr::Instance()->talkerToPlugin(""));;
+//    //                    it = d->uttQueue.insert(it, intrUtt);
+//    //                    ++it;
+//    //                }
+//    //            }
+//    //        }
+//    //        // Insert the new message or warning.
+//    //        it = d->uttQueue.insert(it, *utt);
+//    //        ++it;
+//    //        // Resumption message and sound.
+//    //        if (interrupting)
+//    //        {
+//    //            if (d->configData->textPostSndEnabled)
+//    //            {
+//    //                Utt resUtt(Utt::utResumeSnd, appId, d->configData->textPostSnd);
+//    //                it = d->uttQueue.insert(it, resUtt);
+//    //                ++it;
+//    //            }
+//    //            if (d->configData->textPostMsgEnabled)
+//    //            {
+//    //                Utt resUtt(Utt::utResumeMsg, appId, NULL, d->configData->textPostMsg, TalkerMgr::Instance()->talkerToPlugin(""));
+//    //                it = d->uttQueue.insert(it, resUtt);
+//    //            }
+//    //        }
+//    //    }
+//    //    // If a text message...
+//    //    if (Utt::utText == utt->utType())
+//    //        d->uttQueue.append(*utt);
+//    //}
 
-    return r;
-}
+//    //return r;
+//}
 
-uttIterator Speaker::deleteUtterance(uttIterator it)
-{
-    switch (it->state())
-    {
-        case Utt::usNone:
-        case Utt::usWaitingTransform:
-        case Utt::usWaitingSay:
-        case Utt::usWaitingSynth:
-        case Utt::usSynthed:
-        case Utt::usFinished:
-        case Utt::usStretched:
-            break;
+//uttIterator Speaker::deleteUtterance(uttIterator it)
+//{
+//    //switch (it->state())
+//    //{
+//    //    case Utt::usNone:
+//    //    case Utt::usWaitingTransform:
+//    //    case Utt::usWaitingSay:
+//    //    case Utt::usFinished:
+//    //        break;
 
-        case Utt::usTransforming:
-            delete it->transformer();
-            break;
-        case Utt::usSaying:
-        case Utt::usSynthing:
-        {
-            // If plugin supports asynchronous mode, and it is busy, halt it.
-            PlugInProc* plugin = it->plugin();
-            if (plugin->supportsAsync())
-                if ((plugin->getState() == psSaying) || (plugin->getState() == psSynthing))
-                {
-                    kDebug() << "Speaker::deleteUtterance calling stopText";
-                    plugin->stopText();
-                }
-            break;
-        }
-        case Utt::usStretching:
-            delete it->audioStretcher();
-            break;
-        case Utt::usPlaying:
-            d->timer->stop();
-            it->audioPlayer()->stop();
-            delete it->audioPlayer();
-            break;
-        case Utt::usPaused:
-        case Utt::usPreempted:
-            // Note: Must call stop(), even if player not currently playing.  Why?
-            it->audioPlayer()->stop();
-            delete it->audioPlayer();
-            break;
-    }
-    if (!it->audioUrl().isNull())
-    {
-        // If the audio file was generated by a plugin, delete it.
-        if (it->plugin())
-        {
-            if (d->configData->keepAudio)
-            {
-                QString seqStr;
-                seqStr.sprintf("%08i", it->seq());    // Zero-fill to 8 chars.
-                QString jobStr;
-                jobStr.sprintf("%08i", it->job()->jobNum());
-                QString dest = d->configData->keepAudioPath + "/kttsd-" +
-                    QString("%1-%2").arg(jobStr).arg(seqStr) + ".wav";
-                QFile::remove(dest);
-                QDir d;
-                d.rename(it->audioUrl(), dest);
-                // TODO: This is always producing the following.  Why and how to fix?
-                // It moves the files just fine.
-                //  kio (KIOJob): stat file:///home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
-                //  kio (KIOJob): error 11 /home/kde-devel/.kde/share/apps/kttsd/audio/kttsd-5-1.wav
-                //  kio (KIOJob): This seems to be a suitable case for trying to rename before stat+[list+]copy+del
-                // KIO::move(it->audioUrl, dest, false);
-            }
-            else
-                QFile::remove(it->audioUrl());
-        }
-    }
-    // Delete the utterance from queue.
-    return d->uttQueue.erase(it);
-}
+//    //    case Utt::usTransforming:
+//    //        delete it->transformer();
+//    //        break;
+//    //    case Utt::usSaying:
+//    //    case Utt::usPaused:
+//    //    case Utt::usPreempted:
+//    //        // Note: Must call stop(), even if player not currently playing.  Why?
+//    //        it->audioPlayer()->stop();
+//    //        delete it->audioPlayer();
+//    //        break;
+//    //}
+//    //// Delete the utterance from queue.
+//    //return d->uttQueue.erase(it);
+//}
 
-bool Speaker::startPlayingUtterance(uttIterator it)
-{
-    // kDebug() << "Speaker::startPlayingUtterance running";
-    if (Utt::usPlaying == it->state()) return false;
-    if (it->audioUrl().isEmpty()) return false;
-    bool started = false;
-    // Pause (preempt) any other utterance currently being spoken.
-    // If any plugins are audibilizing, must wait for them to finish.
-    uttIterator itEnd = d->uttQueue.end();
-    for (uttIterator it2 = d->uttQueue.begin(); it2 != itEnd; ++it2)
-        if (it2 != it)
-        {
-            if (Utt::usPlaying == it2->state())
-            {
-                d->timer->stop();
-                it2->audioPlayer()->pause();
-                it2->setState(Utt::usPreempted);
-            }
-            if (Utt::usSaying == it2->state()) return false;
-        }
-    Utt::uttState utState = it->state();
-    switch (utState)
-    {
-        case Utt::usNone:
-        case Utt::usWaitingTransform:
-        case Utt::usTransforming:
-        case Utt::usWaitingSay:
-        case Utt::usWaitingSynth:
-        case Utt::usSaying:
-        case Utt::usSynthing:
-        case Utt::usSynthed:
-        case Utt::usStretching:
-        case Utt::usPlaying:
-        case Utt::usFinished:
-            break;
+//bool Speaker::startPlayingUtterance(uttIterator it)
+//{
+//    //// kDebug() << "Speaker::startPlayingUtterance running";
+//    //if (Utt::usPlaying == it->state()) return false;
+//    //bool started = false;
+//    //// Pause (preempt) any other utterance currently being spoken.
+//    //// If any plugins are audibilizing, must wait for them to finish.
+//    //uttIterator itEnd = d->uttQueue.end();
+//    //for (uttIterator it2 = d->uttQueue.begin(); it2 != itEnd; ++it2)
+//    //    if (it2 != it)
+//    //    {
+//    //        if (Utt::usPlaying == it2->state())
+//    //        {
+//    //            it2->audioPlayer()->pause();
+//    //            it2->setState(Utt::usPreempted);
+//    //        }
+//    //        if (Utt::usSaying == it2->state()) return false;
+//    //    }
+//    //Utt::uttState utState = it->state();
+//    //switch (utState)
+//    //{
+//    //    case Utt::usNone:
+//    //    case Utt::usWaitingTransform:
+//    //    case Utt::usTransforming:
+//    //    case Utt::usWaitingSay:
+//    //    case Utt::usWaitingSynth:
+//    //    case Utt::usSaying:
+//    //    case Utt::usSynthing:
+//    //    case Utt::usSynthed:
+//    //    case Utt::usStretching:
+//    //    case Utt::usPlaying:
+//    //    case Utt::usFinished:
+//    //        break;
 
-        case Utt::usStretched:
-            it->setAudioPlayer(createPlayerObject());
-            if (it->audioPlayer()) {
-                it->audioPlayer()->startPlay(it->audioUrl());
-                // Set job to speaking state and set sequence number.
-                d->currentJobNum = it->job()->jobNum();
-                it->setState(Utt::usPlaying);
-                prePlaySignals(it);
-                d->timer->start(timerInterval);
-                started = true;
-            } else {
-                // If could not create audio player object, best we can do is silence.
-                it->setState(Utt::usFinished);
-            }
-            break;
+//    //    case Utt::usPaused:
+//    //        // kDebug() << "Speaker::startPlayingUtterance: resuming play";
+//    //        it->audioPlayer()->startPlay(QString());  // resume
+//    //        it->setState(Utt::usPlaying);
+//    //        started = true;
+//    //        break;
 
-        case Utt::usPaused:
-            // kDebug() << "Speaker::startPlayingUtterance: resuming play";
-            it->audioPlayer()->startPlay(QString());  // resume
-            it->setState(Utt::usPlaying);
-            d->timer->start(timerInterval);
-            started = true;
-            break;
+//    //    case Utt::usPreempted:
+//    //        // Preempted playback automatically resumes.
+//    //        it->audioPlayer()->startPlay(QString());  // resume
+//    //        it->setState(Utt::usPlaying);
+//    //        started = true;
+//    //        break;
+//    //}
+//    //return started;
+//}
 
-        case Utt::usPreempted:
-            // Preempted playback automatically resumes.
-            it->audioPlayer()->startPlay(QString());  // resume
-            it->setState(Utt::usPlaying);
-            d->timer->start(timerInterval);
-            started = true;
-            break;
-    }
-    return started;
-}
+//void Speaker::prePlaySignals(uttIterator it)
+//{
+//    //if (it->job())
+//    //    emit marker(it->job()->appId(), it->job()->jobNum(), KSpeech::mtSentenceBegin, QString::number(it->seq()));
+//}
 
-void Speaker::prePlaySignals(uttIterator it)
-{
-    if (it->job())
-        emit marker(it->job()->appId(), it->job()->jobNum(), KSpeech::mtSentenceBegin, QString::number(it->seq()));
-}
+//void Speaker::postPlaySignals(uttIterator it)
+//{
+//    //if (it->job())
+//    //    emit marker(it->job()->appId(), it->job()->jobNum(), KSpeech::mtSentenceEnd, QString::number(it->seq()));
+//}
 
-void Speaker::postPlaySignals(uttIterator it)
-{
-    if (it->job())
-        emit marker(it->job()->appId(), it->job()->jobNum(), KSpeech::mtSentenceEnd, QString::number(it->seq()));
-}
-
-QString Speaker::makeSuggestedFilename()
-{
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setPrefix("kttsd-");
-    tempFile->setSuffix(".wav");
-    tempFile->open();
-    QString waveFile = tempFile->fileName();
-    delete tempFile;
-    kDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile;
-    return KStandardDirs::realFilePath(waveFile);
-}
-
-Player* Speaker::createPlayerObject()
-{
-    Player* player = 0;
-    QString plugInName;
-    switch(d->configData->playerOption)
-    {
-        case 0 :
-            {
-                plugInName = "kttsd_phononplugin";
-                break;
-            }
-        case 2 :
-            {
-                plugInName = "kttsd_alsaplugin";
-                break;
-            }
-        default:
-            {
-                // TODO: Default to Phonon.
-                plugInName = "kttsd_phononplugin";
-                break;
-            }
-    }
-	KService::List offers = KServiceTypeTrader::self()->query(
-            "KTTSD/AudioPlugin", QString("DesktopEntryName == '%1'").arg(plugInName));
-
-    if(offers.count() == 1)
-    {
-        kDebug() << "Speaker::createPlayerObject: Loading " << offers[0]->library();
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
-        if (factory)
-            player = 
-                KLibLoader::createInstance<Player>(
-                    offers[0]->library().toLatin1(), this, QStringList(offers[0]->library().toLatin1()));
-    }
-    if (player == 0)
-    {
-        // If we failed, fall back to default plugin.
-        // Default to Phonon.
-        if (d->configData->playerOption != 0)
-        {
-            kDebug() << "Speaker::createPlayerObject: Could not load " + plugInName + 
-                " plugin.  Falling back to KDE (Phonon)." << endl;
-            d->configData->playerOption = 0;
-            return createPlayerObject();
-        }
-        else
-            kDebug() << "Speaker::createPlayerObject: Could not load KDE (Phonon) plugin.  Is KDEDIRS set  correctly?";
-    }
-    if (player) {
-        player->setSinkName(d->configData->sinkName);
-        player->setPeriodSize(d->configData->periodSize);
-        player->setPeriods(d->configData->periods);
-        player->setDebugLevel(d->configData->playerDebugLevel);
-    }
-    return player;
-}
-
+//QString Speaker::makeSuggestedFilename()
+//{
+//    KTemporaryFile *tempFile = new KTemporaryFile();
+//    tempFile->setPrefix("kttsd-");
+//    tempFile->setSuffix(".wav");
+//    tempFile->open();
+//    QString waveFile = tempFile->fileName();
+//    delete tempFile;
+//    kDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile;
+//    return KStandardDirs::realFilePath(waveFile);
+//}
 
 /* Slots ==========================================================*/
 
@@ -1097,16 +1047,6 @@ void Speaker::slotStopped()
 }
 
 /**
-* Received from audio stretcher when stretching (speed adjustment) is finished.
-*/
-void Speaker::slotStretchFinished()
-{
-    // Convert to postEvent and return immediately.
-    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 104));
-    QApplication::postEvent(this, ev);
-}
-
-/**
 * Received from transformer (SSMLConvert) when transforming is finished.
 */
 void Speaker::slotTransformFinished()
@@ -1137,30 +1077,6 @@ void Speaker::slotError(bool /*keepGoing*/, const QString& /*msg*/)
 }
 
 /**
-* Received from Timer when it fires.
-* Check audio player to see if it is finished.
-*/
-void Speaker::slotTimeout()
-{
-    uttIterator itEnd = d->uttQueue.end();
-    for (uttIterator it = d->uttQueue.begin(); it != itEnd; ++it)
-    {
-        if (Utt::usPlaying == it->state())
-        {
-            if (it->audioPlayer()->playing())
-                return;  // Still playing.
-            else {
-                d->timer->stop();
-                postPlaySignals(it);
-                it->setState(Utt::usFinished);
-                doUtterances();
-                return;
-            }
-        }
-    }
-}
-
-/**
 * Processes events posted by plugins.  When asynchronous plugins emit signals
 * they are converted into these events.
 */
@@ -1171,8 +1087,476 @@ bool Speaker::event ( QEvent * e )
     if ((e->type() >= (QEvent::User + 101)) && (e->type() <= (QEvent::User + 105)))
     {
         // kDebug() << "Speaker::event: received event.";
-        doUtterances();
+        //doUtterances();
         return true;
     }
     else return false;
+}
+
+void Speaker::deleteJob(int removeJobNum)
+{
+    if (d->allJobs.contains(removeJobNum)) {
+        SpeechJob* job = d->allJobs.take(removeJobNum);
+        KSpeech::JobPriority priority = job->jobPriority();
+        QString appId = job->appId();
+        if (job->refCount() != 0)
+            kWarning() << "Speaker::deleteJob: deleting job " << removeJobNum << " with non-zero refCount." ;
+        delete job;
+        d->jobLists[priority]->removeAll(removeJobNum);
+        getAppData(appId)->jobList()->removeAll(removeJobNum);
+    }
+}
+
+void Speaker::removeJob(int jobNum)
+{
+    // kDebug() << "Running: Speaker::removeJob";
+    SpeechJob* removeJob = findJobByJobNum(jobNum);
+    if (removeJob) {
+        QString removeAppId = removeJob->appId();
+        int removeJobNum = removeJob->jobNum();
+        // If filtering on the job, cancel it.
+        if (d->pooledFilterMgrs.contains(removeJobNum)) {
+            while (PooledFilterMgr* pooledFilterMgr = d->pooledFilterMgrs.take(removeJobNum)) {
+                pooledFilterMgr->busy = false;
+                pooledFilterMgr->job = 0;
+                delete pooledFilterMgr->talkerCode;
+                pooledFilterMgr->talkerCode = 0;
+                pooledFilterMgr->filterMgr->stopFiltering();
+                d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+            }
+        }
+        deleteJob(removeJobNum);
+    }
+}
+
+void Speaker::removeAllJobs(const QString& appId)
+{
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager())
+        foreach (SpeechJob* job, d->allJobs)
+            removeJob(job->jobNum());
+    else
+        foreach (int jobNum, *appData->jobList())
+            removeJob(jobNum);
+}
+
+void Speaker::deleteExpiredJobs()
+{
+    foreach (AppData* appData, d->appData) {
+        if (appData->unregistered())
+            deleteExpiredApp(appData->appId());
+        else {
+            int finishedCount = 0;
+            // Copy JobList.
+            TJobList jobList = *(appData->jobList());
+            for (int ndx = jobList.size() - 1; ndx >= 0; --ndx) {
+                int jobNum = jobList[ndx];
+                SpeechJob* job = d->allJobs[jobNum];
+                if (KSpeech::jsFinished == job->state()) {
+                    ++finishedCount;
+                    if (finishedCount > 1 && 0 == job->refCount())
+                        deleteJob(jobNum);
+                }
+            }
+        }
+    }
+}
+
+void Speaker::deleteExpiredApp(const QString appId)
+{
+    if (d->appData.contains(appId)) {
+        AppData* appData = getAppData(appId);
+        // Scan the app's job list.  If there are no utterances on any jobs,
+        // delete the app altogether.
+        bool speaking = false;
+        foreach (int jobNum, *appData->jobList())
+            if (0 != d->allJobs[jobNum]->refCount()) {
+                speaking = true;
+                break;
+            }
+        if (!speaking) {
+            foreach (int jobNum, *appData->jobList())
+                deleteJob(jobNum);
+            releaseAppData(appId);
+            kDebug() << "Speaker::deleteExpiredApp: application " << appId << " deleted.";
+        }
+    }
+}
+
+//SpeechJob* Speaker::getNextSpeakableJob(KSpeech::JobPriority priority)
+//{
+//    foreach (int jobNum, *d->jobLists[priority]) {
+//        SpeechJob* job = d->allJobs[jobNum];
+//        if (!d->appData[job->appId()]->isApplicationPaused()) {
+//            switch (job->state()) {
+//                case KSpeech::jsQueued:
+//                    break;
+//                case KSpeech::jsFiltering:
+//                    waitJobFiltering(job);
+//                    return job;
+//                case KSpeech::jsSpeakable:
+//                    return job;
+//                case KSpeech::jsSpeaking:
+//                    if (job->seq() < job->sentenceCount())
+//                        return job;
+//                    break;
+//                case KSpeech::jsPaused:
+//                case KSpeech::jsInterrupted:
+//                case KSpeech::jsFinished:
+//                case KSpeech::jsDeleted:
+//                    break;
+//            }
+//        }
+//    }
+//    return NULL;
+//}
+
+void Speaker::setJobSentenceNum(int jobNum, int sentenceNum)
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) job->setSentenceNum(sentenceNum);
+}
+
+int Speaker::jobSentenceNum(int jobNum) const
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job)
+        return job->sentenceNum();
+    else
+        return 0;
+}
+
+int Speaker::sentenceCount(int jobNum)
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    int temp;
+    if (job) {
+        waitJobFiltering(job);
+        temp = job->sentenceCount();
+    } else
+        temp = -1;
+    return temp;
+}
+
+int Speaker::jobCount(const QString& appId, KSpeech::JobPriority priority) const
+{
+    AppData* appData = getAppData(appId);
+    // If System Manager app, return count of all jobs for all apps.
+    if (appData->isSystemManager())
+        return d->allJobs.count();
+    else {
+        if (KSpeech::jpAll == priority)
+            // Return count of all jobs for this app.
+            return appData->jobList()->count();
+        else {
+            // Return count of jobs for this app of the specified priority.
+            int cnt = 0;
+            foreach (int jobNum, *d->jobLists[priority]) {
+                SpeechJob* job = d->allJobs[jobNum];
+                if (job->appId() == appId)
+                    ++cnt;
+            }
+            return cnt;
+        }
+    }
+}
+
+QStringList Speaker::jobNumbers(const QString& appId, KSpeech::JobPriority priority) const
+{
+    QStringList jobs;
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager()) {
+        if (KSpeech::jpAll == priority) {
+            // Return job numbers for all jobs.
+            foreach (int jobNum, d->allJobs.keys())
+                jobs.append(QString::number(jobNum));
+        } else {
+            // Return job numbers for all jobs of specified priority.
+            foreach (int jobNum, *d->jobLists[priority])
+                jobs.append(QString::number(jobNum));
+        }
+    } else {
+        if (KSpeech::jpAll == priority) {
+            // Return job numbers for all jobs for this app.
+            foreach (int jobNum, *appData->jobList())
+                jobs.append(QString::number(jobNum));
+        } else {
+            // Return job numbers for this app's jobs of the specified priority.
+            foreach (int jobNum, *d->jobLists[priority]) {
+                SpeechJob* job = d->allJobs[jobNum];
+                if (job->appId() == appId)
+                    jobs.append(QString::number(jobNum));
+            }
+        }
+    }
+    // kDebug() << "Speaker::jobNumbers: appId = " << appId << " priority = " << priority
+    //     << " jobs = " << jobs << endl;
+    return jobs;
+}
+
+int Speaker::jobState(int jobNum) const
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    int temp;
+    if (job)
+        temp = (int)job->state();
+    else
+        temp = -1;
+    return temp;
+}
+
+QByteArray Speaker::jobInfo(int jobNum)
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) {
+        waitJobFiltering(job);
+        QByteArray temp = job->serialize();
+        QDataStream stream(&temp, QIODevice::Append);
+        stream << getAppData(job->appId())->applicationName();
+        return temp;
+    } else {
+        kDebug() << "Speaker::jobInfo: request for job info on non-existent jobNum = " << jobNum;
+        return QByteArray();
+    }
+}
+
+QString Speaker::jobSentence(int jobNum, int sentenceNum)
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) {
+        waitJobFiltering(job);
+        if (sentenceNum <= job->sentenceCount())
+            return job->sentences()[sentenceNum - 1];
+        else
+            return QString();
+    } else
+        return QString();
+}
+
+void Speaker::setTalker(int jobNum, const QString &talker)
+{
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job)
+        job->setTalker(talker);
+}
+
+void Speaker::moveJobLater(int jobNum)
+{
+    // kDebug() << "Running: Speaker::moveTextLater";
+    if (d->allJobs.contains(jobNum)) {
+        KSpeech::JobPriority priority = d->allJobs[jobNum]->jobPriority();
+        TJobListPtr jobList = d->jobLists[priority];
+        // Get index of the job.
+        uint index = jobList->indexOf(jobNum);
+        // Move job down one position in the queue.
+        // kDebug() << "In Speaker::moveTextLater, moving jobNum " << movedJobNum;
+        jobList->insert(index + 2, jobNum);
+        jobList->takeAt(index);
+    }
+}
+
+int Speaker::moveRelSentence(int jobNum, int n)
+{
+    // kDebug() << "Running: Speaker::moveRelTextSentence";
+    int newSentenceNum = 0;
+    SpeechJob* job = findJobByJobNum(jobNum);
+    if (job) {
+        waitJobFiltering(job);
+        int oldSentenceNum = job->sentenceNum();
+        newSentenceNum = oldSentenceNum + n;
+        if (0 != n) {
+            // Position one before the desired sentence.
+            int seq = newSentenceNum - 1;
+            if (seq < 0) seq = 0;
+            int sentenceCount = job->sentenceCount();
+            if (seq > sentenceCount) seq = sentenceCount;
+            job->setSentenceNum(seq);
+            job->setSeq(seq);
+            // If job was previously finished, but is now rewound, set state to speakable.
+            // If job was not finished, but now is past end, set state to finished.
+            if (KSpeech::jsFinished == job->state()) {
+                if (seq < sentenceCount)
+                    job->setState(KSpeech::jsSpeakable);
+            } else {
+                if (seq == sentenceCount)
+                    job->setState(KSpeech::jsFinished);
+            }
+        }
+    }
+    return newSentenceNum;
+}
+
+void Speaker::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
+{
+    job->setState(KSpeech::jsFiltering);
+    int jobNum = job->jobNum();
+    // kDebug() << "Speaker::startJobFiltering: jobNum = " << jobNum << " text.left(500) = " << text.left(500);
+    PooledFilterMgr* pooledFilterMgr = 0;
+    if (d->pooledFilterMgrs.contains(jobNum)) return;
+    // Find an idle FilterMgr, if any.
+    // If filtering is already in progress for this job, do nothing.
+    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+    while (it != d->pooledFilterMgrs.end()) {
+        if (!it.value()->busy) {
+            if (it.value()->job && it.value()->job->jobNum() == jobNum)
+                return;
+        } else {
+            if (!it.value()->job && !pooledFilterMgr)
+                pooledFilterMgr = it.value();
+        }
+        ++it;
+    }
+    // Create a new FilterMgr if needed and add to pool.
+    if (!pooledFilterMgr) {
+         // kDebug() << "Speaker::startJobFiltering: adding new pooledFilterMgr for job " << jobNum;
+        pooledFilterMgr = new PooledFilterMgr();
+        FilterMgr* filterMgr = new FilterMgr();
+        filterMgr->init();
+        pooledFilterMgr->filterMgr = filterMgr;
+        // Connect signals from FilterMgr.
+        connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
+        connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
+        d->pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
+    }
+    // else kDebug() << "Speaker::startJobFiltering: re-using idle pooledFilterMgr for job " << jobNum;
+    // Flag the FilterMgr as busy and set it going.
+    pooledFilterMgr->busy = true;
+    pooledFilterMgr->job = job;
+    pooledFilterMgr->filterMgr->setNoSBD( noSBD );
+    // Get TalkerCode structure of closest matching Talker.
+    pooledFilterMgr->talkerCode = TalkerMgr::Instance()->talkerToTalkerCode(job->talker());
+    // Pass Sentence Boundary regular expression.
+    AppData* appData = getAppData(job->appId());
+    pooledFilterMgr->filterMgr->setSbRegExp(appData->sentenceDelimiter());
+    kDebug() << "Speaker::startJobFiltering: job = " << job->jobNum() << " NoSBD = "
+        << noSBD << " sentenceDelimiter = " << appData->sentenceDelimiter() << endl;
+    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, appData->applicationName());
+}
+
+void Speaker::waitJobFiltering(const SpeechJob* job)
+{
+    int jobNum = job->jobNum();
+    bool waited = false;
+    bool notOptimum = false;
+    if (!d->pooledFilterMgrs.contains(jobNum)) return;
+    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.find(jobNum);
+    while (it != d->pooledFilterMgrs.end() && it.key() == jobNum) {
+        PooledFilterMgr* pooledFilterMgr = it.value();
+        if (pooledFilterMgr->busy) {
+            if (!pooledFilterMgr->filterMgr->noSBD())
+                notOptimum = true;
+            pooledFilterMgr->filterMgr->waitForFinished();
+            waited = true;
+        }
+        ++it;
+    }
+    if (waited) {
+        if (notOptimum)
+            kDebug() << "Speaker::waitJobFiltering: Waited for filtering to finish on job "
+                << jobNum << ".  Not optimium.  "
+                << "Try waiting for jobStateChanged signal with jsSpeakable before querying for job information." << endl;
+        doFiltering();
+    }
+}
+
+void Speaker::doFiltering()
+{
+    // kDebug() << "Speaker::doFiltering: Running.";
+    kDebug() << "Speaker::doFiltering: Scanning " << d->pooledFilterMgrs.count() << " pooled filter managers.";
+    bool again = true;
+    bool filterFinished = false;
+    while (again) {
+        again = false;
+        QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+        QMultiHash<int, PooledFilterMgr*>::iterator nextIt;
+        while (it != d->pooledFilterMgrs.end()) {
+            nextIt = it;
+            ++nextIt;
+            PooledFilterMgr* pooledFilterMgr = it.value();
+            // If FilterMgr is busy, see if it is now finished.
+            Q_ASSERT(pooledFilterMgr);
+            if (pooledFilterMgr->busy) {
+                FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
+                if (FilterMgr::fsFinished == filterMgr->getState()) {
+                    filterFinished = true;
+                    SpeechJob* job = pooledFilterMgr->job;
+                    kDebug() << "Speaker::doFiltering: filter finished, jobNum = " << job->jobNum();
+                    pooledFilterMgr->busy = false;
+                    // Retrieve text from FilterMgr.
+                    QString text = filterMgr->getOutput();
+                    kDebug() << "Speaker::doFiltering: text.left(500) = " << text.left(500);
+                    // kDebug() << "Speaker::doFiltering: filtered text: " << text;
+                    filterMgr->ackFinished();
+                    // Convert the TalkerCode back into string.
+                    job->setTalker(pooledFilterMgr->talkerCode->getTalkerCode());
+                    // TalkerCode object no longer needed.
+                    delete pooledFilterMgr->talkerCode;
+                    pooledFilterMgr->talkerCode = 0;
+                    if (filterMgr->noSBD()) {
+                        job->setSentences(QStringList(text));
+                    } else {
+                        // Split the text into sentences and store in the job.
+                        // The SBD plugin does all the real sentence parsing, inserting tabs at each
+                        // sentence boundary.
+                        QStringList sentences = text.split( '\t', QString::SkipEmptyParts);
+                        job->setSentences(sentences);
+                    }
+                    // Clean up.
+                    pooledFilterMgr->job = 0;
+                    // Re-index pool of FilterMgrs;
+                    d->pooledFilterMgrs.erase(it);
+                    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+                    // Emit signal.
+                    job->setState(KSpeech::jsSpeakable);
+                }
+                else kDebug() << "Speaker::doFiltering: filter for job " << pooledFilterMgr->job->jobNum() << " is busy.";
+            }
+            else kDebug() << "Speaker::doFiltering: filter is idle";
+            it = nextIt;
+        }
+    }
+    if (filterFinished)
+        emit filteringFinished();
+}
+
+void Speaker::pause(const QString& appId)
+{
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager()) {
+        foreach (AppData* app, d->appData)
+            app->setIsApplicationPaused(true);
+    } else
+        appData->setIsApplicationPaused(true);
+}
+
+void Speaker::resume(const QString& appId)
+{
+    AppData* appData = getAppData(appId);
+    if (appData->isSystemManager()) {
+        foreach (AppData* app, d->appData)
+            app->setIsApplicationPaused(false);
+    } else
+        appData->setIsApplicationPaused(false);
+}
+
+bool Speaker::isApplicationPaused(const QString& appId)
+{
+    return getAppData(appId)->isApplicationPaused();
+}
+
+void Speaker::slotFilterMgrFinished()
+{
+    // kDebug() << "Speaker::slotFilterMgrFinished: received signal FilterMgr finished signal.";
+    doFiltering();
+}
+
+void Speaker::slotFilterMgrStopped()
+{
+    doFiltering();
+}
+
+void Speaker::slotServiceUnregistered(const QString& serviceName)
+{
+    if (d->appData.contains(serviceName))
+        d->appData[serviceName]->setUnregistered(true);
 }
