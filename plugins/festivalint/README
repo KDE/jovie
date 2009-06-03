@@ -1,9 +1,0 @@
-This is the directory containing the Festival (Interactive) plug in.
-This plugin is developed and maintained by Gary Cramblitt.
-<garycramblitt@comcast.net>
-
-Make sure that Festival has write access to the audio device
-
-  chmod a+rw /dev/dsp*
-
-
