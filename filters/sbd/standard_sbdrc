@@ -1,6 +1,0 @@
-[Filter]
-AppID=
-LanguageCodes=
-SentenceBoundary=\\1\\t
-SentenceDelimiterRegExp=([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))
-UserFilterName=Standard Sentence Boundary Detector

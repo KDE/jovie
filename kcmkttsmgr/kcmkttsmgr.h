@@ -88,19 +88,6 @@ protected:
     FilterList m_filters;
 };
 
-class SbdFilterListModel : public FilterListModel
-{
-    Q_OBJECT
-public:
-    explicit SbdFilterListModel(FilterList filters = FilterList(), QObject *parent = 0);
-
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation,
-        int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-};
-
 class KCMKttsMgr :
     public KCModule,
     private Ui::KCMKttsMgrWidget
@@ -233,18 +220,18 @@ class KCMKttsMgr :
         /**
         * Display the Filter Configuration Dialog.
         */
-        void configureFilterItem( bool sbd );
+        void configureFilterItem();
         void configureFilter();
 
         /**
         * Add a filter.
         */
-        void addFilter( bool sbd );
+        void addFilter();
 
         /**
         * Remove a filter.
         */
-        void removeFilter( bool sbd );
+        void removeFilter();
 
         /**
         * Count number of configured Filters with the specified plugin name.
@@ -300,15 +287,6 @@ class KCMKttsMgr :
         KDialog* m_configDlg;
 
         /**
-        * Sentence Boundary Detector button popup menu actions.
-        */
-        QAction* m_sbdBtnEdit;
-        QAction* m_sbdBtnUp;
-        QAction* m_sbdBtnDown;
-        QAction* m_sbdBtnAdd;
-        QAction* m_sbdBtnRemove;
-
-        /**
         * Talker(synth) Plugin currently loaded into configuration dialog.
         */
         //PlugInConf *m_loadedTalkerPlugIn;
@@ -329,20 +307,14 @@ class KCMKttsMgr :
         int m_lastTalkerID;
 
         /**
-        * Models containing normal and SBD filters.
+        * Model containing normal filters.
         */
         FilterListModel m_filterListModel;
-        SbdFilterListModel m_sbdFilterListModel;
 
         /**
         * Last filter ID.  Used to generate a new ID.
         */
         int m_lastFilterID;
-
-        /**
-        * Last SBD filter ID.  Used to generate to new ID.
-        */
-        int m_lastSbdID;
 
         /**
         * True if the configuration has been changed.
@@ -371,7 +343,6 @@ class KCMKttsMgr :
         */
         void updateTalkerButtons();
         void updateFilterButtons();
-        void updateSbdButtons();
 
         /**
         * Slots for the Talker/Filter Configuration dialogs.
@@ -404,15 +375,10 @@ class KCMKttsMgr :
         */
         void slotFilterListView_clicked(const QModelIndex & index);
         void slotAddNormalFilterButton_clicked();
-        void slotAddSbdFilterButton_clicked();
         void slotRemoveNormalFilterButton_clicked();
-        void slotRemoveSbdFilterButton_clicked();
         void slotHigherNormalFilterPriorityButton_clicked();
-        void slotHigherSbdFilterPriorityButton_clicked();
         void slotLowerNormalFilterPriorityButton_clicked();
-        void slotLowerSbdFilterPriorityButton_clicked();
         void slotConfigureNormalFilterButton_clicked();
-        void slotConfigureSbdFilterButton_clicked();
 
         /**
         * Interruption tab slots.

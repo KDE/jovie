@@ -223,53 +223,6 @@ void FilterListModel::clear()
 
 // ----------------------------------------------------------------------------
 
-SbdFilterListModel::SbdFilterListModel(FilterList filters, QObject *parent)
-    : FilterListModel(filters, parent)
-{
-}
-
-int SbdFilterListModel::columnCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return 1;
-}
-
-QVariant SbdFilterListModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
-
-    if (index.row() < 0 || index.row() >= m_filters.count())
-        return QVariant();
-
-    if (index.column() != 0)
-        return QVariant();
-
-    if (role == Qt::DisplayRole)
-        return m_filters.at(index.row()).userFilterName;
-    else
-        return QVariant();
-}
-
-Qt::ItemFlags SbdFilterListModel::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return Qt::ItemIsEnabled;
-
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-}
-
-QVariant SbdFilterListModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        switch (section) {
-            case 0: return i18n("Sentence Boundary Detector");
-        };
-    return QVariant();
-}
-
-// ----------------------------------------------------------------------------
-
 /**
 * Constructor.
 */
@@ -293,16 +246,12 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     // Connect Views to Models and set row selection mode.
     talkersView->setModel(&m_talkerListModel);
     filtersView->setModel(&m_filterListModel);
-    sbdsView->setModel(&m_sbdFilterListModel);
     talkersView->setSelectionBehavior(QAbstractItemView::SelectRows);
     filtersView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    sbdsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     talkersView->setRootIsDecorated(false);
     filtersView->setRootIsDecorated(false);
-    sbdsView->setRootIsDecorated(false);
     talkersView->setItemsExpandable(false);
     filtersView->setItemsExpandable(false);
-    sbdsView->setItemsExpandable(false);
 
     // Give buttons icons.
     // Talkers tab.
@@ -316,21 +265,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     lowerFilterPriorityButton->setIcon(KIcon("go-down"));
     removeFilterButton->setIcon(KIcon("user-trash"));
     configureFilterButton->setIcon(KIcon("configure"));
-
-    // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
-    QMenu* sbdPopmenu = new QMenu( this );
-    sbdPopmenu->setObjectName( "SbdPopupMenu" );
-    m_sbdBtnEdit = sbdPopmenu->addAction(
-        i18n("&Edit..."), this, SLOT(slotConfigureSbdFilterButton_clicked()), 0 );
-    m_sbdBtnUp = sbdPopmenu->addAction( KIcon("go-up"),
-        i18nc("One slot up", "U&p"), this, SLOT(slotHigherSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnDown = sbdPopmenu->addAction( KIcon("go-down"),
-        i18n("Do&wn"), this, SLOT(slotLowerSbdFilterPriorityButton_clicked()), 0 );
-    m_sbdBtnAdd = sbdPopmenu->addAction(
-        i18n("&Add..."), this, SLOT(slotAddSbdFilterButton_clicked()), 0 );
-    m_sbdBtnRemove = sbdPopmenu->addAction(
-        i18n("&Remove"), this, SLOT(slotRemoveSbdFilterButton_clicked()), 0 );
-    sbdButton->setMenu( sbdPopmenu );
 
     // Object for the KTTSD configuration.
     m_config = new KConfig("kttsdrc");
@@ -372,8 +306,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
             this, SLOT(slotConfigureNormalFilterButton_clicked()));
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(updateFilterButtons()));
-    connect(sbdsView, SIGNAL(clicked(const QModelIndex &)),
-            this, SLOT(updateSbdButtons()));
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
 
@@ -518,7 +450,6 @@ void KCMKttsMgr::load()
 
     // Load Filters.
     m_filterListModel.clear();
-    m_sbdFilterListModel.clear();
     QStringList filterIDsList = generalConfig.readEntry("FilterIDs", QStringList());
     // kDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList;
     if (!filterIDsList.isEmpty())
@@ -547,11 +478,7 @@ void KCMKttsMgr::load()
                 fi.multiInstance = filterConfig.readEntry("MultiInstance", false);
                 fi.enabled = filterConfig.readEntry("Enabled", false);
                 // Determine if this filter is a Sentence Boundary Detector (SBD).
-                bool isSbd = filterConfig.readEntry("IsSBD", false);
-                if (isSbd)
-                    m_sbdFilterListModel.appendRow(fi);
-                else
-                    m_filterListModel.appendRow(fi);
+                m_filterListModel.appendRow(fi);
                 if (filterID.toInt() > m_lastFilterID) m_lastFilterID = filterID.toInt();
             }
         }
@@ -624,7 +551,6 @@ void KCMKttsMgr::load()
     // Update controls based on new states.
     updateTalkerButtons();
     updateFilterButtons();
-    updateSbdButtons();
 
     m_changed = false;
     m_suppressConfigChanged = false;
@@ -708,14 +634,6 @@ void KCMKttsMgr::save()
         filterIDsList.append(fi.id);
         KConfigGroup filterConfig(m_config, "Filter_" + fi.id);
         filterConfig.writeEntry("Enabled", fi.enabled);
-        filterConfig.writeEntry("IsSBD", false);
-    }
-    for (int i = 0; i < m_sbdFilterListModel.rowCount(); ++i) {
-        FilterItem fi = m_sbdFilterListModel.getRow(i);
-        filterIDsList.append(fi.id);
-        KConfigGroup filterConfig(m_config, "Filter_" + fi.id);
-        filterConfig.writeEntry("Enabled", fi.enabled);
-        filterConfig.writeEntry("IsSBD", true);
     }
     QString filterIDs = filterIDsList.join(",");
     generalConfig.writeEntry("FilterIDs", filterIDs);
@@ -1051,21 +969,15 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
 
 void KCMKttsMgr::slotAddNormalFilterButton_clicked()
 {
-    addFilter( false );
-}
-
-void KCMKttsMgr:: slotAddSbdFilterButton_clicked()
-{
-    addFilter( true );
+    addFilter();
 }
 
 /**
 * Add a filter.
 */
-void KCMKttsMgr::addFilter( bool sbd)
+void KCMKttsMgr::addFilter()
 {
     QTreeView* lView = filtersView;
-    if (sbd) lView = sbdsView;
     FilterListModel* model = qobject_cast<FilterListModel *>(lView->model());
 
     // Build a list of filters that support multiple instances and let user choose.
@@ -1089,8 +1001,7 @@ void KCMKttsMgr::addFilter( bool sbd)
             KttsFilterConf* filterConf = loadFilterPlugin( desktopEntryName );
             if (filterConf)
             {
-                if (filterConf->isSBD() == sbd)
-                    filterPlugInNames.append(filterPlugInName);
+                filterPlugInNames.append(filterPlugInName);
                 delete filterConf;
             }
         }
@@ -1170,7 +1081,6 @@ void KCMKttsMgr::addFilter( bool sbd)
         filterConfig.writeEntry("UserFilterName", userFilterName);
         filterConfig.writeEntry("MultiInstance", multiInstance);
         filterConfig.writeEntry("Enabled", true);
-        filterConfig.writeEntry("IsSBD", sbd);
         m_config->sync();
 
         // Add listview item.
@@ -1189,10 +1099,7 @@ void KCMKttsMgr::addFilter( bool sbd)
 
         // Select the new item, update buttons.
         lView->setCurrentIndex(modelIndex);
-        if (sbd)
-            updateSbdButtons();
-        else
-            updateFilterButtons();
+        updateFilterButtons();
 
         // Inform Control Center that change has been made.
         configChanged();
@@ -1232,37 +1139,25 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
 
 void KCMKttsMgr::slotRemoveNormalFilterButton_clicked()
 {
-    removeFilter( false );
-}
-
-void KCMKttsMgr::slotRemoveSbdFilterButton_clicked()
-{
-    removeFilter( true );
+    removeFilter();
 }
 
 /**
 * Remove filter.
 */
-void KCMKttsMgr::removeFilter( bool sbd )
+void KCMKttsMgr::removeFilter()
 {
     // kDebug() << "KCMKttsMgr::removeFilter: Running";
 
     FilterListModel* model;
-    QTreeView* lView;
-    if (sbd)
-        lView = sbdsView;
-    else
-        lView = filtersView;
+    QTreeView* lView = filtersView;
     model = qobject_cast<FilterListModel *>(lView->model());
     QModelIndex modelIndex = lView->currentIndex();
     if (!modelIndex.isValid()) return;
     QString filterID = model->getRow(modelIndex.row()).id;
     // Delete the filter from list view.
     model->removeRow(modelIndex.row());
-    if (sbd)
-        updateSbdButtons();
-    else
-        updateFilterButtons();
+    updateFilterButtons();
 
     // Delete the filter from the configuration file?
     kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file.";
@@ -1296,18 +1191,6 @@ void KCMKttsMgr::slotHigherNormalFilterPriorityButton_clicked()
     configChanged();
 }
 
-void KCMKttsMgr::slotHigherSbdFilterPriorityButton_clicked()
-{
-    QModelIndex modelIndex = sbdsView->currentIndex();
-    if (!modelIndex.isValid()) return;
-    m_sbdFilterListModel.swap(modelIndex.row(), modelIndex.row() - 1);
-    modelIndex = m_sbdFilterListModel.index(modelIndex.row() - 1, 0, QModelIndex());
-    sbdsView->scrollTo(modelIndex);
-    sbdsView->setCurrentIndex(modelIndex);
-    updateSbdButtons();
-    configChanged();
-}
-
 void KCMKttsMgr::slotLowerTalkerPriorityButton_clicked()
 {
     QModelIndex modelIndex = talkersView->currentIndex();
@@ -1329,18 +1212,6 @@ void KCMKttsMgr::slotLowerNormalFilterPriorityButton_clicked()
     filtersView->scrollTo(modelIndex);
     filtersView->setCurrentIndex(modelIndex);
     updateFilterButtons();
-    configChanged();
-}
-
-void KCMKttsMgr::slotLowerSbdFilterPriorityButton_clicked()
-{
-    QModelIndex modelIndex = sbdsView->currentIndex();
-    if (!modelIndex.isValid()) return;
-    m_sbdFilterListModel.swap(modelIndex.row(), modelIndex.row() + 1);
-    modelIndex = m_sbdFilterListModel.index(modelIndex.row() + 1, 0, QModelIndex());
-    sbdsView->scrollTo(modelIndex);
-    sbdsView->setCurrentIndex(modelIndex);
-    updateSbdButtons();
     configChanged();
 }
 
@@ -1382,26 +1253,6 @@ void KCMKttsMgr::updateFilterButtons(){
         lowerFilterPriorityButton->setEnabled(false);
     }
     // kDebug() << "KCMKttsMgr::updateFilterButtons: Exiting";
-}
-
-/**
- * Update the status of the SBD buttons.
- */
-void KCMKttsMgr::updateSbdButtons(){
-    // kDebug() << "KCMKttsMgr::updateSbdButtons: Running";
-    QModelIndex modelIndex = sbdsView->currentIndex();
-    if (modelIndex.isValid()) {
-        m_sbdBtnEdit->setEnabled( true );
-        m_sbdBtnUp->setEnabled( modelIndex.row() != 0 );
-        m_sbdBtnDown->setEnabled( modelIndex.row() < (m_sbdFilterListModel.rowCount() -1));
-        m_sbdBtnRemove->setEnabled( true );
-    } else {
-        m_sbdBtnEdit->setEnabled( false );
-        m_sbdBtnUp->setEnabled( false );
-        m_sbdBtnDown->setEnabled( false );
-        m_sbdBtnRemove->setEnabled( false );
-    }
-    // kDebug() << "KCMKttsMgr::updateSbdButtons: Exiting";
 }
 
 /**
@@ -1626,29 +1477,19 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
 
 void KCMKttsMgr::slotConfigureNormalFilterButton_clicked()
 {
-    configureFilterItem( false );
-}
-
-void KCMKttsMgr::slotConfigureSbdFilterButton_clicked()
-{
-    configureFilterItem( true );
+    configureFilterItem();
 }
 
 /**
  * User has requested display of filter configuration dialog.
  */
-void KCMKttsMgr::configureFilterItem( bool sbd )
+void KCMKttsMgr::configureFilterItem()
 {
     // Get highlighted plugin from Filter ListView and load into memory.
     QTreeView* lView;
     FilterListModel* model;
-    if (sbd) {
-        lView = sbdsView;
-        model = &m_sbdFilterListModel;
-    } else {
-        lView = filtersView;
-        model = &m_filterListModel;
-    }
+    lView = filtersView;
+    model = &m_filterListModel;
     QModelIndex modelIndex = lView->currentIndex();
     if (!modelIndex.isValid()) return;
     FilterItem fi = model->getRow(modelIndex.row());
@@ -1690,7 +1531,6 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
         filterConfig.writeEntry("UserFilterName", userFilterName);
         filterConfig.writeEntry("Enabled", true);
         filterConfig.writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
-        filterConfig.writeEntry("IsSBD", sbd);
 
         m_config->sync();
 
@@ -1769,10 +1609,6 @@ int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
     int cnt = 0;
     for (int i = 0; i < m_filterListModel.rowCount(); ++i) {
         FilterItem fi = m_filterListModel.getRow(i);
-        if (fi.plugInName == filterPlugInName) ++cnt;
-    }
-    for (int i = 0; i < m_sbdFilterListModel.rowCount(); ++i) {
-        FilterItem fi = m_sbdFilterListModel.getRow(i);
         if (fi.plugInName == filterPlugInName) ++cnt;
     }
     return cnt;
