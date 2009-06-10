@@ -183,7 +183,7 @@
         <item>
          <widget class="QLabel" name="appIdLabel" >
           <property name="whatsThis" >
-           <string>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
+           <string>Enter a D-Bus Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"</string>
           </property>
           <property name="text" >
            <string>Application &amp;ID contains:</string>
@@ -239,7 +239,7 @@
         <item>
          <widget class="KLineEdit" name="appIdLineEdit" >
           <property name="whatsThis" >
-           <string>&lt;qt>Enter a DCOP Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
+           <string>&lt;qt>Enter a D-Bus Application ID.  This filter will only apply to text jobs queued by that application.  You may enter more than one ID separated by commas.  Use &lt;b>knotify&lt;/b> to match all messages sent as KDE notifications.  If blank, this filter applies to text jobs queued by all applications.  Tip: Use kdcop from the command line to get the Application IDs of running applications.  Example: "konversation, kvirc,ksirc,kopete"&lt;/qt></string>
           </property>
          </widget>
         </item>
