@@ -123,6 +123,7 @@ QString KSpeech::applicationName()
 
 void KSpeech::setApplicationName(const QString &applicationName)
 {
+    kDebug() << "setting application name to : " << applicationName;
     Speaker::Instance()->getAppData(callingAppId())->setApplicationName(applicationName);
 }
 

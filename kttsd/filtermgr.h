@@ -86,7 +86,7 @@ class FilterMgr : public KttsFilterProc
          * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
          *                          use for synthing the text.  Useful for extracting hints about
          *                          how to filter the text.  For example, languageCode.
-         * @param appId             The DCOP appId of the application that queued the text.
+         * @param appId             The DBUS appId of the application that queued the text.
          *                          Also useful for hints about how to do the filtering.
          * @return                  Converted text.
          */

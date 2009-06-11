@@ -35,7 +35,7 @@
 #include <kspeech.h>
 
 // KTTSD includes.
-#include "utt.h"
+//#include "utt.h"
 #include "libspeechd.h"
 #include "filtermgr.h"
 #include "appdata.h"
@@ -47,17 +47,17 @@ class TalkerMgr;
 /**
  * Struct used to keep a pool of FilterMgr objects.
  */
-struct PooledFilterMgr {
-    FilterMgr* filterMgr;       /* The FilterMgr object. */
-    bool busy;                  /* True if the FilterMgr is busy. */
-    SpeechJob* job;             /* The job the FilterMgr is filtering. */
-    TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
-};
+//struct PooledFilterMgr {
+//    FilterMgr* filterMgr;       /* The FilterMgr object. */
+//    bool busy;                  /* True if the FilterMgr is busy. */
+//    SpeechJob* job;             /* The job the FilterMgr is filtering. */
+//    TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
+//};
 
 /**
 * Iterator for queue of utterances.
 */
-typedef QList<Utt>::iterator uttIterator;
+//typedef QList<Utt>::iterator uttIterator;
 
 // Timer interval for checking whether audio playback is finished.
 const int timerInterval = 500;
@@ -99,7 +99,7 @@ public:
     * Main processing loop.  Dequeues utterances and sends them to the
     * plugins and/or Audio Player.
     */
-    void doUtterances();
+    //void doUtterances();
 
     /**
     * Determine if kttsd is currently speaking any jobs.
@@ -437,8 +437,8 @@ private slots:
     */
     //void slotTimeout();
 
-    void slotFilterMgrFinished();
-    void slotFilterMgrStopped();
+    //void slotFilterMgrFinished();
+    //void slotFilterMgrStopped();
     
     void slotServiceUnregistered(const QString& serviceName);
 
@@ -547,7 +547,7 @@ private:
     /**
     * Assigns a FilterMgr to a job and starts filtering on it.
     */
-    void startJobFiltering(SpeechJob* job, const QString& text, bool noSBD);
+    //void startJobFiltering(SpeechJob* job, const QString& text, bool noSBD);
 
     /**
     * Waits for filtering to be completed on a job.
