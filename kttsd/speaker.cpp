@@ -162,6 +162,7 @@ protected:
                 modulenames++;
                 kDebug() << "added module " << outputModules.last();
             }
+            retval = true;
         }
         return retval;
     }

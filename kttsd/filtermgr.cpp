@@ -76,21 +76,7 @@ bool FilterMgr::init()
     KConfig* rawconfig = new KConfig("kttsdrc");
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList());
      kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
-    // If no filters have been configured, automatically configure the standard SBD.
-    if (filterIDsList.isEmpty())
-    {
-        KConfigGroup group = config.group("Filter_1");
-        group.writeEntry("DesktopEntryName", "kttsd_sbdplugin");
-        group.writeEntry("Enabled", true);
-        group.writeEntry("IsSBD", true);
-        group.writeEntry("MultiInstance", true);
-        group.writeEntry("SentenceBoundary", "\\1\\t");
-        group.writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
-        group.writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
 
-        config.writeEntry("FilterIDs", "1");
-        filterIDsList = config.readEntry("FilterIDs", QStringList());
-    }
     if ( !filterIDsList.isEmpty() )
     {
         QStringList::ConstIterator itEnd = filterIDsList.constEnd();
@@ -98,7 +84,7 @@ bool FilterMgr::init()
         {
             QString filterID = *it;
             QString groupName = "Filter_" + filterID;
-            KConfigGroup thisgroup = config.group(groupName);
+            KConfigGroup thisgroup = pConfig->group(groupName);
             QString desktopEntryName = thisgroup.readEntry( "DesktopEntryName" );
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
