@@ -97,7 +97,8 @@ bool FilterMgr::init()
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
-                if (!desktopEntryName.isEmpty()) thisgroup.writeEntry("DesktopEntryName", desktopEntryName);
+                if (!desktopEntryName.isEmpty())
+                    thisgroup.writeEntry("DesktopEntryName", desktopEntryName);
             }
             if (thisgroup.readEntry("Enabled",false) || thisgroup.readEntry("IsSBD",false))
             {

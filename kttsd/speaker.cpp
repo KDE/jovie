@@ -452,8 +452,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 
     if (jobNum != -1)
     {
-        kDebug() << "saying new job with id of: " << jobNum;
-        kDebug() << "saying text: " << filteredText;
+        kDebug() << "saying post filtered text: " << filteredText;
     }
 
     job->setJobNum(jobNum);

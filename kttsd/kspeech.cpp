@@ -214,7 +214,8 @@ void KSpeech::setIsSystemManager(bool isSystemManager)
 
 int KSpeech::say(const QString &text, int options) {
     // kDebug() << "KSpeech::say: Adding '" << text << "' to queue.";
-    return Speaker::Instance()->say(callingAppId(), text, options);
+    Speaker * speaker = Speaker::Instance();
+    return speaker->say(speaker->getAppData(callingAppId())->applicationName(), text, options);
 }
 
 int KSpeech::sayFile(const QString &filename, const QString &encoding)
