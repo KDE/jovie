@@ -106,8 +106,8 @@ class SpeakerPrivate
         currentJobNum(0),
         connection(NULL),
         lastJobNum(0),
-        supportsHTML(false),
-        filterMgr(NULL)
+        filterMgr(NULL),
+        supportsHTML(false)
     {
         if (!ConnectToSpeechd())
             kError() << "could not get a connection to speech-dispatcher"<< endl;
@@ -163,6 +163,7 @@ protected:
                 kDebug() << "added module " << outputModules.last();
             }
         }
+        return retval;
     }
 
     // try to reconnect to speech-dispatcher, return true on success
@@ -244,7 +245,7 @@ Speaker * Speaker::Instance()
     return m_instance;
 }
 
-void Speaker::speechdCallback(size_t msg_id, size_t client_id, SPDNotificationType type)
+void Speaker::speechdCallback(size_t msg_id, size_t /*client_id*/, SPDNotificationType type)
 {
     kDebug() << "speechdCallback called with messageid: " << msg_id << " and type: " << type;
     SpeechJob * job = Speaker::Instance()->d->allJobs[msg_id];
@@ -1112,7 +1113,7 @@ void Speaker::deleteJob(int removeJobNum)
 {
     if (d->allJobs.contains(removeJobNum)) {
         SpeechJob* job = d->allJobs.take(removeJobNum);
-        KSpeech::JobPriority priority = job->jobPriority();
+        //KSpeech::JobPriority priority = job->jobPriority();
         QString appId = job->appId();
         if (job->refCount() != 0)
             kWarning() << "Speaker::deleteJob: deleting job " << removeJobNum << " with non-zero refCount." ;
@@ -1345,7 +1346,7 @@ void Speaker::moveJobLater(int jobNum)
 {
     // kDebug() << "Running: Speaker::moveTextLater";
     if (d->allJobs.contains(jobNum)) {
-        KSpeech::JobPriority priority = d->allJobs[jobNum]->jobPriority();
+        //KSpeech::JobPriority priority = d->allJobs[jobNum]->jobPriority();
         //TJobListPtr jobList = d->jobLists[priority];
         // Get index of the job.
         //uint index = jobList->indexOf(jobNum);
