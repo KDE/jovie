@@ -115,16 +115,16 @@ Qt::ItemFlags TalkerListModel::flags(const QModelIndex &index) const
 QVariant TalkerListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-    switch (section)
-    {
-        case 0: return i18n("ID");
-        case 1: return i18n("Language");
-        case 2: return i18n("Synthesizer");
-        case 3: return i18n("Voice Code");
-        case 4: return i18n("Gender");
-        case 5: return i18nc("Volume of noise", "Volume");
-        case 6: return i18n("Rate");
-    };
+        switch (section)
+        {
+            case 0: return i18n("ID");
+            case 1: return i18n("Language");
+            case 2: return i18n("Synthesizer");
+            case 3: return i18n("Voice Code");
+            case 4: return i18n("Gender");
+            case 5: return i18nc("Volume of noise", "Volume");
+            case 6: return i18n("Rate");
+        };
 
     return QVariant();
 }

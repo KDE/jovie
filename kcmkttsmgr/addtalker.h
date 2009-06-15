@@ -26,12 +26,9 @@
 #define ADDTALKER_H
 
 // Qt includes.
-#include <QtCore/QMap>
+#include <QtCore/QList>
 
 #include "ui_addtalkerwidget.h"
-
-typedef QMap<QString,QStringList> SynthToLangMap;
-typedef QMap<QString,QStringList> LangToSynthMap;
 
 class AddTalker : public QWidget, private Ui::AddTalkerWidget
 {
@@ -40,11 +37,10 @@ class AddTalker : public QWidget, private Ui::AddTalkerWidget
 public:
     /**
     * Constructor.
-    * @param synthToLangMap     QMap of supported language codes indexed by synthesizer.
     * @param parent             Inherited KDialog parameter.
     * @param name               Inherited KDialog parameter.
     */
-    explicit AddTalker(SynthToLangMap synthToLangMap, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    explicit AddTalker(QWidget* parent = 0);
 
     /**
     * Destructor.
@@ -61,28 +57,20 @@ public:
     */
     QString getSynthesizer() const;
 
-
 private:
-    /**
-    * Set the synthesizer-to-languages map.
-    * @param synthToLang        QMap of supported language codes indexed by synthesizer.
-    */
-    void setSynthToLangMap(SynthToLangMap synthToLangMap);
-
     // Converts a language code plus optional country code to language description.
     QString languageCodeToLanguage(const QString &languageCode);
 
     // QMap of language descriptions to language codes.
     QMap<QString,QString> m_languageToLanguageCodeMap;
-    // QMap of supported languages indexed by synthesizer.
-    SynthToLangMap m_synthToLangMap;
-    // QMap of synthesizers indexed by language code they support.
-    LangToSynthMap m_langToSynthMap;
+
+    // output modules found in speech-dispatcher
+    QStringList m_outputModules;
+
+    // map of output module to language list supported by each output module
+    QMap<QString, QStringList> m_synthsToLanguagesMap;
 
 private slots:
-    // Based on user's radio button selection, filters choices for language or synthesizer
-    // comboboxes based on what is selected in the other combobox.
-    void applyFilter();
 };
 
 #endif

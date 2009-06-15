@@ -182,7 +182,6 @@ class KCMKttsMgr :
             wpTalkers = 1,          // Talkers tab.
             wpFilters = 2,          // Filters tab.
             wpInterruption = 3,     // Interruption tab.
-            wpAudio = 4,            // Audio tab.
             wpJobs = 5              // Jobs tab.
         };
 
@@ -264,7 +263,7 @@ class KCMKttsMgr :
         *
         * An exact match is performed.
         */
-        QTreeWidgetItem* findTreeWidgetItem(QTreeWidget* tw, const QString& sought, int col);
+        //QTreeWidgetItem* findTreeWidgetItem(QTreeWidget* tw, const QString& sought, int col);
 
         /**
         * DBUS KSpeech Interface.
@@ -335,7 +334,7 @@ class KCMKttsMgr :
         /**
         * A QMap of languages codes indexed by synthesizer that supports them.
         */
-        SynthToLangMap m_synthToLangMap;
+        //SynthToLangMap m_synthToLangMap;
 
     private slots:
         /**
@@ -369,16 +368,15 @@ class KCMKttsMgr :
         void slotLowerTalkerPriorityButton_clicked();
         void slotConfigureTalkerButton_clicked();
 
-
         /**
         * Filters tab slots.
         */
         void slotFilterListView_clicked(const QModelIndex & index);
-        void slotAddNormalFilterButton_clicked();
-        void slotRemoveNormalFilterButton_clicked();
-        void slotHigherNormalFilterPriorityButton_clicked();
-        void slotLowerNormalFilterPriorityButton_clicked();
-        void slotConfigureNormalFilterButton_clicked();
+        void slotAddFilterButton_clicked();
+        void slotRemoveFilterButton_clicked();
+        void slotHigherFilterPriorityButton_clicked();
+        void slotLowerFilterPriorityButton_clicked();
+        void slotConfigureFilterButton_clicked();
 
         /**
         * Interruption tab slots.

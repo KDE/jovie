@@ -53,11 +53,17 @@ public:
     ~TalkerMgr();
 
     /**
-     * Get a list of the talkers configured in KTTS.
+     * Get a list of the talkers configured in Speech Dispatcher.
      * @return               A QStringList of fully-specified talker codes, one
      *                       for each talker available in speech-dispatcher
      */
     QStringList getTalkers();
+
+    /**
+     * load the talkers from the given config object
+     * @param c              KConfig object to read configured talkers from
+     */
+    int loadTalkers(KConfig* c);
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.
@@ -135,7 +141,6 @@ private:
      * Array of the loaded plug ins for different Talkers.
      * Array of parsed Talker Codes for the plugins.
      */
-    //PlugInList m_loadedPlugIns;
     QStringList m_loadedTalkerIds;
     TalkerCode::TalkerCodeList m_loadedTalkerCodes;
 

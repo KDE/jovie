@@ -1,252 +1,71 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <author>Gary Cramblitt</author>
  <class>AddTalkerWidget</class>
- <widget class="QWidget" name="AddTalkerWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="AddTalkerWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
-    <height>141</height>
+    <width>569</width>
+    <height>214</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="margin">
     <number>8</number>
    </property>
-   <property name="spacing" >
+   <property name="spacing">
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string/>
+   <item row="0" column="0">
+    <widget class="QTableWidget" name="AvailableTalkersTable">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>8</number>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="horizontalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Language</string>
       </property>
-      <property name="spacing" >
-       <number>6</number>
+     </column>
+     <column>
+      <property name="text">
+       <string>Voice Name</string>
       </property>
-      <item row="2" column="4" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>25</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="3" colspan="2" >
-       <widget class="QLabel" name="showAllLabel" >
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>true</underline>
-          <strikeout>false</strikeout>
-         </font>
-        </property>
-        <property name="whatsThis" >
-         <string>The radio buttons below determine which box shows all possibilities.  The box to the left of the checked button shows all possibilities.  The box to the left of the unchecked box only shows those possibilities that match the other box.</string>
-        </property>
-        <property name="text" >
-         <string>Show All</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>30</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="3" >
-       <widget class="QRadioButton" name="synthesizerRadioButton" >
-        <property name="whatsThis" >
-         <string>Check this box to display all the available synthesizers in the Synthesizer box to the left.  When a synthesizer is chosen, only the languages that can be spoken by that synthesizer appear in the Language box.</string>
-        </property>
-        <property name="text" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>25</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="3" >
-       <widget class="QRadioButton" name="languageRadioButton" >
-        <property name="whatsThis" >
-         <string>Check to list all the possible languages in the Language box at the left.  When a language has been chosen, the Synthesizer box will show only those synthesizers that can speak in the chosen language.</string>
-        </property>
-        <property name="text" >
-         <string/>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>30</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0" colspan="3" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>351</width>
-          <height>21</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="synthesizerLabel" >
-        <property name="whatsThis" >
-         <string>Select the speech synthesizer to do the speaking.</string>
-        </property>
-        <property name="text" >
-         <string>&amp;Synthesizer:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy" >
-         <cstring>synthesizerSelection</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="languageLabel" >
-        <property name="whatsThis" >
-         <string>Select the language to be spoken.  Note that after you configure a Talker, your chosen Language may be overridden by the synthesizer, depending upon the options you choose.</string>
-        </property>
-        <property name="text" >
-         <string>&amp;Language:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy" >
-         <cstring>languageSelection</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="KComboBox" name="synthesizerSelection" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>1</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="whatsThis" >
-         <string>Select the speech synthesizer to do the speaking.</string>
-        </property>
-        <property name="duplicatesEnabled" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="KComboBox" name="languageSelection" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="whatsThis" >
-         <string>Select the language to be spoken.  Note that after you configure a Talker, your chosen Language may be overridden by the synthesizer, depending upon the options you choose.</string>
-        </property>
-        <property name="duplicatesEnabled" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     </column>
+     <column>
+      <property name="text">
+       <string>Synthesizer</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
- </customwidgets>
- <tabstops>
-  <tabstop>languageSelection</tabstop>
-  <tabstop>synthesizerSelection</tabstop>
-  <tabstop>languageRadioButton</tabstop>
-  <tabstop>synthesizerRadioButton</tabstop>
-  <tabstop>languageSelection</tabstop>
-  <tabstop>synthesizerSelection</tabstop>
- </tabstops>
- <includes/>
  <resources/>
  <connections/>
 </ui>
