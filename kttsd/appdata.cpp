@@ -35,7 +35,7 @@ public:
         appId(newAppId),
         applicationName(appId),
         defaultTalker(""),
-        defaultPriority(KSpeech::jpText),
+        defaultPriority(KSpeech::jpMessage),
         sentenceDelimiter("([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))"),
         filteringOn(true),
         isApplicationPaused(false),
