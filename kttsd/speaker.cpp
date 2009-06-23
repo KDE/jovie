@@ -1141,8 +1141,10 @@ void Speaker::removeAllJobs(const QString& appId)
 {
     AppData* appData = getAppData(appId);
     if (appData->isSystemManager())
-        foreach (SpeechJob* job, d->allJobs)
-            removeJob(job->jobNum());
+        foreach (SpeechJob* job, d->allJobs) {
+            if (job) {
+                removeJob(job->jobNum());
+            }
     else
         foreach (int jobNum, *appData->jobList())
             removeJob(jobNum);
