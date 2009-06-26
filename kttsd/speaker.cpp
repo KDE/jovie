@@ -100,7 +100,6 @@
 class SpeakerPrivate
 {
     SpeakerPrivate() :
-        configData(NULL),
         exitRequested(false),
         again(false),
         currentJobNum(0),
@@ -173,11 +172,6 @@ protected:
         spd_close(connection);
         return ConnectToSpeechd();
     }
-    
-    /**
-    * Configuration Data object.
-    */
-    ConfigData* configData;
 
     /**
     * True if the speaker was requested to exit.
@@ -294,12 +288,9 @@ Speaker::~Speaker(){
     delete d;
 }
 
-void Speaker::setConfigData(ConfigData* configData)
+void Speaker::init()
 {
-    d->configData = configData;
-
     // from speechdata
-
     // Create an initial FilterMgr for the pool to save time later.
     delete d->filterMgr;
     d->filterMgr = new FilterMgr();
@@ -1145,6 +1136,7 @@ void Speaker::removeAllJobs(const QString& appId)
             if (job) {
                 removeJob(job->jobNum());
             }
+        }
     else
         foreach (int jobNum, *appData->jobList())
             removeJob(jobNum);

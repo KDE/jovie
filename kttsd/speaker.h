@@ -35,12 +35,10 @@
 #include <kspeech.h>
 
 // KTTSD includes.
-#include "libspeechd.h"
+#include <libspeechd.h>
 #include "filtermgr.h"
 #include "appdata.h"
 #include "speechjob.h"
-
-class ConfigData;
 
 /**
  * Struct used to keep a pool of FilterMgr objects.
@@ -51,9 +49,6 @@ class ConfigData;
 //    SpeechJob* job;             /* The job the FilterMgr is filtering. */
 //    TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 //};
-
-// Timer interval for checking whether audio playback is finished.
-const int timerInterval = 500;
 
 /**
  * This class is in charge of getting the messages, warnings and text from
@@ -78,9 +73,9 @@ public:
     ~Speaker();
     
     /**
-    * Sets pointer to the configuration data object.
+    * (re)initializes the filtermgr
     */
-    void setConfigData(ConfigData* configData);
+    void init();
 
     /**
     * Tells the thread to exit.
@@ -388,11 +383,6 @@ signals:
     */
     void jobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
     
-    /**
-    * Emitted when job filtering completes.
-    */
-    void filteringFinished();
-
 protected:
     /**
     * Processes events posted by ThreadedPlugIns.

@@ -8,10 +8,8 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2400)
 set(kttsd_SRCS 
    main.cpp 
    kspeech.cpp 
-   utt.cpp 
    speaker.cpp 
    appdata.cpp 
-   configdata.cpp 
    ssmlconvert.cpp 
    filtermgr.cpp 
    talkermgr.cpp 
