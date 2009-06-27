@@ -3,9 +3,10 @@
   -------------------
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Copyright : (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
  ******************************************************************************/
 
 /***************************************************************************
@@ -73,18 +74,6 @@
 const bool autostartMgrCheckBoxValue = true;
 const bool autoexitMgrCheckBoxValue = true;
 
-
-const bool textPreMsgCheckValue = true;
-const QString textPreMsgValue = i18n("Text interrupted. Message.");
-
-const bool textPreSndCheckValue = false;
-const QString textPreSndValue = "";
-
-const bool textPostMsgCheckValue = true;
-const QString textPostMsgValue = i18n("Resuming text.");
-
-const bool textPostSndCheckValue = false;
-const QString textPostSndValue = "";
 
 // Make this a plug in.
 K_PLUGIN_FACTORY(KCMKttsMgrFactory, registerPlugin<KCMKttsMgr>();)
@@ -310,24 +299,6 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
             this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
 
 
-    // Interruption tab.
-    connect(textPreMsgCheck, SIGNAL(toggled(bool)),
-            this, SLOT(slotTextPreMsgCheck_toggled(bool)));
-    connect(textPreMsg, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-    connect(textPreSndCheck, SIGNAL(toggled(bool)),
-            this, SLOT(slotTextPreSndCheck_toggled(bool)));
-    connect(textPreSnd, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-    connect(textPostMsgCheck, SIGNAL(toggled(bool)),
-            this, SLOT(slotTextPostMsgCheck_toggled(bool)));
-    connect(textPostMsg, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-    connect(textPostSndCheck, SIGNAL(toggled(bool)),
-            this, SLOT(slotTextPostSndCheck_toggled(bool)));
-    connect(textPostSnd, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-
     // Others.
     connect(mainTab, SIGNAL(currentChanged(int)),
             this, SLOT(slotTabChanged()));
@@ -381,23 +352,6 @@ void KCMKttsMgr::load()
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
     KConfigGroup generalConfig(m_config, "General");
-
-    // Load the configuration of the text interruption messages and sound
-    textPreMsgCheck->setChecked(generalConfig.readEntry("TextPreMsgEnabled", textPreMsgCheckValue));
-    textPreMsg->setText(generalConfig.readEntry("TextPreMsg", textPreMsgValue));
-    textPreMsg->setEnabled(textPreMsgCheck->isChecked());
-
-    textPreSndCheck->setChecked(generalConfig.readEntry("TextPreSndEnabled", textPreSndCheckValue));
-    textPreSnd->setUrl(KUrl::fromPath(generalConfig.readEntry("TextPreSnd", textPreSndValue)));
-    textPreSnd->setEnabled(textPreSndCheck->isChecked());
-
-    textPostMsgCheck->setChecked(generalConfig.readEntry("TextPostMsgEnabled", textPostMsgCheckValue));
-    textPostMsg->setText(generalConfig.readEntry("TextPostMsg", textPostMsgValue));
-    textPostMsg->setEnabled(textPostMsgCheck->isChecked());
-
-    textPostSndCheck->setChecked(generalConfig.readEntry("TextPostSndEnabled", textPostSndCheckValue));
-    textPostSnd->setUrl(KUrl::fromPath(generalConfig.readEntry("TextPostSnd", textPostSndValue)));
-    textPostSnd->setEnabled(textPostSndCheck->isChecked());
 
     // Overall settings.
     enableKttsdCheckBox->setChecked(generalConfig.readEntry("EnableKttsd",
@@ -565,19 +519,6 @@ void KCMKttsMgr::save()
     // Set the group general for the configuration of kttsd itself (no plug ins)
     KConfigGroup generalConfig(m_config, "General");
 
-    // Set text interrumption messages and paths
-    generalConfig.writeEntry("TextPreMsgEnabled", textPreMsgCheck->isChecked());
-    generalConfig.writeEntry("TextPreMsg", textPreMsg->text());
-
-    generalConfig.writeEntry("TextPreSndEnabled", textPreSndCheck->isChecked());
-    //generalConfig.writeEntry("TextPreSnd", PlugInConf::realFilePath(textPreSnd->url().path()));
-
-    generalConfig.writeEntry("TextPostMsgEnabled", textPostMsgCheck->isChecked());
-    generalConfig.writeEntry("TextPostMsg", textPostMsg->text());
-
-    generalConfig.writeEntry("TextPostSndEnabled", textPostSndCheck->isChecked());
-    //generalConfig.writeEntry("TextPostSnd", PlugInConf::realFilePath(textPostSnd->url().path()));
-
     // Overall settings.
     generalConfig.writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
     generalConfig.writeEntry("AutoExitManager", autoexitMgrCheckBox->isChecked());
@@ -703,49 +644,6 @@ void KCMKttsMgr::defaults() {
                     autoexitMgrCheckBoxValue);
             }
             break;
-
-        case wpInterruption:
-            if (textPreMsgCheck->isChecked() != textPreMsgCheckValue)
-            {
-                changed = true;
-                textPreMsgCheck->setChecked(textPreMsgCheckValue);
-            }
-            if (textPreMsg->text() != i18n(textPreMsgValue.toUtf8()))
-            {
-                changed = true;
-                textPreMsg->setText(i18n(textPreMsgValue.toUtf8()));
-            }
-            if (textPreSndCheck->isChecked() != textPreSndCheckValue)
-            {
-                changed = true;
-                textPreSndCheck->setChecked(textPreSndCheckValue);
-            }
-            if (textPreSnd->url().path() != textPreSndValue)
-            {
-                changed = true;
-                textPreSnd->setUrl(KUrl::fromPath(textPreSndValue));
-            }
-            if (textPostMsgCheck->isChecked() != textPostMsgCheckValue)
-            {
-                changed = true;
-                textPostMsgCheck->setChecked(textPostMsgCheckValue);
-            }
-            if (textPostMsg->text() != i18n(textPostMsgValue.toUtf8()))
-            {
-                changed = true;
-                textPostMsg->setText(i18n(textPostMsgValue.toUtf8()));
-            }
-            if (textPostSndCheck->isChecked() != textPostSndCheckValue)
-            {
-                changed = true;
-                textPostSndCheck->setChecked(textPostSndCheckValue);
-            }
-            if (textPostSnd->url().path() != textPostSndValue)
-            {
-                changed = true;
-                textPostSnd->setUrl(KUrl::fromPath(textPostSndValue));
-            }
-            break;
     }
     if (changed) configChanged();
 }
@@ -839,7 +737,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
  */
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
-    KDialog* dlg = new KDialog(this);
+    QPointer<KDialog> dlg = new KDialog(this);
     dlg->setCaption(i18n("Add Talker"));
     dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     dlg->setDefaultButton(KDialog::Cancel);
@@ -850,6 +748,8 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     QString languageCode = addTalkerWidget->getLanguageCode();
     QString synthName = addTalkerWidget->getSynthesizer();
     delete dlg;
+    kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
+
     // Also delete addTalkerWidget
     if (dlgResult != QDialog::Accepted) {
         delete addTalkerWidget;
@@ -868,8 +768,10 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         int dlgResult = dlg->exec();
         languageCode = dlg->selectedLanguageCode();
         delete dlg;
+
         // TODO: Also delete QTableWidget and hBox?
-        if (dlgResult != QDialog::Accepted) return;
+        if (dlgResult != QDialog::Accepted)
+            return; // got no language
     }
 
     if (languageCode.isEmpty())
@@ -1304,30 +1206,6 @@ void KCMKttsMgr::slotEnableKttsd_toggled(bool)
 void KCMKttsMgr::slotAutoStartMgrCheckBox_toggled(bool checked)
 {
     autoexitMgrCheckBox->setEnabled(checked);
-    configChanged();
-}
-
-void KCMKttsMgr::slotTextPreMsgCheck_toggled(bool checked)
-{
-    textPreMsg->setEnabled(checked);
-    configChanged();
-}
-
-void KCMKttsMgr::slotTextPreSndCheck_toggled(bool checked)
-{
-    textPreSnd->setEnabled(checked);
-    configChanged();
-}
-
-void KCMKttsMgr::slotTextPostMsgCheck_toggled(bool checked)
-{
-    textPostMsg->setEnabled(checked);
-    configChanged();
-}
-
-void KCMKttsMgr::slotTextPostSndCheck_toggled(bool checked)
-{
-    textPostSnd->setEnabled(checked);
     configChanged();
 }
 
