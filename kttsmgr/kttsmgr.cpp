@@ -204,15 +204,15 @@ void KttsMgrTray::slotActivated(QSystemTrayIcon::ActivationReason reason)
     actResume->setEnabled(jobState == KSpeech::jsPaused);
     actRepeat->setEnabled(jobState != -1);
     actSpeakClipboard->setEnabled(kttsdRunning);
-    bool configActive = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kcmshell_kcmkttsd"));
+    const bool configActive = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kcmshell_kcmkttsd"));
     actConfigure->setEnabled(!configActive);
 }
 
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running";
-    QStringList jobNumsList = m_kspeech->getJobNumbers(KSpeech::jpAll);
-    uint jobNumsListCount = jobNumsList.count();
+    const QStringList jobNumsList = m_kspeech->getJobNumbers(KSpeech::jpAll);
+    const uint jobNumsListCount = jobNumsList.count();
     // Since there can only be 2 Finished jobs at a time, more than 2 jobs means at least
     // one job is not Finished.
     if (jobNumsListCount > 2) return;
@@ -253,7 +253,7 @@ QString KttsMgrTray::stateToStr(int state)
 QString KttsMgrTray::getStatus()
 {
     if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
-    int jobCount = m_kspeech->getJobCount(KSpeech::jpAll);
+    const int jobCount = m_kspeech->getJobCount(KSpeech::jpAll);
     QString status = i18np("1 job", "%1 jobs", jobCount);
     if (jobCount > 0)
     {
@@ -340,7 +340,7 @@ void KttsMgrTray::configureSelected()
 
 bool KttsMgrTray::isKttsdRunning()
 {
-    bool isRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
+    const bool isRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
     if (isRunning) {
         if (!m_kspeech) {
             m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
