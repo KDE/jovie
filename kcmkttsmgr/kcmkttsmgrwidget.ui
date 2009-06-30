@@ -697,7 +697,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="timeBox" >
+          <widget class="KIntSpinBox" name="timeBox" >
            <property name="enabled" >
             <bool>true</bool>
            </property>
@@ -775,6 +775,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>
