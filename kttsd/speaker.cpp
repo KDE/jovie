@@ -52,7 +52,7 @@
 #include "talkercode.h"
 
 // KTTSD includes.
-#include "talkermgr.h"
+//#include "talkermgr.h"
 #include "ssmlconvert.h"
 
 
@@ -251,25 +251,28 @@ void Speaker::speechdCallback(size_t msg_id, size_t /*client_id*/, SPDNotificati
     kDebug() << "speechdCallback called with messageid: " << msg_id << " and type: " << type;
     SpeechJob * job = Speaker::Instance()->d->allJobs[msg_id];
     if (job) {
+        KSpeech::JobState state;
         switch (type) {
             case SPD_EVENT_BEGIN:
-                job->setState(KSpeech::jsSpeaking);
+                state = KSpeech::jsSpeaking;
                 break;
             case SPD_EVENT_END:
-                job->setState(KSpeech::jsFinished);
+                state = KSpeech::jsFinished;
                 break;
             case SPD_EVENT_INDEX_MARK:
                 break;
             case SPD_EVENT_CANCEL:
-                job->setState(KSpeech::jsDeleted);
+                state = KSpeech::jsDeleted;
                 break;
             case SPD_EVENT_PAUSE:
-                job->setState(KSpeech::jsPaused);
+                state = KSpeech::jsPaused;
                 break;
             case SPD_EVENT_RESUME:
-                job->setState(KSpeech::jsSpeaking);
+                state = KSpeech::jsSpeaking;
                 break;
         }
+        job->setState(state);
+        Speaker::Instance()->jobStateChanged(job->appId(), msg_id, state);
     }
     else
     {
@@ -1324,15 +1327,10 @@ QByteArray Speaker::jobInfo(int jobNum)
 
 QString Speaker::jobSentence(int jobNum, int sentenceNum)
 {
-    SpeechJob* job = findJobByJobNum(jobNum);
-    if (job) {
-        //waitJobFiltering(job);
-        if (sentenceNum <= job->sentenceCount())
-            return job->sentences()[sentenceNum - 1];
-        else
-            return QString();
-    } else
-        return QString();
+    char * messagetext;
+    QString command = QString("HISTORY GET MESSAGE %1").arg(jobNum);
+    messagetext = spd_send_data(d->connection, command.toUtf8().data(), SPD_WAIT_REPLY);
+    return QString(messagetext);
 }
 
 void Speaker::setTalker(int jobNum, const QString &talker)

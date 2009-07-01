@@ -35,14 +35,12 @@
 #include <kspeech.h>
 
 // KTTSD includes.
-//#include "utt.h"
 #include "libspeechd.h"
 #include "filtermgr.h"
 #include "appdata.h"
 #include "speechjob.h"
 
 class ConfigData;
-class TalkerMgr;
 
 /**
  * Struct used to keep a pool of FilterMgr objects.
@@ -53,11 +51,6 @@ class TalkerMgr;
 //    SpeechJob* job;             /* The job the FilterMgr is filtering. */
 //    TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 //};
-
-/**
-* Iterator for queue of utterances.
-*/
-//typedef QList<Utt>::iterator uttIterator;
 
 // Timer interval for checking whether audio playback is finished.
 const int timerInterval = 500;

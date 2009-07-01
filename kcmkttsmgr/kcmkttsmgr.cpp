@@ -295,15 +295,15 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
 
     // Filter tab.
     connect(addFilterButton, SIGNAL(clicked()),
-            this, SLOT(slotAddNormalFilterButton_clicked()));
+            this, SLOT(slotAddFilterButton_clicked()));
     connect(higherFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slotHigherNormalFilterPriorityButton_clicked()));
+            this, SLOT(slotHigherFilterPriorityButton_clicked()));
     connect(lowerFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slotLowerNormalFilterPriorityButton_clicked()));
+            this, SLOT(slotLowerFilterPriorityButton_clicked()));
     connect(removeFilterButton, SIGNAL(clicked()),
-            this, SLOT(slotRemoveNormalFilterButton_clicked()));
+            this, SLOT(slotRemoveFilterButton_clicked()));
     connect(configureFilterButton, SIGNAL(clicked()),
-            this, SLOT(slotConfigureNormalFilterButton_clicked()));
+            this, SLOT(slotConfigureFilterButton_clicked()));
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(updateFilterButtons()));
     connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
@@ -446,7 +446,7 @@ void KCMKttsMgr::load()
     //}
 
     // Add "Other" language.
-    m_languagesToCodes[i18nc("Other language", "Other")] = "other";
+    //m_languagesToCodes[i18nc("Other language", "Other")] = "other";
 
     // Load Filters.
     m_filterListModel.clear();
@@ -539,14 +539,6 @@ void KCMKttsMgr::load()
     QString filterIDs = filterIDsList.join(",");
     generalConfig.writeEntry("FilterIDs", filterIDs);
     m_config->sync();
-
-    // Uncheck and disable KTTSD checkbox if no Talkers are configured.
-    //if (m_talkerListModel.rowCount() == 0)
-    //{
-    //    enableKttsdCheckBox->setChecked(false);
-    //    enableKttsdCheckBox->setEnabled(false);
-    //    slotEnableKttsd_toggled(false);
-    //}
 
     // Update controls based on new states.
     updateTalkerButtons();
@@ -851,15 +843,18 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     dlg->setCaption(i18n("Add Talker"));
     dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     dlg->setDefaultButton(KDialog::Cancel);
-    AddTalker* addTalkerWidget = new AddTalker(m_synthToLangMap, dlg, "AddTalker_widget");
+    AddTalker* addTalkerWidget = new AddTalker(dlg);
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
     QString languageCode = addTalkerWidget->getLanguageCode();
     QString synthName = addTalkerWidget->getSynthesizer();
     delete dlg;
-    // TODO: Also delete addTalkerWidget?
-    if (dlgResult != QDialog::Accepted) return;
+    // Also delete addTalkerWidget
+    if (dlgResult != QDialog::Accepted) {
+        delete addTalkerWidget;
+        return;
+    }
 
     // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
@@ -877,9 +872,11 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         if (dlgResult != QDialog::Accepted) return;
     }
 
-    if (languageCode.isEmpty()) return;
+    if (languageCode.isEmpty())
+        return;
     QString language = TalkerCode::languageCodeToLanguage(languageCode);
-    if (language.isEmpty()) return;
+    if (language.isEmpty())
+        return;
 
     m_languagesToCodes[language] = languageCode;
 
@@ -893,7 +890,8 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     // Convert translated plugin name to DesktopEntryName.
     QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
     // This shouldn't happen, but just in case.
-    if (desktopEntryName.isEmpty()) return;
+    if (desktopEntryName.isEmpty()) 
+        return;
 
     // Load the plugin.
     //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
@@ -967,7 +965,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     // kDebug() << "KCMKttsMgr::addTalker: done.";
 }
 
-void KCMKttsMgr::slotAddNormalFilterButton_clicked()
+void KCMKttsMgr::slotAddFilterButton_clicked()
 {
     addFilter();
 }
@@ -1137,7 +1135,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
     configChanged();
 }
 
-void KCMKttsMgr::slotRemoveNormalFilterButton_clicked()
+void KCMKttsMgr::slotRemoveFilterButton_clicked()
 {
     removeFilter();
 }
@@ -1179,7 +1177,7 @@ void KCMKttsMgr::slotHigherTalkerPriorityButton_clicked()
     configChanged();
 }
 
-void KCMKttsMgr::slotHigherNormalFilterPriorityButton_clicked()
+void KCMKttsMgr::slotHigherFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = filtersView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1203,7 +1201,7 @@ void KCMKttsMgr::slotLowerTalkerPriorityButton_clicked()
     configChanged();
 }
 
-void KCMKttsMgr::slotLowerNormalFilterPriorityButton_clicked()
+void KCMKttsMgr::slotLowerFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = filtersView->currentIndex();
     if (!modelIndex.isValid()) return;
@@ -1475,7 +1473,7 @@ void KCMKttsMgr::slotConfigureTalkerButton_clicked()
     //m_configDlg = 0;
 }
 
-void KCMKttsMgr::slotConfigureNormalFilterButton_clicked()
+void KCMKttsMgr::slotConfigureFilterButton_clicked()
 {
     configureFilterItem();
 }

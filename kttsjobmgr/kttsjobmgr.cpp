@@ -583,7 +583,7 @@ Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobN
                 job.state = state;
                 m_jobListModel->updateRow(index.row(), job);
             }
-            m_ui->m_currentSentence->setPlainText(QString());
+            m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, 0));
             break;
         }
         case KSpeech::jsDeleted:
