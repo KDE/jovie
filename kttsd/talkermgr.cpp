@@ -273,6 +273,7 @@ QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
 {
 //    int talkerNdx = talkerToPluginIndex(talkerCode);
 //    return m_loadedTalkerIds[talkerNdx];
+    return QString();
 }
 
 /**
@@ -310,7 +311,7 @@ bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/)
 bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
 {
     //// Not yet implemented.
-    //// return false;
+    return false;
 
     //QString languageCode = langCode;
 

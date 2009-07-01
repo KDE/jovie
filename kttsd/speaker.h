@@ -527,7 +527,7 @@ private:
     /**
     * Determines whether the given text is SSML markup.
     */
-    //bool isSsml(const QString &text);
+    bool isSsml(const QString &text);
 
     /**
     * Parses a block of text into sentences using the application-specified regular expression
@@ -537,7 +537,7 @@ private:
     * @return               List of parsed sentences.
     */
 
-    //QStringList parseText(const QString &text, const QString &appId);
+    QStringList parseText(const QString &text, const QString &appId);
 
     /**
     * Deletes job, removing it from all queues.
@@ -554,13 +554,13 @@ private:
     * This is typically called because an app has requested job info that requires
     * filtering to be completed, such as getJobInfo.
     */
-    void waitJobFiltering(const SpeechJob* job);
+    //void waitJobFiltering(const SpeechJob* job);
 
     /**
     * Processes filters by looping across the pool of FilterMgrs.
     * As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
     */
-    void doFiltering();
+    //void doFiltering();
 
     /**
     * Checks to see if an application has active jobs, and if not and

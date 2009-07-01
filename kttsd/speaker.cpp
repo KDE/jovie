@@ -258,6 +258,26 @@ Speaker * Speaker::Instance()
 void Speaker::speechdCallback(size_t msg_id, size_t client_id, SPDNotificationType type)
 {
     kDebug() << "speechdCallback called with messageid: " << msg_id << " and type: " << type;
+    switch (type)
+    {
+        case SPD_EVENT_BEGIN:
+            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsSpeaking);
+            break;
+        case SPD_EVENT_END:
+            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsFinished);
+            break;
+        case SPD_EVENT_INDEX_MARK:
+            break;
+        case SPD_EVENT_CANCEL:
+            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsDeleted);
+            break;
+        case SPD_EVENT_PAUSE:
+            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsPaused);
+            break;
+        case SPD_EVENT_RESUME:
+            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsSpeaking);
+            break;
+    }
 }
 
 Speaker::Speaker() :
@@ -318,53 +338,53 @@ void Speaker::releaseAppData(const QString& appId)
         delete d->appData.take(appId);
 }
 
-//bool Speaker::isSsml(const QString &text)
-//{
-//    /// This checks to see if the root tag of the text is a <speak> tag.
-//    QDomDocument ssml;
-//    ssml.setContent(text, false);  // No namespace processing.
-//    /// Check to see if this is SSML
-//    QDomElement root = ssml.documentElement();
-//    return (root.tagName() == "speak");
-//}
+bool Speaker::isSsml(const QString &text)
+{
+    /// This checks to see if the root tag of the text is a <speak> tag.
+    QDomDocument ssml;
+    ssml.setContent(text, false);  // No namespace processing.
+    /// Check to see if this is SSML
+    QDomElement root = ssml.documentElement();
+    return (root.tagName() == "speak");
+}
 
 QStringList Speaker::moduleNames()
 {
     return d->outputModules;
 }
 
-//QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL*/)
-//{
-//    // There has to be a better way
-//    // kDebug() << "I'm getting: "<< text << " from application " << appId;
-//    if (isSsml(text)) {
-//        QStringList tempList(text);
-//        return tempList;
-//    }
-//    // See if app has specified a custom sentence delimiter and use it, otherwise use default.
-//    QRegExp sentenceDelimiter(getAppData(appId)->sentenceDelimiter());
-//    QString temp = text;
-//    // Replace spaces, tabs, and formfeeds with a single space.
-//    temp.replace(QRegExp("[ \\t\\f]+"), " ");
-//    // Replace sentence delimiters with tab.
-//    temp.replace(sentenceDelimiter, "\\1\t");
-//    // Replace remaining newlines with spaces.
-//    temp.replace('\n',' ');
-//    temp.replace('\r',' ');
-//    // Remove leading spaces.
-//    temp.replace(QRegExp("\\t +"), "\t");
-//    // Remove trailing spaces.
-//    temp.replace(QRegExp(" +\\t"), "\t");
-//    // Remove blank lines.
-//    temp.replace(QRegExp("\t\t+"),"\t");
-//    // Split into sentences.
-//    QStringList tempList = temp.split( '\t', QString::SkipEmptyParts);
+QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL*/)
+{
+    // There has to be a better way
+    // kDebug() << "I'm getting: "<< text << " from application " << appId;
+    if (isSsml(text)) {
+        QStringList tempList(text);
+        return tempList;
+    }
+    // See if app has specified a custom sentence delimiter and use it, otherwise use default.
+    QRegExp sentenceDelimiter(getAppData(appId)->sentenceDelimiter());
+    QString temp = text;
+    // Replace spaces, tabs, and formfeeds with a single space.
+    temp.replace(QRegExp("[ \\t\\f]+"), " ");
+    // Replace sentence delimiters with tab.
+    temp.replace(sentenceDelimiter, "\\1\t");
+    // Replace remaining newlines with spaces.
+    temp.replace('\n',' ');
+    temp.replace('\r',' ');
+    // Remove leading spaces.
+    temp.replace(QRegExp("\\t +"), "\t");
+    // Remove trailing spaces.
+    temp.replace(QRegExp(" +\\t"), "\t");
+    // Remove blank lines.
+    temp.replace(QRegExp("\t\t+"),"\t");
+    // Split into sentences.
+    QStringList tempList = temp.split( '\t', QString::SkipEmptyParts);
 
-////    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
-////        kDebug() << "'" << *it << "'";
-////    }
-//    return tempList;
-//}
+//    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
+//        kDebug() << "'" << *it << "'";
+//    }
+    return tempList;
+}
 
 int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 {
@@ -399,6 +419,16 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
     SpeechJob* job = new SpeechJob(priority);
     connect(job, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
         this, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)));
+
+    //if (!appData->filteringOn()) {
+    //    QStringList tempList = parseText(text, appId);
+    //    job->setSentences(tempList);
+    //    job->setState(KSpeech::jsSpeakable);
+    //} else {
+    //    job->setSentences(QStringList());
+    //    startJobFiltering(job, text, (priority == KSpeech::jpScreenReaderOutput));
+    //    emit jobStateChanged(appId, jobNum, KSpeech::jsQueued);
+    //}
 
     switch (sayOptions)
     {
@@ -437,15 +467,6 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
     d->jobLists[priority]->append(jobNum);
     appData->jobList()->append(jobNum);
     d->lastJobNum = jobNum;
-    //if (!appData->filteringOn()) {
-    //    QStringList tempList = parseText(text, appId);
-    //    job->setSentences(tempList);
-    //    job->setState(KSpeech::jsSpeakable);
-    //} else {
-    //    job->setSentences(QStringList());
-    //    startJobFiltering(job, text, (KSpeech::jpScreenReaderOutput == priority));
-    //    emit jobStateChanged(appId, jobNum, KSpeech::jsQueued);
-    //}
 
     return jobNum;
 }
@@ -1231,7 +1252,7 @@ int Speaker::sentenceCount(int jobNum)
     SpeechJob* job = findJobByJobNum(jobNum);
     int temp;
     if (job) {
-        waitJobFiltering(job);
+        //waitJobFiltering(job);
         temp = job->sentenceCount();
     } else
         temp = -1;
@@ -1309,7 +1330,7 @@ QByteArray Speaker::jobInfo(int jobNum)
 {
     SpeechJob* job = findJobByJobNum(jobNum);
     if (job) {
-        waitJobFiltering(job);
+        //waitJobFiltering(job);
         QByteArray temp = job->serialize();
         QDataStream stream(&temp, QIODevice::Append);
         stream << getAppData(job->appId())->applicationName();
@@ -1324,7 +1345,7 @@ QString Speaker::jobSentence(int jobNum, int sentenceNum)
 {
     SpeechJob* job = findJobByJobNum(jobNum);
     if (job) {
-        waitJobFiltering(job);
+        //waitJobFiltering(job);
         if (sentenceNum <= job->sentenceCount())
             return job->sentences()[sentenceNum - 1];
         else
@@ -1361,7 +1382,7 @@ int Speaker::moveRelSentence(int jobNum, int n)
     int newSentenceNum = 0;
     SpeechJob* job = findJobByJobNum(jobNum);
     if (job) {
-        waitJobFiltering(job);
+        //waitJobFiltering(job);
         int oldSentenceNum = job->sentenceNum();
         newSentenceNum = oldSentenceNum + n;
         if (0 != n) {
@@ -1422,7 +1443,7 @@ void Speaker::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
     // Flag the FilterMgr as busy and set it going.
     pooledFilterMgr->busy = true;
     pooledFilterMgr->job = job;
-    pooledFilterMgr->filterMgr->setNoSBD( noSBD );
+    //pooledFilterMgr->filterMgr->setNoSBD( noSBD );
     // Get TalkerCode structure of closest matching Talker.
     pooledFilterMgr->talkerCode = TalkerMgr::Instance()->talkerToTalkerCode(job->talker());
     // Pass Sentence Boundary regular expression.
@@ -1433,91 +1454,91 @@ void Speaker::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
     pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, appData->applicationName());
 }
 
-void Speaker::waitJobFiltering(const SpeechJob* job)
-{
-    int jobNum = job->jobNum();
-    bool waited = false;
-    bool notOptimum = false;
-    if (!d->pooledFilterMgrs.contains(jobNum)) return;
-    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.find(jobNum);
-    while (it != d->pooledFilterMgrs.end() && it.key() == jobNum) {
-        PooledFilterMgr* pooledFilterMgr = it.value();
-        if (pooledFilterMgr->busy) {
-            if (!pooledFilterMgr->filterMgr->noSBD())
-                notOptimum = true;
-            pooledFilterMgr->filterMgr->waitForFinished();
-            waited = true;
-        }
-        ++it;
-    }
-    if (waited) {
-        if (notOptimum)
-            kDebug() << "Speaker::waitJobFiltering: Waited for filtering to finish on job "
-                << jobNum << ".  Not optimium.  "
-                << "Try waiting for jobStateChanged signal with jsSpeakable before querying for job information." << endl;
-        doFiltering();
-    }
-}
+//void Speaker::waitJobFiltering(const SpeechJob* job)
+//{
+//    int jobNum = job->jobNum();
+//    bool waited = false;
+//    bool notOptimum = false;
+//    if (!d->pooledFilterMgrs.contains(jobNum)) return;
+//    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.find(jobNum);
+//    while (it != d->pooledFilterMgrs.end() && it.key() == jobNum) {
+//        PooledFilterMgr* pooledFilterMgr = it.value();
+//        if (pooledFilterMgr->busy) {
+//            if (!pooledFilterMgr->filterMgr->noSBD())
+//                notOptimum = true;
+//            pooledFilterMgr->filterMgr->waitForFinished();
+//            waited = true;
+//        }
+//        ++it;
+//    }
+//    if (waited) {
+//        if (notOptimum)
+//            kDebug() << "Speaker::waitJobFiltering: Waited for filtering to finish on job "
+//                << jobNum << ".  Not optimium.  "
+//                << "Try waiting for jobStateChanged signal with jsSpeakable before querying for job information." << endl;
+//        doFiltering();
+//    }
+//}
 
-void Speaker::doFiltering()
-{
-    // kDebug() << "Speaker::doFiltering: Running.";
-    kDebug() << "Speaker::doFiltering: Scanning " << d->pooledFilterMgrs.count() << " pooled filter managers.";
-    bool again = true;
-    bool filterFinished = false;
-    while (again) {
-        again = false;
-        QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
-        QMultiHash<int, PooledFilterMgr*>::iterator nextIt;
-        while (it != d->pooledFilterMgrs.end()) {
-            nextIt = it;
-            ++nextIt;
-            PooledFilterMgr* pooledFilterMgr = it.value();
-            // If FilterMgr is busy, see if it is now finished.
-            Q_ASSERT(pooledFilterMgr);
-            if (pooledFilterMgr->busy) {
-                FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
-                if (FilterMgr::fsFinished == filterMgr->getState()) {
-                    filterFinished = true;
-                    SpeechJob* job = pooledFilterMgr->job;
-                    kDebug() << "Speaker::doFiltering: filter finished, jobNum = " << job->jobNum();
-                    pooledFilterMgr->busy = false;
-                    // Retrieve text from FilterMgr.
-                    QString text = filterMgr->getOutput();
-                    kDebug() << "Speaker::doFiltering: text.left(500) = " << text.left(500);
-                    // kDebug() << "Speaker::doFiltering: filtered text: " << text;
-                    filterMgr->ackFinished();
-                    // Convert the TalkerCode back into string.
-                    job->setTalker(pooledFilterMgr->talkerCode->getTalkerCode());
-                    // TalkerCode object no longer needed.
-                    delete pooledFilterMgr->talkerCode;
-                    pooledFilterMgr->talkerCode = 0;
-                    if (filterMgr->noSBD()) {
-                        job->setSentences(QStringList(text));
-                    } else {
-                        // Split the text into sentences and store in the job.
-                        // The SBD plugin does all the real sentence parsing, inserting tabs at each
-                        // sentence boundary.
-                        QStringList sentences = text.split( '\t', QString::SkipEmptyParts);
-                        job->setSentences(sentences);
-                    }
-                    // Clean up.
-                    pooledFilterMgr->job = 0;
-                    // Re-index pool of FilterMgrs;
-                    d->pooledFilterMgrs.erase(it);
-                    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
-                    // Emit signal.
-                    job->setState(KSpeech::jsSpeakable);
-                }
-                else kDebug() << "Speaker::doFiltering: filter for job " << pooledFilterMgr->job->jobNum() << " is busy.";
-            }
-            else kDebug() << "Speaker::doFiltering: filter is idle";
-            it = nextIt;
-        }
-    }
-    if (filterFinished)
-        emit filteringFinished();
-}
+//void Speaker::doFiltering()
+//{
+//    // kDebug() << "Speaker::doFiltering: Running.";
+//    kDebug() << "Speaker::doFiltering: Scanning " << d->pooledFilterMgrs.count() << " pooled filter managers.";
+//    bool again = true;
+//    bool filterFinished = false;
+//    while (again) {
+//        again = false;
+//        QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+//        QMultiHash<int, PooledFilterMgr*>::iterator nextIt;
+//        while (it != d->pooledFilterMgrs.end()) {
+//            nextIt = it;
+//            ++nextIt;
+//            PooledFilterMgr* pooledFilterMgr = it.value();
+//            // If FilterMgr is busy, see if it is now finished.
+//            Q_ASSERT(pooledFilterMgr);
+//            if (pooledFilterMgr->busy) {
+//                FilterMgr* filterMgr = pooledFilterMgr->filterMgr;
+//                if (FilterMgr::fsFinished == filterMgr->getState()) {
+//                    filterFinished = true;
+//                    SpeechJob* job = pooledFilterMgr->job;
+//                    kDebug() << "Speaker::doFiltering: filter finished, jobNum = " << job->jobNum();
+//                    pooledFilterMgr->busy = false;
+//                    // Retrieve text from FilterMgr.
+//                    QString text = filterMgr->getOutput();
+//                    kDebug() << "Speaker::doFiltering: text.left(500) = " << text.left(500);
+//                    // kDebug() << "Speaker::doFiltering: filtered text: " << text;
+//                    filterMgr->ackFinished();
+//                    // Convert the TalkerCode back into string.
+//                    job->setTalker(pooledFilterMgr->talkerCode->getTalkerCode());
+//                    // TalkerCode object no longer needed.
+//                    delete pooledFilterMgr->talkerCode;
+//                    pooledFilterMgr->talkerCode = 0;
+//                    if (filterMgr->noSBD()) {
+//                        job->setSentences(QStringList(text));
+//                    } else {
+//                        // Split the text into sentences and store in the job.
+//                        // The SBD plugin does all the real sentence parsing, inserting tabs at each
+//                        // sentence boundary.
+//                        QStringList sentences = text.split( '\t', QString::SkipEmptyParts);
+//                        job->setSentences(sentences);
+//                    }
+//                    // Clean up.
+//                    pooledFilterMgr->job = 0;
+//                    // Re-index pool of FilterMgrs;
+//                    d->pooledFilterMgrs.erase(it);
+//                    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+//                    // Emit signal.
+//                    job->setState(KSpeech::jsSpeakable);
+//                }
+//                else kDebug() << "Speaker::doFiltering: filter for job " << pooledFilterMgr->job->jobNum() << " is busy.";
+//            }
+//            else kDebug() << "Speaker::doFiltering: filter is idle";
+//            it = nextIt;
+//        }
+//    }
+//    if (filterFinished)
+//        emit filteringFinished();
+//}
 
 void Speaker::pause(const QString& appId)
 {
@@ -1547,12 +1568,12 @@ bool Speaker::isApplicationPaused(const QString& appId)
 void Speaker::slotFilterMgrFinished()
 {
     // kDebug() << "Speaker::slotFilterMgrFinished: received signal FilterMgr finished signal.";
-    doFiltering();
+    //doFiltering();
 }
 
 void Speaker::slotFilterMgrStopped()
 {
-    doFiltering();
+    //doFiltering();
 }
 
 void Speaker::slotServiceUnregistered(const QString& serviceName)

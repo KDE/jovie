@@ -5,6 +5,7 @@
 
   Copyright:
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -65,7 +66,7 @@ class FilterMgr : public KttsFilterProc
          * If so, the filter should implement @ref setSbRegExp() .
          * @return          True if this filter is a SBD.
          */
-        virtual bool isSBD();
+        //virtual bool isSBD();
 
         /**
          * Returns True if the plugin supports asynchronous processing,
@@ -77,7 +78,7 @@ class FilterMgr : public KttsFilterProc
          * If the plugin returns True, it must also implement @ref stopFiltering .
          * It must also emit @ref filteringStopped when filtering has been stopped.
          */
-        virtual bool supportsAsync();
+        //virtual bool supportsAsync();
 
         /** 
          * Synchronously convert text.
@@ -142,8 +143,8 @@ class FilterMgr : public KttsFilterProc
         /**
          * Do not call SBD filters.
          */
-        void setNoSBD(bool noSBD);
-        bool noSBD();
+        //void setNoSBD(bool noSBD);
+        //bool noSBD();
 
         /**
          * True if there is at least one XML Transformer filter for html.
@@ -176,7 +177,7 @@ class FilterMgr : public KttsFilterProc
         // Current filter.
         KttsFilterProc* m_filterProc;
         // True if calling filters asynchronously.
-        bool m_async;
+        //bool m_async;
         // Talker Code.
         TalkerCode* m_talkerCode;
         // AppId.
@@ -188,7 +189,7 @@ class FilterMgr : public KttsFilterProc
         // FilterMgr state.
         int m_state;
         // True if SBD Filters should not be called.
-        bool m_noSBD;
+        //bool m_noSBD;
         // True if at least one XML Transformer for html is enabled.
         bool m_supportsHTML;
 };

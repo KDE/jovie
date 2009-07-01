@@ -2,7 +2,6 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 add_subdirectory( stringreplacer ) 
 add_subdirectory( xmltransformer ) 
-add_subdirectory( sbd ) 
 add_subdirectory( talkerchooser ) 
 
 include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
