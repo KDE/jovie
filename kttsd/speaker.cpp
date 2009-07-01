@@ -106,15 +106,44 @@ class SpeakerPrivate
         currentJobNum(0),
         connection(NULL),
         lastJobNum(0),
-        talkerMgr(NULL),
-        supportsHTML(false)
+        supportsHTML(false),
+        filterMgr(NULL)
     {
-        connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
-        if (connection == NULL)
-        {
+        if (!ConnectToSpeechd())
             kError() << "could not get a connection to speech-dispatcher"<< endl;
-        }
-        else
+
+        filterMgr = new FilterMgr();
+        filterMgr->init();
+    }
+    
+    ~SpeakerPrivate()
+    {
+        spd_close(connection);
+        connection = NULL;
+        
+        // from speechdata class
+        // kDebug() << "Running: SpeechDataPrivate::~SpeechDataPrivate";
+        // Walk through jobs and emit jobStateChanged signal for each job.
+        foreach (SpeechJob* job, allJobs)
+            delete job;
+        allJobs.clear();
+
+        delete filterMgr;
+
+        foreach (AppData* applicationData, appData)
+            delete applicationData;
+        appData.clear();
+    }
+    
+    friend class Speaker;
+    
+protected:
+
+    bool ConnectToSpeechd()
+    {
+        bool retval = false;
+        connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
+        if (connection != NULL)
         {
             kDebug() << "successfully opened connection to speech dispatcher";
             connection->callback_begin = connection->callback_end = 
@@ -134,45 +163,15 @@ class SpeakerPrivate
                 kDebug() << "added module " << outputModules.last();
             }
         }
-
-        // from speechdata class
-        jobLists.insert(KSpeech::jpScreenReaderOutput, new TJobList());
-        jobLists.insert(KSpeech::jpWarning, new TJobList());
-        jobLists.insert(KSpeech::jpMessage, new TJobList());
-        jobLists.insert(KSpeech::jpText, new TJobList());
     }
-    
-    ~SpeakerPrivate()
+
+    // try to reconnect to speech-dispatcher, return true on success
+    bool reconnect()
     {
         spd_close(connection);
-        connection = NULL;
-        
-        // from speechdata class
-        // kDebug() << "Running: SpeechDataPrivate::~SpeechDataPrivate";
-        // Walk through jobs and emit jobStateChanged signal for each job.
-        foreach (SpeechJob* job, allJobs)
-            delete job;
-        allJobs.clear();
-
-        foreach (TJobListPtr jobList, jobLists)
-            jobList->clear();
-        jobLists.clear();
-
-        foreach (PooledFilterMgr* pooledFilterMgr, pooledFilterMgrs) {
-            delete pooledFilterMgr->filterMgr;
-            delete pooledFilterMgr->talkerCode;
-            delete pooledFilterMgr;
-        }
-        pooledFilterMgrs.clear();
-
-        foreach (AppData* applicationData, appData)
-            delete applicationData;
-        appData.clear();
+        return ConnectToSpeechd();
     }
     
-    friend class Speaker;
-    
-protected:
     /**
     * Configuration Data object.
     */
@@ -207,11 +206,6 @@ protected:
     QHash<int, SpeechJob*> allJobs;
 
     /**
-    * List of jobs for each job priority type.
-    */
-    QMap<KSpeech::JobPriority, TJobListPtr> jobLists;
-
-    /**
     * Application data.
     */
     mutable QMap<QString, AppData*> appData;
@@ -222,14 +216,9 @@ protected:
     int lastJobNum;
 
     /**
-    * TalkerMgr object local pointer.
+    * the filter manager
     */
-    TalkerMgr* talkerMgr;
-
-    /**
-    * Pool of FilterMgrs.
-    */
-    QMultiHash<int, PooledFilterMgr*> pooledFilterMgrs;
+    FilterMgr * filterMgr;
 
     /**
     * Job counter.  Each new job increments this counter.
@@ -258,25 +247,31 @@ Speaker * Speaker::Instance()
 void Speaker::speechdCallback(size_t msg_id, size_t client_id, SPDNotificationType type)
 {
     kDebug() << "speechdCallback called with messageid: " << msg_id << " and type: " << type;
-    switch (type)
+    SpeechJob * job = Speaker::Instance()->d->allJobs[msg_id];
+    if (job) {
+        switch (type) {
+            case SPD_EVENT_BEGIN:
+                job->setState(KSpeech::jsSpeaking);
+                break;
+            case SPD_EVENT_END:
+                job->setState(KSpeech::jsFinished);
+                break;
+            case SPD_EVENT_INDEX_MARK:
+                break;
+            case SPD_EVENT_CANCEL:
+                job->setState(KSpeech::jsDeleted);
+                break;
+            case SPD_EVENT_PAUSE:
+                job->setState(KSpeech::jsPaused);
+                break;
+            case SPD_EVENT_RESUME:
+                job->setState(KSpeech::jsSpeaking);
+                break;
+        }
+    }
+    else
     {
-        case SPD_EVENT_BEGIN:
-            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsSpeaking);
-            break;
-        case SPD_EVENT_END:
-            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsFinished);
-            break;
-        case SPD_EVENT_INDEX_MARK:
-            break;
-        case SPD_EVENT_CANCEL:
-            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsDeleted);
-            break;
-        case SPD_EVENT_PAUSE:
-            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsPaused);
-            break;
-        case SPD_EVENT_RESUME:
-            Speaker::Instance()->d->allJobs[msg_id]->setState(KSpeech::jsSpeaking);
-            break;
+        kDebug() << "job number " << msg_id << " not in allJobs yet ";
     }
 }
 
@@ -299,30 +294,12 @@ void Speaker::setConfigData(ConfigData* configData)
     d->configData = configData;
 
     // from speechdata
-    // Clear the pool of filter managers so that filters re-init themselves.
-    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
-    while (it != d->pooledFilterMgrs.end()) {
-        PooledFilterMgr* pooledFilterMgr = it.value();
-        delete pooledFilterMgr->filterMgr;
-        delete pooledFilterMgr->talkerCode;
-        delete pooledFilterMgr;
-        ++it;
-    }
-    d->pooledFilterMgrs.clear();
 
     // Create an initial FilterMgr for the pool to save time later.
-    PooledFilterMgr* pooledFilterMgr = new PooledFilterMgr();
-    FilterMgr* filterMgr = new FilterMgr();
-    filterMgr->init();
-    d->supportsHTML = filterMgr->supportsHTML();
-    pooledFilterMgr->filterMgr = filterMgr;
-    pooledFilterMgr->busy = false;
-    pooledFilterMgr->job = 0;
-    pooledFilterMgr->talkerCode = 0;
-    // Connect signals from FilterMgr.
-    connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
-    connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
-    d->pooledFilterMgrs.insert(0, pooledFilterMgr);
+    delete d->filterMgr;
+    d->filterMgr = new FilterMgr();
+    d->filterMgr->init();
+    d->supportsHTML = d->filterMgr->supportsHTML();
 }
 
 AppData* Speaker::getAppData(const QString& appId) const
@@ -388,11 +365,12 @@ QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL
 
 int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 {
-    int jobNum = 0;
+    int jobNum = -1;
+    QString filteredText = text;
 
     AppData* appData = getAppData(appId);
     KSpeech::JobPriority priority = appData->defaultPriority();
-    kDebug() << "Speaker::say priority = " << priority;
+    //kDebug() << "Speaker::say priority = " << priority;
     //kDebug() << "Running: Speaker::say appId = " << appId << " text = " << text;
     //QString talker = appData->defaultTalker();
 
@@ -417,46 +395,63 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
     }
 
     SpeechJob* job = new SpeechJob(priority);
-    connect(job, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
-        this, SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)));
 
-    //if (!appData->filteringOn()) {
-    //    QStringList tempList = parseText(text, appId);
-    //    job->setSentences(tempList);
-    //    job->setState(KSpeech::jsSpeakable);
-    //} else {
-    //    job->setSentences(QStringList());
-    //    startJobFiltering(job, text, (priority == KSpeech::jpScreenReaderOutput));
-    //    emit jobStateChanged(appId, jobNum, KSpeech::jsQueued);
-    //}
-
-    switch (sayOptions)
+    if (appData->filteringOn()) {
+        filteredText = d->filterMgr->convert(text, NULL, appId);
+        job->setSentences(QStringList(filteredText));
+    }
+    else
     {
-        case KSpeech::soNone: /**< No options specified.  Autodetected. */
-            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
-            break;
-        case KSpeech::soPlainText: /**< The text contains plain text. */
-            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
-            break;
-        case KSpeech::soHtml: /**< The text contains HTML markup. */
-            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
-            break;
-        case KSpeech::soSsml: /**< The text contains SSML markup. */
-            spd_set_data_mode(d->connection, SPD_DATA_SSML);
-            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
-            spd_set_data_mode(d->connection, SPD_DATA_TEXT);
-            break;
-        case KSpeech::soChar: /**< The text should be spoken as individual characters. */
-            spd_set_spelling(d->connection, SPD_SPELL_ON);
-            jobNum = spd_say(d->connection, spdpriority, text.toUtf8().data());
-            spd_set_spelling(d->connection, SPD_SPELL_OFF);
-            break;
-        case KSpeech::soKey: /**< The text contains a keyboard symbolic key name. */
-            jobNum = spd_key(d->connection, spdpriority, text.toUtf8().data());
-            break;
-        case KSpeech::soSoundIcon: /**< The text is the name of a sound icon. */
-            jobNum = spd_sound_icon(d->connection, spdpriority, text.toUtf8().data());
-            break;
+        job->setSentences(QStringList(filteredText));
+    }
+
+    bool failedconnect = false;
+    while (jobNum == -1 && !failedconnect)
+    {
+        switch (sayOptions)
+        {
+            case KSpeech::soNone: /**< No options specified.  Autodetected. */
+                jobNum = spd_say(d->connection, spdpriority, filteredText.toUtf8().data());
+                break;
+            case KSpeech::soPlainText: /**< The text contains plain text. */
+                jobNum = spd_say(d->connection, spdpriority, filteredText.toUtf8().data());
+                break;
+            case KSpeech::soHtml: /**< The text contains HTML markup. */
+                jobNum = spd_say(d->connection, spdpriority, filteredText.toUtf8().data());
+                break;
+            case KSpeech::soSsml: /**< The text contains SSML markup. */
+                spd_set_data_mode(d->connection, SPD_DATA_SSML);
+                jobNum = spd_say(d->connection, spdpriority, filteredText.toUtf8().data());
+                spd_set_data_mode(d->connection, SPD_DATA_TEXT);
+                break;
+            case KSpeech::soChar: /**< The text should be spoken as individual characters. */
+                spd_set_spelling(d->connection, SPD_SPELL_ON);
+                jobNum = spd_say(d->connection, spdpriority, filteredText.toUtf8().data());
+                spd_set_spelling(d->connection, SPD_SPELL_OFF);
+                break;
+            case KSpeech::soKey: /**< The text contains a keyboard symbolic key name. */
+                jobNum = spd_key(d->connection, spdpriority, filteredText.toUtf8().data());
+                break;
+            case KSpeech::soSoundIcon: /**< The text is the name of a sound icon. */
+                jobNum = spd_sound_icon(d->connection, spdpriority, filteredText.toUtf8().data());
+                break;
+        }
+        if (jobNum == -1 && !failedconnect)
+        {
+            // job failure
+            // try to reconnect once
+            kDebug() << "trying to reconnect to speech dispatcher";
+            if (!d->reconnect())
+            {
+                failedconnect = true;
+            }
+        }
+    }
+
+    if (jobNum != -1)
+    {
+        kDebug() << "saying new job with id of: " << jobNum;
+        kDebug() << "saying text: " << filteredText;
     }
 
     job->setJobNum(jobNum);
@@ -464,7 +459,6 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
     //job->setTalker(talker);
     //// Note: Set state last so job is fully populated when jobStateChanged signal is emitted.
     d->allJobs.insert(jobNum, job);
-    d->jobLists[priority]->append(jobNum);
     appData->jobList()->append(jobNum);
     d->lastJobNum = jobNum;
 
@@ -1123,7 +1117,6 @@ void Speaker::deleteJob(int removeJobNum)
         if (job->refCount() != 0)
             kWarning() << "Speaker::deleteJob: deleting job " << removeJobNum << " with non-zero refCount." ;
         delete job;
-        d->jobLists[priority]->removeAll(removeJobNum);
         getAppData(appId)->jobList()->removeAll(removeJobNum);
     }
 }
@@ -1136,16 +1129,6 @@ void Speaker::removeJob(int jobNum)
         QString removeAppId = removeJob->appId();
         int removeJobNum = removeJob->jobNum();
         // If filtering on the job, cancel it.
-        if (d->pooledFilterMgrs.contains(removeJobNum)) {
-            while (PooledFilterMgr* pooledFilterMgr = d->pooledFilterMgrs.take(removeJobNum)) {
-                pooledFilterMgr->busy = false;
-                pooledFilterMgr->job = 0;
-                delete pooledFilterMgr->talkerCode;
-                pooledFilterMgr->talkerCode = 0;
-                pooledFilterMgr->filterMgr->stopFiltering();
-                d->pooledFilterMgrs.insert(0, pooledFilterMgr);
-            }
-        }
         deleteJob(removeJobNum);
     }
 }
@@ -1235,7 +1218,8 @@ void Speaker::deleteExpiredApp(const QString appId)
 void Speaker::setJobSentenceNum(int jobNum, int sentenceNum)
 {
     SpeechJob* job = findJobByJobNum(jobNum);
-    if (job) job->setSentenceNum(sentenceNum);
+    if (job)
+        job->setSentenceNum(sentenceNum);
 }
 
 int Speaker::jobSentenceNum(int jobNum) const
@@ -1249,14 +1233,11 @@ int Speaker::jobSentenceNum(int jobNum) const
 
 int Speaker::sentenceCount(int jobNum)
 {
+    int retval = -1;
     SpeechJob* job = findJobByJobNum(jobNum);
-    int temp;
-    if (job) {
-        //waitJobFiltering(job);
-        temp = job->sentenceCount();
-    } else
-        temp = -1;
-    return temp;
+    if (job)
+        retval = job->sentenceCount();
+    return retval;
 }
 
 int Speaker::jobCount(const QString& appId, KSpeech::JobPriority priority) const
@@ -1272,9 +1253,9 @@ int Speaker::jobCount(const QString& appId, KSpeech::JobPriority priority) const
         else {
             // Return count of jobs for this app of the specified priority.
             int cnt = 0;
-            foreach (int jobNum, *d->jobLists[priority]) {
+            foreach (int jobNum, d->allJobs.keys()) {
                 SpeechJob* job = d->allJobs[jobNum];
-                if (job->appId() == appId)
+                if (job->appId() == appId && job->jobPriority() == priority)
                     ++cnt;
             }
             return cnt;
@@ -1293,8 +1274,9 @@ QStringList Speaker::jobNumbers(const QString& appId, KSpeech::JobPriority prior
                 jobs.append(QString::number(jobNum));
         } else {
             // Return job numbers for all jobs of specified priority.
-            foreach (int jobNum, *d->jobLists[priority])
-                jobs.append(QString::number(jobNum));
+            foreach (int jobNum, d->allJobs.keys())
+                if (d->allJobs[jobNum]->jobPriority() == priority)
+                    jobs.append(QString::number(jobNum));
         }
     } else {
         if (KSpeech::jpAll == priority) {
@@ -1303,9 +1285,9 @@ QStringList Speaker::jobNumbers(const QString& appId, KSpeech::JobPriority prior
                 jobs.append(QString::number(jobNum));
         } else {
             // Return job numbers for this app's jobs of the specified priority.
-            foreach (int jobNum, *d->jobLists[priority]) {
+            foreach (int jobNum, d->allJobs.keys()) {
                 SpeechJob* job = d->allJobs[jobNum];
-                if (job->appId() == appId)
+                if (job->appId() == appId && job->jobPriority() == priority)
                     jobs.append(QString::number(jobNum));
             }
         }
@@ -1317,12 +1299,10 @@ QStringList Speaker::jobNumbers(const QString& appId, KSpeech::JobPriority prior
 
 int Speaker::jobState(int jobNum) const
 {
+    int temp = -1;
     SpeechJob* job = findJobByJobNum(jobNum);
-    int temp;
     if (job)
         temp = (int)job->state();
-    else
-        temp = -1;
     return temp;
 }
 
@@ -1366,13 +1346,13 @@ void Speaker::moveJobLater(int jobNum)
     // kDebug() << "Running: Speaker::moveTextLater";
     if (d->allJobs.contains(jobNum)) {
         KSpeech::JobPriority priority = d->allJobs[jobNum]->jobPriority();
-        TJobListPtr jobList = d->jobLists[priority];
+        //TJobListPtr jobList = d->jobLists[priority];
         // Get index of the job.
-        uint index = jobList->indexOf(jobNum);
+        //uint index = jobList->indexOf(jobNum);
         // Move job down one position in the queue.
         // kDebug() << "In Speaker::moveTextLater, moving jobNum " << movedJobNum;
-        jobList->insert(index + 2, jobNum);
-        jobList->takeAt(index);
+        //jobList->insert(index + 2, jobNum);
+        //jobList->takeAt(index);
     }
 }
 
@@ -1407,52 +1387,52 @@ int Speaker::moveRelSentence(int jobNum, int n)
     return newSentenceNum;
 }
 
-void Speaker::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
-{
-    job->setState(KSpeech::jsFiltering);
-    int jobNum = job->jobNum();
-    // kDebug() << "Speaker::startJobFiltering: jobNum = " << jobNum << " text.left(500) = " << text.left(500);
-    PooledFilterMgr* pooledFilterMgr = 0;
-    if (d->pooledFilterMgrs.contains(jobNum)) return;
-    // Find an idle FilterMgr, if any.
-    // If filtering is already in progress for this job, do nothing.
-    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
-    while (it != d->pooledFilterMgrs.end()) {
-        if (!it.value()->busy) {
-            if (it.value()->job && it.value()->job->jobNum() == jobNum)
-                return;
-        } else {
-            if (!it.value()->job && !pooledFilterMgr)
-                pooledFilterMgr = it.value();
-        }
-        ++it;
-    }
-    // Create a new FilterMgr if needed and add to pool.
-    if (!pooledFilterMgr) {
-         // kDebug() << "Speaker::startJobFiltering: adding new pooledFilterMgr for job " << jobNum;
-        pooledFilterMgr = new PooledFilterMgr();
-        FilterMgr* filterMgr = new FilterMgr();
-        filterMgr->init();
-        pooledFilterMgr->filterMgr = filterMgr;
-        // Connect signals from FilterMgr.
-        connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
-        connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
-        d->pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
-    }
-    // else kDebug() << "Speaker::startJobFiltering: re-using idle pooledFilterMgr for job " << jobNum;
-    // Flag the FilterMgr as busy and set it going.
-    pooledFilterMgr->busy = true;
-    pooledFilterMgr->job = job;
-    //pooledFilterMgr->filterMgr->setNoSBD( noSBD );
-    // Get TalkerCode structure of closest matching Talker.
-    pooledFilterMgr->talkerCode = TalkerMgr::Instance()->talkerToTalkerCode(job->talker());
-    // Pass Sentence Boundary regular expression.
-    AppData* appData = getAppData(job->appId());
-    pooledFilterMgr->filterMgr->setSbRegExp(appData->sentenceDelimiter());
-    kDebug() << "Speaker::startJobFiltering: job = " << job->jobNum() << " NoSBD = "
-        << noSBD << " sentenceDelimiter = " << appData->sentenceDelimiter() << endl;
-    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, appData->applicationName());
-}
+//void Speaker::startJobFiltering(SpeechJob* job, const QString& text, bool noSBD)
+//{
+//    job->setState(KSpeech::jsFiltering);
+//    int jobNum = job->jobNum();
+//    // kDebug() << "Speaker::startJobFiltering: jobNum = " << jobNum << " text.left(500) = " << text.left(500);
+//    PooledFilterMgr* pooledFilterMgr = 0;
+//    if (d->pooledFilterMgrs.contains(jobNum)) return;
+//    // Find an idle FilterMgr, if any.
+//    // If filtering is already in progress for this job, do nothing.
+//    QMultiHash<int, PooledFilterMgr*>::iterator it = d->pooledFilterMgrs.begin();
+//    while (it != d->pooledFilterMgrs.end()) {
+//        if (!it.value()->busy) {
+//            if (it.value()->job && it.value()->job->jobNum() == jobNum)
+//                return;
+//        } else {
+//            if (!it.value()->job && !pooledFilterMgr)
+//                pooledFilterMgr = it.value();
+//        }
+//        ++it;
+//    }
+//    // Create a new FilterMgr if needed and add to pool.
+//    if (!pooledFilterMgr) {
+//         // kDebug() << "Speaker::startJobFiltering: adding new pooledFilterMgr for job " << jobNum;
+//        pooledFilterMgr = new PooledFilterMgr();
+//        FilterMgr* filterMgr = new FilterMgr();
+//        filterMgr->init();
+//        pooledFilterMgr->filterMgr = filterMgr;
+//        // Connect signals from FilterMgr.
+//        connect (filterMgr, SIGNAL(filteringFinished()), this, SLOT(slotFilterMgrFinished()));
+//        connect (filterMgr, SIGNAL(filteringStopped()),  this, SLOT(slotFilterMgrStopped()));
+//        d->pooledFilterMgrs.insert(jobNum, pooledFilterMgr);
+//    }
+//    // else kDebug() << "Speaker::startJobFiltering: re-using idle pooledFilterMgr for job " << jobNum;
+//    // Flag the FilterMgr as busy and set it going.
+//    pooledFilterMgr->busy = true;
+//    pooledFilterMgr->job = job;
+//    //pooledFilterMgr->filterMgr->setNoSBD( noSBD );
+//    // Get TalkerCode structure of closest matching Talker.
+//    pooledFilterMgr->talkerCode = TalkerMgr::Instance()->talkerToTalkerCode(job->talker());
+//    // Pass Sentence Boundary regular expression.
+//    AppData* appData = getAppData(job->appId());
+//    pooledFilterMgr->filterMgr->setSbRegExp(appData->sentenceDelimiter());
+//    kDebug() << "Speaker::startJobFiltering: job = " << job->jobNum() << " NoSBD = "
+//        << noSBD << " sentenceDelimiter = " << appData->sentenceDelimiter() << endl;
+//    pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, appData->applicationName());
+//}
 
 //void Speaker::waitJobFiltering(const SpeechJob* job)
 //{
@@ -1565,16 +1545,16 @@ bool Speaker::isApplicationPaused(const QString& appId)
     return getAppData(appId)->isApplicationPaused();
 }
 
-void Speaker::slotFilterMgrFinished()
-{
+//void Speaker::slotFilterMgrFinished()
+//{
     // kDebug() << "Speaker::slotFilterMgrFinished: received signal FilterMgr finished signal.";
     //doFiltering();
-}
+//}
 
-void Speaker::slotFilterMgrStopped()
-{
+//void Speaker::slotFilterMgrStopped()
+//{
     //doFiltering();
-}
+//}
 
 void Speaker::slotServiceUnregistered(const QString& serviceName)
 {

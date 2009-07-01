@@ -178,22 +178,22 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
 {
     m_wasModified = false;
     // If language doesn't match, return input unmolested.
-    if ( !m_languageCodeList.isEmpty() )
-    {
-        QString languageCode = talkerCode->languageCode();
-        //kDebug() << "StringReplacerProc::convert: converting " << inputText <<
-        //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
-        if ( !m_languageCodeList.contains( languageCode ) )
-        {
-            if ( !talkerCode->countryCode().isEmpty() )
-            {
-                languageCode += '_' + talkerCode->countryCode();
-                 //kDebug() << "StringReplacerProc::convert: converting " << inputText << 
-                 //   " if language code " << languageCode << " matches " << m_languageCodeList << endl;
-                if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
-            } else return inputText;
-        }
-    }
+    //if ( !m_languageCodeList.isEmpty() )
+    //{
+    //    QString languageCode = talkerCode->languageCode();
+    //    //kDebug() << "StringReplacerProc::convert: converting " << inputText <<
+    //    //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+    //    if ( !m_languageCodeList.contains( languageCode ) )
+    //    {
+    //        if ( !talkerCode->countryCode().isEmpty() )
+    //        {
+    //            languageCode += '_' + talkerCode->countryCode();
+    //             //kDebug() << "StringReplacerProc::convert: converting " << inputText << 
+    //             //   " if language code " << languageCode << " matches " << m_languageCodeList << endl;
+    //            if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
+    //        } else return inputText;
+    //    }
+    //}
     // If appId doesn't match, return input unmolested.
     if ( !m_appIdList.isEmpty() )
     {
