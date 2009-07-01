@@ -79,15 +79,15 @@ bool FilterMgr::init()
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
     {
-        config.changeGroup("Filter_1");
-        config.writeEntry("DesktopEntryName", "kttsd_sbdplugin");
-        config.writeEntry("Enabled", true);
-        config.writeEntry("IsSBD", true);
-        config.writeEntry("MultiInstance", true);
-        config.writeEntry("SentenceBoundary", "\\1\\t");
-        config.writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
-        config.writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
-        config.changeGroup("General");
+        KConfigGroup group = config.group("Filter_1");
+        group.writeEntry("DesktopEntryName", "kttsd_sbdplugin");
+        group.writeEntry("Enabled", true);
+        group.writeEntry("IsSBD", true);
+        group.writeEntry("MultiInstance", true);
+        group.writeEntry("SentenceBoundary", "\\1\\t");
+        group.writeEntry("SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))");
+        group.writeEntry("UserFilterName", i18n("Standard Sentence Boundary Detector"));
+
         config.writeEntry("FilterIDs", "1");
         filterIDsList = config.readEntry("FilterIDs", QStringList());
     }
@@ -98,8 +98,8 @@ bool FilterMgr::init()
         {
             QString filterID = *it;
             QString groupName = "Filter_" + filterID;
-            config.changeGroup( groupName );
-            QString desktopEntryName = config.readEntry( "DesktopEntryName" );
+            KConfigGroup thisgroup = config.group(groupName);
+            QString desktopEntryName = thisgroup.readEntry( "DesktopEntryName" );
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
@@ -107,13 +107,13 @@ bool FilterMgr::init()
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString filterPlugInName = config.readEntry("PlugInName", QString());
+                QString filterPlugInName = thisgroup.readEntry("PlugInName", QString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
-                if (!desktopEntryName.isEmpty()) config.writeEntry("DesktopEntryName", desktopEntryName);
+                if (!desktopEntryName.isEmpty()) thisgroup.writeEntry("DesktopEntryName", desktopEntryName);
             }
-            if (config.readEntry("Enabled",false) || config.readEntry("IsSBD",false))
+            if (thisgroup.readEntry("Enabled",false) || thisgroup.readEntry("IsSBD",false))
             {
                 kDebug() << "FilterMgr::init: filterID = " << filterID;
                 KttsFilterProc* filterProc = loadFilterPlugin( desktopEntryName );
@@ -122,8 +122,8 @@ bool FilterMgr::init()
                     filterProc->init( rawconfig, groupName );
                     m_filterList.append( filterProc );
                 }
-                if (config.readEntry("DocType").contains("html") ||
-                    config.readEntry("RootElement").contains("html"))
+                if (thisgroup.readEntry("DocType").contains("html") ||
+                    thisgroup.readEntry("RootElement").contains("html"))
                     m_supportsHTML = true;
             }
         }

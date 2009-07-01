@@ -173,7 +173,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode,
+/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* /*talkerCode*/,
     const QString& appId)
 {
     m_wasModified = false;
