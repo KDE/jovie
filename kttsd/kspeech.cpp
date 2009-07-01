@@ -46,6 +46,8 @@
 // KTTSD includes.
 #include "configdata.h"
 #include "talkermgr.h"
+// define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
+#define spd_debug spd_debug2
 #include "speaker.h"
 
 // KSpeech includes.
