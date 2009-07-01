@@ -1,6 +1,0 @@
-This is the directory containing the FreeTTS plug in.
-If you intend to edit the GUI (freettsconfig.ui) you will have to first
-copy kttsd/libkttsd/pluginconf.h to a standard include directory
-like $KDEDIR/include/ since the interface has been tweaked to derive
-from PlugInConf instead of QWidget and Qt Designer refuses to open it
-if the header is not properly place.

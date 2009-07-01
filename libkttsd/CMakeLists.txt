@@ -1,9 +1,7 @@
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2405)
+
 set(kttsd_LIB_SRCS
-   pluginproc.cpp 
-   pluginconf.cpp 
-   testplayer.cpp 
-   stretcher.cpp 
    talkercode.cpp 
    filterproc.cpp 
    filterconf.cpp 

@@ -41,7 +41,6 @@
 #include "ui_kcmkttsmgrwidget.h"
 #include "kspeechinterface.h"
 
-class PlugInConf;
 class KttsFilterConf;
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -220,13 +219,6 @@ class KCMKttsMgr :
         QString defaultTalkerCode(const QString &languageCode, const QString &plugInName);
 
         /**
-        * Loads the configuration plugin for a named Talker plugin.
-        * @param name             DesktopEntryName of the Synthesizer.
-        * @return                 Pointer to the configuration plugin for the Talker.
-        */
-        PlugInConf* loadTalkerPlugin(const QString& name);
-
-        /**
         * Loads the configuration plugin for a named Filter plugin.
         * @param plugInName       DesktopEntryName of the plugin.
         * @return                 Pointer to the configuration plugin for the Filter.
@@ -319,7 +311,7 @@ class KCMKttsMgr :
         /**
         * Talker(synth) Plugin currently loaded into configuration dialog.
         */
-        PlugInConf *m_loadedTalkerPlugIn;
+        //PlugInConf *m_loadedTalkerPlugIn;
 
         /**
         * Filter Plugin currently loaded into configuration dialog.
@@ -429,16 +421,6 @@ class KCMKttsMgr :
         void slotTextPreSndCheck_toggled(bool checked);
         void slotTextPostMsgCheck_toggled(bool checked);
         void slotTextPostSndCheck_toggled(bool checked);
-
-        /**
-        * Audio tab slots.
-        */
-        void timeBox_valueChanged(int percentValue);
-        void timeSlider_valueChanged(int sliderValue);
-        void keepAudioCheckBox_toggled(bool checked);
-        void slotPhononRadioButton_toggled(bool state);
-        void slotAlsaRadioButton_toggled(bool state);
-        void slotPcmComboBox_activated();
 
         /**
         * Other slots.

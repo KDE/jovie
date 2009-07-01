@@ -130,4 +130,3 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
     }
 }
 
-#include "player.moc"

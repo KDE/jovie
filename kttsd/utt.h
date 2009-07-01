@@ -30,10 +30,6 @@
 #include <QString>
 
 class SSMLConvert;
-class PlugInProc;
-class Player;
-class SpeechJob;
-class Stretcher;
 class SpeechJob;
 
 class UttPrivate;
@@ -64,12 +60,7 @@ public:
         usWaitingTransform,          /**< Waiting to be transformed (XSLT) */
         usTransforming,              /**< Transforming the utterance (XSLT). */
         usWaitingSay,                /**< Waiting to start synthesis. */
-        usWaitingSynth,              /**< Waiting to be synthesized and audibilized. */
         usSaying,                    /**< Plugin is synthesizing and audibilizing. */
-        usSynthing,                  /**< Plugin is synthesizing only. */
-        usSynthed,                   /**< Plugin has finished synthesizing.  Ready for stretch. */
-        usStretching,                /**< Adjusting speed. */
-        usStretched,                 /**< Speed adjustment finished.  Ready for playback. */
         usPlaying,                   /**< Playing on Audio Player. */
         usPaused,                    /**< Paused due to user action. */
         usPreempted,                 /**< Paused due to Screen Reader Output. */
@@ -88,13 +79,12 @@ public:
     Utt(uttType utType,
         const QString& appId,
         SpeechJob* job,
-        const QString& sentence,
-        PlugInProc* pluginproc);
+        const QString& sentence);
 
     /**
     * Constructs a sound icon type of utterance.
     */
-    Utt(uttType utType, const QString& appId, const QString& audioUrl);
+    Utt(uttType utType, const QString& appId);
 
     /**
     * Destructor.
@@ -148,33 +138,6 @@ public:
     */
     SSMLConvert* transformer() const;
     void setTransformer(SSMLConvert* transformer);
-    
-    /**
-    * Synthesis plugin.
-    */
-    PlugInProc* plugin() const;
-    void setPlugin(PlugInProc* plugin);
-    
-    /**
-    * Audio Stretcher.
-    */
-    Stretcher* audioStretcher() const;
-    void setAudioStretcher(Stretcher* stretcher);
-    
-    /**
-    * Filename containing synthesized audio.  Null if
-    * plugin has not yet synthesized the utterance, or if
-    * plugin does not support synthesis. */
-    QString audioUrl() const;
-    void setAudioUrl(const QString& audioUrl);
-    
-    /**
-    * The audio player audibilizing the utterance.  Null
-    * if not currently audibilizing or if plugin doesn't
-    * support synthesis.
-    */            
-    Player* audioPlayer() const;
-    void setAudioPlayer(Player* player);
     
     /**
      * Determines the initial state of an utterance.  If the utterance contains

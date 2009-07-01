@@ -51,14 +51,16 @@ public:
     /**
     * @enum JobPriority
     * Determines the priority of jobs submitted by @ref say.
+    * maps directly to SPDPriority
     */
     enum JobPriority
     {
         jpAll                = 0,    /**< All priorities.  Used for information retrieval only. */
-        jpScreenReaderOutput = 1,    /**< Screen Reader job. */
-        jpWarning            = 2,    /**< Warning job. */
-        jpMessage            = 3,    /**< Message job.*/
-        jpText               = 4     /**< Text job. */
+        jpScreenReaderOutput = 1,    /**< Screen Reader job. SPD_IMPORTANT */
+        jpWarning            = 2,    /**< Warning job. SPD_NOTIFICATION */
+        jpMessage            = 3,    /**< Message job.SPD_MESSAGE */
+        jpText               = 4,    /**< Text job. SPD_TEXT */
+        jpProgress           = 5     /**< Progress report. SPD_PROGRESS added KDE 4.4 */ 
     };
     
     /**
@@ -87,7 +89,6 @@ public:
         soPlainText = 0x0001,   /**< The text contains plain text. */
         soHtml      = 0x0002,   /**< The text contains HTML markup. */
         soSsml      = 0x0004,   /**< The text contains SSML markup. */
-        // FUTURE:
         soChar      = 0x0008,   /**< The text should be spoken as individual characters. */
         soKey       = 0x0010,   /**< The text contains a keyboard symbolic key name. */
         soSoundIcon = 0x0020    /**< The text is the name of a sound icon. */
@@ -191,6 +192,7 @@ public Q_SLOTS: // METHODS
     * @return               Version number string.
     */
     QString version() const;
+
     /**
     * Returns the friendly display name for the application.
     * @return               Application display name.
@@ -677,6 +679,7 @@ private:
 
     /*
     * Create and initialize the SpeechData object.
+    * Deprecated, remove in KDE 5
     */
     bool initializeSpeechData();
 
