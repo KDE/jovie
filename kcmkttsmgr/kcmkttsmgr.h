@@ -3,9 +3,10 @@
   -------------------
   Copyright : (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
   Copyright : (C) 2004-2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  Current Maintainer: 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
  ******************************************************************************/
 
 /***************************************************************************
@@ -181,8 +182,7 @@ class KCMKttsMgr :
             wpGeneral = 0,          // General tab.
             wpTalkers = 1,          // Talkers tab.
             wpFilters = 2,          // Filters tab.
-            wpInterruption = 3,     // Interruption tab.
-            wpJobs = 5              // Jobs tab.
+            wpJobs = 3              // Jobs tab.
         };
 
         /**
@@ -377,14 +377,6 @@ class KCMKttsMgr :
         void slotHigherFilterPriorityButton_clicked();
         void slotLowerFilterPriorityButton_clicked();
         void slotConfigureFilterButton_clicked();
-
-        /**
-        * Interruption tab slots.
-        */
-        void slotTextPreMsgCheck_toggled(bool checked);
-        void slotTextPreSndCheck_toggled(bool checked);
-        void slotTextPostMsgCheck_toggled(bool checked);
-        void slotTextPostSndCheck_toggled(bool checked);
 
         /**
         * Other slots.

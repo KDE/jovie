@@ -345,163 +345,15 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
-      <attribute name="title">
-       <string>Interruption</string>
-      </attribute>
-      <layout class="QGridLayout">
-       <item row="0" column="0">
-        <layout class="QGridLayout">
-         <item row="1" column="1">
-          <widget class="KUrlRequester" name="textPreSnd">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis">
-            <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="KLineEdit" name="textPostMsg">
-           <property name="whatsThis">
-            <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="textPostMsgCheck">
-           <property name="whatsThis">
-            <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
-           </property>
-           <property name="text">
-            <string>Post-&amp;message:</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="textPreSndCheck">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis">
-            <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
-           </property>
-           <property name="text">
-            <string>Pre-sou&amp;nd:</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="textPreMsgCheck">
-           <property name="whatsThis">
-            <string>Check the Pre-message box and enter a Pre-message, which will be spoken whenever a text job is interrupted by another message.</string>
-           </property>
-           <property name="text">
-            <string>&amp;Pre-message:</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <property name="tristate">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="KUrlRequester" name="textPostSnd">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis">
-            <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="textPostSndCheck">
-           <property name="whatsThis">
-            <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
-           </property>
-           <property name="text">
-            <string>Post-s&amp;ound:</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="KLineEdit" name="textPreMsg">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="whatsThis">
-            <string>Check the Pre-message box and enter a Pre-message, which will be spoken whenever a text job is interrupted by another message.</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>
@@ -531,14 +383,6 @@
   <tabstop>lowerFilterPriorityButton</tabstop>
   <tabstop>configureFilterButton</tabstop>
   <tabstop>removeFilterButton</tabstop>
-  <tabstop>textPreMsgCheck</tabstop>
-  <tabstop>textPreMsg</tabstop>
-  <tabstop>textPreSndCheck</tabstop>
-  <tabstop>textPreSnd</tabstop>
-  <tabstop>textPostMsgCheck</tabstop>
-  <tabstop>textPostMsg</tabstop>
-  <tabstop>textPostSndCheck</tabstop>
-  <tabstop>textPostSnd</tabstop>
  </tabstops>
  <includes>
   <include location="global">klocale.h</include>

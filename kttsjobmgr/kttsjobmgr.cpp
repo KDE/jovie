@@ -278,10 +278,12 @@ void KttsJobMgrPart::slot_job_change_talker()
         QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
         int ndx = talkerIDs.indexOf(talkerID);
         QString talkerCode;
-        if (ndx >= 0) talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
+        if (ndx >= 0)
+            talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
         SelectTalkerDlg dlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
         int dlgResult = dlg.exec();
-        if (dlgResult != KDialog::Accepted) return;
+        if (dlgResult != KDialog::Accepted)
+            return;
         talkerCode = dlg.getSelectedTalkerCode();
         int jobNum = job.jobNum;
         m_kspeech->changeJobTalker(jobNum, talkerCode);
