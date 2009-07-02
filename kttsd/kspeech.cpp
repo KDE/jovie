@@ -44,7 +44,6 @@
 
 
 // KTTSD includes.
-#include "configdata.h"
 #include "talkermgr.h"
 // define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
 #define spd_debug spd_debug2
@@ -57,14 +56,12 @@
 
 class KSpeechPrivate
 {
-    KSpeechPrivate() :
-        configData(NULL)
+    KSpeechPrivate()
     {
     }
     
     ~KSpeechPrivate()
     {
-        delete configData;
     }
 
     friend class KSpeech;
@@ -74,11 +71,6 @@ protected:
     * The DBUS sender ID of last application to call KTTSD.
     */
     QString callingAppId;
-    
-    /**
-    * Configuration data.
-    */
-    ConfigData* configData;
 };
 
 /* KSpeech Class ========================================================= */
@@ -403,18 +395,14 @@ void KSpeech::setCallingAppId(const QString& appId)
 
 bool KSpeech::initializeConfigData()
 {
-    if (d->configData) {
-        delete d->configData;
-    }
-    d->configData = new ConfigData(KGlobal::config().data());
     return true;
 }
 
 bool KSpeech::ready()
 {
     // TODO: add a check here to see if kttsd is ready (Speaker::Instance() will always be true...)
-    if (Speaker::Instance())
-        return true;
+    //if (Speaker::Instance())
+    //    return true;
     kDebug() << "KSpeech::ready: Starting KTTSD service";
 //    if (!initializeSpeechData()) return false;
     if (!initializeTalkerMgr())
@@ -433,42 +421,7 @@ bool KSpeech::initializeSpeechData()
 
 bool KSpeech::initializeTalkerMgr()
 {
-    //int load = TalkerMgr::Instance()->loadPlugIns(d->configData->config());
-    //// If no Talkers configured, try to autoconfigure one, first in the user's
-    //// desktop language, but if that fails, fallback to English.
-    //if (load < 0)
-    //{
-    //    QString languageCode = KGlobal::locale()->language();
-    //    if (TalkerMgr::Instance()->autoconfigureTalker(languageCode, d->configData->config()))
-    //        load = TalkerMgr::Instance()->loadPlugIns(d->configData->config());
-    //    else
-    //    {
-    //        if (TalkerMgr::Instance()->autoconfigureTalker("en", d->configData->config()))
-    //            load = TalkerMgr::Instance()->loadPlugIns(d->configData->config());
-    //    }
-    //}
-    //if (load < 0)
-    //{
-    //    // TODO: Would really like to eliminate ALL GUI stuff from kttsd.  Find
-    //    // a better way to do this.
-    //    kDebug() << "KSpeech::initializeTalkerMgr: no Talkers have been configured.";
-    //    // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
-    //    QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
-    //    KMessageBox::ButtonCode msgResult;
-    //    if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
-    //    {
-    //        if (KMessageBox::questionYesNo(
-    //            0,
-    //            i18n("KTTS has not yet been configured.  At least one Talker must be configured.  "
-    //                "Would you like to configure it now?"),
-    //            i18n("KTTS Not Configured"),
-    //            KGuiItem(i18n("Configure")),
-    //            KGuiItem(i18n("Do Not Configure")),
-    //            dontAskConfigureKTTS) == KMessageBox::Yes) msgResult = KMessageBox::Yes;
-    //    }
-    //    if (msgResult == KMessageBox::Yes) showManagerDialog();
-    //    return false;
-    //}
+    TalkerMgr::Instance()->loadTalkers(KGlobal::config().data());
     return true;
 }
 
@@ -476,24 +429,18 @@ bool KSpeech::initializeSpeaker()
 {
     kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker";
 
+    Speaker::Instance()->init();
+
     connect (Speaker::Instance(), SIGNAL(marker(const QString&, int, KSpeech::MarkerType, const QString&)),
         this, SLOT(slotMarker(const QString&, int, KSpeech::MarkerType, const QString&)));
-        
-    Speaker::Instance()->setConfigData(d->configData);
-
-    // Create speechData object.
     connect (Speaker::Instance(), SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
         this, SLOT(slotJobStateChanged(const QString&, int, KSpeech::JobState)));
-    connect (Speaker::Instance(), SIGNAL(filteringFinished()),
-        this, SLOT(slotFilteringFinished()));
-
-    if (!d->configData)
-        initializeConfigData();
-    Speaker::Instance()->setConfigData(d->configData);
+    //connect (Speaker::Instance(), SIGNAL(filteringFinished()),
+    //    this, SLOT(slotFilteringFinished()));
 
     // Establish ourself as a System Manager application.
     Speaker::Instance()->getAppData("kttsd")->setIsSystemManager(true);
-    
+
     return true;
 }
 

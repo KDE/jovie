@@ -63,7 +63,7 @@ public:
      * load the talkers from the given config object
      * @param c              KConfig object to read configured talkers from
      */
-    int loadTalkers(KConfig* c);
+    void loadTalkers(KConfig* c);
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.

@@ -59,6 +59,60 @@ TalkerMgr::~TalkerMgr()
     //while (!m_loadedPlugIns.isEmpty()) delete m_loadedPlugIns.takeFirst();
 }
 
+/**
+ * load the talkers from the given config object
+ * @param c              KConfig object to read configured talkers from
+ */
+void TalkerMgr::loadTalkers(KConfig* c)
+{
+    m_loadedTalkerCodes.clear();
+    m_loadedTalkerIds.clear();
+    KConfigGroup config(c, "General");
+    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList());
+    if (!talkerIDsList.isEmpty())
+    {
+        QStringList::ConstIterator itEnd(talkerIDsList.constEnd());
+        for( QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
+        {
+            // kDebug() << "Loading plugInProc for Talker ID " << *it;
+
+            // Talker ID.
+            QString talkerID = *it;
+
+            // Set the group for the language we're loading
+            KConfigGroup talkerConfig(c, "Talker_" + talkerID);
+
+            // Get the DesktopEntryName of the plugin we will try to load.
+            QString desktopEntryName = talkerConfig.readEntry("DesktopEntryName", QString());
+
+//            // If a DesktopEntryName is not in the config file, it was configured before
+//            // we started using them, when we stored translated plugin names instead.
+//            // Try to convert the translated plugin name to a DesktopEntryName.
+//            // DesktopEntryNames are better because user can change their desktop language
+//            // and DesktopEntryName won't change.
+//            if (desktopEntryName.isEmpty())
+//            {
+//                QString synthName = talkerConfig.readEntry("PlugIn", QString());
+//                // See if the translated name will untranslate.  If not, well, sorry.
+//                desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
+//                // Record the DesktopEntryName from now on.
+//                if (!desktopEntryName.isEmpty()) talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
+//            }
+
+            // Get the talker code.
+            QString talkerCode = talkerConfig.readEntry("TalkerCode", QString());
+
+            // Normalize the talker code.
+            QString fullLanguageCode;
+            talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
+
+            m_loadedTalkerCodes.append(TalkerCode(talkerCode));
+            m_loadedTalkerIds.append(talkerID);
+        }
+    }
+}
+
+
 ///**
 // * Load all the configured synth plugins,  populating loadedPlugIns structure.
 // */
