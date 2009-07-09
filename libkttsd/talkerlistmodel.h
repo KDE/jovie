@@ -2,10 +2,10 @@
   Model for listing Talkers, typically in a QTreeView.
   -------------------
   Copyright : (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright : (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
+  Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
-  Current Maintainer: Jeremy Whiting <jeremy@scitools.com>
+  Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

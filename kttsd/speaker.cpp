@@ -6,7 +6,7 @@
   -------------------
   Copyright:
   (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
-  (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -446,6 +446,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 
     if (jobNum != -1)
     {
+        kDebug() << "incoming job with text: " << text;
         kDebug() << "saying post filtered text: " << filteredText;
     }
 

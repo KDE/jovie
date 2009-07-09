@@ -3,7 +3,7 @@
   Uses addtalkerwidget.ui.
   -------------------
   Copyright: (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright: (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
+  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 

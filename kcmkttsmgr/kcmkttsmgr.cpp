@@ -744,57 +744,52 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     AddTalker* addTalkerWidget = new AddTalker(dlg);
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
-    int dlgResult = dlg->exec();
-    QString languageCode = addTalkerWidget->getLanguageCode();
-    QString synthName = addTalkerWidget->getSynthesizer();
-    delete dlg;
-    kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
-
-    // Also delete addTalkerWidget
-    if (dlgResult != QDialog::Accepted) {
-        delete addTalkerWidget;
-        return;
-    }
-
-    // If user chose "Other", must now get a language from him.
-    if(languageCode == "other")
+    if (dlg->exec() == QDialog::Accepted)
     {
-        QPointer<SelectLanguageDlg> dlg = new SelectLanguageDlg(
-            this,
-            i18n("Select Language"),
-            QStringList(),
-            SelectLanguageDlg::SingleSelect,
-            SelectLanguageDlg::BlankNotAllowed);
-        int dlgResult = dlg->exec();
-        languageCode = dlg->selectedLanguageCode();
+        QString languageCode = addTalkerWidget->getLanguageCode();
+        QString synthName = addTalkerWidget->getSynthesizer();
         delete dlg;
+        kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
+        // If user chose "Other", must now get a language from him.
+        if(languageCode == "other")
+        {
+            QPointer<SelectLanguageDlg> dlg = new SelectLanguageDlg(
+                this,
+                i18n("Select Language"),
+                QStringList(),
+                SelectLanguageDlg::SingleSelect,
+                SelectLanguageDlg::BlankNotAllowed);
+            int dlgResult = dlg->exec();
+            languageCode = dlg->selectedLanguageCode();
+            delete dlg;
 
-        // TODO: Also delete QTableWidget and hBox?
-        if (dlgResult != QDialog::Accepted)
-            return; // got no language
+            // TODO: Also delete QTableWidget and hBox?
+            if (dlgResult != QDialog::Accepted)
+                return; // got no language
+        }
+
+        if (languageCode.isEmpty())
+            return;
+        QString language = TalkerCode::languageCodeToLanguage(languageCode);
+        if (language.isEmpty())
+            return;
+
+        m_languagesToCodes[language] = languageCode;
+
+        // Assign a new Talker ID for the talker.  Wraps around to 1.
+        QString talkerID = QString::number(m_lastTalkerID + 1);
+
+        // Erase extraneous Talker configuration entries that might be there.
+        m_config->deleteGroup(QString("Talker_")+talkerID, 0);
+        m_config->sync();
+
+        // Convert translated plugin name to DesktopEntryName.
+        QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
+        // This shouldn't happen, but just in case.
+        if (desktopEntryName.isEmpty()) 
+            return;
     }
-
-    if (languageCode.isEmpty())
-        return;
-    QString language = TalkerCode::languageCodeToLanguage(languageCode);
-    if (language.isEmpty())
-        return;
-
-    m_languagesToCodes[language] = languageCode;
-
-    // Assign a new Talker ID for the talker.  Wraps around to 1.
-    QString talkerID = QString::number(m_lastTalkerID + 1);
-
-    // Erase extraneous Talker configuration entries that might be there.
-    m_config->deleteGroup(QString("Talker_")+talkerID, 0);
-    m_config->sync();
-
-    // Convert translated plugin name to DesktopEntryName.
-    QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
-    // This shouldn't happen, but just in case.
-    if (desktopEntryName.isEmpty()) 
-        return;
-
+    delete dlg;
     // Load the plugin.
     //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     //if (!m_loadedTalkerPlugIn) return;

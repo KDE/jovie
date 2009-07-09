@@ -6,6 +6,7 @@
   -------------------
   Copyright:
   (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
