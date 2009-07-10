@@ -528,7 +528,6 @@ private:
     * @param appId          The DBUS senderId of the application.
     * @return               List of parsed sentences.
     */
-
     QStringList parseText(const QString &text, const QString &appId);
 
     /**
