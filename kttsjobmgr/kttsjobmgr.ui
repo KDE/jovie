@@ -15,27 +15,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <widget class="QTableView" name="m_jobTableView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QTreeView" name="m_jobListView">
-      <property name="whatsThis">
-       <string>&lt;p&gt;These are all the text jobs.  The &lt;b&gt;State&lt;/b&gt; column may be:
-        &lt;ul&gt;
-        &lt;li&gt;&lt;b&gt;Queued&lt;/b&gt; - the job is waiting and will not be spoken until its state is changed to &lt;b&gt;Waiting&lt;/b&gt; by clicking the &lt;b&gt;Resume&lt;/b&gt; or &lt;b&gt;Restart&lt;/b&gt; buttons.&lt;/li&gt;
-        &lt;li&gt;&lt;b&gt;Waiting&lt;/b&gt; - the job is ready to be spoken.  It will be spoken when the jobs preceding it in the list have finished.&lt;/li&gt;
-        &lt;li&gt;&lt;b&gt;Speaking&lt;/b&gt; - the job is speaking.  The &lt;b&gt;Position&lt;/b&gt; column shows the current sentence of the job being spoken.  You may pause a speaking job by clicking the &lt;b&gt;Hold&lt;/b&gt; button.&lt;/li&gt;
-        &lt;li&gt;&lt;b&gt;Paused&lt;/b&gt; - the job is currently paused.  Paused jobs prevent jobs below them from speaking.  Use the &lt;b&gt;Resume&lt;/b&gt; or &lt;b&gt;Restart&lt;/b&gt; buttons to resume speaking the job, or click &lt;b&gt;Later&lt;/b&gt; to move the job down in the list.&lt;/li&gt;
-        &lt;li&gt;&lt;b&gt;Finished&lt;/b&gt; - the job has finished speaking.  When a second job finishes, this one will be deleted.  You may click &lt;b&gt;Restart&lt;/b&gt; to repeat the job.&lt;/li&gt;
-        &lt;/ul&gt;
-        &lt;em&gt;Note&lt;/em&gt;: Messages, Warnings, and Screen Reader Output do not appear in this list.  See the Handbook for more information.
-        &lt;/p&gt;</string>
-      </property>
-      <property name="rootIsDecorated">
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -188,11 +196,17 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Current job info:</string>
+          <string>Latest job info:</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="1" column="1" colspan="2">
            <widget class="KTextEdit" name="m_currentSentence">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="whatsThis">
              <string>&lt;p&gt;The text of the sentence currently speaking.&lt;/p&gt;</string>
             </property>

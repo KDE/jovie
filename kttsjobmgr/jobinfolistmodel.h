@@ -1,10 +1,10 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Model for listing Jobs, typically in a QTreeView.
+  Model for listing Jobs, typically in a QTableView.
   -------------------
   Copyright : (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

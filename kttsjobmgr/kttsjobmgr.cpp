@@ -89,10 +89,10 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     KGlobal::locale()->insertCatalog("kttsd");
 
     m_jobListModel = new JobInfoListModel();
-    m_ui->m_jobListView->setModel(m_jobListModel);
+    m_ui->m_jobTableView->setModel(m_jobListModel);
 
     // TODO: Do not sort the list.
-    // m_jobListView->setSorting(-1);
+    // m_jobTableView->setSorting(-1);
 
     m_jobButtons << m_ui->job_hold;
     m_jobButtons << m_ui->job_resume;
@@ -137,7 +137,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     // Set the main widget for the part.
     setWidget(widget);
 
-    connect(m_ui->m_jobListView, SIGNAL(clicked(const QModelIndex&)),
+    connect(m_ui->m_jobTableView, SIGNAL(clicked(const QModelIndex&)),
         this, SLOT(slot_jobListView_clicked()));
 
     // Fill the Job List.
@@ -153,6 +153,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         this, SLOT(jobStateChanged(const QString&, int, int)));
     connect(m_kspeech, SIGNAL(marker(const QString&, int, int, const QString&)),
         this, SLOT(marker(const QString&, int, int, const QString&)));
+    connect(m_kspeech, SIGNAL(newJobFiltered(const QString&, const QString&)),
+        this, SLOT(slotJobFiltered(const QString&, const QString&)));
 
     m_extension = new KttsJobMgrBrowserExtension(this);
 
@@ -262,7 +264,7 @@ void KttsJobMgrPart::slot_job_move()
         QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
         if (index.isValid())
         {
-            m_ui->m_jobListView->setCurrentIndex(index);
+            m_ui->m_jobTableView->setCurrentIndex(index);
             slot_jobListView_clicked();
         }
     }
@@ -270,7 +272,7 @@ void KttsJobMgrPart::slot_job_move()
 
 void KttsJobMgrPart::slot_job_change_talker()
 {
-    QModelIndex index = m_ui->m_jobListView->currentIndex();
+    QModelIndex index = m_ui->m_jobTableView->currentIndex();
     if (index.isValid())
     {
         JobInfo job = m_jobListModel->getRow(index.row());
@@ -361,7 +363,7 @@ void KttsJobMgrPart::slot_refresh()
         QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
         if (index.isValid())
         {
-            m_ui->m_jobListView->setCurrentIndex(index);
+            m_ui->m_jobTableView->setCurrentIndex(index);
             slot_jobListView_clicked();
         }
     }
@@ -376,7 +378,7 @@ void KttsJobMgrPart::slot_refresh()
 int KttsJobMgrPart::getCurrentJobNum()
 {
     int jobNum = 0;
-    QModelIndex index = m_ui->m_jobListView->currentIndex();
+    QModelIndex index = m_ui->m_jobTableView->currentIndex();
     if (index.isValid())
         jobNum = m_jobListModel->getRow(index.row()).jobNum;
     return jobNum;
@@ -461,7 +463,7 @@ void KttsJobMgrPart::refreshJobList()
 void KttsJobMgrPart::autoSelectInJobListView()
 {
     // If something selected, nothing to do.
-    if (m_ui->m_jobListView->currentIndex().isValid()) return;
+    if (m_ui->m_jobTableView->currentIndex().isValid()) return;
     // If empty, disable job buttons.
     
     if (m_jobListModel->rowCount() == 0)
@@ -469,7 +471,7 @@ void KttsJobMgrPart::autoSelectInJobListView()
     else
     {
         // Select first item.
-        m_ui->m_jobListView->setCurrentIndex(m_jobListModel->index(0, 0));
+        m_ui->m_jobTableView->setCurrentIndex(m_jobListModel->index(0, 0));
         slot_jobListView_clicked();
     }
 }
@@ -508,7 +510,7 @@ void KttsJobMgrPart::enableJobActions(bool enable)
     if (enable)
     {
         // Later button only enables if currently selected list item is not bottom of list.
-        QModelIndex index = m_ui->m_jobListView->currentIndex();
+        QModelIndex index = m_ui->m_jobTableView->currentIndex();
         if (index.isValid())
         {
             bool enableLater = (index.row() < m_jobListModel->rowCount());
@@ -550,7 +552,7 @@ Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobN
                     // Should we select this job?
                     if (m_selectOnTextSet)
                     {
-                        m_ui->m_jobListView->setCurrentIndex(m_jobListModel->jobNumToIndex(jobNum));
+                        m_ui->m_jobTableView->setCurrentIndex(m_jobListModel->jobNumToIndex(jobNum));
                         m_selectOnTextSet = false;
                         slot_jobListView_clicked();
                     }
@@ -597,6 +599,13 @@ Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobN
             break;
         }
     }
+}
+
+Q_SCRIPTABLE void KttsJobMgrPart::slotJobFiltered(const QString& prefilterText, const QString& postfilterText)
+{
+    kDebug() << "jobFiltered called";
+    m_ui->m_currentSentence->setPlainText(prefilterText);
+    m_ui->m_filteredCurrentSentence->setPlainText(postfilterText);
 }
 
 /**

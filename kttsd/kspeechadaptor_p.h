@@ -204,6 +204,10 @@ class KSpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg type=\"i\" name=\"jobNum\" />\n"
 "      <arg type=\"i\" name=\"state\" />\n"
 "    </signal>\n"
+"    <signal name=\"newJobFiltered\" >\n"
+"      <arg type=\"s\" name=\"prefilterText\" />\n"
+"      <arg type=\"s\" name=\"postfilterText\" />\n"
+"    </signal>\n"
 "    <signal name=\"marker\" >\n"
 "      <arg type=\"s\" name=\"appId\" />\n"
 "      <arg type=\"i\" name=\"jobNum\" />\n"
@@ -272,6 +276,7 @@ Q_SIGNALS: // SIGNALS
     void jobStateChanged(const QString &appId, int jobNum, int state);
     void kttsdExiting();
     void kttsdStarted();
+    void newJobFiltered(const QString &prefilterText, const QString &postfilterText);
     void marker(const QString &appId, int jobNum, int markerType, const QString &markerData);
 };
 
