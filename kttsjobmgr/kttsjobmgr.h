@@ -89,6 +89,11 @@ protected Q_SLOTS:
     */
     Q_SCRIPTABLE void marker(const QString &appId, int jobNum, int markerType, const QString &markerData);
 
+    /**
+     * slot for when jobs are filtered in the daemon so we can show it in our ui
+     */
+    Q_SCRIPTABLE void slotJobFiltered(const QString&, const QString&);
+
 private slots:
     /**
     * This slot is connected to the Job List View clicked signal.

@@ -6,7 +6,7 @@
   -------------------
   Copyright:
   (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
-  (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -100,13 +100,8 @@
 class SpeakerPrivate
 {
     SpeakerPrivate() :
-        exitRequested(false),
-        again(false),
-        currentJobNum(0),
         connection(NULL),
-        lastJobNum(0),
-        filterMgr(NULL),
-        supportsHTML(false)
+        filterMgr(NULL)
     {
         if (!ConnectToSpeechd())
             kError() << "could not get a connection to speech-dispatcher"<< endl;
@@ -174,24 +169,9 @@ protected:
     }
 
     /**
-    * True if the speaker was requested to exit.
-    */
-    volatile bool exitRequested;
-
-    /**
     * list of output modules speech-dispatcher has
     */
     QStringList outputModules;
-
-    /**
-    * Used to prevent doUtterances from prematurely exiting.
-    */
-    bool again;
-
-    /**
-    * Current Text job being played.
-    */
-    int currentJobNum;
 
     SPDConnection * connection;
     
@@ -207,24 +187,9 @@ protected:
     mutable QMap<QString, AppData*> appData;
 
     /**
-    * The last job queued by any App.
-    */
-    int lastJobNum;
-
-    /**
     * the filter manager
     */
     FilterMgr * filterMgr;
-
-    /**
-    * Job counter.  Each new job increments this counter.
-    */
-    int jobCounter;
-
-    /**
-    * True if at least one XML Transformer plugin for html is enabled.
-    */
-    bool supportsHTML;
 };
 
 /* Public Methods ==========================================================*/
@@ -245,7 +210,7 @@ void Speaker::speechdCallback(size_t msg_id, size_t /*client_id*/, SPDNotificati
     kDebug() << "speechdCallback called with messageid: " << msg_id << " and type: " << type;
     SpeechJob * job = Speaker::Instance()->d->allJobs[msg_id];
     if (job) {
-        KSpeech::JobState state;
+        KSpeech::JobState state(KSpeech::jsQueued);
         switch (type) {
             case SPD_EVENT_BEGIN:
                 state = KSpeech::jsSpeaking;
@@ -295,7 +260,6 @@ void Speaker::init()
     delete d->filterMgr;
     d->filterMgr = new FilterMgr();
     d->filterMgr->init();
-    d->supportsHTML = d->filterMgr->supportsHTML();
 }
 
 AppData* Speaker::getAppData(const QString& appId) const
@@ -401,6 +365,8 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
         job->setSentences(QStringList(filteredText));
     }
 
+    emit newJobFiltered(text, filteredText);
+
     bool failedconnect = false;
     while (jobNum == -1 && !failedconnect)
     {
@@ -455,7 +421,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
     //// Note: Set state last so job is fully populated when jobStateChanged signal is emitted.
     d->allJobs.insert(jobNum, job);
     appData->jobList()->append(jobNum);
-    d->lastJobNum = jobNum;
+    //d->lastJobNum = jobNum;
 
     return jobNum;
 }
@@ -472,7 +438,7 @@ SpeechJob* Speaker::findLastJobByAppId(const QString& appId) const
 int Speaker::findJobNumByAppId(const QString& appId) const
 {
     if (appId.isEmpty())
-        return d->lastJobNum;
+        return 0; // d->lastJobNum;
     else
         return getAppData(appId)->lastJobNum();
 }
@@ -501,7 +467,7 @@ QString Speaker::getAppIdByJobNum(int jobNum) const
 
 void Speaker::requestExit(){
     // kDebug() << "Speaker::requestExit: Running";
-    d->exitRequested = true;
+    //d->exitRequested = true;
 }
 
 //void Speaker::doUtterances()
@@ -714,12 +680,12 @@ void Speaker::requestExit(){
 
 bool Speaker::isSpeaking()
 {
-    return (KSpeech::jsSpeaking == jobState(d->currentJobNum));
+    return true; // TODO: ask speech-dispatcher somehow?
 }
 
 int Speaker::getCurrentJobNum()
 { 
-    return d->currentJobNum;
+    return 0;// TODO: ask speech dispatcher if it's needed...
 }
 
 //void Speaker::moveJobLater(int jobNum)

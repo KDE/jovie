@@ -1,9 +1,10 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Description:t, applying each configured Filter in turn.
-    Runs asynchronously, emitting Finished() signal when all Filters have run.
+    Runs synchronously via call to convert()
 
   Copyright:
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -27,15 +28,12 @@
 #include "filtermgr.moc"
 
 // Qt includes
-#include <QtCore/QCoreApplication>
 
 // KDE includes.
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kparts/componentfactory.h>
-#include <klocale.h>
 #include <kservicetypetrader.h>
 
 /**
@@ -46,8 +44,6 @@ FilterMgr::FilterMgr( QObject *parent) :
 {
     // kDebug() << "FilterMgr::FilterMgr: Running";
     m_state = fsIdle;
-    //m_noSBD = false;
-    m_supportsHTML = false;
     m_talkerCode = 0;
 }
 
@@ -57,8 +53,6 @@ FilterMgr::FilterMgr( QObject *parent) :
 FilterMgr::~FilterMgr()
 {
     // kDebug() << "FilterMgr::~FilterMgr: Running";
-    if ( m_state == fsFiltering )
-        stopFiltering();
     qDeleteAll(m_filterList);
     m_filterList.clear();
 }
@@ -75,7 +69,7 @@ bool FilterMgr::init()
     KConfigGroup config( pConfig, "General");
     KConfig* rawconfig = new KConfig("kttsdrc");
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList());
-     kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
+    kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
 
     if ( !filterIDsList.isEmpty() )
     {
@@ -109,34 +103,15 @@ bool FilterMgr::init()
                     filterProc->init( rawconfig, groupName );
                     m_filterList.append( filterProc );
                 }
-                if (thisgroup.readEntry("DocType").contains("html") ||
-                    thisgroup.readEntry("RootElement").contains("html"))
-                    m_supportsHTML = true;
+                //if (thisgroup.readEntry("DocType").contains("html") ||
+                //    thisgroup.readEntry("RootElement").contains("html"))
+                    //m_supportsHTML = true;
             }
         }
     }
     delete rawconfig;
     return true;
 }
-
-/**
- * Returns True if this filter is a Sentence Boundary Detector.
- * If so, the filter should implement @ref setSbRegExp() .
- * @return          True if this filter is a SBD.
- */
-///*virtual*/ bool FilterMgr::isSBD() { return true; }
-
-/**
- * Returns True if the plugin supports asynchronous processing,
- * i.e., supports asyncConvert method.
- * @return                        True if this plugin supports asynchronous processing.
- *
- * If the plugin returns True, it must also implement @ref getState .
- * It must also emit @ref filteringFinished when filtering is completed.
- * If the plugin returns True, it must also implement @ref stopFiltering .
- * It must also emit @ref filteringStopped when filtering has been stopped.
- */
-///*virtual*/ bool FilterMgr::supportsAsync() { return true; }
 
 /**
  * Synchronously convert text.
@@ -162,185 +137,20 @@ QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, con
     return m_text;
 }
 
-/**
- * Aynchronously convert input.
- * @param inputText         Input text.
- * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
- *                          use for synthing the text.  Useful for extracting hints about
- *                          how to filter the text.  For example, languageCode.
- * @param appId             The DCOP appId of the application that queued the text.
- *                          Also useful for hints about how to do the filtering.
- *
- * When the input text has been converted, filteringFinished signal will be emitted
- * and caller can retrieve using getOutput();
-*/
-bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QString& appId)
-{
-    m_text = inputText;
-    m_talkerCode = talkerCode;
-    m_appId = appId;
-    m_filterIndex = -1;
-    m_filterProc = 0;
-    m_state = fsFiltering;
-    //m_async = true;
-    nextFilter();
-    return true;
-}
-
 // Finishes up with current filter (if any) and goes on to the next filter.
 void FilterMgr::nextFilter()
 {
-    //if ( m_filterProc )
-    //{
-    //    if ( m_filterProc->supportsAsync() )
-    //    {
-    //        m_text = m_filterProc->getOutput();
-    //        m_filterProc->ackFinished();
-    //        disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-    //    }
-    //    // if ( m_filterProc->wasModified() )
-    //    //     kDebug() << "FilterMgr::nextFilter: Filter# " << m_filterIndex << " modified the text.";
-    //    if ( m_filterProc->wasModified() && m_filterProc->isSBD() )
-    //    {
-    //        m_state = fsFinished;
-    //        // Post an event which will be later emitted as a signal.
-    //        QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
-    //        QCoreApplication::postEvent(this, ev);
-    //        return;
-    //    }
-    //}
     ++m_filterIndex;
-    if ( m_filterIndex == static_cast<int>(m_filterList.count()) )
+    if (m_filterIndex == m_filterList.count())
     {
         m_state = fsFinished;
-        // Post an event which will be later emitted as a signal.
-        QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
-        QCoreApplication::postEvent(this, ev);
         return;
     }
     m_filterProc = m_filterList.at(m_filterIndex);
-    //if ( m_noSBD && m_filterProc->isSBD() )
-    //{
-    //    // kDebug() << "FilterMgr::nextFilter: skipping plugin " << m_filterIndex
-    //    //     << " because it is an SBD filter and noSBD is true." << endl;
-    //    m_state = fsFinished;
-    //    // Post an event which will be later emitted as a signal.
-    //    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 301));
-    //    QCoreApplication::postEvent(this, ev);
-    //    return;
-    //}
-    m_filterProc->setSbRegExp( m_re );
-    //if ( m_async )
-    //{
-    //    if ( m_filterProc->supportsAsync() )
-    //    {
-    //        // kDebug() << "FilterMgr::nextFilter: calling asyncConvert on filter " << m_filterIndex;
-    //        connect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-    //        if ( !m_filterProc->asyncConvert( m_text, m_talkerCode, m_appId ) )
-    //        {
-    //            disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-    //            m_filterProc = 0;
-    //            nextFilter();
-    //        }
-    //    } else {
-    //        // kDebug() << "FilterMgr::nextFilter: calling convert on filter " << m_filterIndex;
-    //        m_text = m_filterProc->convert( m_text, m_talkerCode, m_appId );
-    //        nextFilter();
-    //    }
-    //} else
     m_text = m_filterProc->convert( m_text, m_talkerCode, m_appId );
+    if (m_filterProc->wasModified())
+        kDebug() << "FilterMgr::nextFilter: Filter# " << m_filterIndex << " modified the text.";
 }
-
-// Received when each filter finishes.
-void FilterMgr::slotFilteringFinished()
-{
-    // kDebug() << "FilterMgr::slotFilteringFinished: received signal from filter " << m_filterIndex;
-    nextFilter();
-}
-
-bool FilterMgr::event ( QEvent * e )
-{
-    if ( e->type() == (QEvent::User + 301) )
-    {
-        // kDebug() << "FilterMgr::event: emitting filteringFinished signal.";
-        emit filteringFinished();
-        return true;
-    }
-    if ( e->type() == (QEvent::User + 302) )
-    {
-        // kDebug() << "FilterMgr::event: emitting filteringStopped signal.";
-        emit filteringStopped();
-        return true;
-    }
-    else return false;
-}
-
-/**
- * Waits for filtering to finish.
- */
-void FilterMgr::waitForFinished()
-{
-    if ( m_state != fsFiltering ) return;
-    disconnect(m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-    //m_async = false;
-    m_filterProc->waitForFinished();
-    while ( m_state == fsFiltering )
-        nextFilter();
-}
-
-/**
- * Returns the state of the FilterMgr.
- */
-int FilterMgr::getState() { return m_state; }
-
-/**
- * Returns the filtered output.
- */
-QString FilterMgr::getOutput()
-{
-    return m_text;
-}
-
-/**
- * Acknowledges the finished filtering.
- */
-void FilterMgr::ackFinished()
-{
-    m_state = fsIdle;
-    m_text.clear();
-}
-
-/**
- * Stops filtering.  The filteringStopped signal will emit when filtering
- * has in fact stopped.
- */
-void FilterMgr::stopFiltering()
-{
-    if ( m_state != fsFiltering ) return;
-    //if ( m_async )
-        disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
-    m_filterProc->stopFiltering();
-    m_state = fsIdle;
-    QEvent* ev = new QEvent(QEvent::Type(QEvent::User + 302));
-    QCoreApplication::postEvent(this, ev);
-}
-
-/**
- * Set Sentence Boundary Regular Expression.
- * This method will only be called if the application overrode the default.
- *
- * @param re            The sentence delimiter regular expression.
- */
-/*virtual*/ void FilterMgr::setSbRegExp(const QString& re)
-{
-    m_re = re;
-}
-
-/**
- * Do not call SBD filters.
- */
-//void FilterMgr::setNoSBD(bool noSBD) { m_noSBD = noSBD; }
-//bool FilterMgr::noSBD() { return m_noSBD; }
 
 // Loads the processing plug in for a filter plug in given its DesktopEntryName.
 KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)

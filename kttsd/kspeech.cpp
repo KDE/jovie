@@ -89,8 +89,7 @@ KSpeech::KSpeech(QObject *parent) :
 
 KSpeech::~KSpeech(){
     kDebug() << "KSpeech::~KSpeech:: Stopping KTTSD service";
-    if (Speaker::Instance())
-        Speaker::Instance()->requestExit();
+    Speaker::Instance()->requestExit();
     delete d;
     announceEvent("~KSpeech", "kttsdExiting");
     emit kttsdExiting();
@@ -213,7 +212,6 @@ int KSpeech::say(const QString &text, int options) {
 int KSpeech::sayFile(const QString &filename, const QString &encoding)
 {
     // kDebug() << "KSpeech::setFile: Running";
-    if (!Speaker::Instance()) return 0;
     QFile file(filename);
     int jobNum = 0;
     if ( file.open(QIODevice::ReadOnly) )
@@ -226,7 +224,6 @@ int KSpeech::sayFile(const QString &filename, const QString &encoding)
         }
         jobNum = Speaker::Instance()->say(callingAppId(), stream.readAll(), 0);
         file.close();
-        //Speaker::Instance()->doUtterances();
     }
     return jobNum;
 }
@@ -435,6 +432,8 @@ bool KSpeech::initializeSpeaker()
         this, SLOT(slotMarker(const QString&, int, KSpeech::MarkerType, const QString&)));
     connect (Speaker::Instance(), SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
         this, SLOT(slotJobStateChanged(const QString&, int, KSpeech::JobState)));
+    connect (Speaker::Instance(), SIGNAL(newJobFiltered(const QString&, const QString&)),
+        this, SIGNAL(newJobFiltered(const QString&, const QString&)));
     //connect (Speaker::Instance(), SIGNAL(filteringFinished()),
     //    this, SLOT(slotFilteringFinished()));
 

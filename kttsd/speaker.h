@@ -382,7 +382,15 @@ signals:
     * Emitted when the state of a job changes.
     */
     void jobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
-    
+
+    /**
+     * This signal is emitted when a new job coming in is filtered (or not filtered if no filters
+     * are on).
+     * @param prefilterText     The text of the speech job
+     * @param postfilterText    The text of the speech job after any filters have been applied
+     */
+    void newJobFiltered(const QString &prefilterText, const QString &postfilterText);
+
 protected:
     /**
     * Processes events posted by ThreadedPlugIns.

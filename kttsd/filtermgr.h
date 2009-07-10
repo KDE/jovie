@@ -5,7 +5,7 @@
 
   Copyright:
   (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
-  (C) 2009 by Jeremy Whiting <jeremy@scitools.com>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -61,25 +61,6 @@ class FilterMgr : public KttsFilterProc
          */
         virtual bool init();
 
-        /**
-         * Returns True if this filter is a Sentence Boundary Detector.
-         * If so, the filter should implement @ref setSbRegExp() .
-         * @return          True if this filter is a SBD.
-         */
-        //virtual bool isSBD();
-
-        /**
-         * Returns True if the plugin supports asynchronous processing,
-         * i.e., supports asyncConvert method.
-         * @return                        True if this plugin supports asynchronous processing.
-         *
-         * If the plugin returns True, it must also implement @ref getState .
-         * It must also emit @ref filteringFinished when filtering is completed.
-         * If the plugin returns True, it must also implement @ref stopFiltering .
-         * It must also emit @ref filteringStopped when filtering has been stopped.
-         */
-        //virtual bool supportsAsync();
-
         /** 
          * Synchronously convert text.
          * @param inputText         Input text.
@@ -91,71 +72,6 @@ class FilterMgr : public KttsFilterProc
          * @return                  Converted text.
          */
         virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QString& appId);
-
-        /**
-         * Asynchronously convert input.
-         * @param inputText         Input text.
-         * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
-         *                          use for synthing the text.  Useful for extracting hints about
-         *                          how to filter the text.  For example, languageCode.
-         * @param appId             The DCOP appId of the application that queued the text.
-         *                          Also useful for hints about how to do the filtering.
-         *
-         * When the input text has been converted, filteringFinished signal will be emitted
-         * and caller can retrieve using getOutput();
-         */
-        virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QString& appId);
-
-        /**
-         * Waits for filtering to finish.
-         */
-        virtual void waitForFinished();
-
-        /**
-         * Returns the state of the FilterMgr.
-         */
-        virtual int getState();
-
-        /**
-         * Returns the filtered output.
-         */
-        virtual QString getOutput();
-
-        /**
-         * Acknowledges the finished filtering.
-         */
-        virtual void ackFinished();
-
-        /**
-         * Stops filtering.  The filteringStopped signal will emit when filtering
-         * has in fact stopped.
-         */
-        virtual void stopFiltering();
-
-        /**
-         * Set Sentence Boundary Regular Expression.
-         * This method will only be called if the application overrode the default.
-         *
-         * @param re            The sentence delimiter regular expression.
-         */
-        virtual void setSbRegExp(const QString& re);
-
-        /**
-         * Do not call SBD filters.
-         */
-        //void setNoSBD(bool noSBD);
-        //bool noSBD();
-
-        /**
-         * True if there is at least one XML Transformer filter for html.
-         */
-        bool supportsHTML() { return m_supportsHTML; }
-
-    protected:
-        bool event ( QEvent * e );
-
-    private slots:
-        void slotFilteringFinished();
 
     private:
         // Loads the processing plug in for a named filter plug in.
@@ -176,22 +92,12 @@ class FilterMgr : public KttsFilterProc
         int m_filterIndex;
         // Current filter.
         KttsFilterProc* m_filterProc;
-        // True if calling filters asynchronously.
-        //bool m_async;
         // Talker Code.
         TalkerCode* m_talkerCode;
         // AppId.
         QString m_appId;
-        // Sentence Boundary regular expression (if app overrode the default).
-        QString m_re;
-        // True if any of the filters modified the text.
-        bool m_wasModified;
         // FilterMgr state.
         int m_state;
-        // True if SBD Filters should not be called.
-        //bool m_noSBD;
-        // True if at least one XML Transformer for html is enabled.
-        bool m_supportsHTML;
 };
 
 #endif      // FILTERMGR_H
