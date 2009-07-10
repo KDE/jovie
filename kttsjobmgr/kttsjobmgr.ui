@@ -53,7 +53,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="KPushButton" name="job_hold">
+          <widget class="KPushButton" name="job_pause">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -61,7 +61,7 @@
             <string>&lt;p&gt;Changes a job to Paused state.  If currently speaking, the job stops speaking. Paused jobs prevent jobs that follow them from speaking, so either click &lt;b&gt;Resume&lt;/b&gt; to make the job speakable, or click &lt;b&gt;Later&lt;/b&gt; to move it down in the list.&lt;/p&gt;</string>
            </property>
            <property name="text">
-            <string>Hold</string>
+            <string>Pause</string>
            </property>
           </widget>
          </item>

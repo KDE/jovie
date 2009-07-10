@@ -356,14 +356,14 @@ public:
     bool isApplicationPaused(const QString& appId);
     
     /**
-    * Pauses the application.
+    * Pauses the speech.
     */
-    void pause(const QString& appId);
+    void pause();
     
     /**
-    * Resumes the application.
+    * Resumes the speech.
     */
-    void resume(const QString& appId);
+    void resume();
 
 signals:
     /**

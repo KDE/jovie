@@ -246,12 +246,12 @@ int KSpeech::sayClipboard()
 
 void KSpeech::pause()
 {
-    Speaker::Instance()->pause(callingAppId());
+    Speaker::Instance()->pause();
 }
 
 void KSpeech::resume()
 {
-    Speaker::Instance()->resume(callingAppId());
+    Speaker::Instance()->resume();
 }
 
 void KSpeech::removeJob(int jobNum)
@@ -375,7 +375,7 @@ void KSpeech::reinit()
     kDebug() << "KSpeech::reinit: Running";
     kDebug() << "KSpeech::reinit: Stopping KTTSD service";
     if (Speaker::Instance()->isSpeaking())
-        Speaker::Instance()->pause("kttsd");
+        Speaker::Instance()->pause();
     Speaker::Instance()->requestExit();
     QDBusConnection::sessionBus().unregisterObject("/KSpeech");
     if (ready()) {

@@ -103,7 +103,7 @@ private slots:
     /**
     * Slots connected to buttons.
     */
-    void slot_job_hold();
+    void slot_job_pause();
     void slot_job_resume();
     void slot_job_restart();
     void slot_job_remove();

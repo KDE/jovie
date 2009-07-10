@@ -94,7 +94,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     // TODO: Do not sort the list.
     // m_jobTableView->setSorting(-1);
 
-    m_jobButtons << m_ui->job_hold;
+    m_jobButtons << m_ui->job_pause;
     m_jobButtons << m_ui->job_resume;
     m_jobButtons << m_ui->job_restart;
     m_jobButtons << m_ui->job_remove;
@@ -104,9 +104,9 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_jobButtons << m_ui->job_nextsentence;
     m_jobButtons << m_ui->job_changetalker;
 
-    m_ui->job_hold->setIcon(KIcon("process-stop"));
-    connect (m_ui->job_hold, SIGNAL(clicked()), this, SLOT(slot_job_hold()));
-    m_ui->job_resume->setIcon(KIcon("system-run"));
+    m_ui->job_pause->setIcon(KIcon("media-playback-pause"));
+    connect (m_ui->job_pause, SIGNAL(clicked()), this, SLOT(slot_job_pause()));
+    m_ui->job_resume->setIcon(KIcon("media-playback-start"));
     connect (m_ui->job_resume, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
     m_ui->job_restart->setIcon(KIcon("edit-redo"));
     connect (m_ui->job_restart, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
@@ -195,7 +195,7 @@ void KttsJobMgrPart::slot_jobListView_clicked()
 /**
 * Slots connected to buttons.
 */
-void KttsJobMgrPart::slot_job_hold()
+void KttsJobMgrPart::slot_job_pause()
 {
     m_kspeech->pause();
 }

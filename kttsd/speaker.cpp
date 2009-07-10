@@ -1480,24 +1480,14 @@ int Speaker::moveRelSentence(int jobNum, int n)
 //        emit filteringFinished();
 //}
 
-void Speaker::pause(const QString& appId)
+void Speaker::pause()
 {
-    AppData* appData = getAppData(appId);
-    if (appData->isSystemManager()) {
-        foreach (AppData* app, d->appData)
-            app->setIsApplicationPaused(true);
-    } else
-        appData->setIsApplicationPaused(true);
+    spd_pause(d->connection);
 }
 
-void Speaker::resume(const QString& appId)
+void Speaker::resume()
 {
-    AppData* appData = getAppData(appId);
-    if (appData->isSystemManager()) {
-        foreach (AppData* app, d->appData)
-            app->setIsApplicationPaused(false);
-    } else
-        appData->setIsApplicationPaused(false);
+    spd_resume(d->connection);
 }
 
 bool Speaker::isApplicationPaused(const QString& appId)
