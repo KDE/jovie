@@ -315,6 +315,7 @@ TalkerCode* TalkerMgr::talkerToTalkerCode(const QString& talker)
 {
 //    int talkerNdx = talkerToPluginIndex(talker);
 //    return new TalkerCode(&m_loadedTalkerCodes[talkerNdx]);
+      return NULL;
 }
 
 /**
