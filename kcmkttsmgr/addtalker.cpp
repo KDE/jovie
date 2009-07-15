@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 #include "libspeechd.h"
 
@@ -46,8 +47,9 @@ AddTalker::AddTalker(QWidget* parent)
     if (connection == NULL)
     {
         // TODO: make this show an error dialog of some kind
-        kError() << "could not connect to speech-dispatcher to find available synthesizers and languages";
+        KMessageBox::error(parent, "could not connect to speech-dispatcher to find available synthesizers and languages", "speech-dispatcher not running");
         close();
+        return;
     }
 
     char ** modulenames = spd_list_modules(connection);
@@ -57,7 +59,7 @@ AddTalker::AddTalker(QWidget* parent)
         ++modulenames;
     }
 
-    foreach (QString module, m_outputModules)
+    foreach (const QString module, m_outputModules)
     {
         AvailableTalkersTable->setSortingEnabled(false);
         if (spd_set_output_module(connection, module.toUtf8().data()) == 0)

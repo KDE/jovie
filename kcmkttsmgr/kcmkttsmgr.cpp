@@ -64,7 +64,6 @@
 // KTTS includes.
 #include "talkercode.h"
 #include "filterconf.h"
-#include "testplayer.h"
 #include "selecttalkerdlg.h"
 #include "selectlanguagedlg.h"
 #include "utils.h"

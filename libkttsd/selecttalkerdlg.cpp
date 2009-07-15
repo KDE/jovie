@@ -164,7 +164,7 @@ QString SelectTalkerDlg::getSelectedTranslatedDescription()
 
 void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 {
-    SelectLanguageDlg* dlg = new SelectLanguageDlg(
+    QPointer<SelectLanguageDlg> dlg = new SelectLanguageDlg(
         this,
         i18n("Select Language"),
         QStringList(m_talkerCode.fullLanguageCode()),
