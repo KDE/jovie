@@ -98,7 +98,7 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_jobButtons << m_ui->job_resume;
     m_jobButtons << m_ui->job_restart;
     m_jobButtons << m_ui->job_remove;
-    m_jobButtons << m_ui->job_removeall;
+    m_jobButtons << m_ui->job_stop;
     m_jobButtons << m_ui->job_later;
     m_jobButtons << m_ui->job_prevsentence;
     m_jobButtons << m_ui->job_nextsentence;
@@ -112,8 +112,8 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     connect (m_ui->job_restart, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
     m_ui->job_remove->setIcon(KIcon("user-trash"));
     connect (m_ui->job_remove, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
-    m_ui->job_removeall->setIcon(KIcon("user-trash"));
-    connect (m_ui->job_removeall, SIGNAL(clicked()), this, SLOT(slot_job_remove_all()));
+    m_ui->job_stop->setIcon(KIcon("media-playback-stop"));
+    connect (m_ui->job_stop, SIGNAL(clicked()), this, SLOT(slot_job_stop()));
     m_ui->job_later->setIcon(KIcon("go-down"));
     connect (m_ui->job_later, SIGNAL(clicked()), this, SLOT(slot_job_move()));
 
@@ -247,7 +247,7 @@ void KttsJobMgrPart::slot_job_remove()
     }
 }
 
-void KttsJobMgrPart::slot_job_remove_all()
+void KttsJobMgrPart::slot_job_stop()
 {
     m_kspeech->removeAllJobs();
     m_ui->m_currentSentence->clear();

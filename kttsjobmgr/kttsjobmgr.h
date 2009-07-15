@@ -103,11 +103,11 @@ private slots:
     /**
     * Slots connected to buttons.
     */
+    void slot_job_stop();
     void slot_job_pause();
     void slot_job_resume();
     void slot_job_restart();
     void slot_job_remove();
-    void slot_job_remove_all();
     void slot_job_move();
     void slot_job_change_talker();
     void slot_speak_clipboard();
