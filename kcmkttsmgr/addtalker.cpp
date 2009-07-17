@@ -35,7 +35,9 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include "libspeechd.h"
+// define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
+#define spd_debug spd_debug4
+#include <libspeechd.h>
 
 AddTalker::AddTalker(QWidget* parent)
     : QWidget(parent)
@@ -46,9 +48,7 @@ AddTalker::AddTalker(QWidget* parent)
     SPDConnection * connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
     if (connection == NULL)
     {
-        // TODO: make this show an error dialog of some kind
-        KMessageBox::error(parent, "could not connect to speech-dispatcher to find available synthesizers and languages", "speech-dispatcher not running");
-        close();
+        kError("could not connect to speech-dispatcher to find available synthesizers and languages speech-dispatcher not running");
         return;
     }
 
