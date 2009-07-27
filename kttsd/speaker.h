@@ -354,6 +354,18 @@ public:
     * Return true if the application is paused.
     */
     bool isApplicationPaused(const QString& appId);
+
+    /**
+     * Stops the message currently being spoken on a given connection.
+     * If there is no message being spoken, does nothing. (It doesn't touch the messages waiting in queues).
+     */
+    void stop();
+    
+    /**
+     * Stops the currently spoken message from this connection (if there is any) and discards all the
+     * queued messages from this connection.
+     */
+    void cancel();
     
     /**
     * Pauses the speech.
@@ -364,6 +376,10 @@ public:
     * Resumes the speech.
     */
     void resume();
+
+    void setSpeed(int speed);
+    void setPitch(int pitch);
+    void setVolume(int volume);
 
 signals:
     /**

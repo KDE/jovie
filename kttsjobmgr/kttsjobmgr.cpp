@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  A KPart to display running jobs in KTTSD and permit user to stop, rewind,
-  advance, change Talker, etc.
+  A KPart to display running jobs in KTTSD and permit user to stop, cancel, pause,
+  resume, change Talker, etc.
   -------------------
   Copyright : (C) 2004,2005 by Gary Cramblitt <garycramblitt@comcast.net>
   Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
@@ -67,7 +67,6 @@ KAboutData* KttsJobMgrPart::createAboutData()
 
 KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args) :
     KParts::ReadOnlyPart(parent)
-//    m_kspeech(QDBus::sessionBus().findInterface<org::kde::KSpeech>("org.kde.kttsd", "/KSpeech"))
 {
     m_ui = new Ui::kttsjobmgr;
     QWidget * widget = new QWidget(parentWidget);
@@ -91,36 +90,18 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_jobListModel = new JobInfoListModel();
     m_ui->m_jobTableView->setModel(m_jobListModel);
 
-    // TODO: Do not sort the list.
-    // m_jobTableView->setSorting(-1);
+    connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_speedSliderChanged(int)));
+    connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_pitchSliderChanged(int)));
+    connect (m_ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_volumeSliderChanged(int)));
 
-    m_jobButtons << m_ui->job_pause;
-    m_jobButtons << m_ui->job_resume;
-    m_jobButtons << m_ui->job_restart;
-    m_jobButtons << m_ui->job_remove;
-    m_jobButtons << m_ui->job_stop;
-    m_jobButtons << m_ui->job_later;
-    m_jobButtons << m_ui->job_prevsentence;
-    m_jobButtons << m_ui->job_nextsentence;
-    m_jobButtons << m_ui->job_changetalker;
-
-    m_ui->job_pause->setIcon(KIcon("media-playback-pause"));
-    connect (m_ui->job_pause, SIGNAL(clicked()), this, SLOT(slot_job_pause()));
-    m_ui->job_resume->setIcon(KIcon("media-playback-start"));
-    connect (m_ui->job_resume, SIGNAL(clicked()), this, SLOT(slot_job_resume()));
-    m_ui->job_restart->setIcon(KIcon("edit-redo"));
-    connect (m_ui->job_restart, SIGNAL(clicked()), this, SLOT(slot_job_restart()));
-    m_ui->job_remove->setIcon(KIcon("user-trash"));
-    connect (m_ui->job_remove, SIGNAL(clicked()), this, SLOT(slot_job_remove()));
-    m_ui->job_stop->setIcon(KIcon("media-playback-stop"));
-    connect (m_ui->job_stop, SIGNAL(clicked()), this, SLOT(slot_job_stop()));
-    m_ui->job_later->setIcon(KIcon("go-down"));
-    connect (m_ui->job_later, SIGNAL(clicked()), this, SLOT(slot_job_move()));
-
-    m_ui->job_prevsentence->setIcon(KIcon("arrow-left"));
-    connect (m_ui->job_prevsentence, SIGNAL(clicked()), this, SLOT(slot_job_prev_sen()));
-    m_ui->job_nextsentence->setIcon(KIcon("arrow-right"));
-    connect (m_ui->job_nextsentence, SIGNAL(clicked()), this, SLOT(slot_job_next_sen()));
+    m_ui->stopButton->setIcon(KIcon("media-playback-stop"));
+    connect (m_ui->stopButton, SIGNAL(clicked()), this, SLOT(slot_stop()));
+    m_ui->cancelButton->setIcon(KIcon("edit-clear"));
+    connect (m_ui->cancelButton, SIGNAL(clicked()), this, SLOT(slot_cancel()));
+    m_ui->pauseButton->setIcon(KIcon("media-playback-pause"));
+    connect (m_ui->pauseButton, SIGNAL(clicked()), this, SLOT(slot_pause()));
+    m_ui->resumeButton->setIcon(KIcon("media-playback-start"));
+    connect (m_ui->resumeButton, SIGNAL(clicked()), this, SLOT(slot_resume()));
 
     m_ui->speak_clipboard->setIcon(KIcon("klipper"));
     connect (m_ui->speak_clipboard, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
@@ -128,11 +109,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     connect (m_ui->speak_file, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
     m_ui->job_changetalker->setIcon(KIcon("translate"));
     connect (m_ui->job_changetalker, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
-    m_ui->refresh->setIcon(KIcon("view-refresh"));
-    connect (m_ui->refresh, SIGNAL(clicked()), this, SLOT(slot_refresh()));
-
-    // Disable job buttons until a job is selected.
-    enableJobActions(false);
 
     // Set the main widget for the part.
     setWidget(widget);
@@ -157,13 +133,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         this, SLOT(slotJobFiltered(const QString&, const QString&)));
 
     m_extension = new KttsJobMgrBrowserExtension(this);
-
-    // Divide splitter in half.  ListView gets half.  Buttons and Current Sentence get half.
-    int halfSplitterSize = m_ui->splitter->height()/2;
-    QList<int> splitterSizes;
-    splitterSizes.append(halfSplitterSize);
-    splitterSizes.append(halfSplitterSize);
-    m_ui->splitter->setSizes(splitterSizes);
 }
 
 KttsJobMgrPart::~KttsJobMgrPart()
@@ -188,86 +157,47 @@ bool KttsJobMgrPart::closeUrl()
 */
 void KttsJobMgrPart::slot_jobListView_clicked()
 {
-    // Enable job buttons.
-    enableJobActions(true);
 }
 
 /**
 * Slots connected to buttons.
 */
-void KttsJobMgrPart::slot_job_pause()
+void KttsJobMgrPart::slot_stop()
+{
+    m_kspeech->stop();
+}
+
+void KttsJobMgrPart::slot_cancel()
+{
+    m_kspeech->cancel();
+}
+
+void KttsJobMgrPart::slot_pause()
 {
     m_kspeech->pause();
 }
 
-void KttsJobMgrPart::slot_job_resume()
+void KttsJobMgrPart::slot_resume()
 {
     m_kspeech->resume();
 }
 
-void KttsJobMgrPart::slot_job_restart()
+void KttsJobMgrPart::slot_speedSliderChanged(int speed)
 {
-    int jobNum = getCurrentJobNum();
-    // kDebug() << "KttsJobMgrPart::slot_job_restart: jobNum = " << jobNum;
-    if (jobNum)
-    {
-        int seq = m_kspeech->moveRelSentence(jobNum, 0);
-        m_kspeech->moveRelSentence(jobNum, -seq);
-        refreshJob(jobNum);
-    }
+    kDebug() << "telling kspeech to set speed to " << speed;
+    m_kspeech->setSpeed(speed);
 }
 
-void KttsJobMgrPart::slot_job_prev_sen()
+void KttsJobMgrPart::slot_pitchSliderChanged(int pitch)
 {
-    int jobNum = getCurrentJobNum();
-    if (jobNum)
-    {
-        m_kspeech->moveRelSentence(jobNum, -1);
-        refreshJob(jobNum);
-    }
+    kDebug() << "telling kspeech to set pitch to " << pitch;
+    m_kspeech->setPitch(pitch);
 }
 
-void KttsJobMgrPart::slot_job_next_sen()
+void KttsJobMgrPart::slot_volumeSliderChanged(int volume)
 {
-    int jobNum = getCurrentJobNum();
-    if (jobNum)
-    {
-        m_kspeech->moveRelSentence(jobNum, 1);
-        refreshJob(jobNum);
-    }
-}
-
-void KttsJobMgrPart::slot_job_remove()
-{
-    int jobNum = getCurrentJobNum();
-    if (jobNum)
-    {
-        m_kspeech->removeJob(jobNum);
-        m_ui->m_currentSentence->clear();
-    }
-}
-
-void KttsJobMgrPart::slot_job_stop()
-{
-    m_kspeech->removeAllJobs();
-    m_ui->m_currentSentence->clear();
-}
-
-void KttsJobMgrPart::slot_job_move()
-{
-    int jobNum = getCurrentJobNum();
-    if (jobNum)
-    {
-        m_kspeech->moveJobLater(jobNum);
-        refreshJobList();
-        // Select the job we just moved.
-        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-        if (index.isValid())
-        {
-            m_ui->m_jobTableView->setCurrentIndex(index);
-            slot_jobListView_clicked();
-        }
-    }
+    kDebug() << "telling kspeech to set volume to " << volume;
+    m_kspeech->setVolume(volume);
 }
 
 void KttsJobMgrPart::slot_job_change_talker()
@@ -350,24 +280,24 @@ void KttsJobMgrPart::slot_speak_file()
     }
 }
 
-void KttsJobMgrPart::slot_refresh()
-{
-    // Clear TalkerID cache.
-    m_talkerCodesToTalkerIDs.clear();
-    // Get current job number.
-    int jobNum = getCurrentJobNum();
-    refreshJobList();
-    // Select the previously-selected job.
-    if (jobNum)
-    {
-        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-        if (index.isValid())
-        {
-            m_ui->m_jobTableView->setCurrentIndex(index);
-            slot_jobListView_clicked();
-        }
-    }
-}
+//void KttsJobMgrPart::slot_refresh()
+//{
+//    // Clear TalkerID cache.
+//    m_talkerCodesToTalkerIDs.clear();
+//    // Get current job number.
+//    int jobNum = getCurrentJobNum();
+//    refreshJobList();
+//    // Select the previously-selected job.
+//    if (jobNum)
+//    {
+//        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
+//        if (index.isValid())
+//        {
+//            m_ui->m_jobTableView->setCurrentIndex(index);
+//            slot_jobListView_clicked();
+//        }
+//    }
+//}
 
 
 /**
@@ -441,7 +371,6 @@ void KttsJobMgrPart::refreshJobList()
     // kDebug() << "KttsJobMgrPart::refreshJobList: Running";
     m_jobListModel->clear();
     JobInfoList jobInfoList;
-    enableJobActions(false);
     QStringList jobNums = m_kspeech->getJobNumbers(KSpeech::jpAll);
     for (int ndx = 0; ndx < jobNums.count(); ++ndx)
     {
@@ -466,14 +395,14 @@ void KttsJobMgrPart::autoSelectInJobListView()
     if (m_ui->m_jobTableView->currentIndex().isValid()) return;
     // If empty, disable job buttons.
     
-    if (m_jobListModel->rowCount() == 0)
-        enableJobActions(false);
-    else
-    {
+    //if (m_jobListModel->rowCount() == 0)
+    //    enableJobActions(false);
+    //else
+    //{
         // Select first item.
         m_ui->m_jobTableView->setCurrentIndex(m_jobListModel->index(0, 0));
         slot_jobListView_clicked();
-    }
+    //}
 }
 
 /**
@@ -496,35 +425,15 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
     }
 }
 
-/**
-* Enables or disables all the job-related buttons.
-* @param enable        True to enable the job-related butons.  False to disable.
-*/
-void KttsJobMgrPart::enableJobActions(bool enable)
-{
-    QListIterator<KPushButton *> i(m_jobButtons);
-
-    while (i.hasNext())
-        (i.next())->setEnabled( enable );
-
-    if (enable)
-    {
-        // Later button only enables if currently selected list item is not bottom of list.
-        QModelIndex index = m_ui->m_jobTableView->currentIndex();
-        if (index.isValid())
-        {
-            bool enableLater = (index.row() < m_jobListModel->rowCount());
-            m_ui->job_later->setEnabled(enableLater);
-        }
-    }
-}
-
 /** Slots connected to DBUS Signals emitted by KTTSD. */
 
 /**
 * This signal is emitted when KTTSD starts or restarts after a call to reinit.
 */
-Q_SCRIPTABLE void KttsJobMgrPart::kttsdStarted() { slot_refresh(); }
+Q_SCRIPTABLE void KttsJobMgrPart::kttsdStarted()
+{
+    refreshJobList();
+}
 
 
 /**
@@ -587,7 +496,7 @@ Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobN
                 job.state = state;
                 m_jobListModel->updateRow(index.row(), job);
             }
-            m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, 0));
+            //m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, 0));
             break;
         }
         case KSpeech::jsDeleted:
@@ -603,9 +512,8 @@ Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobN
 
 Q_SCRIPTABLE void KttsJobMgrPart::slotJobFiltered(const QString& prefilterText, const QString& postfilterText)
 {
-    kDebug() << "jobFiltered called";
-    m_ui->m_currentSentence->setPlainText(prefilterText);
-    m_ui->m_filteredCurrentSentence->setPlainText(postfilterText);
+    //m_ui->m_currentSentence->setPlainText(prefilterText);
+    //m_ui->m_filteredCurrentSentence->setPlainText(postfilterText);
 }
 
 /**
@@ -630,11 +538,11 @@ Q_SCRIPTABLE void KttsJobMgrPart::marker(const QString &appId, int jobNum, int m
             int seq = markerData.toInt();
             job.sentenceNum = seq;
             m_jobListModel->updateRow(index.row(), job);
-            m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, seq));
+            //m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, seq));
         }
     }
     if (KSpeech::mtSentenceEnd == markerType) {
-        m_ui->m_currentSentence->setPlainText(QString());
+        //m_ui->m_currentSentence->setPlainText(QString());
     }
 }
 

@@ -13,9 +13,9 @@ set(kttsd_SRCS
    ssmlconvert.cpp 
    filtermgr.cpp 
    talkermgr.cpp 
-   speechjob.cpp 
-   kspeechadaptor_p.cpp )
+   speechjob.cpp )
 
+qt4_add_dbus_adaptor(kttsd_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml kspeech.h KSpeech)
 
 kde4_add_executable(kttsd_bin ${kttsd_SRCS})
 
@@ -28,7 +28,6 @@ target_link_libraries(kttsd_bin
     kttsd )
 
 install(TARGETS kttsd_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
 
 ########### install files ###############
 

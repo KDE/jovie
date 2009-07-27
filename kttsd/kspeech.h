@@ -5,6 +5,7 @@
   ------------------------------
   Copyright:
   (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -392,6 +393,14 @@ public Q_SLOTS: // METHODS
     */
     void resume();
 
+    
+    void stop();
+    void cancel();
+
+    void setSpeed(int speed);
+    void setPitch(int pitch);
+    void setVolume(int volume);
+    
     /**
     * Removes the specified job.  If the job is speaking, it is stopped.
     * @param jobNum             Job Number.  If 0, the last job submitted by
@@ -610,7 +619,12 @@ public Q_SLOTS: // METHODS
     * Shuts down KTTSD.  Do not call this!
     */
     void kttsdExit();
-    
+
+    /**
+    * post ctor helper method that instantiates the dbus adaptor class, and registers
+    */
+    void init();
+
     /**
     * Cause KTTSD to re-read its configuration.
     */

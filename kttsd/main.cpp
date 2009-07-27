@@ -69,6 +69,7 @@ int main (int argc, char *argv[]){
     app.disableSessionManagement();
     kDebug() << "main: Creating KTTSD Service";
     KSpeech* service = new KSpeech();
+    service->init();
 
     // kDebug() << "Entering event loop.";
     return app.exec();

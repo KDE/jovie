@@ -13,231 +13,222 @@
   <property name="windowTitle">
    <string>Jobs</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Speech Control</string>
      </property>
-     <widget class="QTableView" name="m_jobTableView">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>20</number>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="KPushButton" name="job_stop">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>&amp;Stop</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_pause">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="whatsThis">
-            <string>&lt;p&gt;Changes a job to Paused state.  If currently speaking, the job stops speaking. Paused jobs prevent jobs that follow them from speaking, so either click &lt;b&gt;Resume&lt;/b&gt; to make the job speakable, or click &lt;b&gt;Later&lt;/b&gt; to move it down in the list.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>Pause</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_resume">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="whatsThis">
-            <string>&lt;p&gt;Resumes a paused job or changes a Queued job to Waiting.  If the job is the top speakable job in the list, it begins speaking.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>Resume</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_restart">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="whatsThis">
-            <string>&lt;p&gt;Rewinds a job to the beginning and changes its state to Waiting.  If the job is the top speakable job in the list, it begins speaking.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string comment="Restart a job to the beginning">R&amp;estart</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_remove">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="whatsThis">
-            <string>&lt;p&gt;Deletes the job.  If it is currently speaking, it stops speaking.  The next speakable job in the list begins speaking.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>Re&amp;move</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_later">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="whatsThis">
-            <string>&lt;p&gt;Moves a job downward in the list so that it will be spoken later.  If the job is currently speaking, its state changes to Paused.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>&amp;Later</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="KPushButton" name="job_prevsentence">
-           <property name="whatsThis">
-            <string>&lt;p&gt;Rewinds a job to the previous sentence.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>&amp;Previous Sentence</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_nextsentence">
-           <property name="whatsThis">
-            <string>&lt;p&gt;Advances a job to the next sentence.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>&amp;Next Sentence</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="KPushButton" name="speak_clipboard">
-           <property name="whatsThis">
-            <string>&lt;p&gt;Queues the current contents of the clipboard for speaking and sets its state to Waiting.  If the job is the topmost in the list, it begins speaking.  The job will be spoken by the topmost Talker in the &lt;b&gt;Talkers&lt;/b&gt; tab.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>&amp;Speak Clipboard</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="speak_file">
-           <property name="whatsThis">
-            <string>&lt;p&gt;Prompts you for a file name and queues the contents of the file for speaking.  You must click the &lt;b&gt;Resume&lt;/b&gt; button before the job will be speakable.  The job will be spoken by the topmost Talker in the &lt;b&gt;Talkers&lt;/b&gt; tab.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>Spea&amp;k File</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="job_changetalker">
-           <property name="whatsThis">
-            <string>&lt;p&gt;Prompts you with a list of your configured Talkers from the &lt;b&gt;Talkers&lt;/b&gt; tab.  The job will be spoken using the selected Talker.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>Change Talker</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="refresh">
-           <property name="whatsThis">
-            <string>&lt;p&gt;Refresh the list of jobs.&lt;/p&gt;</string>
-           </property>
-           <property name="text">
-            <string>&amp;Refresh</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Latest job info:</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="1" colspan="2">
-           <widget class="KTextEdit" name="m_currentSentence">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="whatsThis">
-             <string>&lt;p&gt;The text of the sentence currently speaking.&lt;/p&gt;</string>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="KTextEdit" name="m_filteredCurrentSentence"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Message text:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Filtered text:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>&amp;Speed</string>
+        </property>
+        <property name="buddy">
+         <cstring>speedSlider</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSlider" name="speedSlider">
+        <property name="minimum">
+         <number>-100</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="singleStep">
+         <number>10</number>
+        </property>
+        <property name="pageStep">
+         <number>20</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksAbove</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>&amp;Pitch</string>
+        </property>
+        <property name="buddy">
+         <cstring>pitchSlider</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSlider" name="pitchSlider">
+        <property name="minimum">
+         <number>-100</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="singleStep">
+         <number>10</number>
+        </property>
+        <property name="pageStep">
+         <number>20</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksAbove</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>&amp;Volume</string>
+        </property>
+        <property name="buddy">
+         <cstring>volumeSlider</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSlider" name="volumeSlider">
+        <property name="minimum">
+         <number>-100</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="singleStep">
+         <number>10</number>
+        </property>
+        <property name="pageStep">
+         <number>20</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksAbove</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="KPushButton" name="stopButton">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Stop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="cancelButton">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;p&gt;Deletes the job.  If it is currently speaking, it stops speaking.  The next speakable job in the list begins speaking.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="pauseButton">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;p&gt;Changes a job to Paused state.  If currently speaking, the job stops speaking. Paused jobs prevent jobs that follow them from speaking, so either click &lt;b&gt;Resume&lt;/b&gt; to make the job speakable, or click &lt;b&gt;Later&lt;/b&gt; to move it down in the list.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Pause</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="resumeButton">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;p&gt;Resumes a paused job or changes a Queued job to Waiting.  If the job is the top speakable job in the list, it begins speaking.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Resume</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="KPushButton" name="speak_clipboard">
+          <property name="whatsThis">
+           <string>&lt;p&gt;Queues the current contents of the clipboard for speaking and sets its state to Waiting.  If the job is the topmost in the list, it begins speaking.  The job will be spoken by the topmost Talker in the &lt;b&gt;Talkers&lt;/b&gt; tab.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>&amp;Speak Clipboard</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="speak_file">
+          <property name="whatsThis">
+           <string>&lt;p&gt;Prompts you for a file name and queues the contents of the file for speaking.  You must click the &lt;b&gt;Resume&lt;/b&gt; button before the job will be speakable.  The job will be spoken by the topmost Talker in the &lt;b&gt;Talkers&lt;/b&gt; tab.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Spea&amp;k File</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="job_changetalker">
+          <property name="whatsThis">
+           <string>&lt;p&gt;Prompts you with a list of your configured Talkers from the &lt;b&gt;Talkers&lt;/b&gt; tab.  The job will be spoken using the selected Talker.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Change Talker</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableView" name="m_jobTableView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>20</number>
+     </attribute>
     </widget>
    </item>
   </layout>
@@ -247,11 +238,6 @@
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>ktextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -1480,6 +1480,31 @@ int Speaker::moveRelSentence(int jobNum, int n)
 //        emit filteringFinished();
 //}
 
+void Speaker::setSpeed(int speed)
+{
+    spd_set_voice_rate(d->connection, speed);
+}
+
+void Speaker::setPitch(int pitch)
+{
+    spd_set_voice_pitch(d->connection, pitch);
+}
+
+void Speaker::setVolume(int volume)
+{
+    spd_set_volume(d->connection, volume);
+}
+
+void Speaker::stop()
+{
+    spd_stop(d->connection);
+}
+
+void Speaker::cancel()
+{
+    spd_cancel(d->connection);
+}
+
 void Speaker::pause()
 {
     spd_pause(d->connection);

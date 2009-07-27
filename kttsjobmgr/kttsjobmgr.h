@@ -103,19 +103,20 @@ private slots:
     /**
     * Slots connected to buttons.
     */
-    void slot_job_stop();
-    void slot_job_pause();
-    void slot_job_resume();
-    void slot_job_restart();
-    void slot_job_remove();
-    void slot_job_move();
+    void slot_stop();
+    void slot_cancel();
+    void slot_pause();
+    void slot_resume();
     void slot_job_change_talker();
     void slot_speak_clipboard();
     void slot_speak_file();
-    void slot_refresh();
-    void slot_job_prev_sen();
-    void slot_job_next_sen();
 
+    /**
+    * Slots connected to sliders.
+    */
+    void slot_speedSliderChanged(int);
+    void slot_pitchSliderChanged(int);
+    void slot_volumeSliderChanged(int);
 private:
     /**
     * Get the Job Number of the currently-selected job in the Job List View.
@@ -123,12 +124,6 @@ private:
     *                       0 if no currently-selected job.
     */
     int getCurrentJobNum();
-
-    /**
-    * Enables or disables all the job-related buttons.
-    * @param enable        True to enable the job-related butons.  False to disable.
-    */
-    void enableJobActions(bool enable);
 
     /**
     * Retrieves JobInfo from KTTSD, creates and fills JobInfo object.

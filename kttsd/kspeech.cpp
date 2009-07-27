@@ -5,6 +5,7 @@
   ------------------------------
   Copyright:
   (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -50,7 +51,7 @@
 #include "speaker.h"
 
 // KSpeech includes.
-#include "kspeechadaptor_p.h"
+#include "kspeechadaptor.h"
 
 /* KSpeechPrivate Class ================================================== */
 
@@ -81,10 +82,6 @@ KSpeech::KSpeech(QObject *parent) :
     QObject(parent), d(new KSpeechPrivate())
 {
     kDebug() << "KSpeech::KSpeech Running";
-    new KSpeechAdaptor(this);
-    if (ready()) {
-        QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
-    }
 }
 
 KSpeech::~KSpeech(){
@@ -244,6 +241,46 @@ int KSpeech::sayClipboard()
         return 0;
 }
 
+void KSpeech::setSpeed(int speed)
+{
+    if (speed < -100 || speed > 100) {
+        kDebug() << "setSpeed called with out of range speed value: " << speed;
+    }
+    else {
+        Speaker::Instance()->setSpeed(speed);
+    }
+}
+
+void KSpeech::setPitch(int pitch)
+{
+    if (pitch < -100 || pitch > 100) {
+        kDebug() << "setPitch called with out of range pitch value: " << pitch;
+    }
+    else {
+        Speaker::Instance()->setPitch(pitch);
+    }
+}
+
+void KSpeech::setVolume(int volume)
+{
+    if (volume < -100 || volume > 100) {
+        kDebug() << "setVolume called with out of range volume value: " << volume;
+    }
+    else {
+        Speaker::Instance()->setVolume(volume);
+    }
+}
+
+void KSpeech::stop()
+{
+    Speaker::Instance()->stop();
+}
+
+void KSpeech::cancel()
+{
+    Speaker::Instance()->pause();
+}
+
 void KSpeech::pause()
 {
     Speaker::Instance()->pause();
@@ -367,6 +404,14 @@ void KSpeech::kttsdExit()
     announceEvent("kttsdExit", "kttsdExiting");
     emit kttsdExiting();
     qApp->quit();
+}
+
+void KSpeech::init()
+{
+    new KSpeechAdaptor(this);
+    if (ready()) {
+        QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
+    }
 }
 
 void KSpeech::reinit()
