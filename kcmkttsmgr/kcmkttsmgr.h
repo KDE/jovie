@@ -47,7 +47,6 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class KAboutData;
 class KConfig;
-class QAction;
 
 class FilterItem
 {

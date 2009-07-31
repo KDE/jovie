@@ -33,12 +33,9 @@
 // KTTS includes.
 #include "kspeechinterface.h"
 
-class QTreeView;
 class KAboutData;
 class KPushButton;
 class KttsJobMgrBrowserExtension;
-class KVBox;
-class KTextEdit;
 class JobInfo;
 class JobInfoListModel;
 

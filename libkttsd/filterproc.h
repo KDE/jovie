@@ -34,7 +34,6 @@
 
 class TalkerCode;
 class KConfig;
-class KConfigGroup;
 
 class KDE_EXPORT KttsFilterProc : public QObject
 {
