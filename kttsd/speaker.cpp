@@ -367,8 +367,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 
     emit newJobFiltered(text, filteredText);
 
-    bool failedconnect = false;
-    while (jobNum == -1 && !failedconnect)
+    while (jobNum == -1 && d->connection != NULL)
     {
         switch (sayOptions)
         {
@@ -398,14 +397,15 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
                 jobNum = spd_sound_icon(d->connection, spdpriority, filteredText.toUtf8().data());
                 break;
         }
-        if (jobNum == -1 && !failedconnect)
+        if (jobNum == -1 && d->connection != NULL)
         {
             // job failure
             // try to reconnect once
             kDebug() << "trying to reconnect to speech dispatcher";
             if (!d->reconnect())
             {
-                failedconnect = true;
+                // replace this with an error stored in kttsd in a log? to be viewed on hover over kttsmgr?
+                kDebug() << "could not connect to speech dispatcher";
             }
         }
     }
@@ -749,14 +749,14 @@ int Speaker::getCurrentJobNum()
 //    //Utt::uttType utType;
 //    //KSpeech::JobPriority priority;
 //    //if (KSpeech::jpAll == requestedPriority) {
-//	////As the variabele priority is used further on, we can't make it a reference type
+//  ////As the variabele priority is used further on, we can't make it a reference type
 //    //    foreach (priority, d->currentJobs.keys()){ //krazy:exclude=foreach
 //    //        d->currentJobs[priority] = SpeechData::Instance()->getNextSpeakableJob(priority);
 //    //        if (d->currentJobs[priority])
 //    //            sentence = d->currentJobs[priority]->getNextSentence();
 //    //        if (!sentence.isEmpty())
 //    //            break;
-//	//}
+//  //}
 //    //}
 //    //else {
 //    //    priority = requestedPriority;
@@ -1493,6 +1493,24 @@ void Speaker::setPitch(int pitch)
 void Speaker::setVolume(int volume)
 {
     spd_set_volume(d->connection, volume);
+}
+
+void Speaker::setOutputModule(const QString & module)
+{
+    int result = spd_set_output_module(d->connection, module.toUtf8().data());
+    // discard result for now, TODO: add error reporting
+}
+
+void Speaker::setLanguage(const QString & language)
+{
+    int result = spd_set_language(d->connection, language.toUtf8().data());
+    // discard result for now, TODO: add error reporting
+}
+
+void Speaker::setVoiceType(int voiceType)
+{
+    int result = spd_set_voice_type(d->connection, SPDVoiceType(voiceType));
+    // discard result for now, TODO: add error reporting
 }
 
 void Speaker::stop()

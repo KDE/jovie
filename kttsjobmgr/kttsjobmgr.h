@@ -109,11 +109,20 @@ private slots:
     void slot_speak_file();
 
     /**
+    * Slots for comboboxes.
+    */
+    
+    void slot_moduleChanged(const QString & module);
+    void slot_languageChanged(const QString & language);
+    void slot_voiceChanged(int voice);
+
+    /**
     * Slots connected to sliders.
     */
     void slot_speedSliderChanged(int);
     void slot_pitchSliderChanged(int);
     void slot_volumeSliderChanged(int);
+    
 private:
     /**
     * Get the Job Number of the currently-selected job in the Job List View.

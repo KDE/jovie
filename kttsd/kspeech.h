@@ -397,10 +397,15 @@ public Q_SLOTS: // METHODS
     void stop();
     void cancel();
 
+    // runtime slots to change the current speech configuration
     void setSpeed(int speed);
     void setPitch(int pitch);
     void setVolume(int volume);
-    
+
+    void setOutputModule(const QString & module);
+    void setLanguage(const QString & language);
+    void setVoiceType(int voiceType);
+
     /**
     * Removes the specified job.  If the job is speaking, it is stopped.
     * @param jobNum             Job Number.  If 0, the last job submitted by

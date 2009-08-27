@@ -271,6 +271,21 @@ void KSpeech::setVolume(int volume)
     }
 }
 
+void KSpeech::setOutputModule(const QString & module)
+{
+    Speaker::Instance()->setOutputModule(module);
+}
+
+void KSpeech::setLanguage(const QString & language)
+{
+    Speaker::Instance()->setLanguage(language);
+}
+
+void KSpeech::setVoiceType(int voiceType)
+{
+    Speaker::Instance()->setVoiceType(voiceType);
+}
+
 void KSpeech::stop()
 {
     Speaker::Instance()->stop();

@@ -93,6 +93,10 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_speedSliderChanged(int)));
     connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_pitchSliderChanged(int)));
     connect (m_ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_volumeSliderChanged(int)));
+    
+    connect (m_ui->moduleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(slot_moduleChanged(const QString &)));
+    connect (m_ui->languageComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(slot_languageChanged(const QString &)));
+    connect (m_ui->voiceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_voiceChanged(int)));
 
     m_ui->stopButton->setIcon(KIcon("media-playback-stop"));
     connect (m_ui->stopButton, SIGNAL(clicked()), this, SLOT(slot_stop()));
@@ -198,6 +202,24 @@ void KttsJobMgrPart::slot_volumeSliderChanged(int volume)
 {
     kDebug() << "telling kspeech to set volume to " << volume;
     m_kspeech->setVolume(volume);
+}
+
+void KttsJobMgrPart::slot_moduleChanged(const QString & module)
+{
+    kDebug() << "changing the output module to " << module;
+    m_kspeech->setOutputModule(module);
+}
+
+void KttsJobMgrPart::slot_languageChanged(const QString & language)
+{
+    kDebug() << "changing the language to " << language;
+    m_kspeech->setLanguage(language);
+}
+
+void KttsJobMgrPart::slot_voiceChanged(int voice)
+{
+    kDebug() << "changing the voice to voice # " << voice;
+    m_kspeech->setVoiceType(voice);
 }
 
 void KttsJobMgrPart::slot_job_change_talker()

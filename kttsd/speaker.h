@@ -380,6 +380,10 @@ public:
     void setSpeed(int speed);
     void setPitch(int pitch);
     void setVolume(int volume);
+    
+    void setOutputModule(const QString & module);
+    void setLanguage(const QString & language);
+    void setVoiceType(int voiceType);
 
 signals:
     /**
