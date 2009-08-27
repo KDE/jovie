@@ -746,7 +746,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     SPDConnection * connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
     if (connection == NULL) {
         // TODO: make this show an error dialog of some kind
-        KMessageBox::error(this, "could not connect to speech-dispatcher to find available synthesizers and languages", "speech-dispatcher not running");
+        KMessageBox::error(this, i18n("could not connect to speech-dispatcher to find available synthesizers and languages"), i18n("speech-dispatcher not running"));
     }
     else {
         spd_close(connection);
