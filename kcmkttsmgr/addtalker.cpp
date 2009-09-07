@@ -39,10 +39,22 @@
 #define spd_debug spd_debug4
 #include <libspeechd.h>
 
+#include "ui_addtalkerwidget.h"
+
 AddTalker::AddTalker(QWidget* parent)
-    : QWidget(parent)
+    : KDialog(parent)
 {
-    setupUi(this);
+    this->setCaption(i18n("Add Talker"));
+    this->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    this->setDefaultButton(KDialog::Cancel);
+    this->enableButtonOk(false);
+    this->setHelp("select-plugin", "kttsd");
+
+    QWidget * widget = new QWidget(this);
+    mUi = new Ui::AddTalkerWidget;
+    mUi->setupUi(widget);
+    connect(mUi->AvailableTalkersTable, SIGNAL(itemSelectionChanged()), this, SLOT(slot_tableSelectionChanged()));
+    this->setMainWidget(widget);
 
     // setup the table
     SPDConnection * connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
@@ -61,7 +73,7 @@ AddTalker::AddTalker(QWidget* parent)
 
     foreach (const QString module, m_outputModules)
     {
-        AvailableTalkersTable->setSortingEnabled(false);
+        mUi->AvailableTalkersTable->setSortingEnabled(false);
         if (spd_set_output_module(connection, module.toUtf8().data()) == 0)
         {
             kDebug() << "set output module to " << module;
@@ -71,22 +83,22 @@ AddTalker::AddTalker(QWidget* parent)
                 kDebug() << "found voice " << voices[0]->name;
                 m_synthsToLanguagesMap[module] << voices[0]->language;
                 kDebug() << "with language " << voices[0]->language;
-                int rowcount = AvailableTalkersTable->rowCount();
-                AvailableTalkersTable->setRowCount(rowcount + 1);
+                int rowcount = mUi->AvailableTalkersTable->rowCount();
+                mUi->AvailableTalkersTable->setRowCount(rowcount + 1);
                 
                 // set the synthesizer item
                 QTableWidgetItem * item = new QTableWidgetItem(module);
-                AvailableTalkersTable->setItem(rowcount, 2, item);
+                mUi->AvailableTalkersTable->setItem(rowcount, 2, item);
                 QString langName = languageCodeToLanguage(voices[0]->language);
                 
                 // set the voice name item
                 item = new QTableWidgetItem(voices[0]->name);
-                AvailableTalkersTable->setItem(rowcount, 1, item);
+                mUi->AvailableTalkersTable->setItem(rowcount, 1, item);
                 
                 // set the language name item
                 item = new QTableWidgetItem(langName.isEmpty() ? voices[0]->language : langName);
                 item->setToolTip(voices[0]->language);
-                AvailableTalkersTable->setItem(rowcount, 0, item);
+                mUi->AvailableTalkersTable->setItem(rowcount, 0, item);
                 ++voices;
             }
         }
@@ -94,7 +106,7 @@ AddTalker::AddTalker(QWidget* parent)
         {
             // some error, unable to change output modules, probably just continue
         }
-        AvailableTalkersTable->setSortingEnabled(true);
+        mUi->AvailableTalkersTable->setSortingEnabled(true);
     }
     // Default to user's desktop language.
     QString languageCode = KGlobal::locale()->defaultLanguage();
@@ -120,6 +132,11 @@ AddTalker::~AddTalker()
 {
 }
 
+void AddTalker::slot_tableSelectionChanged()
+{
+    this->enableButtonOk(true);
+}
+
 /**
 * Returns user's chosen language code.
 */
@@ -127,7 +144,7 @@ QString AddTalker::getLanguageCode() const
 {
     //return m_languageToLanguageCodeMap[languageSelection->currentText()];
     
-    return AvailableTalkersTable->item(AvailableTalkersTable->currentRow(), 0)->toolTip();
+    return mUi->AvailableTalkersTable->item(mUi->AvailableTalkersTable->currentRow(), 0)->toolTip();
 }
 
 /**
@@ -136,7 +153,7 @@ QString AddTalker::getLanguageCode() const
 QString AddTalker::getSynthesizer() const 
 { 
 	//return synthesizerSelection->currentText(); 
-    return AvailableTalkersTable->item(AvailableTalkersTable->currentRow(), 2)->text();
+    return mUi->AvailableTalkersTable->item(mUi->AvailableTalkersTable->currentRow(), 2)->text();
 }
 
 // Set the synthesizer-to-languages map.

@@ -739,10 +739,6 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
  */
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
-    QPointer<KDialog> dlg = new KDialog(this);
-    dlg->setCaption(i18n("Add Talker"));
-    dlg->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
-    dlg->setDefaultButton(KDialog::Cancel);
     SPDConnection * connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
     if (connection == NULL) {
         // TODO: make this show an error dialog of some kind
@@ -750,12 +746,10 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     }
     else {
         spd_close(connection);
-        AddTalker* addTalkerWidget = new AddTalker(dlg);
-        dlg->setMainWidget(addTalkerWidget);
-        dlg->setHelp("select-plugin", "kttsd");
+        QPointer<AddTalker> dlg = new AddTalker(this);
         if (dlg->exec() == QDialog::Accepted) {
-            QString languageCode = addTalkerWidget->getLanguageCode();
-            QString synthName = addTalkerWidget->getSynthesizer();
+            QString languageCode = dlg->getLanguageCode();
+            QString synthName = dlg->getSynthesizer();
             kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
             // If user chose "Other", must now get a language from him.
             if(languageCode == "other")
@@ -796,8 +790,8 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
             if (desktopEntryName.isEmpty()) 
                 return;
         }
+        delete dlg;
     }
-    delete dlg;
     // Load the plugin.
     //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     //if (!m_loadedTalkerPlugIn) return;

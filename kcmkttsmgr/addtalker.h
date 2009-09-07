@@ -28,9 +28,15 @@
 // Qt includes.
 #include <QtCore/QList>
 
-#include "ui_addtalkerwidget.h"
+// KDE includes
+#include <KDialog>
 
-class AddTalker : public QWidget, private Ui::AddTalkerWidget
+namespace Ui
+{
+    class AddTalkerWidget;
+}
+
+class AddTalker : public KDialog
 {
     Q_OBJECT
 
@@ -70,7 +76,10 @@ private:
     // map of output module to language list supported by each output module
     QMap<QString, QStringList> m_synthsToLanguagesMap;
 
+    // designer ui content
+    Ui::AddTalkerWidget * mUi;
 private slots:
+    void slot_tableSelectionChanged();
 };
 
 #endif
