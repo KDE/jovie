@@ -27,5 +27,5 @@ install(TARGETS kttsd  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
-install( FILES kttsd_synthplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
+#install( FILES kttsd_synthplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 

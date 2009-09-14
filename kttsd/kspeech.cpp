@@ -241,6 +241,16 @@ int KSpeech::sayClipboard()
         return 0;
 }
 
+QStringList KSpeech::outputModules()
+{
+    return Speaker::Instance()->outputModules();
+}
+
+QStringList KSpeech::languagesByModule(const QString & module)
+{
+    return Speaker::Instance()->languagesByModule(module);
+}
+
 void KSpeech::setSpeed(int speed)
 {
     if (speed < -100 || speed > 100) {

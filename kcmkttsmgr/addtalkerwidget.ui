@@ -7,12 +7,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>340</height>
+    <width>591</width>
+    <height>366</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&amp;Name</string>
+     </property>
+     <property name="buddy">
+      <cstring>nameEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KLineEdit" name="nameEdit"/>
+   </item>
+   <item row="1" column="0" colspan="2">
     <widget class="QTableWidget" name="AvailableTalkersTable">
      <property name="alternatingRowColors">
       <bool>true</bool>
@@ -48,17 +61,66 @@
      </column>
      <column>
       <property name="text">
-       <string>Voice Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Synthesizer</string>
       </property>
      </column>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Voice &amp;Type</string>
+     </property>
+     <property name="buddy">
+      <cstring>voiceComboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="voiceComboBox">
+     <item>
+      <property name="text">
+       <string>Male 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Male 2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Male 3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Female 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Female 2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Female 3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Male Child</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Female Child</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>&amp;Speed</string>
@@ -68,29 +130,36 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QSlider" name="speedSlider">
-     <property name="minimum">
-      <number>-100</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="pageStep">
-      <number>20</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TicksAbove</enum>
-     </property>
-    </widget>
+   <item row="3" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QSlider" name="speedSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KIntSpinBox" name="speedSpinBox"/>
+     </item>
+    </layout>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>&amp;Pitch</string>
@@ -100,29 +169,36 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QSlider" name="pitchSlider">
-     <property name="minimum">
-      <number>-100</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="pageStep">
-      <number>20</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TicksAbove</enum>
-     </property>
-    </widget>
+   <item row="4" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QSlider" name="pitchSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KIntSpinBox" name="pitchSpinBox"/>
+     </item>
+    </layout>
    </item>
-   <item row="3" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>&amp;Volume</string>
@@ -132,30 +208,157 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QSlider" name="volumeSlider">
-     <property name="minimum">
-      <number>-100</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="pageStep">
-      <number>20</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TicksAbove</enum>
-     </property>
-    </widget>
+   <item row="5" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QSlider" name="volumeSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KIntSpinBox" name="volumeSpinBox"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>AvailableTalkersTable</tabstop>
+  <tabstop>voiceComboBox</tabstop>
+  <tabstop>speedSlider</tabstop>
+  <tabstop>speedSpinBox</tabstop>
+  <tabstop>pitchSlider</tabstop>
+  <tabstop>pitchSpinBox</tabstop>
+  <tabstop>volumeSlider</tabstop>
+  <tabstop>volumeSpinBox</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>speedSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>speedSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>556</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>speedSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>speedSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>297</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pitchSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pitchSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>556</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pitchSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pitchSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>297</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>volumeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>volumeSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>341</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>556</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>volumeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>volumeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>341</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>297</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

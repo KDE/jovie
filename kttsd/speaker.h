@@ -377,6 +377,16 @@ public:
     */
     void resume();
 
+    /**
+     * Get the output modules available from speech-dispatcher
+     */
+    QStringList outputModules();
+    
+    /**
+     * Get the languages available for the given output module
+     */
+    QStringList languagesByModule(const QString & module);
+
     void setSpeed(int speed);
     void setPitch(int pitch);
     void setVolume(int volume);

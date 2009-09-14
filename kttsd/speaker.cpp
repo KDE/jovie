@@ -1480,6 +1480,35 @@ int Speaker::moveRelSentence(int jobNum, int n)
 //        emit filteringFinished();
 //}
 
+QStringList Speaker::outputModules()
+{
+    QStringList modules;
+
+    char ** modulenames = spd_list_modules(d->connection);
+    while (modulenames != NULL && modulenames[0] != NULL)
+    {
+        modules << modulenames[0];
+        ++modulenames;
+    }
+    return modules;
+}
+
+QStringList Speaker::languagesByModule(const QString & module)
+{
+    QStringList languages;
+    if (spd_set_output_module(d->connection, module.toUtf8().data()) == 0)
+    {
+        SPDVoice ** voices = spd_list_synthesis_voices(d->connection);
+        while (voices != NULL && voices[0] != NULL)
+        {
+            if (!languages.contains(voices[0]->language))
+                languages << voices[0]->language;
+            ++voices;
+        }
+    }
+    return languages;
+}
+
 void Speaker::setSpeed(int speed)
 {
     spd_set_voice_rate(d->connection, speed);

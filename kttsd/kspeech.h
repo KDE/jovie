@@ -397,6 +397,9 @@ public Q_SLOTS: // METHODS
     void stop();
     void cancel();
 
+    QStringList outputModules();
+    QStringList languagesByModule(const QString & module);
+
     // runtime slots to change the current speech configuration
     void setSpeed(int speed);
     void setPitch(int pitch);

@@ -35,9 +35,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-// define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
-#define spd_debug spd_debug4
-#include <libspeechd.h>
+#include "kspeechinterface.h"
 
 #include "ui_addtalkerwidget.h"
 
@@ -56,58 +54,33 @@ AddTalker::AddTalker(QWidget* parent)
     connect(mUi->AvailableTalkersTable, SIGNAL(itemSelectionChanged()), this, SLOT(slot_tableSelectionChanged()));
     this->setMainWidget(widget);
 
-    // setup the table
-    SPDConnection * connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
-    if (connection == NULL)
-    {
-        kError("could not connect to speech-dispatcher to find available synthesizers and languages speech-dispatcher not running");
-        return;
-    }
+    org::kde::KSpeech* kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
 
-    char ** modulenames = spd_list_modules(connection);
-    while (modulenames != NULL && modulenames[0] != NULL)
-    {
-        m_outputModules << modulenames[0];
-        ++modulenames;
-    }
+    m_outputModules = kspeech->outputModules();
+
+    mUi->AvailableTalkersTable->setSortingEnabled(false);
 
     foreach (const QString module, m_outputModules)
     {
-        mUi->AvailableTalkersTable->setSortingEnabled(false);
-        if (spd_set_output_module(connection, module.toUtf8().data()) == 0)
+        QStringList languages = kspeech->languagesByModule(module);
+        
+        foreach (const QString language, languages)
         {
-            kDebug() << "set output module to " << module;
-            SPDVoice ** voices = spd_list_synthesis_voices(connection);
-            while (voices != NULL && voices[0] != NULL)
-            {
-                kDebug() << "found voice " << voices[0]->name;
-                m_synthsToLanguagesMap[module] << voices[0]->language;
-                kDebug() << "with language " << voices[0]->language;
-                int rowcount = mUi->AvailableTalkersTable->rowCount();
-                mUi->AvailableTalkersTable->setRowCount(rowcount + 1);
-                
-                // set the synthesizer item
-                QTableWidgetItem * item = new QTableWidgetItem(module);
-                mUi->AvailableTalkersTable->setItem(rowcount, 2, item);
-                QString langName = languageCodeToLanguage(voices[0]->language);
-                
-                // set the voice name item
-                item = new QTableWidgetItem(voices[0]->name);
-                mUi->AvailableTalkersTable->setItem(rowcount, 1, item);
-                
-                // set the language name item
-                item = new QTableWidgetItem(langName.isEmpty() ? voices[0]->language : langName);
-                item->setToolTip(voices[0]->language);
-                mUi->AvailableTalkersTable->setItem(rowcount, 0, item);
-                ++voices;
-            }
+            int rowcount = mUi->AvailableTalkersTable->rowCount();
+            mUi->AvailableTalkersTable->setRowCount(rowcount + 1);
+            
+            // set the synthesizer item
+            QTableWidgetItem * item = new QTableWidgetItem(module);
+            mUi->AvailableTalkersTable->setItem(rowcount, 1, item);
+
+            QString langName = languageCodeToLanguage(language);
+            // set the language name item
+            item = new QTableWidgetItem(langName.isEmpty() ? language : langName);
+            item->setToolTip(language);
+            mUi->AvailableTalkersTable->setItem(rowcount, 0, item);
         }
-        else
-        {
-            // some error, unable to change output modules, probably just continue
-        }
-        mUi->AvailableTalkersTable->setSortingEnabled(true);
     }
+    mUi->AvailableTalkersTable->setSortingEnabled(true);
     // Default to user's desktop language.
     QString languageCode = KGlobal::locale()->defaultLanguage();
     // If there is not a synth that supports the locale, try stripping country code.

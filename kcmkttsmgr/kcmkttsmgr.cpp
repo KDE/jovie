@@ -67,10 +67,6 @@
 #include "selectlanguagedlg.h"
 #include "utils.h"
 
-// define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
-#define spd_debug spd_debug3
-#include <libspeechd.h>
-
 // Some constants.
 // Defaults set when clicking Defaults button.
 const bool autostartMgrCheckBoxValue = true;
@@ -739,59 +735,52 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
  */
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
-    SPDConnection * connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
-    if (connection == NULL) {
-        // TODO: make this show an error dialog of some kind
-        KMessageBox::error(this, i18n("could not connect to speech-dispatcher to find available synthesizers and languages"), i18n("speech-dispatcher not running"));
-    }
-    else {
-        spd_close(connection);
-        QPointer<AddTalker> dlg = new AddTalker(this);
-        if (dlg->exec() == QDialog::Accepted) {
-            QString languageCode = dlg->getLanguageCode();
-            QString synthName = dlg->getSynthesizer();
-            kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
-            // If user chose "Other", must now get a language from him.
-            if(languageCode == "other")
-            {
-                QPointer<SelectLanguageDlg> languageDialog = new SelectLanguageDlg(
-                    this,
-                    i18n("Select Language"),
-                    QStringList(),
-                    SelectLanguageDlg::SingleSelect,
-                    SelectLanguageDlg::BlankNotAllowed);
-                int dlgResult = languageDialog->exec();
-                languageCode = languageDialog->selectedLanguageCode();
-                delete languageDialog;
+    QPointer<AddTalker> dlg = new AddTalker(this);
+    if (dlg->exec() == QDialog::Accepted) {
+        QString languageCode = dlg->getLanguageCode();
+        QString synthName = dlg->getSynthesizer();
+        kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
+        // If user chose "Other", must now get a language from him.
+        if(languageCode == "other")
+        {
+            QPointer<SelectLanguageDlg> languageDialog = new SelectLanguageDlg(
+                this,
+                i18n("Select Language"),
+                QStringList(),
+                SelectLanguageDlg::SingleSelect,
+                SelectLanguageDlg::BlankNotAllowed);
+            int dlgResult = languageDialog->exec();
+            languageCode = languageDialog->selectedLanguageCode();
+            delete languageDialog;
 
-                // TODO: Also delete QTableWidget and hBox?
-                if (dlgResult != QDialog::Accepted)
-                    return; // got no language
-            }
-
-            if (languageCode.isEmpty())
-                return;
-            QString language = TalkerCode::languageCodeToLanguage(languageCode);
-            if (language.isEmpty())
-                return;
-
-            m_languagesToCodes[language] = languageCode;
-
-            // Assign a new Talker ID for the talker.  Wraps around to 1.
-            QString talkerID = QString::number(m_lastTalkerID + 1);
-
-            // Erase extraneous Talker configuration entries that might be there.
-            m_config->deleteGroup(QString("Talker_")+talkerID, 0);
-            m_config->sync();
-
-            // Convert translated plugin name to DesktopEntryName.
-            QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
-            // This shouldn't happen, but just in case.
-            if (desktopEntryName.isEmpty()) 
-                return;
+            // TODO: Also delete QTableWidget and hBox?
+            if (dlgResult != QDialog::Accepted)
+                return; // got no language
         }
-        delete dlg;
+
+        if (languageCode.isEmpty())
+            return;
+        QString language = TalkerCode::languageCodeToLanguage(languageCode);
+        if (language.isEmpty())
+            return;
+
+        m_languagesToCodes[language] = languageCode;
+
+        // Assign a new Talker ID for the talker.  Wraps around to 1.
+        QString talkerID = QString::number(m_lastTalkerID + 1);
+
+        // Erase extraneous Talker configuration entries that might be there.
+        m_config->deleteGroup(QString("Talker_")+talkerID, 0);
+        m_config->sync();
+
+        // Convert translated plugin name to DesktopEntryName.
+        QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
+        // This shouldn't happen, but just in case.
+        if (desktopEntryName.isEmpty()) 
+            return;
     }
+    delete dlg;
+
     // Load the plugin.
     //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     //if (!m_loadedTalkerPlugIn) return;
