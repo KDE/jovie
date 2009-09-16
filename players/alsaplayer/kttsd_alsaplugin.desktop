@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=KTTSD ALSA Plugin
 Name[ar]=ملحق ALSA لـ KTTSD
+Name[bg]=KTTSD ALSA Plugin
 Name[br]=Lugent ALSA evit KTTSD
 Name[ca]=Connector ALSA pel KTTSD
 Name[cs]=KTTSD ALSA modul
 Name[da]=KTTSD ALSA plugin
 Name[de]=KTTSD ALSA-Modul
 Name[el]=KTTSD πρόσθετο ALSA
+Name[en_GB]=KTTSD ALSA Plugin
 Name[es]=Complemento de KTTSD para ALSA
 Name[et]=KTTSD ALSA plugin
 Name[eu]=KTTSD-ren ALSA plugina
@@ -60,6 +62,7 @@ Comment[cs]=KTTSD ALSA zvukový modul
 Comment[da]=KTTSD ALSA lyd-plugin
 Comment[de]=KTTSD ALSA-Audio-Modul
 Comment[el]=KTTSD πρόσθετο ήχου ALSA
+Comment[en_GB]=KTTSD ALSA audio plugin
 Comment[es]=Complemento de audio de KTTD para ALSA
 Comment[et]=KTTSD ALSA heliplugin
 Comment[eu]=KTTSD-ren ALSA audio-plugina
