@@ -215,7 +215,7 @@ QString JobInfoListModel::priorityToStr(int priority) const
 {
     switch (priority)
     {
-        case KSpeech::jpAll: return                 i18nc("Job priorty: All", "All");
+        case KSpeech::jpAll: return                 i18nc("Job priority: All", "All");
         case KSpeech::jpScreenReaderOutput: return  i18n("Screen Reader");
         case KSpeech::jpWarning: return             i18nc("Prioritylevel: warning", "Warning");
         case KSpeech::jpMessage: return             i18n("Message");
