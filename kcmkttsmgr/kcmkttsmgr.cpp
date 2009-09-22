@@ -365,14 +365,13 @@ void KCMKttsMgr::load()
     m_talkerListModel.loadTalkerCodesFromConfig(m_config);
 
     // Last talker ID.  Used to generate a new ID for an added talker.
-    m_lastTalkerID = m_talkerListModel.highestTalkerId();
+    //m_lastTalkerID = m_talkerListModel.highestTalkerId();
 
     // Dictionary mapping languages to language codes.
     m_languagesToCodes.clear();
     for (int i = 0; i < m_talkerListModel.rowCount(); ++i) {
-        QString fullLanguageCode = m_talkerListModel.getRow(i).fullLanguageCode();
-        QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
-        m_languagesToCodes[language] = fullLanguageCode;
+        QString language = m_talkerListModel.getRow(i).language();
+        m_languagesToCodes[language] = language;
     }
 
     // Iterate thru the possible plug ins getting their language support codes.
@@ -540,7 +539,7 @@ void KCMKttsMgr::save()
     // Get ordered list of all talker IDs.
     QStringList talkerIDsList;
     for (int i = 0; i < m_talkerListModel.rowCount(); ++i)
-        talkerIDsList.append(m_talkerListModel.getRow(i).id());
+        talkerIDsList.append(m_talkerListModel.getRow(i).name());
     QString talkerIDs = talkerIDsList.join(",");
     generalConfig.writeEntry("TalkerIDs", talkerIDs);
 
@@ -737,120 +736,31 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
     QPointer<AddTalker> dlg = new AddTalker(this);
     if (dlg->exec() == QDialog::Accepted) {
-        QString languageCode = dlg->getLanguageCode();
-        QString synthName = dlg->getSynthesizer();
-        kDebug() << "adding talker with language code: " << languageCode << " and synth: " << synthName;
-        // If user chose "Other", must now get a language from him.
-        if(languageCode == "other")
-        {
-            QPointer<SelectLanguageDlg> languageDialog = new SelectLanguageDlg(
-                this,
-                i18n("Select Language"),
-                QStringList(),
-                SelectLanguageDlg::SingleSelect,
-                SelectLanguageDlg::BlankNotAllowed);
-            int dlgResult = languageDialog->exec();
-            languageCode = languageDialog->selectedLanguageCode();
-            delete languageDialog;
+        TalkerCode code = dlg->getTalkerCode();
 
-            // TODO: Also delete QTableWidget and hBox?
-            if (dlgResult != QDialog::Accepted)
-                return; // got no language
-        }
-
-        if (languageCode.isEmpty())
-            return;
-        QString language = TalkerCode::languageCodeToLanguage(languageCode);
-        if (language.isEmpty())
-            return;
-
-        m_languagesToCodes[language] = languageCode;
-
-        // Assign a new Talker ID for the talker.  Wraps around to 1.
-        QString talkerID = QString::number(m_lastTalkerID + 1);
-
-        // Erase extraneous Talker configuration entries that might be there.
-        m_config->deleteGroup(QString("Talker_")+talkerID, 0);
+        // Record configuration data.
+        KConfigGroup talkerConfig(m_config, code.name());
+        talkerConfig.writeEntry("TalkerCode", code.getTalkerCode());
         m_config->sync();
 
-        // Convert translated plugin name to DesktopEntryName.
-        QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
-        // This shouldn't happen, but just in case.
-        if (desktopEntryName.isEmpty()) 
-            return;
+        // Add to list of Talkers.
+        m_talkerListModel.appendRow(code);
+
+        // Make sure visible.
+        const QModelIndex modelIndex = m_talkerListModel.index(m_talkerListModel.rowCount(),
+            0, QModelIndex());
+        talkersView->scrollTo(modelIndex);
+
+        // Select the new item, update buttons.
+        talkersView->setCurrentIndex(modelIndex);
+        updateTalkerButtons();
+
+        // Inform Control Center that change has been made.
+        configChanged();
     }
     delete dlg;
 
-    // Load the plugin.
-    //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
-    //if (!m_loadedTalkerPlugIn) return;
-
-    //// Give plugin the user's language code and permit plugin to autoconfigure itself.
-    //m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    //m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
-
-    //// If plugin was able to configure itself, it returns a full talker code.
-    //// If not, display configuration dialog for user to configure the plugin.
-    //QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
-    //if (talkerCode.isEmpty())
-    //{
-    //    // Display configuration dialog.
-    //    configureTalker();
-    //    // Did user Cancel?
-    //    if (!m_loadedTalkerPlugIn)
-    //    {
-    //        delete m_configDlg;
-    //        m_configDlg = 0;
-    //        return;
-    //    }
-    //    talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
-    //}
-
-    //// If still no Talker Code, abandon.
-    //if (!talkerCode.isEmpty())
-    //{
-    //    // Let plugin save its configuration.
-    //    m_loadedTalkerPlugIn->save(m_config, QString("Talker_"+talkerID));
-
-    //    // Record last Talker ID used for next add.
-    //    m_lastTalkerID = talkerID.toInt();
-
-    //    // Record configuration data.  Note, might as well do this now.
-    //    KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
-    //    talkerConfig.writeEntry("DesktopEntryName", desktopEntryName);
-    //    talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-    //    talkerConfig.writeEntry("TalkerCode", talkerCode);
-    //    m_config->sync();
-
-    //    // Add to list of Talkers.
-    //    TalkerCode tc = TalkerCode(talkerCode);
-    //    tc.setId(talkerID);
-    //    tc.setDesktopEntryName(desktopEntryName);
-    //    m_talkerListModel.appendRow(tc);
-
-    //    // Make sure visible.
-    //    const QModelIndex modelIndex = m_talkerListModel.index(m_talkerListModel.rowCount(),
-    //        0, QModelIndex());
-    //    talkersView->scrollTo(modelIndex);
-
-    //    // Select the new item, update buttons.
-    //    talkersView->setCurrentIndex(modelIndex);
-    //    updateTalkerButtons();
-
-    //    // Inform Control Center that change has been made.
-    //    configChanged();
-    //}
-
-    //// Don't need plugin in memory anymore.
-    //delete m_loadedTalkerPlugIn;
-    //m_loadedTalkerPlugIn = 0;
-    //if (m_configDlg)
-    //{
-    //    delete m_configDlg;
-    //    m_configDlg = 0;
-    //}
-
-    // kDebug() << "KCMKttsMgr::addTalker: done.";
+    kDebug() << "KCMKttsMgr::addTalker: done.";
 }
 
 void KCMKttsMgr::slotAddFilterButton_clicked()
@@ -1011,7 +921,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
     if (!modelIndex.isValid()) return;
 
     // Delete the talker from configuration file?
-    QString talkerID = m_talkerListModel.getRow(modelIndex.row()).id();
+    QString talkerID = m_talkerListModel.getRow(modelIndex.row()).name();
     m_config->deleteGroup(QString("Talker_")+talkerID, 0);
 
     // Delete the talker from the list of Talkers.

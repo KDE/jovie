@@ -2,8 +2,8 @@
   Dialog to allow user to add a new Talker by selecting a language and synthesizer
   (button).  Uses addtalkerwidget.ui.
   -------------------
-  Copyright:
-  (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -31,6 +31,8 @@
 // KDE includes
 #include <KDialog>
 
+#include "../libkttsd/talkercode.h"
+
 namespace Ui
 {
     class AddTalkerWidget;
@@ -54,27 +56,19 @@ public:
     ~AddTalker();
 
     /**
-    * Returns user's chosen language code.
+    * Set the talker configuration to start with
+    * @param talker             Talker configuration to initialize to
     */
-    QString getLanguageCode() const;
+    void setTalkerCode(const TalkerCode & talker);
 
     /**
-    * Returns user's chosen synthesizer.
+    * Returns user's chosen talker configuration
     */
-    QString getSynthesizer() const;
+    TalkerCode getTalkerCode() const;
 
 private:
-    // Converts a language code plus optional country code to language description.
-    QString languageCodeToLanguage(const QString &languageCode);
-
-    // QMap of language descriptions to language codes.
-    QMap<QString,QString> m_languageToLanguageCodeMap;
-
     // output modules found in speech-dispatcher
     QStringList m_outputModules;
-
-    // map of output module to language list supported by each output module
-    QMap<QString, QStringList> m_synthsToLanguagesMap;
 
     // designer ui content
     Ui::AddTalkerWidget * mUi;

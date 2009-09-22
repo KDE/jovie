@@ -155,7 +155,14 @@
       </widget>
      </item>
      <item>
-      <widget class="KIntSpinBox" name="speedSpinBox"/>
+      <widget class="KIntSpinBox" name="speedSpinBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -194,7 +201,14 @@
       </widget>
      </item>
      <item>
-      <widget class="KIntSpinBox" name="pitchSpinBox"/>
+      <widget class="KIntSpinBox" name="pitchSpinBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -233,7 +247,14 @@
       </widget>
      </item>
      <item>
-      <widget class="KIntSpinBox" name="volumeSpinBox"/>
+      <widget class="KIntSpinBox" name="volumeSpinBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

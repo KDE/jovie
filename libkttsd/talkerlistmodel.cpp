@@ -2,9 +2,10 @@
   Widget for listing Talkers.  Based on QTreeView.
   -------------------
   Copyright : (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
  ******************************************************************************/
 
 /******************************************************************************
@@ -37,10 +38,20 @@
 
 // ----------------------------------------------------------------------------
 
+enum Columns {
+    kNameColumn = 0,
+    kLanguageColumn,
+    kModuleColumn,
+    kVoiceTypeColumn,
+    kVolumeColumn,
+    kRateColumn,
+    kPitchColumn,
+    kColumnCount
+};
+
 TalkerListModel::TalkerListModel(TalkerCode::TalkerCodeList talkers, QObject *parent) :
     QAbstractListModel(parent),
-    m_talkerCodes(talkers),
-    m_highestTalkerId(0)
+    m_talkerCodes(talkers)
 {
 }
 
@@ -55,7 +66,7 @@ int TalkerListModel::rowCount(const QModelIndex &parent) const
 int TalkerListModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 7;
+    return kColumnCount;
 }
 
 QModelIndex TalkerListModel::index(int row, int column, const QModelIndex &parent) const
@@ -80,7 +91,7 @@ QVariant TalkerListModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= m_talkerCodes.count())
         return QVariant();
 
-    if (index.column() < 0 || index.column() >= 7)
+    if (index.column() < 0 || index.column() >= kColumnCount)
         return QVariant();
 
     if (role == Qt::DisplayRole)
@@ -93,13 +104,13 @@ QVariant TalkerListModel::dataColumn(const TalkerCode& talkerCode, int column) c
 {
     switch (column)
     {
-        case 0: return talkerCode.id(); break;
-        case 1: return talkerCode.languageCodeToLanguage(talkerCode.fullLanguageCode()); break;
-        case 2: return talkerCode.TalkerDesktopEntryNameToName(talkerCode.desktopEntryName()); break;
-        case 3: return talkerCode.voice(); break;
-        case 4: return talkerCode.translatedGender(talkerCode.gender()); break;
-        case 5: return talkerCode.translatedVolume(talkerCode.volume()); break;
-        case 6: return talkerCode.translatedRate(talkerCode.rate()); break;
+        case kNameColumn:      return talkerCode.name(); break;
+        case kLanguageColumn:  return talkerCode.language(); break;
+        case kModuleColumn:    return talkerCode.outputModule(); break;
+        case kVoiceTypeColumn: return TalkerCode::translatedVoiceType(talkerCode.voiceType()); break;
+        case kVolumeColumn:    return talkerCode.volume(); break;
+        case kRateColumn:      return talkerCode.rate(); break;
+        case kPitchColumn:     return talkerCode.pitch(); break;
     }
     return QVariant();
 }
@@ -117,13 +128,13 @@ QVariant TalkerListModel::headerData(int section, Qt::Orientation orientation, i
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         switch (section)
         {
-            case 0: return i18n("ID");
-            case 1: return i18n("Language");
-            case 2: return i18n("Synthesizer");
-            case 3: return i18n("Voice Code");
-            case 4: return i18n("Gender");
-            case 5: return i18nc("Volume of noise", "Volume");
-            case 6: return i18n("Rate");
+            case kNameColumn:      return i18n("Name"); break;
+            case kLanguageColumn:  return i18n("Language"); break;
+            case kModuleColumn:    return i18n("Synthesizer"); break;
+            case kVoiceTypeColumn: return i18n("Voice Type"); break;
+            case kVolumeColumn:    return i18nc("Volume of noise", "Volume"); break;
+            case kRateColumn:      return i18n("Speed"); break;
+            case kPitchColumn:     return i18n("Pitch"); break;
         };
 
     return QVariant();
@@ -133,9 +144,6 @@ bool TalkerListModel::removeRow(int row, const QModelIndex & parent)
 {
     beginRemoveRows(parent, row, row);
     m_talkerCodes.removeAt(row);
-    for (int i = 0; i < m_talkerCodes.count(); ++i)
-        if (m_talkerCodes[i].id().toInt() > m_highestTalkerId)
-            m_highestTalkerId = m_talkerCodes[i].id().toInt();
     endRemoveRows();
     return true;
 }
@@ -143,21 +151,18 @@ bool TalkerListModel::removeRow(int row, const QModelIndex & parent)
 void TalkerListModel::setDatastore(TalkerCode::TalkerCodeList talkers)
 {
     m_talkerCodes = talkers;
-    m_highestTalkerId = 0;
-    for (int i = 0; i < talkers.count(); ++i)
-        if (talkers[i].id().toInt() > m_highestTalkerId) m_highestTalkerId = talkers[i].id().toInt();
     emit reset();
 }
 
 TalkerCode TalkerListModel::getRow(int row) const
 {
-    if (row < 0 || row >= rowCount()) return TalkerCode();
+    if (row < 0 || row >= rowCount())
+        return TalkerCode();
     return m_talkerCodes[row];
 }
 
 bool TalkerListModel::appendRow(TalkerCode& talker)
 {
-    if (talker.id().toInt() > m_highestTalkerId) m_highestTalkerId = talker.id().toInt();
     beginInsertRows(QModelIndex(), m_talkerCodes.count(), m_talkerCodes.count());
     m_talkerCodes.append(talker);
     endInsertRows();
@@ -166,9 +171,6 @@ bool TalkerListModel::appendRow(TalkerCode& talker)
 
 bool TalkerListModel::updateRow(int row, TalkerCode& talker)
 {
-    for (int i = 0; i < m_talkerCodes.count(); ++i)
-        if (m_talkerCodes[i].id().toInt() > m_highestTalkerId)
-            m_highestTalkerId = m_talkerCodes[i].id().toInt();
     m_talkerCodes.replace(row, talker);
     emit dataChanged(index(row, 0, QModelIndex()), index(row, columnCount()-1, QModelIndex()));
     return true;
@@ -184,7 +186,6 @@ bool TalkerListModel::swap(int i, int j)
 void TalkerListModel::clear()
 {
     m_talkerCodes.clear();
-    m_highestTalkerId = 0;
     emit reset();
 }
 
@@ -207,9 +208,7 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
             QString talkerCode = talkGroup.readEntry("TalkerCode");
             TalkerCode tc = TalkerCode(talkerCode, true);
             kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode;
-            tc.setId(talkerID);
-            QString desktopEntryName = talkGroup.readEntry("DesktopEntryName", QString());
-            tc.setDesktopEntryName(desktopEntryName);
+            //tc.setId(talkerID);
             appendRow(tc);
         }
     }

@@ -114,15 +114,15 @@ void TalkerChooserConf::load(KConfig* c, const QString& configGroup){
     m_talkerCode = TalkerCode(config.readEntry("TalkerCode"), false);
     // Legacy settings.
     QString s = config.readEntry( "LanguageCode" );
-    if (!s.isEmpty()) m_talkerCode.setFullLanguageCode(s);
+    if (!s.isEmpty()) m_talkerCode.setLanguage(s);
     s = config.readEntry( "SynthInName" );
-    if (!s.isEmpty()) m_talkerCode.setPlugInName(s);
+    //if (!s.isEmpty()) m_talkerCode.setPlugInName(s);
     s = config.readEntry( "Gender" );
-    if (!s.isEmpty()) m_talkerCode.setGender(s);
+    //if (!s.isEmpty()) m_talkerCode.setGender(s);
     s = config.readEntry( "Volume" );
-    if (!s.isEmpty()) m_talkerCode.setVolume(s);
+    //if (!s.isEmpty()) m_talkerCode.setVolume(s);
     s = config.readEntry( "Rate" );
-    if (!s.isEmpty()) m_talkerCode.setRate(s);
+    //if (!s.isEmpty()) m_talkerCode.setRate(s);
 
     talkerLineEdit->setText(m_talkerCode.getTranslatedDescription());
 }

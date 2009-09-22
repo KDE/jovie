@@ -3,8 +3,8 @@
   functions for manipulating Talker Codes.
   For an explanation of what a Talker Code is, see speech.h. 
   -------------------
-  Copyright:
-  (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -55,30 +55,26 @@ class KDE_EXPORT TalkerCode
         /**
          * Properties.
          */
-        QString id() const;                 /* ID */
-        QString languageCode() const;       /* lang="xx" */
-        QString countryCode() const;        /* lang="yy_xx */
-        QString voice() const;              /* name="xxx" */
-        QString gender() const;             /* gender="xxx" */
-        QString volume() const;             /* volume="xxx" */
-        QString rate() const;               /* rate="xxx" */
-        QString plugInName() const;         /* synthesizer="xxx" */
-        QString desktopEntryName() const;
+        QString name() const;           /* name         */
+        QString language() const;       /* lang="xx"    */
+        int voiceType() const;          /* voiceType="xxx" equivalent to SPDVoiceType enumeration */
+        int volume() const;             /* volume="xxx" */
+        int rate() const;               /* rate="xxx"   */
+        int pitch() const;              /* pitch="xxx"  */
+        QString outputModule() const;         /* synthesizer="xxx" */
 
         /**
          * Returns the language code plus country code (if any).
          */
         QString fullLanguageCode() const;
 
-        void setId(const QString& id);
-        void setLanguageCode(const QString &languageCode);
-        void setCountryCode(const QString &countryCode);
-        void setVoice(const QString &voice);
-        void setGender(const QString &gender);
-        void setVolume(const QString &volume);
-        void setRate(const QString &rate);
-        void setPlugInName(const QString plugInName);
-        void setDesktopEntryName(const QString &desktopEntryName);
+        void setName(const QString& name);
+        void setLanguage(const QString &language);
+        void setVoiceType(int voiceType);
+        void setVolume(int volume);
+        void setRate(int rate);
+        void setPitch(int pitch);
+        void setOutputModule(const QString &moduleName);
 
         /**
          * Sets the language code and country code (if given).
@@ -99,7 +95,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Normalizes the Talker Code by filling in defaults.
          */
-        void normalize();
+        //void normalize();
 
         /**
          * Given a talker code, normalizes it into a standard form and also returns
@@ -108,7 +104,7 @@ class KDE_EXPORT TalkerCode
          * @return fullLanguageCode  Language code from the talker code (including country code if any).
          * @return                   Normalized talker code.
          */
-        static QString normalizeTalkerCode(const QString &talkerCode, QString &fullLanguageCode);
+        //static QString normalizeTalkerCode(const QString &talkerCode, QString &fullLanguageCode);
 
         /**
          * Given a language code that might contain a country code, splits the code into
@@ -143,12 +139,11 @@ class KDE_EXPORT TalkerCode
         /**
          * These functions return translated Talker Code attributes.
          */
-        static QString translatedGender(const QString &gender);
-        static QString translatedVolume(const QString &volume);
-        static QString translatedRate(const QString &rate);
-        static QString untranslatedGender(const QString &gender);
-        static QString untranslatedVolume(const QString &volume);
-        static QString untranslatedRate(const QString &rate);
+        static QString translatedVoiceType(int voiceType);
+        //static QString translatedVolume(const QString &volume);
+        //static QString translatedRate(const QString &rate);
+        //static QString untranslatedVolume(const QString &volume);
+        //static QString untranslatedRate(const QString &rate);
 
         /**
          * Given a list of parsed talker codes and a desired talker code, finds the closest
@@ -175,14 +170,14 @@ class KDE_EXPORT TalkerCode
         * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
         *                               QString() if not found.
         */
-        static QString TalkerNameToDesktopEntryName(const QString& name);
+        //static QString TalkerNameToDesktopEntryName(const QString& name);
 
         /**
         * Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
         * @param desktopEntryName       The DesktopEntryName.
         * @return                       The translated Name of the plugin, from Name= line in .desktop file.
         */
-        static QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
+        //static QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
 
     private:
         /**
@@ -191,15 +186,13 @@ class KDE_EXPORT TalkerCode
          */
         void parseTalkerCode(const QString &talkerCode);
 
-        QString m_id;
-        QString m_languageCode;       /* lang="xx" */
-        QString m_countryCode;        /* lang="yy_xx */
-        QString m_voice;              /* name="xxx" */
-        QString m_gender;             /* gender="xxx" */
-        QString m_volume;             /* volume="xxx" */
-        QString m_rate;               /* rate="xxx" */
-        QString m_plugInName;         /* synthesizer="xxx" */
-        QString m_desktopEntryName;
+        QString m_name;           /* name="xxx"        */
+        QString m_language;       /* lang="xx"         */
+        int m_voiceType;          /* voiceType="xxx"   */
+        int m_volume;             /* volume="xxx"      */
+        int m_rate;               /* rate="xxx"        */
+        int m_pitch;              /* pitch="xxx"       */
+        QString m_outputModule;   /* synthesizer="xxx" */
 };
 
 #endif      // TALKERCODE_H

@@ -1,5 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Dialog to allow user to add a new Talker by selecting a language and synthesizer.
+  Dialog to allow user to add a new Talker by selecting a language, synthesizer,
+  and voice/pitch/speed options also.
   Uses addtalkerwidget.ui.
   -------------------
   Copyright: (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
@@ -39,6 +40,9 @@
 
 #include "ui_addtalkerwidget.h"
 
+const int kLanguageColumn = 0;
+const int kSynthesizerColumn = 1;
+
 AddTalker::AddTalker(QWidget* parent)
     : KDialog(parent)
 {
@@ -60,6 +64,13 @@ AddTalker::AddTalker(QWidget* parent)
 
     mUi->AvailableTalkersTable->setSortingEnabled(false);
 
+    QString fullLanguageCode = KGlobal::locale()->defaultLanguage();
+    QString languageCode;
+    QString countryCode;
+    TalkerCode::splitFullLanguageCode(fullLanguageCode, languageCode, countryCode);
+
+    QTableWidgetItem * defaultItem = 0;
+
     foreach (const QString module, m_outputModules)
     {
         QStringList languages = kspeech->languagesByModule(module);
@@ -71,197 +82,58 @@ AddTalker::AddTalker(QWidget* parent)
             
             // set the synthesizer item
             QTableWidgetItem * item = new QTableWidgetItem(module);
-            mUi->AvailableTalkersTable->setItem(rowcount, 1, item);
+            mUi->AvailableTalkersTable->setItem(rowcount, kSynthesizerColumn, item);
 
-            QString langName = languageCodeToLanguage(language);
+            QString langName = TalkerCode::languageCodeToLanguage(language);
+            if (language == languageCode)
+            {
+                defaultItem = item;
+            }
+            
             // set the language name item
             item = new QTableWidgetItem(langName.isEmpty() ? language : langName);
             item->setToolTip(language);
-            mUi->AvailableTalkersTable->setItem(rowcount, 0, item);
+            mUi->AvailableTalkersTable->setItem(rowcount, kLanguageColumn, item);
         }
     }
-    mUi->AvailableTalkersTable->setSortingEnabled(true);
-    // Default to user's desktop language.
-    QString languageCode = KGlobal::locale()->defaultLanguage();
-    // If there is not a synth that supports the locale, try stripping country code.
-    //if (!m_langToSynthMap.contains(languageCode))
-    //{
-    //    QString countryCode;
-    //    QString modifier;
-    //    QString charSet;
-    //    QString langAlpha;
-    //    KGlobal::locale()->splitLocale(languageCode, langAlpha, countryCode, modifier, charSet);
-    //    languageCode = langAlpha;
-    //}
-    //// If there is still not a synth that supports the language code, default to "other".
-    //if (!m_langToSynthMap.contains(languageCode)) languageCode = "other";
 
-    //// Select the language in the language combobox.
-    //QString language = languageCodeToLanguage(languageCode);
-    //languageSelection->setCurrentItem(language, false);
+    // turn sorting on now that the table is populated
+    mUi->AvailableTalkersTable->setSortingEnabled(true);
+    
+    // sort by language by default
+    mUi->AvailableTalkersTable->sortItems(kLanguageColumn);
+
+    if (defaultItem)
+    {
+        mUi->AvailableTalkersTable->setCurrentItem(defaultItem);
+    }
 }
 
 AddTalker::~AddTalker()
 {
 }
 
+TalkerCode AddTalker::getTalkerCode() const
+{
+    TalkerCode retval;
+    int row = mUi->AvailableTalkersTable->currentRow();
+    if (row > 0 && row < mUi->AvailableTalkersTable->rowCount())
+    {
+        retval.setName(mUi->nameEdit->text());
+        retval.setLanguage(mUi->AvailableTalkersTable->item(row, kLanguageColumn)->toolTip());
+        retval.setVoiceType(mUi->voiceComboBox->currentIndex() + 1); // add 1 because the enumeration starts at 1
+        retval.setVolume(mUi->volumeSlider->value());
+        retval.setRate(mUi->speedSlider->value());
+        retval.setPitch(mUi->pitchSlider->value());
+        retval.setOutputModule(mUi->AvailableTalkersTable->item(row, kSynthesizerColumn)->text());
+    }
+    return retval;
+}
+
 void AddTalker::slot_tableSelectionChanged()
 {
     this->enableButtonOk(true);
 }
-
-/**
-* Returns user's chosen language code.
-*/
-QString AddTalker::getLanguageCode() const
-{
-    //return m_languageToLanguageCodeMap[languageSelection->currentText()];
-    
-    return mUi->AvailableTalkersTable->item(mUi->AvailableTalkersTable->currentRow(), 0)->toolTip();
-}
-
-/**
-* Returns user's chosen synthesizer.
-*/
-QString AddTalker::getSynthesizer() const 
-{ 
-	//return synthesizerSelection->currentText(); 
-    return mUi->AvailableTalkersTable->item(mUi->AvailableTalkersTable->currentRow(), 2)->text();
-}
-
-// Set the synthesizer-to-languages map.
-// @param synthToLang        QMap of supported language codes indexed by synthesizer.
-//void AddTalker::setSynthToLangMap(SynthToLangMap synthToLangMap)
-//{
-//    m_synthToLangMap = synthToLangMap;
-//    // "Invert" the map, i.e., map language codes to synthesizers.
-//    QStringList synthList = m_synthToLangMap.keys();
-//    const int synthListCount = synthList.count();
-//    for (int synthNdx=0; synthNdx < synthListCount; ++synthNdx)
-//    {
-//        QString synth = synthList[synthNdx];
-//        QStringList languageCodeList = m_synthToLangMap[synth];
-//        const int languageCodeListCount = languageCodeList.count();
-//        for (int langNdx=0; langNdx < languageCodeListCount; ++langNdx)
-//        {
-//            QString languageCode = languageCodeList[langNdx];
-//            QStringList synthesizerList = m_langToSynthMap[languageCode];
-//            synthesizerList.append(synth);
-//            m_langToSynthMap[languageCode] = synthesizerList;
-//        }
-//    }
-//    // Fill language to language code map.
-//    QStringList languageCodeList = m_langToSynthMap.keys();
-//    const int languageCodeListCount = languageCodeList.count();
-//    for (int ndx = 0; ndx < languageCodeListCount; ++ndx)
-//    {
-//        QString languageCode = languageCodeList[ndx];
-//        QString language = languageCodeToLanguage(languageCode);
-//        m_languageToLanguageCodeMap[language] = languageCode;
-//    }
-//}
-
-// Converts a language code plus optional country code to language description.
-QString AddTalker::languageCodeToLanguage(const QString &languageCode)
-{
-    QString langAlpha;
-    QString countryCode;
-    QString modifier;
-    QString charSet;
-    QString language;
-    if (languageCode == "other")
-        language = i18nc("Other language", "Other");
-    else
-    {
-        KGlobal::locale()->splitLocale(languageCode, langAlpha, countryCode, modifier, charSet);
-        language = KGlobal::locale()->languageCodeToName(langAlpha);
-    }
-    if (!countryCode.isEmpty())
-        language += " (" + KGlobal::locale()->countryCodeToName(countryCode) + ')';
-    return language;
-}
-
-// Based on user's radio button selection, filters choices for language or synthesizer
-// comboboxes based on what is selected in the other combobox.
-//void AddTalker::applyFilter()
-//{
-//    if (languageRadioButton->isChecked())
-//    {
-//        // Get current language.
-//        QString language = languageSelection->currentText();
-//        // Fill language combobox will all possible languages.
-//        languageSelection->clear();
-//        QStringList languageCodeList = m_langToSynthMap.keys();
-//        const int languageCodeListCount = languageCodeList.count();
-//        QStringList languageList;
-//        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
-//        {
-//            languageList.append(languageCodeToLanguage(languageCodeList[ndx]));
-//        }
-//        languageList.sort();
-//        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
-//        {
-//            languageSelection->addItem(languageList[ndx]);
-//        }
-//        // Re-select user's selection.
-//        languageSelection->setCurrentItem(language, false);
-//        // Get current language selection.
-//        language = languageSelection->currentText();
-//        // Map current language to language code.
-//        QString languageCode = m_languageToLanguageCodeMap[language];
-//        // Get list of synths that support this language code.
-//        QStringList synthList = m_langToSynthMap[languageCode];
-//        // Get current user's synth selection.
-//        QString synth = synthesizerSelection->currentText();
-//        // Fill synthesizer combobox.
-//        synthesizerSelection->clear();
-//        synthList.sort();
-//        const int synthListCount = synthList.count();
-//        for (int ndx=0; ndx < synthListCount; ++ndx)
-//        {
-//            synthesizerSelection->addItem(synthList[ndx]);
-//        }
-//        // Re-select user's selection.
-//        synthesizerSelection->setCurrentItem(synth, false);
-//    }
-//    else
-//    {
-//        // Get current synth selection.
-//        QString synth = synthesizerSelection->currentText();
-//        // Fill synthesizer combobox with all possible synths.
-//        synthesizerSelection->clear();
-//        QStringList synthList = m_synthToLangMap.keys();
-//        synthList.sort();
-//        const int synthListCount = synthList.count();
-//        for (int ndx=0; ndx < synthListCount; ++ndx)
-//        {
-//            synthesizerSelection->addItem(synthList[ndx]);
-//        }
-//        // Re-select user's synthesizer.
-//        synthesizerSelection->setCurrentItem(synth, false);
-//        // Get current synth selection.
-//        synth = synthesizerSelection->currentText();
-//        // Get list of supported language codes.
-//        QStringList languageCodeList = m_synthToLangMap[synth];
-//        // Get current user's language selection.
-//        QString language = languageSelection->currentText();
-//        // Fill language combobox with language descriptions.
-//        languageSelection->clear();
-//        const int languageCodeListCount = languageCodeList.count();
-//        QStringList languageList;
-//        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
-//        {
-//            languageList.append(languageCodeToLanguage(languageCodeList[ndx]));
-//        }
-//        languageList.sort();
-//        for (int ndx=0; ndx < languageCodeListCount; ++ndx)
-//        {
-//            languageSelection->addItem(languageList[ndx]);
-//        }
-//        // Re-select user's language selection.
-//        languageSelection->setCurrentItem(language, false);
-//    }
-//}
 
 #include "addtalker.moc"
 

@@ -85,10 +85,6 @@ public:
     */
     void clear();
     /**
-    *   Returns the highest ID of all TalkerCodes.  Useful when generating a new TalkerCode.
-    */
-    int highestTalkerId() const { return m_highestTalkerId; }
-    /**
     *   Loads the TalkerCodes into the model/view from the config file.
     *   @param config                   Pointer to KConfig object holding the config file info.
     */
@@ -99,8 +95,6 @@ private:
     QVariant dataColumn(const TalkerCode& talkerCode, int column) const;
     // QList of TalkerCodes.
     TalkerCode::TalkerCodeList m_talkerCodes;
-    // Highest talker ID.  Used to generate a new ID.
-    int m_highestTalkerId;
 };
 
 #endif          // TALKERLISTMODEL_H

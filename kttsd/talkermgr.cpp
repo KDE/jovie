@@ -103,8 +103,8 @@ void TalkerMgr::loadTalkers(KConfig* c)
             QString talkerCode = talkerConfig.readEntry("TalkerCode", QString());
 
             // Normalize the talker code.
-            QString fullLanguageCode;
-            talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
+            //QString fullLanguageCode;
+            //talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
 
             m_loadedTalkerCodes.append(TalkerCode(talkerCode));
             m_loadedTalkerIds.append(talkerID);

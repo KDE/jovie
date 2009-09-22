@@ -71,15 +71,15 @@ bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
     m_chosenTalkerCode = TalkerCode(config.readEntry("TalkerCode"), false);
     // Legacy settings.
     QString s = config.readEntry( "LanguageCode" );
-    if (!s.isEmpty()) m_chosenTalkerCode.setFullLanguageCode(s);
+    if (!s.isEmpty()) m_chosenTalkerCode.setLanguage(s);
     s = config.readEntry( "SynthInName" );
-    if (!s.isEmpty()) m_chosenTalkerCode.setPlugInName(s);
+    //if (!s.isEmpty()) m_chosenTalkerCode.setPlugInName(s);
     s = config.readEntry( "Gender" );
-    if (!s.isEmpty()) m_chosenTalkerCode.setGender(s);
+    //if (!s.isEmpty()) m_chosenTalkerCode.setGender(s);
     s = config.readEntry( "Volume" );
-    if (!s.isEmpty()) m_chosenTalkerCode.setVolume(s);
+    //if (!s.isEmpty()) m_chosenTalkerCode.setVolume(s);
     s = config.readEntry( "Rate" );
-    if (!s.isEmpty()) m_chosenTalkerCode.setRate(s);
+    //if (!s.isEmpty()) m_chosenTalkerCode.setRate(s);
     return true;
 }
 
@@ -139,12 +139,12 @@ bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
     //         " gender " << m_gender << " synth " << m_synth <<
     //         " volume " << m_volume << " rate " << m_rate << endl;
     // Only override the language if user specified a language code.
-    if (!m_chosenTalkerCode.fullLanguageCode().isEmpty())
-        talkerCode->setFullLanguageCode(m_chosenTalkerCode.fullLanguageCode());
-    talkerCode->setVoice(m_chosenTalkerCode.voice());
-    talkerCode->setGender(m_chosenTalkerCode.gender());
-    talkerCode->setPlugInName(m_chosenTalkerCode.plugInName());
-    talkerCode->setVolume(m_chosenTalkerCode.volume());
-    talkerCode->setRate(m_chosenTalkerCode.rate());
+    if (!m_chosenTalkerCode.language().isEmpty())
+        talkerCode->setLanguage(m_chosenTalkerCode.language());
+    //talkerCode->setVoice(m_chosenTalkerCode.voice());
+    //talkerCode->setGender(m_chosenTalkerCode.gender());
+    //talkerCode->setPlugInName(m_chosenTalkerCode.plugInName());
+    //talkerCode->setVolume(m_chosenTalkerCode.volume());
+    //talkerCode->setRate(m_chosenTalkerCode.rate());
     return inputText;
 }

@@ -68,7 +68,7 @@ SelectLanguageDlg::SelectLanguageDlg(
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
     {
         locale = allLocales[ndx];
-        language = TalkerCode::languageCodeToLanguage(locale);
+        language = locale;
         if (!language.isEmpty()) {
             int row = m_langList->rowCount();
             m_langList->setRowCount(row + 1);

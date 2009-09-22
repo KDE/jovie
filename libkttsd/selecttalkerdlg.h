@@ -76,7 +76,6 @@ class KDE_EXPORT SelectTalkerDlg : public KDialog
         QString getSelectedTranslatedDescription();
 
     private slots:
-        void slotLanguageBrowseButton_clicked();
         void slotTalkersView_clicked();
         void configChanged();
 
