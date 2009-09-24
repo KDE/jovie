@@ -115,8 +115,8 @@ void TalkerCode::setTalkerCode(const QString& code)
 
 QString TalkerCode::getTalkerCode() const
 {
-    QString code = QString("<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\" />").arg(m_name).arg(m_language).arg(m_outputModule);
-    code += QString("<prosody volume=\"%1\" rate=\"%2\" pitch=\"%3\" />").arg(m_volume).arg(m_rate).arg(m_pitch);
+    QString code = QString("<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\" voiceType=\"%4\">").arg(m_name).arg(m_language).arg(m_outputModule).arg(m_voiceType);
+    code += QString("<prosody volume=\"%1\" rate=\"%2\" pitch=\"%3\" /></voice>").arg(m_volume).arg(m_rate).arg(m_pitch);
     return code;
 }
 
@@ -329,21 +329,33 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
         m_name = voice.attribute("name");
         m_language = voice.attribute("lang");
         m_outputModule = voice.attribute("outputModule");
-    }
-    
-    QDomElement prosody = doc.firstChildElement("prosody");
-    if (!prosody.isNull())
-    {
         bool result = false;
-        m_volume = prosody.attribute("volume").toInt(&result);
+        m_voiceType = voice.attribute("voiceType").toInt(&result);
         if (!result)
-            m_volume = 0;
-        m_rate = prosody.attribute("rate").toInt(&result);
-        if (!result)
-            m_rate = 0;
-        m_pitch = prosody.attribute("pitch").toInt(&result);
-        if (!result)
-            m_pitch = 0;
+            m_voiceType = 1;
+
+        QDomElement prosody = voice.firstChildElement("prosody");
+        if (!prosody.isNull())
+        {
+            bool result = false;
+            m_volume = prosody.attribute("volume").toInt(&result);
+            if (!result)
+                m_volume = 0;
+            m_rate = prosody.attribute("rate").toInt(&result);
+            if (!result)
+                m_rate = 0;
+            m_pitch = prosody.attribute("pitch").toInt(&result);
+            if (!result)
+                m_pitch = 0;
+        }
+        else
+        {
+            kDebug() << "got a voice with no prosody tag";
+        }
+    }
+    else
+    {
+        kDebug() << "got a voice with no voice tag";
     }
 }
 

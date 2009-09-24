@@ -79,11 +79,11 @@ void TalkerMgr::loadTalkers(KConfig* c)
             // Talker ID.
             QString talkerID = *it;
 
-            // Set the group for the language we're loading
-            KConfigGroup talkerConfig(c, "Talker_" + talkerID);
+            // Set the group for the talker to load
+            KConfigGroup talkerConfig(c, "Talkers");
 
             // Get the DesktopEntryName of the plugin we will try to load.
-            QString desktopEntryName = talkerConfig.readEntry("DesktopEntryName", QString());
+            //QString desktopEntryName = talkerConfig.readEntry("DesktopEntryName", QString());
 
 //            // If a DesktopEntryName is not in the config file, it was configured before
 //            // we started using them, when we stored translated plugin names instead.
@@ -100,7 +100,7 @@ void TalkerMgr::loadTalkers(KConfig* c)
 //            }
 
             // Get the talker code.
-            QString talkerCode = talkerConfig.readEntry("TalkerCode", QString());
+            QString talkerCode = talkerConfig.readEntry(talkerID, QString());
 
             // Normalize the talker code.
             //QString fullLanguageCode;

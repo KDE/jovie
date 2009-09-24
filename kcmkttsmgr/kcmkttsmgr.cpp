@@ -537,9 +537,18 @@ void KCMKttsMgr::save()
     generalConfig.writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
 
     // Get ordered list of all talker IDs.
+    QList<TalkerCode> talkers;
     QStringList talkerIDsList;
+    KConfigGroup talkerGroup(m_config, "Talkers");
+    talkerGroup.deleteGroup();
     for (int i = 0; i < m_talkerListModel.rowCount(); ++i)
-        talkerIDsList.append(m_talkerListModel.getRow(i).name());
+    {
+        TalkerCode talker = m_talkerListModel.getRow(i);
+        talkers << talker;
+        talkerGroup.writeEntry(talker.name(), talker.getTalkerCode());
+        talkerIDsList << talker.name();
+    }
+
     QString talkerIDs = talkerIDsList.join(",");
     generalConfig.writeEntry("TalkerIDs", talkerIDs);
 
@@ -737,11 +746,6 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
     QPointer<AddTalker> dlg = new AddTalker(this);
     if (dlg->exec() == QDialog::Accepted) {
         TalkerCode code = dlg->getTalkerCode();
-
-        // Record configuration data.
-        KConfigGroup talkerConfig(m_config, code.name());
-        talkerConfig.writeEntry("TalkerCode", code.getTalkerCode());
-        m_config->sync();
 
         // Add to list of Talkers.
         m_talkerListModel.appendRow(code);

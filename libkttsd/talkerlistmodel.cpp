@@ -105,7 +105,7 @@ QVariant TalkerListModel::dataColumn(const TalkerCode& talkerCode, int column) c
     switch (column)
     {
         case kNameColumn:      return talkerCode.name(); break;
-        case kLanguageColumn:  return talkerCode.language(); break;
+        case kLanguageColumn:  return TalkerCode::languageCodeToLanguage(talkerCode.language()); break;
         case kModuleColumn:    return talkerCode.outputModule(); break;
         case kVoiceTypeColumn: return TalkerCode::translatedVoiceType(talkerCode.voiceType()); break;
         case kVolumeColumn:    return talkerCode.volume(); break;
@@ -204,8 +204,8 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
         {
             QString talkerID = *it;
             kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID;
-            KConfigGroup talkGroup(c, QString("Talker_") + talkerID);
-            QString talkerCode = talkGroup.readEntry("TalkerCode");
+            KConfigGroup talkGroup(c, "Talkers");
+            QString talkerCode = talkGroup.readEntry(talkerID);
             TalkerCode tc = TalkerCode(talkerCode, true);
             kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode;
             //tc.setId(talkerID);
