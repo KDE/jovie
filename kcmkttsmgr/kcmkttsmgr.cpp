@@ -674,7 +674,7 @@ QString KCMKttsMgr::quickHelp() const{
     // kDebug() << "KCMKttsMgr::quickHelp: Running";
     return i18n(
         "<h1>Text-to-Speech</h1>"
-        "<p>This is the configuration for the text-to-speech dcop service</p>"
+        "<p>This is the configuration for the text-to-speech dbus service</p>"
         "<p>This allows other applications to access text-to-speech resources</p>"
         "<p>Be sure to configure a default language for the language you are using as this will be the language used by most of the applications</p>");
 }
