@@ -7,6 +7,7 @@
  <appid>kvirc</appid>
  <appid>ksirc</appid>
  <appid>konversation</appid>
+ <appid>kcmkttsmgr</appid>
  <word>
   <type>RegExp</type>
   <case>No</case>
@@ -308,9 +309,9 @@
   <subst><![CDATA[got to go]]></subst>
  </word>
  <word>
-  <type>Word</type>
+  <type>RegExp</type>
   <case>No</case>
-  <match><![CDATA[hmm]]></match>
+  <match><![CDATA[\shm+]]></match>
   <subst><![CDATA[hurrmmm]]></subst>
  </word>
  <word>
@@ -612,5 +613,29 @@
   <case>No</case>
   <match><![CDATA[\:\-\/]]></match>
   <subst><![CDATA[ frowns ]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <case>No</case>
+  <match><![CDATA[,]]></match>
+  <subst><![CDATA[]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <case>No</case>
+  <match><![CDATA[`]]></match>
+  <subst><![CDATA[]]></subst>
+ </word>
+ <word>
+  <type>RegExp</type>
+  <case>No</case>
+  <match><![CDATA[\sgr+]]></match>
+  <subst><![CDATA[gurrr]]></subst>
+ </word>
+ <word>
+  <type>Word</type>
+  <case>No</case>
+  <match><![CDATA[\]]></match>
+  <subst><![CDATA[ slash ]]></subst>
  </word>
 </wordlist>
