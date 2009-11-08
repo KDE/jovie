@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd ${CMAKE_BINARY_DIR}/ktts
 ########### next target ###############
 
 set(kttsjobmgrpart_PART_SRCS
-    jobinfolistmodel.cpp
     kttsjobmgr.cpp )
 
 qt4_add_dbus_interfaces(kttsjobmgrpart_PART_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml )

@@ -64,39 +64,7 @@ protected Q_SLOTS:
     */
     Q_SCRIPTABLE void kttsdStarted();
 
-    /**
-    * This signal is emitted each time the state of a job changes.
-    * @param appId              The DBUS sender ID of the application that
-    *                           submitted the job.
-    * @param jobNum             Job Number.
-    * @param state              Job state.  @see KSpeech::JobState.
-    */
-    Q_SCRIPTABLE void jobStateChanged(const QString &appId, int jobNum, int state);
-
-    /**
-    * This signal is emitted when a marker is processed.
-    * Currently only emits mtSentenceBegin and mtSentenceEnd.
-    * @param appId         The DBUS sender ID of the application that submitted the job.
-    * @param jobNum        Job Number of the job emitting the marker.
-    * @param markerType    The type of marker.
-    *                      Currently either mtSentenceBegin or mtSentenceEnd.
-    * @param markerData    Data for the marker.
-    *                      Currently, this is the sequence number of the sentence
-    *                      begun or ended.  Sequence numbers begin at 1.
-    */
-    Q_SCRIPTABLE void marker(const QString &appId, int jobNum, int markerType, const QString &markerData);
-
-    /**
-     * slot for when jobs are filtered in the daemon so we can show it in our ui
-     */
-    Q_SCRIPTABLE void slotJobFiltered(const QString&, const QString&);
-
 private slots:
-    /**
-    * This slot is connected to the Job List View clicked signal.
-    */
-    void slot_jobListView_clicked();
-
     /**
     * Slots connected to buttons.
     */
@@ -125,36 +93,6 @@ private slots:
     
 private:
     /**
-    * Get the Job Number of the currently-selected job in the Job List View.
-    * @return               Job Number of currently-selected job.
-    *                       0 if no currently-selected job.
-    */
-    int getCurrentJobNum();
-
-    /**
-    * Retrieves JobInfo from KTTSD, creates and fills JobInfo object.
-    * @param jobNum         Job Number.
-    */
-    JobInfo* retrieveJobInfo(int jobNum);
-
-    /**
-    * Refresh display of a single job in the JobListView.
-    * @param jobNum         Job Number.
-    */
-    void refreshJob(int jobNum);
-
-    /**
-    * Fill the Job List.
-    */
-    void refreshJobList();
-
-    /**
-    * If nothing selected in Job List View and list not empty, select top item.
-    * If nothing selected and list is empty, disable job buttons.
-    */
-    void autoSelectInJobListView();
-    
-    /**
     * DBUS KSpeech Interface.
     */
     org::kde::KSpeech* m_kspeech;
@@ -169,7 +107,6 @@ private:
     /**
     * Job ListView.
     */
-    JobInfoListModel* m_jobListModel;
     KttsJobMgrBrowserExtension *m_extension;
     Ui::kttsjobmgr * m_ui;
     QList<KPushButton*> m_jobButtons;

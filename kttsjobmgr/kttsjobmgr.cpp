@@ -54,7 +54,6 @@
 // KTTS includes.
 #include "talkercode.h"
 #include "selecttalkerdlg.h"
-#include "jobinfolistmodel.h"
 
 typedef KParts::GenericFactory<KttsJobMgrPart> KttsJobMgrPartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkttsjobmgrpart, KttsJobMgrPartFactory )
@@ -87,9 +86,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     // All the ktts components use the same catalog.
     KGlobal::locale()->insertCatalog("kttsd");
 
-    m_jobListModel = new JobInfoListModel();
-    m_ui->m_jobTableView->setModel(m_jobListModel);
-
     connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_speedSliderChanged(int)));
     connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_pitchSliderChanged(int)));
     connect (m_ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_volumeSliderChanged(int)));
@@ -116,15 +112,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
 
     // Set the main widget for the part.
     setWidget(widget);
-
-    connect(m_ui->m_jobTableView, SIGNAL(clicked(const QModelIndex&)),
-        this, SLOT(slot_jobListView_clicked()));
-
-    // Fill the Job List.
-    refreshJobList();
-    
-    // Select first item (if any).
-    autoSelectInJobListView();
 
     // Connect DBUS Signals emitted by KTTSD to our own slots.
     connect(m_kspeech, SIGNAL(kttsdStarted()),
@@ -154,13 +141,6 @@ bool KttsJobMgrPart::openFile()
 bool KttsJobMgrPart::closeUrl()
 {
     return true;
-}
-
-/**
-* This slot is connected to the Job List View clicked signal.
-*/
-void KttsJobMgrPart::slot_jobListView_clicked()
-{
 }
 
 /**
@@ -224,25 +204,25 @@ void KttsJobMgrPart::slot_voiceChanged(int voice)
 
 void KttsJobMgrPart::slot_job_change_talker()
 {
-    QModelIndex index = m_ui->m_jobTableView->currentIndex();
-    if (index.isValid())
-    {
-        JobInfo job = m_jobListModel->getRow(index.row());
-        QString talkerID = job.talkerID;
-        QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
-        int ndx = talkerIDs.indexOf(talkerID);
-        QString talkerCode;
-        if (ndx >= 0)
-            talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
-        QPointer<SelectTalkerDlg> dlg = new SelectTalkerDlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
-        int dlgResult = dlg->exec();
-        if (dlgResult != KDialog::Accepted)
-            return;
-        talkerCode = dlg->getSelectedTalkerCode();
-        int jobNum = job.jobNum;
-        m_kspeech->changeJobTalker(jobNum, talkerCode);
-        refreshJob(jobNum);
-    }
+    //QModelIndex index = m_ui->m_jobTableView->currentIndex();
+    //if (index.isValid())
+    //{
+    //    JobInfo job = m_jobListModel->getRow(index.row());
+    //    QString talkerID = job.talkerID;
+    //    QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
+    //    int ndx = talkerIDs.indexOf(talkerID);
+    //    QString talkerCode;
+    //    if (ndx >= 0)
+    //        talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
+    //    QPointer<SelectTalkerDlg> dlg = new SelectTalkerDlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
+    //    int dlgResult = dlg->exec();
+    //    if (dlgResult != KDialog::Accepted)
+    //        return;
+    //    talkerCode = dlg->getSelectedTalkerCode();
+    //    int jobNum = job.jobNum;
+    //    m_kspeech->changeJobTalker(jobNum, talkerCode);
+    //    refreshJob(jobNum);
+    //}
 }
 
 void KttsJobMgrPart::slot_speak_clipboard()
@@ -302,131 +282,6 @@ void KttsJobMgrPart::slot_speak_file()
     }
 }
 
-//void KttsJobMgrPart::slot_refresh()
-//{
-//    // Clear TalkerID cache.
-//    m_talkerCodesToTalkerIDs.clear();
-//    // Get current job number.
-//    int jobNum = getCurrentJobNum();
-//    refreshJobList();
-//    // Select the previously-selected job.
-//    if (jobNum)
-//    {
-//        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-//        if (index.isValid())
-//        {
-//            m_ui->m_jobTableView->setCurrentIndex(index);
-//            slot_jobListView_clicked();
-//        }
-//    }
-//}
-
-
-/**
-* Get the Job Number of the currently-selected job in the Job List View.
-* @return               Job Number of currently-selected job.
-*                       0 if no currently-selected job.
-*/
-int KttsJobMgrPart::getCurrentJobNum()
-{
-    int jobNum = 0;
-    QModelIndex index = m_ui->m_jobTableView->currentIndex();
-    if (index.isValid())
-        jobNum = m_jobListModel->getRow(index.row()).jobNum;
-    return jobNum;
-}
-
-/**
-* Retrieves JobInfo from KTTSD, creates and fills JobInfo object.
-* @param jobNum         Job Number.
-*/
-JobInfo* KttsJobMgrPart::retrieveJobInfo(int jobNum)
-{
-    QByteArray jobInfo = m_kspeech->getJobInfo(jobNum);
-    if (jobInfo != QByteArray()) {
-        JobInfo* job = new JobInfo();
-        QDataStream stream(&jobInfo, QIODevice::ReadOnly);
-        qint32 priority;
-        qint32 state;
-        QString talkerCode;
-        qint32 sentenceNum;
-        qint32 sentenceCount;
-        stream >> priority;
-        stream >> state;
-        stream >> job->appId;
-        stream >> talkerCode;
-        stream >> sentenceNum;
-        stream >> sentenceCount;
-        stream >> job->applicationName;
-        job->jobNum = jobNum;
-        job->priority = priority;
-        job->state = state;
-        job->sentenceNum = sentenceNum;
-        job->sentenceCount = sentenceCount;
-        job->talkerID = cachedTalkerCodeToTalkerID(talkerCode);
-        return job;
-    };
-    return NULL;
-}
-
-/**
-* Refresh display of a single job in the JobListView.
-* @param jobNum         Job Number.
-*/
-void KttsJobMgrPart::refreshJob(int jobNum)
-{
-    QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-    if (index.isValid()) {
-        JobInfo* job = retrieveJobInfo(jobNum);
-        if (job)
-            m_jobListModel->updateRow(index.row(), *job);
-        else
-            m_jobListModel->removeRow(index.row());
-    }
-}
-
-/**
-* Fill the Job List View.
-*/
-void KttsJobMgrPart::refreshJobList()
-{
-    // kDebug() << "KttsJobMgrPart::refreshJobList: Running";
-    m_jobListModel->clear();
-    JobInfoList jobInfoList;
-    QStringList jobNums = m_kspeech->getJobNumbers(KSpeech::jpAll);
-    for (int ndx = 0; ndx < jobNums.count(); ++ndx)
-    {
-        QString jobNumStr = jobNums[ndx];
-        kDebug() << "jobNumStr = " << jobNumStr;
-        int jobNum = jobNumStr.toInt(0, 10);
-        kDebug() << "jobNum = " << jobNum;
-        JobInfo* job = retrieveJobInfo(jobNum);
-        if (job)
-            jobInfoList.append(*job);
-    }
-    m_jobListModel->setDatastore(jobInfoList);
-}
-
-/**
-* If nothing selected in Job List View and list not empty, select top item.
-* If nothing selected and list is empty, disable job buttons.
-*/
-void KttsJobMgrPart::autoSelectInJobListView()
-{
-    // If something selected, nothing to do.
-    if (m_ui->m_jobTableView->currentIndex().isValid()) return;
-    // If empty, disable job buttons.
-    
-    //if (m_jobListModel->rowCount() == 0)
-    //    enableJobActions(false);
-    //else
-    //{
-        // Select first item.
-        m_ui->m_jobTableView->setCurrentIndex(m_jobListModel->index(0, 0));
-        slot_jobListView_clicked();
-    //}
-}
-
 /**
 * Return the Talker ID corresponding to a Talker Code, retrieving from cached list if present.
 * @param talkerCode    Talker Code.
@@ -454,120 +309,7 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
 */
 Q_SCRIPTABLE void KttsJobMgrPart::kttsdStarted()
 {
-    refreshJobList();
 }
-
-
-/**
-* This signal is emitted each time the state of a job changes.
-* @param appId              The DBUS sender ID of the application that
-*                           submitted the job.
-* @param jobNum             Job Number.
-* @param state              Job state.  @see KSpeech::JobState.
-*/
-Q_SCRIPTABLE void KttsJobMgrPart::jobStateChanged(const QString &appId, int jobNum, int state)
-{
-    Q_UNUSED(appId);
-    switch (state)
-    {
-        case KSpeech::jsQueued:
-        {
-            QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-            if (index.isValid())
-                refreshJob(jobNum);
-            else
-            {
-                JobInfo* job = retrieveJobInfo(jobNum);
-                if (job) {
-                    m_jobListModel->appendRow(*job);
-                    // Should we select this job?
-                    if (m_selectOnTextSet)
-                    {
-                        m_ui->m_jobTableView->setCurrentIndex(m_jobListModel->jobNumToIndex(jobNum));
-                        m_selectOnTextSet = false;
-                        slot_jobListView_clicked();
-                    }
-                }
-            }
-            // If a job not already selected, select this one.
-            autoSelectInJobListView();
-            break;
-        }
-        case KSpeech::jsSpeakable:
-        {
-            QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-            if (index.isValid()) {
-                JobInfo* job = retrieveJobInfo(jobNum);
-                if (job)
-                    m_jobListModel->updateRow(index.row(), *job);
-                else
-                    m_jobListModel->removeRow(index.row());
-            }
-            break;
-        }
-        case KSpeech::jsFiltering:
-        case KSpeech::jsSpeaking:
-        case KSpeech::jsPaused:
-        case KSpeech::jsInterrupted:
-        case KSpeech::jsFinished:
-        {
-            QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-            if (index.isValid())
-            {
-                JobInfo job = m_jobListModel->getRow(index.row());
-                job.state = state;
-                m_jobListModel->updateRow(index.row(), job);
-            }
-            //m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, 0));
-            break;
-        }
-        case KSpeech::jsDeleted:
-        {
-            QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-            if (index.isValid())
-                m_jobListModel->removeRow(index.row());
-            autoSelectInJobListView();
-            break;
-        }
-    }
-}
-
-Q_SCRIPTABLE void KttsJobMgrPart::slotJobFiltered(const QString& prefilterText, const QString& postfilterText)
-{
-    //m_ui->m_currentSentence->setPlainText(prefilterText);
-    //m_ui->m_filteredCurrentSentence->setPlainText(postfilterText);
-}
-
-/**
-* This signal is emitted when a marker is processed.
-* Currently only emits mtSentenceBegin and mtSentenceEnd.
-* @param appId         The DBUS sender ID of the application that submitted the job.
-* @param jobNum        Job Number of the job emitting the marker.
-* @param markerType    The type of marker.
-*                      Currently either mtSentenceBegin or mtSentenceEnd.
-* @param markerData    Data for the marker.
-*                      Currently, this is the sequence number of the sentence
-*                      begun or ended.  Sequence numbers begin at 1.
-*/
-Q_SCRIPTABLE void KttsJobMgrPart::marker(const QString &appId, int jobNum, int markerType, const QString &markerData)
-{
-    Q_UNUSED(appId);
-    if (KSpeech::mtSentenceBegin == markerType) {
-        QModelIndex index = m_jobListModel->jobNumToIndex(jobNum);
-        if (index.isValid())
-        {
-            JobInfo job = m_jobListModel->getRow(index.row());
-            int seq = markerData.toInt();
-            job.sentenceNum = seq;
-            m_jobListModel->updateRow(index.row(), job);
-            //m_ui->m_currentSentence->setPlainText(m_kspeech->getJobSentence(jobNum, seq));
-        }
-    }
-    if (KSpeech::mtSentenceEnd == markerType) {
-        //m_ui->m_currentSentence->setPlainText(QString());
-    }
-}
-
 
 KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
     : KParts::BrowserExtension(parent)
