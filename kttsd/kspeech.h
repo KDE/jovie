@@ -677,14 +677,6 @@ Q_SIGNALS: // SIGNALS
     */
     void marker(const QString &appId, int jobNum, int markerType, const QString &markerData);
 
-    /**
-     * This signal is emitted when a new job coming in is filtered (or not filtered if no filters
-     * are on).
-     * @param prefilterText     The text of the speech job
-     * @param postfilterText    The text of the speech job after any filters have been applied
-     */
-    void newJobFiltered(const QString &prefilterText, const QString &postfilterText);
-
 private slots:
     void slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
     void slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData);

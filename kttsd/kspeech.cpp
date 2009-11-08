@@ -502,8 +502,6 @@ bool KSpeech::initializeSpeaker()
         this, SLOT(slotMarker(const QString&, int, KSpeech::MarkerType, const QString&)));
     connect (Speaker::Instance(), SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
         this, SLOT(slotJobStateChanged(const QString&, int, KSpeech::JobState)));
-    connect (Speaker::Instance(), SIGNAL(newJobFiltered(const QString&, const QString&)),
-        this, SIGNAL(newJobFiltered(const QString&, const QString&)));
     //connect (Speaker::Instance(), SIGNAL(filteringFinished()),
     //    this, SLOT(slotFilteringFinished()));
 
