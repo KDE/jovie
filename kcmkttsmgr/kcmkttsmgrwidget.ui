@@ -78,7 +78,7 @@
          <item>
           <widget class="QCheckBox" name="autoexitMgrCheckBox">
            <property name="whatsThis">
-            <string>When checked, and KTTSMgr was automatically started when speech began, automatically exits when speech has finished.  Does not automatically exit if KTTSMgr was started manually or started from the Control Center.</string>
+            <string>When checked, and KTTSMgr was automatically started when speech began, automatically exits when speech has finished.  Does not automatically exit if KTTSMgr was started manually or started from the System Settings.</string>
            </property>
            <property name="text">
             <string>E&amp;xit when speaking is finished</string>
