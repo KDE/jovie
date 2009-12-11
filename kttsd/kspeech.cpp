@@ -444,8 +444,8 @@ void KSpeech::reinit()
     // Restart ourself.
     kDebug() << "KSpeech::reinit: Running";
     kDebug() << "KSpeech::reinit: Stopping KTTSD service";
-    if (Speaker::Instance()->isSpeaking())
-        Speaker::Instance()->pause();
+    //if (Speaker::Instance()->isSpeaking())
+    //    Speaker::Instance()->pause();
     Speaker::Instance()->requestExit();
     QDBusConnection::sessionBus().unregisterObject("/KSpeech");
     if (ready()) {
@@ -470,7 +470,7 @@ bool KSpeech::ready()
     // TODO: add a check here to see if kttsd is ready (Speaker::Instance() will always be true...)
     //if (Speaker::Instance())
     //    return true;
-    kDebug() << "KSpeech::ready: Starting KTTSD service";
+    //kDebug() << "KSpeech::ready: Starting KTTSD service";
 //    if (!initializeSpeechData()) return false;
     if (!initializeTalkerMgr())
         return false;

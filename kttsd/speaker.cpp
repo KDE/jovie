@@ -1484,12 +1484,19 @@ QStringList Speaker::outputModules()
 {
     QStringList modules;
 
-    char ** modulenames = spd_list_modules(d->connection);
-    while (modulenames != NULL && modulenames[0] != NULL)
-    {
-        modules << modulenames[0];
-        ++modulenames;
-    }
+	if (d->connection)
+	{
+		char ** modulenames = spd_list_modules(d->connection);
+		while (modulenames != NULL && modulenames[0] != NULL)
+		{
+			modules << modulenames[0];
+			++modulenames;
+		}
+	}
+	else
+	{
+		// emit some error message
+	}
     return modules;
 }
 
