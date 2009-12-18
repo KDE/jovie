@@ -313,15 +313,6 @@ public:
     SpeechJob* findLastJobByAppId(const QString& appId) const;
 
     /**
-    * Given a Job Type and Job Number, returns the next speakable job on the queue.
-    * @param priority       Type of job.  Text, Message, Warning, or ScreenReaderOutput.
-    * @return               Pointer to the speakable job.
-    *
-    * Caller must not delete the job.
-    */
-    //SpeechJob* getNextSpeakableJob(KSpeech::JobPriority priority);
-
-    /**
     * Given a Job Number, returns the current sentence number begin spoken.
     * @param jobNum         Job Number.
     * @return               Sentence number of the job.  If no such job, returns 0.
@@ -343,13 +334,7 @@ public:
     * If no such job, returns "".
     */
     QString getAppIdByJobNum(int jobNum) const;
-
-    /**
-    * Delete expired jobs.  At most, one finished job per application 
-    * is kept on the queue.
-    */
-    void deleteExpiredJobs();
-    
+   
     /**
     * Return true if the application is paused.
     */
@@ -410,11 +395,6 @@ signals:
     void marker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData);
 
     /**
-    * Emitted when the state of a job changes.
-    */
-    void jobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
-
-    /**
      * This signal is emitted when a new job coming in is filtered (or not filtered if no filters
      * are on).
      * @param prefilterText     The text of the speech job
@@ -453,14 +433,6 @@ private slots:
     * @param msg                     Error message.
     */
     void slotError(bool keepGoing, const QString &msg);
-    /**
-    * Received from Timer when it fires.
-    * Check audio player to see if it is finished.
-    */
-    //void slotTimeout();
-
-    //void slotFilterMgrFinished();
-    //void slotFilterMgrStopped();
     
     void slotServiceUnregistered(const QString& serviceName);
 
@@ -483,70 +455,6 @@ private:
     QStringList moduleNames();
 
     /**
-    * Gets the next utterance of the specified priority to be spoken from
-    * speechdata and adds it to the queue.
-    * @param requestedPriority     Job priority to check for.
-    * @return                      True if one or more utterances were added to the queue.
-    *
-    * If priority is KSpeech::jpAll, checks for waiting ScreenReaderOutput,
-    * Warnings, Messages, or Text, in that order.
-    * If Warning or Message and interruption messages have been configured,
-    * adds those to the queue as well.
-    * Determines which plugin should be used for the utterance.
-    */
-    //bool getNextUtterance(KSpeech::JobPriority requestedPriority);
-
-    /**
-    * Given an iterator pointing to the m_uttQueue, deletes the utterance
-    * from the queue.  If the utterance is currently being processed by a
-    * plugin or the Audio Player, halts that operation and deletes Audio Player.
-    * Also takes care of deleting temporary audio file.
-    * @param it                      Iterator pointer to m_uttQueue.
-    * @return                        Iterator pointing to the next utterance in the
-    *                                queue, or m_uttQueue.end().
-    */
-    //uttIterator deleteUtterance(uttIterator it);
-
-    /**
-    * Given an iterator pointing to the m_uttQueue, starts playing audio if
-    *   1) An audio file is ready to be played, and
-    *   2) It is not already playing.
-    * If another audio player is already playing, pauses it before starting
-    * the new audio player.
-    * @param it                      Iterator pointer to m_uttQueue.
-    * @return                        True if an utterance began playing or resumed.
-    */
-    //bool startPlayingUtterance(uttIterator it);
-
-    /**
-    * Delete any utterances in the queue with this jobNum.
-    * @param jobNum          The Job Number of the utterance(s) to delete.
-    * If currently processing any deleted utterances, stop them.
-    */
-    //void deleteUtteranceByJobNum(int jobNum);
-
-    /**
-    * Takes care of emitting reading interrupted/resumed and sentence started signals.
-    * Should be called just before audibilizing an utterance.
-    * @param it                      Iterator pointer to m_uttQueue.
-    */
-    //void prePlaySignals(uttIterator it);
-
-    /**
-    * Takes care of emitting sentenceFinished signal.
-    * Should be called immediately after an utterance has completed playback.
-    * @param it                      Iterator pointer to m_uttQueue.
-    */
-    //void postPlaySignals(uttIterator it);
-
-    /**
-    * Constructs a temporary filename for plugins to use as a suggested filename
-    * for synthesis to write to.
-    * @return                        Full pathname of suggested file.
-    */
-    //QString makeSuggestedFilename();
-
-    /**
     * Determines whether the given text is SSML markup.
     */
     bool isSsml(const QString &text);
@@ -564,24 +472,6 @@ private:
     * Deletes job, removing it from all queues.
     */
     void deleteJob(int removeJobNum);
-
-    /**
-    * Assigns a FilterMgr to a job and starts filtering on it.
-    */
-    //void startJobFiltering(SpeechJob* job, const QString& text, bool noSBD);
-
-    /**
-    * Waits for filtering to be completed on a job.
-    * This is typically called because an app has requested job info that requires
-    * filtering to be completed, such as getJobInfo.
-    */
-    //void waitJobFiltering(const SpeechJob* job);
-
-    /**
-    * Processes filters by looping across the pool of FilterMgrs.
-    * As each FilterMgr finishes, emits appropriate signals and flags it as no longer busy.
-    */
-    //void doFiltering();
 
     /**
     * Checks to see if an application has active jobs, and if not and

@@ -500,10 +500,6 @@ bool KSpeech::initializeSpeaker()
 
     connect (Speaker::Instance(), SIGNAL(marker(const QString&, int, KSpeech::MarkerType, const QString&)),
         this, SLOT(slotMarker(const QString&, int, KSpeech::MarkerType, const QString&)));
-    connect (Speaker::Instance(), SIGNAL(jobStateChanged(const QString&, int, KSpeech::JobState)),
-        this, SLOT(slotJobStateChanged(const QString&, int, KSpeech::JobState)));
-    //connect (Speaker::Instance(), SIGNAL(filteringFinished()),
-    //    this, SLOT(slotFilteringFinished()));
 
     // Establish ourself as a System Manager application.
     Speaker::Instance()->getAppData("kttsd")->setIsSystemManager(true);
