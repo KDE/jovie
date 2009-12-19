@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=String Replacer
 Name[ar]=مستبدل النصوص
+Name[ast]=Trocador de cadenes
 Name[bg]=Замяна на низове
 Name[ca]=Reemplaçador de cadenes
 Name[cs]=Nahrazení řetězce
@@ -57,6 +58,7 @@ Name[zh_CN]=字符串替换器
 Name[zh_TW]=字串置換器
 Comment=Generic String Replacement Filter Plugin for KTTS
 Comment[ar]=ملحق تصفية مستبدل النصوص العام لـ KTTS
+Comment[ast]=Complementu de filtru xenéricu pa trocar cadenes pa KTTS
 Comment[bg]=Приставка филтър за замяна на низове за KTTS
 Comment[ca]=Connector del filtre reemplaçador genèric de cadenes pel KTTS
 Comment[cs]=Modul filtru náhrady řetězce KTTS

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Talker Chooser
 Name[ar]=منتقي المتكلم
+Name[ast]=Seleutor de lleutores
 Name[bg]=Избор на глас
 Name[ca]=Selector de parla
 Name[cs]=Výběr hlasu
@@ -55,6 +56,7 @@ Name[zh_CN]=朗读者选择器
 Name[zh_TW]=語音選擇器
 Comment=Generic Talker Chooser Filter Plugin for KTTS
 Comment[ar]=ملحق تصفية منتقي المتكلم العام لـ KTTS
+Comment[ast]=Complementu d'audiu pa KTTSD
 Comment[bg]=Приставка за избор на глас за KTTS
 Comment[ca]=Connector del filtre selector genèric de parla pel KTTS
 Comment[cs]=Modul filtru výběru hlasu KTTS

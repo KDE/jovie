@@ -2,6 +2,7 @@
 Type=Service
 Name=kttsjobmgrpart
 Name[ar]=kttsjobmgrpart
+Name[ast]=kttsjobmgrpart
 Name[bg]=kttsjobmgrpart
 Name[br]=kttsjobmgrpart
 Name[ca]=kttsjobmgrpart
@@ -59,6 +60,7 @@ Name[zh_CN]=kttsjobmgrpart
 Name[zh_TW]=kttsjobmgrpart
 Comment=KDE Text-to-speech Job Manager
 Comment[ar]=مدير أعمال نص-إلى-صوت لكدي
+Comment[ast]=Xestor de trabayos del sintetizador de testu a voz de KDE
 Comment[bg]=Мениджър на задачите за синтез на глас
 Comment[ca]=Gestor de treballs de text a veu de KDE
 Comment[cs]=Správce úloh zvukové syntézy KDE
