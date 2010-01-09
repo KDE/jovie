@@ -4,6 +4,7 @@
   <!ENTITY kappname "&ktts;">
   <!ENTITY package "kdeaccessibility">
   <!ENTITY mbrola "<application>MBROLA</application>">
+  <!ENTITY qdbus "<application>qdbus</application>">
   <!ENTITY % imageobjectco.module "INCLUDE">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
@@ -60,6 +61,13 @@ as Authors, publish date, the abstract, and Keywords -->
 and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
  -->
 <personname>
+<firstname>Jeremy</firstname>
+<surname>Whiting</surname>
+</personname>
+<email>jpwhiting@kde.org</email>
+</author>
+<author>
+<personname>
 <firstname>Gary</firstname>
 <othername>R.</othername>
 <surname>Cramblitt</surname>
@@ -71,6 +79,10 @@ and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
 
 </authorgroup>
 
+<copyright>
+<year>2009</year>
+<holder>Jeremy Whiting</holder>
+</copyright>
 <copyright>
 <year>2004-2005</year>
 <holder>Gary R. Cramblitt</holder>
@@ -87,8 +99,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-07-31</date>
-<releaseinfo>1.05.00</releaseinfo>
+<date>2009-12-25</date>
+<releaseinfo>0.4.0 (&kde; 4.4)</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -96,7 +108,7 @@ Do NOT change these in the translation. -->
 <para>
 &ktts; - the &kde; Text-to-Speech system - is
 a plugin based service that
-allows any &kde; (or non-&kde;) application to speak using the &DCOP; interface.
+allows any &kde; (or non-&kde;) application to speak using the &DBus; interface.
 </para>
 
 <para>&ktts; intends to be the implementation for the &kde; Text-to-Speech API.</para>
@@ -158,9 +170,7 @@ nice capabilities for end users as well.</para>
 <listitem><para>Speak all or part of the text of a web page in &konqueror;.</para></listitem>
 <listitem><para>Speak all or part of the text in &kate; text editor,
 including instances where &kate; is embedded in another &kde; application.</para></listitem>
-<listitem><para>Long text is parsed into sentences.  User may backup by sentence
-or paragraph, replay, pause, and stop playing.</para></listitem>
-<listitem><para>Audio output via &arts;, ALSA, GStreamer (version 0.8.7 or later), or aKode.</para></listitem>
+<listitem><para>Speech is spoken via speech-dispatcher, so any speech-dispatcher backend can be used (espeak, festival, &etc;)</para></listitem>
 <listitem><para>User-configurable filters for substituting misspoken words, choosing
 speech synthesizers, and transforming XHMTL/&XML; documents.</para></listitem>
 </itemizedlist>
@@ -169,8 +179,7 @@ speech synthesizers, and transforming XHMTL/&XML; documents.</para></listitem>
 
 <itemizedlist>
 <listitem><para>Priority system for screen reader outputs, warnings and messages, while still playing regular texts.</para></listitem>
-<listitem><para>Plugin-based architecture for support of a wide variety of speech synthesis engines and drivers.</para></listitem>
-<listitem><para>Permit generation of speech from the command line (or via shell scripts) using the &kde; &DCOP; utilities.</para></listitem>
+<listitem><para>Permit generation of speech from the command line (or via shell scripts) using the &qdbus; utility.</para></listitem>
 <listitem><para>Provide a lightweight and easily usable interface for applications to generate speech output.</para></listitem>
 <listitem><para>Applications need not be concerned about contention over the speech device.</para></listitem>
 <listitem><para>FUTURE: Provide support for speech markup languages, such as VoiceXML, Sable, &Java; Speech Markup Language (JSML), and Speech Markup Meta-language (SMML).</para></listitem>
@@ -184,7 +193,7 @@ speech synthesizers, and transforming XHMTL/&XML; documents.</para></listitem>
 <varlistentry>
 <term><command>kttsd</command></term>
 <listitem><para>the &kde; Text-to-Speech Daemon, which is a non-&GUI;
-application that provides TTS services to applications via &DCOP;.
+application that provides TTS services to applications via &DBus;.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -231,8 +240,8 @@ also hang out in IRC (irc.kde.org, channel #kde-accessibility).
 <title>Using &ktts;</title>
 
 <para>
-<warning><para>Before you can use &ktts;, you must install at least one speech
-synthesis engine and make sure it is working.  See <xref linkend="installation" />.
+<warning><para>Before you can use &ktts;, you must install speech-dispatcher 
+and make sure it is working.  See <xref linkend="installation" />.
 </para></warning></para>
 
 <!-- ...................................................................... -->
@@ -251,7 +260,7 @@ To start the &ktts; system, type the following command in a &konsole;
 
 <para>If this is the first time running <command>kttsmgr</command>, or
 if you have not yet configured any talkers, the <guilabel>Talkers</guilabel>
-screen appears.  See <xref linkend="configure-plugin" />.
+screen appears.  See <xref linkend="configure-talkers" />.
 If you have already configured at least one talker, the <guilabel>General</guilabel>
 screen appears.  See <xref linkend="general" />.</para>
 
@@ -260,25 +269,17 @@ screen appears.  See <xref linkend="general" />.</para>
 <!-- ...................................................................... -->
 
 
-<sect1 id="configure-plugin">
-<title>Configuring Synthesis Plugins (Talkers)</title>
+<sect1 id="configure-talkers">
+<title>Configuring Talkers</title>
 
 <para>Most text-to-speech (TTS) synthesizers offer multiple languages and voices
 and may offer multiple speaking genders, volumes, and rates.  You may configure more than
 one instance of a synthesizer.  Each combination of language, synthesizer, voice,
-gender, volume, and rate is called a talker.  You must configure at least one talker
-before you can start &ktts; and begin speaking text.</para>
+gender, volume, and rate is called a talker.  You should configure at least one talker
+before you use &ktts; otherwise speech-dispatcher will use a default voice.</para>
 
 <note><para>Multiple talkers for the same synthesizer is similar to multiple print
 queues for a single physical printer.</para></note>
-
-<para>When applications send text to &ktts;, they may specify the
-attributes of the preferred talker to do the synthesis.  For example,
-an application may request an English language female talker.  If you have
-configured a talker with both the English language and female gender, that
-talker will be used, otherwise the closest matching talker will be automatically
-picked.  To learn more about how &ktts; picks talkers, see
-<xref linkend="filters" />.</para>
 
 <para>When you click the <guilabel>Talkers</guilabel> tab in <command>kttsmgr</command>,
 the <guilabel>Talkers</guilabel> screen appears.  This screen also automatically
@@ -314,7 +315,7 @@ any talkers.</para>
 <callout arearefs="pt-talker-1"><para>Click to add a new talker.</para></callout>
 <callout arearefs="pt-talker-2"><para>All the configured <guilabel>Talkers</guilabel> are listed here.  Highest priority <guilabel>Talkers</guilabel> are listed at the top.  The top-most talker will be used to do the speaking when an application does not specify a talker.</para></callout>
 <callout arearefs="pt-talker-3"><para>Click on a talker in the list to highlight it and click this button to remove it.</para></callout>
-<callout arearefs="pt-talker-4"><para>Click on a talker in the list to highlight it and click this button to display the synthesis plugin's configuration dialog.  See below.</para></callout>
+<callout arearefs="pt-talker-4"><para>Click on a talker in the list to highlight it and click this button to change its configuration.  See below.</para></callout>
 <callout arearefs="pt-talker-5"><para>Click on a talker in the list to highlight it and click this button to move it down one row in the list.  The lower a talker appears in the list, the lower its priority.</para></callout>
 <callout arearefs="pt-talker-6"><para>Click one of these buttons to apply the changes you have made to the running &ktts; system.</para></callout>
 </calloutlist>
@@ -331,6 +332,8 @@ any talkers.</para>
 					<area id="pt-addtalker-1" coords="1 1"/>
 					<area id="pt-addtalker-2" coords="1 1"/>
 					<area id="pt-addtalker-3" coords="1 1"/>
+					<area id="pt-addtalker-4" coords="1 1"/>
+					<area id="pt-addtalker-5" coords="1 1"/>
 				</areaspec>
 				<imageobject>
 					<imagedata fileref="addtalker.png" format="PNG"/>
@@ -344,93 +347,29 @@ any talkers.</para>
 </para>
 
 <para>
-<calloutlist>
-<callout arearefs="pt-addtalker-1"><para>You can select a speech synthesis
-plugin by either <guilabel>Synthesizer</guilabel> name, or by the <guilabel>Language</guilabel> the synthesizer can speak.
-Check the radio button next to the corresponding box.  When the
-<guilabel>Language</guilabel> radio button is checked, the
-<guilabel>Language</guilabel> box displays all the languages supported by
-all available synthesizers, and the <guilabel>Synthesizer</guilabel> box
-displays only those synthesizers that support the chosen language.
-When the <guilabel>Synthesizer</guilabel> radio button is checked,
-the <guilabel>Synthesizer</guilabel> box displays all available
-synthesizers, and the <guilabel>Language</guilabel> box displays
-only the languages supported by the chosen synthesizer.</para></callout>
-<callout arearefs="pt-addtalker-2"><para>Choose the language and
-synthesizer plugin here.</para></callout>
-<callout arearefs="pt-addtalker-3"><para>When you click here,
-most synthesizer plugins will automatically configure themselves,
-choosing a default setup.  A new talker
-will appear in the list in the <guilabel>Talkers</guilabel> screen.
-Click the <guibutton>Edit</guibutton> button to display or edit the talker's 
-configuration.</para></callout>
-</calloutlist>
+    <calloutlist>
+        <callout arearefs="pt-addtalker-1">
+            <para>You should give your new talker a name, this can be anything.
+            </para>
+        </callout>
+        <callout arearefs="pt-addtalker-2">
+            <para>Choose the language and synthesizer here.</para></callout>
+        <callout arearefs="pt-addtalker-3">
+            <para>Choose the voice type here, there are three Male, three Female, 
+	      one Male Child and one Female Child voices to choose from.
+            </para>
+        </callout>
+        <callout arearefs="pt-addtalker-4">
+            <para>Set any custom voice parameters here.</para></callout>
+        <callout arearefs="pt-addtalker-5">
+            <para>When you click here your new talker
+                will appear in the list in the <guilabel>Talkers</guilabel> screen.
+                Click the <guibutton>Edit</guibutton> button to edit the talker's 
+                configuration.</para></callout>
+    </calloutlist>
 </para>
 
-<para>When you click the <guibutton>Add</guibutton> button on the
-<guilabel>Talkers</guilabel> tab and add a talker that cannot
-automatically configure itself, or click the
-<guibutton>Edit</guibutton> button,
-the <guilabel>Talker Configuration</guilabel> screen appears.
-Each speech synthesis plugin has a different
-<guilabel>Talker Configuration</guilabel> screen.  The following is an example for
-configuring the Festival Interactive plugin.  For specifics for each
-kind of plugin, see <xref linkend="configuration" />.</para>
-
-<para>
-<screenshot>
-<screeninfo>Talker Configuration</screeninfo>
-	<mediaobjectco>
-		<imageobjectco>
-			<areaspec units="calspair">
-				<area id="pt-prop-1" coords="1 1"/>
-				<area id="pt-prop-2" coords="1 1"/>
-				<area id="pt-prop-3" coords="1 1"/>
-				<area id="pt-prop-4" coords="1 1"/>
-				<area id="pt-prop-5" coords="1 1"/>
-				<area id="pt-prop-6" coords="1 1"/>
-				<area id="pt-prop-7" coords="1 1"/>
-			</areaspec>
-			<imageobject>
-				<imagedata fileref="festivalintconf.png" format="PNG"/>
-			</imageobject>
-		</imageobjectco>
-		<textobject>
-			<phrase>Talker Configuration</phrase>
-		</textobject>
-	</mediaobjectco>
-</screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-prop-1"><para>Specify the path to the Festival executable program.
-If Festival is in your PATH environment variable, just enter
-<userinput><replaceable>festival</replaceable></userinput>.</para></callout>
-<callout arearefs="pt-prop-2"><para>Click to scan for available voices.</para></callout>
-<callout arearefs="pt-prop-3"><para>Select a voice.</para></callout>
-<callout arearefs="pt-prop-4"><para>Select a character encoding for text sent to Festival.
-For voices that are known to &ktts;, this setting will be picked for you automatically.  In general, western languages use ISO 8859-1.  Eastern European languages such
-as Czech or Slovak use ISO 8859-2.</para></callout>
-<callout arearefs="pt-prop-5"><para>Click to test.  You should hear a test sentence spoken.</para></callout>
-<callout arearefs="pt-prop-6"><para>Use these controls to set the volume, talking speed, and
-pitch (tone) of the synthesized speech.  If any of these are disabled (grayed), the chosen
-voice does not support changing them.</para></callout>
-<callout arearefs="pt-prop-7"><para>Some voices, such as the MultiSyn voices, are so large
-that they require several seconds to load.  Checking this box will cause them to be loaded
-when KTTSD is started, thereby saving time (at the expense of using more memory)
-before the first sentence is synthesized.</para></callout>
-</calloutlist>
-</para>
-
-<para>Click the <guibutton>OK</guibutton> button to save the talker configuration settings.</para>
-
-<warning><para>
-Be sure to click the <guibutton>Apply</guibutton> button, otherwise your
-changes will not take effect in the running &ktts; system.
-</para></warning>
-
-<para>Assuming the test worked, you are almost ready to begin using &ktts;.
+<para>You are almost ready to begin using &ktts;.
 Now go back to the <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  This
 will start the &kde; TTS Daemon.  See <xref linkend="general" />.
@@ -461,8 +400,6 @@ screen appears.  You can also set some general options on this screen.
 				<areaspec units="calspair">
 					<area id="pt-gen-1" coords="1 1"/>
 					<area id="pt-gen-2" coords="1 1"/>
-					<area id="pt-gen-3" coords="1 1"/>
-					<area id="pt-gen-4" coords="1 1"/>
                     <area id="pt-gen-5" coords="1 1"/>
                     <area id="pt-gen-6" coords="1 1"/>
 				</areaspec>
@@ -484,9 +421,6 @@ This starts the &kde; TTS Daemon (KTTSD).  If KTTSD starts successfully,
 the <guilabel>Jobs</guilabel> tab will appear.
 Once KTTSD has been started, you can begin creating and speaking text jobs.
 See <xref linkend="jobmgr" />.  Unchecking will stop KTTSD and deactivate the &kde; TTS system.
-<note><para>If this box is disabled, you have not yet configured any talkers
-(or you forgot to click the <guibutton>Apply</guibutton> button).
-See <xref linkend="configure-plugin"/>.</para></note>
 </para></callout>
 <callout arearefs="pt-gen-2"><para>When this box is checked, an icon appears
 in the system tray whenever <command>kttsmgr</command> is running.  In this
@@ -504,13 +438,6 @@ or <guibutton>Cancel</guibutton> quits <command>kttsmgr</command>.
 <note><para>This option has no effect when <command>kttsmgr</command> is
 running in the &kcontrol;.</para></note>
 </para></callout>
-<callout arearefs="pt-gen-3"><para>When this box is checked, the <command>kttsmgr</command> screen appears when you start <command>kttsmgr</command>.  If unchecked, the
-<command>kttsmgr</command> icon appears in the system tray when
-<command>kttsmgr</command> is started, but the screen does not appear.
-Click the icon in the system tray to make the screen appear.</para></callout>
-<callout arearefs="pt-gen-4"><para>When this box is checked, and <command>kttsmgr</command> is 
-not already running, it will appear in the system tray whenever KTTSD is speaking.
-This gives you an opportunity to stop or otherwise manage the speaking.</para></callout>
 <callout arearefs="pt-gen-5"><para>When this box is checked, and <command>kttsmgr</command>
 automatically appears in the system tray whenever speaking, it will also disappear
 automatically when speaking has finished.</para></callout>
@@ -529,7 +456,6 @@ automatically when speaking has finished.</para></callout>
 <para>When you click the <guilabel>Jobs</guilabel> tab in <command>kttsmgr</command>,
 the <guilabel>Jobs</guilabel> screen appears.</para>
 
-<para>
 <screenshot>
 <screeninfo>The &kde; Text-to-Speech Manager (Jobs tab).</screeninfo>
 	<mediaobjectco>
@@ -539,9 +465,6 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
 				<area id="pt-jobmgr-2" coords="1 1"/>
 				<area id="pt-jobmgr-3" coords="1 1"/>
 				<area id="pt-jobmgr-4" coords="1 1"/>
-				<area id="pt-jobmgr-5" coords="1 1"/>
-				<area id="pt-jobmgr-6" coords="1 1"/>
-				<area id="pt-jobmgr-7" coords="1 1"/>
 			</areaspec>
 			<imageobject>
 				<imagedata fileref="jobs.png" format="PNG"/>
@@ -552,34 +475,19 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
 		</textobject>
 	</mediaobjectco>
 </screenshot>
-</para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-jobmgr-1"><para>All of the text jobs currently in the queue
-are listed here, together with the application that queued the job,
-the current job state, number of sentences in the job,
-and current sentence number.  The <guilabel>Talker ID</guilabel> corresponds to the
-<guilabel>ID</guilabel> column on the <guilabel>Talkers</guilabel> screen.
-</para></callout>
-<callout arearefs="pt-jobmgr-2"><para>The buttons in this row permit you to start,
-delete, and pause text jobs.  Select a job in the list above, then click
-one of these buttons.</para></callout>
+<callout arearefs="pt-jobmgr-1"><para>The controls here allow you to change attributes of 
+  the currently speaking voice.</para></callout>
+<callout arearefs="pt-jobmgr-2"><para>The buttons in this row permit you to stop,
+cancel, pause and resume the current text job.</para></callout>
 <callout arearefs="pt-jobmgr-3"><para>The buttons in this row permit
-you to advance or rewind by sentence within the job selected in the list
-above.  (Not all jobs have multiple parts.)</para></callout>
-<callout arearefs="pt-jobmgr-4"><para>The buttons in this row permit
 you to speak the text currently in the &kde; clipboard, or open a text file
-for speaking.  You can also refresh the list of text jobs or
-change the talker for a job.  See <xref linkend="selecttalker" />.</para></callout>
-<callout arearefs="pt-jobmgr-5"><para>The currently-speaking sentence
-appears here.</para></callout>
-<callout arearefs="pt-jobmgr-6"><para>When you click <guibutton>OK</guibutton>,
-all changes to settings on other screens are applied (if any) and
-<command>kttsmgr</command> minimizes to the system tray.  Click on the icon
-in the system tray to restore the screen.</para></callout>
-<callout arearefs="pt-jobmgr-7"><para>Drag this divider to resize
-the jobs listing and <guilabel>Current sentence</guilabel> panels.</para></callout>
+for speaking.  You can also change the talker for a job.</para></callout>
+<callout arearefs="pt-jobmgr-4"><para>When you click <guibutton>OK</guibutton> 
+or <guibutton>Apply</guibutton>,
+all changes to settings on other screens are applied (if any).</para></callout>
 </calloutlist>
 </para>
 
@@ -587,179 +495,6 @@ the jobs listing and <guilabel>Current sentence</guilabel> panels.</para></callo
 <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech (KTTSD)</guilabel> box.</para>
 </note>
-
-<note><para>If you do not have the &arts; audio subsystem installed, but you
-do have ALSA, GStreamer, or aKode installed, click the <guilabel>Audio</guilabel> tab.
-See <xref linkend="audio" />.</para></note>
-
-<note><para>Only Text jobs are listed and controlled on this screen.
-Screen Reader Output, Warnings, and Messages are not displayed.  For more information
-about &ktts; message types, see <xref linkend="filters" />.</para></note>
-
-</sect1>
-
-<!-- ...................................................................... -->
-
-<sect1 id="audio">
-<title>Audio Settings</title>
-
-<para>When you click the <guilabel>Audio</guilabel> tab in <command>kttsmgr</command>,
-the <guilabel>Audio</guilabel> screen appears.</para>
-
-<para>
-    <screenshot>
-        <screeninfo>The &kde; Text-to-Speech Manager (Audio tab).</screeninfo>
-        <mediaobjectco>
-            <imageobjectco>
-                <areaspec units="calspair">
-                    <area id="pt-audio-1" coords="1 1"/>
-                    <area id="pt-audio-2" coords="1 1"/>
-                    <area id="pt-audio-3" coords="1 1"/>
-                    <area id="pt-audio-4" coords="1 1"/>
-                    <area id="pt-audio-5" coords="1 1"/>
-                </areaspec>
-                <imageobject>
-                    <imagedata fileref="audio.png" format="PNG"/>
-                </imageobject>
-            </imageobjectco>
-            <textobject>
-                <phrase>The &kde; Text-to-Speech Manager (Audio tab)</phrase>
-            </textobject>
-        </mediaobjectco>
-    </screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-audio-1"><para>Select the method of audio output here.
-If a component is is grayed, either &ktts; was compiled
-without that support for that audio plugin, or &ktts; was unable to load the
-necessary libraries.
-</para></callout>
-<callout arearefs="pt-audio-2"><para>If GStreamer or aKode is selected for audio output,
-choose the audio sink method here.  If no sinks are listed, you need
-to install at least one.  If ALSA is selected, choose the PCM device here.  See <xref linkend="requirements" />.
-</para></callout>
-<callout arearefs="pt-audio-3"><para>Adjust the speed of talking here.
-50% is approximately twice as slow as normal while 200% is approximately
-twice as fast.  You must have the <command>sox</command> utility installed for this setting
-to work.
-</para></callout>
-<callout arearefs="pt-audio-4"><para>When this box is checked, &ktts; will 
-copy temporary audio files (.wav files) into the indicated folder.  Choose
-any folder on your hard drive you like, but you must have write access to it.
-This can be useful for creating audio files of speech for other purposes.
-The files will have names of the form <filename>kttsd-J-SS</filename> where
-<filename>J</filename> is the job number and <filename>SS</filename> is the sentence number.
-Existing files with the same name will be deleted.
-<emphasis>Do not forget to uncheck this box, otherwise your hard drive will fill up!</emphasis>
-</para></callout>
-<callout arearefs="pt-audio-5"><para>Be sure to click <guibutton>Apply</guibutton>
-to apply the new settings to the running &ktts; system.
-</para></callout>
-</calloutlist>
-</para>
-
-<note><para>There are two ways to adjust the speed of speech in &ktts;.
-Many of the <guilabel>Talkers</guilabel> have a <guilabel>Speed</guilabel>
-setting in their configuration dialogs, which you can display by clicking
-<guibutton>Edit</guibutton> on the <guilabel>Talkers</guilabel> screen.  This
-<guilabel>Speed</guilabel> setting on the <guilabel>Audio</guilabel> screen
-is in addition to the talker speed setting and generally can be used
-even if the talker does not support a speed setting.  For this speed setting
-to work, you must have the <command>sox</command>
-utility installed on your system (Debian users: 
-<command>apt-get install sox</command>).  Also, this speed setting is ignored
-when speaking text containing SSML.  (See <xref linkend="ssml" />)</para></note>
-
-<note><para>The list of ALSA devices includes all the ALSA PCM devices and
-plugins configured in your system.  Many of the choices will not work.
-You must experiment to find a device that works for you.  If in doubt,
-choose <guilabel>default</guilabel>.</para></note>
-
-</sect1>
-
-<!-- ...................................................................... -->
-
-<sect1 id="interruption">
-<title>Text Interruption Settings</title>
-
-<para>When you click the <guilabel>Interruption</guilabel> tab in <command>kttsmgr</command>,
-the <guilabel>Interruption</guilabel> screen appears.</para>
-
-<para>
-<screenshot>
-<screeninfo>The &kde; Text-to-Speech Manager (Interruption tab).</screeninfo>
-	<mediaobjectco>
-		<imageobjectco>
-			<areaspec units="calspair">
-				<area id="pt-interruption-1" coords="1 1"/>
-				<area id="pt-interruption-2" coords="1 1"/>
-				<area id="pt-interruption-3" coords="1 1"/>
-				<area id="pt-interruption-4" coords="1 1"/>
-			</areaspec>
-			<imageobject>
-				<imagedata fileref="interruption.png" format="PNG"/>
-			</imageobject>
-		</imageobjectco>
-		<textobject>
-			<phrase>The &kde; Text-to-Speech Manager (Interruption tab)</phrase>
-		</textobject>
-	</mediaobjectco>
-</screenshot>
-</para>
-
-<para>This screen permits you to specify special actions to be taken whenever
-a text job is interrupted by another, higher priority, message.  There are
-four kinds of speech jobs that &ktts; handles:
-<itemizedlist>
-<listitem><para>Regular text.</para></listitem>
-<listitem><para>Messages.</para></listitem>
-<listitem><para>Warnings.</para></listitem>
-<listitem><para>Screen Reader Output.</para></listitem>
-</itemizedlist>
-</para>
-
-<para>Screen Reader Output has the highest priority.  It is reserved for use
-by Screen Reader applications.  Screen Reader Output preempts all other
-messages, causing those jobs to pause.  Once the Screen Reader Output has
-been spoken, the preempted jobs will automatically resume.
-</para>
-
-<para>Warnings are the next highest priority.  It is reserved for high-priority
-messages, such as "CPU is over-heating."  A Warning will preempt Messages
-and regular text, causing those jobs to pause.  Once the Warning has been
-spoken, the preempted jobs will automatically resume.</para>
-
-<para>Messages are the next highest priority.  A Message will preempt regular
-text jobs.  &kmouth; is an example of an application that uses Messages.
-For example, while reading out long text from a web page,
-&kmouth; can be used to greet someone who walks into the room.</para>
-
-<para>All four kinds of jobs are queues, except for Screen Reader Output.
-If a Screen Reader Output is sent from an application while
-&ktts; is speaking another Screen Reader Output, the speaking message 
-is stopped and discarded.</para>
-
-<para>When a text job is interrupted by a Message, Warning, or Screen Reader Output,
-&ktts; will add the audio outputs on this screen to the stream.</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-interruption-1"><para>This message is spoken whenever a regular text job is interrupted.</para></callout>
-<callout arearefs="pt-interruption-2"><para>This audio file is sounded whenever a regular text job is interrupted.  If both a <guilabel>Pre-sound</guilabel>
-and a <guilabel>Pre-message</guilabel> are specified, the 
-<guilabel>Pre-sound</guilabel> is sounded before the <guilabel>Pre-message</guilabel>.</para></callout>
-<callout arearefs="pt-interruption-3"><para>This message is spoken whenever an
-interrupted text job resumes.</para></callout>
-<callout arearefs="pt-interruption-4"><para>This audio file is sounded whenever an
-interrupted text job resumes.  It is sounded last.</para></callout>
-</calloutlist>
-</para>
-
-<note><para>The settings on this screen apply only to regular text jobs.
-Messages, Warnings, and Screen Reader Outputs have no special actions when
-they are preempted by a higher-priority message.</para></note>
 
 </sect1>
 
@@ -829,150 +564,6 @@ have &kde; speak the text of the IRC message to you.</para>
 application's <guilabel>Settings</guilabel> menu.  The specifics for configuring
 each application with KNotify vary from application to application.</para>
 
-<para>To enable &ktts; to speak KNotify text notifications,
-start <command>kttsmgr</command> and click the <guilabel>Notifications</guilabel> tab.
-The <guilabel>Notifications</guilabel> screen appears.</para>
-
-<para>
-<screenshot>
-<screeninfo>The &kde; Text-to-Speech Manager (Notifications tab).</screeninfo>
-	<mediaobjectco>
-		<imageobjectco>
-			<areaspec units="calspair">
-				<area id="pt-notify-1" coords="1 1"/>
-				<area id="pt-notify-2" coords="1 1"/>
-				<area id="pt-notify-3" coords="1 1"/>
-				<area id="pt-notify-4" coords="1 1"/>
-				<area id="pt-notify-5" coords="1 1"/>
-				<area id="pt-notify-6" coords="1 1"/>
-				<area id="pt-notify-7" coords="1 1"/>
-				<area id="pt-notify-8" coords="1 1"/>
-				<area id="pt-notify-9" coords="1 1"/>
-				<area id="pt-notify-10" coords="1 1"/>
-			</areaspec>
-			<imageobject>
-				<imagedata fileref="notifications.png" format="PNG"/>
-			</imageobject>
-		</imageobjectco>
-		<textobject>
-			<phrase>The &kde; Text-to-Speech Manager (Notification tab)</phrase>
-		</textobject>
-	</mediaobjectco>
-</screenshot>
-</para>
-
-<para>
-<calloutlist>
-<callout arearefs="pt-notify-1"><para>Check this box to enable speaking of
-&kde; notifications.  If unchecked, everything else on this screen is disabled
-and &ktts; does not speak any notifications.</para></callout>
-<callout arearefs="pt-notify-2"><para>When checked, any application
-that sends an event with a sound will not be spoken by &ktts;.</para></callout>
-<callout arearefs="pt-notify-3"><para>Use these buttons to add or delete
-application events from the list below.  When you click
-the <guibutton>Add</guibutton> button, a screen appears in which
-you select the application and event you want to add to the list.
-</para></callout>
-<callout arearefs="pt-notify-4"><para>This event will speak the message
-&konversation; sends when someone mentions your nickname in an Internet Relay Chat message.
-</para></callout>
-<callout arearefs="pt-notify-5"><para>For all other events coming from
-&konversation;, no action will be taken in &ktts;.</para></callout>
-<callout arearefs="pt-notify-6"><para>For all events not otherwise
-specified in the list, no action will be taken in &ktts;.</para></callout>
-<callout arearefs="pt-notify-7"><para>Use this box to specify what
-&ktts; should do when it receives an event.  Your choices are:</para>
-<para>
-<variablelist>
-<varlistentry>
-<term>Speak event name</term>
-<listitem><para>Speaks the name of the event; what you see listed in the
-event list on this screen.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>Speak the notification message</term>
-<listitem><para>Speaks the message as it is sent from the application.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>Do not speak the notification</term>
-<listitem><para>Does not speak this event at all.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>Speak custom text</term>
-<listitem><para>Speaks the text you enter in the box to the right.</para></listitem>
-</varlistentry>
-</variablelist>
-</para>
-</callout>
-<callout arearefs="pt-notify-8"><para>If the action is
-<guilabel>Speak custom text</guilabel>, enter the text of the message
-you would like spoken here.  Within the message, you may use the following
-substitution strings:</para>
-<para>
-<variablelist>
-<varlistentry>
-<term>%e</term>
-<listitem><para>The name of the event</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>%a</term>
-<listitem><para>The name of the application that sent the event</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>%m</term>
-<listitem><para>The message the application sent</para></listitem>
-</varlistentry>
-</variablelist>
-</para>
-</callout>
-<callout arearefs="pt-notify-9"><para>Test the message by clicking here.</para></callout>
-<callout arearefs="pt-notify-10"><para>You may specify the attributes of the
-desired talker to speak the notification message here.
-<command><userinput>default</userinput></command>
-will use the topmost talker listed in the <guilabel>Talkers</guilabel>
-screen.  See <xref linkend="selecttalker" />.
-</para></callout>
-</calloutlist>
-</para>
-
-<para>Notice there are three levels of events.  If an action for a specific event
-of a specific application is specified, that action is taken.  Otherwise, if
-an action for all other events of a specific application is specified, that
-action is taken.  Otherwise, the action specified for all other events
-under <guilabel>Default (all other events)</guilabel> is taken.</para>
-
-<para>The event <guilabel>all notifications</guilabel>
-for application <guilabel>Default (all other events)</guilabel>
-may not be deleted from the list.  For the default all other events,
-you may specify the kind of notifications that are spoken, as follows:</para>
-
-<variablelist>
-<varlistentry>
-<term>none</term>
-<listitem><para>None will be spoken.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>notification dialogs</term>
-<listitem><para>Notifications that display a dialog on your screen, that you must then
-dismiss, will be spoken.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>passive popups</term>
-<listitem><para>Notifications that display a passive dialog on your screen,
-that automatically disappear after a moment, will be spoken.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>notification dialogs and passive popups</term>
-<listitem><para>Notifications that display on screen, passively or not,
-will be spoken.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term>all notifications</term>
-<listitem><para>All notifications, regardless of whether they produce
-a display on screen, will be spoken.</para></listitem>
-</varlistentry>
-</variablelist>
-
 <tip><para>String Replacer filters are a good way to clean up messages
 sent from applications if they are mispronounced or misspoken in 
 &ktts;.  The <filename>kmail.xml</filename> file, which
@@ -982,22 +573,11 @@ phrase <command>/local/inbox/</command>, since this
 may be safely assumed in most cases.  See <xref linkend="stringreplacer" />.
 </para></tip>
 
-<para>Use the <guibutton>Save</guibutton> button to save your
-notification settings to a file.  Use the <guibutton>Load</guibutton>
-button to load saved settings from a file.  The loaded events are merged
-with existing events in the list.  If you want to start with
-an empty event list, click the <guibutton>Clear</guibutton>
-button first.  All events except for <guilabel>all notifications</guilabel>
-will be erased.</para>
-
-<note><para>Be sure to click <guibutton>Apply</guibutton>
-or <guibutton>OK</guibutton> to save your settings.</para></note>
-
 </sect1>
 
 <!-- ...................................................................... -->
 
-<sect1 id="ssml">
+<!--- <sect1 id="ssml">
 <title>SSML</title>
 
 <para>The Speech Synthesis Markup Language (SSML) is a W3C standard
@@ -1049,7 +629,7 @@ will usually cause the SSML text to be spoken in a monotone.</para></listitem>
 &ktts;.
 </para>
 
-</sect1>
+</sect1>-->
 
 <!-- ...................................................................... -->
 
@@ -1059,8 +639,8 @@ will usually cause the SSML text to be spoken in a monotone.</para></listitem>
 <para>Filters are an advanced feature of &ktts;.  For the
 basic operation of &ktts;, they are not needed.</para>
 
-<para>Filters are used to pre-process text before it is sent to the
-speech synthesis engine.  They are useful for enhancing speech,
+<para>Filters are used to pre-process text before it is sent to speech-dispatcher.
+They are useful for enhancing speech,
 substituting for misspoken words or abbreviations, choosing the
 appropriate language and talker to do the speaking, or working around 
 certain limitations of speech synthesizers and their voices.</para>
@@ -1071,7 +651,7 @@ certain limitations of speech synthesizers and their voices.</para>
 <title>Types of &ktts; Messages</title>
 
 <para>To understand how to use filters, it is
-helpful to first understand how text is processed by &ktts;.
+helpful to first understand how text is processed by speech-dispatcher.
 Text spoken by &ktts; is of four possible types.</para>
 
 <para>
@@ -1124,18 +704,8 @@ is stopped and discarded.</para>
 never applied to Screen Reader Output.  They are applied to
 Warnings, Messages, and Text jobs, and also &kde; notifications (KNotify).</para>
 
-<para>There are two kinds of filters --
-ordinary filters and Sentence Boundary Detector (SBD) filters.
-SBDs break text up into individual sentences.  This allows
-&ktts; to begin speaking faster because it need only
-synthesize the first sentence; not the entire Text Job.
-It also permits you to advance or rewind by sentence in the
-<guilabel>Jobs</guilabel> tab, or to stop or pause Text Jobs when
-the speech synthesizer does not directly support stopping of speech.
-</para>
-
-<para>Ordinary filters process the text and pass it on to the
-next filter.  There are currently three kinds of ordinary filters.
+<para>Filters process the text and pass it on to the
+next filter.  There are currently three kinds of filters.
 </para>
 
 <para>
@@ -1168,7 +738,7 @@ file to convert &XML; of one format to another format.
 based on the contents of the text, or upon the application that sent it
 to &ktts;.  For example, if you have configured a female talker
 in the <guilabel>Talkers</guilabel> tab, you can direct text coming from
-KSayIt to that talker.  See <xref linkend="configure-plugin" />.
+KSayIt to that talker.  See <xref linkend="configure-talkers" />.
 </para>
 
 <para>Each of these kinds of filters has configurable rules for when
@@ -1178,12 +748,7 @@ is passed on to the next filter unaltered.</para>
 
 <para>When a Text Job, Message, Warning, or &kde; Notification message is sent to &ktts;,
 it passes through each of the enabled filters you have configured in the
-screen below.  The order is from top to bottom.  After passing through
-each of the ordinary filters listed in the top portion of the screen, Text Jobs
-are passed to the <guilabel>Sentence Boundary Detector</guilabel> (SBD) filters.
-(&kde; Notifications, Warnings, and Messages never pass through SBD filters.)
-Unlike ordinary filters, the first SBD filter that makes changes to the text
-stops any further filtering.
+screen below.  The order is from top to bottom.
 </para>
 
 </sect2>
@@ -1207,8 +772,6 @@ stops any further filtering.
                     <area id="pt-filters-4" coords="1 1"/>
                     <area id="pt-filters-5" coords="1 1"/>
                     <area id="pt-filters-6" coords="1 1"/>
-                    <area id="pt-filters-7" coords="1 1"/>
-                    <area id="pt-filters-8" coords="1 1"/>
                 </areaspec>
                 <imageobject>
                     <imagedata fileref="filters.png" format="PNG"/>
@@ -1234,14 +797,7 @@ see the configuration dialogs below.</para></callout>
 of a filter.  See the configuration dialogs below.</para></callout>
 <callout arearefs="pt-filters-5"><para>Click these buttons to move a filter
 up or down in the list.</para></callout>
-<callout arearefs="pt-filters-6"><para>These are the Sentence Boundary Detector
-filters.  When you first start &ktts;, the Standard Sentence Boundary Detector
-is automatically configured for you.  You can change this filter's configuration,
-or add additional Sentence Boundary Detectors, but we advise beginners not
-to change them.</para></callout>
-<callout arearefs="pt-filters-7"><para>This drop-down button permits you
-to add, remove, edit, or change the order of Sentence Boundary Detector filters.</para></callout>
-<callout arearefs="pt-filters-8"><para>Be sure to click here, otherwise your
+<callout arearefs="pt-filters-6"><para>Be sure to click here, otherwise your
 settings will not take effect.</para></callout>
 </calloutlist>
 </para>
@@ -1256,8 +812,7 @@ settings will not take effect.</para></callout>
 <para>You configure String Replacer filters by supplying
 a list of words or regular expressions to be matched.
 When the matched words or regular expressions are found in the
-text, each is replaced by a substitute string you supply.
-Matching is case insensitive.</para>
+text, each is replaced by a substitute string you supply.</para>
 
 <para>
     <screenshot>
@@ -1311,14 +866,14 @@ file are appended to the existing list.</para></callout>
 apply itself only if the job's talker language matches
 the language you enter here.  Click the button to display a list of languages.
 You may select more than one language by pressing
-<keycap>&Ctrl;</keycap> while clicking.</para></callout>
+&Ctrl; while clicking.</para></callout>
 <callout arearefs="pt-stringreplacer-9"><para>If not blank, the filter will
 apply itself only if the text came from one of the applications listed.
 You may enter more than one application separated by commas.
 Example: <command><userinput>konversation,kmail</userinput></command></para>
 <tip><para>You can discover the <guilabel>Application ID</guilabel>
-of running programs using the <command>&kdcop;</command> program.
-You should leave the &DCOP; numbers out.  For example, if &kdcop; shows
+of running programs using the <command>&qdbus;</command> program.
+You should leave the &DBus; numbers out.  For example, if &qdbus; shows
 an Application ID of <command>kopete-3432</command>, you would just
 enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 </calloutlist>
@@ -1328,8 +883,6 @@ enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 if all non-blank conditions are met in the 
 <guilabel>Apply This Filter When</guilabel> box. 
 If all the boxes are blank, the filter will apply to all text.</para>
-
-<para>All matching is case insensitive.</para>
 
 <para>When matching words, the String Replacer filter internally uses a
 regular expression of the form <command>\s<userinput>word</userinput>\s</command>.
@@ -1410,8 +963,8 @@ apply itself only if the text came from one of the applications listed.
 You may enter more than one application separated by commas.
 Example: <command><userinput>konversation,kmail</userinput></command></para>
 <tip><para>You can discover the <guilabel>Application ID</guilabel>
-of running programs using the <command>&kdcop;</command> program.
-You should leave the &DCOP; numbers out.  For example, if &kdcop; shows
+of running programs using the <command>&qdbus;</command> program.
+You should leave the &DBus; numbers out.  For example, if &qdbus; shows
 an Application ID of <command>kopete-3432</command>, you would just
 enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 </calloutlist>
@@ -1438,7 +991,7 @@ talker configured in the <guilabel>Talker</guilabel> tab, or to any
 talker having specified attributes.  For example,
 you can specify that text coming from <command>kmail</command>
 should be spoken using a talker configured with a female voice.
-See <xref linkend="configure-plugin" />.</para>
+See <xref linkend="configure-talkers" />.</para>
 
 <para>Just before &ktts; begins sending text to each of the
 filters, it picks a talker to speak the text.  The talker chosen is
@@ -1488,8 +1041,8 @@ apply itself only if the text came from one of the applications listed.
 You may enter more than one application separated by commas.
 Example: <command><userinput>konversation,kmail</userinput></command></para>
 <tip><para>You can discover the <guilabel>Application ID</guilabel>
-of running programs using the <command>&kdcop;</command> program.
-You should leave the &DCOP; numbers out.  For example, if &kdcop; shows
+of running programs using the <command>&qdbus;</command> program.
+You should leave the &DBus; numbers out.  For example, if &qdbus; shows
 an Application ID of <command>kopete-3432</command>, you would just
 enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 <callout arearefs="pt-talkerchooser-4"><para>Specify the attributes of the
@@ -1497,7 +1050,7 @@ talker you prefer to speak the text here.  If the text meets the filter
 conditions above, a talker will be chosen that most closely matches
 the attributes you specify here.  Click the button at the right to
 display the <guilabel>Select Talker</guilabel> screen.
-See <xref linkend="selecttalker" />.</para></callout>
+</para></callout>
 <callout arearefs="pt-talkerchooser-5"><para>Use these buttons
 to save your Talker Chooser settings, load settings from a saved file,
 or clear all the settings.</para></callout>
@@ -1509,77 +1062,18 @@ if all non-blank conditions are met in the
 <guilabel>Apply This Filter When</guilabel> box.  You must fill in
 at least one of the boxes.</para>
 
-<para>The easiest way to learn how to configure Talker Choosers is
-to experiment.  Disable the Talker Chooser and submit some text.
-In the <guilabel>Jobs</guilabel> tab, note the talker that
-&ktts; chooses.  Click the <guibutton>Change Talker</guibutton>
-button, enter some attributes, and try again to see how the choice is affected.
-Of course, you must have more than one talker configured for
-the Talker Chooser to do anything.</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-<sect2 id="sbd">
-<title>Configuring Sentence Boundary Detector Filters</title>
-
-<para>Sentence Boundary Detector (SBD) filters break text up into individual sentences.
-This is important because it</para>
-
-<itemizedlist>
-<listitem><para>allows &ktts; to begin speaking faster
-because it need only synthesize the first sentence, rather than the entire
-block of text, which might be very long, and</para></listitem>
-<listitem><para>allows you to rewind and advance by sentences in the
-<guilabel>Jobs</guilabel> tab, and</para></listitem>
-<listitem><para>allows you to pause or stop Text Jobs in the
-<guilabel>Jobs</guilabel> tab even if the speech synthesizer is not
-capable of being stopped.</para></listitem>
-</itemizedlist>
-
-<para>For these reasons, the Standard Sentence Boundary Detector filter
-is automatically configured the first time you run <command>kttsmgr</command>
-and cannot be disabled (although you can remove it).  We advise you
-not to modify this filter unless you know what you are doing.</para>
-
-<para>You can, however, add additional SBD filters to solve certain
-problems.  For example, as of February 2005, the Polish Festival voice
-has the annoying attribute of speaking sentence punctuation.  It will
-speak the periods at the end of each sentence, for instance.  You cannot solve this problem
-by creating a String Replacer filter to remove the sentence punctuation,
-because doing so will prevent the Standard SBD from recognizing any
-sentences.  Instead, you can create a modified version of the
-Standard SBD that recognizes sentences while simultaneously removing
-the sentence punctuation.  To do this, add an SBD filter and use the
-<guibutton>Load</guibutton> button to load the <filename>polish_festival_sbdrc</filename>
-file that comes with &ktts;.</para>
-
-<para>SBD filters work by matching an end-of-sentence regular expression
-and inserting Tab (decimal 8) characters at the sentence boundaries.
-(All Tab characters are automatically stripped from text before filtering begins.)
-Note that the Standard SBD preserves the sentence punctuation.
-</para>
-
-<para>SBD filters are never applied to &kde; Notification messages (knotify),
-Warnings, Messages, or Screen Reader Outputs.</para>
-
-<para>If you accidentally remove the Standard Sentence Boundary Detectory filter,
-you can get it back by loading the <filename>standard_sbdrc</filename> file,
-which comes with &ktts;.</para>
-
 </sect2>
 
 </sect1>
 
 <!-- ...................................................................... -->
-
+<!--
 <sect1 id="selecttalker">
 <title>Selecting Talkers (Advanced)</title>
 
 <para>You can configure
 any number of talkers in the <guilabel>Talkers</guilabel> tab.
-See <xref linkend="configure-plugin" />.  When applications send text
+See <xref linkend="configure-talkers" />.  When applications send text
 to &ktts;, they may specify the attributes of a desired
 talker to speak the text.  &ktts; will pick the closest
 matching talker from among the talkers you have configured to satisfy
@@ -1609,8 +1103,6 @@ button on the <guilabel>Jobs</guilabel> tab, or</para></listitem>
 <listitem><para>when you click the <guilabel>Talker</guilabel> button
 on the <guilabel>Filter Configuration</guilabel> dialog for
 a Talker Chooser filter, or</para></listitem>
-<listitem><para>when you click the <guilabel>Talker</guilabel> button
-on the <guilabel>Notifications</guilabel> tab.</para></listitem>
 </itemizedlist>
 
 <para>
@@ -1626,7 +1118,7 @@ on the <guilabel>Notifications</guilabel> tab.</para></listitem>
                     <area id="pt-selecttalker-5" coords="1 1"/>
                 </areaspec>
                 <imageobject>
-                    <imagedata fileref="selecttalker.png" format="PNG"/>
+                    <imagedata fileref="addtalker.png" format="PNG"/>
                 </imageobject>
             </imageobjectco>
             <textobject>
@@ -1693,7 +1185,7 @@ then click the <guilabel>Use closest matching Talker having</guilabel>
 radio button.</para></tip>
 
 </sect1>
-
+ -->
 </chapter>
 
 <!-- ====================================================================== -->
@@ -1768,14 +1260,14 @@ or menu bars. -->
 <itemizedlist>
 <listitem><para>The &kde; Text-to-Speech API, which is used by application
 programmers to give their applications TTS capabilities.  Applications
-communicate with KTTSD via &DCOP;.</para></listitem>
+communicate with KTTSD via &DBus;.</para></listitem>
 <listitem><para>The KTTSD Plugin API, which is used to add speech
 synthesis plugins to KTTSD so that &ktts; will work with
 a new speech synthesis engine.</para></listitem>
 </itemizedlist>
 
 <para>The following section gives a short description of the &kde; Text-to-Speech API
-&DCOP; Interface.
+&DBus; Interface.
 Full documentation for both APIs is available online at the
 <ulink url="http://accessibility.kde.org/developer/kttsd/">
 &kde; Accessibility</ulink> web site (http://accessibility.kde.org).
@@ -1785,11 +1277,11 @@ Full documentation for both APIs is available online at the
 <!-- ...................................................................... -->
 
 
-<sect1 id="dcop-interface">
-<title>The &ktts; &DCOP; Interface</title>
+<sect1 id="dbus-interface">
+<title>The &ktts; &DBus; Interface</title>
 
 <para>Applications communicate requests for Text-to-Speech services via the
-&kde; &DCOP; interface to program <command>kttsd</command> object <command>KSpeech</command>.
+&kde; &DBus; interface to program <command>kttsd</command> object <command>KSpeech</command>.
 </para>
 
 <para>Enter the following commands in a &konsole;.</para>
@@ -1800,33 +1292,19 @@ Full documentation for both APIs is available online at the
 
 <para>To queue a text job to be spoken</para>
 
-<para><userinput>dcop kttsd KSpeech setText "<replaceable>text</replaceable>"  "<replaceable>talker</replaceable>"</userinput></para>
+<para><userinput>qdbus org.kde.kttsd /KSpeech say "<replaceable>text</replaceable>"  "<replaceable>options</replaceable>"</userinput></para>
 
-<para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>talker</replaceable></userinput> is a language code
-such as <userinput><replaceable>en</replaceable></userinput>, <userinput><replaceable>cy</replaceable></userinput>, &etc;  This command does
-not speak the text; instead it queues a text job for speaking.</para>
+<para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>options</replaceable></userinput> is a language code
+such as <userinput><replaceable>en</replaceable></userinput>, <userinput><replaceable>cy</replaceable></userinput>, &etc;</para>
 
 <para>Example.</para>
 
-<para><userinput>dcop kttsd KSpeech setText "This is a test." "en"</userinput></para>
-
-<para>To speak the last queued text job</para>
-
-<para><userinput>dcop kttsd KSpeech startText <replaceable>0</replaceable></userinput></para>
-
-<para>In this case, <userinput>0</userinput> refers to the last text job queued.  
-You may also specify a specific job number.  (If no job number is given, a <userinput>0</userinput> is required.)</para>
-
-<para>To stop the currently speaking text job</para>
-
-<para><userinput>dcop kttsd KSpeech stopText 0</userinput></para>
-
-<para>Depending upon the speech plugin used, speaking may not immediately stop.</para>
+<para><userinput>qdbus org.kde.kttsd /KSpeech say "This is a test." "en"</userinput></para>
 
 <para>There are many more commands that can be sent.  To see a list of possible
 commands,</para>
 
-<para><userinput>dcop kttsd KSpeech</userinput></para>
+<para><userinput>qdbus org.kde.kttsd /KSpeech</userinput></para>
 
 <para>or read the 
 <ulink url="http://accessibility.kde.org/developer/kttsd/">
@@ -1857,32 +1335,6 @@ application work. -->
 <qandaset id="faqlist">
 <qandaentry>
 <question>
-<para><command>kttsmgr</command> immediately crashes when I start it.  I
-compiled with debug support and I don't even get a backtrace.</para>
-</question>
-<answer>
-<para>GStreamer has crashed taking &ktts; down with it.  You most
-likely need to "register" GStreamer.  For GStreamer 0.8x, the command is
-<command>gst-register-0.8</command>.  If this doesn't solve the problem,
-you may have an incompatible version of GStreamer installed.  You could
-try upgrading or uninstalling GStreamer.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>ALSA audio output is not working if I am playing music in another
-application at the same time.  When I pause a text job, &ktts;
-freezes.  I notice "unable to open PCM" in the &konsole; output.</para>
-</question>
-<answer>
-<para>You have the ALSA device contention problem, which prevents opening
-more than one PCM device at one time.  See the ALSA website (dmix) for
-possible solutions. <ulink url="www.alsa-project.org">www.alsa-project.org</ulink>
-</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
 <para>I need to start over.  How do I get &ktts; completely terminated?</para>
 </question>
 <answer>
@@ -1905,18 +1357,6 @@ window, then start <command>kttsmgr</command> in the second.</para>
 </qandaentry>
 <qandaentry>
 <question>
-<para>I have an additional Festival voice I downloaded from the Internet.
-I installed it, and I can use it in Festival, but it does not show up in <command>kttsmgr</command>.</para>
-</question>
-<answer>
-<para>Edit file <command>$KDEHOME/share/apps/kttsd/festivalint/voices</command> to
-add the new voice.  The other entries can be used as a guide.  If you
-successfully add a voice, please send a patch to the developers along
-with the &URL; from which you obtained the voice file.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
 <para>None of the supported speech synthesizers support the language I need.
 Where can I get a synth for my language?</para>
 </question>
@@ -1929,44 +1369,7 @@ contact the development team.  Open source engines are especially welcome.
 If you know of a commercial synth, perhaps you can persuade the vendor
 to donate a free copy to the &ktts; development team.
 In the meantime, you may be able to get
-the synth working using the <guilabel>Command</guilabel> plugin.
-See <xref linkend="using-with-command" />.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>&ktts; is speaking too slow.  How can I speed it up?</para>
-</question>
-<answer>
-<para>There is a <guilabel>Speed</guilabel> setting on the <guilabel>Audio</guilabel>
-tab.  For this to work, you must have the <command>sox</command> utility
-installed and available in the PATH.  Some synthesis plugins, such as
-Festival Interactive also provide a <guilabel>Speed</guilabel>
-setting in the talker configuration dialog.  Depending upon the
-voice used, it may or may not be enabled.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>OK, that works for some things, but web pages are still spoken too slow.</para>
-</question>
-<answer>
-<para>The speed settings are ignored when &ktts; is speaking
-&HTML;.  (This is because the &HTML; is converted into SSML, which has its own
-"rate" tags.)  Either disable the &HTML; &XML; Transformer filter
-(see <xref linkend="filters"/>), or if you are brave, edit the .xsl file
-in the &HTML; to SSML Transformer filter and increase the default talking rate.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>I cannot get web pages to speak in a female voice.  I have female Festival talker
-configured, but &ktts; always speaks web pages in a male voice.</para>
-</question>
-<answer>
-<para>As of Festival 1.95 beta, the SABLE GENDER tag doesn't seem to be working.
-To keep Festival from producing errors, the SSML to SABLE .xsl file strips the
-gender tags out.  The same applies to voice tags as well.</para>
+the synth working using speech-dispatchers command backend.</para>
 </answer>
 </qandaentry>
 <qandaentry>
@@ -1990,20 +1393,7 @@ making it skip entire sentences, or pronounce gibberish.  What can I do?</para>
 <para>First, make sure the <guilabel>Character encoding</guilabel> option in the
 talker's configuration dialog is properly set for the language.  If certain words
 or characters are causing problems, a String Replacer filter might help.
-If certain sentence punctuation characters are confusing the synth, you'll need to
-configure a Sentence Boundary Detector filter.  See <xref linkend="filters" />.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>I added a String Replacer filter of my own and now &ktts;
-will not allow me to rewind or advance by sentence.  On the <guilabel>Jobs</guilabel>
-tab, it claims each job has only one sentence.  What did I do wrong?</para>
-</question>
-<answer>
-<para>You must not filter out sentence punctuation characters (period, question mark,
-exclamation mark, colon, and semicolon).
-For these characters, use a Sentence Boundary Detector filter instead.</para>
+ See <xref linkend="filters" />.</para>
 </answer>
 </qandaentry>
 </qandaset>
@@ -2027,11 +1417,13 @@ distribution. -->
 Program Copyright &copy; 2002 Jos&#233; Pablo Ezequiel "Pupeno" Fern&#225;ndez <email>pupeno@kde.org</email> 
 </para>
 <para>
-Current Maintainer: Gary Cramblitt <email>garycramblitt@comcast.net</email>
+Current Maintainer: Jeremy Whiting <email>jpwhiting@kde.org</email>
 </para>
 <para>
 Contributors:
 <itemizedlist>
+<listitem><para>Gary Cramblitt <email>garycramblitt@comcast.net</email></para>
+</listitem>
 <listitem><para>Olaf Schmidt <email>ojschmidt@kde.org</email></para>
 </listitem>
 <listitem><para>Gunnar Schmi Dt <email>gunnar@schmi-dt.de</email></para>
@@ -2042,7 +1434,8 @@ Contributors:
 </para>
 
 <para>
-Documentation Copyright &copy; 2004 Gary R. Cramblitt <email>garycramblitt@comcast.net</email>
+Documentation Copyright &copy; 2009 Jeremy Whiting <email>jpwhiting@kde.org</email>
+&copy; 2004 Gary R. Cramblitt <email>garycramblitt@comcast.net</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
@@ -2082,7 +1475,7 @@ application -->
 &install.intro.documentation;
 </para>
 
-<para>(FUTURE) Debian Install Command: <command>apt-get install kdeaccessibility</command></para>
+<para>Debian Install Command: <command>apt-get install kdeaccessibility</command></para>
 
 <note>
 <para>You will find links to source and binary packages
@@ -2109,8 +1502,9 @@ ftp://ftp.kde.org/pub/kde/</ulink></para>
 
 <para>
 <itemizedlist>
-<listitem><para>&kde; version 3.2 or later.</para></listitem>
-<listitem><para>A speech synthesis engine.  The following engines
+<listitem><para>&kde; version 4.4 or later.</para></listitem>
+<listitem><para>speech-dispatcher version 0.67 or later.</para></listitem>
+<listitem><para>A speech synthesizer.  The following synthesizers
 and spoken languages are currently supported.</para>
 
 <para>
@@ -2119,29 +1513,15 @@ and spoken languages are currently supported.</para>
 <tbody>
 
 <row>
+<entry>Espeak</entry>
+<entry>Most languages, check <ulink url="http://espeak.sourceforge.net/languages.html">http://espeak.sourceforge.net/languages.html</ulink>
+for the current list of supported languages</entry>
+</row>
+
+<row>
 <entry>Festival</entry>
 <entry>American English, British, Spanish, German, Finnish, Czech, Polish, Russian,
 Italian, French Canadian, Kiswahili, Zulu, and Ibibio</entry>
-</row>
-
-<row>
-<entry>Festival Lite (flite)</entry>
-<entry>English</entry>
-</row>
-
-<row>
-<entry>Hadifix (&mbrola; and txt2pho)</entry>
-<entry>German, Hungarian</entry>
-</row>
-
-<row>
-<entry>Epos</entry>
-<entry>Czech, Slovak</entry>
-</row>
-
-<row>
-<entry>FreeTTS</entry>
-<entry>English</entry>
 </row>
 
 </tbody>
@@ -2162,7 +1542,7 @@ information that might not have made it into this handbook.
 </para></note>
 
 <note>
-<para>&ktts; uses a flexible plugin architecture for
+<para>speech-dispatcher uses a flexible plugin architecture for
 speech synthesis engines.  If you
 want to enhance &ktts; to support another engine, contact the
 development team.
@@ -2173,39 +1553,7 @@ development team.
 See <xref linkend="configuration" /> for specific instructions for each
 of these engines.
 </para>
-
 </listitem>
-
-<listitem>
-<para>At least one of the following audio subsystems:
-
-<itemizedlist>
-<listitem><para>&kde; &arts; Soundsystem.  &arts; is usually installed with &kde;.</para></listitem>
-<listitem><para>ALSA (Advanced &Linux; Sound Architecture).  ALSA is installed with
-most &Linux; systems.  (<ulink url="www.alsa-project.org">www.alsa-project.org</ulink>)</para></listitem>
-<listitem><para>GStreamer version 0.8.7 or greater.  <emphasis>Note</emphasis>:
-Be sure to register your GStreamer plugins by running the <command>gst-register</command> 
-command prior to using GStreamer in &ktts;.  
-(<ulink url="http://gstreamer.freedesktop.org">
-http://gstreamer.freedesktop.org</ulink>)</para></listitem>
-<listitem><para>aKode library.  aKode is a decoder library that is part of &kde;.
-</para></listitem>
-</itemizedlist>
-
-<note><para>The &kde; project plans to drop &arts; starting in version 4.</para></note>
-
-<note><para>Some users experience device contention with ALSA.  If your system
-has this problem, you will not be able to simultaneously play music while speaking.
-&ktts; will also freeze if you pause a text job and then
-start another.  See the ALSA website (dmix) for possible solutions.</para></note>
-
-<note><para>As of July 2005, aKode does not support a true pause capability.
-When you pause a text job in &ktts; it will finish speaking the
-current sentence.</para></note>
-
-</para>
-</listitem>
-
 </itemizedlist>
 </para>
 
@@ -2213,13 +1561,6 @@ current sentence.</para></note>
 
 <para>
 <itemizedlist>
-
-<listitem>
-<para>The <command>sox</command> audio utility is needed for
-adjusting overall speech speed, but not required.  Debian users can install
-sox with the command <command>apt-get install sox</command>.
-Sox is included on most &Linux; distribution CDs.</para>
-</listitem>
 
 <listitem>
 <para>The <command>xsltproc</command> utility is needed for
@@ -2245,104 +1586,8 @@ xsltproc with the command <command>apt-get install xsltproc</command>.</para>
 <!-- &install.compile.documentation; -->
 
 <para>In order to compile &ktts;, you must have a
-recent (&kde; 3.4 or greater) copy of the &kde; development files,
-including kdelibs and arts.</para>
-
-<para>If you downloaded &ktts; as a tarball, log in
-as a normal user and untar the tarball to a suitable folder, 
-change to that folder, and enter the following commands.</para>
-
-<programlisting>
-./configure
-make
-</programlisting>
-
-<para>The following <command>configure</command> options are available:</para>
-
-<para>
-<informaltable id="configure-audio-options">
-<tgroup cols="3">
-<tbody>
-
-<row>
-<entry><emphasis>Default Option</emphasis></entry>
-<entry><emphasis>Description</emphasis></entry>
-<entry><emphasis>Alternate</emphasis></entry>
-</row>
-<row>
-<entry>--with-arts</entry>
-<entry>Builds the arts audio plugin.</entry>
-<entry>--without-arts</entry>
-</row>
-<row>
-<entry>--with-alsa=check</entry>
-<entry>Builds the ALSA audio plugin.</entry>
-<entry>--with-alsa=no</entry>
-</row>
-<row>
-<entry>--with-gstreamer=no</entry>
-<entry>Does not build the GStreamer audio plugin.</entry>
-<entry>--with-gstreamer=check</entry>
-</row>
-<row>
-<entry>--with-akode=no</entry>
-<entry>Does not build the aKode audio plugin.</entry>
-<entry>--with-akode=check</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</para>
-
-<note><para>
-In &kde; 4, the &arts; plugin will likely be removed or at least not built by default.
-</para></note>
-
-<para>The following speech synthesizer plugins are all built by default.
-Some of them are runtime only dependent upon non-free software.
-(Non-free according to Debian Policy). The "Configure Option to
-not build" column shows the configure command to not build the plugin:</para>
-
-<para>
-<informaltable id="configure-synth-options">
-<tgroup cols="3">
-<tbody>
-
-<row>
-<entry><emphasis>Synth</emphasis></entry>
-<entry><emphasis>License</emphasis></entry>
-<entry><emphasis>Configure Option to not build</emphasis></entry>
-</row>
-<row><entry>Festival</entry><entry>free</entry><entry>--disable-kttsd-festivalint</entry></row>
-<row><entry>Festival Lite</entry><entry>free</entry><entry>--disable-kttsd-flite</entry></row>
-<row><entry>Epos</entry><entry>free</entry><entry>--disable-kttsd-epos</entry></row>
-<row><entry>Command</entry><entry>free</entry><entry>--disable-kttsd-command</entry></row>
-<row><entry>Hadifix</entry><entry>non-free</entry><entry>--disable-kttsd-hadifix</entry></row>
-<row><entry>FreeTTS</entry><entry>non-free</entry><entry>--disable-kttsd-freetts</entry></row>
-</tbody></tgroup></informaltable></para>
-
-<para>By default, the commands above will install &ktts; to
-<filename>/opt/kde3</filename>.  If this folder is not in your
-$<envar>KDEDIRS</envar> path, you may need to add a
-<userinput>--prefix=<replaceable>target</replaceable></userinput> option.
-For example,</para>
-
-<programlisting>
-./configure --prefix=/usr/local
-make
-</programlisting>
-
-<note><para>On Debian systems, <filename><replaceable>/usr/local</replaceable></filename>
-is the usual place to install applications compiled from source code.
-</para></note>
-
-<para>Login as root and install the compiled &ktts;
-using the following commands.</para>
-
-<programlisting>
-su
-make install
-</programlisting>
+recent (&kde; 4.4 or greater) copy of the &kde; development files,
+including kdelibs and the development files for speech-dispatcher.</para>
 
 <para>If you downloaded the &ktts; source from the
 <filename>kdeaccessibility</filename> code repository module, or downloaded the nightly
@@ -2351,13 +1596,11 @@ tarball, use the following commands to compile and install.
 
 <programlisting>
 cd kdeaccessibility
-echo kttsd>inst-apps
-make -f Makefile.cvs
-./configure
-cd kttsd
+mkdir build
+cd build
+cmake ../
 make
-su
-make install
+sudo make install
 </programlisting>
 
 </sect1>
@@ -2368,449 +1611,12 @@ make install
 <sect1 id="configuration">
 <title>Configuration</title>
 
-<para>Make sure your speech synthesis engine is working before using
-&ktts;.  Follow the instructions that came with the engine.</para>
-
-<tip>
-<para>In some cases, you may need to grant write access to the audio device.</para>
-<para><userinput>chmod a+rw <replaceable>/dev/dsp*</replaceable></userinput></para>
-</tip>
-
-<!-- ...................................................................... -->
-
-
-<sect2 id="using-with-festival">
-<title>Using with Festival (Interactive)</title>
-
-<para>Festival is one of the best free and open source TTS
-engines available.  Voice quality is generally good and there are quite
-a few languages and voices supported.
-For many voices, you can control the volume, 
-speed of the generated speech, and pitch (tone) from &ktts;.</para>
-
-<para>Synthesizer Name: <guilabel>Festival Interactive</guilabel></para>
-
-<para>&URL;: <ulink url="http://www.cstr.ed.ac.uk/projects/festival/">
-http://www.cstr.ed.ac.uk/projects/festival/</ulink>
-</para>
-
-<para>Debian Install Command: <userinput>apt-get install festival</userinput></para>
-
-<para>
-You will need to install at least one language.  Follow the instructions
-that come with Festival.  If you will be speaking web pages,
-you must install the <command>rab_diphone</command> (British Male)
-voice.
-</para>
-
-<para>Additional English festival voices are available from</para>
-
-<para><ulink url="http://hts.ics.nitech.ac.jp/">http://hts.ics.nitech.ac.jp/</ulink>.
-</para>
-
-<para>Additional Spanish, English, and German voices are available from</para>
-
-<para><ulink url="http://cslu.cse.ogi.edu/tts/download/">
-http://cslu.cse.ogi.edu/tts/download/</ulink></para>
-
-<para>You must compile an additional module
-for these voices, therefore, you must have the Festival source code.
-The German voices have limited distribution.
-</para>
-
-<para>A Finnish male voice is available from </para>
-
-<para><ulink url="http://www.ling.helsinki.fi/suopuhe/download/">
-http://www.ling.helsinki.fi/suopuhe/download/</ulink>.
-</para>
-
-<para>A Polish male voice is available from </para>
-
-<para><ulink url="http://www.artegence.com/download/voicexml/speech/festival_polish_voice.tgz">
-http://www.artegence.com/download/voicexml/speech/festival_polish_voice.tgz</ulink>.
-</para>
-
-<para>A Russian male voice is available from </para>
-
-<para><ulink url="http://nshmyrev.narod.ru/festival/festival.html">
-http://nshmyrev.narod.ru/festival/festival.html
-</ulink></para>
-
-<para>You must have Festival 1.95 beta or later to use this voice.  The voice
-is still in early development.  Untar to
-<filename>festival/lib/voices/russian/</filename>.  When you configure the Russian
-talker, the voice code is <userinput>msu_ru_nsh_diphone</userinput>.  Be sure to
-select an 8-bit cryllic encoding, such as <userinput>KOI8-R</userinput>.</para>
-
-<para>Italian voices for Festival 1.95 beta are available at</para>
-
-<para><ulink url="http://www.csrf.pd.cnr.it/TTS/It-FESTIVAL-download.htm">
-http://www.csrf.pd.cnr.it/TTS/It-FESTIVAL-download.htm</ulink>.</para>
-
-<para>If you get CRC errors when you unzip, try downloading again.</para>
-
-<para>Kiswahili, Zulu, and Ibibio voices for Festival 1.95 beta are available at</para>
-
-<para><ulink url="http://www.llsti.org/">http://www.llsti.org/</ulink>.</para>
-
-<para>Unfortunately, the Hindi voice also available there will not work with
-&ktts;.</para>
-
-<para>Commercial voices, including a French Canadian voice,
-can be purchased from Cepstral, LLC at</para>
-
-<para><ulink url="http://www.cepstral.com/">http://www.cepstral.com/</ulink></para>
-
-<para>The FAQ on their Support page has information about using their voices
-in Festival.</para>
-
-<para>Festival is typically included with &Linux; distributions.  Check your
-distro CDs to see if it is included.</para>
-
-<note>
-<para>When using the Polish, Hungarian, or Czech languages, be sure the <guilabel>Encoding</guilabel>
-option is set to <userinput>ISO 8859-2</userinput>.
-</para>
-<para>When using the Russian voice, be sure the <guilabel>Encoding</guilabel>
-option is set to an 8-bit cryllic encoding, such as <userinput>KOI8-R</userinput>.
-</para>
-</note>
-
-<!-- ...................................................................... -->
-
-
-<sect3 id="festival-with-mbrola">
-<title>Using Festival with &mbrola;</title>
-
-<para>Festival can be used in combination with the &mbrola; synthesizer.
-In this mode, Festival does the lexical analysis and &mbrola; produces the
-audio.  The &mbrola; binary and &mbrola; voice files can be downloaded from</para>
-
-<para><ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para>
-
-<para>Follow the instructions in the <filename>readme.txt</filename> that comes with
-the download.</para>
-
-<para>Note that &mbrola; is not a complete Text-to-Speech system.  &mbrola; synthesizes
-speech from diphone files.  You must have additional software that can produce
-the diphones.  When combined with Festival, Festival produces the diphones needed
-by &mbrola;.  <command>txt2pho</command> can also be used to produce diphones
-from German text.  See <xref linkend="using-with-hadifix"/> for more information.</para>
-
-<para>There are three methods of combining Festival with &mbrola;.</para>
-
-<para>
-<itemizedlist>
-<listitem><para><link linkend="mbrola-wrappers">&mbrola; Wrappers</link>.
-At the time of writing this Handbook,
-this method is limited to English voices.</para></listitem>
-<listitem><para><link linkend="ims-german-festival">IMS German Festival</link>.</para></listitem>
-<listitem><para><link linkend="festival-czech">Festival-Czech</link>.</para></listitem>
-</itemizedlist>
-</para>
-
-<!-- ...................................................................... -->
-
-<sect4 id="mbrola-wrappers">
-<title>Using Festival with &mbrola; Wrappers</title>
-
-<para>In this method, additional
-wrapper code is added to Festival to enable speech synthesis using
-&mbrola; voice files.  Note that the &mbrola; voice files are <emphasis>not</emphasis>
-installed in the &mbrola; folder tree.  Instead, they are installed
-in the <filename>festival/lib/</filename> folder tree.  For instructions, see</para>
-
-<para><ulink url="http://www.cstr.ed.ac.uk/projects/festival/mbrola.html">
-http://www.cstr.ed.ac.uk/projects/festival/mbrola.html</ulink></para>
-
-</sect4>
-
-<!-- ...................................................................... -->
-
-<sect4 id="ims-german-festival">
-<title>Using IMS German Festival</title>
-
-<para>IMS German Festival is a modified version of Festival that uses German &mbrola;
-voices.  It works with either Festival version 1.4.1 or Festival 2.0 (1.95beta).
-First install Festival and &mbrola;, if you have not already done so.
-Next, download IMS German Festival, from</para>
-
-<para>
-<ulink url="http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html">
-http://www.ims.uni-stuttgart.de/phonetik/synthesis/festival_opensource.html</ulink>.</para>
-
-<para>Follow the instructions in the <filename>README</filename> that comes with the
-download.  (Note, if using in combination with Festival 2.0, it is <emphasis>not</emphasis>
-necessary to apply the <filename>fixes</filename> tarball, but you must still
-rebuild festival.)  Finally, add the following
-lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
-
-<para>
-<programlisting>
-(voice-location "german_de1_os" "/usr/local/mbrola/de1"
-  "German Female, IMS Festival de1")
-(voice-location "german_de2_os" "/usr/local/mbrola/de2"
-  "German Male, IMS Festival de2")
-(voice-location "german_de3_os" "/usr/local/mbrola/de3"
-  "German Female, IMS Festival de3")
-</programlisting>
-</para>
-
-<para>just above the line that reads</para>
-
-<para>
-<programlisting>
-(provide 'siteinit)
-</programlisting>
-</para>
-
-<para>On some systems, the file you edit is <filename>/etc/festival.scm</filename>.  
-Only add the lines that correspond to the German voices you have installed.
-Substitute the correct path for 
-<userinput><replaceable>/usr/local/mbrola/</replaceable></userinput>.
-Also note that (at the time of this writing) 
-IMS German Festival does not work with the de4, de5, or de6 German voices.</para>
-
-</sect4>
-
-<!-- ...................................................................... -->
-
-<sect4 id="festival-czech">
-<title>Using Festival-Czech</title>
-
-<para>This method uses some special code to enable speech synthesis
-using Festival with an &mbrola; Czech voice.  To install, first download and 
-install Festival and &mbrola;, and make sure both are working.  Next, download
-Festival-Czech from</para>
-
-<para><ulink url="http://www.freebsoft.org/festival-czech">
-http://www.freebsoft.org/festival-czech</ulink></para>
-
-<note><para>In the following procedures substitute the correct folder
-paths as needed.</para></note>
-
-<para>Untar the download to a suitable folder and make
-the lexicon.  The Festival executable must be in your <envar>PATH</envar>.
-</para>
-
-<para>
-<programlisting>
-cd /usr/local
-tar xvfz festival-czech.tar.gz
-cd festival-czech
-make
-</programlisting>
-</para>
-
-<para>Download the <filename>cz2</filename> voice file from the &mbrola;
-website, and unzip it in the &mbrola; folder.</para>
-
-<para>
-<programlisting>
-cd /usr/local/mbrola
-mkdir cz2
-cd cz2
-unzip cz2-001009.zip
-</programlisting>
-</para>
-
-<para>Add the following lines to the <filename>festival/lib/siteinit.scm</filename> file.</para>
-
-<para>
-<programlisting>
-(set! czech-lexicon-file "/usr/local/festival-czech/czech-lexicon.out")
-(set! load-path (cons "/usr/local/festival-czech" load-path))
-(require 'czech)
-(set! czech-mbrola_database "/usr/local/mbrola/cz2/cz2")
-(set! mbrola_progname "/usr/local/mbrola/mbrola")
-(voice-location "czech_mbrola_cz2" "/usr/local/mbrola/cz2"
-    "Czech Male, MBROLA")
-(require 'czech-mbrola)
-</programlisting>
-</para>
-
-<para>just above the line that reads</para>
-
-<para>
-<programlisting>
-(provide 'siteinit)
-</programlisting>
-</para>
-
-<para>On some systems, the file you edit is <filename>/etc/festival.scm</filename>.</para>
-
-</sect4>
-
-</sect3>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-<sect2 id="using-with-flite">
-<title>Using with Festival Lite (flite)</title>
-
-<para>Festival Lite is a free open source engine that currently supports
-a limited number of voices and languages.  It is light weight, but
-sacrifices voice quality somewhat.
-You cannot control the pitch, volume, or speed of this engine
-from &ktts;.</para>
-
-<para>Synthesizer Name: <guilabel>Festival Lite (flite)</guilabel></para>
-
-<para>&URL;: <ulink url="http://www.speech.cs.cmu.edu/flite/index.html">
-http://www.speech.cs.cmu.edu/flite/index.html</ulink>
-</para>
-
-<para>Debian Install Command: <userinput>apt-get install flite</userinput></para>
-
-<para>flite is typically included with &Linux; distributions.  Check your
-distro CDs to see if it is included.</para>
-
-<para>Build and install flite following the instructions in the
-<filename>README</filename> that comes with it.</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-
-<sect2 id="using-with-hadifix">
-<title>Using with Hadifix (&mbrola; and txt2pho)</title>
-
-<para>Hadifix is a two-stage synthesis engine based on diphones.
-The <command>txt2pho</command> utility converts text into diphones
-and the &mbrola; engine synthesizes the diphones to sound.
-Voice quality is good, but language support is currently somewhat limited.
-You can control the voice, pitch, speed, and volume from <application>kttsmgr</application>.
-</para>
-
-<para>Synthesizer Name: <guilabel>Hadifix</guilabel></para>
-
-<para>&URL;: see below</para>
-
-<para>Debian Install Command: none</para>
-
-<para>If you do not already have Hadifix installed, do this:</para>
-
-<procedure>
-<step><para>Download &mbrola; binary from
-<ulink url="http://festvox.org/mbrola/">http://festvox.org/mbrola/</ulink>.</para></step>
-<step><para>Install &mbrola; to <filename>/usr/local/mbrola</filename> folder.</para></step>
-<step><para>Download at least one german language file from the &mbrola; site.
-Unzip to the <filename>/usr/local/mbrola</filename> folder.</para></step>
-<step><para>Download txt2pho from</para>
-<para>
-<ulink url="http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html">
-http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/HADIFIXforMBROLA.html</ulink>.</para>
-</step>
-<step><para>Unzip txt2pho to <filename>/usr/local/txt2pho</filename>.</para></step>
-<step><para>Edit <command>txt2phorc</command> file, putting correct data paths in.</para></step>
-<step><para>Either copy <command>txt2phorc</command> to <filename>~/.txt2phorc</filename> or to <filename>/etc/txt2pho</filename>.
-Note that you drop the "rc" in file name.</para></step>
-<step><para>In <application>kttsmgr</application>, choose the German language 
-(<guilabel>de</guilabel>), and add <guilabel>Hadifix</guilabel>.</para></step>
-<step><para>On the <guilabel>Configure Talker</guilabel> screen,
-configure a voice and the paths to &mbrola; and txt2pho.</para></step>
-<step><para>Click the <guibutton>Test</guibutton> button to test.</para></step>
-</procedure>
-
-<para>A Hungarian implementation for &mbrola; and txt2pho is available at</para>
-
-<para>
-<ulink url="http://tkltrans.sourceforge.net/">http://tkltrans.sourceforge.net/</ulink>.
-</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-
-<sect2 id="using-with-epos">
-    <title>Using with Epos</title>
-
-<para>Epos is a free Czeck and Slovak open source engine.
-It is light weight, but sacrifices voice quality somewhat.
-You cannot control the volume of this engine
-from &ktts;.</para>
-
-<para>Synthesizer Name: <guilabel>Epos TTS Synthesis System</guilabel></para>
-
-<para>&URL;: <ulink url="http://epos.ure.cas.cz/">
-http://epos.ure.cas.cz/</ulink>
-</para>
-
-<para>Debian Install Command: <userinput>apt-get install epos</userinput></para>
-
-<para>Start <application>kttsmgr</application>.  On the <guilabel>Talkers</guilabel> tab,
-click the <guibutton>Add</guibutton> button.  Choose Czeck or Slovak
-language and <guilabel>Epos TTS Synthesis System</guilabel>.
-If the epos server executable and client are not
-in your <envar>PATH</envar>, specify the paths to these executables
-in the <guilabel>Configure Talker</guilabel> screen.  The options boxes
-permit you to pass additional options to the server and client.  In a 
-&konsole;, type <userinput>epos -h</userinput> 
-or <userinput>say -h</userinput> for information.</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-
-<sect2 id="using-with-freetts">
-    <title>Using with FreeTTS</title>
-
-<para>FreeTTS is a free open source speech engine written in &Java;, which means
-that you must have the &Java; Virtual Machine software installed on your
-system to use it.  It currently has limited voice and language support.
-You cannot control the pitch, volume, or speed of this engine
-from &ktts;.</para>
-
-<para>Synthesizer Name: <guilabel>FreeTTS</guilabel></para>
-
-<para>&URL;: <ulink url="http://sourceforge.net/projects/freetts/">
-http://sourceforge.net/projects/freetts/</ulink>
-</para>
-
-<para>Debian Install Command: none</para>
-
-</sect2>
-
-<!-- ...................................................................... -->
-
-
-<sect2 id="using-with-command">
-    <title>Using the Command Plugin</title>
-
-<para>The command plugin permits you to use &ktts; with any
-speech synthesis engine that can be run as a command in a 
-&konsole;.</para>
-
-<para>Synthesizer Name: <guilabel>Command</guilabel></para>
-
-<para>&URL;: none</para>
-
-<para>Debian Install Command: none</para>
-
-<para>Ideally, you should use a command that synthesizes to a temporary audio
-(wav) file, rather than send the speech directly to the audio device.</para>
-
-<para>If the speech synthesis engine requires text to be encoded
-differently from your desktop encoding setting, you must use the
-<command>%f</command> parameter to pass the text to the engine.
-&ktts; will encode the text in the setting you specify when
-it writes the text to the temporary file.  If you attempt to pass text
-on the command line using the <command>%t</command> parameter,
-it will be encoded using your desktop locale setting.
-You can also use the <guilabel>Send the data as standard input</guilabel>
-option to solve this problem, if the engine accepts input from StdIn.
-For example, here is a sample command to send polish text to Festival using
-ISO 8859-2 encoding and removing unspeakable punctuation characters.</para>
-
-<para><command>cat %f | tr '(){}[]"' ' ' | festival --tts --language polish</command>
-</para>
-
-</sect2>
+<para>Make sure speech-dispatcher is working with your speech synthesis engine before using
+&ktts;.  The shell script spd-conf can be used for that.</para>
+
+<note><para>&ktts; in &kde; 4.4 is a first attempt at porting &ktts; to use speech-dispatcher.
+In the future kttsmgr will be able to configure speech-dispatcher directly without spd-conf.
+</para></note>
 
 <!-- ====================================================================== -->
 
