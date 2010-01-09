@@ -1,3 +1,9 @@
+2010-01-09  Jeremy Whiting (jpwhiting)
+        * Moved kttsjobmgr into the kcm itself, no more plugin/kpart for it.  Finished making the
+          controls on the Jobs tab apply on apply or ok click.
+        * Using speech-dispatcher for a while now - no more jobs in kttsd, no more sbd filter (also
+          no more sentence or job control from within kttsmgr).
+
 2005-07-19  Gary Cramblitt (PhantomsDad)
         * Name kept .wav files in format kttsd-jjjjjjjj-ssssssss.wav where jjjjjjjj is the job 
           number zero-filled to the left and ssssssss is the sentence sequence number zero-filled

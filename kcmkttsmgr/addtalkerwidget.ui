@@ -79,8 +79,146 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>&amp;Speed</string>
+     </property>
+     <property name="buddy">
+      <cstring>speedSlider</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QSlider" name="speedSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KIntSpinBox" name="speedSpinBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>&amp;Pitch</string>
+     </property>
+     <property name="buddy">
+      <cstring>pitchSlider</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QSlider" name="pitchSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KIntSpinBox" name="pitchSpinBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>&amp;Volume</string>
+     </property>
+     <property name="buddy">
+      <cstring>volumeSlider</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QSlider" name="volumeSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KIntSpinBox" name="volumeSpinBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="2" column="1">
-    <widget class="QComboBox" name="voiceComboBox">
+    <widget class="KComboBox" name="voiceComboBox">
      <item>
       <property name="text">
        <string>Male 1</string>
@@ -123,144 +261,6 @@
      </item>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>&amp;Speed</string>
-     </property>
-     <property name="buddy">
-      <cstring>speedSlider</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QSlider" name="speedSlider">
-       <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="singleStep">
-        <number>10</number>
-       </property>
-       <property name="pageStep">
-        <number>20</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksAbove</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KIntSpinBox" name="speedSpinBox">
-       <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>&amp;Pitch</string>
-     </property>
-     <property name="buddy">
-      <cstring>pitchSlider</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QSlider" name="pitchSlider">
-       <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="singleStep">
-        <number>10</number>
-       </property>
-       <property name="pageStep">
-        <number>20</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksAbove</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KIntSpinBox" name="pitchSpinBox">
-       <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>&amp;Volume</string>
-     </property>
-     <property name="buddy">
-      <cstring>volumeSlider</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QSlider" name="volumeSlider">
-       <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="singleStep">
-        <number>10</number>
-       </property>
-       <property name="pageStep">
-        <number>20</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksAbove</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KIntSpinBox" name="volumeSpinBox">
-       <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -274,11 +274,15 @@
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>nameEdit</tabstop>
   <tabstop>AvailableTalkersTable</tabstop>
-  <tabstop>voiceComboBox</tabstop>
   <tabstop>speedSlider</tabstop>
   <tabstop>speedSpinBox</tabstop>
   <tabstop>pitchSlider</tabstop>

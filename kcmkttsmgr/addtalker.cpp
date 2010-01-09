@@ -71,11 +71,11 @@ AddTalker::AddTalker(QWidget* parent)
 
     QTableWidgetItem * defaultItem = 0;
 
-    foreach (const QString module, m_outputModules)
+    foreach (const QString & module, m_outputModules)
     {
         QStringList languages = kspeech->languagesByModule(module);
         
-        foreach (const QString language, languages)
+        foreach (const QString & language, languages)
         {
             int rowcount = mUi->AvailableTalkersTable->rowCount();
             mUi->AvailableTalkersTable->setRowCount(rowcount + 1);

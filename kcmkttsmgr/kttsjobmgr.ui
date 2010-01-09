@@ -234,10 +234,10 @@
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QComboBox" name="moduleComboBox"/>
+       <widget class="KComboBox" name="moduleComboBox"/>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="QComboBox" name="voiceComboBox">
+       <widget class="KComboBox" name="voiceComboBox">
         <item>
          <property name="text">
           <string>Male 1</string>
@@ -295,7 +295,7 @@
        </widget>
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="QComboBox" name="languageComboBox"/>
+       <widget class="KComboBox" name="languageComboBox"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_6">
@@ -319,6 +319,11 @@
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
