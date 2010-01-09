@@ -66,6 +66,7 @@
 #include "selecttalkerdlg.h"
 #include "selectlanguagedlg.h"
 #include "utils.h"
+#include "kttsjobmgr.h"
 
 // Some constants.
 // Defaults set when clicking Defaults button.
@@ -222,7 +223,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
 
     // Initialize some variables.
     m_config = 0;
-    m_jobMgrPart = 0;
+    m_jobMgrWidget = 0;
     m_configDlg = 0;
     m_changed = false;
     m_suppressConfigChanged = false;
@@ -591,6 +592,12 @@ void KCMKttsMgr::save()
 
     m_config->sync();
 
+    // apply changes in the jobs page if it exists
+    if (m_jobMgrWidget)
+    {
+        m_jobMgrWidget->save();
+    }
+    
     // If we automatically unchecked the Enable KTTSD checkbox, stop KTTSD.
     if (enableKttsdWasToggled)
         slotEnableKttsd_toggled(false);
@@ -1115,16 +1122,16 @@ void KCMKttsMgr::slotAutoStartMgrCheckBox_toggled(bool checked)
 void KCMKttsMgr::kttsdStarted()
 {
     // kDebug() << "KCMKttsMgr::kttsdStarted: Running";
-    bool kttsdLoaded = (m_jobMgrPart != 0);
+    bool kttsdLoaded = (m_jobMgrWidget != 0);
     // Load Job Manager Part library.
     if (!kttsdLoaded)
     {
-        m_jobMgrPart = KParts::ComponentFactory::createPartInstanceFromLibrary<KParts::ReadOnlyPart>(
-            "libkttsjobmgrpart", mainTab, this);
-        if (m_jobMgrPart)
+        m_jobMgrWidget = new KttsJobMgr(this);
+        if (m_jobMgrWidget)
         {
+	    connect(m_jobMgrWidget, SIGNAL(configChanged()), this, SLOT(configChanged()));
             // Add the Job Manager part as a new tab.
-            mainTab->addTab(m_jobMgrPart->widget(), i18n("Jobs"));
+            mainTab->addTab(m_jobMgrWidget, i18n("Jobs"));
             kttsdLoaded = true;
         }
         else
@@ -1180,11 +1187,11 @@ void KCMKttsMgr::slotServiceOwnerChanged( const QString &service, const QString 
 void KCMKttsMgr::kttsdExiting()
 {
     // kDebug() << "KCMKttsMgr::kttsdExiting: Running";
-    if (m_jobMgrPart)
+    if (m_jobMgrWidget)
     {
         mainTab->removeTab(wpJobs);
-        delete m_jobMgrPart;
-        m_jobMgrPart = 0;
+        delete m_jobMgrWidget;
+        m_jobMgrWidget = 0;
     }
     enableKttsdCheckBox->setChecked(false);
     disconnect( QDBusConnection::sessionBus().interface(), 0, this, 0 );

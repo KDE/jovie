@@ -85,24 +85,10 @@ public:
     void requestExit();
 
     /**
-    * Main processing loop.  Dequeues utterances and sends them to the
-    * plugins and/or Audio Player.
-    */
-    //void doUtterances();
-
-    /**
     * Determine if kttsd is currently speaking any jobs.
     * @return               True if currently speaking any jobs.
     */
     bool isSpeaking();
-
-    /**
-    * Get the job number of the current job speaking.
-    * @return               Job number of the current job. 0 if no jobs.
-    *
-    * @see isSpeakingText
-    */
-    int getCurrentJobNum();
 
     /**
     * Get application data.
@@ -113,11 +99,6 @@ public:
     * @param appId          The DBUS senderId of the application.
     */
     AppData* getAppData(const QString& appId) const;
-
-    /**
-    * Destroys the application data.
-    */
-    void releaseAppData(const QString& appId);
 
     /**
     * Queue and start a speech job.
@@ -136,119 +117,6 @@ public:
     int say(const QString& appId, const QString& text, int sayOptions);
 
     /**
-    * Remove a job from the queue.
-    * @param jobNum         Job number.
-    *
-    * The job is deleted from the queue and the textRemoved signal is emitted.
-    */
-    void removeJob(int jobNum);
-
-    /**
-    * Remove all jobs owned by the application.
-    * @param appId          The DBUS senderId of the application.
-    */
-    void removeAllJobs(const QString& appId);
-
-    /**
-    * Get the number of sentences in a job.
-    * @param jobNum         Job number.
-    * @return               The number of sentences in the job.  -1 if no such job.
-    *
-    * The sentences of a job are given numbers from 1 to the number returned by this
-    * method.
-    *
-    * If the job is being filtered and split into sentences, waits until that is finished
-    * before returning.
-    */
-    int sentenceCount(int jobNum);
-
-    /**
-    * Get the number of jobs in the queue of the specified type owned by
-    * the application.
-    * @param appId          The DBUS senderId of the application.
-    * @param priority       Type of job.  Text, Message, Warning, or ScreenReaderOutput.
-    * @return               Number of jobs in the queue.  0 if none.
-    *
-    * A priority of KSpeech::jpAll will return all the job numbers 
-    * owned by the application.
-    */
-    int jobCount(const QString& appId, KSpeech::JobPriority priority) const;
-
-    /**
-    * Get a list of job numbers in the queue of the
-    * specified type owned by the application.
-    * @param appId          The DBUS senderId of the application.
-    * @param priority       Type of job.  Text, Message, Warning, or ScreenReaderOutput.
-    * @return               List of job numbers in the queue.
-    */
-    QStringList jobNumbers(const QString& appId, KSpeech::JobPriority priority) const;
-
-    /**
-    * Get the state of a job.
-    * @param jobNum         Job number.
-    * @return               State of the job. -1 if invalid job number.
-    *
-    * @see setJobState
-    */
-    int jobState(int jobNum) const;
-
-    /**
-    * Get information about a job.
-    * @param jobNum         Job number of the job.
-    * @return               A QDataStream containing information about the job.
-    *                       Blank if no such job.
-    *
-    * The stream contains the following elements:
-    *   - int priority      Job Type.
-    *   - int state         Job state.
-    *   - QString appId     DBUS senderId of the application that requested the speech job.
-    *   - QString talker    Talker code as requested by application.
-    *   - int sentenceNum   Current sentence being spoken.  Sentences are numbered starting at 1.
-    *   - int sentenceCount Total number of sentences in the job.
-    *   - QString applicationName Application's friendly name (if provided by app)
-    *
-    * If the job is currently filtering, waits for that to finish before returning.
-    *
-    * The following sample code will decode the stream:
-            @verbatim
-                QByteArray jobInfo = getTextJobInfo(jobNum);
-                QDataStream stream(jobInfo, QIODevice::ReadOnly);
-                qint32 priority;
-                qint32 state;
-                QString appId;
-                QString talker;
-                qint32 sentenceNum;
-                qint32 sentenceCount;
-                QString applicationName;
-                stream >> priority;
-                stream >> state;
-                stream >> appId;
-                stream >> talker;
-                stream >> sentenceNum;
-                stream >> sentenceCount;
-                stream >> applicationName;
-            @endverbatim
-    */
-    QByteArray jobInfo(int jobNum);
-
-    /**
-    * Return a sentence of a job.
-    * @param jobNum         Job number.
-    * @param sentenceNum    Sentence number of the sentence.
-    * @return               The specified sentence in the specified job.  If no such
-    *                       job or sentence, returns "".
-    */
-    QString jobSentence(int jobNum, int sentenceNum=1);
-
-    /**
-    * Return the talker code for a job.
-    * @param jobNum         Job number of the job.
-    *
-    * @see setTalker
-    */
-    QString talker(int jobNum);
-
-    /**
     * Change the talker for a job.
     * @param jobNum         Job number of the job.
     * @param talker         New code for the talker to do speaking.  Example "en".
@@ -261,32 +129,6 @@ public:
     void setTalker(int jobNum, const QString &talker);
 
     /**
-    * Move a job down in the queue so that it is spoken later.
-    * @param jobNum         Job number.
-    *
-    * Since there is only one ScreenReaderOutput, this method is meaningless
-    * for ScreenReaderOutput jobs.
-    */
-    void moveJobLater(int jobNum);
-
-    /**
-    * Advance or rewind N sentences in a job.
-    * @param jobNum         Job number of the job.
-    * @param n              Number of sentences to advance (positive) or rewind (negative)
-    *                       in the job.
-    * @return               Sentence number of the sentence actually moved to.  Sentence numbers
-    *                       are numbered starting at 1.
-    *
-    * If no such job, does nothing and returns 0.
-    * If n is zero, returns the current sentence number of the job.
-    * Does not affect the current speaking/not-speaking state of the job.
-    *
-    * Since ScreenReaderOutput jobs are not split into sentences, this method
-    * is meaningless for ScreenReaderOutput jobs.
-    */
-    int moveRelSentence(int jobNum, int n);
-
-    /**
     * Given an appId, returns the last (most recently queued) Job Number with that appId,
     * or if no such job, the Job Number of the last (most recent) job in the queue.
     * @param appId          The DBUS senderId of the application.
@@ -297,13 +139,6 @@ public:
     int findJobNumByAppId(const QString& appId) const;
 
     /**
-    * Given a jobNum, returns the first job with that jobNum.
-    * @return               Pointer to the job.
-    * If no such job, returns 0.
-    */
-    SpeechJob* findJobByJobNum(int jobNum) const;
-
-    /**
     * Given an appId, returns the last (most recently queued) job with that appId.
     * @param appId          The DBUS senderId of the application.
     * @return               Pointer to the job.
@@ -312,29 +147,6 @@ public:
     */
     SpeechJob* findLastJobByAppId(const QString& appId) const;
 
-    /**
-    * Given a Job Number, returns the current sentence number begin spoken.
-    * @param jobNum         Job Number.
-    * @return               Sentence number of the job.  If no such job, returns 0.
-    */
-    int jobSentenceNum(int jobNum) const;
-
-    /**
-    * Given a Job Number, sets the current sentence number begin spoken.
-    * @param jobNum          Job Number.
-    * @param sentenceNum     Sentence number.
-    * If for some reason, the job does not exist, nothing happens.
-    */
-    void setJobSentenceNum(int jobNum, int sentenceNum);
-
-    /**
-    * Given a jobNum, returns the appId of the application that owns the job.
-    * @param jobNum         Job number.
-    * @return               appId of the job.
-    * If no such job, returns "".
-    */
-    QString getAppIdByJobNum(int jobNum) const;
-   
     /**
     * Return true if the application is paused.
     */
@@ -382,19 +194,6 @@ public:
 
 signals:
     /**
-    * Emitted when a marker is processed.
-    * Currently only emits mtSentenceBegin and mtSentenceEnd.
-    * @param appId         The DBUS sender ID of the application that queued the job.
-    * @param jobNum        Job Number of the job emitting the marker.
-    * @param markerType    The type of marker.
-    *                      Currently either mtSentenceBegin or mtSentenceEnd.
-    * @param markerData    Data for the marker.
-    *                      Currently, this is the sentence number of the sentence
-    *                      begun or ended.  Sentence numbers begin at 1.
-    */
-    void marker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData);
-
-    /**
      * This signal is emitted when a new job coming in is filtered (or not filtered if no filters
      * are on).
      * @param prefilterText     The text of the speech job
@@ -402,38 +201,7 @@ signals:
      */
     void newJobFiltered(const QString &prefilterText, const QString &postfilterText);
 
-protected:
-    /**
-    * Processes events posted by ThreadedPlugIns.
-    */
-    virtual bool event ( QEvent * e );
-
 private slots:
-    /**
-    * Received from PlugIn objects when they finish asynchronous synthesis.
-    */
-    void slotSynthFinished();
-    /**
-    * Received from PlugIn objects when they finish asynchronous synthesis
-    * and audibilizing.
-    */
-    void slotSayFinished();
-    /**
-    * Received from PlugIn objects when they asynchronously stopText.
-    */
-    void slotStopped();
-    /**
-    * Received from transformer (SSMLConvert) when transforming is finished.
-    */
-    void slotTransformFinished();
-    /** Received from PlugIn object when they encounter an error.
-    * @param keepGoing               True if the plugin can continue processing.
-    *                                False if the plugin cannot continue, for example,
-    *                                the speech engine could not be started.
-    * @param msg                     Error message.
-    */
-    void slotError(bool keepGoing, const QString &msg);
-    
     void slotServiceUnregistered(const QString& serviceName);
 
 private:
@@ -441,13 +209,6 @@ private:
     * Constructor.
     */
     Speaker();
-
-    /**
-    * Converts a job state enumerator to a displayable string.
-    * @param state           Job state.
-    * @return                Displayable string for job state.
-    */
-    QString jobStateToStr(int state);
 
     /**
     * get the list of available modules that are configured in speech-dispatcher
@@ -467,18 +228,6 @@ private:
     * @return               List of parsed sentences.
     */
     QStringList parseText(const QString &text, const QString &appId);
-
-    /**
-    * Deletes job, removing it from all queues.
-    */
-    void deleteJob(int removeJobNum);
-
-    /**
-    * Checks to see if an application has active jobs, and if not and
-    * the application has exited, deletes the app and all its jobs.
-    * @param appId          DBUS sender id of the application.
-    */
-    void deleteExpiredApp(const QString appId);
 
 private:
     SpeakerPrivate* d;

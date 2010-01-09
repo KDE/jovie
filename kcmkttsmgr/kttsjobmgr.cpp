@@ -55,24 +55,13 @@
 #include "talkercode.h"
 #include "selecttalkerdlg.h"
 
-typedef KParts::GenericFactory<KttsJobMgrPart> KttsJobMgrPartFactory;
-K_EXPORT_COMPONENT_FACTORY( libkttsjobmgrpart, KttsJobMgrPartFactory )
-
-KAboutData* KttsJobMgrPart::createAboutData()
-{
-    KAboutData *about = new KAboutData("kttsjobmgr", 0, ki18n("KttsJobMgr"), "1.99");
-    return about;
-}
-
-KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args) :
-    KParts::ReadOnlyPart(parent)
+KttsJobMgr::KttsJobMgr(QWidget *parent) :
+    QWidget(parent)
 {
     m_ui = new Ui::kttsjobmgr;
-    QWidget * widget = new QWidget(parentWidget);
-    m_ui->setupUi(widget);
+    m_ui->setupUi(this);
 
 //DBusAbstractInterfacePrivate
-    Q_UNUSED(args);
     m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
     m_kspeech->setParent(this);
 
@@ -80,19 +69,16 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     m_kspeech->setApplicationName("KCMKttsMgr");
     m_kspeech->setIsSystemManager(true);
 
-    // Initialize some variables.
-    m_selectOnTextSet = false;
-
     // All the ktts components use the same catalog.
     KGlobal::locale()->insertCatalog("kttsd");
 
-    connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_speedSliderChanged(int)));
-    connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_pitchSliderChanged(int)));
-    connect (m_ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(slot_volumeSliderChanged(int)));
+    connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
+    connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
+    connect (m_ui->volumeSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
     
     connect (m_ui->moduleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(slot_moduleChanged(const QString &)));
     connect (m_ui->languageComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(slot_languageChanged(const QString &)));
-    connect (m_ui->voiceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_voiceChanged(int)));
+    connect (m_ui->voiceComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(configChanged()));
 
     m_ui->stopButton->setIcon(KIcon("media-playback-stop"));
     connect (m_ui->stopButton, SIGNAL(clicked()), this, SLOT(slot_stop()));
@@ -111,7 +97,6 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
     connect (m_ui->job_changetalker, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
 
     // Set the main widget for the part.
-    setWidget(widget);
 
     // Connect DBUS Signals emitted by KTTSD to our own slots.
     connect(m_kspeech, SIGNAL(kttsdStarted()),
@@ -120,89 +105,64 @@ KttsJobMgrPart::KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QSt
         this, SLOT(jobStateChanged(const QString&, int, int)));
     connect(m_kspeech, SIGNAL(marker(const QString&, int, int, const QString&)),
         this, SLOT(marker(const QString&, int, int, const QString&)));
-    connect(m_kspeech, SIGNAL(newJobFiltered(const QString&, const QString&)),
-        this, SLOT(slotJobFiltered(const QString&, const QString&)));
-
-    m_extension = new KttsJobMgrBrowserExtension(this);
 }
 
-KttsJobMgrPart::~KttsJobMgrPart()
+KttsJobMgr::~KttsJobMgr()
 {
     KGlobal::locale()->removeCatalog("kttsd");
-    closeUrl();
     delete m_ui;
-}
-
-bool KttsJobMgrPart::openFile()
-{
-    return true;
-}
-
-bool KttsJobMgrPart::closeUrl()
-{
-    return true;
 }
 
 /**
 * Slots connected to buttons.
 */
-void KttsJobMgrPart::slot_stop()
+void KttsJobMgr::slot_stop()
 {
     m_kspeech->stop();
 }
 
-void KttsJobMgrPart::slot_cancel()
+void KttsJobMgr::slot_cancel()
 {
     m_kspeech->cancel();
 }
 
-void KttsJobMgrPart::slot_pause()
+void KttsJobMgr::slot_pause()
 {
     m_kspeech->pause();
 }
 
-void KttsJobMgrPart::slot_resume()
+void KttsJobMgr::slot_resume()
 {
     m_kspeech->resume();
 }
 
-void KttsJobMgrPart::slot_speedSliderChanged(int speed)
+void KttsJobMgr::save()
 {
-    kDebug() << "telling kspeech to set speed to " << speed;
-    m_kspeech->setSpeed(speed);
+    m_kspeech->setSpeed(m_ui->speedSlider->value());
+    m_kspeech->setPitch(m_ui->pitchSlider->value());
+    m_kspeech->setVolume(m_ui->volumeSlider->value());
+    m_kspeech->setVoiceType(m_ui->voiceComboBox->currentIndex() + 1);
 }
 
-void KttsJobMgrPart::slot_pitchSliderChanged(int pitch)
+void KttsJobMgr::load()
 {
-    kDebug() << "telling kspeech to set pitch to " << pitch;
-    m_kspeech->setPitch(pitch);
 }
 
-void KttsJobMgrPart::slot_volumeSliderChanged(int volume)
-{
-    kDebug() << "telling kspeech to set volume to " << volume;
-    m_kspeech->setVolume(volume);
-}
-
-void KttsJobMgrPart::slot_moduleChanged(const QString & module)
+void KttsJobMgr::slot_moduleChanged(const QString & module)
 {
     kDebug() << "changing the output module to " << module;
     m_kspeech->setOutputModule(module);
+    emit configChanged();
 }
 
-void KttsJobMgrPart::slot_languageChanged(const QString & language)
+void KttsJobMgr::slot_languageChanged(const QString & language)
 {
     kDebug() << "changing the language to " << language;
     m_kspeech->setLanguage(language);
+    emit configChanged();
 }
 
-void KttsJobMgrPart::slot_voiceChanged(int voice)
-{
-    kDebug() << "changing the voice to voice # " << voice;
-    m_kspeech->setVoiceType(voice);
-}
-
-void KttsJobMgrPart::slot_job_change_talker()
+void KttsJobMgr::slot_job_change_talker()
 {
     //QModelIndex index = m_ui->m_jobTableView->currentIndex();
     //if (index.isValid())
@@ -225,9 +185,9 @@ void KttsJobMgrPart::slot_job_change_talker()
     //}
 }
 
-void KttsJobMgrPart::slot_speak_clipboard()
+void KttsJobMgr::slot_speak_clipboard()
 {
-    // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: running";
+    // kDebug() << "KttsJobMgr::slot_speak_clipboard: running";
 
     // Get the clipboard object.
     QClipboard *cb = QApplication::clipboard();
@@ -264,13 +224,11 @@ void KttsJobMgrPart::slot_speak_clipboard()
     {
         m_kspeech->say(text, sayOptions);
         // int jobNum = m_kspeech->say(text, sayOptions);
-        // kDebug() << "KttsJobMgrPart::slot_speak_clipboard: started jobNum " << jobNum;
-        // Set flag so that the job we just created will be selected when textSet signal is received.
-        m_selectOnTextSet = true;
+        // kDebug() << "KttsJobMgr::slot_speak_clipboard: started jobNum " << jobNum;
     }
 }
 
-void KttsJobMgrPart::slot_speak_file()
+void KttsJobMgr::slot_speak_file()
 {
     KEncodingFileDialog dlg;
     KEncodingFileDialog::Result result = dlg.getOpenFileNameAndEncoding();
@@ -287,7 +245,7 @@ void KttsJobMgrPart::slot_speak_file()
 * @param talkerCode    Talker Code.
 * @return              Talker ID.
 */
-QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
+QString KttsJobMgr::cachedTalkerCodeToTalkerID(const QString& talkerCode)
 {
     // If in the cache, return that.
     if (m_talkerCodesToTalkerIDs.contains(talkerCode))
@@ -297,7 +255,7 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
         // Otherwise, retrieve Talker ID from KTTSD and cache it.
         QString talkerID = m_kspeech->talkerToTalkerId(talkerCode);
         m_talkerCodesToTalkerIDs[talkerCode] = talkerID;
-        // kDebug() << "KttsJobMgrPart::cachedTalkerCodeToTalkerID: talkerCode = " << talkerCode << " talkerID = " << talkerID;
+        // kDebug() << "KttsJobMgr::cachedTalkerCodeToTalkerID: talkerCode = " << talkerCode << " talkerID = " << talkerID;
         return talkerID;
     }
 }
@@ -307,15 +265,6 @@ QString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const QString& talkerCode)
 /**
 * This signal is emitted when KTTSD starts or restarts after a call to reinit.
 */
-Q_SCRIPTABLE void KttsJobMgrPart::kttsdStarted()
-{
-}
-
-KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
-    : KParts::BrowserExtension(parent)
-{
-}
-
-KttsJobMgrBrowserExtension::~KttsJobMgrBrowserExtension()
+Q_SCRIPTABLE void KttsJobMgr::kttsdStarted()
 {
 }

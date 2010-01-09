@@ -47,6 +47,7 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class KAboutData;
 class KConfig;
+class KttsJobMgr;
 
 class FilterItem
 {
@@ -277,7 +278,7 @@ class KCMKttsMgr :
         /**
         * KTTS Job Manager.
         */
-        KParts::ReadOnlyPart *m_jobMgrPart;
+        KttsJobMgr *m_jobMgrWidget;
 
         /**
         * Plugin configuration dialog.

@@ -318,52 +318,54 @@ void KSpeech::resume()
 
 void KSpeech::removeJob(int jobNum)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    Speaker::Instance()->removeJob(jobNum);
+    kDebug() << "not implemented in speech-dispatcher yet";
 }
 
 void KSpeech::removeAllJobs()
 {
-    Speaker::Instance()->removeAllJobs(callingAppId());
+    kDebug() << "not implemented in speech-dispatcher yet";
 }
 
 int KSpeech::getSentenceCount(int jobNum)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    return Speaker::Instance()->sentenceCount(jobNum);
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
 }
 
 int KSpeech::getCurrentJob()
 {
-    return Speaker::Instance()->getCurrentJobNum();
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
 }
 
 int KSpeech::getJobCount(int priority)
 {
-    return Speaker::Instance()->jobCount(callingAppId(), (JobPriority)priority);
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
 }
 
 QStringList KSpeech::getJobNumbers(int priority)
 {
-    return Speaker::Instance()->jobNumbers(callingAppId(), (JobPriority)priority);
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return QStringList();
 }
 
 int KSpeech::getJobState(int jobNum)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    return Speaker::Instance()->jobState(jobNum);
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
 }
 
 QByteArray KSpeech::getJobInfo(int jobNum)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    return Speaker::Instance()->jobInfo(jobNum);
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return QByteArray();
 }
 
 QString KSpeech::getJobSentence(int jobNum, int sentenceNum)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    return Speaker::Instance()->jobSentence(jobNum, sentenceNum);
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
 }
 
 QStringList KSpeech::getTalkerCodes()
@@ -405,15 +407,13 @@ void KSpeech::changeJobTalker(int jobNum, const QString &talker)
 
 void KSpeech::moveJobLater(int jobNum)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    Speaker::Instance()->moveJobLater(jobNum);
+    kDebug() << "not implemented in speech-dispatcher yet";
 }
 
 int KSpeech::moveRelSentence(int jobNum, int n)
 {
-    jobNum = applyDefaultJobNum(jobNum);
-    int sentenceNum = Speaker::Instance()->moveRelSentence(jobNum, n);
-    return sentenceNum;
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
 }
 
 void KSpeech::showManagerDialog()
@@ -425,7 +425,6 @@ void KSpeech::showManagerDialog()
 
 void KSpeech::kttsdExit()
 {
-   Speaker::Instance()->removeAllJobs("kttsd");
     announceEvent("kttsdExit", "kttsdExiting");
     emit kttsdExiting();
     qApp->quit();
@@ -497,9 +496,6 @@ bool KSpeech::initializeSpeaker()
     kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker";
 
     Speaker::Instance()->init();
-
-    connect (Speaker::Instance(), SIGNAL(marker(const QString&, int, KSpeech::MarkerType, const QString&)),
-        this, SLOT(slotMarker(const QString&, int, KSpeech::MarkerType, const QString&)));
 
     // Establish ourself as a System Manager application.
     Speaker::Instance()->getAppData("kttsd")->setIsSystemManager(true);

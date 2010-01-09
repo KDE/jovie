@@ -21,14 +21,13 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef KTTSJOBMGRPART_H
-#define KTTSJOBMGRPART_H
+#ifndef KTTSJOBMGR_H
+#define KTTSJOBMGR_H
 
 // Qt includes
-
+#include <QWidget>
 
 // KDE includes.
-#include <kparts/browserextension.h>
 
 // KTTS includes.
 #include "kspeechinterface.h"
@@ -44,18 +43,21 @@ namespace Ui
     class kttsjobmgr;
 }
 
-class KttsJobMgrPart:
-    public KParts::ReadOnlyPart
+class KttsJobMgr:
+  public QWidget
 {
     Q_OBJECT
 public:
-    KttsJobMgrPart(QWidget *parentWidget, QObject *parent, const QStringList& args=QStringList());
-    virtual ~KttsJobMgrPart();
-    static KAboutData* createAboutData();
+    KttsJobMgr(QWidget *parent = 0);
+    virtual ~KttsJobMgr();
 
-protected:
-    virtual bool openFile();
-    virtual bool closeUrl();
+    /** apply current settings, i.e. speech-dispatcher what to do */
+    void save();
+    /** get the current settings from speech-dispatcher */
+    void load();
+    
+signals:
+    void configChanged();
 
     /** Slots connected to DBUS Signals emitted by KTTSD. */
 protected Q_SLOTS:
@@ -82,15 +84,7 @@ private slots:
     
     void slot_moduleChanged(const QString & module);
     void slot_languageChanged(const QString & language);
-    void slot_voiceChanged(int voice);
-
-    /**
-    * Slots connected to sliders.
-    */
-    void slot_speedSliderChanged(int);
-    void slot_pitchSliderChanged(int);
-    void slot_volumeSliderChanged(int);
-    
+   
 private:
     /**
     * DBUS KSpeech Interface.
@@ -107,15 +101,7 @@ private:
     /**
     * Job ListView.
     */
-    KttsJobMgrBrowserExtension *m_extension;
     Ui::kttsjobmgr * m_ui;
-    QList<KPushButton*> m_jobButtons;
-
-    /**
-    * This flag is set to True whenever we want to select the next job that
-    * is announced in a textSet signal.
-    */
-    bool m_selectOnTextSet;
 
     /**
     * Cache mapping Talker Codes to Talker IDs.
@@ -123,13 +109,4 @@ private:
     QMap<QString,QString> m_talkerCodesToTalkerIDs;
 };
 
-class KttsJobMgrBrowserExtension : public KParts::BrowserExtension
-{
-    Q_OBJECT
-    friend class KttsJobMgrPart;
-public:
-    KttsJobMgrBrowserExtension(KttsJobMgrPart *parent);
-    virtual ~KttsJobMgrBrowserExtension();
-};
-
-#endif    // KTTSJOBMGRPART_H
+#endif    // KTTSJOBMGR_H
