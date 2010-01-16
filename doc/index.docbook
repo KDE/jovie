@@ -527,7 +527,8 @@ hear a lot of &HTML; headers and other invisible tags spoken.</para></tip>
 <title>Speaking Text from &kate; Text Editor</title>
 
 <para>While running the &kde; Advanced Text Editor (&kate;), you can speak the text
-displayed.  First ensure that &ktts; is running.
+displayed.  First ensure that &ktts; is running and enable the <guilabel>KTextEditor 
+KTTSD Plugin</guilabel> in &kate;'s settings dialog.
 Highlight the text you want spoken and choose
 <menuchoice>
   <guisubmenu>Tools</guisubmenu>
