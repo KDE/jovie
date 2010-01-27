@@ -1,10 +1,11 @@
-project(kttsd)
+if(Q_WS_X11)
 
 macro_optional_find_package(Speechd)
 macro_log_feature(SPEECHD_FOUND "speechd" "Speech Dispatcher provides a high-level device independent layer for speech synthesis" "http://www.freebsoft.org/speechd" FALSE "" "Required to build kttsd, the KDE text-to-speech daemon")
 
-if(Q_WS_X11)
   if(SPEECHD_FOUND)
+
+project(kttsd)
 
 include(KttsdConfigureChecks.cmake)
 
