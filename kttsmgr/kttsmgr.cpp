@@ -75,8 +75,8 @@ int main (int argc, char *argv[])
 
     KUniqueApplication::setOrganizationDomain("kde.org");
     KUniqueApplication::setApplicationName("KttsMgr");
-    KUniqueApplication app;
-    app.setQuitOnLastWindowClosed( false );
+    KUniqueApplication * app = new KUniqueApplication;
+    app->setQuitOnLastWindowClosed( false );
 
     if(!KUniqueApplication::start())
     {
@@ -90,7 +90,7 @@ int main (int argc, char *argv[])
     KttsMgrTray* tray = new KttsMgrTray();
     tray->show();
 
-    int result = app.exec();
+    int result = app->exec();
     delete tray;
     return result;
 }

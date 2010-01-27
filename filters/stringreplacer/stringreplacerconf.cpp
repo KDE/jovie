@@ -119,7 +119,7 @@ StringReplacerConf::~StringReplacerConf(){
 * loaded, so it not necessary to call it in your constructor.
 * The plugin should read its configuration from the specified group
 * in the specified config file.
-* @param config      Pointer to a KConfig object.
+* @param c           Pointer to a KConfig object.
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
