@@ -59,7 +59,6 @@ FilterMgr::~FilterMgr()
 
 /**
  * Loads and initializes the filters.
- * @param config          Settings object.
  * @return                False if FilterMgr is not ready to filter.
  */
 bool FilterMgr::init()
