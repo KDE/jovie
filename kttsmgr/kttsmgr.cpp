@@ -50,7 +50,7 @@
 int main (int argc, char *argv[])
 {
     KAboutData aboutdata("kttsmgr", "kttsd", ki18n("KTTSMgr"),
-        "0.4.0", ki18n("Text-to-Speech Manager"),
+        "0.5.0", ki18n("Text-to-Speech Manager"),
         KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
