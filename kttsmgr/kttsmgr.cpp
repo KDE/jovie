@@ -38,7 +38,6 @@
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 #include <ksystemtrayicon.h>
-#include <kiconloader.h>
 #include <kmenu.h>
 #include <kaboutapplicationdialog.h>
 #include <ktoolinvocation.h>
@@ -83,9 +82,6 @@ int main (int argc, char *argv[])
         kDebug() << "kttsmgr is already running";
         return (0);
     }
-
-    QPixmap icon = KIconLoader::global()->loadIcon("preferences-desktop-text-to-speech", KIconLoader::Panel);
-    aboutdata.setProgramLogo(icon.toImage());
 
     KttsMgrTray* tray = new KttsMgrTray();
     tray->show();
