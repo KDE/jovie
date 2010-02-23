@@ -436,7 +436,7 @@ or <guibutton>Cancel</guibutton> quits <command>kttsmgr</command>.
 <note><para>This option does not take effect until the next time
 <command>kttsmgr</command> is started.</para></note>
 <note><para>This option has no effect when <command>kttsmgr</command> is
-running in the &kcontrol;.</para></note>
+running in the &systemsettings;.</para></note>
 </para></callout>
 <callout arearefs="pt-gen-5"><para>When this box is checked, and <command>kttsmgr</command>
 automatically appears in the system tray whenever speaking, it will also disappear
