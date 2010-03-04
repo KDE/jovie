@@ -3,12 +3,10 @@
   
   The KDE Text-to-Speech Daemon.
   -----------------------------
-  Copyright:
-  (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-  (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
-  (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright: (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
+  Copyright: (C) 2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
-  Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -34,7 +32,8 @@
 #include <klocale.h>
 
 // KTTSD includes.
-#include "kspeech.h"
+#include "kitty.h"
+#include "kittytrayicon.h"
 
 int main (int argc, char *argv[]){
     KLocale::setMainCatalog("kttsd");
@@ -49,6 +48,7 @@ int main (int argc, char *argv[]){
     aboutdata.addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
     aboutdata.addCredit(ki18n("Jorge Luis Arzola"), ki18n("Testing"), "arzolacub@hotmail.com");
     aboutdata.addCredit(ki18n("David Powell"), ki18n("Testing"), "achiestdragon@gmail.com");
+    aboutdata.setProgramIconName("preferences-desktop-text-to-speech");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
     // KCmdLineArgs::addCmdLineOptions( options );
@@ -67,9 +67,13 @@ int main (int argc, char *argv[]){
 
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
+
     kDebug() << "main: Creating KTTSD Service";
-    KSpeech* service = new KSpeech();
+    Kitty* service = Kitty::Instance();
     service->init();
+
+    KittyTrayIcon* tray = new KittyTrayIcon();
+    tray->show();
 
     // kDebug() << "Entering event loop.";
     return app.exec();

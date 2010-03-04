@@ -489,14 +489,29 @@ void Speaker::setSpeed(int speed)
     spd_set_voice_rate(d->connection, speed);
 }
 
+int Speaker::speed()
+{
+    return 0;
+}
+
 void Speaker::setPitch(int pitch)
 {
     spd_set_voice_pitch(d->connection, pitch);
 }
 
+int Speaker::pitch()
+{
+    return 0;
+}
+
 void Speaker::setVolume(int volume)
 {
     spd_set_volume(d->connection, volume);
+}
+
+int Speaker::volume()
+{
+    return 0;
 }
 
 void Speaker::setOutputModule(const QString & module)
@@ -505,16 +520,31 @@ void Speaker::setOutputModule(const QString & module)
     // discard result for now, TODO: add error reporting
 }
 
+QString Speaker::outputModule()
+{
+    return QString();
+}
+
 void Speaker::setLanguage(const QString & language)
 {
     int result = spd_set_language(d->connection, language.toUtf8().data());
     // discard result for now, TODO: add error reporting
 }
 
+QString Speaker::language()
+{
+    return QString();
+}
+
 void Speaker::setVoiceType(int voiceType)
 {
     int result = spd_set_voice_type(d->connection, SPDVoiceType(voiceType));
     // discard result for now, TODO: add error reporting
+}
+
+int Speaker::voiceType()
+{
+    return 0;
 }
 
 void Speaker::stop()

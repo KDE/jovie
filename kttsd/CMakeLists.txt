@@ -7,15 +7,16 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2400)
 
 set(kttsd_SRCS 
    main.cpp 
-   kspeech.cpp 
+   kitty.cpp 
    speaker.cpp 
    appdata.cpp 
    ssmlconvert.cpp 
    filtermgr.cpp 
    talkermgr.cpp 
-   speechjob.cpp )
+   kittytrayicon.cpp
+) 
 
-qt4_add_dbus_adaptor(kttsd_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml kspeech.h KSpeech)
+qt4_add_dbus_adaptor(kttsd_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml kitty.h Kitty)
 
 kde4_add_executable(kttsd_bin ${kttsd_SRCS})
 
@@ -25,6 +26,8 @@ target_link_libraries(kttsd_bin
     speechd
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KUTILS_LIBS} 
     kttsd )
 
 install(TARGETS kttsd_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -33,4 +36,5 @@ install(TARGETS kttsd_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES SSMLtoPlainText.xsl  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/xslt/ )
 install( FILES kttsd.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES kttsmgr.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
 

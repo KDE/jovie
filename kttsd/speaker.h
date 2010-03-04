@@ -192,6 +192,13 @@ public:
     void setLanguage(const QString & language);
     void setVoiceType(int voiceType);
 
+    int speed();
+    int pitch();
+    int volume();
+    QString outputModule();
+    QString language();
+    int voiceType();
+
 signals:
     /**
      * This signal is emitted when a new job coming in is filtered (or not filtered if no filters

@@ -1,11 +1,12 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   KTTSMgr System Tray Application
   -------------------------------
-  Copyright:
-  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
+  
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+  Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -22,33 +23,25 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef KTTSMGR_H
-#define KTTSMGR_H
+#ifndef _KITTYTRAYICON_H
+#define _KITTYTRAYICON_H
 
 // KDE includes.
 #include <kmenu.h>
 #include <ksystemtrayicon.h>
 
-// KTTS includes.
-#include "kspeechinterface.h"
-
 class QEvent;
 class QAction;
 
-class KttsMgrTray: public KSystemTrayIcon
+class KittyTrayIcon: public KSystemTrayIcon
 {
     Q_OBJECT
 
     public:
-        KttsMgrTray(QWidget *parent=0);
-        ~KttsMgrTray();
-
-        void setExitWhenFinishedSpeaking();
-        QString getStatus();
+        KittyTrayIcon(QWidget *parent=0);
+        ~KittyTrayIcon();
 
     protected Q_SLOTS:
-        Q_SCRIPTABLE void jobStateChanged(const QString &appId, int jobNum, int state);
-
         bool event(QEvent *event);
         void slotActivated(QSystemTrayIcon::ActivationReason reason);
         virtual void contextMenuAboutToShow(KMenu* menu);
@@ -66,20 +59,6 @@ class KttsMgrTray: public KSystemTrayIcon
         void quitSelected();
 
     private:
-        /**
-         * Convert a KTTSD job state integer into a display string.
-         * @param state          KTTSD job state
-         * @return               Display string for the state.
-         */
-        QString stateToStr(int state);
-        void exitWhenFinishedSpeaking();
-        
-        /**
-        * DBUS KSpeech Interface.
-        */
-        org::kde::KSpeech* m_kspeech;
-
-        bool isKttsdRunning();
         QAction* actStop;
         QAction* actPause;
         QAction* actResume;
@@ -88,4 +67,4 @@ class KttsMgrTray: public KSystemTrayIcon
         QAction* actConfigure;
 };
 
-#endif    // KTTSMGR_H
+#endif    // _KITTYTRAYICON_H

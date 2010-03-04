@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KSpeech
+  Kitty
   
   The KDE Text-to-Speech object.
   ------------------------------
@@ -23,6 +23,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
+
+#include "kitty.h"
 
 #include <kspeech.h>
 
@@ -50,22 +52,21 @@
 #define spd_debug spd_debug2
 #include "speaker.h"
 
-// KSpeech includes.
 #include "kspeechadaptor.h"
 
-/* KSpeechPrivate Class ================================================== */
+/* KittyPrivate Class ================================================== */
 
-class KSpeechPrivate
+class KittyPrivate
 {
-    KSpeechPrivate()
+    KittyPrivate()
     {
     }
     
-    ~KSpeechPrivate()
+    ~KittyPrivate()
     {
     }
 
-    friend class KSpeech;
+    friend class Kitty;
     
 protected:
     /*
@@ -74,141 +75,151 @@ protected:
     QString callingAppId;
 };
 
-/* KSpeech Class ========================================================= */
+/* Kitty Class ========================================================= */
 
 /* ---- Public Methods --------------------------------------------------- */
+Kitty * Kitty::m_instance = NULL;
 
-KSpeech::KSpeech(QObject *parent) :
-    QObject(parent), d(new KSpeechPrivate())
+Kitty * Kitty::Instance()
 {
-    kDebug() << "KSpeech::KSpeech Running";
+    if (m_instance == NULL)
+    {
+        m_instance = new Kitty();
+    }
+    return m_instance;
 }
 
-KSpeech::~KSpeech(){
-    kDebug() << "KSpeech::~KSpeech:: Stopping KTTSD service";
+Kitty::Kitty(QObject *parent) :
+    QObject(parent), d(new KittyPrivate())
+{
+    kDebug() << "Kitty::Kitty Running";
+}
+
+Kitty::~Kitty(){
+    kDebug() << "Kitty::~Kitty:: Stopping KTTSD service";
     Speaker::Instance()->requestExit();
     delete d;
-    announceEvent("~KSpeech", "kttsdExiting");
+    announceEvent("~Kitty", "kttsdExiting");
     emit kttsdExiting();
 }
 
 /* ---- DBUS exported functions ------------------------------------------ */
 
-bool KSpeech::isSpeaking() const
+bool Kitty::isSpeaking() const
 {
     return Speaker::Instance()->isSpeaking();
 }
 
-QString KSpeech::version() const
+QString Kitty::version() const
 {
     return KGlobal::mainComponent().aboutData()->version();
 }
 
-QString KSpeech::applicationName()
+QString Kitty::applicationName()
 {
     return Speaker::Instance()->getAppData(callingAppId())->applicationName();
 }
 
-void KSpeech::setApplicationName(const QString &applicationName)
+void Kitty::setApplicationName(const QString &applicationName)
 {
     kDebug() << "setting application name to : " << applicationName;
     Speaker::Instance()->getAppData(callingAppId())->setApplicationName(applicationName);
 }
 
-QString KSpeech::defaultTalker()
+QString Kitty::defaultTalker()
 {
     return Speaker::Instance()->getAppData(callingAppId())->defaultTalker();
 }
 
-void KSpeech::setDefaultTalker(const QString &defaultTalker)
+void Kitty::setDefaultTalker(const QString &defaultTalker)
 {
     Speaker::Instance()->getAppData(callingAppId())->setDefaultTalker(defaultTalker);
 }
 
-int KSpeech::defaultPriority()
+int Kitty::defaultPriority()
 {
     return Speaker::Instance()->getAppData(callingAppId())->defaultPriority();
 }
 
-void KSpeech::setDefaultPriority(int defaultPriority)
+void Kitty::setDefaultPriority(int defaultPriority)
 {
-    Speaker::Instance()->getAppData(callingAppId())->setDefaultPriority((JobPriority)defaultPriority);
+    Speaker::Instance()->getAppData(callingAppId())->setDefaultPriority((KSpeech::JobPriority)defaultPriority);
 }
 
-QString KSpeech::sentenceDelimiter()
+QString Kitty::sentenceDelimiter()
 {
     return Speaker::Instance()->getAppData(callingAppId())->sentenceDelimiter();
 }
 
-void KSpeech::setSentenceDelimiter(const QString &sentenceDelimiter)
+void Kitty::setSentenceDelimiter(const QString &sentenceDelimiter)
 {
     Speaker::Instance()->getAppData(callingAppId())->setSentenceDelimiter(sentenceDelimiter);
 }
 
-bool KSpeech::filteringOn()
+bool Kitty::filteringOn()
 {
     return Speaker::Instance()->getAppData(callingAppId())->filteringOn();
 }
 
-void KSpeech::setFilteringOn(bool filteringOn)
+void Kitty::setFilteringOn(bool filteringOn)
 {
     Speaker::Instance()->getAppData(callingAppId())->setFilteringOn(filteringOn);
 }
 
-bool KSpeech::autoConfigureTalkersOn()
+bool Kitty::autoConfigureTalkersOn()
 {
     return Speaker::Instance()->getAppData(callingAppId())->autoConfigureTalkersOn();
 }
 
-void KSpeech::setAutoConfigureTalkersOn(bool autoConfigureTalkersOn)
+void Kitty::setAutoConfigureTalkersOn(bool autoConfigureTalkersOn)
 {
     Speaker::Instance()->getAppData(callingAppId())->setAutoConfigureTalkersOn(autoConfigureTalkersOn);
 }
 
-bool KSpeech::isApplicationPaused()
+bool Kitty::isApplicationPaused()
 {
     return Speaker::Instance()->isApplicationPaused(callingAppId());
 }
 
-QString KSpeech::htmlFilterXsltFile()
+QString Kitty::htmlFilterXsltFile()
 {
     return Speaker::Instance()->getAppData(callingAppId())->htmlFilterXsltFile();
 }
 
-void KSpeech::setHtmlFilterXsltFile(const QString &htmlFilterXsltFile)
+void Kitty::setHtmlFilterXsltFile(const QString &htmlFilterXsltFile)
 {
     Speaker::Instance()->getAppData(callingAppId())->setHtmlFilterXsltFile(htmlFilterXsltFile);
 }
 
-QString KSpeech::ssmlFilterXsltFile()
+QString Kitty::ssmlFilterXsltFile()
 {
     return Speaker::Instance()->getAppData(callingAppId())->ssmlFilterXsltFile();
 }
 
-void KSpeech::setSsmlFilterXsltFile(const QString &ssmlFilterXsltFile)
+void Kitty::setSsmlFilterXsltFile(const QString &ssmlFilterXsltFile)
 {
     Speaker::Instance()->getAppData(callingAppId())->setSsmlFilterXsltFile(ssmlFilterXsltFile);
 }
 
-bool KSpeech::isSystemManager()
+bool Kitty::isSystemManager()
 {
     return Speaker::Instance()->getAppData(callingAppId())->isSystemManager();
 }
 
-void KSpeech::setIsSystemManager(bool isSystemManager)
+void Kitty::setIsSystemManager(bool isSystemManager)
 {
     Speaker::Instance()->getAppData(callingAppId())->setIsSystemManager(isSystemManager);
 }
 
-int KSpeech::say(const QString &text, int options) {
-    // kDebug() << "KSpeech::say: Adding '" << text << "' to queue.";
+int Kitty::say(const QString &text, int options) {
+    // kDebug() << "Kitty::say: Adding '" << text << "' to queue.";
     Speaker * speaker = Speaker::Instance();
     return speaker->say(speaker->getAppData(callingAppId())->applicationName(), text, options);
 }
 
-int KSpeech::sayFile(const QString &filename, const QString &encoding)
+int Kitty::sayFile(const QString &filename, const QString &encoding)
 {
-    // kDebug() << "KSpeech::setFile: Running";
+    // kDebug() << "Kitty::setFile: Running";
     QFile file(filename);
     int jobNum = 0;
     if ( file.open(QIODevice::ReadOnly) )
@@ -225,7 +236,7 @@ int KSpeech::sayFile(const QString &filename, const QString &encoding)
     return jobNum;
 }
 
-int KSpeech::sayClipboard()
+int Kitty::sayClipboard()
 {
     // Get the clipboard object.
     QClipboard *cb = qApp->clipboard();
@@ -241,17 +252,17 @@ int KSpeech::sayClipboard()
         return 0;
 }
 
-QStringList KSpeech::outputModules()
+QStringList Kitty::outputModules()
 {
     return Speaker::Instance()->outputModules();
 }
 
-QStringList KSpeech::languagesByModule(const QString & module)
+QStringList Kitty::languagesByModule(const QString & module)
 {
     return Speaker::Instance()->languagesByModule(module);
 }
 
-void KSpeech::setSpeed(int speed)
+void Kitty::setSpeed(int speed)
 {
     if (speed < -100 || speed > 100) {
         kDebug() << "setSpeed called with out of range speed value: " << speed;
@@ -261,7 +272,12 @@ void KSpeech::setSpeed(int speed)
     }
 }
 
-void KSpeech::setPitch(int pitch)
+int Kitty::speed()
+{
+    return Speaker::Instance()->speed();
+}
+
+void Kitty::setPitch(int pitch)
 {
     if (pitch < -100 || pitch > 100) {
         kDebug() << "setPitch called with out of range pitch value: " << pitch;
@@ -271,7 +287,12 @@ void KSpeech::setPitch(int pitch)
     }
 }
 
-void KSpeech::setVolume(int volume)
+int Kitty::pitch()
+{
+    return Speaker::Instance()->pitch();
+}
+
+void Kitty::setVolume(int volume)
 {
     if (volume < -100 || volume > 100) {
         kDebug() << "setVolume called with out of range volume value: " << volume;
@@ -281,156 +302,166 @@ void KSpeech::setVolume(int volume)
     }
 }
 
-void KSpeech::setOutputModule(const QString & module)
+int Kitty::volume()
+{
+    return Speaker::Instance()->volume();
+}
+
+void Kitty::setOutputModule(const QString & module)
 {
     Speaker::Instance()->setOutputModule(module);
 }
 
-void KSpeech::setLanguage(const QString & language)
+void Kitty::setLanguage(const QString & language)
 {
     Speaker::Instance()->setLanguage(language);
 }
 
-void KSpeech::setVoiceType(int voiceType)
+void Kitty::setVoiceType(int voiceType)
 {
     Speaker::Instance()->setVoiceType(voiceType);
 }
 
-void KSpeech::stop()
+int Kitty::voiceType()
+{
+    return Speaker::Instance()->voiceType();
+}
+
+void Kitty::stop()
 {
     Speaker::Instance()->stop();
 }
 
-void KSpeech::cancel()
+void Kitty::cancel()
 {
     Speaker::Instance()->pause();
 }
 
-void KSpeech::pause()
+void Kitty::pause()
 {
     Speaker::Instance()->pause();
 }
 
-void KSpeech::resume()
+void Kitty::resume()
 {
     Speaker::Instance()->resume();
 }
 
-void KSpeech::removeJob(int jobNum)
+void Kitty::removeJob(int jobNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
 }
 
-void KSpeech::removeAllJobs()
+void Kitty::removeAllJobs()
 {
     kDebug() << "not implemented in speech-dispatcher yet";
 }
 
-int KSpeech::getSentenceCount(int jobNum)
-{
-    kDebug() << "not implemented in speech-dispatcher yet";
-    return 0;
-}
-
-int KSpeech::getCurrentJob()
+int Kitty::getSentenceCount(int jobNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return 0;
 }
 
-int KSpeech::getJobCount(int priority)
+int Kitty::getCurrentJob()
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return 0;
 }
 
-QStringList KSpeech::getJobNumbers(int priority)
+int Kitty::getJobCount(int priority)
+{
+    kDebug() << "not implemented in speech-dispatcher yet";
+    return 0;
+}
+
+QStringList Kitty::getJobNumbers(int priority)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return QStringList();
 }
 
-int KSpeech::getJobState(int jobNum)
+int Kitty::getJobState(int jobNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return 0;
 }
 
-QByteArray KSpeech::getJobInfo(int jobNum)
+QByteArray Kitty::getJobInfo(int jobNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return QByteArray();
 }
 
-QString KSpeech::getJobSentence(int jobNum, int sentenceNum)
+QString Kitty::getJobSentence(int jobNum, int sentenceNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return 0;
 }
 
-QStringList KSpeech::getTalkerCodes()
+QStringList Kitty::getTalkerCodes()
 {
     return TalkerMgr::Instance()->getTalkers();
 }
 
-QString KSpeech::talkerToTalkerId(const QString &talker)
+QString Kitty::talkerToTalkerId(const QString &talker)
 {
     return TalkerMgr::Instance()->talkerCodeToTalkerId(talker);
 }
 
-int KSpeech::getTalkerCapabilities1(const QString &talker)
+int Kitty::getTalkerCapabilities1(const QString &talker)
 {
     // TODO:
     Q_UNUSED(talker);
     return 0;
 }
 
-int KSpeech::getTalkerCapabilities2(const QString &talker)
+int Kitty::getTalkerCapabilities2(const QString &talker)
 {
     // TODO:
     Q_UNUSED(talker);
     return 0;
 }
 
-QStringList KSpeech::getTalkerVoices(const QString &talker)
+QStringList Kitty::getTalkerVoices(const QString &talker)
 {
     // TODO:
     Q_UNUSED(talker);
     return QStringList();
 }
 
-void KSpeech::changeJobTalker(int jobNum, const QString &talker)
+void Kitty::changeJobTalker(int jobNum, const QString &talker)
 {
     jobNum = applyDefaultJobNum(jobNum);
     Speaker::Instance()->setTalker(jobNum, talker);
 }
 
-void KSpeech::moveJobLater(int jobNum)
+void Kitty::moveJobLater(int jobNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
 }
 
-int KSpeech::moveRelSentence(int jobNum, int n)
+int Kitty::moveRelSentence(int jobNum, int n)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
     return 0;
 }
 
-void KSpeech::showManagerDialog()
+void Kitty::showManagerDialog()
 {
     QString cmd = "kcmshell4 kcmkttsd --caption ";
     cmd += '\'' + i18n("KDE Text-to-Speech") + '\'';
     KRun::runCommand(cmd,NULL);
 }
 
-void KSpeech::kttsdExit()
+void Kitty::kttsdExit()
 {
     announceEvent("kttsdExit", "kttsdExiting");
     emit kttsdExiting();
     qApp->quit();
 }
 
-void KSpeech::init()
+void Kitty::init()
 {
     new KSpeechAdaptor(this);
     if (ready()) {
@@ -438,11 +469,11 @@ void KSpeech::init()
     }
 }
 
-void KSpeech::reinit()
+void Kitty::reinit()
 {
     // Restart ourself.
-    kDebug() << "KSpeech::reinit: Running";
-    kDebug() << "KSpeech::reinit: Stopping KTTSD service";
+    kDebug() << "Kitty::reinit: Running";
+    kDebug() << "Kitty::reinit: Stopping KTTSD service";
     //if (Speaker::Instance()->isSpeaking())
     //    Speaker::Instance()->pause();
     Speaker::Instance()->requestExit();
@@ -452,24 +483,24 @@ void KSpeech::reinit()
     }
 }
 
-void KSpeech::setCallingAppId(const QString& appId)
+void Kitty::setCallingAppId(const QString& appId)
 {
     d->callingAppId = appId;
 }
 
 /* ---- Private Methods ------------------------------------------ */
 
-bool KSpeech::initializeConfigData()
+bool Kitty::initializeConfigData()
 {
     return true;
 }
 
-bool KSpeech::ready()
+bool Kitty::ready()
 {
     // TODO: add a check here to see if kttsd is ready (Speaker::Instance() will always be true...)
     //if (Speaker::Instance())
     //    return true;
-    //kDebug() << "KSpeech::ready: Starting KTTSD service";
+    //kDebug() << "Kitty::ready: Starting KTTSD service";
 //    if (!initializeSpeechData()) return false;
     if (!initializeTalkerMgr())
         return false;
@@ -480,20 +511,20 @@ bool KSpeech::ready()
     return true;
 }
 
-bool KSpeech::initializeSpeechData()
+bool Kitty::initializeSpeechData()
 {
     return true;
 }
 
-bool KSpeech::initializeTalkerMgr()
+bool Kitty::initializeTalkerMgr()
 {
     TalkerMgr::Instance()->loadTalkers(KGlobal::config().data());
     return true;
 }
 
-bool KSpeech::initializeSpeaker()
+bool Kitty::initializeSpeaker()
 {
-    kDebug() << "KSpeech::initializeSpeaker: Instantiating Speaker";
+    kDebug() << "Kitty::initializeSpeaker: Instantiating Speaker";
 
     Speaker::Instance()->init();
 
@@ -504,24 +535,24 @@ bool KSpeech::initializeSpeaker()
 }
 
 
-void KSpeech::slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state)
+void Kitty::slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state)
 {
     announceEvent("slotJobStateChanged", "jobStateChanged", appId, jobNum, state);
     emit jobStateChanged(appId, jobNum, state);
 }
 
-void KSpeech::slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData)
+void Kitty::slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData)
 {
     announceEvent("slotMarker", "marker", appId, jobNum, markerType, markerData);
     emit marker(appId, jobNum, markerType, markerData);
 }
 
-void KSpeech::slotFilteringFinished()
+void Kitty::slotFilteringFinished()
 {
     //Speaker::Instance()->doUtterances();
 }
 
-QString KSpeech::callingAppId()
+QString Kitty::callingAppId()
 {
     // TODO: What would be nice is if there were a way to get the
     // last DBUS sender() without having to add DBusMessage to every
@@ -529,7 +560,7 @@ QString KSpeech::callingAppId()
     return d->callingAppId;
 }
 
-int KSpeech::applyDefaultJobNum(int jobNum)
+int Kitty::applyDefaultJobNum(int jobNum)
 {
     int jNum = jobNum;
     if (!jNum)
@@ -541,21 +572,21 @@ int KSpeech::applyDefaultJobNum(int jobNum)
     return jNum;
 }
 
-void KSpeech::announceEvent(const QString& slotName, const QString& eventName)
+void Kitty::announceEvent(const QString& slotName, const QString& eventName)
 {
-    kDebug() << "KSpeech::" << slotName << ": emitting DBUS signal " << eventName;
+    kDebug() << "Kitty::" << slotName << ": emitting DBUS signal " << eventName;
 }
 
-void KSpeech::announceEvent(const QString& slotName, const QString& eventName, const QString& appId,
-    int jobNum, MarkerType markerType, const QString& markerData)
+void Kitty::announceEvent(const QString& slotName, const QString& eventName, const QString& appId,
+    int jobNum, KSpeech::MarkerType markerType, const QString& markerData)
 {
-    kDebug() << "KSpeech::" << slotName << ": emitting DBUS signal " << eventName 
+    kDebug() << "Kitty::" << slotName << ": emitting DBUS signal " << eventName 
         << " with appId " << appId << " job number " << jobNum << " marker type " << markerType << " and data " << markerData << endl;
 }
 
-void KSpeech::announceEvent(const QString& slotName, const QString& eventName, const QString& appId,
-    int jobNum, JobState state)
+void Kitty::announceEvent(const QString& slotName, const QString& eventName, const QString& appId,
+    int jobNum, KSpeech::JobState state)
 {
-    kDebug() << "KSpeech::" << slotName << ": emitting DBUS signal " << eventName <<
-        " with appId " << appId << " job number " << jobNum << " and state " << SpeechJob::jobStateToStr(state) << endl;
+    kDebug() << "Kitty::" << slotName << ": emitting DBUS signal " << eventName <<
+        " with appId " << appId << " job number " << jobNum << " and state " << /* SpeechJob::jobStateToStr(state) << */ endl;
 }
