@@ -36,9 +36,6 @@
 // KTTS includes.
 #include "talkercode.h"
 
-/**
- * Constructor.
- */
 TalkerChooserProc::TalkerChooserProc( QObject *parent, const QVariantList& args ) :
     KttsFilterProc(parent, args) 
 {
@@ -46,23 +43,11 @@ TalkerChooserProc::TalkerChooserProc( QObject *parent, const QVariantList& args 
     // kDebug() << "TalkerChooserProc::TalkerChooserProc: Running";
 }
 
-/**
- * Destructor.
- */
 TalkerChooserProc::~TalkerChooserProc()
 {
     // kDebug() << "TalkerChooserProc::~TalkerChooserProc: Running";
 }
 
-/**
- * Initialize the filter.
- * @param config          Settings object.
- * @param configGroup     Settings Group.
- * @return                False if filter is not ready to filter.
- *
- * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
- * separate configuration files of their own.
- */
 bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
     // kDebug() << "PlugInProc::init: Running";
     KConfigGroup config( c, configGroup );
@@ -83,27 +68,8 @@ bool TalkerChooserProc::init(KConfig* c, const QString& configGroup){
     return true;
 }
 
-/**
- * Returns True if the plugin supports asynchronous processing,
- * i.e., supports asyncConvert method.
- * @return                        True if this plugin supports asynchronous processing.
- *
- * If the plugin returns True, it must also implement @ref getState .
- * It must also emit @ref filteringFinished when filtering is completed.
- * If the plugin returns True, it must also implement @ref stopFiltering .
- * It must also emit @ref filteringStopped when filtering has been stopped.
- */
 /*virtual*/ bool TalkerChooserProc::supportsAsync() { return false; }
 
-/**
- * Convert input, returning output.  Runs synchronously.
- * @param inputText         Input text.
- * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
- *                          use for synthing the text.  Useful for extracting hints about
- *                          how to filter the text.  For example, languageCode.
- * @param appId             The DCOP appId of the application that queued the text.
- *                          Also useful for hints about how to do the filtering.
- */
 /*virtual*/ QString TalkerChooserProc::convert(const QString& inputText, TalkerCode* talkerCode,
     const QString& appId)
 {

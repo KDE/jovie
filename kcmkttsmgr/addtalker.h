@@ -46,7 +46,6 @@ public:
     /**
     * Constructor.
     * @param parent             Inherited KDialog parameter.
-    * @param name               Inherited KDialog parameter.
     */
     explicit AddTalker(QWidget* parent = 0);
 

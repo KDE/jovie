@@ -53,7 +53,7 @@ class KDE_EXPORT SelectLanguageDlg : public KDialog
          * Constructor.
          * @param parent                The parent for this dialog.
          * @param caption               Displayed title for this dialog.
-         * @param languageCode          A list of language codes that should start
+         * @param languageCodes          A list of language codes that should start
          *                              out selected when dialog is shown.
          * @param selectMode            0 if user may choose more than one
          *                              language in the list.  1 if only one

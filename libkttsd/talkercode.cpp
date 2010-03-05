@@ -182,16 +182,6 @@ QString TalkerCode::translatedVoiceType(int voiceType)
 //    return tmpTalkerCode.getTalkerCode();
 //}
 
-/**
- * Given a language code that might contain a country code, splits the code into
- * the two letter language code and country code.
- * @param fullLanguageCode     Language code to be split.
- * @return languageCode        Just the language part of the code.
- * @return countryCode         The country code part (if any).
- *
- * If the input code begins with an asterisk, it is ignored and removed from the returned
- * languageCode.
- */
 /*static*/ void TalkerCode::splitFullLanguageCode(const QString &lang, QString &languageCode, QString &countryCode)
 {
     QString language = lang;
@@ -202,17 +192,6 @@ QString TalkerCode::translatedVoiceType(int voiceType)
     KGlobal::locale()->splitLocale(language, languageCode, countryCode, modifier, charSet);
 }
 
-/**
- * Given a full language code and plugin name, returns a normalized default talker code.
- * @param fullLanguageCode      Language code.
- * @param plugInName            Name of the Synthesizer plugin.
- * @return                      Full normalized talker code.
- *
- * Example returned from defaultTalkerCode("en", "Festival")
- *   <voice lang="en" name="fixed" gender="neutral"/>
- *   <prosody volume="medium" rate="medium"/>
- *   <kttsd synthesizer="Festival" />
- */
 /*static*/ QString TalkerCode::defaultTalkerCode(const QString &fullLanguageCode, const QString &moduleName)
 {
     TalkerCode tmpTalkerCode;
@@ -222,9 +201,6 @@ QString TalkerCode::translatedVoiceType(int voiceType)
     return tmpTalkerCode.getTalkerCode();
 }
 
-/**
- * Converts a language code plus optional country code to language description.
- */
 /*static*/ QString TalkerCode::languageCodeToLanguage(const QString &languageCode)
 {
     QString langAlpha;

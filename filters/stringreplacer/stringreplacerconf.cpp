@@ -53,9 +53,6 @@
 #include "selectlanguagedlg.h"
 #include "filterconf.h"
 
-/**
-* Constructor 
-*/
 StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& args ) :
     KttsFilterConf(parent, args),
     m_editDlg(0),
@@ -103,26 +100,10 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& arg
     defaults();
 }
 
-/**
-* Destructor.
-*/
 StringReplacerConf::~StringReplacerConf(){
     // kDebug() << "StringReplacerConf::~StringReplacerConf: Running";
 }
 
-/**
-* This method is invoked whenever the module should read its 
-* configuration (most of the times from a config file) and update the 
-* user interface. This happens when the user clicks the "Reset" button in 
-* the control center, to undo all of his changes and restore the currently 
-* valid settings.  Note that kttsmgr calls this when the plugin is
-* loaded, so it not necessary to call it in your constructor.
-* The plugin should read its configuration from the specified group
-* in the specified config file.
-* @param c           Pointer to a KConfig object.
-* @param configGroup Call config->setGroup with this argument before
-*                    loading your configuration.
-*/
 void StringReplacerConf::load(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::load: Running";
     // See if this filter previously save its word list.
@@ -247,16 +228,6 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     return QString();
 }
 
-/**
-* This function gets called when the user wants to save the settings in 
-* the user interface, updating the config files or wherever the 
-* configuration is stored. The method is called when the user clicks "Apply" 
-* or "Ok". The plugin should save its configuration in the specified
-* group of the specified config file.
-* @param config      Pointer to a KConfig object.
-* @param configGroup Call config->setGroup with this argument before
-*                    saving your configuration.
-*/
 void StringReplacerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::save: Running";
     QString wordsFilename =
@@ -360,13 +331,6 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     return QString();
 }
 
-/** 
-* This function is called to set the settings in the module to sensible
-* default values. It gets called when hitting the "Default" button. The 
-* default values should probably be the same as the ones the application 
-* uses when started without a config file.  Note that defaults should
-* be applied to the on-screen widgets; not to the config file.
-*/
 void StringReplacerConf::defaults(){
     // kDebug() << "StringReplacerConf::defaults: Running";
     // Default language is none.
@@ -381,21 +345,8 @@ void StringReplacerConf::defaults(){
     // kDebug() << "StringReplacerConf::defaults: Exiting";
 }
 
-/**
- * Indicates whether the plugin supports multiple instances.  Return
- * False if only one instance of the plugin can be configured.
- * @return            True if multiple instances are possible.
- */
 bool StringReplacerConf::supportsMultiInstance() { return true; }
 
-/**
- * Returns the name of the plugin.  Displayed in Filters tab of KTTSMgr.
- * If there can be more than one instance of a filter, it should return
- * a unique name for each instance.  The name should be translated for
- * the user if possible.  If the plugin is not correctly configured,
- * return an empty string.
- * @return          Filter instance name.
- */
 QString StringReplacerConf::userPlugInName()
 {
     if ( substLView->rowCount() == 0 ) return QString();

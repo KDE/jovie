@@ -104,7 +104,7 @@ public:
     * Queue and start a speech job.
     * @param appId          The DBUS senderId of the application.
     * @param text           The text to be spoken.
-    * @param options        Option flags.  @see SayOptions.  Defaults to KSpeech::soNone.
+    * @param sayOptions        Option flags.  @see SayOptions.  Defaults to KSpeech::soNone.
     *
     * Based on the options, the text may contain the text to be spoken, with or withou
     * markup, or it may contain characters to be spelled out, or it may contain

@@ -109,7 +109,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Given a language code that might contain a country code, splits the code into
          * the two letter language code and country code.
-         * @param fullLanguageCode   Language code to be split.
+         * @param lang               Language code to be split.
          * @return languageCode      Just the language part of the code.
          * @return countryCode       The country code part (if any).
          *
@@ -121,7 +121,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Given a language code and plugin name, returns a normalized default talker code.
          * @param fullLanguageCode      Language code.
-         * @param plugInName            Name of the Synthesizer plugin.
+         * @param moduleName            Name of the Synthesizer plugin.
          * @return                      Full normalized talker code.
          *
          * Example returned from defaultTalkerCode("en", "Festival")
@@ -129,7 +129,7 @@ class KDE_EXPORT TalkerCode
          *   <prosody volume="medium" rate="medium"/>
          *   <kttsd synthesizer="Festival" />
          */
-        static QString defaultTalkerCode(const QString &fullLanguageCode, const QString &plugInName);
+        static QString defaultTalkerCode(const QString &fullLanguageCode, const QString &moduleName);
 
         /**
          * Converts a language code plus optional country code to language description.
