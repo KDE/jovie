@@ -73,7 +73,6 @@ int main (int argc, char *argv[]){
     service->init();
 
     KittyTrayIcon* tray = new KittyTrayIcon();
-    tray->show();
 
     // kDebug() << "Entering event loop.";
     return app.exec();

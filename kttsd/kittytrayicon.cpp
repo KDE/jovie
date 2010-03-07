@@ -50,10 +50,17 @@
 
 /* ------------------  KittyTrayIcon class ----------------------- */
 
-KittyTrayIcon::KittyTrayIcon(QWidget *parent):
-    KSystemTrayIcon("preferences-desktop-text-to-speech", parent)
+KittyTrayIcon::KittyTrayIcon(QWidget *parent)
+    :KStatusNotifierItem("kitty", parent)
 {
     setObjectName("kittytrayicon");
+    setIconByName("preferences-desktop-text-to-speech");
+    setStatus(KStatusNotifierItem::Active);
+
+    QString status = "<qt><b>Kitty</b> - <qt>";
+    status += i18n("Text-to-Speech Manager");
+    status += "</qt>";
+    setToolTipSubTitle(status);
 
     // Set up menu.
     QAction *act;
@@ -87,34 +94,27 @@ KittyTrayIcon::KittyTrayIcon(QWidget *parent):
 
     connect(this, SIGNAL(quitSelected()),
                   SLOT(quitSelected()));
-    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-                  SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
+    connect(this, SIGNAL(activateRequested(bool, const QPoint &)),
+                  SLOT(slotActivateRequested(bool, const QPoint &)));
 }
 
 KittyTrayIcon::~KittyTrayIcon()
 {
 }
 
-bool KittyTrayIcon::event(QEvent *event)
+void KittyTrayIcon::slotActivateRequested(bool active, const QPoint &pos)
 {
-    // TODO: This event only fires on X11 systems.
-    // To make it work on all platforms, would have to constantly monitor status and update,
-    // which would suck up huge amounts of CPU.
-    if (event->type() == QEvent::ToolTip) {
-        QString status = "<qt><b>Kitty</b> - <qt>";
-        status += i18n("Text-to-Speech Manager");
-        status += "</qt>";
-        setToolTip(status);
+    Q_UNUSED(active)
+    Q_UNUSED(pos)
+    // pause/resume icon/app
+    if (overlayIconName() == QString("media-playback-pause")) {
+        Kitty::Instance()->resume();
+        setOverlayIconByName("");
     }
-    return false;
-}
-
-void KittyTrayIcon::slotActivated(QSystemTrayIcon::ActivationReason reason)
-{
-    // Convert left-click into a right-click.
-    if (reason == QSystemTrayIcon::Trigger) {
-       contextMenu()->exec();
-   }
+    else {
+        Kitty::Instance()->pause();
+        setOverlayIconByName("media-playback-pause");
+    }
 }
 
 /*virtual*/ void KittyTrayIcon::contextMenuAboutToShow(KMenu* menu)

@@ -28,12 +28,12 @@
 
 // KDE includes.
 #include <kmenu.h>
-#include <ksystemtrayicon.h>
+#include <kstatusnotifieritem.h>
 
 class QEvent;
 class QAction;
 
-class KittyTrayIcon: public KSystemTrayIcon
+class KittyTrayIcon: public KStatusNotifierItem
 {
     Q_OBJECT
 
@@ -42,8 +42,7 @@ class KittyTrayIcon: public KSystemTrayIcon
         ~KittyTrayIcon();
 
     protected Q_SLOTS:
-        bool event(QEvent *event);
-        void slotActivated(QSystemTrayIcon::ActivationReason reason);
+        void slotActivateRequested(bool active, const QPoint &pos);
         virtual void contextMenuAboutToShow(KMenu* menu);
 
     private slots:
@@ -59,6 +58,8 @@ class KittyTrayIcon: public KSystemTrayIcon
         void quitSelected();
 
     private:
+        void setupIcons();
+
         QAction* actStop;
         QAction* actPause;
         QAction* actResume;
