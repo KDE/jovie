@@ -3,7 +3,7 @@
   For an explanation of what a Talker Code is, see kspeech.h. 
   -------------------
   Copyright: (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright: (C) 2009 - 2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -87,25 +87,6 @@ void TalkerCode::setPitch(int pitch) { m_pitch = pitch; }
 void TalkerCode::setOutputModule(const QString &moduleName) { m_outputModule = moduleName; }
 
 /**
- * Sets the language code and country code (if given).
- */
-//void TalkerCode::setFullLanguageCode(const QString &fullLanguageCode)
-//{
-//    splitFullLanguageCode(fullLanguageCode, m_languageCode, m_countryCode);
-//}
-
-/**
- * Returns the language code plus country code (if any).
- */
-//QString TalkerCode::fullLanguageCode() const
-//{
-//    if (!m_countryCode.isEmpty())
-//        return m_languageCode + '_' + m_countryCode;
-//    else
-//        return m_languageCode;
-//}
-
-/**
  * The Talker Code returned in XML format.
  */
 void TalkerCode::setTalkerCode(const QString& code)
@@ -157,31 +138,6 @@ QString TalkerCode::translatedVoiceType(int voiceType)
     return i18nc("Somehow user has gotten a voice type that is not valid, i.e. not Male1, Male2, etc.","Invalid voice type");
 }
 
-/**
- * Normalizes the Talker Code by filling in defaults.
- */
-//void TalkerCode::normalize()
-//{
-//    if (m_voice.isEmpty()) m_voice = 0;
-//    if (m_volume.isEmpty()) m_volume = 0;
-//    if (m_rate.isEmpty()) m_rate = 0;
-//}
-
-/**
- * Given a talker code, normalizes it into a standard form and also returns
- * the language code.
- * @param talkerCode            Unnormalized talker code.
- * @return fullLanguageCode     Language code from the talker code (including country code if any).
- * @return                      Normalized talker code.
- */
-///*static*/ QString TalkerCode::normalizeTalkerCode(const QString &talkerCode, QString &fullLanguageCode)
-//{
-//    TalkerCode tmpTalkerCode(talkerCode);
-//    tmpTalkerCode.normalize();
-//    fullLanguageCode = tmpTalkerCode.fullLanguageCode();
-//    return tmpTalkerCode.getTalkerCode();
-//}
-
 /*static*/ void TalkerCode::splitFullLanguageCode(const QString &lang, QString &languageCode, QString &countryCode)
 {
     QString language = lang;
@@ -225,70 +181,6 @@ QString TalkerCode::translatedVoiceType(int voiceType)
     }
     return language;
 }
-
-/**
- * These functions return translated Talker Code attributes.
- */
-///*static*/ QString TalkerCode::translatedGender(const QString &gender)
-//{
-//    if (gender == "male")
-//        return i18nc("Male gender", "male");
-//    else if (gender == "female")
-//        return i18nc("Female gender", "female");
-//    else if (gender == "neutral")
-//        return i18nc("neutral gender", "neutral");
-//    else return gender;
-//}
-///*static*/ QString TalkerCode::untranslatedGender(const QString &gender)
-//{
-//    if (gender == i18nc("Male gender", "male"))
-//        return "male";
-//    else if (gender == i18nc("Female gender", "female"))
-//        return "female";
-//    else if (gender == i18nc("neutral gender", "neutral"))
-//        return "neutral";
-//    else return gender;
-//}
-///*static*/ QString TalkerCode::translatedVolume(const QString &volume)
-//{
-//    if (volume == "medium")
-//        return i18nc("medium sound", "medium");
-//    else if (volume == "loud")
-//        return i18nc("loud sound", "loud");
-//    else if (volume == "soft")
-//        return i18nc("soft sound", "soft");
-//    else return volume;
-//}
-///*static*/ QString TalkerCode::untranslatedVolume(const QString &volume)
-//{
-//    if (volume == i18nc("medium sound", "medium"))
-//        return "medium";
-//    else if (volume == i18nc("loud sound", "loud"))
-//        return "loud";
-//    else if (volume == i18nc("soft sound", "soft"))
-//        return "soft";
-//    else return volume;
-//}
-///*static*/ QString TalkerCode::translatedRate(const QString &rate)
-//{
-//    if (rate == "medium")
-//        return i18nc("medium speed", "medium");
-//    else if (rate == "fast")
-//        return i18nc("fast speed", "fast");
-//    else if (rate == "slow")
-//        return i18nc("slow speed", "slow");
-//    else return rate;
-//}
-///*static*/ QString TalkerCode::untranslatedRate(const QString &rate)
-//{
-//    if (rate == i18nc("medium speed", "medium"))
-//        return "medium";
-//    else if (rate == i18nc("fast speed", "fast"))
-//        return "fast";
-//    else if (rate == i18nc("slow speed", "slow"))
-//        return "slow";
-//    else return rate;
-//}
 
 /**
  * Given a talker code, parses out the attributes.
@@ -443,36 +335,3 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
         return code;
     }
 }
-
-///**
-//* Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
-//* @param name                   The translated plugin name.  From Name= line in .desktop file.
-//* @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-//*                               QString() if not found.
-//*/
-///*static*/ QString TalkerCode::TalkerNameToDesktopEntryName(const QString& name)
-//{
-//    if (name.isEmpty()) return QString();
-//    KService::List  offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
-//    for (int ndx = 0; ndx < offers.count(); ++ndx)
-//        if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-//    return QString();
-//}
-
-/**
-* Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
-* @param desktopEntryName       The DesktopEntryName.
-* @return                       The translated Name of the plugin, from Name= line in .desktop file.
-*/
-///*static*/ QString TalkerCode::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
-//{
-//    if (desktopEntryName.isEmpty()) return QString();
-//	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin",
-//    QString("DesktopEntryName == '%1'").arg(desktopEntryName));
-
-//    if (offers.count() == 1)
-//        return offers[0]->name();
-//    else
-//        return QString();
-//}
-

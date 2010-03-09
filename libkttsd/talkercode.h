@@ -93,20 +93,6 @@ class KDE_EXPORT TalkerCode
         QString getTranslatedDescription() const;
 
         /**
-         * Normalizes the Talker Code by filling in defaults.
-         */
-        //void normalize();
-
-        /**
-         * Given a talker code, normalizes it into a standard form and also returns
-         * the full language code.
-         * @param talkerCode         Unnormalized talker code.
-         * @return fullLanguageCode  Language code from the talker code (including country code if any).
-         * @return                   Normalized talker code.
-         */
-        //static QString normalizeTalkerCode(const QString &talkerCode, QString &fullLanguageCode);
-
-        /**
          * Given a language code that might contain a country code, splits the code into
          * the two letter language code and country code.
          * @param lang               Language code to be split.
@@ -140,10 +126,6 @@ class KDE_EXPORT TalkerCode
          * These functions return translated Talker Code attributes.
          */
         static QString translatedVoiceType(int voiceType);
-        //static QString translatedVolume(const QString &volume);
-        //static QString translatedRate(const QString &rate);
-        //static QString untranslatedVolume(const QString &volume);
-        //static QString untranslatedRate(const QString &rate);
 
         /**
          * Given a list of parsed talker codes and a desired talker code, finds the closest
@@ -163,21 +145,6 @@ class KDE_EXPORT TalkerCode
          * Strips leading * from a code.
          */
         static QString stripPrefer( const QString& code, bool& preferred);
-
-        /**
-        * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
-        * @param name                   The translated plugin name.  From Name= line in .desktop file.
-        * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        *                               QString() if not found.
-        */
-        //static QString TalkerNameToDesktopEntryName(const QString& name);
-
-        /**
-        * Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
-        * @param desktopEntryName       The DesktopEntryName.
-        * @return                       The translated Name of the plugin, from Name= line in .desktop file.
-        */
-        //static QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
 
     private:
         /**
