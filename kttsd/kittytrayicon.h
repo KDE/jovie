@@ -43,7 +43,7 @@ class KittyTrayIcon: public KStatusNotifierItem
 
     protected Q_SLOTS:
         void slotActivateRequested(bool active, const QPoint &pos);
-        virtual void contextMenuAboutToShow(KMenu* menu);
+        virtual void contextMenuAboutToShow();
 
     private slots:
 

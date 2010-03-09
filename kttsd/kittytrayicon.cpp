@@ -1,11 +1,9 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   KTTSMgr System Tray Application
   -------------------------------
-  Copyright:
-  (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
-  Original author: Gary Cramblitt <garycramblitt@comcast.net>
-  Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -56,11 +54,12 @@ KittyTrayIcon::KittyTrayIcon(QWidget *parent)
     setObjectName("kittytrayicon");
     setIconByName("preferences-desktop-text-to-speech");
     setStatus(KStatusNotifierItem::Active);
+    setCategory(KStatusNotifierItem::SystemServices);
 
-    QString status = "<qt><b>Kitty</b> - <qt>";
-    status += i18n("Text-to-Speech Manager");
-    status += "</qt>";
-    setToolTipSubTitle(status);
+    QString status = "Kitty - ";
+    status += i18n("KDE Text-to-Speech Manager");
+    setToolTipTitle(status);
+    setToolTipIconByName("preferences-desktop-text-to-speech");
 
     // Set up menu.
     QAction *act;
@@ -96,6 +95,8 @@ KittyTrayIcon::KittyTrayIcon(QWidget *parent)
                   SLOT(quitSelected()));
     connect(this, SIGNAL(activateRequested(bool, const QPoint &)),
                   SLOT(slotActivateRequested(bool, const QPoint &)));
+    connect(contextMenu(), SIGNAL(aboutToShow()),
+                  SLOT(contextMenuAboutToShow()));
 }
 
 KittyTrayIcon::~KittyTrayIcon()
@@ -117,26 +118,8 @@ void KittyTrayIcon::slotActivateRequested(bool active, const QPoint &pos)
     }
 }
 
-/*virtual*/ void KittyTrayIcon::contextMenuAboutToShow(KMenu* menu)
+void KittyTrayIcon::contextMenuAboutToShow()
 {
-    Q_UNUSED(menu);
-    // Enable menu items based on current KTTSD state.
-    bool kttsdRunning = true;
-    int jobState = -1;
-    if (kttsdRunning)
-    {
-        //int jobNum = m_kspeech->getCurrentJob();
-        //if (jobNum != 0)
-        //{
-        //    // kDebug() << "KittyTrayIcon::getStatus: jobNum = " << jobNum;
-        //    jobState = m_kspeech->getJobState(jobNum);
-        //}
-    }
-    actStop->setEnabled(jobState != -1);
-    actPause->setEnabled(jobState == KSpeech::jsSpeaking);
-    actResume->setEnabled(jobState == KSpeech::jsPaused);
-    actRepeat->setEnabled(jobState != -1);
-    actSpeakClipboard->setEnabled(kttsdRunning);
     const bool configActive = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kcmshell_kcmkttsd"));
     actConfigure->setEnabled(!configActive);
 }
