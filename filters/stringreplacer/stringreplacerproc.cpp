@@ -58,15 +58,6 @@ StringReplacerProc::StringReplacerProc( QObject *parent, QVariantList list) :
     m_substList.clear();
 }
 
-/**
- * Initialize the filter.
- * @param config          Settings object.
- * @param configGroup     Settings Group.
- * @return                False if filter is not ready to filter.
- *
- * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
- * separate configuration files of their own.
- */
 bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     //kDebug() << "StringReplacerProc::init: Running";
     QString wordsFilename =

@@ -77,19 +77,6 @@ XmlTransformerConf::~XmlTransformerConf(){
     // kDebug() << "XmlTransformerConf::~XmlTransformerConf: Running";
 }
 
-/**
-* This method is invoked whenever the module should read its 
-* configuration (most of the times from a config file) and update the 
-* user interface. This happens when the user clicks the "Reset" button in 
-* the control center, to undo all of his changes and restore the currently 
-* valid settings.  Note that kttsmgr calls this when the plugin is
-* loaded, so it not necessary to call it in your constructor.
-* The plugin should read its configuration from the specified group
-* in the specified config file.
-* @param config      Pointer to a KConfig object.
-* @param configGroup Call config->setGroup with this argument before
-*                    loading your configuration.
-*/
 void XmlTransformerConf::load(KConfig* c, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::load: Running";
     KConfigGroup config( c, configGroup );
@@ -104,16 +91,6 @@ void XmlTransformerConf::load(KConfig* c, const QString& configGroup){
             config.readEntry( "AppID", appIdLineEdit->text() ) );
 }
 
-/**
-* This function gets called when the user wants to save the settings in 
-* the user interface, updating the config files or wherever the 
-* configuration is stored. The method is called when the user clicks "Apply" 
-* or "Ok". The plugin should save its configuration in the specified
-* group of the specified config file.
-* @param config      Pointer to a KConfig object.
-* @param configGroup Call config->setGroup with this argument before
-*                    saving your configuration.
-*/
 void XmlTransformerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "XmlTransformerConf::save: Running";
     KConfigGroup config( c, configGroup );

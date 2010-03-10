@@ -40,11 +40,7 @@ class KittyPrivate;
 /**
 * Kitty -- the KDE Text-to-Speech API.
 *
-* Note: Applications do not use this class directly.  Instead,
-* use the @ref KSpeechInterface object as described in
-* @ref programming.
-*
-* See also @ref kspeech_intro
+* Note: Applications do not use this class directly.
 */
 class Kitty : public QObject
 {
@@ -548,7 +544,7 @@ Q_SIGNALS: // SIGNALS
     * @param appId              The DBUS connection name of the application that
     *                           submitted the job.
     * @param jobNum             Job Number.
-    * @param state              Job state.  @ref JobState.
+    * @param state              Job state.
     */
     void jobStateChanged(const QString &appId, int jobNum, int state);
 

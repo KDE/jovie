@@ -63,15 +63,6 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const QVariantList& arg
     if (!m_outFilename.isEmpty()) QFile::remove(m_outFilename);
 }
 
-/**
- * Initialize the filter.
- * @param config          Settings object.
- * @param configGroup     Settings Group.
- * @return                False if filter is not ready to filter.
- *
- * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
- * separate configuration files of their own.
- */
 bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
 {
     // kDebug() << "XmlTransformerProc::init: Running.";
@@ -128,23 +119,10 @@ bool XmlTransformerProc::init(KConfig* c, const QString& configGroup)
         return inputText;
 }
 
-/**
- * Convert input.  Runs asynchronously.
- * @param inputText         Input text.
- * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
- *                          use for synthing the text.  Useful for extracting hints about
- *                          how to filter the text.  For example, languageCode.
- * @param appId             The DCOP appId of the application that queued the text.
- *                          Also useful for hints about how to do the filtering.
- * @return                  False if the filter cannot perform the conversion.
- *
- * When conversion is completed, emits signal @ref filteringFinished.  Calling
- * program may then call @ref getOutput to retrieve converted text.  Calling
- * program must call @ref ackFinished to acknowledge the conversion.
- */
-/*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
+bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talkerCode,
     const QString& appId)
 {
+    Q_UNUSED(talkerCode);
     m_wasModified = false;
 
     // kDebug() << "XmlTransformerProc::asyncConvert: Running.";
