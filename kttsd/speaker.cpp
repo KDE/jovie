@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Speaker class.
-  
+
   This class is in charge of getting the messages, warnings and text from
   the queue and calling speech-dispatcher to actually speak the texts.
   -------------------
@@ -31,7 +31,7 @@
 
 // System includes.
 
-// Qt includes. 
+// Qt includes.
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 #include <QtGui/QApplication>
@@ -110,15 +110,15 @@ class SpeakerPrivate
 
         filterMgr = new FilterMgr();
         filterMgr->init();
-        
+
         config = new KConfig("kttsdrc");
     }
-    
+
     ~SpeakerPrivate()
     {
         spd_close(connection);
         connection = NULL;
-        
+
         // from speechdata class
         // kDebug() << "Running: SpeechDataPrivate::~SpeechDataPrivate";
         // Walk through jobs and emit jobStateChanged signal for each job.
@@ -133,9 +133,9 @@ class SpeakerPrivate
             delete applicationData;
         appData.clear();
     }
-    
+
     friend class Speaker;
-    
+
 protected:
 
     bool ConnectToSpeechd()
@@ -145,8 +145,8 @@ protected:
         if (connection != NULL)
         {
             kDebug() << "successfully opened connection to speech dispatcher";
-            connection->callback_begin = connection->callback_end = 
-                connection->callback_cancel = connection->callback_pause = 
+            connection->callback_begin = connection->callback_end =
+                connection->callback_cancel = connection->callback_pause =
                 connection->callback_resume = Speaker::speechdCallback;
 
             spd_set_notification_on(connection, SPD_BEGIN);
@@ -202,7 +202,7 @@ protected:
     QStringList outputModules;
 
     SPDConnection * connection;
-    
+
     /**
     * Application data.
     */
@@ -276,6 +276,7 @@ void Speaker::init()
 {
     // from speechdata
     // Create an initial FilterMgr for the pool to save time later.
+    kDebug() << "Running: Speaker::init()";
     delete d->filterMgr;
     d->filterMgr = new FilterMgr();
     d->filterMgr->init();
@@ -339,7 +340,7 @@ QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL
 int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 {
     QString filteredText = text;
-	int jobNum = -1;
+    int jobNum = -1;
 
     AppData* appData = getAppData(appId);
     KSpeech::JobPriority priority = appData->defaultPriority();
@@ -454,17 +455,17 @@ QStringList Speaker::outputModules()
 {
     QStringList modules;
 
-	if (d->connection) {
-		char ** modulenames = spd_list_modules(d->connection);
-		while (modulenames != NULL && modulenames[0] != NULL)
-		{
-			modules << modulenames[0];
-			++modulenames;
-		}
-	}
-	else {
-		// emit some error message
-	}
+    if (d->connection) {
+        char ** modulenames = spd_list_modules(d->connection);
+        while (modulenames != NULL && modulenames[0] != NULL)
+        {
+            modules << modulenames[0];
+            ++modulenames;
+        }
+    }
+    else {
+        // emit some error message
+    }
     return modules;
 }
 

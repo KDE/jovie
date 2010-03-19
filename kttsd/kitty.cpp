@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Kitty
-  
+
   The KDE Text-to-Speech object.
   ------------------------------
   Copyright:
@@ -61,13 +61,13 @@ class KittyPrivate
     KittyPrivate()
     {
     }
-    
+
     ~KittyPrivate()
     {
     }
 
     friend class Kitty;
-    
+
 protected:
     /*
     * The DBUS sender ID of last application to call KTTSD.
@@ -471,12 +471,11 @@ void Kitty::init()
 
 void Kitty::reinit()
 {
-    // Restart ourself.
+    // Reload ourself.
     kDebug() << "Kitty::reinit: Running";
-    kDebug() << "Kitty::reinit: Stopping KTTSD service";
     //if (Speaker::Instance()->isSpeaking())
     //    Speaker::Instance()->pause();
-    Speaker::Instance()->requestExit();
+    Speaker::Instance()->init();
     QDBusConnection::sessionBus().unregisterObject("/KSpeech");
     if (ready()) {
         QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
@@ -580,7 +579,7 @@ void Kitty::announceEvent(const QString& slotName, const QString& eventName)
 void Kitty::announceEvent(const QString& slotName, const QString& eventName, const QString& appId,
     int jobNum, KSpeech::MarkerType markerType, const QString& markerData)
 {
-    kDebug() << "Kitty::" << slotName << ": emitting DBUS signal " << eventName 
+    kDebug() << "Kitty::" << slotName << ": emitting DBUS signal " << eventName
         << " with appId " << appId << " job number " << jobNum << " marker type " << markerType << " and data " << markerData << endl;
 }
 
