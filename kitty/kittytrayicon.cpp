@@ -52,14 +52,14 @@ KittyTrayIcon::KittyTrayIcon(QWidget *parent)
     :KStatusNotifierItem("kitty", parent)
 {
     setObjectName("kittytrayicon");
-    setIconByName("preferences-desktop-text-to-speech");
     setStatus(KStatusNotifierItem::Active);
-    setCategory(KStatusNotifierItem::SystemServices);
+    setCategory(ApplicationStatus);
 
     QString status = "Kitty - ";
     status += i18n("KDE Text-to-Speech Manager");
     setToolTipTitle(status);
     setToolTipIconByName("preferences-desktop-text-to-speech");
+    setIconByName("preferences-desktop-text-to-speech");
 
     // Set up menu.
     QAction *act;
@@ -91,8 +91,6 @@ KittyTrayIcon::KittyTrayIcon(QWidget *parent)
         i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
     act->setIcon(KIcon("preferences-desktop-text-to-speech"));
 
-    connect(this, SIGNAL(quitSelected()),
-                  SLOT(quitSelected()));
     connect(this, SIGNAL(activateRequested(bool, const QPoint &)),
                   SLOT(slotActivateRequested(bool, const QPoint &)));
     connect(contextMenu(), SIGNAL(aboutToShow()),
@@ -140,12 +138,6 @@ void KittyTrayIcon::helpSelected()
     KToolInvocation::invokeHelp(QString(),"kttsd");
 }
 
-void KittyTrayIcon::quitSelected()
-{
-    // kDebug() << "Running KittyTrayIcon::quitSelected";
-    kapp->quit();
-}
-
 void KittyTrayIcon::stopSelected()
 {
     Kitty::Instance()->removeAllJobs();
@@ -171,8 +163,8 @@ void KittyTrayIcon::repeatSelected()
 void KittyTrayIcon::configureSelected()
 {
     QStringList lst;
-	lst << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
-	QProcess::startDetached("kcmshell4",lst);
+    lst << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
+    QProcess::startDetached("kcmshell4",lst);
 }
 
 #include "kittytrayicon.moc"

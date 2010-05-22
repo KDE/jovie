@@ -1,11 +1,11 @@
 [Desktop Entry]
 Type=Service
-Exec=kttsd
-Icon=kttsd
+Exec=kitty
+Icon=preferences-desktop-text-to-speech
 ServiceTypes=DBUS/Text-to-Speech
 X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
-Name=KTTSD
+Name=KITTY
 Name[ar]=KTTSD
 Name[ast]=KTTSD
 Name[be]=KTTSD
@@ -68,7 +68,7 @@ Name[vi]=KTTSD
 Name[x-test]=xxKTTSDxx
 Name[zh_CN]=K 语音精灵
 Name[zh_TW]=KTTSd
-Comment=KDE Text To Speech Daemon
+Comment=KDE Text To Speech Service
 Comment[ar]=عفريت نص-إلى-صوت لـ كي دي إي
 Comment[ast]=Serviciu de KDE pa la síntesis de testu a voz
 Comment[bg]=Демон за управление на модула за синтез на глас
@@ -127,4 +127,4 @@ Comment[vi]=Trình nền Văn bản sang Tiếng nói KDE
 Comment[x-test]=xxKDE Text To Speech Daemonxx
 Comment[zh_CN]=KDE 语音合成守护进程
 Comment[zh_TW]=KDE 文字轉語音的常駐精靈
-
+Categories=Qt;KDE;Utility;Accessibility;

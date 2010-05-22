@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kpluginloader.h>
 #include <ksharedconfig.h>
 #include <kservicetypetrader.h>
 
@@ -157,37 +158,54 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
     // kDebug() << "FilterMgr::loadFilterPlugin: Running";
 
     // Find the plugin.
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query("KITTY/FilterPlugin",
         QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
     {
         // When the entry is found, load the plug in
         // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
-        if(factory){
-            // If the factory is created successfully, instantiate the KttsFilterConf class for the
-            // specific plug in to get the plug in configuration object.
-            int errorNo;
-            KttsFilterProc *plugIn =
-                    KLibLoader::createInstance<KttsFilterProc>(
-                    offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()),
-             &errorNo);
-            if(plugIn){
-                // If everything went ok, return the plug in pointer.
-                // kDebug() << "FilterMgr::loadFilterPlugin: plugin " << offers[0]->library().toLatin1() << " loaded successfully.";
-                return plugIn;
-            } else {
-                // Something went wrong, returning null.
-                kDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << desktopEntryName << " error: " << errorNo;
-                return NULL;
-            }
-        } else {
+        KPluginLoader loader(offers[0]->library());
+        KPluginFactory* factory = loader.factory();
+        if (!factory) {
             // Something went wrong, returning null.
             kDebug() << "FilterMgr::loadFilterPlugin: Unable to create Factory object for plugin "
                 << desktopEntryName << endl;
             return NULL;
+        } else {
+            KttsFilterProc *plugIn = factory->create<KttsFilterProc>(
+               offers[0]->library().toLatin1(), NULL);
+            if (plugIn) {
+                return plugIn;
+            } else {
+                // Something went wrong, returning null.
+                kDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << desktopEntryName;
+                return NULL;
+            }
         }
+        //KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
+        //if(factory){
+        //    // If the factory is created successfully, instantiate the KttsFilterConf class for the
+        //    // specific plug in to get the plug in configuration object.
+        //    KttsFilterProc *plugIn =
+        //            KLibLoader::createInstance<KttsFilterProc>(
+        //            offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()),
+        //     &errorNo);
+        //    if(plugIn){
+        //        // If everything went ok, return the plug in pointer.
+        //        // kDebug() << "FilterMgr::loadFilterPlugin: plugin " << offers[0]->library().toLatin1() << " loaded successfully.";
+        //        return plugIn;
+        //    } else {
+        //        // Something went wrong, returning null.
+        //        kDebug() << "FilterMgr::loadFilterPlugin: Unable to instantiate KttsFilterProc class for plugin " << desktopEntryName << " error: " << errorNo;
+        //        return NULL;
+        //    }
+        //} else {
+        //    // Something went wrong, returning null.
+        //    kDebug() << "FilterMgr::loadFilterPlugin: Unable to create Factory object for plugin "
+        //        << desktopEntryName << endl;
+        //    return NULL;
+        //}
     }
     // The plug in was not found (unexpected behaviour, returns null).
     kDebug() << "FilterMgr::loadFilterPlugin: KTrader did not return an offer for plugin "
@@ -204,7 +222,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query("KITTY/FilterPlugin",
     QString("Name == '%1'").arg(name));
 
     if (offers.count() == 1)

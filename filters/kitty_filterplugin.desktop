@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=KTTSD/FilterPlugin
+X-KDE-ServiceType=KITTY/FilterPlugin
 
 [PropertyDef::X-KDE-Languages]
 Type=QStringList

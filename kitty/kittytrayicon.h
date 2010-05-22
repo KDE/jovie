@@ -3,7 +3,7 @@
   -------------------------------
   Copyright: (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
   Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
-  
+
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
   Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
@@ -55,7 +55,6 @@ class KittyTrayIcon: public KStatusNotifierItem
         void configureSelected();
         void aboutSelected();
         void helpSelected();
-        void quitSelected();
 
     private:
         void setupIcons();

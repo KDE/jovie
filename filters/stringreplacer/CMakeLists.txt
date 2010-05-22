@@ -1,25 +1,25 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
+include_directories( ${CMAKE_SOURCE_DIR}/kitty/libkttsd  )
 
 
 ########### next target ###############
 
-set(kttsd_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerproc.cpp stringreplacerplugin.cpp )
+set(kitty_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerproc.cpp stringreplacerplugin.cpp )
 
-kde4_add_ui_files(kttsd_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
+kde4_add_ui_files(kitty_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
 
-kde4_add_plugin(kttsd_stringreplacerplugin WITH_PREFIX ${kttsd_stringreplacerplugin_PART_SRCS})
+kde4_add_plugin(kitty_stringreplacerplugin WITH_PREFIX ${kitty_stringreplacerplugin_PART_SRCS})
 
 
 
-target_link_libraries(kttsd_stringreplacerplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kttsd )
+target_link_libraries(kitty_stringreplacerplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kttsd )
 
-install(TARGETS kttsd_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kitty_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install(FILES 
+install(FILES
     abbreviations.xml
     chat.xml
     chat-de.xml
@@ -28,8 +28,8 @@ install(FILES
     polish_festival_unspeakables.xml
     kmail.xml
     festival_unspeakable_chars.xml
-    qt2plaintext.xml DESTINATION ${DATA_INSTALL_DIR}/kttsd/stringreplacer/)
-    
-install( FILES kttsd_stringreplacerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+    qt2plaintext.xml DESTINATION ${DATA_INSTALL_DIR}/kitty/stringreplacer/)
+
+install( FILES kitty_stringreplacerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 

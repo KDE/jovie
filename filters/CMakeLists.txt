@@ -4,7 +4,7 @@ add_subdirectory( stringreplacer )
 add_subdirectory( xmltransformer ) 
 add_subdirectory( talkerchooser ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kttsd/libkttsd  )
+include_directories( ${CMAKE_SOURCE_DIR}/kitty/libkttsd  )
 
 
 ########### next target ###############
@@ -19,7 +19,7 @@ target_link_libraries(testfilter  ${KDE4_KDECORE_LIBS} kttsd )
 
 ########### install files ###############
 
-install( FILES kttsd_filterplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
+install( FILES kitty_filterplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 
 
 

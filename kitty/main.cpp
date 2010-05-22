@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   KTTSD
-  
+
   The KDE Text-to-Speech Daemon.
   -----------------------------
   Copyright: (C) 2002-2003 by José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
@@ -37,8 +37,8 @@
 
 int main (int argc, char *argv[]){
     KLocale::setMainCatalog("kttsd");
-    KAboutData aboutdata("kttsd", 0, ki18n("kttsd"),
-         "0.5.0", ki18n("Text-to-speech synthesis daemon"),
+    KAboutData aboutdata("kitty", 0, ki18n("kitty"),
+         "0.6.0", ki18n("Text-to-speech synthesis daemon"),
          KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor(ki18n("Jeremy Whiting"), ki18n("Current Maintainer"), "jpwhiting@kde.org");
@@ -53,13 +53,13 @@ int main (int argc, char *argv[]){
     KCmdLineArgs::init( argc, argv, &aboutdata );
     // KCmdLineArgs::addCmdLineOptions( options );
     KUniqueApplication::addCmdLineOptions();
-    
+
     KUniqueApplication::setOrganizationDomain("kde.org");
-    KUniqueApplication::setApplicationName("kttsd");
+    KUniqueApplication::setApplicationName("kitty");
     KUniqueApplication app;
 
     if (!KUniqueApplication::start()) {
-        kDebug() << "KTTSD is already running";
+        kDebug() << "KITTY is already running";
         return (0);
     }
 
@@ -68,7 +68,7 @@ int main (int argc, char *argv[]){
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
 
-    kDebug() << "main: Creating KTTSD Service";
+    kDebug() << "main: Creating Kitty Service";
     Kitty* service = Kitty::Instance();
     service->init();
 

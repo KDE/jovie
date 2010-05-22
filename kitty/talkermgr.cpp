@@ -168,7 +168,7 @@ void TalkerMgr::loadTalkers(KConfig* c)
 //            talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
 
 //            // Find the KTTSD SynthPlugin.
-//			KService::List offers = KServiceTypeTrader::self()->query(
+//          KService::List offers = KServiceTypeTrader::self()->query(
 //                "KTTSD/SynthPlugin", QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
 //            if(offers.count() > 1){
@@ -181,7 +181,7 @@ void TalkerMgr::loadTalkers(KConfig* c)
 //                kDebug() << "Loading " << offers[0]->library();
 //                factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
 //                if(factory){
-//                    //PlugInProc *speech = 
+//                    //PlugInProc *speech =
 //                    //        KLibLoader::createInstance<PlugInProc>(
 //                    //        offers[0]->library().toLatin1(), this, QStringList(offers[0]->library().toLatin1()));
 //                    if(!speech){
@@ -341,26 +341,6 @@ QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
 QString TalkerMgr::userDefaultTalker() const
 {
     return m_loadedTalkerCodes[0].getTalkerCode();
-}
-
-/**
- * Determine whether the currently-configured speech plugin supports a speech markup language.
- * @param talker         Code for the talker to do the speaking.  Example "en".
- *                       If NULL, defaults to the user's default talker.
- * @param markupType     The kttsd code for the desired speech markup language.
- * @return               True if the plugin currently configured for the indicated
- *                       talker supports the indicated speech markup language.
- * @see kttsdMarkupType
- */
-bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/) const
-{
-    kDebug() << "TalkerMgr::supportsMarkup: Testing talker " << talker;
-    QString matchingTalker = talker;
-    if (matchingTalker.isEmpty()) matchingTalker = userDefaultTalker();
-    //PlugInProc* plugin = talkerToPlugin(matchingTalker);
-    //return ( plugin->getSsmlXsltFilename() !=
-    //        KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl");
-    return false;
 }
 
 bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)

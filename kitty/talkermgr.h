@@ -66,22 +66,9 @@ public:
     void loadTalkers(KConfig* c);
 
     /**
-     * Given a talker code, returns pointer to the closest matching plugin.
-     * @param talker          The talker (language) code.
-     * @return                Index to m_loadedPlugins array of Talkers.
-     *
-     * If a plugin has not been loaded to match the talker, returns the default
-     * plugin.
-     */
-    //int talkerToPluginIndex(const QString& talker) const;
-
-    /**
      * Given a talker code, returns the parsed TalkerCode of the closest matching Talker.
      * @param talker          The talker (language) code.
      * @return                Parsed TalkerCode structure.
-     *
-     * If a plugin has not been loaded to match the talker, returns the default
-     * plugin.
      *
      * The returned TalkerCode is a copy and should be destroyed by caller.
      *
@@ -108,17 +95,6 @@ public:
      * @see getTalkers
      */
     QString userDefaultTalker() const;
-
-    /**
-     * Determine whether the currently-configured speech plugin supports a speech markup language.
-     * @param talker         Code for the talker to do the speaking.  Example "en".
-     *                       If NULL, defaults to the user's default talker.
-     * @param markupType     The kttsd code for the desired speech markup language.
-     * @return               True if the plugin currently configured for the indicated
-     *                       talker supports the indicated speech markup language.
-     * @see kttsdMarkupType
-     */
-    bool supportsMarkup(const QString& talker, const uint markupType) const;
 
     /**
      * Try to automatically configure a Talker in the specified language.
