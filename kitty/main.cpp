@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KTTSD
+  Kitty
 
   The KDE Text-to-Speech Daemon.
   -----------------------------
@@ -36,7 +36,7 @@
 #include "kittytrayicon.h"
 
 int main (int argc, char *argv[]){
-    KLocale::setMainCatalog("kttsd");
+    KLocale::setMainCatalog("kitty");
     KAboutData aboutdata("kitty", 0, ki18n("kitty"),
          "0.6.0", ki18n("Text-to-speech synthesis daemon"),
          KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
