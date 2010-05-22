@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY ktts "<application>KTTS</application>">
-  <!ENTITY kappname "&ktts;">
+  <!ENTITY kappname "&kitty;">
   <!ENTITY package "kdeaccessibility">
   <!ENTITY mbrola "<application>MBROLA</application>">
   <!ENTITY qdbus "<application>qdbus</application>">
@@ -19,7 +18,7 @@
      Minor update to "Credits and Licenses" section on August 24, 2000
      Removed "Revision history" section on 22 January 2001
      Changed to Installation/Help menu entities 18 October 2001
-     Other minor cleanup and changes 18 October 2001 
+     Other minor cleanup and changes 18 October 2001
      FPI change and minor changes November 2002 -->
 
 <!--
@@ -46,15 +45,12 @@ thanks ;-).
 <!-- than English, change the language above ONLY, not here -->
 <book lang="&language;">
 
-<!-- This header contains all of the meta-information for the document such
-as Authors, publish date, the abstract, and Keywords -->
-
 <bookinfo>
-<title>The &ktts; Handbook</title>
+<title>The &kitty; Handbook</title>
 
 <authorgroup>
 <author>
-<!-- This is just put in as an example.  For real documentation, please 
+<!-- This is just put in as an example.  For real documentation, please
      define a general entity in entities/contributor.entities, e.g.
 <!ENTITY George.N.Ugnacious "<personname><firstname>George</firstname><othername>N.</othername><surname>Ugnacious</surname></personname>">
 <!ENTITY George.N.Ugnacious.mail "<email>gnu@kde.org</email>">
@@ -88,7 +84,7 @@ and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
 <holder>Gary R. Cramblitt</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
-<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook
      and in the FDL itself on how to use it. -->
 <legalnotice>&FDLNotice;</legalnotice>
 
@@ -106,12 +102,12 @@ Do NOT change these in the translation. -->
 
 <abstract>
 <para>
-&ktts; - the &kde; Text-to-Speech system - is
+&kitty; - the &kde; Text-to-Speech system - is
 a plugin based service that
 allows any &kde; (or non-&kde;) application to speak using the &DBus; interface.
 </para>
 
-<para>&ktts; intends to be the implementation for the &kde; Text-to-Speech API.</para>
+<para>&kitty; intends to be the implementation for the &kde; Text-to-Speech API.</para>
 
 </abstract>
 
@@ -157,7 +153,7 @@ application that explains what it does and where to report
 problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
-<para>&ktts; is a subsysem within &kde; for producing
+<para>&kitty; is a subsysem within &kde; for producing
 Text-to-Speech (TTS).  It provides a common API for &kde; programmers to give
 TTS capabilities to their applications.  It provides some
 nice capabilities for end users as well.</para>
@@ -187,7 +183,7 @@ speech synthesizers, and transforming XHMTL/&XML; documents.</para></listitem>
 <listitem><para>Asynchronous to prevent system blocking.</para></listitem>
 </itemizedlist>
 
-<para>&ktts; actually consists of several programs:
+<para>&kitty; actually consists of several programs:
 <variablelist>
 
 <varlistentry>
@@ -224,7 +220,7 @@ all or a portion of a text file.
 <para>
 In addition to the &kde; Bugzilla database (
 <ulink url="http://bugs.kde.org/">http://bugs.kde.org/</ulink>
-), discussions for &ktts;
+), discussions for &kitty;
 currently take place in the kde-accessibility mailing list.  Subscribe at
 <ulink url="https://mail.kde.org/mailman/listinfo/kde-accessibility">
 https://mail.kde.org/mailman/listinfo/kde-accessibility</ulink>.  Developers
@@ -237,10 +233,10 @@ also hang out in IRC (irc.kde.org, channel #kde-accessibility).
 <!-- ====================================================================== -->
 
 <chapter id="using-kapp">
-<title>Using &ktts;</title>
+<title>Using &kitty;</title>
 
 <para>
-<warning><para>Before you can use &ktts;, you must install speech-dispatcher 
+<warning><para>Before you can use &kitty;, you must install speech-dispatcher
 and make sure it is working.  See <xref linkend="installation" />.
 </para></warning></para>
 
@@ -251,7 +247,7 @@ and make sure it is working.  See <xref linkend="installation" />.
 <title>Starting <command>kttsmgr</command></title>
 
 <para>
-To start the &ktts; system, type the following command in a &konsole;
+To start the &kitty; system, type the following command in a &konsole;
 </para>
 
 <para><userinput>kttsmgr</userinput></para>
@@ -276,7 +272,7 @@ screen appears.  See <xref linkend="general" />.</para>
 and may offer multiple speaking genders, volumes, and rates.  You may configure more than
 one instance of a synthesizer.  Each combination of language, synthesizer, voice,
 gender, volume, and rate is called a talker.  You should configure at least one talker
-before you use &ktts; otherwise speech-dispatcher will use a default voice.</para>
+before you use &kitty; otherwise speech-dispatcher will use a default voice.</para>
 
 <note><para>Multiple talkers for the same synthesizer is similar to multiple print
 queues for a single physical printer.</para></note>
@@ -289,24 +285,24 @@ any talkers.</para>
 <para>
 <screenshot>
 <screeninfo>The &kde; Text-to-Speech Manager (Talkers tab).</screeninfo>
-	<mediaobjectco>
-		<imageobjectco>
-			<areaspec units="calspair">
-				<area id="pt-talker-1" coords="1 1"/>
-				<area id="pt-talker-2" coords="1 1"/>
-				<area id="pt-talker-3" coords="1 1"/>
-				<area id="pt-talker-4" coords="1 1"/>
-				<area id="pt-talker-5" coords="1 1"/>
-				<area id="pt-talker-6" coords="1 1"/>
-			</areaspec>
-			<imageobject>
-				<imagedata fileref="talkers.png" format="PNG"/>
-			</imageobject>
-		</imageobjectco>
-		<textobject>
-			<phrase>The &kde; Text-to-Speech Manager (Talkers tab)</phrase>
-		</textobject>
-	</mediaobjectco>
+    <mediaobjectco>
+        <imageobjectco>
+            <areaspec units="calspair">
+                <area id="pt-talker-1" coords="1 1"/>
+                <area id="pt-talker-2" coords="1 1"/>
+                <area id="pt-talker-3" coords="1 1"/>
+                <area id="pt-talker-4" coords="1 1"/>
+                <area id="pt-talker-5" coords="1 1"/>
+                <area id="pt-talker-6" coords="1 1"/>
+            </areaspec>
+            <imageobject>
+                <imagedata fileref="talkers.png" format="PNG"/>
+            </imageobject>
+        </imageobjectco>
+        <textobject>
+            <phrase>The &kde; Text-to-Speech Manager (Talkers tab)</phrase>
+        </textobject>
+    </mediaobjectco>
 </screenshot>
 </para>
 
@@ -317,33 +313,33 @@ any talkers.</para>
 <callout arearefs="pt-talker-3"><para>Click on a talker in the list to highlight it and click this button to remove it.</para></callout>
 <callout arearefs="pt-talker-4"><para>Click on a talker in the list to highlight it and click this button to change its configuration.  See below.</para></callout>
 <callout arearefs="pt-talker-5"><para>Click on a talker in the list to highlight it and click this button to move it down one row in the list.  The lower a talker appears in the list, the lower its priority.</para></callout>
-<callout arearefs="pt-talker-6"><para>Click one of these buttons to apply the changes you have made to the running &ktts; system.</para></callout>
+<callout arearefs="pt-talker-6"><para>Click one of these buttons to apply the changes you have made to the running &kitty; system.</para></callout>
 </calloutlist>
 </para>
 
 <para>When you click the <guibutton>Add</guibutton> button, the <guilabel>Add Talker</guilabel> screen appears.</para>
 
 <para>
-	<screenshot>
-		<screeninfo>Add Talker screen.</screeninfo>
-		<mediaobjectco>
-			<imageobjectco>
-				<areaspec units="calspair">
-					<area id="pt-addtalker-1" coords="1 1"/>
-					<area id="pt-addtalker-2" coords="1 1"/>
-					<area id="pt-addtalker-3" coords="1 1"/>
-					<area id="pt-addtalker-4" coords="1 1"/>
-					<area id="pt-addtalker-5" coords="1 1"/>
-				</areaspec>
-				<imageobject>
-					<imagedata fileref="addtalker.png" format="PNG"/>
-				</imageobject>
-			</imageobjectco>
-			<textobject>
-				<phrase>Add Talker screen</phrase>
-			</textobject>
-		</mediaobjectco>
-	</screenshot>
+    <screenshot>
+        <screeninfo>Add Talker screen.</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-addtalker-1" coords="1 1"/>
+                    <area id="pt-addtalker-2" coords="1 1"/>
+                    <area id="pt-addtalker-3" coords="1 1"/>
+                    <area id="pt-addtalker-4" coords="1 1"/>
+                    <area id="pt-addtalker-5" coords="1 1"/>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="addtalker.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>Add Talker screen</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
 </para>
 
 <para>
@@ -355,8 +351,8 @@ any talkers.</para>
         <callout arearefs="pt-addtalker-2">
             <para>Choose the language and synthesizer here.</para></callout>
         <callout arearefs="pt-addtalker-3">
-            <para>Choose the voice type here, there are three Male, three Female, 
-	      one Male Child and one Female Child voices to choose from.
+            <para>Choose the voice type here, there are three Male, three Female,
+          one Male Child and one Female Child voices to choose from.
             </para>
         </callout>
         <callout arearefs="pt-addtalker-4">
@@ -364,16 +360,16 @@ any talkers.</para>
         <callout arearefs="pt-addtalker-5">
             <para>When you click here your new talker
                 will appear in the list in the <guilabel>Talkers</guilabel> screen.
-                Click the <guibutton>Edit</guibutton> button to edit the talker's 
+                Click the <guibutton>Edit</guibutton> button to edit the talker's
                 configuration.</para></callout>
     </calloutlist>
 </para>
 
-<para>You are almost ready to begin using &ktts;.
+<para>You are almost ready to begin using &kitty;.
 Now go back to the <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  This
 will start the &kde; TTS Daemon.  See <xref linkend="general" />.
-You may now begin using &ktts; to
+You may now begin using &kitty; to
 speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
 See <xref linkend="jobmgr" />.
 </para>
@@ -393,30 +389,30 @@ screen appears.  You can also set some general options on this screen.
 </para>
 
 <para>
-	<screenshot>
-		<screeninfo>The &kde; Text-to-Speech Manager (General tab).</screeninfo>
-		<mediaobjectco>
-			<imageobjectco>
-				<areaspec units="calspair">
-					<area id="pt-gen-1" coords="1 1"/>
-					<area id="pt-gen-2" coords="1 1"/>
+    <screenshot>
+        <screeninfo>The &kde; Text-to-Speech Manager (General tab).</screeninfo>
+        <mediaobjectco>
+            <imageobjectco>
+                <areaspec units="calspair">
+                    <area id="pt-gen-1" coords="1 1"/>
+                    <area id="pt-gen-2" coords="1 1"/>
                     <area id="pt-gen-5" coords="1 1"/>
                     <area id="pt-gen-6" coords="1 1"/>
-				</areaspec>
-				<imageobject>
-					<imagedata fileref="general.png" format="PNG"/>
-				</imageobject>
-			</imageobjectco>
-			<textobject>
-				<phrase>The &kde; Text-to-Speech Manager (General tab)</phrase>
-			</textobject>
-		</mediaobjectco>
-	</screenshot>
+                </areaspec>
+                <imageobject>
+                    <imagedata fileref="general.png" format="PNG"/>
+                </imageobject>
+            </imageobjectco>
+            <textobject>
+                <phrase>The &kde; Text-to-Speech Manager (General tab)</phrase>
+            </textobject>
+        </mediaobjectco>
+    </screenshot>
 </para>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-gen-1"><para>Check this box to activate the &ktts; system.
+<callout arearefs="pt-gen-1"><para>Check this box to activate the &kitty; system.
 This starts the &kde; TTS Daemon (KTTSD).  If KTTSD starts successfully,
 the <guilabel>Jobs</guilabel> tab will appear.
 Once KTTSD has been started, you can begin creating and speaking text jobs.
@@ -431,8 +427,8 @@ tray.  Click the icon to restore the screen.  To quit <command>kttsmgr</command>
 right-click on the icon in the system tray and choose <guilabel>Quit</guilabel>.
 When unchecked, an icon does not appear in the system tray.  Clicking <guibutton>OK</guibutton>
 or <guibutton>Cancel</guibutton> quits <command>kttsmgr</command>.
-<note><para>When <command>kttsmgr</command> exits, 
-&ktts; keeps running if the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box is checked.</para></note>
+<note><para>When <command>kttsmgr</command> exits,
+&kitty; keeps running if the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box is checked.</para></note>
 <note><para>This option does not take effect until the next time
 <command>kttsmgr</command> is started.</para></note>
 <note><para>This option has no effect when <command>kttsmgr</command> is
@@ -458,34 +454,34 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
 
 <screenshot>
 <screeninfo>The &kde; Text-to-Speech Manager (Jobs tab).</screeninfo>
-	<mediaobjectco>
-		<imageobjectco>
-			<areaspec units="calspair">
-				<area id="pt-jobmgr-1" coords="1 1"/>
-				<area id="pt-jobmgr-2" coords="1 1"/>
-				<area id="pt-jobmgr-3" coords="1 1"/>
-				<area id="pt-jobmgr-4" coords="1 1"/>
-			</areaspec>
-			<imageobject>
-				<imagedata fileref="jobs.png" format="PNG"/>
-			</imageobject>
-		</imageobjectco>
-		<textobject>
-			<phrase>The &kde; Text-to-Speech Manager (Jobs tab)</phrase>
-		</textobject>
-	</mediaobjectco>
+    <mediaobjectco>
+        <imageobjectco>
+            <areaspec units="calspair">
+                <area id="pt-jobmgr-1" coords="1 1"/>
+                <area id="pt-jobmgr-2" coords="1 1"/>
+                <area id="pt-jobmgr-3" coords="1 1"/>
+                <area id="pt-jobmgr-4" coords="1 1"/>
+            </areaspec>
+            <imageobject>
+                <imagedata fileref="jobs.png" format="PNG"/>
+            </imageobject>
+        </imageobjectco>
+        <textobject>
+            <phrase>The &kde; Text-to-Speech Manager (Jobs tab)</phrase>
+        </textobject>
+    </mediaobjectco>
 </screenshot>
 
 <para>
 <calloutlist>
-<callout arearefs="pt-jobmgr-1"><para>The controls here allow you to change attributes of 
+<callout arearefs="pt-jobmgr-1"><para>The controls here allow you to change attributes of
   the currently speaking voice.</para></callout>
 <callout arearefs="pt-jobmgr-2"><para>The buttons in this row permit you to stop,
 cancel, pause and resume the current text job.</para></callout>
 <callout arearefs="pt-jobmgr-3"><para>The buttons in this row permit
 you to speak the text currently in the &kde; clipboard, or open a text file
 for speaking.  You can also change the talker for a job.</para></callout>
-<callout arearefs="pt-jobmgr-4"><para>When you click <guibutton>OK</guibutton> 
+<callout arearefs="pt-jobmgr-4"><para>When you click <guibutton>OK</guibutton>
 or <guibutton>Apply</guibutton>,
 all changes to settings on other screens are applied (if any).</para></callout>
 </calloutlist>
@@ -505,7 +501,7 @@ all changes to settings on other screens are applied (if any).</para></callout>
 <title>Speaking Text from Web Pages</title>
 
 <para>While running the &kde; &konqueror; web browser, you can speak the text
-of the web page displayed.  First ensure that &ktts; is running.
+of the web page displayed.  First ensure that &kitty; is running.
 Highlight the text you want spoken and choose
 <menuchoice>
   <guisubmenu>Tools</guisubmenu>
@@ -527,7 +523,7 @@ hear a lot of &HTML; headers and other invisible tags spoken.</para></tip>
 <title>Speaking Text from &kate; Text Editor</title>
 
 <para>While running the &kde; Advanced Text Editor (&kate;), you can speak the text
-displayed.  First ensure that &ktts; is running and enable the <guilabel>KTextEditor 
+displayed.  First ensure that &kitty; is running and enable the <guilabel>KTextEditor
 KTTSD Plugin</guilabel> in &kate;'s settings dialog.
 Highlight the text you want spoken and choose
 <menuchoice>
@@ -552,12 +548,12 @@ such as &konqueror; or &quanta;.</para></tip>
 
 <para>KNotify is the notification subsystem within &kde;, which alerts you
 to events you configure within the &kde; system.  You can configure
-&ktts; to speak text notifications.</para>
+&kitty; to speak text notifications.</para>
 
 <para>For example, &konversation;, a &kde; IRC application, permits you
 to configure a wide variety of notifications.  For instance, you can tell
 &konversation; to notify you whenever a message appears in an IRC channel
-with your nickname in it.  Together with &ktts; you can
+with your nickname in it.  Together with &kitty; you can
 have &kde; speak the text of the IRC message to you.</para>
 
 <para>In general, if a &kde; application supports KNotify, a
@@ -566,9 +562,9 @@ application's <guilabel>Settings</guilabel> menu.  The specifics for configuring
 each application with KNotify vary from application to application.</para>
 
 <tip><para>String Replacer filters are a good way to clean up messages
-sent from applications if they are mispronounced or misspoken in 
-&ktts;.  The <filename>kmail.xml</filename> file, which
-comes with &ktts;, is a good example.  It removes <command>br</command>,
+sent from applications if they are mispronounced or misspoken in
+&kitty;.  The <filename>kmail.xml</filename> file, which
+comes with &kitty;, is a good example.  It removes <command>br</command>,
 and <command>b</command> tags from the &kmail; notification messages and also removes the
 phrase <command>/local/inbox/</command>, since this
 may be safely assumed in most cases.  See <xref linkend="stringreplacer" />.
@@ -588,7 +584,7 @@ provides tags for controlling how words are spoken, for instance
 spelling out abbreviations.  SSML is part of the VoiceXML specification,
 which is also a W3C standard.</para>
 
-<para>At this time, &ktts; provides limited and very basic support for
+<para>At this time, &kitty; provides limited and very basic support for
 SSML.  It currently has the following restrictions.</para>
 
 <itemizedlist>
@@ -627,7 +623,7 @@ will usually cause the SSML text to be spoken in a monotone.</para></listitem>
 ]]></programlisting>
 
 <para>More robust support for SSML is planned for the next version of
-&ktts;.
+&kitty;.
 </para>
 
 </sect1>-->
@@ -637,23 +633,23 @@ will usually cause the SSML text to be spoken in a monotone.</para></listitem>
 <sect1 id="filters">
 <title>Filters (Advanced)</title>
 
-<para>Filters are an advanced feature of &ktts;.  For the
-basic operation of &ktts;, they are not needed.</para>
+<para>Filters are an advanced feature of &kitty;.  For the
+basic operation of &kitty;, they are not needed.</para>
 
 <para>Filters are used to pre-process text before it is sent to speech-dispatcher.
 They are useful for enhancing speech,
 substituting for misspoken words or abbreviations, choosing the
-appropriate language and talker to do the speaking, or working around 
+appropriate language and talker to do the speaking, or working around
 certain limitations of speech synthesizers and their voices.</para>
 
 <!-- ...................................................................... -->
 
 <sect2 id="msg-types">
-<title>Types of &ktts; Messages</title>
+<title>Types of &kitty; Messages</title>
 
 <para>To understand how to use filters, it is
 helpful to first understand how text is processed by speech-dispatcher.
-Text spoken by &ktts; is of four possible types.</para>
+Text spoken by &kitty; is of four possible types.</para>
 
 <para>
 <itemizedlist>
@@ -665,7 +661,7 @@ Text spoken by &ktts; is of four possible types.</para>
 </para>
 
 <para>The type is determined by the application that sends the text
-to &ktts;.</para>
+to &kitty;.</para>
 
 <para>Screen Reader Output has the highest priority.  It is reserved for use
 by Screen Reader applications.  Screen Reader Output preempts all other
@@ -691,7 +687,7 @@ longer speech output that is not urgent.</para>
 
 <para>All four kinds of jobs are queues, except for Screen Reader Output.
 If a Screen Reader Output is sent from an application while
-&ktts; is speaking another Screen Reader Output, the speaking message 
+&kitty; is speaking another Screen Reader Output, the speaking message
 is stopped and discarded.</para>
 
 </sect2>
@@ -722,7 +718,7 @@ In the future, there may be additional kinds of filters.</para></note>
 
 <para>String Replacer filters substitute pieces of text with
 other text.  The replaced pieces are matched either as words or
-as regular expressions.  &ktts; comes with pre-defined
+as regular expressions.  &kitty; comes with pre-defined
 String Replacer filters for speaking abbreviations, speaking
 chat emoticons, such as ":-)", or reformatting notification
 messages from &konversation; or &kmail; into a more understandable
@@ -731,13 +727,13 @@ form.
 
 <para>&XML; Transformers use an &XML; Style Language - Transforms (XSLT)
 file to convert &XML; of one format to another format.
-&ktts; comes with a couple of XSLT files for converting
+&kitty; comes with a couple of XSLT files for converting
 &XHTML; into SSML.
 </para>
 
-<para>Talker Choosers permit you redirect jobs to a talker 
+<para>Talker Choosers permit you redirect jobs to a talker
 based on the contents of the text, or upon the application that sent it
-to &ktts;.  For example, if you have configured a female talker
+to &kitty;.  For example, if you have configured a female talker
 in the <guilabel>Talkers</guilabel> tab, you can direct text coming from
 KSayIt to that talker.  See <xref linkend="configure-talkers" />.
 </para>
@@ -747,7 +743,7 @@ the filter should apply itself to the text to be spoken.  If the
 filter determines that it should not apply itself, the text
 is passed on to the next filter unaltered.</para>
 
-<para>When a Text Job, Message, Warning, or &kde; Notification message is sent to &ktts;,
+<para>When a Text Job, Message, Warning, or &kde; Notification message is sent to &kitty;,
 it passes through each of the enabled filters you have configured in the
 screen below.  The order is from top to bottom.
 </para>
@@ -881,8 +877,8 @@ enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 </para>
 
 <para>The String Replacer filter will only apply itself to the text
-if all non-blank conditions are met in the 
-<guilabel>Apply This Filter When</guilabel> box. 
+if all non-blank conditions are met in the
+<guilabel>Apply This Filter When</guilabel> box.
 If all the boxes are blank, the filter will apply to all text.</para>
 
 <para>When matching words, the String Replacer filter internally uses a
@@ -896,14 +892,14 @@ there is a button available on the <guilabel>Add</guilabel> or
 constructing regular expressions.  The &kde; Regular Expression Editor is part
 of the <command>kdeutils</command> package.</para>
 
-<para>&ktts; comes with a few word list files, including a list
+<para>&kitty; comes with a few word list files, including a list
 of emoticons, such as ":-)", some abbreviations typically used in IRC or
 instant messaging applications, and a list of other abbreviations.
 There is also a list of special characters which the current version
 of the Polish Festival voice cannot handle.
 If you develop useful word lists of your own, use the <guibutton>Save</guibutton>
 button to save them to a file and send them to the
-&ktts; team for inclusion in the next version.</para>
+&kitty; team for inclusion in the next version.</para>
 
 </sect2>
 
@@ -972,8 +968,8 @@ enter <command><userinput>kopete</userinput></command>.</para></tip></callout>
 </para>
 
 <para>The &XML; Transformer filter will only apply itself to the text
-if the specified root element or DOCTYPE are met and if the 
-application ID is met in the 
+if the specified root element or DOCTYPE are met and if the
+application ID is met in the
 <guilabel>Apply This Filter When</guilabel> box.  If an item in this
 box is blank, the test is not performed, so if all the
 boxes are blank, the filter will apply itself to all text.  However,
@@ -994,10 +990,10 @@ you can specify that text coming from <command>kmail</command>
 should be spoken using a talker configured with a female voice.
 See <xref linkend="configure-talkers" />.</para>
 
-<para>Just before &ktts; begins sending text to each of the
+<para>Just before &kitty; begins sending text to each of the
 filters, it picks a talker to speak the text.  The talker chosen is
 based on the talker attributes specified by the application that sent
-the text to &ktts; and the attributes of the talkers that
+the text to &kitty; and the attributes of the talkers that
 you have configured on the <guilabel>Talkers</guilabel> tab.
 The Talker Chooser filter permits you to override the
 chosen talker.
@@ -1059,7 +1055,7 @@ or clear all the settings.</para></callout>
 </para>
 
 <para>The Talker Chooser filter will only apply itself to the text
-if all non-blank conditions are met in the 
+if all non-blank conditions are met in the
 <guilabel>Apply This Filter When</guilabel> box.  You must fill in
 at least one of the boxes.</para>
 
@@ -1075,8 +1071,8 @@ at least one of the boxes.</para>
 <para>You can configure
 any number of talkers in the <guilabel>Talkers</guilabel> tab.
 See <xref linkend="configure-talkers" />.  When applications send text
-to &ktts;, they may specify the attributes of a desired
-talker to speak the text.  &ktts; will pick the closest
+to &kitty;, they may specify the attributes of a desired
+talker to speak the text.  &kitty; will pick the closest
 matching talker from among the talkers you have configured to satisfy
 the application's request.  For example, an application might request
 the text be spoken by an English female voice.  If you have configured
@@ -1091,7 +1087,7 @@ they may indicate that certain attributes are "preferred" over other
 attributes.  For example, an application may specify that it wishes
 that a female loud voice speak the text, and that the loud attribute is
 "preferred" over the female attribute.  If you had a female soft talker
-and a male loud talker configured, &ktts; will choose the male
+and a male loud talker configured, &kitty; will choose the male
 loud talker to do the speaking.  Since language is a critical parameter
 in making speech understandable, it is always a "preferred" attribute.</para>
 
@@ -1139,8 +1135,8 @@ are specified.</para></listitem>
 <listitem><para>Use the closest matching talker having one or more specified attributes.</para></listitem>
 <listitem><para>Use the closest matching talker having all the attributes
 of a configured talker.  If you don't delete or modify the talker's settings,
-&ktts; will pick that specific talker.  If you delete or modify the
-talker's settings, then &ktts; will pick the closest matching talker
+&kitty; will pick that specific talker.  If you delete or modify the
+talker's settings, then &kitty; will pick the closest matching talker
 having the talker's original attributes.</para></listitem>
 </itemizedlist>
 
@@ -1159,7 +1155,7 @@ that you will use this attribute.  The only time you might specify the language
 attribute is when you know a specific application sends text in a language
 different from your desktop.</para></callout>
 <callout arearefs="pt-selecttalker-5"><para>This is a list of the talkers
-you currently have configured in &ktts;.  By choosing one of these,
+you currently have configured in &kitty;.  By choosing one of these,
 in effect, you are specifying all the attributes of that talker.  If that
 talker is still configured when text is sent, you'll get an exact match and that
 talker will be chosen.  However, if you later delete the talker, or modify
@@ -1174,7 +1170,7 @@ speaks a language different from the text.  Therefore, language
 is automatically a "preferred" attribute. If you specify a language,
 it will override the chosen language, but if you leave it blank,
 the existing language setting will be used.  If the application that sent the
-text to &ktts; did not specify a language, &ktts; assigns
+text to &kitty; did not specify a language, &kitty; assigns
 the language of the topmost talker you have configured in the
 <guilabel>Talkers</guilabel> tab.  In other words, the topmost
 talker is assumed to speak the language of your desktop.</para>
@@ -1207,7 +1203,7 @@ or menu bars. -->
 <!--
 
 <sect1 id="kapp-mainwindow">
-<title>The main &ktts; window</title>
+<title>The main &kitty; window</title>
 
 <sect2>
 <title>The File Menu</title>
@@ -1241,7 +1237,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits</action> &ktts;</para></listitem>
+<listitem><para><action>Quits</action> &kitty;</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -1253,9 +1249,9 @@ or menu bars. -->
 <!-- ====================================================================== -->
 
 <chapter id="developers">
-<title>Developer's Guide to &ktts;</title>
+<title>Developer's Guide to &kitty;</title>
 
-<para>&ktts; has two Application Programmer Interfaces (APIs):
+<para>&kitty; has two Application Programmer Interfaces (APIs):
 </para>
 
 <itemizedlist>
@@ -1263,7 +1259,7 @@ or menu bars. -->
 programmers to give their applications TTS capabilities.  Applications
 communicate with KTTSD via &DBus;.</para></listitem>
 <listitem><para>The KTTSD Plugin API, which is used to add speech
-synthesis plugins to KTTSD so that &ktts; will work with
+synthesis plugins to KTTSD so that &kitty; will work with
 a new speech synthesis engine.</para></listitem>
 </itemizedlist>
 
@@ -1279,7 +1275,7 @@ Full documentation for both APIs is available online at the
 
 
 <sect1 id="dbus-interface">
-<title>The &ktts; &DBus; Interface</title>
+<title>The &kitty; &DBus; Interface</title>
 
 <para>Applications communicate requests for Text-to-Speech services via the
 &kde; &DBus; interface to program <command>kttsd</command> object <command>KSpeech</command>.
@@ -1307,7 +1303,7 @@ commands,</para>
 
 <para><userinput>qdbus org.kde.kttsd /KSpeech</userinput></para>
 
-<para>or read the 
+<para>or read the
 <ulink url="http://accessibility.kde.org/developer/kttsd/">
 &kde; Text-to-Speech API</ulink> online.</para>
 
@@ -1336,7 +1332,7 @@ application work. -->
 <qandaset id="faqlist">
 <qandaentry>
 <question>
-<para>I need to start over.  How do I get &ktts; completely terminated?</para>
+<para>I need to start over.  How do I get &kitty; completely terminated?</para>
 </question>
 <answer>
 <para>Enter the following commands in a &konsole;:
@@ -1362,13 +1358,13 @@ window, then start <command>kttsmgr</command> in the second.</para>
 Where can I get a synth for my language?</para>
 </question>
 <answer>
-<para>Google(tm) is your friend.  This 
+<para>Google(tm) is your friend.  This
 <ulink url="http://tcts.fpms.ac.be/synthesis/mbrola/mbrtts.html">link</ulink>
 might also help.  If you find a free synthesis engine that supports your
-desired language, and want to add support for it to &ktts;, please
+desired language, and want to add support for it to &kitty;, please
 contact the development team.  Open source engines are especially welcome.
 If you know of a commercial synth, perhaps you can persuade the vendor
-to donate a free copy to the &ktts; development team.
+to donate a free copy to the &kitty; development team.
 In the meantime, you may be able to get
 the synth working using speech-dispatchers command backend.</para>
 </answer>
@@ -1412,10 +1408,10 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-&ktts;
+&kitty;
 </para>
 <para>
-Program Copyright &copy; 2002 Jos&#233; Pablo Ezequiel "Pupeno" Fern&#225;ndez <email>pupeno@kde.org</email> 
+Program Copyright &copy; 2002 Jos&#233; Pablo Ezequiel "Pupeno" Fern&#225;ndez <email>pupeno@kde.org</email>
 </para>
 <para>
 Current Maintainer: Jeremy Whiting <email>jpwhiting@kde.org</email>
@@ -1443,15 +1439,15 @@ Documentation Copyright &copy; 2009 Jeremy Whiting <email>jpwhiting@kde.org</ema
 
 &underFDL;               <!-- FDL: do not remove -->
 
-<!-- Determine which license your application is licensed under, 
+<!-- Determine which license your application is licensed under,
      and delete all the remaining licenses below:
 
-     (NOTE:  All documentation are licensed under the FDL, 
+     (NOTE:  All documentation are licensed under the FDL,
      regardless of what license the application uses) -->
 
-&underGPL;        	 <!-- GPL License -->
+&underGPL;           <!-- GPL License -->
 
-<note><para>Speech synthesis engines used by &ktts; have their own
+<note><para>Speech synthesis engines used by &kitty; have their own
 licenses.  See each engine's documentation or website for details.
 Some voices also have their own licensing.</para></note>
 
@@ -1466,11 +1462,11 @@ Some voices also have their own licensing.</para></note>
 
 
 <sect1 id="getting-kapp">
-<title>How to obtain &ktts;</title>
+<title>How to obtain &kitty;</title>
 
 <!-- This first entity contains boiler plate for applications that are
 part of KDE CVS.  You should remove it if you are releasing your
-application --> 
+application -->
 
 <para>
 &install.intro.documentation;
@@ -1483,8 +1479,8 @@ application -->
 on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
 &kde; Accessibility</ulink> web site (http://accessibility.kde.org).</para>
 
-<para>If you have access to the &kde; code repository, you can download &ktts;
-by checking out the <command>kdeaccessibility</command> module.  &ktts;
+<para>If you have access to the &kde; code repository, you can download &kitty;
+by checking out the <command>kdeaccessibility</command> module.  &kitty;
 will be found in the <command>kttsd</command> folder.  You can also
 download tarballs of the kdeaccessibility source code from
 <ulink url="ftp://ftp.kde.org/pub/kde/">
@@ -1538,14 +1534,14 @@ The languages listed above may not be comprehensive or up-to-date.
 Check the specifications for each engine for a complete list of supported
 languages.  Also check the
 <ulink url="http://accessibility.kde.org/developer/kttsd/index.php">
-&ktts;</ulink> website for additional
+&kitty;</ulink> website for additional
 information that might not have made it into this handbook.
 </para></note>
 
 <note>
 <para>speech-dispatcher uses a flexible plugin architecture for
 speech synthesis engines.  If you
-want to enhance &ktts; to support another engine, contact the
+want to enhance &kitty; to support another engine, contact the
 development team.
 </para>
 </note>
@@ -1586,11 +1582,11 @@ xsltproc with the command <command>apt-get install xsltproc</command>.</para>
 
 <!-- &install.compile.documentation; -->
 
-<para>In order to compile &ktts;, you must have a
+<para>In order to compile &kitty;, you must have a
 recent (&kde; 4.4 or greater) copy of the &kde; development files,
 including kdelibs and the development files for speech-dispatcher.</para>
 
-<para>If you downloaded the &ktts; source from the
+<para>If you downloaded the &kitty; source from the
 <filename>kdeaccessibility</filename> code repository module, or downloaded the nightly
 tarball, use the following commands to compile and install.
 </para>
@@ -1613,9 +1609,9 @@ sudo make install
 <title>Configuration</title>
 
 <para>Make sure speech-dispatcher is working with your speech synthesis engine before using
-&ktts;.  The shell script spd-conf can be used for that.</para>
+&kitty;.  The shell script spd-conf can be used for that.</para>
 
-<note><para>&ktts; in &kde; 4.4 is a first attempt at porting &ktts; to use speech-dispatcher.
+<note><para>&kitty; in &kde; 4.5 is a rename of KTTSD and kttsmgr.
 In the future kttsmgr will be able to configure speech-dispatcher directly without spd-conf.
 </para></note>
 
@@ -1637,5 +1633,5 @@ sgml-indent-step:0
 sgml-indent-data:nil
 End:
 
-vim:tabstop=2:shiftwidth=2:expandtab 
+vim:tabstop=2:shiftwidth=2:expandtab
 -->
