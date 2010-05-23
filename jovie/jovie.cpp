@@ -95,11 +95,12 @@ Jovie::Jovie(QObject *parent) :
     kDebug() << "Jovie::Jovie Running";
 }
 
-Jovie::~Jovie(){
-    kDebug() << "Jovie::~Jovie:: Stopping KTTSD service";
+Jovie::~Jovie()
+{
+    kDebug() << "Jovie::~Jovie:: Stopping Jovie service";
     Speaker::Instance()->requestExit();
     delete d;
-    announceEvent("~Jovie", "kttsdExiting");
+    announceEvent("~Jovie", "jovieExiting");
     emit kttsdExiting();
 }
 

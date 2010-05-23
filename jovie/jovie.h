@@ -196,7 +196,7 @@ public Q_SLOTS: // METHODS
     * Returns the full path name to XSLT file used to convert SSML
     * markup to a speakable form.
     * @return                   XSLT filename.
-    */    
+    */
     QString ssmlFilterXsltFile();
 
     /**
@@ -521,19 +521,19 @@ public Q_SLOTS: // METHODS
     * Cause KTTSD to re-read its configuration.
     */
     void reinit();
-    
+
     /** Called by DBusAdaptor so that KTTSD knows the application that
     * called it.
     * @param appId              DBUS connection name that called KSpeech.
     */
     void setCallingAppId(const QString& appId);
-        
+
 Q_SIGNALS: // SIGNALS
     /**
     * This signal is emitted when KTTSD starts.
     */
     void kttsdStarted();
-    
+
     /**
     * This signal is emitted just before KTTS exits.
     */
