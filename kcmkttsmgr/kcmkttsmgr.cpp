@@ -75,18 +75,18 @@ const bool autoexitMgrCheckBoxValue = true;
 
 
 // Make this a plug in.
-K_PLUGIN_FACTORY(KCMKttsMgrFactory, registerPlugin<KCMKttsMgr>();)
-K_EXPORT_PLUGIN(KCMKttsMgrFactory("kttsd"))
+K_PLUGIN_FACTORY (KCMKttsMgrFactory, registerPlugin<KCMKttsMgr>();)
+K_EXPORT_PLUGIN (KCMKttsMgrFactory ("kttsd"))
 
 
 // ----------------------------------------------------------------------------
 
-FilterListModel::FilterListModel(FilterList filters, QObject *parent)
-    : QAbstractListModel(parent), m_filters(filters)
+FilterListModel::FilterListModel (FilterList filters, QObject *parent)
+        : QAbstractListModel (parent), m_filters (filters)
 {
 }
 
-int FilterListModel::rowCount(const QModelIndex &parent) const
+int FilterListModel::rowCount (const QModelIndex &parent) const
 {
     if (!parent.isValid())
         return m_filters.count();
@@ -94,27 +94,27 @@ int FilterListModel::rowCount(const QModelIndex &parent) const
         return 0;
 }
 
-int FilterListModel::columnCount(const QModelIndex &parent) const
+int FilterListModel::columnCount (const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    Q_UNUSED (parent);
     return 2;
 }
 
-QModelIndex FilterListModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex FilterListModel::index (int row, int column, const QModelIndex &parent) const
 {
     if (!parent.isValid())
-        return createIndex(row, column, 0);
+        return createIndex (row, column, 0);
     else
         return QModelIndex();
 }
 
-QModelIndex FilterListModel::parent(const QModelIndex &index ) const
+QModelIndex FilterListModel::parent (const QModelIndex &index) const
 {
-    Q_UNUSED(index);
+    Q_UNUSED (index);
     return QModelIndex();
 }
 
-QVariant FilterListModel::data(const QModelIndex &index, int role) const
+QVariant FilterListModel::data (const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -127,79 +127,92 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
         switch (index.column()) {
-            case 0: return QVariant(); break;
-            case 1: return m_filters.at(index.row()).userFilterName; break;
+        case 0:
+            return QVariant();
+            break;
+        case 1:
+            return m_filters.at (index.row()).userFilterName;
+            break;
         }
 
     if (role == Qt::CheckStateRole)
         switch (index.column()) {
-            case 0: if (m_filters.at(index.row()).enabled)
-                        return Qt::Checked;
-                    else
-                        return Qt::Unchecked;
-                    break;
-            case 1: return QVariant(); break;
+        case 0:
+            if (m_filters.at (index.row()).enabled)
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
+            break;
+        case 1:
+            return QVariant();
+            break;
         }
 
     return QVariant();
 }
 
-Qt::ItemFlags FilterListModel::flags(const QModelIndex &index) const
+Qt::ItemFlags FilterListModel::flags (const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsEnabled;
 
     switch (index.column()) {
-        case 0: return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled |
-                    Qt::ItemIsSelectable | Qt::ItemIsUserCheckable; break;
-        case 1: return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsSelectable; break;
+    case 0:
+        return QAbstractItemModel::flags (index) | Qt::ItemIsEnabled |
+               Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+        break;
+    case 1:
+        return QAbstractItemModel::flags (index) | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        break;
     }
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
+    return QAbstractItemModel::flags (index) | Qt::ItemIsEnabled;
 }
 
-QVariant FilterListModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant FilterListModel::headerData (int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         switch (section) {
-            case 0: return "";
-            case 1: return i18n("Filter");
+        case 0:
+            return "";
+        case 1:
+            return i18n ("Filter");
         };
     return QVariant();
 }
 
-bool FilterListModel::removeRow(int row, const QModelIndex & parent)
+bool FilterListModel::removeRow (int row, const QModelIndex & parent)
 {
-    beginRemoveRows(parent, row, row);
-    m_filters.removeAt(row);
+    beginRemoveRows (parent, row, row);
+    m_filters.removeAt (row);
     endRemoveRows();
     return true;
 }
 
-FilterItem FilterListModel::getRow(int row) const
+FilterItem FilterListModel::getRow (int row) const
 {
     if (row < 0 || row >= rowCount()) return FilterItem();
     return m_filters[row];
 }
 
-bool FilterListModel::appendRow(FilterItem& filter)
+bool FilterListModel::appendRow (FilterItem& filter)
 {
-    beginInsertRows(QModelIndex(), m_filters.count(), m_filters.count());
-    m_filters.append(filter);
+    beginInsertRows (QModelIndex(), m_filters.count(), m_filters.count());
+    m_filters.append (filter);
     endInsertRows();
     return true;
 }
 
-bool FilterListModel::updateRow(int row, FilterItem& filter)
+bool FilterListModel::updateRow (int row, FilterItem& filter)
 {
-    m_filters.replace(row, filter);
-    emit dataChanged(index(row, 0, QModelIndex()), index(row, columnCount()-1, QModelIndex()));
+    m_filters.replace (row, filter);
+    emit dataChanged (index (row, 0, QModelIndex()), index (row, columnCount() - 1, QModelIndex()));
     return true;
 }
 
-bool FilterListModel::swap(int i, int j)
+bool FilterListModel::swap (int i, int j)
 {
-    m_filters.swap(i, j);
-    emit dataChanged(index(i, 0, QModelIndex()), index(j, columnCount()-1, QModelIndex()));
+    m_filters.swap (i, j);
+    emit dataChanged (index (i, 0, QModelIndex()), index (j, columnCount() - 1, QModelIndex()));
     return true;
 }
 
@@ -214,9 +227,9 @@ void FilterListModel::clear()
 /**
 * Constructor.
 */
-KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
-    KCModule(KCMKttsMgrFactory::componentData(), parent/*, name*/),
-    m_kspeech(0)
+KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
+        KCModule (KCMKttsMgrFactory::componentData(), parent/*, name*/),
+        m_kspeech (0)
 {
 
     // kDebug() << "KCMKttsMgr constructor running.";
@@ -229,106 +242,103 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const QVariantList &) :
     m_suppressConfigChanged = false;
 
     // Add the KTTS Manager widget
-    setupUi(this);
+    setupUi (this);
 
     // Connect Views to Models and set row selection mode.
-    talkersView->setModel(&m_talkerListModel);
-    filtersView->setModel(&m_filterListModel);
-    talkersView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    filtersView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    talkersView->setRootIsDecorated(false);
-    filtersView->setRootIsDecorated(false);
-    talkersView->setItemsExpandable(false);
-    filtersView->setItemsExpandable(false);
+    talkersView->setModel (&m_talkerListModel);
+    filtersView->setModel (&m_filterListModel);
+    talkersView->setSelectionBehavior (QAbstractItemView::SelectRows);
+    filtersView->setSelectionBehavior (QAbstractItemView::SelectRows);
+    talkersView->setRootIsDecorated (false);
+    filtersView->setRootIsDecorated (false);
+    talkersView->setItemsExpandable (false);
+    filtersView->setItemsExpandable (false);
 
     // Give buttons icons.
     // Talkers tab.
-    higherTalkerPriorityButton->setIcon(KIcon("go-up"));
-    lowerTalkerPriorityButton->setIcon(KIcon("go-down"));
-    removeTalkerButton->setIcon(KIcon("user-trash"));
-    configureTalkerButton->setIcon(KIcon("configure"));
+    higherTalkerPriorityButton->setIcon (KIcon ("go-up"));
+    lowerTalkerPriorityButton->setIcon (KIcon ("go-down"));
+    removeTalkerButton->setIcon (KIcon ("user-trash"));
+    configureTalkerButton->setIcon (KIcon ("configure"));
 
     // Filters tab.
-    higherFilterPriorityButton->setIcon(KIcon("go-up"));
-    lowerFilterPriorityButton->setIcon(KIcon("go-down"));
-    removeFilterButton->setIcon(KIcon("user-trash"));
-    configureFilterButton->setIcon(KIcon("configure"));
+    higherFilterPriorityButton->setIcon (KIcon ("go-up"));
+    lowerFilterPriorityButton->setIcon (KIcon ("go-down"));
+    removeFilterButton->setIcon (KIcon ("user-trash"));
+    configureFilterButton->setIcon (KIcon ("configure"));
 
     // Object for the KTTSD configuration.
-    m_config = new KConfig("kttsdrc");
+    m_config = new KConfig ("kttsdrc");
 
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
     // General tab.
-    connect(enableKttsdCheckBox, SIGNAL(toggled(bool)),
-            SLOT(slotEnableKttsd_toggled(bool)));
-    connect(autostartMgrCheckBox, SIGNAL(toggled(bool)),
-            SLOT(slotAutoStartMgrCheckBox_toggled(bool)));
-    connect(autoexitMgrCheckBox, SIGNAL(toggled(bool)),
-            SLOT(configChanged()));
+    connect (enableJovieCheckBox, SIGNAL (toggled (bool)),
+             SLOT (slotEnableKttsd_toggled (bool)));
 
     // Talker tab.
-    connect(addTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slotAddTalkerButton_clicked()));
-    connect(higherTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slotHigherTalkerPriorityButton_clicked()));
-    connect(lowerTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slotLowerTalkerPriorityButton_clicked()));
-    connect(removeTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slotRemoveTalkerButton_clicked()));
-    connect(configureTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slotConfigureTalkerButton_clicked()));
-    connect(talkersView, SIGNAL(clicked(const QModelIndex &)),
-            this, SLOT(updateTalkerButtons()));
+    connect (addTalkerButton, SIGNAL (clicked()),
+             this, SLOT (slotAddTalkerButton_clicked()));
+    connect (higherTalkerPriorityButton, SIGNAL (clicked()),
+             this, SLOT (slotHigherTalkerPriorityButton_clicked()));
+    connect (lowerTalkerPriorityButton, SIGNAL (clicked()),
+             this, SLOT (slotLowerTalkerPriorityButton_clicked()));
+    connect (removeTalkerButton, SIGNAL (clicked()),
+             this, SLOT (slotRemoveTalkerButton_clicked()));
+    connect (configureTalkerButton, SIGNAL (clicked()),
+             this, SLOT (slotConfigureTalkerButton_clicked()));
+    connect (talkersView, SIGNAL (clicked (const QModelIndex &)),
+             this, SLOT (updateTalkerButtons()));
 
     // Filter tab.
-    connect(addFilterButton, SIGNAL(clicked()),
-            this, SLOT(slotAddFilterButton_clicked()));
-    connect(higherFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slotHigherFilterPriorityButton_clicked()));
-    connect(lowerFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slotLowerFilterPriorityButton_clicked()));
-    connect(removeFilterButton, SIGNAL(clicked()),
-            this, SLOT(slotRemoveFilterButton_clicked()));
-    connect(configureFilterButton, SIGNAL(clicked()),
-            this, SLOT(slotConfigureFilterButton_clicked()));
-    connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
-            this, SLOT(updateFilterButtons()));
-    connect(filtersView, SIGNAL(clicked(const QModelIndex &)),
-            this, SLOT(slotFilterListView_clicked(const QModelIndex &)));
+    connect (addFilterButton, SIGNAL (clicked()),
+             this, SLOT (slotAddFilterButton_clicked()));
+    connect (higherFilterPriorityButton, SIGNAL (clicked()),
+             this, SLOT (slotHigherFilterPriorityButton_clicked()));
+    connect (lowerFilterPriorityButton, SIGNAL (clicked()),
+             this, SLOT (slotLowerFilterPriorityButton_clicked()));
+    connect (removeFilterButton, SIGNAL (clicked()),
+             this, SLOT (slotRemoveFilterButton_clicked()));
+    connect (configureFilterButton, SIGNAL (clicked()),
+             this, SLOT (slotConfigureFilterButton_clicked()));
+    connect (filtersView, SIGNAL (clicked (const QModelIndex &)),
+             this, SLOT (updateFilterButtons()));
+    connect (filtersView, SIGNAL (clicked (const QModelIndex &)),
+             this, SLOT (slotFilterListView_clicked (const QModelIndex &)));
 
 
     // Others.
-    connect(mainTab, SIGNAL(currentChanged(int)),
-            this, SLOT(slotTabChanged()));
+    connect (mainTab, SIGNAL (currentChanged (int)),
+             this, SLOT (slotTabChanged()));
 
-    // See if KTTSD is already running, and if so, create jobs tab.
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
-        kttsdStarted();
+    // See if Jovie is already running, and if so, create jobs tab.
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered ("org.kde.jovie"))
+        jovieStarted();
     else
-        // Start KTTSD if check box is checked.
-        slotEnableKttsd_toggled(enableKttsdCheckBox->isChecked());
+        // Start Jovie if check box is checked.
+        slotEnableJovie_toggled (enableJovieCheckBox->isChecked());
 
     // Adjust view column sizes.
     // TODO: To work properly, this needs to be done after the widgets are shown.
     // Possibly in Resize event?
     for (int i = 0; i < m_filterListModel.columnCount(); ++i)
-        filtersView->resizeColumnToContents(i);
+        filtersView->resizeColumnToContents (i);
     for (int i = 0; i < m_talkerListModel.columnCount(); ++i)
-        talkersView->resizeColumnToContents(i);
+        talkersView->resizeColumnToContents (i);
 
     // Switch to Talkers tab if none configured,
     // otherwise switch to Jobs tab if it is active.
     if (m_talkerListModel.rowCount() == 0)
-        mainTab->setCurrentIndex(wpTalkers);
-    else if (enableKttsdCheckBox->isChecked())
-        mainTab->setCurrentIndex(wpJobs);
+        mainTab->setCurrentIndex (wpTalkers);
+    else if (enableJovieCheckBox->isChecked())
+        mainTab->setCurrentIndex (wpJobs);
 }
 
 /**
 * Destructor.
 */
-KCMKttsMgr::~KCMKttsMgr(){
+KCMKttsMgr::~KCMKttsMgr()
+{
     // kDebug() << "KCMKttsMgr::~KCMKttsMgr: Running";
     delete m_config;
 }
@@ -350,20 +360,17 @@ void KCMKttsMgr::load()
     m_suppressConfigChanged = true;
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
-    KConfigGroup generalConfig(m_config, "General");
+    KConfigGroup generalConfig (m_config, "General");
 
     // Overall settings.
-    enableKttsdCheckBox->setChecked(generalConfig.readEntry("EnableKttsd",
-        enableKttsdCheckBox->isChecked()));
-
-    autostartMgrCheckBox->setChecked(generalConfig.readEntry("AutoStartManager", true));
-    autoexitMgrCheckBox->setChecked(generalConfig.readEntry("AutoExitManager", true));
+    enableJovieCheckBox->setChecked (generalConfig.readEntry ("EnableJovie",
+                                     enableJovieCheckBox->isChecked()));
 
     // Last filter ID.  Used to generate a new ID for an added filter.
     m_lastFilterID = 0;
 
     // Load existing Talkers into Talker List.
-    m_talkerListModel.loadTalkerCodesFromConfig(m_config);
+    m_talkerListModel.loadTalkerCodesFromConfig (m_config);
 
     // Last talker ID.  Used to generate a new ID for an added talker.
     //m_lastTalkerID = m_talkerListModel.highestTalkerId();
@@ -371,7 +378,7 @@ void KCMKttsMgr::load()
     // Dictionary mapping languages to language codes.
     m_languagesToCodes.clear();
     for (int i = 0; i < m_talkerListModel.rowCount(); ++i) {
-        QString language = m_talkerListModel.getRow(i).language();
+        QString language = m_talkerListModel.getRow (i).language();
         m_languagesToCodes[language] = language;
     }
 
@@ -402,35 +409,32 @@ void KCMKttsMgr::load()
 
     // Load Filters.
     m_filterListModel.clear();
-    QStringList filterIDsList = generalConfig.readEntry("FilterIDs", QStringList());
+    QStringList filterIDsList = generalConfig.readEntry ("FilterIDs", QStringList());
     // kDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList;
-    if (!filterIDsList.isEmpty())
-    {
+    if (!filterIDsList.isEmpty()) {
         QStringList::ConstIterator itEnd = filterIDsList.constEnd();
-        for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
-        {
+        for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it) {
             QString filterID = *it;
             // kDebug() << "KCMKttsMgr::load: filterID = " << filterID;
-            KConfigGroup filterConfig(m_config, "Filter_" + filterID);
-            QString desktopEntryName = filterConfig.readEntry("DesktopEntryName", QString());
+            KConfigGroup filterConfig (m_config, "Filter_" + filterID);
+            QString desktopEntryName = filterConfig.readEntry ("DesktopEntryName", QString());
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
             // DesktopEntryNames are better because user can change their desktop language
             // and DesktopEntryName won't change.
             QString filterPlugInName;
-            filterPlugInName = FilterDesktopEntryNameToName(desktopEntryName);
-            if (!filterPlugInName.isEmpty())
-            {
+            filterPlugInName = FilterDesktopEntryNameToName (desktopEntryName);
+            if (!filterPlugInName.isEmpty()) {
                 FilterItem fi;
                 fi.id = filterID;
                 fi.plugInName = filterPlugInName;
                 fi.desktopEntryName = desktopEntryName;
-                fi.userFilterName = filterConfig.readEntry("UserFilterName", filterPlugInName);
-                fi.multiInstance = filterConfig.readEntry("MultiInstance", false);
-                fi.enabled = filterConfig.readEntry("Enabled", false);
+                fi.userFilterName = filterConfig.readEntry ("UserFilterName", filterPlugInName);
+                fi.multiInstance = filterConfig.readEntry ("MultiInstance", false);
+                fi.enabled = filterConfig.readEntry ("Enabled", false);
                 // Determine if this filter is a Sentence Boundary Detector (SBD).
-                m_filterListModel.appendRow(fi);
+                m_filterListModel.appendRow (fi);
                 if (filterID.toInt() > m_lastFilterID) m_lastFilterID = filterID.toInt();
             }
         }
@@ -488,8 +492,8 @@ void KCMKttsMgr::load()
     //    }
     //}
     // Rewrite list of FilterIDs in case we added any.
-    QString filterIDs = filterIDsList.join(",");
-    generalConfig.writeEntry("FilterIDs", filterIDs);
+    QString filterIDs = filterIDsList.join (",");
+    generalConfig.writeEntry ("FilterIDs", filterIDs);
     m_config->sync();
 
     // Update controls based on new states.
@@ -512,101 +516,89 @@ void KCMKttsMgr::save()
     m_changed = false;
 
     // Clean up config.
-    m_config->deleteGroup("General", 0);
+    m_config->deleteGroup ("General", 0);
 
     // Set the group general for the configuration of kttsd itself (no plug ins)
-    KConfigGroup generalConfig(m_config, "General");
-
-    // Overall settings.
-    generalConfig.writeEntry("AutoStartManager", autostartMgrCheckBox->isChecked());
-    generalConfig.writeEntry("AutoExitManager", autoexitMgrCheckBox->isChecked());
+    KConfigGroup generalConfig (m_config, "General");
 
     // Uncheck and disable KTTSD checkbox if no Talkers are configured.
     // Enable checkbox if at least one Talker is configured.
-    bool enableKttsdWasToggled = false;
+    bool enableJovieWasToggled = false;
     //if (m_talkerListModel.rowCount() == 0)
     //{
-        //enableKttsdWasToggled = enableKttsdCheckBox->isChecked();
-        //enableKttsdCheckBox->setChecked(false);
-        //enableKttsdCheckBox->setEnabled(false);
-        // Might as well zero LastTalkerID as well.
-        //m_lastTalkerID = 0;
+    //enableKttsdWasToggled = enableKttsdCheckBox->isChecked();
+    //enableKttsdCheckBox->setChecked(false);
+    //enableKttsdCheckBox->setEnabled(false);
+    // Might as well zero LastTalkerID as well.
+    //m_lastTalkerID = 0;
     //}
     //else
-        enableKttsdCheckBox->setEnabled(true);
+    enableJovieCheckBox->setEnabled (true);
 
-    generalConfig.writeEntry("EnableKttsd", enableKttsdCheckBox->isChecked());
+    generalConfig.writeEntry ("EnableKttsd", enableJovieCheckBox->isChecked());
 
     // Get ordered list of all talker IDs.
     QList<TalkerCode> talkers;
     QStringList talkerIDsList;
-    KConfigGroup talkerGroup(m_config, "Talkers");
+    KConfigGroup talkerGroup (m_config, "Talkers");
     talkerGroup.deleteGroup();
-    for (int i = 0; i < m_talkerListModel.rowCount(); ++i)
-    {
-        TalkerCode talker = m_talkerListModel.getRow(i);
+    for (int i = 0; i < m_talkerListModel.rowCount(); ++i) {
+        TalkerCode talker = m_talkerListModel.getRow (i);
         talkers << talker;
-        talkerGroup.writeEntry(talker.name(), talker.getTalkerCode());
+        talkerGroup.writeEntry (talker.name(), talker.getTalkerCode());
         talkerIDsList << talker.name();
     }
 
-    QString talkerIDs = talkerIDsList.join(",");
-    generalConfig.writeEntry("TalkerIDs", talkerIDs);
+    QString talkerIDs = talkerIDsList.join (",");
+    generalConfig.writeEntry ("TalkerIDs", talkerIDs);
 
     // Erase obsolete Talker_nn sections.
     QStringList groupList = m_config->groupList();
     int groupListCount = groupList.count();
-    for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
-    {
+    for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx) {
         QString groupName = groupList[groupNdx];
-        if (groupName.left(7) == "Talker_")
-        {
-            QString groupTalkerID = groupName.mid(7);
-            if (!talkerIDsList.contains(groupTalkerID))
-                m_config->deleteGroup(groupName, 0);
+        if (groupName.left (7) == "Talker_") {
+            QString groupTalkerID = groupName.mid (7);
+            if (!talkerIDsList.contains (groupTalkerID))
+                m_config->deleteGroup (groupName, 0);
         }
     }
 
     // Get ordered list of all filter IDs.  Record enabled state of each filter.
     QStringList filterIDsList;
     for (int i = 0; i < m_filterListModel.rowCount(); ++i) {
-        FilterItem fi = m_filterListModel.getRow(i);
-        filterIDsList.append(fi.id);
-        KConfigGroup filterConfig(m_config, "Filter_" + fi.id);
-        filterConfig.writeEntry("Enabled", fi.enabled);
+        FilterItem fi = m_filterListModel.getRow (i);
+        filterIDsList.append (fi.id);
+        KConfigGroup filterConfig (m_config, "Filter_" + fi.id);
+        filterConfig.writeEntry ("Enabled", fi.enabled);
     }
-    QString filterIDs = filterIDsList.join(",");
-    generalConfig.writeEntry("FilterIDs", filterIDs);
+    QString filterIDs = filterIDsList.join (",");
+    generalConfig.writeEntry ("FilterIDs", filterIDs);
 
     // Erase obsolete Filter_nn sections.
-    for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
-    {
+    for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx) {
         QString groupName = groupList[groupNdx];
-        if (groupName.left(7) == "Filter_")
-        {
-            QString groupFilterID = groupName.mid(7);
-            if (!filterIDsList.contains(groupFilterID))
-                m_config->deleteGroup(groupName, 0);
+        if (groupName.left (7) == "Filter_") {
+            QString groupFilterID = groupName.mid (7);
+            if (!filterIDsList.contains (groupFilterID))
+                m_config->deleteGroup (groupName, 0);
         }
     }
 
     m_config->sync();
 
     // apply changes in the jobs page if it exists
-    if (m_jobMgrWidget)
-    {
+    if (m_jobMgrWidget) {
         m_jobMgrWidget->save();
     }
-    
+
     // If we automatically unchecked the Enable KTTSD checkbox, stop KTTSD.
-    if (enableKttsdWasToggled)
-        slotEnableKttsd_toggled(false);
-    else
-    {
-        // If KTTSD is running, reinitialize it.
-        if (m_kspeech)
-        {
-            kDebug() << "Restarting KTTSD";
+    if (enableJovieWasToggled)
+        slotEnableJovie_toggled (false);
+    else {
+        // If Jovie is running, reinitialize it.
+        if (m_kspeech) {
+            kDebug() << "Restarting Jovie";
             m_kspeech->reinit();
         }
     }
@@ -619,13 +611,11 @@ void KCMKttsMgr::slotTabChanged()
     // is not available to a KCModule.  Uncomment this when bug is fixed.
     // setButtons(buttons());
     int currentPageIndex = mainTab->currentIndex();
-    if (currentPageIndex == wpJobs)
-    {
-        if (m_changed)
-        {
-            KMessageBox::information(this,
-                i18n("You have made changes to the configuration but have not saved them yet.  "
-                     "Click Apply to save the changes or Cancel to abandon the changes."));
+    if (currentPageIndex == wpJobs) {
+        if (m_changed) {
+            KMessageBox::information (this,
+                                      i18n ("You have made changes to the configuration but have not saved them yet.  "
+                                            "Click Apply to save the changes or Cancel to abandon the changes."));
         }
     }
 }
@@ -636,29 +626,12 @@ void KCMKttsMgr::slotTabChanged()
 * default values should probably be the same as the ones the application
 * uses when started without a config file.
 */
-void KCMKttsMgr::defaults() {
+void KCMKttsMgr::defaults()
+{
     // kDebug() << "Running: KCMKttsMgr::defaults: Running";
 
     int currentPageIndex = mainTab->currentIndex();
-    bool changed = false;
-    switch (currentPageIndex)
-    {
-        case wpGeneral:
-            if (autostartMgrCheckBox->isChecked() != autostartMgrCheckBoxValue)
-            {
-                changed = true;
-                autostartMgrCheckBox->setChecked(
-                    autostartMgrCheckBoxValue);
-            }
-            if (autoexitMgrCheckBox->isChecked() != autoexitMgrCheckBoxValue)
-            {
-                changed = true;
-                autoexitMgrCheckBox->setChecked(
-                    autoexitMgrCheckBoxValue);
-            }
-            break;
-    }
-    if (changed) configChanged();
+    // configChanged();
 }
 
 /**
@@ -669,7 +642,8 @@ void KCMKttsMgr::defaults() {
 * it can avoid to create an instance of the user interface, which is often
 * not needed in this case.
 */
-void KCMKttsMgr::init(){
+void KCMKttsMgr::init()
+{
     // kDebug() << "KCMKttsMgr::init: Running";
 }
 
@@ -677,25 +651,27 @@ void KCMKttsMgr::init(){
 * This function returns the small quickhelp.
 * That is displayed in the sidebar in the KControl
 */
-QString KCMKttsMgr::quickHelp() const{
+QString KCMKttsMgr::quickHelp() const
+{
     // kDebug() << "KCMKttsMgr::quickHelp: Running";
-    return i18n(
-        "<h1>Text-to-Speech</h1>"
-        "<p>This is the configuration for the text-to-speech D-Bus service</p>"
-        "<p>This allows other applications to access text-to-speech resources</p>"
-        "<p>Be sure to configure a default language for the language you are using as this will be the language used by most of the applications</p>");
+    return i18n (
+               "<h1>Text-to-Speech</h1>"
+               "<p>This is the configuration for the text-to-speech D-Bus service</p>"
+               "<p>This allows other applications to access text-to-speech resources</p>"
+               "<p>Be sure to configure a default language for the language you are using as this will be the language used by most of the applications</p>");
 }
 
-const KAboutData* KCMKttsMgr::aboutData() const{
+const KAboutData* KCMKttsMgr::aboutData() const
+{
     KAboutData *about =
-    new KAboutData(I18N_NOOP("kttsd"), 0, ki18n("KCMKttsMgr"),
-        0, KLocalizedString(), KAboutData::License_GPL,
-        ki18n("(c) 2002, José Pablo Ezequiel Fernández"));
+        new KAboutData (I18N_NOOP ("jovie"), 0, ki18n ("KCMKttsMgr"),
+                        0, KLocalizedString(), KAboutData::License_GPL,
+                        ki18n ("(c) 2010, Jeremy Whiting"));
 
-    about->addAuthor(ki18n("José Pablo Ezequiel Fernández"), ki18n("Author") , "pupeno@kde.org");
-    about->addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer") , "garycramblitt@comcast.net");
-    about->addAuthor(ki18n("Olaf Schmidt"), ki18n("Contributor"), "ojschmidt@kde.org");
-    about->addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
+    about->addAuthor (ki18n ("José Pablo Ezequiel Fernández"), ki18n ("Author") , "pupeno@kde.org");
+    about->addAuthor (ki18n ("Gary Cramblitt"), ki18n ("Maintainer") , "garycramblitt@comcast.net");
+    about->addAuthor (ki18n ("Olaf Schmidt"), ki18n ("Contributor"), "ojschmidt@kde.org");
+    about->addAuthor (ki18n ("Paul Giannaros"), ki18n ("Contributor"), "ceruleanblaze@gmail.com");
 
     return about;
 }
@@ -705,28 +681,27 @@ const KAboutData* KCMKttsMgr::aboutData() const{
  * @param plugInName       DesktopEntryName of the plugin.
  * @return                 Pointer to the configuration plugin for the Filter.
  */
-KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
+KttsFilterConf* KCMKttsMgr::loadFilterPlugin (const QString& plugInName)
 {
     // kDebug() << "KCMKttsMgr::loadPlugin: Running";
 
     // Find the plugin.
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
-        QString("DesktopEntryName == '%1'").arg(plugInName));
+    KService::List offers = KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin",
+                            QString ("DesktopEntryName == '%1'").arg (plugInName));
 
-    if (offers.count() == 1)
-    {
+    if (offers.count() == 1) {
         // When the entry is found, load the plug in
         // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().toLatin1());
-        if(factory){
+        KLibFactory *factory = KLibLoader::self()->factory (offers[0]->library().toLatin1());
+        if (factory) {
             // If the factory is created successfully, instantiate the KttsFilterConf class for the
             // specific plug in to get the plug in configuration object.
             int errorNo = 0;
             KttsFilterConf *plugIn =
-                KLibLoader::createInstance<KttsFilterConf>(
-                    offers[0]->library().toLatin1(), NULL, QStringList(offers[0]->library().toLatin1()),
-                     &errorNo);
-            if(plugIn){
+                KLibLoader::createInstance<KttsFilterConf> (
+                    offers[0]->library().toLatin1(), NULL, QStringList (offers[0]->library().toLatin1()),
+                    &errorNo);
+            if (plugIn) {
                 // If everything went ok, return the plug in pointer.
                 return plugIn;
             } else {
@@ -750,20 +725,20 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
  */
 void KCMKttsMgr::slotAddTalkerButton_clicked()
 {
-    QPointer<AddTalker> dlg = new AddTalker(this);
+    QPointer<AddTalker> dlg = new AddTalker (this);
     if (dlg->exec() == QDialog::Accepted) {
         TalkerCode code = dlg->getTalkerCode();
 
         // Add to list of Talkers.
-        m_talkerListModel.appendRow(code);
+        m_talkerListModel.appendRow (code);
 
         // Make sure visible.
-        const QModelIndex modelIndex = m_talkerListModel.index(m_talkerListModel.rowCount(),
-            0, QModelIndex());
-        talkersView->scrollTo(modelIndex);
+        const QModelIndex modelIndex = m_talkerListModel.index (m_talkerListModel.rowCount(),
+                                       0, QModelIndex());
+        talkersView->scrollTo (modelIndex);
 
         // Select the new item, update buttons.
-        talkersView->setCurrentIndex(modelIndex);
+        talkersView->setCurrentIndex (modelIndex);
         updateTalkerButtons();
 
         // Inform Control Center that change has been made.
@@ -785,30 +760,26 @@ void KCMKttsMgr::slotAddFilterButton_clicked()
 void KCMKttsMgr::addFilter()
 {
     QTreeView* lView = filtersView;
-    FilterListModel* model = qobject_cast<FilterListModel *>(lView->model());
+    FilterListModel* model = qobject_cast<FilterListModel *> (lView->model());
 
     // Build a list of filters that support multiple instances and let user choose.
     QStringList filterPlugInNames;
     for (int i = 0; i < model->rowCount(); ++i) {
-        FilterItem fi = model->getRow(i);
-        if (fi.multiInstance)
-        {
-            if (!filterPlugInNames.contains(fi.plugInName))
-                filterPlugInNames.append(fi.plugInName);
+        FilterItem fi = model->getRow (i);
+        if (fi.multiInstance) {
+            if (!filterPlugInNames.contains (fi.plugInName))
+                filterPlugInNames.append (fi.plugInName);
         }
     }
     // Append those available plugins not yet in the list at all.
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
-    for (int i=0; i < offers.count() ; ++i)
-    {
+    KService::List offers = KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin");
+    for (int i = 0; i < offers.count() ; ++i) {
         QString filterPlugInName = offers[i]->name();
-        if (countFilterPlugins(filterPlugInName) == 0)
-        {
-            QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
-            KttsFilterConf* filterConf = loadFilterPlugin( desktopEntryName );
-            if (filterConf)
-            {
-                filterPlugInNames.append(filterPlugInName);
+        if (countFilterPlugins (filterPlugInName) == 0) {
+            QString desktopEntryName = FilterNameToDesktopEntryName (filterPlugInName);
+            KttsFilterConf* filterConf = loadFilterPlugin (desktopEntryName);
+            if (filterConf) {
+                filterPlugInNames.append (filterPlugInName);
                 delete filterConf;
             }
         }
@@ -821,16 +792,15 @@ void KCMKttsMgr::addFilter()
     // If exactly one choice, skip selection dialog, otherwise display list to user to select from.
     bool okChosen = false;
     QString filterPlugInName;
-    if (filterPlugInNames.count() > 1)
-    {
-        filterPlugInName = KInputDialog::getItem(
-            i18n("Select Filter"),
-            i18n("Filter"),
-            filterPlugInNames,
-            0,
-            false,
-            &okChosen,
-            this);
+    if (filterPlugInNames.count() > 1) {
+        filterPlugInName = KInputDialog::getItem (
+                               i18n ("Select Filter"),
+                               i18n ("Filter"),
+                               filterPlugInNames,
+                               0,
+                               false,
+                               &okChosen,
+                               this);
         if (!okChosen) return;
     } else
         filterPlugInName = filterPlugInNames[0];
@@ -838,30 +808,29 @@ void KCMKttsMgr::addFilter()
     // kDebug() << "KCMKttsMgr::addFilter: filterPlugInName = " << filterPlugInName;
 
     // Assign a new Filter ID for the filter.  Wraps around to 1.
-    QString filterID = QString::number(m_lastFilterID + 1);
+    QString filterID = QString::number (m_lastFilterID + 1);
 
     // Erase extraneous Filter configuration entries that might be there.
-    m_config->deleteGroup(QString("Filter_")+filterID, 0);
+    m_config->deleteGroup (QString ("Filter_") + filterID, 0);
     m_config->sync();
 
     // Get DesktopEntryName from the translated name.
-    QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+    QString desktopEntryName = FilterNameToDesktopEntryName (filterPlugInName);
     // This shouldn't happen, but just in case.
     if (desktopEntryName.isEmpty()) return;
 
     // Load the plugin.
-    m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
+    m_loadedFilterPlugIn = loadFilterPlugin (desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
 
     // Permit plugin to autoconfigure itself.
-    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
+    m_loadedFilterPlugIn->load (m_config, QString ("Filter_") + filterID);
 
     // Display configuration dialog for user to configure the plugin.
     configureFilter();
 
     // Did user Cancel?
-    if (!m_loadedFilterPlugIn)
-    {
+    if (!m_loadedFilterPlugIn) {
         delete m_configDlg;
         m_configDlg = 0;
         return;
@@ -871,10 +840,9 @@ void KCMKttsMgr::addFilter()
     QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
 
     // If user properly configured the plugin, save its configuration.
-    if ( !userFilterName.isEmpty() )
-    {
+    if (!userFilterName.isEmpty()) {
         // Let plugin save its configuration.
-        m_loadedFilterPlugIn->save(m_config, QString("Filter_"+filterID));
+        m_loadedFilterPlugIn->save (m_config, QString ("Filter_" + filterID));
 
         // Record last Filter ID used for next add.
         m_lastFilterID = filterID.toInt();
@@ -883,11 +851,11 @@ void KCMKttsMgr::addFilter()
         bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
 
         // Record configuration data.  Note, might as well do this now.
-        KConfigGroup filterConfig(m_config, QString("Filter_"+filterID));
-        filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
-        filterConfig.writeEntry("UserFilterName", userFilterName);
-        filterConfig.writeEntry("MultiInstance", multiInstance);
-        filterConfig.writeEntry("Enabled", true);
+        KConfigGroup filterConfig (m_config, QString ("Filter_" + filterID));
+        filterConfig.writeEntry ("DesktopEntryName", desktopEntryName);
+        filterConfig.writeEntry ("UserFilterName", userFilterName);
+        filterConfig.writeEntry ("MultiInstance", multiInstance);
+        filterConfig.writeEntry ("Enabled", true);
         m_config->sync();
 
         // Add listview item.
@@ -898,14 +866,14 @@ void KCMKttsMgr::addFilter()
         fi.desktopEntryName = desktopEntryName;
         fi.multiInstance = multiInstance;
         fi.enabled = true;
-        model->appendRow(fi);
+        model->appendRow (fi);
 
         // Make sure visible.
-        QModelIndex modelIndex = model->index(model->rowCount() - 1, 0, QModelIndex());
-        lView->scrollTo(modelIndex);
+        QModelIndex modelIndex = model->index (model->rowCount() - 1, 0, QModelIndex());
+        lView->scrollTo (modelIndex);
 
         // Select the new item, update buttons.
-        lView->setCurrentIndex(modelIndex);
+        lView->setCurrentIndex (modelIndex);
         updateFilterButtons();
 
         // Inform Control Center that change has been made.
@@ -924,7 +892,8 @@ void KCMKttsMgr::addFilter()
 /**
 * Remove talker.
 */
-void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
+void KCMKttsMgr::slotRemoveTalkerButton_clicked()
+{
     // kDebug() << "KCMKttsMgr::removeTalker: Running";
 
     // Get the selected talker.
@@ -932,11 +901,11 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked(){
     if (!modelIndex.isValid()) return;
 
     // Delete the talker from configuration file?
-    QString talkerID = m_talkerListModel.getRow(modelIndex.row()).name();
-    m_config->deleteGroup(QString("Talker_")+talkerID, 0);
+    QString talkerID = m_talkerListModel.getRow (modelIndex.row()).name();
+    m_config->deleteGroup (QString ("Talker_") + talkerID, 0);
 
     // Delete the talker from the list of Talkers.
-    m_talkerListModel.removeRow(modelIndex.row());
+    m_talkerListModel.removeRow (modelIndex.row());
 
     updateTalkerButtons();
 
@@ -958,17 +927,17 @@ void KCMKttsMgr::removeFilter()
 
     FilterListModel* model;
     QTreeView* lView = filtersView;
-    model = qobject_cast<FilterListModel *>(lView->model());
+    model = qobject_cast<FilterListModel *> (lView->model());
     QModelIndex modelIndex = lView->currentIndex();
     if (!modelIndex.isValid()) return;
-    QString filterID = model->getRow(modelIndex.row()).id;
+    QString filterID = model->getRow (modelIndex.row()).id;
     // Delete the filter from list view.
-    model->removeRow(modelIndex.row());
+    model->removeRow (modelIndex.row());
     updateFilterButtons();
 
     // Delete the filter from the configuration file?
     kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file.";
-    m_config->deleteGroup(QString("Filter_")+filterID, 0);
+    m_config->deleteGroup (QString ("Filter_") + filterID, 0);
 
     // Emit configuration changed.
     configChanged();
@@ -978,10 +947,10 @@ void KCMKttsMgr::slotHigherTalkerPriorityButton_clicked()
 {
     QModelIndex modelIndex = talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
-    m_talkerListModel.swap(modelIndex.row(), modelIndex.row() - 1);
-    modelIndex = m_talkerListModel.index(modelIndex.row() - 1, 0, QModelIndex());
-    talkersView->scrollTo(modelIndex);
-    talkersView->setCurrentIndex(modelIndex);
+    m_talkerListModel.swap (modelIndex.row(), modelIndex.row() - 1);
+    modelIndex = m_talkerListModel.index (modelIndex.row() - 1, 0, QModelIndex());
+    talkersView->scrollTo (modelIndex);
+    talkersView->setCurrentIndex (modelIndex);
     updateTalkerButtons();
     configChanged();
 }
@@ -990,10 +959,10 @@ void KCMKttsMgr::slotHigherFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = filtersView->currentIndex();
     if (!modelIndex.isValid()) return;
-    m_filterListModel.swap(modelIndex.row(), modelIndex.row() - 1);
-    modelIndex = m_filterListModel.index(modelIndex.row() - 1, 0, QModelIndex());
-    filtersView->scrollTo(modelIndex);
-    filtersView->setCurrentIndex(modelIndex);
+    m_filterListModel.swap (modelIndex.row(), modelIndex.row() - 1);
+    modelIndex = m_filterListModel.index (modelIndex.row() - 1, 0, QModelIndex());
+    filtersView->scrollTo (modelIndex);
+    filtersView->setCurrentIndex (modelIndex);
     updateFilterButtons();
     configChanged();
 }
@@ -1002,10 +971,10 @@ void KCMKttsMgr::slotLowerTalkerPriorityButton_clicked()
 {
     QModelIndex modelIndex = talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
-    m_talkerListModel.swap(modelIndex.row(), modelIndex.row() + 1);
-    modelIndex = m_talkerListModel.index(modelIndex.row() + 1, 0, QModelIndex());
-    talkersView->scrollTo(modelIndex);
-    talkersView->setCurrentIndex(modelIndex);
+    m_talkerListModel.swap (modelIndex.row(), modelIndex.row() + 1);
+    modelIndex = m_talkerListModel.index (modelIndex.row() + 1, 0, QModelIndex());
+    talkersView->scrollTo (modelIndex);
+    talkersView->setCurrentIndex (modelIndex);
     updateTalkerButtons();
     configChanged();
 }
@@ -1014,10 +983,10 @@ void KCMKttsMgr::slotLowerFilterPriorityButton_clicked()
 {
     QModelIndex modelIndex = filtersView->currentIndex();
     if (!modelIndex.isValid()) return;
-    m_filterListModel.swap(modelIndex.row(), modelIndex.row() + 1);
-    modelIndex = m_filterListModel.index(modelIndex.row() + 1, 0, QModelIndex());
-    filtersView->scrollTo(modelIndex);
-    filtersView->setCurrentIndex(modelIndex);
+    m_filterListModel.swap (modelIndex.row(), modelIndex.row() + 1);
+    modelIndex = m_filterListModel.index (modelIndex.row() + 1, 0, QModelIndex());
+    filtersView->scrollTo (modelIndex);
+    filtersView->setCurrentIndex (modelIndex);
     updateFilterButtons();
     configChanged();
 }
@@ -1025,19 +994,20 @@ void KCMKttsMgr::slotLowerFilterPriorityButton_clicked()
 /**
 * Update the status of the Talker buttons.
 */
-void KCMKttsMgr::updateTalkerButtons(){
+void KCMKttsMgr::updateTalkerButtons()
+{
     // kDebug() << "KCMKttsMgr::updateTalkerButtons: Running";
     QModelIndex modelIndex = talkersView->currentIndex();
     if (modelIndex.isValid()) {
-        removeTalkerButton->setEnabled(true);
-        configureTalkerButton->setEnabled(true);
-        higherTalkerPriorityButton->setEnabled(modelIndex.row() != 0);
-        lowerTalkerPriorityButton->setEnabled(modelIndex.row() < (m_talkerListModel.rowCount() - 1));
+        removeTalkerButton->setEnabled (true);
+        configureTalkerButton->setEnabled (true);
+        higherTalkerPriorityButton->setEnabled (modelIndex.row() != 0);
+        lowerTalkerPriorityButton->setEnabled (modelIndex.row() < (m_talkerListModel.rowCount() - 1));
     } else {
-        removeTalkerButton->setEnabled(false);
-        configureTalkerButton->setEnabled(false);
-        higherTalkerPriorityButton->setEnabled(false);
-        lowerTalkerPriorityButton->setEnabled(false);
+        removeTalkerButton->setEnabled (false);
+        configureTalkerButton->setEnabled (false);
+        higherTalkerPriorityButton->setEnabled (false);
+        lowerTalkerPriorityButton->setEnabled (false);
     }
     // kDebug() << "KCMKttsMgr::updateTalkerButtons: Exiting";
 }
@@ -1045,19 +1015,20 @@ void KCMKttsMgr::updateTalkerButtons(){
 /**
 * Update the status of the normal Filter buttons.
 */
-void KCMKttsMgr::updateFilterButtons(){
+void KCMKttsMgr::updateFilterButtons()
+{
     // kDebug() << "KCMKttsMgr::updateFilterButtons: Running";
     QModelIndex modelIndex = filtersView->currentIndex();
     if (modelIndex.isValid()) {
-        removeFilterButton->setEnabled(true);
-        configureFilterButton->setEnabled(true);
-        higherFilterPriorityButton->setEnabled(modelIndex.row() != 0);
-        lowerFilterPriorityButton->setEnabled(modelIndex.row() < (m_filterListModel.rowCount() - 1));
+        removeFilterButton->setEnabled (true);
+        configureFilterButton->setEnabled (true);
+        higherFilterPriorityButton->setEnabled (modelIndex.row() != 0);
+        lowerFilterPriorityButton->setEnabled (modelIndex.row() < (m_filterListModel.rowCount() - 1));
     } else {
-        removeFilterButton->setEnabled(false);
-        configureFilterButton->setEnabled(false);
-        higherFilterPriorityButton->setEnabled(false);
-        lowerFilterPriorityButton->setEnabled(false);
+        removeFilterButton->setEnabled (false);
+        configureFilterButton->setEnabled (false);
+        higherFilterPriorityButton->setEnabled (false);
+        lowerFilterPriorityButton->setEnabled (false);
     }
     // kDebug() << "KCMKttsMgr::updateFilterButtons: Exiting";
 }
@@ -1065,139 +1036,122 @@ void KCMKttsMgr::updateFilterButtons(){
 /**
 * This signal is emitted whenever user checks/unchecks the Enable TTS System check box.
 */
-void KCMKttsMgr::slotEnableKttsd_toggled(bool)
+void KCMKttsMgr::slotEnableJovie_toggled (bool)
 {
     // Prevent re-entrancy.
     static bool reenter;
     if (reenter) return;
     reenter = true;
-    // See if KTTSD is running.
-    bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"));
+    // See if Jovie is running.
+    bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered ("org.kde.jovie"));
 
     // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning;
-    // If Enable KTTSD check box is checked and it is not running, then start KTTSD.
-    if (enableKttsdCheckBox->isChecked())
-    {
-        if (!kttsdRunning)
-        {
-            // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting KTTSD";
+    // If Enable Jovie check box is checked and it is not running, then start Jovie.
+    if (enableJovieCheckBox->isChecked()) {
+        if (!kttsdRunning) {
+            // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting Jovie";
             QString error;
-            if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
-            {
-                kDebug() << "Starting KTTSD failed with message " << error;
-                enableKttsdCheckBox->setChecked(false);
+            if (KToolInvocation::startServiceByDesktopName ("jovie", QStringList(), &error)) {
+                kDebug() << "Starting Jovie failed with message " << error;
+                enableJovieCheckBox->setChecked (false);
 
             } else {
                 configChanged();
-                kttsdStarted();
+                jovieStarted();
             }
         }
-    }
-    else
-    // If check box is not checked and it is running, then stop KTTSD.
+    } else
+        // If check box is not checked and it is running, then stop Jovie.
     {
-        if (kttsdRunning)
-            {
-                // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping KTTSD";
-		if(!m_kspeech)
-		   m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
-                m_kspeech->kttsdExit();
-		delete m_kspeech;
-		m_kspeech = 0;
-                configChanged();
-            }
+        if (kttsdRunning) {
+            // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping Jovie";
+            if (!m_kspeech)
+                m_kspeech = new OrgKdeKSpeechInterface ("org.kde.jovie", "/KSpeech", QDBusConnection::sessionBus());
+            m_kspeech->kttsdExit();
+            delete m_kspeech;
+            m_kspeech = 0;
+            configChanged();
+        }
     }
     reenter = false;
-}
-
-void KCMKttsMgr::slotAutoStartMgrCheckBox_toggled(bool checked)
-{
-    autoexitMgrCheckBox->setEnabled(checked);
-    configChanged();
 }
 
 /**
 * This slot is called whenever KTTSD starts or restarts.
 */
-void KCMKttsMgr::kttsdStarted()
+void KCMKttsMgr::jovieStarted()
 {
     // kDebug() << "KCMKttsMgr::kttsdStarted: Running";
     bool kttsdLoaded = (m_jobMgrWidget != 0);
     // Load Job Manager Part library.
-    if (!kttsdLoaded)
-    {
-        m_jobMgrWidget = new KttsJobMgr(this);
-        if (m_jobMgrWidget)
-        {
-	    connect(m_jobMgrWidget, SIGNAL(configChanged()), this, SLOT(configChanged()));
+    if (!kttsdLoaded) {
+        m_jobMgrWidget = new KttsJobMgr (this);
+        if (m_jobMgrWidget) {
+            connect (m_jobMgrWidget, SIGNAL (configChanged()), this, SLOT (configChanged()));
             // Add the Job Manager part as a new tab.
-            mainTab->addTab(m_jobMgrWidget, i18n("Jobs"));
+            mainTab->addTab (m_jobMgrWidget, i18n ("Jobs"));
             kttsdLoaded = true;
-        }
-        else
+        } else
             kDebug() << "KCMKttsMgr::kttsdStarted: Could not create kttsjobmgr part.";
     }
     // Check/Uncheck the Enable KTTSD check box.
-    if (kttsdLoaded)
-    {
-        enableKttsdCheckBox->setChecked(true);
-        m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
-        m_kspeech->setParent(this);
-        m_kspeech->setApplicationName("KCMKttsMgr");
-        m_kspeech->setIsSystemManager(true);
+    if (kttsdLoaded) {
+        enableJovieCheckBox->setChecked (true);
+        m_kspeech = new OrgKdeKSpeechInterface ("org.kde.jovie", "/KSpeech", QDBusConnection::sessionBus());
+        m_kspeech->setParent (this);
+        m_kspeech->setApplicationName ("KCMKttsMgr");
+        m_kspeech->setIsSystemManager (true);
         // Connect KTTSD DBUS signals to our slots.
-        connect(m_kspeech, SIGNAL(kttsdStarted()),
-            this, SLOT(kttsdStarted()));
-        connect(m_kspeech, SIGNAL(kttsdExiting()),
-            this, SLOT(kttsdExiting()));
-        connect( QDBusConnection::sessionBus().interface(), SIGNAL( serviceUnregistered( const QString & ) ),
-                 this, SLOT( slotServiceUnregistered( const QString & ) ) );
-        connect( QDBusConnection::sessionBus().interface(), SIGNAL( serviceOwnerChanged( const QString &, const QString &, const QString & ) ),
-                 this, SLOT( slotServiceOwnerChanged( const QString &, const QString &, const QString & ) ) );
+        connect (m_kspeech, SIGNAL (kttsdStarted()),
+                 this, SLOT (kttsdStarted()));
+        connect (m_kspeech, SIGNAL (kttsdExiting()),
+                 this, SLOT (kttsdExiting()));
+        connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceUnregistered (const QString &)),
+                 this, SLOT (slotServiceUnregistered (const QString &)));
+        connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceOwnerChanged (const QString &, const QString &, const QString &)),
+                 this, SLOT (slotServiceOwnerChanged (const QString &, const QString &, const QString &)));
 
-        kttsdVersion->setText(i18n("KTTSD Version: %1", m_kspeech->version()));
+        kttsdVersion->setText (i18n ("Jovie Version: %1", m_kspeech->version()));
 
     } else {
-        enableKttsdCheckBox->setChecked(false);
+        enableJovieCheckBox->setChecked (false);
         delete m_kspeech;
         m_kspeech = 0;
     }
 }
 
-void KCMKttsMgr::slotServiceUnregistered( const QString &service )
+void KCMKttsMgr::slotServiceUnregistered (const QString &service)
 {
-  if ( service == QLatin1String( "org.kde.kttsd" ) )
-  {
-    kttsdExiting();
-  }
+    if (service == QLatin1String ("org.kde.jovie")) {
+        jovieExiting();
+    }
 
 }
 
-void KCMKttsMgr::slotServiceOwnerChanged( const QString &service, const QString &, const QString &newOwner )
+void KCMKttsMgr::slotServiceOwnerChanged (const QString &service, const QString &, const QString &newOwner)
 {
-  if ( service == QLatin1String( "org.kde.kttsd" ) && newOwner.isEmpty() )
-  {
-    kttsdExiting();
-  }
+    if (service == QLatin1String ("org.kde.jovie") && newOwner.isEmpty()) {
+        jovieExiting();
+    }
 }
 
 /**
 * This slot is called whenever KTTSD is about to exit.
 */
-void KCMKttsMgr::kttsdExiting()
+void KCMKttsMgr::jovieExiting()
 {
     // kDebug() << "KCMKttsMgr::kttsdExiting: Running";
-    if (m_jobMgrWidget)
-    {
-        mainTab->removeTab(wpJobs);
+    if (m_jobMgrWidget) {
+        mainTab->removeTab (wpJobs);
         delete m_jobMgrWidget;
         m_jobMgrWidget = 0;
     }
-    enableKttsdCheckBox->setChecked(false);
-    disconnect( QDBusConnection::sessionBus().interface(), 0, this, 0 );
+
+    enableJovieCheckBox->setChecked (false);
+    disconnect (QDBusConnection::sessionBus().interface(), 0, this, 0);
     delete m_kspeech;
     m_kspeech = 0;
-    kttsdVersion->setText(i18n("KTTSD not running"));
+    kttsdVersion->setText (i18n ("Jovie not running"));
 }
 
 /**
@@ -1275,25 +1229,24 @@ void KCMKttsMgr::configureFilterItem()
     model = &m_filterListModel;
     QModelIndex modelIndex = lView->currentIndex();
     if (!modelIndex.isValid()) return;
-    FilterItem fi = model->getRow(modelIndex.row());
+    FilterItem fi = model->getRow (modelIndex.row());
     QString filterID = fi.id;
     QString filterPlugInName = fi.plugInName;
     QString desktopEntryName = fi.desktopEntryName;
     if (desktopEntryName.isEmpty()) return;
-    m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
+    m_loadedFilterPlugIn = loadFilterPlugin (desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
     // kDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully.";
 
     // Tell plugin to load its configuration.
     // kDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID;
-    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
+    m_loadedFilterPlugIn->load (m_config, QString ("Filter_") + filterID);
 
     // Display configuration dialog.
     configureFilter();
 
     // Did user Cancel?
-    if (!m_loadedFilterPlugIn)
-    {
+    if (!m_loadedFilterPlugIn) {
         delete m_configDlg;
         m_configDlg = 0;
         return;
@@ -1303,17 +1256,16 @@ void KCMKttsMgr::configureFilterItem()
     QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
 
     // If user properly configured the plugin, save the configuration.
-    if ( !userFilterName.isEmpty() )
-    {
+    if (!userFilterName.isEmpty()) {
         // Let plugin save its configuration.
-        m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
+        m_loadedFilterPlugIn->save (m_config, QString ("Filter_") + filterID);
 
         // Save configuration.
-        KConfigGroup filterConfig(m_config, QString("Filter_")+filterID);
-        filterConfig.writeEntry("DesktopEntryName", desktopEntryName);
-        filterConfig.writeEntry("UserFilterName", userFilterName);
-        filterConfig.writeEntry("Enabled", true);
-        filterConfig.writeEntry("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
+        KConfigGroup filterConfig (m_config, QString ("Filter_") + filterID);
+        filterConfig.writeEntry ("DesktopEntryName", desktopEntryName);
+        filterConfig.writeEntry ("UserFilterName", userFilterName);
+        filterConfig.writeEntry ("Enabled", true);
+        filterConfig.writeEntry ("MultiInstance", m_loadedFilterPlugIn->supportsMultiInstance());
 
         m_config->sync();
 
@@ -1324,7 +1276,7 @@ void KCMKttsMgr::configureFilterItem()
         fi.userFilterName = userFilterName;
         fi.enabled = true;
         fi.multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
-        model->updateRow(modelIndex.row(), fi);
+        model->updateRow (modelIndex.row(), fi);
         // Inform Control Center that configuration has changed.
         configChanged();
     }
@@ -1368,18 +1320,18 @@ void KCMKttsMgr::configureTalker()
 void KCMKttsMgr::configureFilter()
 {
     if (!m_loadedFilterPlugIn) return;
-    m_configDlg = new KDialog(this);
-    m_configDlg->setCaption(i18n("Filter Configuration"));
-    m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
-    m_configDlg->setDefaultButton(KDialog::Cancel);
-    m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
+    m_configDlg = new KDialog (this);
+    m_configDlg->setCaption (i18n ("Filter Configuration"));
+    m_configDlg->setButtons (KDialog::Help | KDialog::Default | KDialog::Ok | KDialog::Cancel);
+    m_configDlg->setDefaultButton (KDialog::Cancel);
+    m_loadedFilterPlugIn->setMinimumSize (m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
-    m_configDlg->setMainWidget(m_loadedFilterPlugIn);
-    m_configDlg->setHelp("configure-filter", "kttsd");
-    m_configDlg->enableButtonOk(false);
-    connect(m_loadedFilterPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigFilterDlg_ConfigChanged() ));
-    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigFilterDlg_DefaultClicked() ));
-    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigFilterDlg_CancelClicked() ));
+    m_configDlg->setMainWidget (m_loadedFilterPlugIn);
+    m_configDlg->setHelp ("configure-filter", "jovie");
+    m_configDlg->enableButtonOk (false);
+    connect (m_loadedFilterPlugIn, SIGNAL (changed (bool)), this, SLOT (slotConfigFilterDlg_ConfigChanged()));
+    connect (m_configDlg, SIGNAL (defaultClicked()), this, SLOT (slotConfigFilterDlg_DefaultClicked()));
+    connect (m_configDlg, SIGNAL (cancelClicked()), this, SLOT (slotConfigFilterDlg_CancelClicked()));
     // Display the dialog.
     m_configDlg->exec();
 }
@@ -1387,30 +1339,14 @@ void KCMKttsMgr::configureFilter()
 /**
 * Count number of configured Filters with the specified plugin name.
 */
-int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
+int KCMKttsMgr::countFilterPlugins (const QString& filterPlugInName)
 {
     int cnt = 0;
     for (int i = 0; i < m_filterListModel.rowCount(); ++i) {
-        FilterItem fi = m_filterListModel.getRow(i);
+        FilterItem fi = m_filterListModel.getRow (i);
         if (fi.plugInName == filterPlugInName) ++cnt;
     }
     return cnt;
-}
-
-// Basically the slider values are logarithmic (0,...,1000) whereas percent
-// values are linear (50%,...,200%).
-//
-// slider = alpha * (log(percent)-log(50))
-// with alpha = 1000/(log(200)-log(50))
-
-int KCMKttsMgr::percentToSlider(int percentValue) {
-    double alpha = 1000 / (log(200.0) - log(50.0));
-    return (int)floor (0.5 + alpha * (log((float)percentValue)-log(50.0)));
-}
-
-int KCMKttsMgr::sliderToPercent(int sliderValue) {
-    double alpha = 1000 / (log(200.0) - log(50.0));
-    return (int)floor(0.5 + exp (sliderValue/alpha + log(50.0)));
 }
 
 void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
@@ -1420,7 +1356,7 @@ void KCMKttsMgr::slotConfigTalkerDlg_ConfigChanged()
 
 void KCMKttsMgr::slotConfigFilterDlg_ConfigChanged()
 {
-    m_configDlg->enableButtonOk( !m_loadedFilterPlugIn->userPlugInName().isEmpty() );
+    m_configDlg->enableButtonOk (!m_loadedFilterPlugIn->userPlugInName().isEmpty());
 }
 
 void KCMKttsMgr::slotConfigTalkerDlg_DefaultClicked()
@@ -1451,13 +1387,13 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
  * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
  *                               QString() if not found.
  */
-QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
+QString KCMKttsMgr::FilterNameToDesktopEntryName (const QString& name)
 {
     if (name.isEmpty()) return QString();
-    const KService::List  offers =  KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
+    const KService::List  offers =  KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name)
-		return offers[ndx]->desktopEntryName();
+            return offers[ndx]->desktopEntryName();
     return QString();
 }
 
@@ -1466,11 +1402,11 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
  * @param desktopEntryName       The DesktopEntryName.
  * @return                       The translated Name of the plugin, from Name= line in .desktop file.
  */
-QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName)
+QString KCMKttsMgr::FilterDesktopEntryNameToName (const QString& desktopEntryName)
 {
     if (desktopEntryName.isEmpty()) return QString();
-	KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin",
-        QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+    KService::List offers = KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin",
+                            QString ("DesktopEntryName == '%1'").arg (desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();
@@ -1479,13 +1415,13 @@ QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName
 }
 
 
-void KCMKttsMgr::slotFilterListView_clicked(const QModelIndex & index)
+void KCMKttsMgr::slotFilterListView_clicked (const QModelIndex & index)
 {
     if (!index.isValid()) return;
     if (index.column() != 0) return;
     if (index.row() < 0 || index.row() >= m_filterListModel.rowCount()) return;
-    FilterItem fi = m_filterListModel.getRow(index.row());
+    FilterItem fi = m_filterListModel.getRow (index.row());
     fi.enabled = !fi.enabled;
-    m_filterListModel.updateRow(index.row(), fi);
+    m_filterListModel.updateRow (index.row(), fi);
     configChanged();
 }

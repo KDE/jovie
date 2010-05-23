@@ -1,20 +1,20 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kitty/libkttsd  )
+include_directories( ${CMAKE_SOURCE_DIR}/jovie/libkttsd  )
 
 
 ########### next target ###############
 
-set(kitty_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerproc.cpp stringreplacerplugin.cpp )
+set(jovie_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerproc.cpp stringreplacerplugin.cpp )
 
-kde4_add_ui_files(kitty_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
+kde4_add_ui_files(jovie_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
 
-kde4_add_plugin(kitty_stringreplacerplugin WITH_PREFIX ${kitty_stringreplacerplugin_PART_SRCS})
+kde4_add_plugin(jovie_stringreplacerplugin WITH_PREFIX ${jovie_stringreplacerplugin_PART_SRCS})
 
 
 
-target_link_libraries(kitty_stringreplacerplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kttsd )
+target_link_libraries(jovie_stringreplacerplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kttsd )
 
-install(TARGETS kitty_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS jovie_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
@@ -28,8 +28,8 @@ install(FILES
     polish_festival_unspeakables.xml
     kmail.xml
     festival_unspeakable_chars.xml
-    qt2plaintext.xml DESTINATION ${DATA_INSTALL_DIR}/kitty/stringreplacer/)
+    qt2plaintext.xml DESTINATION ${DATA_INSTALL_DIR}/jovie/stringreplacer/)
 
-install( FILES kitty_stringreplacerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES jovie_stringreplacerplugin.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 

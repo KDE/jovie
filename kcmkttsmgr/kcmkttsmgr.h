@@ -166,13 +166,14 @@ class KCMKttsMgr :
         /** Most of these are not used */
 
         /**
-        * This signal is emitted when KTTSD starts or restarts after a call to reinit.
+        * This slot is called when Jovie starts or restarts after a call to reinit.
         */
-        virtual void kttsdStarted();
+        void jovieStarted();
+
         /**
-        * This signal is emitted just before KTTSD exits.
+        * This slot is called just before Jovie exits.
         */
-        virtual void kttsdExiting();
+        void jovieExiting();
 
         void slotServiceUnregistered( const QString & );
         void slotServiceOwnerChanged( const QString &, const QString &, const QString & );
@@ -184,12 +185,6 @@ class KCMKttsMgr :
             wpFilters = 2,          // Filters tab.
             wpJobs = 3              // Jobs tab.
         };
-
-        /**
-        * Conversion functions for percent boxes to/from sliders.
-        */
-        int percentToSlider(int percentValue);
-        int sliderToPercent(int sliderValue);
 
         /**
         * Given a language code and plugin name, returns a normalized default talker code.
@@ -356,8 +351,7 @@ class KCMKttsMgr :
         /**
         * General tab slots.
         */
-        void slotEnableKttsd_toggled(bool checked);
-        void slotAutoStartMgrCheckBox_toggled(bool checked);
+        void slotEnableJovie_toggled(bool checked);
 
         /**
         * Talker tab slots.

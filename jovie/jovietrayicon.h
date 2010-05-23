@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KTTSMgr System Tray Application
+  JovieTrayIcon tray icon for jovie text to speech service
   -------------------------------
   Copyright: (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
   Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
@@ -23,8 +23,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef _KITTYTRAYICON_H
-#define _KITTYTRAYICON_H
+#ifndef _JOVIETRAYICON_H
+#define _JOVIETRAYICON_H
 
 // KDE includes.
 #include <kmenu.h>
@@ -33,13 +33,13 @@
 class QEvent;
 class QAction;
 
-class KittyTrayIcon: public KStatusNotifierItem
+class JovieTrayIcon: public KStatusNotifierItem
 {
     Q_OBJECT
 
     public:
-        KittyTrayIcon(QWidget *parent=0);
-        ~KittyTrayIcon();
+        JovieTrayIcon(QWidget *parent=0);
+        ~JovieTrayIcon();
 
     protected Q_SLOTS:
         void slotActivateRequested(bool active, const QPoint &pos);
@@ -67,4 +67,4 @@ class KittyTrayIcon: public KStatusNotifierItem
         QAction* actConfigure;
 };
 
-#endif    // _KITTYTRAYICON_H
+#endif    // _JOVIETRAYICON_H

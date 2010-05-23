@@ -32,16 +32,16 @@
 #include <klocale.h>
 
 // KTTSD includes.
-#include "kitty.h"
-#include "kittytrayicon.h"
+#include "jovie.h"
+#include "jovietrayicon.h"
 
 int main (int argc, char *argv[]){
-    KLocale::setMainCatalog("kitty");
-    KAboutData aboutdata("kitty", 0, ki18n("kitty"),
+    KLocale::setMainCatalog("jovie");
+    KAboutData aboutdata("jovie", 0, ki18n("jovie"),
          "0.6.0", ki18n("Text-to-speech synthesis daemon"),
          KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
-    aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor(ki18n("Jeremy Whiting"), ki18n("Current Maintainer"), "jpwhiting@kde.org");
+    aboutdata.addAuthor(ki18n("José Pablo Ezequiel Fernández"),ki18n("Original Author"),"pupeno@pupeno.com");
     aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Previous Maintainer"),"garycramblitt@comcast.net");
     aboutdata.addAuthor(ki18n("Gunnar Schmi Dt"), ki18n("Contributor"),"gunnar@schmi-dt.de");
     aboutdata.addAuthor(ki18n("Olaf Schmidt"), ki18n("Contributor"),"ojschmidt@kde.org");
@@ -51,15 +51,14 @@ int main (int argc, char *argv[]){
     aboutdata.setProgramIconName("preferences-desktop-text-to-speech");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
-    // KCmdLineArgs::addCmdLineOptions( options );
     KUniqueApplication::addCmdLineOptions();
 
     KUniqueApplication::setOrganizationDomain("kde.org");
-    KUniqueApplication::setApplicationName("kitty");
+    KUniqueApplication::setApplicationName("jovie");
     KUniqueApplication app;
 
     if (!KUniqueApplication::start()) {
-        kDebug() << "KITTY is already running";
+        kDebug() << "Jovie is already running";
         return (0);
     }
 
@@ -68,11 +67,11 @@ int main (int argc, char *argv[]){
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
 
-    kDebug() << "main: Creating Kitty Service";
-    Kitty* service = Kitty::Instance();
+    kDebug() << "main: Creating Jovie Service";
+    Jovie* service = Jovie::Instance();
     service->init();
 
-    KittyTrayIcon* tray = new KittyTrayIcon();
+    JovieTrayIcon* tray = new JovieTrayIcon();
 
     // kDebug() << "Entering event loop.";
     return app.exec();

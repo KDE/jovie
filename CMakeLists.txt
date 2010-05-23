@@ -15,7 +15,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory( libkttsd ) 
 add_subdirectory( filters ) 
-add_subdirectory( kitty ) 
+add_subdirectory( jovie ) 
 add_subdirectory( kcmkttsmgr ) 
 add_subdirectory( icons ) 
   endif(SPEECHD_FOUND)

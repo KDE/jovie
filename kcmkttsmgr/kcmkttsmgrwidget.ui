@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>424</width>
-    <height>444</height>
+    <width>443</width>
+    <height>261</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,14 +34,14 @@
        <string comment="General, as title of window">General</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="4" column="0">
+       <item row="2" column="0">
         <widget class="QLabel" name="kttsdVersion">
          <property name="text">
-          <string>KTTSD not running</string>
+          <string>Jovie not running</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="1" column="0">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -57,59 +57,13 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
-        <layout class="QHBoxLayout">
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="autoexitMgrCheckBox">
-           <property name="whatsThis">
-            <string>When checked, and KTTSMgr was automatically started when speech began, automatically exits when speech has finished.  Does not automatically exit if KTTSMgr was started manually or started from the System Settings.</string>
-           </property>
-           <property name="text">
-            <string>E&amp;xit when speaking is finished</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="autostartMgrCheckBox">
-         <property name="whatsThis">
-          <string>When checked, if KTTSMgr is not already running and speech begins, starts KTTSMgr and displays an icon in the system tray.  &lt;em&gt;Note&lt;/em&gt;: KTTSMgr only automatically starts for text jobs having 5 sentences or more.</string>
-         </property>
-         <property name="text">
-          <string>Sta&amp;rt minimized in system tray when speaking</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
-        <widget class="QCheckBox" name="enableKttsdCheckBox">
+        <widget class="QCheckBox" name="enableJovieCheckBox">
          <property name="whatsThis">
           <string>Check to start the KTTS Daemon and enable Text-to-Speech.</string>
          </property>
          <property name="text">
-          <string>&amp;Enable Text-to-Speech System (KTTSD)</string>
+          <string>&amp;Enable Text-to-Speech System (Jovie)</string>
          </property>
         </widget>
        </item>
@@ -370,9 +324,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>mainTab</tabstop>
-  <tabstop>enableKttsdCheckBox</tabstop>
-  <tabstop>autostartMgrCheckBox</tabstop>
-  <tabstop>autoexitMgrCheckBox</tabstop>
+  <tabstop>enableJovieCheckBox</tabstop>
   <tabstop>addTalkerButton</tabstop>
   <tabstop>higherTalkerPriorityButton</tabstop>
   <tabstop>lowerTalkerPriorityButton</tabstop>

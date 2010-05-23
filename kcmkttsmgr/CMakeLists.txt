@@ -1,7 +1,7 @@
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2404)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kitty/libkttsd ${CMAKE_BINARY_DIR}/kitty/libkttsd )
+include_directories( ${CMAKE_SOURCE_DIR}/jovie/libkttsd ${CMAKE_BINARY_DIR}/jovie/libkttsd )
 
 
 ########### next target ###############
@@ -28,6 +28,6 @@ install(TARGETS kcm_kttsd  DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
 install( FILES kcmkttsd.desktop  DESTINATION ${SERVICES_INSTALL_DIR}  )
-install( FILES kcmkttsd_testmessage.desktop  DESTINATION  ${DATA_INSTALL_DIR}/kitty/ )
+install( FILES kcmkttsd_testmessage.desktop  DESTINATION  ${DATA_INSTALL_DIR}/jovie/ )
 
 
