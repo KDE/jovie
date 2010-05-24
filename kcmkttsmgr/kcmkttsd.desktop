@@ -3,7 +3,7 @@ Type=Service
 Exec=kcmshell4 kcmkttsd
 Icon=preferences-desktop-text-to-speech
 X-KDE-ServiceTypes=KCModule,KCModuleInit
-X-DocPath=kttsd/index.html
+X-DocPath=jovie/index.html
 
 X-KDE-Library=kcm_kttsd
 X-KDE-Init-Symbol=KCMKttsdMgr
