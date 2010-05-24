@@ -31,13 +31,15 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <QtDBus/QtDBus>
+
 // KTTSD includes.
 #include "jovie.h"
 #include "jovietrayicon.h"
 
 int main (int argc, char *argv[]){
     KLocale::setMainCatalog("jovie");
-    KAboutData aboutdata("jovie", 0, ki18n("jovie"),
+    KAboutData aboutdata("Jovie", 0, ki18n("Jovie"),
          "0.6.0", ki18n("Text-to-speech synthesis daemon"),
          KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("Jeremy Whiting"), ki18n("Current Maintainer"), "jpwhiting@kde.org");
@@ -53,13 +55,18 @@ int main (int argc, char *argv[]){
     KCmdLineArgs::init( argc, argv, &aboutdata );
     KUniqueApplication::addCmdLineOptions();
 
-    KUniqueApplication::setOrganizationDomain("kde.org");
-    KUniqueApplication::setApplicationName("jovie");
+    //KUniqueApplication::setOrganizationDomain("kde.org");
+    //KUniqueApplication::setApplicationName("jovie");
     KUniqueApplication app;
 
     if (!KUniqueApplication::start()) {
         kDebug() << "Jovie is already running";
         return (0);
+    }
+
+    if (QDBusConnection::sessionBus().interface()->registerService("org.kde.KSpeech")
+        != QDBusConnectionInterface::ServiceRegistered) {
+        kDebug() << "Could not register on KSpeech";
     }
 
     KCrash::setFlags(KCrash::AutoRestart);
