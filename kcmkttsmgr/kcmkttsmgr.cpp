@@ -686,7 +686,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin (const QString& plugInName)
     // kDebug() << "KCMKttsMgr::loadPlugin: Running";
 
     // Find the plugin.
-    KService::List offers = KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query ("Jovie/FilterPlugin",
                             QString ("DesktopEntryName == '%1'").arg (plugInName));
 
     if (offers.count() == 1) {
@@ -772,7 +772,7 @@ void KCMKttsMgr::addFilter()
         }
     }
     // Append those available plugins not yet in the list at all.
-    KService::List offers = KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin");
+    KService::List offers = KServiceTypeTrader::self()->query ("Jovie/FilterPlugin");
     for (int i = 0; i < offers.count() ; ++i) {
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins (filterPlugInName) == 0) {
@@ -1390,7 +1390,7 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 QString KCMKttsMgr::FilterNameToDesktopEntryName (const QString& name)
 {
     if (name.isEmpty()) return QString();
-    const KService::List  offers =  KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin");
+    const KService::List  offers =  KServiceTypeTrader::self()->query ("Jovie/FilterPlugin");
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name)
             return offers[ndx]->desktopEntryName();
@@ -1405,7 +1405,7 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName (const QString& name)
 QString KCMKttsMgr::FilterDesktopEntryNameToName (const QString& desktopEntryName)
 {
     if (desktopEntryName.isEmpty()) return QString();
-    KService::List offers = KServiceTypeTrader::self()->query ("JOVIE/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query ("Jovie/FilterPlugin",
                             QString ("DesktopEntryName == '%1'").arg (desktopEntryName));
 
     if (offers.count() == 1)

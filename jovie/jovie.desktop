@@ -1,16 +1,16 @@
 [Desktop Entry]
 Type=Service
-Exec=kitty
+Exec=jovie
 Icon=preferences-desktop-text-to-speech
 ServiceTypes=DBUS/Text-to-Speech
 X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
-Name=KITTY
-Name[da]=KITTY
-Name[pt]=KITTY
-Name[sv]=KITTY
-Name[uk]=KITTY
-Name[x-test]=xxKITTYxx
+Name=Jovie
+Name[da]=Jovie
+Name[pt]=Jovie
+Name[sv]=Jovie
+Name[uk]=Jovie
+Name[x-test]=xxJoviexx
 Comment=KDE Text To Speech Service
 Comment[da]=KDE tekst til tale-tjeneste
 Comment[pt]=Serviço de Texto-para-Fala do KDE

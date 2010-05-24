@@ -116,7 +116,7 @@ bool FilterMgr::init()
 /**
  * Synchronously convert text.
  * @param inputText         Input text.
- * @param talkerCode        TalkerCode structure for the talker that KTTSD intends to
+ * @param talkerCode        TalkerCode structure for the talker that Jovie intends to
  *                          use for synthing the text.  Useful for extracting hints about
  *                          how to filter the text.  For example, languageCode.
  * @param appId             The DCOP appId of the application that queued the text.
@@ -158,7 +158,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
     // kDebug() << "FilterMgr::loadFilterPlugin: Running";
 
     // Find the plugin.
-    KService::List offers = KServiceTypeTrader::self()->query("KITTY/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query("Jovie/FilterPlugin",
         QString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
@@ -222,7 +222,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KService::List offers = KServiceTypeTrader::self()->query("KITTY/FilterPlugin",
+    KService::List offers = KServiceTypeTrader::self()->query("Jovie/FilterPlugin",
     QString("Name == '%1'").arg(name));
 
     if (offers.count() == 1)
