@@ -1,3 +1,9 @@
+2010-05-24  Jeremy Whiting (jpwhiting)
+        * Renamed kttsd to Jovie, merged the trayicon(kttsmgr) into the daemon(kttsd) and together
+          they are called jovie.
+        * Added org.kde.KSpeech interface for reverse compatibility with other apps 
+          (and to match our xml file)
+
 2010-01-09  Jeremy Whiting (jpwhiting)
         * Moved kttsjobmgr into the kcm itself, no more plugin/kpart for it.  Finished making the
           controls on the Jobs tab apply on apply or ok click.

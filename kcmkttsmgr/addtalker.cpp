@@ -50,7 +50,7 @@ AddTalker::AddTalker(QWidget* parent)
     this->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     this->setDefaultButton(KDialog::Cancel);
     this->enableButtonOk(false);
-    this->setHelp("select-plugin", "kttsd");
+    this->setHelp("select-plugin", "jovie");
 
     QWidget * widget = new QWidget(this);
     mUi = new Ui::AddTalkerWidget;

@@ -551,7 +551,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editDlg->setDefaultButton(KDialog::Cancel);
     // Disable OK button if match field blank.
     m_editDlg->setMainWidget( w );
-    m_editDlg->setHelp( "", "kttsd" );
+    m_editDlg->setHelp( "", "jovie" );
     m_editDlg->enableButton( KDialog::Ok, !m_editWidget->matchLineEdit->text().isEmpty() );
     int dlgResult = m_editDlg->exec();
     QString substType = i18n( "Word" );

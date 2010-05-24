@@ -86,7 +86,7 @@ SelectLanguageDlg::SelectLanguageDlg(
         m_langList->setItem(0, 1, new QTableWidgetItem(""));
     }
     setMainWidget(m_langList);
-    setHelp("select-language", "kttsd");
+    setHelp("select-language", "jovie");
     QSize size = m_langList->minimumSize();
     size.setHeight(500);
     m_langList->setMinimumSize(size);

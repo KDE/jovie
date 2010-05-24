@@ -76,7 +76,7 @@ const bool autoexitMgrCheckBoxValue = true;
 
 // Make this a plug in.
 K_PLUGIN_FACTORY (KCMKttsMgrFactory, registerPlugin<KCMKttsMgr>();)
-K_EXPORT_PLUGIN (KCMKttsMgrFactory ("kttsd"))
+K_EXPORT_PLUGIN (KCMKttsMgrFactory ("jovie"))
 
 
 // ----------------------------------------------------------------------------
@@ -1297,7 +1297,7 @@ void KCMKttsMgr::configureTalker()
     //m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
     //m_configDlg->setDefaultButton(KDialog::Cancel);
     ////m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
-    //m_configDlg->setHelp("configure-plugin", "kttsd");
+    //m_configDlg->setHelp("configure-plugin", "jovie");
     //m_configDlg->enableButtonOk(false);
     //connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
     //connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));

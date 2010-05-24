@@ -38,8 +38,7 @@
 #include "jovietrayicon.h"
 
 int main (int argc, char *argv[]){
-    KLocale::setMainCatalog("jovie");
-    KAboutData aboutdata("Jovie", 0, ki18n("Jovie"),
+    KAboutData aboutdata("jovie", 0, ki18n("Jovie"),
          "0.6.0", ki18n("Text-to-speech synthesis daemon"),
          KAboutData::License_GPL, ki18n("(C) 2002, José Pablo Ezequiel Fernández"));
     aboutdata.addAuthor(ki18n("Jeremy Whiting"), ki18n("Current Maintainer"), "jpwhiting@kde.org");

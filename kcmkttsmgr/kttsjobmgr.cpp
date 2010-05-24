@@ -62,7 +62,7 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     m_ui->setupUi(this);
 
 //DBusAbstractInterfacePrivate
-    m_kspeech = new OrgKdeKSpeechInterface("org.kde.kttsd", "/KSpeech", QDBusConnection::sessionBus());
+    m_kspeech = new OrgKdeKSpeechInterface("org.kde.KSpeech", "/KSpeech", QDBusConnection::sessionBus());
     m_kspeech->setParent(this);
 
     // Establish ourself as a System Manager.
@@ -70,7 +70,7 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     m_kspeech->setIsSystemManager(true);
 
     // All the ktts components use the same catalog.
-    KGlobal::locale()->insertCatalog("kttsd");
+    KGlobal::locale()->insertCatalog("jovie");
 
     connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
     connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
@@ -109,7 +109,7 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
 
 KttsJobMgr::~KttsJobMgr()
 {
-    KGlobal::locale()->removeCatalog("kttsd");
+    KGlobal::locale()->removeCatalog("jovie");
     delete m_ui;
 }
 

@@ -141,7 +141,7 @@ protected:
     bool ConnectToSpeechd()
     {
         bool retval = false;
-        connection = spd_open("kttsd", "main", NULL, SPD_MODE_THREADED);
+        connection = spd_open("jovie", "main", NULL, SPD_MODE_THREADED);
         if (connection != NULL)
         {
             kDebug() << "successfully opened connection to speech dispatcher";

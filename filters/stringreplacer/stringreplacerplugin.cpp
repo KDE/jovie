@@ -32,7 +32,5 @@
 #include "stringreplacerproc.h"
 
 K_PLUGIN_FACTORY(StringReplacePluginFactory, registerPlugin<StringReplacerProc>(); registerPlugin<StringReplacerConf>();)
-K_EXPORT_PLUGIN(StringReplacePluginFactory("kttsd"))
-//K_EXPORT_COMPONENT_FACTORY( libkttsd_stringreplacerplugin,
-//    KGenericFactory<StringReplacerPlugin>("kttsd") )
+K_EXPORT_PLUGIN(StringReplacePluginFactory("jovie"))
 

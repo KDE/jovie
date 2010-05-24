@@ -529,7 +529,7 @@ bool Jovie::initializeSpeaker()
     Speaker::Instance()->init();
 
     // Establish ourself as a System Manager application.
-    Speaker::Instance()->getAppData("kttsd")->setIsSystemManager(true);
+    Speaker::Instance()->getAppData("jovie")->setIsSystemManager(true);
 
     return true;
 }

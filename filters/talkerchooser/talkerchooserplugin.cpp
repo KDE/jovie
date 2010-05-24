@@ -32,8 +32,4 @@
 #include "talkerchooserproc.h"
 
 K_PLUGIN_FACTORY(TalkerChooserPluginFactory, registerPlugin<TalkerChooserProc>(); registerPlugin<TalkerChooserConf>();)
-K_EXPORT_PLUGIN(TalkerChooserPluginFactory("kttsd"))
-//typedef K_TYPELIST_2( TalkerChooserProc, TalkerChooserConf ) TalkerChooserPlugin;
-//K_EXPORT_COMPONENT_FACTORY( libkttsd_talkerchooserplugin,
-//    KGenericFactory<TalkerChooserPlugin>("kttsd") )
-
+K_EXPORT_PLUGIN(TalkerChooserPluginFactory("jovie"))
