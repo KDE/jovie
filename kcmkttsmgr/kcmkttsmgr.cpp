@@ -1081,7 +1081,7 @@ void KCMKttsMgr::slotEnableJovie_toggled (bool)
 */
 void KCMKttsMgr::jovieStarted()
 {
-    // kDebug() << "KCMKttsMgr::kttsdStarted: Running";
+    // kDebug() << "KCMKttsMgr::jovieStarted: Running";
     bool kttsdLoaded = (m_jobMgrWidget != 0);
     // Load Job Manager Part library.
     if (!kttsdLoaded) {
@@ -1092,7 +1092,7 @@ void KCMKttsMgr::jovieStarted()
             mainTab->addTab (m_jobMgrWidget, i18n ("Jobs"));
             kttsdLoaded = true;
         } else
-            kDebug() << "KCMKttsMgr::kttsdStarted: Could not create kttsjobmgr part.";
+            kDebug() << "KCMKttsMgr::jovieStarted: Could not create kttsjobmgr part.";
     }
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded) {
@@ -1103,9 +1103,9 @@ void KCMKttsMgr::jovieStarted()
         m_kspeech->setIsSystemManager (true);
         // Connect KTTSD DBUS signals to our slots.
         connect (m_kspeech, SIGNAL (kttsdStarted()),
-                 this, SLOT (kttsdStarted()));
+                 this, SLOT (jovieStarted()));
         connect (m_kspeech, SIGNAL (kttsdExiting()),
-                 this, SLOT (kttsdExiting()));
+                 this, SLOT (jovieExiting()));
         connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceUnregistered (const QString &)),
                  this, SLOT (slotServiceUnregistered (const QString &)));
         connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceOwnerChanged (const QString &, const QString &, const QString &)),
