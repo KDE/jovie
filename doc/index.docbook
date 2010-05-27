@@ -121,8 +121,9 @@ Please at least include KDE, the KDE package it is in, the name
 <keyword>kdeaccessibility</keyword>
 <keyword>TTS</keyword>
 <keyword>Text-to-Speech</keyword>
-<keyword>KTTSD</keyword>
-<keyword>kttsmgr</keyword>
+<keyword>Jovie</keyword>
+<keyword>speech-dispatcher</keyword>
+<keyword>espeak</keyword>
 <keyword>festival</keyword>
 <keyword>flite</keyword>
 <keyword>hadifix</keyword>
@@ -187,15 +188,10 @@ speech synthesizers, and transforming XHMTL/&XML; documents.</para></listitem>
 <variablelist>
 
 <varlistentry>
-<term><command>kttsd</command></term>
-<listitem><para>the &kde; Text-to-Speech Daemon, which is a non-&GUI;
+<term><command>jovie</command></term>
+<listitem><para>the &kde; Text-to-Speech Daemon, which is an
 application that provides TTS services to applications via &DBus;.
-</para></listitem></varlistentry>
-
-<varlistentry>
-<term><command>kttsmgr</command></term>
-<listitem><para>a &GUI; application for configuring and controlling
-kttsd.  kttsmgr sits in the system tray.
+It also sits in the system tray.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -243,18 +239,18 @@ and make sure it is working.  See <xref linkend="installation" />.
 <!-- ...................................................................... -->
 
 
-<sect1 id="starting-kttsmgr">
-<title>Starting <command>kttsmgr</command></title>
+<sect1 id="starting-jovie">
+<title>Starting <command>jovie</command></title>
 
 <para>
 To start the &jovie; system, type the following command in a &konsole;
 </para>
 
-<para><userinput>kttsmgr</userinput></para>
+<para><userinput>jovie</userinput></para>
 
-<para>or click on kttsmgr in the &kde; Menu.</para>
+<para>or click on &jovie; in the &kde; Menu.</para>
 
-<para>If this is the first time running <command>kttsmgr</command>, or
+<para>If this is the first time running <command>jovie</command>, or
 if you have not yet configured any talkers, the <guilabel>Talkers</guilabel>
 screen appears.  See <xref linkend="configure-talkers" />.
 If you have already configured at least one talker, the <guilabel>General</guilabel>
@@ -277,9 +273,9 @@ before you use &jovie; otherwise speech-dispatcher will use a default voice.</pa
 <note><para>Multiple talkers for the same synthesizer is similar to multiple print
 queues for a single physical printer.</para></note>
 
-<para>When you click the <guilabel>Talkers</guilabel> tab in <command>kttsmgr</command>,
+<para>When you click the <guilabel>Talkers</guilabel> tab in <command>jovie</command>,
 the <guilabel>Talkers</guilabel> screen appears.  This screen also automatically
-appears if you start <command>kttsmgr</command> and you have not yet configured
+appears if you start <command>jovie</command> and you have not yet configured
 any talkers.</para>
 
 <para>
@@ -380,7 +376,7 @@ See <xref linkend="jobmgr" />.
 
 
 <sect1 id="general">
-<title>Starting KTTSD and Setting General Options</title>
+<title>Starting Jovie and Setting General Options</title>
 
 <para>Once you have configured at least one talker,
 you can start the &kde; Text-to-Speech System.  Click on the
@@ -395,8 +391,6 @@ screen appears.  You can also set some general options on this screen.
             <imageobjectco>
                 <areaspec units="calspair">
                     <area id="pt-gen-1" coords="1 1"/>
-                    <area id="pt-gen-2" coords="1 1"/>
-                    <area id="pt-gen-5" coords="1 1"/>
                     <area id="pt-gen-6" coords="1 1"/>
                 </areaspec>
                 <imageobject>
@@ -413,30 +407,11 @@ screen appears.  You can also set some general options on this screen.
 <para>
 <calloutlist>
 <callout arearefs="pt-gen-1"><para>Check this box to activate the &jovie; system.
-This starts the &kde; TTS Daemon (KTTSD).  If KTTSD starts successfully,
+This starts the &kde; TTS Daemon (Jovie).  If Jovie starts successfully,
 the <guilabel>Jobs</guilabel> tab will appear.
-Once KTTSD has been started, you can begin creating and speaking text jobs.
-See <xref linkend="jobmgr" />.  Unchecking will stop KTTSD and deactivate the &kde; TTS system.
+Once Jovie has been started, you can begin creating and speaking text jobs.
+See <xref linkend="jobmgr" />.  Unchecking will stop Jovie and deactivate the &kde; TTS system.
 </para></callout>
-<callout arearefs="pt-gen-2"><para>When this box is checked, an icon appears
-in the system tray whenever <command>kttsmgr</command> is running.  In this
-mode, clicking <guibutton>OK</guibutton> or <guibutton>Cancel</guibutton> does
-not cause <command>kttsmgr</command> to exit.  Instead, the screen
-disappears but <command>kttsmgr</command> continues running in the system
-tray.  Click the icon to restore the screen.  To quit <command>kttsmgr</command>,
-right-click on the icon in the system tray and choose <guilabel>Quit</guilabel>.
-When unchecked, an icon does not appear in the system tray.  Clicking <guibutton>OK</guibutton>
-or <guibutton>Cancel</guibutton> quits <command>kttsmgr</command>.
-<note><para>When <command>kttsmgr</command> exits,
-&jovie; keeps running if the <guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box is checked.</para></note>
-<note><para>This option does not take effect until the next time
-<command>kttsmgr</command> is started.</para></note>
-<note><para>This option has no effect when <command>kttsmgr</command> is
-running in the &systemsettings;.</para></note>
-</para></callout>
-<callout arearefs="pt-gen-5"><para>When this box is checked, and <command>kttsmgr</command>
-automatically appears in the system tray whenever speaking, it will also disappear
-automatically when speaking has finished.</para></callout>
 <callout arearefs="pt-gen-6"><para>Be sure to click here to save your settings.</para></callout>
 </calloutlist>
 </para>
@@ -449,7 +424,7 @@ automatically when speaking has finished.</para></callout>
 <sect1 id="jobmgr">
 <title>Managing Text Jobs</title>
 
-<para>When you click the <guilabel>Jobs</guilabel> tab in <command>kttsmgr</command>,
+<para>When you click the <guilabel>Jobs</guilabel> tab in <command>jovie</command>,
 the <guilabel>Jobs</guilabel> screen appears.</para>
 
 <screenshot>
@@ -755,7 +730,7 @@ screen below.  The order is from top to bottom.
 <sect2 id="configure-filters">
 <title>Configuring Filters</title>
 
-<para>To use filters, click the <guilabel>Filters</guilabel> tab in <command>kttsmgr</command>.</para>
+<para>To use filters, click the <guilabel>Filters</guilabel> tab in <command>jovie</command>.</para>
 
 <para>
     <screenshot>
@@ -1337,19 +1312,17 @@ application work. -->
 <answer>
 <para>Enter the following commands in a &konsole;:
 <programlisting>
-killall kttsd
-killall kttsmgr
+kquitapp Jovie
 </programlisting>
 </para>
 </answer>
 </qandaentry>
 <qandaentry>
 <question>
-<para>How can I see debugging output from <command>kttsd</command>?</para>
+<para>How can I see debugging output from <command>jovie</command>?</para>
 </question>
 <answer>
-<para>Open two &konsole; windows.  First start <command>kttsd</command> in one
-window, then start <command>kttsmgr</command> in the second.</para>
+<para>Open a &konsole; window.  Then start <command>jovie</command>.</para>
 </answer>
 </qandaentry>
 <qandaentry>
@@ -1612,7 +1585,7 @@ sudo make install
 &jovie;.  The shell script spd-conf can be used for that.</para>
 
 <note><para>&jovie; in &kde; 4.5 is a rename of KTTSD and kttsmgr.
-In the future kttsmgr will be able to configure speech-dispatcher directly without spd-conf.
+In the future &jovie; will be able to configure speech-dispatcher directly without spd-conf.
 </para></note>
 
 <!-- ====================================================================== -->
