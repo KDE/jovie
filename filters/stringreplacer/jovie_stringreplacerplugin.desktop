@@ -62,6 +62,7 @@ Name[zh_TW]=字串置換器
 Comment=Generic String Replacement Filter Plugin for Jovie
 Comment[cs]=Modul filtru náhrady řetězce Jovie
 Comment[da]=Generisk strengerstatnings-filter-plugin til Jovie
+Comment[de]=Ein allgemeines Modul zur Zeichenkettenersetzung für Jovie
 Comment[et]=Jovie üldine stringiasendusfiltri plugin
 Comment[is]=Almennt strengjaútskiptinga-íforrit fyrir Jovie
 Comment[nl]=Filter-plugin voor Jovie voor het vervangen van generieke teksten

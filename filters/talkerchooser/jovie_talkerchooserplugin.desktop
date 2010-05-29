@@ -60,6 +60,7 @@ Name[zh_TW]=語音選擇器
 Comment=Generic Talker Chooser Filter Plugin for Jovie
 Comment[cs]=Modul filtru výběru hlasu Jovie
 Comment[da]=Generisk vælger af oplæser til Jovie
+Comment[de]=Ein allgemeines Modul zur Sprecherauswahl für Jovie
 Comment[et]=Jovie üldine kõneleja valimise filtri plugin
 Comment[is]=Almennt talvalsíforrit fyrir Jovie
 Comment[nl]=Generieke filter-plugin voor Jovie om de spreker te kiezen 
