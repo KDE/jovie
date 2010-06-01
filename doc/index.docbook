@@ -95,8 +95,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2009-12-25</date>
-<releaseinfo>0.5.0 (&kde; 4.4)</releaseinfo>
+<date>2010-05-31</date>
+<releaseinfo>0.6 (&kde; 4.5)</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -1253,30 +1253,30 @@ Full documentation for both APIs is available online at the
 <title>The &jovie; &DBus; Interface</title>
 
 <para>Applications communicate requests for Text-to-Speech services via the
-&kde; &DBus; interface to program <command>kttsd</command> object <command>KSpeech</command>.
+&kde; &DBus; interface to program <command>jovie</command> object <command>KSpeech</command>.
 </para>
 
 <para>Enter the following commands in a &konsole;.</para>
 
 <para>If KTTSD is not already running</para>
 
-<para><userinput>kttsd</userinput></para>
+<para><userinput>jovie</userinput></para>
 
 <para>To queue a text job to be spoken</para>
 
-<para><userinput>qdbus org.kde.kttsd /KSpeech say "<replaceable>text</replaceable>"  "<replaceable>options</replaceable>"</userinput></para>
+<para><userinput>qdbus org.kde.jovie /KSpeech say "<replaceable>text</replaceable>"  "<replaceable>options</replaceable>"</userinput></para>
 
 <para>where <userinput><replaceable>text</replaceable></userinput> is the text to be spoken, and <userinput><replaceable>options</replaceable></userinput> is a language code
 such as <userinput><replaceable>en</replaceable></userinput>, <userinput><replaceable>cy</replaceable></userinput>, &etc;</para>
 
 <para>Example.</para>
 
-<para><userinput>qdbus org.kde.kttsd /KSpeech say "This is a test." "en"</userinput></para>
+<para><userinput>qdbus org.kde.jovie /KSpeech say "This is a test." "en"</userinput></para>
 
 <para>There are many more commands that can be sent.  To see a list of possible
 commands,</para>
 
-<para><userinput>qdbus org.kde.kttsd /KSpeech</userinput></para>
+<para><userinput>qdbus org.kde.jovie /KSpeech</userinput></para>
 
 <para>or read the
 <ulink url="http://accessibility.kde.org/developer/kttsd/">
@@ -1312,7 +1312,7 @@ application work. -->
 <answer>
 <para>Enter the following commands in a &konsole;:
 <programlisting>
-kquitapp Jovie
+kquitapp jovie
 </programlisting>
 </para>
 </answer>
@@ -1454,7 +1454,7 @@ on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
 
 <para>If you have access to the &kde; code repository, you can download &jovie;
 by checking out the <command>kdeaccessibility</command> module.  &jovie;
-will be found in the <command>kttsd</command> folder.  You can also
+will be found in the <filename class="directory">jovie</filename> folder.  You can also
 download tarballs of the kdeaccessibility source code from
 <ulink url="ftp://ftp.kde.org/pub/kde/">
 ftp://ftp.kde.org/pub/kde/</ulink></para>
