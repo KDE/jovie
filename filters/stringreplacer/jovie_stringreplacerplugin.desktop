@@ -60,6 +60,7 @@ Name[x-test]=xxString Replacerxx
 Name[zh_CN]=字符串替换器
 Name[zh_TW]=字串置換器
 Comment=Generic String Replacement Filter Plugin for Jovie
+Comment[ca]=Connector del filtre reemplaçador genèric de cadenes pel Jovie
 Comment[cs]=Modul filtru náhrady řetězce Jovie
 Comment[da]=Generisk strengerstatnings-filter-plugin til Jovie
 Comment[de]=Ein allgemeines Modul zur Zeichenkettenersetzung für Jovie
