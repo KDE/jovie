@@ -110,7 +110,7 @@ signals:
     void transformFinished();
 
 private slots:
-    void slotProcessExited(QProcess* proc);
+    void slotProcessExited();
 
 private:
     /// The XSLT processor.

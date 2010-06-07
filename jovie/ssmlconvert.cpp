@@ -237,8 +237,8 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     // kDebug() << "SSMLConvert::transform: executing command: " <<
     //     m_xsltProc->args() << endl;
 
-    connect(m_xsltProc, SIGNAL(processExited(QProcess*)),
-        this, SLOT(slotProcessExited(QProcess*)));
+    connect(m_xsltProc, SIGNAL(finished(int, QProcess::ExitStatus)),
+        this, SLOT(slotProcessExited()));
     if (!m_xsltProc->execute(QString("xsltproc"), args))
     {
         kDebug() << "SSMLConvert::transform: Error starting xsltproc";
@@ -248,7 +248,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     return true;
 }
 
-void SSMLConvert::slotProcessExited(QProcess* /*proc*/)
+void SSMLConvert::slotProcessExited()
 {
     m_xsltProc->deleteLater();
     m_xsltProc = 0;
