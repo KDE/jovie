@@ -25,9 +25,9 @@ set_target_properties(jovie_bin PROPERTIES OUTPUT_NAME jovie)
 target_link_libraries(jovie_bin
     speechd
     ${KDE4_KDECORE_LIBS}
-#    ${KDE4_KDE3SUPPORT_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KUTILS_LIBS}
+    ${KDE4_KIO_LIBS}
     kttsd )
 
 install(TARGETS jovie_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
