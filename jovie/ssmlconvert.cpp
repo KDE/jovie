@@ -32,7 +32,8 @@
 // KDE includes.
 #include <kdeversion.h>
 #include <kstandarddirs.h>
-#include <k3process.h>
+#include <QProcess>
+#include <QStringList>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 
@@ -228,17 +229,17 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     m_outFilename = outFile.fileName();
 
     /// Spawn an xsltproc process to apply our stylesheet to our SSML file.
-    m_xsltProc = new K3Process;
-    *m_xsltProc << "xsltproc";
-    *m_xsltProc << "-o" << m_outFilename  << "--novalid"
+	QStringList args;
+    m_xsltProc = new QProcess;
+    args << "-o" << m_outFilename  << "--novalid"
         << m_xsltFilename << m_inFilename;
     // Warning: This won't compile under KDE 3.2.  See FreeTTS::argsToStringList().
     // kDebug() << "SSMLConvert::transform: executing command: " <<
     //     m_xsltProc->args() << endl;
 
-    connect(m_xsltProc, SIGNAL(processExited(K3Process*)),
-        this, SLOT(slotProcessExited(K3Process*)));
-    if (!m_xsltProc->start(K3Process::NotifyOnExit, K3Process::NoCommunication))
+    connect(m_xsltProc, SIGNAL(processExited(QProcess*)),
+        this, SLOT(slotProcessExited(QProcess*)));
+    if (!m_xsltProc->execute(QString("xsltproc"), args))
     {
         kDebug() << "SSMLConvert::transform: Error starting xsltproc";
         return false;
@@ -247,7 +248,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     return true;
 }
 
-void SSMLConvert::slotProcessExited(K3Process* /*proc*/)
+void SSMLConvert::slotProcessExited(QProcess* /*proc*/)
 {
     m_xsltProc->deleteLater();
     m_xsltProc = 0;

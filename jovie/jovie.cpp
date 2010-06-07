@@ -42,7 +42,7 @@
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kfiledialog.h>
-#include <krun.h>
+#include <KRun>
 #include <kaboutdata.h>
 
 
