@@ -59,6 +59,7 @@ Name[zh_CN]=XML 转换器
 Name[zh_TW]=XML 轉換器
 Comment=Generic XML Transformation Filter Plugin for Jovie
 Comment[ca]=Connector del filtre genèric del transformador XML pel Jovie
+Comment[ca@valencia]=Connector del filtre genèric del transformador XML pel Jovie
 Comment[cs]=Modul filtru obecné XML transformace pro Jovie
 Comment[da]=Generisk XML Tranformationsfilter-plugin til Jovie
 Comment[de]=Ein allgemeines Modul zur XML-Umformung für Jovie
