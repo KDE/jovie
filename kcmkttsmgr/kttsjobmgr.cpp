@@ -1,9 +1,9 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  A KPart to display running jobs in KTTSD and permit user to stop, cancel, pause,
-  resume, change Talker, etc.
+  A QWidget to allow configuring of current voice in Jovie
+  and permit user to stop, cancel, pause, resume, change Talker, etc.
   -------------------
   Copyright : (C) 2004,2005 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright : (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright : (C) 2009-2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
 
   This program is free software; you can redistribute it and/or modify
@@ -54,6 +54,7 @@
 // KTTS includes.
 #include "talkercode.h"
 #include "selecttalkerdlg.h"
+#include "talkerwidget.h"
 
 KttsJobMgr::KttsJobMgr(QWidget *parent) :
     QWidget(parent)
@@ -61,7 +62,6 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     m_ui = new Ui::kttsjobmgr;
     m_ui->setupUi(this);
 
-//DBusAbstractInterfacePrivate
     m_kspeech = new OrgKdeKSpeechInterface("org.kde.KSpeech", "/KSpeech", QDBusConnection::sessionBus());
     m_kspeech->setParent(this);
 
@@ -72,14 +72,8 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     // All the ktts components use the same catalog.
     KGlobal::locale()->insertCatalog("jovie");
 
-    connect (m_ui->speedSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
-    connect (m_ui->pitchSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
-    connect (m_ui->volumeSlider, SIGNAL(valueChanged(int)), this, SIGNAL(configChanged()));
+    connect (m_ui->talkerWidget, SIGNAL(talkerChanged()), this, SIGNAL(configChanged()));
     
-    connect (m_ui->moduleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(slot_moduleChanged(const QString &)));
-    connect (m_ui->languageComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(slot_languageChanged(const QString &)));
-    connect (m_ui->voiceComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(configChanged()));
-
     m_ui->stopButton->setIcon(KIcon("media-playback-stop"));
     connect (m_ui->stopButton, SIGNAL(clicked()), this, SLOT(slot_stop()));
     m_ui->cancelButton->setIcon(KIcon("edit-clear"));
@@ -95,16 +89,6 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     connect (m_ui->speak_file, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
     m_ui->job_changetalker->setIcon(KIcon("translate"));
     connect (m_ui->job_changetalker, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
-
-    // Set the main widget for the part.
-
-    // Connect DBUS Signals emitted by KTTSD to our own slots.
-    connect(m_kspeech, SIGNAL(kttsdStarted()),
-        this, SLOT(kttsdStarted()));
-    connect(m_kspeech, SIGNAL(jobStateChanged(const QString&, int, int)),
-        this, SLOT(jobStateChanged(const QString&, int, int)));
-    connect(m_kspeech, SIGNAL(marker(const QString&, int, int, const QString&)),
-        this, SLOT(marker(const QString&, int, int, const QString&)));
 }
 
 KttsJobMgr::~KttsJobMgr()
@@ -138,28 +122,20 @@ void KttsJobMgr::slot_resume()
 
 void KttsJobMgr::save()
 {
-    m_kspeech->setSpeed(m_ui->speedSlider->value());
-    m_kspeech->setPitch(m_ui->pitchSlider->value());
-    m_kspeech->setVolume(m_ui->volumeSlider->value());
-    m_kspeech->setVoiceType(m_ui->voiceComboBox->currentIndex() + 1);
+    TalkerCode talker = m_ui->talkerWidget->getTalkerCode();
+    
+    m_kspeech->setSpeed(talker.rate());
+    m_kspeech->setPitch(talker.pitch());
+    m_kspeech->setVolume(talker.volume());
+    m_kspeech->setVoiceType(talker.voiceType());
+    kDebug() << "setting output module to " << talker.outputModule();
+    m_kspeech->setOutputModule(talker.outputModule());
+    kDebug() << "setting language to " << talker.language();
+    m_kspeech->setLanguage(talker.language());
 }
 
 void KttsJobMgr::load()
 {
-}
-
-void KttsJobMgr::slot_moduleChanged(const QString & module)
-{
-    kDebug() << "changing the output module to " << module;
-    m_kspeech->setOutputModule(module);
-    emit configChanged();
-}
-
-void KttsJobMgr::slot_languageChanged(const QString & language)
-{
-    kDebug() << "changing the language to " << language;
-    m_kspeech->setLanguage(language);
-    emit configChanged();
 }
 
 void KttsJobMgr::slot_job_change_talker()
@@ -258,13 +234,4 @@ QString KttsJobMgr::cachedTalkerCodeToTalkerID(const QString& talkerCode)
         // kDebug() << "KttsJobMgr::cachedTalkerCodeToTalkerID: talkerCode = " << talkerCode << " talkerID = " << talkerID;
         return talkerID;
     }
-}
-
-/** Slots connected to DBUS Signals emitted by KTTSD. */
-
-/**
-* This signal is emitted when KTTSD starts or restarts after a call to reinit.
-*/
-Q_SCRIPTABLE void KttsJobMgr::kttsdStarted()
-{
 }

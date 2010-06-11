@@ -1,11 +1,10 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Dialog to allow user to add a new Talker by selecting a language and synthesizer
-  (button).  Uses addtalkerwidget.ui.
+  Widget to configure Talker parameters including language, synthesizer, volume,
+  rate, and pitch. Uses talkerwidget.ui.
+
   -------------------
-  Copyright: (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
-  Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -22,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#ifndef ADDTALKER_H
-#define ADDTALKER_H
+#ifndef _TALKERWIDGET_H
+#define _TALKERWIDGET_H
 
 // Qt includes.
 #include <QtCore/QList>
@@ -33,9 +32,12 @@
 
 #include "../libkttsd/talkercode.h"
 
-class TalkerWidget;
+namespace Ui
+{
+    class TalkerWidget;
+}
 
-class AddTalker : public KDialog
+class TalkerWidget : public QWidget
 {
     Q_OBJECT
 
@@ -44,12 +46,31 @@ public:
     * Constructor.
     * @param parent             Inherited KDialog parameter.
     */
-    explicit AddTalker(QWidget* parent = 0);
+    explicit TalkerWidget(QWidget* parent = 0);
 
     /**
     * Destructor.
     */
-    ~AddTalker();
+    ~TalkerWidget();
+
+    /**
+     * Set the talker's name
+     * @param name              Name to set
+     */
+    void setName(const QString &name);
+
+    /**
+     * Get the talker's name
+     * @returns                 Talker's name
+     */
+    QString getName() const;
+
+    /**
+     * Set whether the name should be read-only (to the user)
+     * @param value             True if the user should not be able to edit the name
+     *                          False otherwise
+     */
+    void setNameReadOnly(bool value);
 
     /**
     * Set the talker configuration to start with
@@ -62,10 +83,17 @@ public:
     */
     TalkerCode getTalkerCode() const;
 
+    
+Q_SIGNALS:
+    void talkerChanged();
+
 private:
-    TalkerWidget * mWidget;
-private slots:
-    void slotTalkerChanged();
+    // output modules found in speech-dispatcher
+    QStringList m_outputModules;
+
+    // designer ui content
+    Ui::TalkerWidget * mUi;
+
 };
 
 #endif

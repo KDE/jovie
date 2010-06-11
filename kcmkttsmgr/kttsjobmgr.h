@@ -51,20 +51,13 @@ public:
     KttsJobMgr(QWidget *parent = 0);
     virtual ~KttsJobMgr();
 
-    /** apply current settings, i.e. speech-dispatcher what to do */
+    /** apply current settings, i.e. tell speech-dispatcher what to do */
     void save();
     /** get the current settings from speech-dispatcher */
     void load();
     
 signals:
     void configChanged();
-
-    /** Slots connected to DBUS Signals emitted by KTTSD. */
-protected Q_SLOTS:
-    /**
-    * This signal is emitted when KTTSD starts or restarts after a call to reinit.
-    */
-    Q_SCRIPTABLE void kttsdStarted();
 
 private slots:
     /**
@@ -78,13 +71,6 @@ private slots:
     void slot_speak_clipboard();
     void slot_speak_file();
 
-    /**
-    * Slots for comboboxes.
-    */
-    
-    void slot_moduleChanged(const QString & module);
-    void slot_languageChanged(const QString & language);
-   
 private:
     /**
     * DBUS KSpeech Interface.

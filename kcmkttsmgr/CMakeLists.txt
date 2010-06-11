@@ -9,12 +9,13 @@ include_directories( ${CMAKE_SOURCE_DIR}/jovie/libkttsd ${CMAKE_BINARY_DIR}/jovi
 set(kcm_kttsd_PART_SRCS 
    kcmkttsmgr.cpp 
    kttsjobmgr.cpp
-   addtalker.cpp )
+   addtalker.cpp
+   talkerwidget.cpp)
 
 
 qt4_add_dbus_interfaces(kcm_kttsd_PART_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml )
 
-kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui kttsjobmgr.ui addtalkerwidget.ui )
+kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui kttsjobmgr.ui talkerwidget.ui )
 
 kde4_add_plugin(kcm_kttsd ${kcm_kttsd_PART_SRCS})
 
