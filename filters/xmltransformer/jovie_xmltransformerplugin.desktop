@@ -75,6 +75,7 @@ Comment[pt_BR]=Plug-in genérico do filtro de transformação XML para o Jovie
 Comment[sv]=Insticksprogram för Jovie med generellt XML-transformeringsfilter
 Comment[uk]=Додаток загального фільтра перетворення XML для Jovie
 Comment[x-test]=xxGeneric XML Transformation Filter Plugin for Joviexx
+Comment[zh_CN]=Jovie 通用 XML 转换过滤插件
 Comment[zh_TW]=Jovie 使用的一般 XML 轉換過濾外掛程式
 Type=Service
 ServiceTypes=Jovie/FilterPlugin

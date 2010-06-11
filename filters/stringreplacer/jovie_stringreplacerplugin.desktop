@@ -77,6 +77,7 @@ Comment[pt_BR]=Plug-in genérico do filtro de substituição de textos para o Jo
 Comment[sv]=Insticksprogram för Jovie med generellt strängersättningsfilter
 Comment[uk]=Додаток загального фільтра заміни рядків для Jovie
 Comment[x-test]=xxGeneric String Replacement Filter Plugin for Joviexx
+Comment[zh_CN]=Jovie 的通用字符串替换过滤插件
 Comment[zh_TW]=Jovie 使用的一般字串置換外掛程式
 Type=Service
 ServiceTypes=Jovie/FilterPlugin
