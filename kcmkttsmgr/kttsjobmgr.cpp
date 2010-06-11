@@ -72,6 +72,8 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     // All the ktts components use the same catalog.
     KGlobal::locale()->insertCatalog("jovie");
 
+    // Hide the name field
+    m_ui->talkerWidget->setNameReadOnly(true);
     connect (m_ui->talkerWidget, SIGNAL(talkerChanged()), this, SIGNAL(configChanged()));
     
     m_ui->stopButton->setIcon(KIcon("media-playback-stop"));

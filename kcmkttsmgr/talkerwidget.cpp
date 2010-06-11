@@ -111,6 +111,12 @@ TalkerWidget::~TalkerWidget()
 {
 }
 
+void TalkerWidget::setNameReadOnly(bool value)
+{
+    mUi->nameLabel->setVisible(!value);
+    mUi->nameEdit->setVisible(!value);
+}
+
 void TalkerWidget::setTalkerCode(const TalkerCode &talker)
 {
 }
