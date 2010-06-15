@@ -140,7 +140,7 @@ void JovieTrayIcon::helpSelected()
 
 void JovieTrayIcon::stopSelected()
 {
-    Jovie::Instance()->removeAllJobs();
+    Jovie::Instance()->stop();
 }
 
 void JovieTrayIcon::pauseSelected()
