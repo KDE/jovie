@@ -1111,7 +1111,7 @@ void KCMKttsMgr::jovieStarted()
         connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceOwnerChanged (const QString &, const QString &, const QString &)),
                  this, SLOT (slotServiceOwnerChanged (const QString &, const QString &, const QString &)));
 
-        kttsdVersion->setText (i18n ("Jovie Version: %1", m_kspeech->version()));
+        kttsdVersion->setText (i18n ("Jovie Version: %1", getenv("SPEECHD_PORT")));
 
     } else {
         enableJovieCheckBox->setChecked (false);

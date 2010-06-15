@@ -35,5 +35,5 @@ install(TARGETS jovie_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 ########### install files ###############
 
 install( FILES SSMLtoPlainText.xsl  DESTINATION  ${DATA_INSTALL_DIR}/kttsd/xslt/ )
-install( FILES jovie.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES jovie.desktop kttsd.desktop DESTINATION  ${SERVICES_INSTALL_DIR} )
 

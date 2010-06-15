@@ -68,6 +68,11 @@ int main (int argc, char *argv[]){
         kDebug() << "Could not register on KSpeech";
     }
 
+    if (QDBusConnection::sessionBus().interface()->registerService("org.kde.kttsd")
+        != QDBusConnectionInterface::ServiceRegistered) {
+        kDebug() << "Could not register on KSpeech";
+    }
+
     KCrash::setFlags(KCrash::AutoRestart);
 
     // This app is started automatically, no need for session management
