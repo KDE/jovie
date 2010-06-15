@@ -89,8 +89,6 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     connect (m_ui->speak_clipboard, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
     m_ui->speak_file->setIcon(KIcon("document-open"));
     connect (m_ui->speak_file, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
-    m_ui->job_changetalker->setIcon(KIcon("translate"));
-    connect (m_ui->job_changetalker, SIGNAL(clicked()), this, SLOT(slot_job_change_talker()));
 }
 
 KttsJobMgr::~KttsJobMgr()
@@ -138,29 +136,6 @@ void KttsJobMgr::save()
 
 void KttsJobMgr::load()
 {
-}
-
-void KttsJobMgr::slot_job_change_talker()
-{
-    //QModelIndex index = m_ui->m_jobTableView->currentIndex();
-    //if (index.isValid())
-    //{
-    //    JobInfo job = m_jobListModel->getRow(index.row());
-    //    QString talkerID = job.talkerID;
-    //    QStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
-    //    int ndx = talkerIDs.indexOf(talkerID);
-    //    QString talkerCode;
-    //    if (ndx >= 0)
-    //        talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
-    //    QPointer<SelectTalkerDlg> dlg = new SelectTalkerDlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
-    //    int dlgResult = dlg->exec();
-    //    if (dlgResult != KDialog::Accepted)
-    //        return;
-    //    talkerCode = dlg->getSelectedTalkerCode();
-    //    int jobNum = job.jobNum;
-    //    m_kspeech->changeJobTalker(jobNum, talkerCode);
-    //    refreshJob(jobNum);
-    //}
 }
 
 void KttsJobMgr::slot_speak_clipboard()

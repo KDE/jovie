@@ -95,16 +95,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="KPushButton" name="job_changetalker">
-          <property name="whatsThis">
-           <string>&lt;p&gt;Prompts you with a list of your configured Talkers from the &lt;b&gt;Talkers&lt;/b&gt; tab.  The job will be spoken using the selected Talker.&lt;/p&gt;</string>
-          </property>
-          <property name="text">
-           <string>Change Talker</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item row="0" column="0" colspan="2">

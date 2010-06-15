@@ -67,7 +67,6 @@ private slots:
     void slot_cancel();
     void slot_pause();
     void slot_resume();
-    void slot_job_change_talker();
     void slot_speak_clipboard();
     void slot_speak_file();
 
