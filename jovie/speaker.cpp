@@ -105,8 +105,10 @@ class SpeakerPrivate
         filterMgr(NULL),
         config(NULL)
     {
-        if (!ConnectToSpeechd())
+        if (!ConnectToSpeechd()) {
+            kDebug() << "connection: " << connection;
             kError() << "could not get a connection to speech-dispatcher"<< endl;
+        }
 
         filterMgr = new FilterMgr();
         filterMgr->init();
@@ -550,22 +552,34 @@ int Speaker::voiceType()
 
 void Speaker::stop()
 {
-    spd_stop(d->connection);
+    if (d->connection)
+        spd_stop(d->connection);
+    else
+        kDebug() << "unable to stop as there's no connection to speech-dispatcher";
 }
 
 void Speaker::cancel()
 {
-    spd_cancel(d->connection);
+    if (d->connection)
+        spd_cancel(d->connection);
+    else
+        kDebug() << "unable to cancel as there's no connection to speech-dispatcher";
 }
 
 void Speaker::pause()
 {
-    spd_pause(d->connection);
+    if (d->connection)
+        spd_pause(d->connection);
+    else
+        kDebug() << "unable to pause as there's no connection to speech-dispatcher";
 }
 
 void Speaker::resume()
 {
-    spd_resume(d->connection);
+    if (d->connection)
+        spd_resume(d->connection);
+    else
+        kDebug() << "unable to resume as there's no connection to speech-dispatcher";
 }
 
 bool Speaker::isApplicationPaused(const QString& appId)
