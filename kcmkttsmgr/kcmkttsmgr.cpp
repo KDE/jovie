@@ -274,7 +274,7 @@ KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
 
     // General tab.
     connect (enableJovieCheckBox, SIGNAL (toggled (bool)),
-             SLOT (slotEnableKttsd_toggled (bool)));
+             SLOT (slotEnableJovie_toggled (bool)));
 
     // Talker tab.
     connect (addTalkerButton, SIGNAL (clicked()),
