@@ -20,8 +20,7 @@ kde4_add_ui_files(kcm_kttsd_PART_SRCS kcmkttsmgrwidget.ui kttsjobmgr.ui talkerwi
 kde4_add_plugin(kcm_kttsd ${kcm_kttsd_PART_SRCS})
 
 
-
-target_link_libraries(kcm_kttsd  ${KDE4_KPARTS_LIBS} speechd kttsd  )
+target_link_libraries(kcm_kttsd  ${KDE4_KPARTS_LIBS} ${SPEECH_LIB} kttsd  )
 
 install(TARGETS kcm_kttsd  DESTINATION ${PLUGIN_INSTALL_DIR} )
 

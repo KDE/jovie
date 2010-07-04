@@ -36,7 +36,15 @@
 #include <kspeech.h>
 
 // KTTSD includes.
+#include "config-jovie.h"
+#ifdef SPEECHD_FOUND
 #include <libspeechd.h>
+#endif
+
+#ifdef OPENTTS_FOUND
+#include <opentts/libopentts.h>
+#endif
+
 #include "filtermgr.h"
 #include "appdata.h"
 #include "speechjob.h"
