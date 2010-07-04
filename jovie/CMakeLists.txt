@@ -23,7 +23,7 @@ kde4_add_executable(jovie_bin ${jovie_SRCS})
 set_target_properties(jovie_bin PROPERTIES OUTPUT_NAME jovie)
 
 target_link_libraries(jovie_bin
-    speechd
+    ${SPEECH_LIB}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KUTILS_LIBS}
