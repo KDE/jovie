@@ -45,6 +45,8 @@ TalkerWidget::TalkerWidget(QWidget* parent)
 {
     mUi = new Ui::TalkerWidget;
     mUi->setupUi(this);
+    connect(mUi->nameEdit, SIGNAL(textEdited(const QString&)),
+            this, SIGNAL(talkerChanged()));
     connect(mUi->AvailableTalkersTable, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(talkerChanged()));
     connect(mUi->voiceComboBox, SIGNAL(currentIndexChanged(int)),
@@ -119,6 +121,11 @@ void TalkerWidget::setNameReadOnly(bool value)
 
 void TalkerWidget::setTalkerCode(const TalkerCode &talker)
 {
+}
+
+QString TalkerWidget::getName() const
+{
+    return mUi->nameEdit->text();
 }
 
 TalkerCode TalkerWidget::getTalkerCode() const

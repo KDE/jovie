@@ -64,7 +64,7 @@ TalkerCode AddTalker::getTalkerCode() const
 
 void AddTalker::slotTalkerChanged()
 {
-    this->enableButtonOk(true);
+    this->enableButtonOk(!mWidget->getName().isEmpty());
 }
 
 #include "addtalker.moc"
