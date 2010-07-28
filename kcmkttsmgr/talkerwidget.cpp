@@ -111,6 +111,7 @@ TalkerWidget::TalkerWidget(QWidget* parent)
 
 TalkerWidget::~TalkerWidget()
 {
+    delete mUi;
 }
 
 void TalkerWidget::setNameReadOnly(bool value)
