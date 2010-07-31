@@ -15,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
+#include <tqstring.h>
 #include <kdebug.h>
-#include <qcombobox.h>
+#include <tqcombobox.h>
 
 #include "utils.h"
 
@@ -34,9 +34,9 @@ KttsUtils::~KttsUtils() {
  * @param elementName        The element to check for in the document.
  * @returns                  True if the root element exists in the document, false otherwise.
 */
-bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName) {
+bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementName) {
     // Strip all whitespace and go from there.
-    QString doc = xmldoc.simplifyWhiteSpace();
+    TQString doc = xmldoc.simplifyWhiteSpace();
     // Take off the <?xml...?> if it exists
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
@@ -76,14 +76,14 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
 /** 
  * Check if an XML document has a certain DOCTYPE.
  * @param xmldoc             The document to check for the doctype.
- * @param name               The doctype name to check for. Pass QString::null to not check the name.
- * @param publicId           The public ID to check for. Pass QString::null to not check the ID.
- * @param systemId           The system ID to check for. Pass QString::null to not check the ID.
+ * @param name               The doctype name to check for. Pass TQString::null to not check the name.
+ * @param publicId           The public ID to check for. Pass TQString::null to not check the ID.
+ * @param systemId           The system ID to check for. Pass TQString::null to not check the ID.
  * @returns                  True if the parameters match the doctype, false otherwise.
 */
-bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const QString &publicId, const QString &systemId*/) {
+bool KttsUtils::hasDoctype(const TQString &xmldoc, const TQString &name/*, const TQString &publicId, const TQString &systemId*/) {
     // Strip all whitespace and go from there.
-    QString doc = xmldoc.stripWhiteSpace();
+    TQString doc = xmldoc.stripWhiteSpace();
     // Take off the <?xml...?> if it exists
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
@@ -117,7 +117,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name/*, const Q
  * Sets the current item in the given combobox to the item with the given text.
  * If item with the text not found, does nothing.
  */
-/*static*/ void KttsUtils::setCbItemFromText(QComboBox* cb, const QString& text)
+/*static*/ void KttsUtils::setCbItemFromText(TQComboBox* cb, const TQString& text)
 {
     const int itemCount = cb->count();
     for (int ndx = 0; ndx < itemCount; ++ndx)

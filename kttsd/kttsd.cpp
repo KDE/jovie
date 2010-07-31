@@ -19,11 +19,11 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qcstring.h>
-#include <qclipboard.h>
-#include <qtextstream.h>
-#include <qtextcodec.h>
-#include <qfile.h>
+#include <tqcstring.h>
+#include <tqclipboard.h>
+#include <tqtextstream.h>
+#include <tqtextcodec.h>
+#include <tqfile.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -49,9 +49,9 @@
 * Note that most of the real tts work occurs in Speaker.
 */
 
-KTTSD::KTTSD(const QCString& objId, QObject *parent, const char *name) :
+KTTSD::KTTSD(const TQCString& objId, TQObject *parent, const char *name) :
     DCOPObject(objId),
-    QObject(parent, name)
+    TQObject(parent, name)
 {
     // kdDebug() << "KTTSD::KTTSD Running" << endl;
     m_speaker = 0;
@@ -69,17 +69,17 @@ bool KTTSD::initializeSpeechData()
     if (!m_speechData)
     {
         m_speechData = new SpeechData();
-        connect (m_speechData, SIGNAL(textSet(const QCString&, const uint)), 
-            this, SLOT(slotTextSet(const QCString&, const uint)));
-        connect (m_speechData, SIGNAL(textAppended(const QCString&, const uint, const int)),
-            this, SLOT(slotTextAppended(const QCString&, const uint, const int)));
-        connect (m_speechData, SIGNAL(textRemoved(const QCString&, const uint)), 
-            this, SLOT(slotTextRemoved(const QCString&, const uint)));
+        connect (m_speechData, TQT_SIGNAL(textSet(const TQCString&, const uint)), 
+            this, TQT_SLOT(slotTextSet(const TQCString&, const uint)));
+        connect (m_speechData, TQT_SIGNAL(textAppended(const TQCString&, const uint, const int)),
+            this, TQT_SLOT(slotTextAppended(const TQCString&, const uint, const int)));
+        connect (m_speechData, TQT_SIGNAL(textRemoved(const TQCString&, const uint)), 
+            this, TQT_SLOT(slotTextRemoved(const TQCString&, const uint)));
 
         // Hook KNotify signal.
         if (!connectDCOPSignal(0, 0, 
-            "notifySignal(QString,QString,QString,QString,QString,int,int,int,int)",
-            "notificationSignal(QString,QString,QString,QString,QString,int,int,int,int)",
+            "notifySignal(TQString,TQString,TQString,TQString,TQString,int,int,int,int)",
+            "notificationSignal(TQString,TQString,TQString,TQString,TQString,int,int,int,int)",
             false)) kdDebug() << "KTTSD:initializeSpeechData: connectDCOPSignal for knotify failed" << endl;
     }
     // Load configuration.
@@ -103,7 +103,7 @@ bool KTTSD::initializeTalkerMgr()
         // desktop language, but if that fails, fallback to English.
         if (load < 0)
         {
-            QString languageCode = KGlobal::locale()->language();
+            TQString languageCode = KGlobal::locale()->language();
             if (m_talkerMgr->autoconfigureTalker(languageCode, m_speechData->config))
                 load = m_talkerMgr->loadPlugIns(m_speechData->config);
             else
@@ -124,7 +124,7 @@ bool KTTSD::initializeTalkerMgr()
             m_speechData = 0;
             kdDebug() << "KTTSD::initializeTalkerMgr: no Talkers have been configured." << endl;
             // Ask if user would like to run configuration dialog, but don't bug user unnecessarily.
-            QString dontAskConfigureKTTS = "DontAskConfigureKTTS";
+            TQString dontAskConfigureKTTS = "DontAskConfigureKTTS";
             KMessageBox::ButtonCode msgResult;
             if (KMessageBox::shouldBeShownYesNo(dontAskConfigureKTTS, msgResult))
             {
@@ -156,20 +156,20 @@ bool KTTSD::initializeSpeaker()
 
     // Create speaker object and load plug ins, checking for the return
     m_speaker = new Speaker(m_speechData, m_talkerMgr);
-    connect (m_speaker, SIGNAL(textStarted(const QCString&, const uint)), 
-        this, SLOT(slotTextStarted(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(textFinished(const QCString&, const uint)), 
-        this, SLOT(slotTextFinished(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(textResumed(const QCString&, const uint)), 
-        this, SLOT(slotTextResumed(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(sentenceStarted(QString, QString, const QCString&, const uint, const uint)),
-        this, SLOT(slotSentenceStarted(QString, QString, const QCString&, const uint, const uint)));
-    connect (m_speaker, SIGNAL(sentenceFinished(const QCString&, const uint, const uint)), this,
-        SLOT(slotSentenceFinished(const QCString&, const uint, const uint)));
-    connect (m_speaker, SIGNAL(textStopped(const QCString&, const uint)), 
-        this, SLOT(slotTextStopped(const QCString&, const uint)));
-    connect (m_speaker, SIGNAL(textPaused(const QCString&, const uint)), 
-        this, SLOT(slotTextPaused(const QCString&, const uint)));
+    connect (m_speaker, TQT_SIGNAL(textStarted(const TQCString&, const uint)), 
+        this, TQT_SLOT(slotTextStarted(const TQCString&, const uint)));
+    connect (m_speaker, TQT_SIGNAL(textFinished(const TQCString&, const uint)), 
+        this, TQT_SLOT(slotTextFinished(const TQCString&, const uint)));
+    connect (m_speaker, TQT_SIGNAL(textResumed(const TQCString&, const uint)), 
+        this, TQT_SLOT(slotTextResumed(const TQCString&, const uint)));
+    connect (m_speaker, TQT_SIGNAL(sentenceStarted(TQString, TQString, const TQCString&, const uint, const uint)),
+        this, TQT_SLOT(slotSentenceStarted(TQString, TQString, const TQCString&, const uint, const uint)));
+    connect (m_speaker, TQT_SIGNAL(sentenceFinished(const TQCString&, const uint, const uint)), this,
+        TQT_SLOT(slotSentenceFinished(const TQCString&, const uint, const uint)));
+    connect (m_speaker, TQT_SIGNAL(textStopped(const TQCString&, const uint)), 
+        this, TQT_SLOT(slotTextStopped(const TQCString&, const uint)));
+    connect (m_speaker, TQT_SIGNAL(textPaused(const TQCString&, const uint)), 
+        this, TQT_SLOT(slotTextPaused(const TQCString&, const uint)));
 
     return true;
 }
@@ -199,7 +199,7 @@ KTTSD::~KTTSD(){
 *                       talker supports the indicated speech markup language.
 * @see kttsdMarkupType
 */
-bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupType /*=0*/) const
+bool KTTSD::supportsMarkup(const TQString& talker /*=NULL*/, const uint markupType /*=0*/) const
 {
     if (markupType == KSpeech::mtHtml)
     {
@@ -219,7 +219,7 @@ bool KTTSD::supportsMarkup(const QString& talker /*=NULL*/, const uint markupTyp
 *                       talker supports markers.
 * TODO: Waiting on plugin API.
 */
-bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) const { return false; }
+bool KTTSD::supportsMarkers(const TQString& /*talker=NULL*/) const { return false; }
 
 /**
 * Say a message as soon as possible, interrupting any other speech in progress.
@@ -234,7 +234,7 @@ bool KTTSD::supportsMarkers(const QString& /*talker=NULL*/) const { return false
 * If an existing Screen Reader output is in progress, it is stopped and discarded and
 * replaced with this new message.
 */
-void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=NULL*/)
+void KTTSD::sayScreenReaderOutput(const TQString &msg, const TQString &talker /*=NULL*/)
 {
     if (!m_speaker) return;
     m_speechData->setScreenReaderOutput(msg, fixNullString(talker), getAppId());
@@ -252,7 +252,7 @@ void KTTSD::sayScreenReaderOutput(const QString &msg, const QString &talker /*=N
 *                       If no plugin has been configured for the specified Talker code,
 *                       defaults to the closest matching talker.
 */
-void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
+void KTTSD::sayWarning(const TQString &warning, const TQString &talker /*=NULL*/){
     // kdDebug() << "KTTSD::sayWarning: Running" << endl;
     if (!m_speaker) return;
     kdDebug() << "KTTSD::sayWarning: Adding '" << warning << "' to warning queue." << endl;
@@ -271,7 +271,7 @@ void KTTSD::sayWarning(const QString &warning, const QString &talker /*=NULL*/){
 *                       If no talker has been configured for the specified Talker code,
 *                       defaults to the closest matching talker.
 */
-void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
+void KTTSD::sayMessage(const TQString &message, const TQString &talker /*=NULL*/)
 {
     // kdDebug() << "KTTSD::sayMessage: Running" << endl;
     if (!m_speaker) return;
@@ -294,7 +294,7 @@ void KTTSD::sayMessage(const QString &message, const QString &talker /*=NULL*/)
 * Changing the sentence delimiter does not affect other applications.
 * @see sentenceparsing
 */
-void KTTSD::setSentenceDelimiter(const QString &delimiter)
+void KTTSD::setSentenceDelimiter(const TQString &delimiter)
 {
     if (!m_speaker) return;
     m_speechData->setSentenceDelimiter(fixNullString(delimiter), getAppId());
@@ -322,7 +322,7 @@ void KTTSD::setSentenceDelimiter(const QString &delimiter)
 * @see getTextCount
 * @see startText
 */
-uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
+uint KTTSD::setText(const TQString &text, const TQString &talker /*=NULL*/)
 {
     // kdDebug() << "KTTSD::setText: Running" << endl;
     if (!m_speaker) return 0;
@@ -359,7 +359,7 @@ uint KTTSD::setText(const QString &text, const QString &talker /*=NULL*/)
 *
 * @since KDE 3.5
 */
-uint KTTSD::sayText(const QString &text, const QString &talker)
+uint KTTSD::sayText(const TQString &text, const TQString &talker)
 {
     uint jobNum = setText(text, talker);
     if (jobNum) startText(jobNum);
@@ -381,7 +381,7 @@ uint KTTSD::sayText(const QString &text, const QString &talker)
 * @see setText.
 * @see startText.
 */
-int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
+int KTTSD::appendText(const TQString &text, const uint jobNum /*=0*/)
 {
     if (!m_speaker) return 0;
     return m_speechData->appendText(text, applyDefaultJobNum(jobNum), getAppId());
@@ -411,20 +411,20 @@ int KTTSD::appendText(const QString &text, const uint jobNum /*=0*/)
 * @see getTextCount
 * @see startText
 */
-uint KTTSD::setFile(const QString &filename, const QString &talker /*=NULL*/,
-    const QString &encoding /*=NULL*/)
+uint KTTSD::setFile(const TQString &filename, const TQString &talker /*=NULL*/,
+    const TQString &encoding /*=NULL*/)
 {
     // kdDebug() << "KTTSD::setFile: Running" << endl;
     if (!m_speaker) return 0;
-    QFile file(filename);
+    TQFile file(filename);
     uint jobNum = 0;
     if ( file.open(IO_ReadOnly) )
     {
-        QTextStream stream(&file);
-        QString enc = fixNullString(encoding);
+        TQTextStream stream(&file);
+        TQString enc = fixNullString(encoding);
         if (!enc.isEmpty())
         {
-            QTextCodec* codec = QTextCodec::codecForName(enc.latin1());
+            TQTextCodec* codec = TQTextCodec::codecForName(enc.latin1());
             if (codec) stream.setCodec(codec);
         }
         jobNum = m_speechData->setText(stream.read(), fixNullString(talker), getAppId());
@@ -477,9 +477,9 @@ uint KTTSD::getTextJobCount()
 * Get a comma-separated list of text job numbers in the queue.
 * @return               Comma-separated list of text job numbers in the queue.
 */
-QString KTTSD::getTextJobNumbers()
+TQString KTTSD::getTextJobNumbers()
 {
-    if (!m_speaker) return QString::null;
+    if (!m_speaker) return TQString::null;
     return m_speechData->getTextJobNumbers();
 }
 
@@ -501,23 +501,23 @@ int KTTSD::getTextJobState(const uint jobNum /*=0*/)
 * Get information about a text job.
 * @param jobNum         Job number of the text job.
 *                       If zero, applies to the last job queued by the application.
-* @return               A QDataStream containing information about the job.
+* @return               A TQDataStream containing information about the job.
 *                       Blank if no such job.
 *
 * The stream contains the following elements:
 *   - int state         Job state.
-*   - QCString appId    DCOP senderId of the application that requested the speech job.
-*   - QString talker    Language code in which to speak the text.
+*   - TQCString appId    DCOP senderId of the application that requested the speech job.
+*   - TQString talker    Language code in which to speak the text.
 *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
 *   - int sentenceCount Total number of sentences in the job.
 *
 * The following sample code will decode the stream:
     @verbatim
-    QByteArray jobInfo = getTextJobInfo(jobNum);
-    QDataStream stream(jobInfo, IO_ReadOnly);
+    TQByteArray jobInfo = getTextJobInfo(jobNum);
+    TQDataStream stream(jobInfo, IO_ReadOnly);
     int state;
-    QCString appId;
-    QString talker;
+    TQCString appId;
+    TQString talker;
     int seq;
     int sentenceCount;
     stream >> state;
@@ -527,7 +527,7 @@ int KTTSD::getTextJobState(const uint jobNum /*=0*/)
     stream >> sentenceCount;
     @endverbatim
 */
-QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
+TQByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 {
     return m_speechData->getTextJobInfo(applyDefaultJobNum(jobNum));
 }
@@ -538,9 +538,9 @@ QByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 * @param talkerCode     Talker Code.
 * @return               Talker ID of the talker that would speak the text job.
 */
-QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
+TQString KTTSD::talkerCodeToTalkerId(const TQString& talkerCode)
 {
-    if (!m_talkerMgr) return QString::null;
+    if (!m_talkerMgr) return TQString::null;
     return m_talkerMgr->talkerCodeToTalkerId(fixNullString(talkerCode));
 }
 
@@ -552,7 +552,7 @@ QString KTTSD::talkerCodeToTalkerId(const QString& talkerCode)
 * @return               The specified sentence in the specified job.  If no such
 *                       job or sentence, returns "".
 */
-QString KTTSD::getTextJobSentence(const uint jobNum /*=0*/, const uint seq /*=1*/)
+TQString KTTSD::getTextJobSentence(const uint jobNum /*=0*/, const uint seq /*=1*/)
 {
     return m_speechData->getTextJobSentence(applyDefaultJobNum(jobNum), seq);
 }
@@ -616,7 +616,7 @@ void KTTSD::startText(const uint jobNum /*=0*/)
             // Do not start KTTSMgr unless at least 5 sentences are queued.
             if (getTextCount(jNum) > 4)
             {
-                QString cmd = "kttsmgr --systray";
+                TQString cmd = "kttsmgr --systray";
                 if (m_speechData->autoExitManager) cmd.append(" --autoexit");
                 // Notice this fails if KTTSMgr is already running, which is what we want.
                 KRun::runCommand(cmd);
@@ -694,14 +694,14 @@ void KTTSD::resumeText(const uint jobNum /*=0*/)
 
 /**
 * Get a list of the talkers configured in KTTS.
-* @return               A QStringList of fully-specified talker codes, one
+* @return               A TQStringList of fully-specified talker codes, one
 *                       for each talker user has configured.
 *
 * @see talkers
 */
-QStringList KTTSD::getTalkers()
+TQStringList KTTSD::getTalkers()
 {
-    if (!m_talkerMgr) return QStringList();
+    if (!m_talkerMgr) return TQStringList();
     return m_talkerMgr->getTalkers();
 }
 
@@ -714,7 +714,7 @@ QStringList KTTSD::getTalkers()
 *                       If no plugin has been configured for the specified Talker code,
 *                       defaults to the closest matching talker.
 */
-void KTTSD::changeTextTalker(const QString &talker, uint jobNum)
+void KTTSD::changeTextTalker(const TQString &talker, uint jobNum)
 {
     m_speechData->changeTextTalker(fixNullString(talker), applyDefaultJobNum(jobNum));
 }
@@ -726,9 +726,9 @@ void KTTSD::changeTextTalker(const QString &talker, uint jobNum)
 * @see talkers
 * @see getTalkers
 */
-QString KTTSD::userDefaultTalker()
+TQString KTTSD::userDefaultTalker()
 {
-    if (!m_talkerMgr) return QString::null;
+    if (!m_talkerMgr) return TQString::null;
     return m_talkerMgr->userDefaultTalker();
 }
 
@@ -793,7 +793,7 @@ void KTTSD::speakClipboard()
     QClipboard *cb = kapp->clipboard();
 
     // Copy text from the clipboard.
-    QString text = cb->text();
+    TQString text = cb->text();
 
     // Speak it.
     if ( !text.isNull() ) 
@@ -847,7 +847,7 @@ void KTTSD::reinit()
 /**
 * Return KTTSD daemon version number.
 */
-QString KTTSD::version() { return kapp->aboutData()->version(); }
+TQString KTTSD::version() { return kapp->aboutData()->version(); }
 
 /*
 * Checks if KTTSD is ready to speak and at least one talker is configured.
@@ -877,8 +877,8 @@ void KTTSD::configCommitted() {
 * default_presentation contains these ORed events: None=0, Sound=1, Messagebox=2, Logfile=4, Stderr=8,
 * PassivePopup=16, Execute=32, Taskbar=64
 */
-void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
-    const QString &text, const QString& sound, const QString& /*file*/,
+void KTTSD::notificationSignal( const TQString& event, const TQString& fromApp,
+    const TQString &text, const TQString& sound, const TQString& /*file*/,
     const int present, const int /*level*/, const int /*windId*/, const int /*eventId*/)
 {
     if (!m_speaker) return;
@@ -890,8 +890,8 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
         {
             bool found = false;
             NotifyOptions notifyOptions;
-            QString msg;
-            QString talker;
+            TQString msg;
+            TQString talker;
             // Check for app-specific action.
             if ( m_speechData->notifyAppMap.contains( fromApp ) )
             {
@@ -906,7 +906,7 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
                     {
                         found = true;
                         notifyOptions = notifyEventMap[ "default" ];
-                        notifyOptions.eventName = QString::null;
+                        notifyOptions.eventName = TQString::null;
                     }
                 }
             }
@@ -980,7 +980,7 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
             // Queue msg if we should speak something.
             if ( !msg.isEmpty() )
             {
-                QString fromApps = fromApp + ",knotify";
+                TQString fromApps = fromApp + ",knotify";
                 m_speechData->enqueueMessage( msg, talker, fromApps.utf8() );
                 m_speaker->doUtterances();
             }
@@ -988,65 +988,65 @@ void KTTSD::notificationSignal( const QString& event, const QString& fromApp,
 }
 
 // Slots for the speaker object
-void KTTSD::slotSentenceStarted(QString, QString, const QCString& appId, 
+void KTTSD::slotSentenceStarted(TQString, TQString, const TQCString& appId, 
     const uint jobNum, const uint seq) {
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotSentenceStarted: Emitting DCOP signal sentenceStarted with appId " << appId << " job number " << jobNum << "  seq number " << seq << endl;
     sentenceStarted(appId, jobNum, seq);
 }
 
-void KTTSD::slotSentenceFinished(const QCString& appId, const uint jobNum, const uint seq){
+void KTTSD::slotSentenceFinished(const TQCString& appId, const uint jobNum, const uint seq){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotSentenceFinished: Emitting DCOP signal sentenceFinished with appId " << appId << " job number " << jobNum << "  seq number " << seq << endl;
     sentenceFinished(appId, jobNum, seq);
 }
 
 // Slots for the speechData and speaker objects.
-void KTTSD::slotTextStarted(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextStarted(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextStarted: Emitting DCOP signal textStarted with appId " << appId << " job number " << jobNum << endl;
     textStarted(appId, jobNum);
 }
 
-void KTTSD::slotTextFinished(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextFinished(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextFinished: Emitting DCOP signal textFinished with appId " << appId << " job number " << jobNum << endl;
     textFinished(appId, jobNum);
 }
 
-void KTTSD::slotTextStopped(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextStopped(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextStopped: Emitting DCOP signal textStopped with appId " << appId << " job number " << jobNum << endl;
     textStopped(appId, jobNum);
 }
 
-void KTTSD::slotTextPaused(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextPaused(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextPaused: Emitting DCOP signal textPaused with appId " << appId << " job number " << jobNum << endl;
     textPaused(appId, jobNum);
 }
 
-void KTTSD::slotTextResumed(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextResumed(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextResumed: Emitting DCOP signal textResumed with appId " << appId << " job number " << jobNum << endl;
     textResumed(appId, jobNum);
 }
 
-//void KTTSD::slotTextSet(const QCString& appId, const uint jobNum){
-void KTTSD::slotTextSet(const QCString& appId, const uint jobNum){
+//void KTTSD::slotTextSet(const TQCString& appId, const uint jobNum){
+void KTTSD::slotTextSet(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextSet: Emitting DCOP signal textSet with appId " << appId << " job number " << jobNum << endl;
     textSet(appId, jobNum);
 }
 
-void KTTSD::slotTextAppended(const QCString& appId, const uint jobNum, const int partNum){
+void KTTSD::slotTextAppended(const TQCString& appId, const uint jobNum, const int partNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextAppended: Emitting DCOP signal textAppended with appId " <<
         appId << " job number " << jobNum << " part number " << partNum << endl;
     textAppended(appId, jobNum, partNum);
 }
 
-void KTTSD::slotTextRemoved(const QCString& appId, const uint jobNum){
+void KTTSD::slotTextRemoved(const TQCString& appId, const uint jobNum){
     // Emit DCOP signal.
     kdDebug() << "KTTSD::slotTextRemoved: Emitting DCOP signal textRemoved with appId " << appId << " job number " << jobNum << endl;
     textRemoved(appId, jobNum);
@@ -1056,10 +1056,10 @@ void KTTSD::slotTextRemoved(const QCString& appId, const uint jobNum){
  * Returns the senderId (appId) of the DCOP application that called us.
  * @return              The DCOP sendId of calling application.
  */
-const QCString KTTSD::getAppId()
+const TQCString KTTSD::getAppId()
 {
     DCOPClient* client = callingDcopClient();
-    QCString appId;
+    TQCString appId;
     if (client) appId = client->senderId();
     return appId;
 }
@@ -1084,21 +1084,21 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
 
 /*
 * Fixes a string argument passed in via dcop.
-* If NULL or "0" return QString::null.
+* If NULL or "0" return TQString::null.
 */
-QString KTTSD::fixNullString(const QString &talker) const
+TQString KTTSD::fixNullString(const TQString &talker) const
 {
-    if (!talker) return QString::null;
-    if (talker == "0") return QString::null;
+    if (!talker) return TQString::null;
+    if (talker == "0") return TQString::null;
     return talker;
 }
 
 // kspeech is obsolete.  Applications should use KSpeech instead.
 
 // Constructor.
-kspeech::kspeech(const QCString& objId, QObject *parent, const char *name) :
+kspeech::kspeech(const TQCString& objId, TQObject *parent, const char *name) :
     DCOPObject(objId),
-    QObject(parent, name),
+    TQObject(parent, name),
     m_kttsd("KSpeech")
 {
 }
@@ -1107,26 +1107,26 @@ kspeech::kspeech(const QCString& objId, QObject *parent, const char *name) :
 kspeech::~kspeech() { }
 
 // Delegate all DCOP methods to KTTSD object.
-/*virtual*/ bool kspeech::supportsMarkup(const QString &talker, uint markupType) const
+/*virtual*/ bool kspeech::supportsMarkup(const TQString &talker, uint markupType) const
             { return m_kttsd.supportsMarkup(talker, markupType); }
-/*virtual*/ bool kspeech::supportsMarkers(const QString &talker) const
+/*virtual*/ bool kspeech::supportsMarkers(const TQString &talker) const
             { return m_kttsd.supportsMarkers(talker); }
-/*virtual*/ ASYNC kspeech::sayScreenReaderOutput(const QString &msg, const QString &talker)
+/*virtual*/ ASYNC kspeech::sayScreenReaderOutput(const TQString &msg, const TQString &talker)
             { m_kttsd.sayScreenReaderOutput(msg, talker); }
-/*virtual*/ ASYNC kspeech::sayWarning(const QString &warning, const QString &talker)
+/*virtual*/ ASYNC kspeech::sayWarning(const TQString &warning, const TQString &talker)
             { m_kttsd.sayWarning(warning, talker); }
-/*virtual*/ ASYNC kspeech::sayMessage(const QString &message, const QString &talker)
+/*virtual*/ ASYNC kspeech::sayMessage(const TQString &message, const TQString &talker)
             { m_kttsd.sayMessage(message, talker); }
-/*virtual*/ ASYNC kspeech::setSentenceDelimiter(const QString &delimiter)
+/*virtual*/ ASYNC kspeech::setSentenceDelimiter(const TQString &delimiter)
             { m_kttsd.setSentenceDelimiter(delimiter); }
-/*virtual*/ uint kspeech::setText(const QString &text, const QString &talker)
+/*virtual*/ uint kspeech::setText(const TQString &text, const TQString &talker)
             { return m_kttsd.setText(text, talker); }
-/*virtual*/ uint kspeech::sayText(const QString &text, const QString &talker)
+/*virtual*/ uint kspeech::sayText(const TQString &text, const TQString &talker)
             { return m_kttsd.sayText(text, talker); }
-/*virtual*/ int kspeech::appendText(const QString &text, uint jobNum)
+/*virtual*/ int kspeech::appendText(const TQString &text, uint jobNum)
             { return m_kttsd.appendText(text, jobNum); }
-/*virtual*/ uint kspeech::setFile(const QString &filename, const QString &talker,
-                        const QString& encoding)
+/*virtual*/ uint kspeech::setFile(const TQString &filename, const TQString &talker,
+                        const TQString& encoding)
             { return m_kttsd.setFile(filename, talker, encoding); }
 /*virtual*/ int kspeech::getTextCount(uint jobNum)
             { return m_kttsd.getTextCount(jobNum); }
@@ -1134,15 +1134,15 @@ kspeech::~kspeech() { }
             { return m_kttsd.getCurrentTextJob(); }
 /*virtual*/ uint kspeech::getTextJobCount()
             { return m_kttsd.getTextJobCount(); }
-/*virtual*/ QString kspeech::getTextJobNumbers()
+/*virtual*/ TQString kspeech::getTextJobNumbers()
             { return m_kttsd.getTextJobNumbers(); }
 /*virtual*/ int kspeech::getTextJobState(uint jobNum)
             { return m_kttsd.getTextJobState(jobNum); }
-/*virtual*/ QByteArray kspeech::getTextJobInfo(uint jobNum)
+/*virtual*/ TQByteArray kspeech::getTextJobInfo(uint jobNum)
             { return m_kttsd.getTextJobInfo(jobNum); }
-/*virtual*/ QString kspeech::talkerCodeToTalkerId(const QString& talkerCode)
+/*virtual*/ TQString kspeech::talkerCodeToTalkerId(const TQString& talkerCode)
             { return m_kttsd.talkerCodeToTalkerId(talkerCode); }
-/*virtual*/ QString kspeech::getTextJobSentence(uint jobNum, uint seq)
+/*virtual*/ TQString kspeech::getTextJobSentence(uint jobNum, uint seq)
             { return m_kttsd.getTextJobSentence(jobNum, seq); }
 /*virtual*/ bool kspeech::isSpeakingText() const
             { return m_kttsd.isSpeakingText(); }
@@ -1156,11 +1156,11 @@ kspeech::~kspeech() { }
             { m_kttsd.pauseText(jobNum); }
 /*virtual*/ ASYNC kspeech::resumeText(uint jobNum)
             { m_kttsd.resumeText(jobNum); }
-/*virtual*/ QStringList kspeech::getTalkers()
+/*virtual*/ TQStringList kspeech::getTalkers()
             { return m_kttsd.getTalkers(); }
-/*virtual*/ ASYNC kspeech::changeTextTalker(const QString &talker, uint jobNum )
+/*virtual*/ ASYNC kspeech::changeTextTalker(const TQString &talker, uint jobNum )
             { m_kttsd.changeTextTalker(talker, jobNum); }
-/*virtual*/ QString kspeech::userDefaultTalker()
+/*virtual*/ TQString kspeech::userDefaultTalker()
             { return m_kttsd.userDefaultTalker(); }
 /*virtual*/ ASYNC kspeech::moveTextLater(uint jobNum)
             { m_kttsd.moveTextLater(jobNum); }
@@ -1176,7 +1176,7 @@ kspeech::~kspeech() { }
             { m_kttsd.kttsdExit(); }
 /*virtual*/ void kspeech::reinit()
             { m_kttsd.reinit(); }
-/*virtual*/ QString kspeech::version()
+/*virtual*/ TQString kspeech::version()
             { return m_kttsd.version(); }
 
 #include "kttsd.moc"

@@ -25,7 +25,7 @@
 #define _XMLTRANSFORMERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <tqwidget.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -45,7 +45,7 @@ class XmlTransformerConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        XmlTransformerConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        XmlTransformerConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 
@@ -70,7 +70,7 @@ class XmlTransformerConf : public KttsFilterConf
         * any instance-specific parameters to load, but it may still wish
         * to load parameters that apply to all instances of the plugin.
         */
-        virtual void load(KConfig *config, const QString &configGroup);
+        virtual void load(KConfig *config, const TQString &configGroup);
 
         /**
         * This function gets called when the user wants to save the settings in 
@@ -82,7 +82,7 @@ class XmlTransformerConf : public KttsFilterConf
         * @param configGroup Call config->setGroup with this argument before
         *                    saving your configuration.
         */
-        virtual void save(KConfig *config, const QString &configGroup);
+        virtual void save(KConfig *config, const TQString &configGroup);
 
         /** 
         * This function is called to set the settings in the module to sensible
@@ -108,7 +108,7 @@ class XmlTransformerConf : public KttsFilterConf
          * return an empty string.
          * @return          Filter instance name.
          */
-        virtual QString userPlugInName();
+        virtual TQString userPlugInName();
 
     private slots:
 

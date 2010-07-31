@@ -16,9 +16,9 @@
  *                                                                         *
  ***************************************************************************/
  
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqtextcodec.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -35,7 +35,7 @@ class HadifixProcPrivate {
          hadifixProc = 0;
          waitingStop = false;
          state = psIdle;
-         synthFilename = QString::null;
+         synthFilename = TQString::null;
          gender = false;
          volume = 100;
          time = 100;
@@ -47,11 +47,11 @@ class HadifixProcPrivate {
         delete hadifixProc;
       };
 
-      void load(KConfig *config, const QString &configGroup) {
+      void load(KConfig *config, const TQString &configGroup) {
          config->setGroup(configGroup);
-         hadifix  = config->readEntry ("hadifixExec",   QString::null);
-         mbrola   = config->readEntry ("mbrolaExec",    QString::null);
-         voice    = config->readEntry ("voice",         QString::null);
+         hadifix  = config->readEntry ("hadifixExec",   TQString::null);
+         mbrola   = config->readEntry ("mbrolaExec",    TQString::null);
+         voice    = config->readEntry ("voice",         TQString::null);
          gender   = config->readBoolEntry("gender",     false);
          volume   = config->readNumEntry ("volume",     100);
          time     = config->readNumEntry ("time",       100);
@@ -59,9 +59,9 @@ class HadifixProcPrivate {
          codec    = PlugInProc::codecNameToCodec(config->readEntry ("codec", "Local"));
       };
 
-      QString hadifix;
-      QString mbrola;
-      QString voice;
+      TQString hadifix;
+      TQString mbrola;
+      TQString voice;
       bool gender;
       int volume;
       int time;
@@ -70,12 +70,12 @@ class HadifixProcPrivate {
       bool waitingStop;      
       KShellProcess* hadifixProc;
       volatile pluginState state;
-      QTextCodec* codec;
-      QString synthFilename;
+      TQTextCodec* codec;
+      TQString synthFilename;
 };
 
 /** Constructor */
-HadifixProc::HadifixProc( QObject* parent, const char* name, const QStringList &) : 
+HadifixProc::HadifixProc( TQObject* parent, const char* name, const TQStringList &) : 
    PlugInProc( parent, name ){
    // kdDebug() << "HadifixProc::HadifixProc: Running" << endl;
    d = 0;
@@ -92,7 +92,7 @@ HadifixProc::~HadifixProc(){
 }
 
 /** Initializate the speech */
-bool HadifixProc::init(KConfig *config, const QString &configGroup){
+bool HadifixProc::init(KConfig *config, const TQString &configGroup){
    // kdDebug() << "HadifixProc::init: Initializing plug in: Hadifix" << endl;
 
    if (d == 0)
@@ -110,7 +110,7 @@ bool HadifixProc::init(KConfig *config, const QString &configGroup){
 * It must also implement the @ref getState method, which must return
 * psFinished, when saying is completed.
 */
-void HadifixProc::sayText(const QString& /*text*/)
+void HadifixProc::sayText(const TQString& /*text*/)
 {
     kdDebug() << "HadifixProc::sayText: Warning, sayText not implemented." << endl;
     return;
@@ -129,7 +129,7 @@ void HadifixProc::sayText(const QString& /*text*/)
 * It must also implement the @ref getState method, which must return
 * psFinished, when synthesis is completed.
 */
-void HadifixProc::synthText(const QString &text, const QString &suggestedFilename)
+void HadifixProc::synthText(const TQString &text, const TQString &suggestedFilename)
 {
     if (d == 0) return;  // Caller should have called init.
     synth(text, d->hadifix, d->gender, d->mbrola, d->voice, d->volume,
@@ -148,12 +148,12 @@ void HadifixProc::synthText(const QString &text, const QString &suggestedFilenam
 * @param pitch           Frequency. 100 = normal
 * @param waveFilename    Name of file to synthesize to.
 */
-void HadifixProc::synth(QString text,
-                        QString hadifix, bool isMale,
-                        QString mbrola,  QString voice,
+void HadifixProc::synth(TQString text,
+                        TQString hadifix, bool isMale,
+                        TQString mbrola,  TQString voice,
                         int volume, int time, int pitch,
-                        QTextCodec *codec,
-                        const QString waveFilename)
+                        TQTextCodec *codec,
+                        const TQString waveFilename)
 {
    // kdDebug() << "HadifixProc::synth: Saying text: '" << text << "' using Hadifix plug in" << endl;
    if (d == 0)
@@ -176,31 +176,31 @@ void HadifixProc::synth(QString text,
    
    // Set up txt2pho and mbrola commands.
    // kdDebug() << "HadifixProc::synth: setting up commands" << endl;
-   QString hadifixCommand = d->hadifixProc->quote(hadifix);
+   TQString hadifixCommand = d->hadifixProc->quote(hadifix);
    if (isMale)
       hadifixCommand += " -m";
    else
       hadifixCommand += " -f";
 
-   QString mbrolaCommand = d->hadifixProc->quote(mbrola);
+   TQString mbrolaCommand = d->hadifixProc->quote(mbrola);
    mbrolaCommand += " -e"; //Ignore fatal errors on unkown diphone
-   mbrolaCommand += QString(" -v %1").arg(volume/100.0); // volume ratio
-   mbrolaCommand += QString(" -f %1").arg(pitch/100.0);  // freqency ratio
-   mbrolaCommand += QString(" -t %1").arg(1/(time/100.0));   // time ratio
+   mbrolaCommand += TQString(" -v %1").arg(volume/100.0); // volume ratio
+   mbrolaCommand += TQString(" -f %1").arg(pitch/100.0);  // freqency ratio
+   mbrolaCommand += TQString(" -t %1").arg(1/(time/100.0));   // time ratio
    mbrolaCommand += " " + d->hadifixProc->quote(voice);
    mbrolaCommand += " - " + d->hadifixProc->quote(waveFilename);
 
    // kdDebug() << "HadifixProc::synth: Hadifix command: " << hadifixCommand << endl;
    // kdDebug() << "HadifixProc::synth: Mbrola command: " << mbrolaCommand << endl;
 
-   QString command = hadifixCommand + "|" + mbrolaCommand;
+   TQString command = hadifixCommand + "|" + mbrolaCommand;
    *(d->hadifixProc) << command;
    
    // Connect signals from process.
-   connect(d->hadifixProc, SIGNAL(processExited(KProcess *)),
-     this, SLOT(slotProcessExited(KProcess *)));
-   connect(d->hadifixProc, SIGNAL(wroteStdin(KProcess *)),
-     this, SLOT(slotWroteStdin(KProcess *)));
+   connect(d->hadifixProc, TQT_SIGNAL(processExited(KProcess *)),
+     this, TQT_SLOT(slotProcessExited(KProcess *)));
+   connect(d->hadifixProc, TQT_SIGNAL(wroteStdin(KProcess *)),
+     this, TQT_SLOT(slotWroteStdin(KProcess *)));
    
    // Store off name of wave file to be generated.
    d->synthFilename = waveFilename;
@@ -211,7 +211,7 @@ void HadifixProc::synth(QString text,
      kdDebug() << "HadifixProc::synth: start process failed." << endl;
      d->state = psIdle;
    } else {
-     QCString encodedText;
+     TQCString encodedText;
      if (codec) {
        encodedText = codec->fromUnicode(text);
        // kdDebug() << "HadifixProc::synth: encoding using " << codec->name() << endl;
@@ -231,7 +231,7 @@ void HadifixProc::synth(QString text,
 * be locked when this method is called.  The file will be deleted when
 * KTTSD is finished using it.
 */
-QString HadifixProc::getFilename() { return d->synthFilename; }
+TQString HadifixProc::getFilename() { return d->synthFilename; }
 
 /**
 * Stop current operation (saying or synthesizing text).
@@ -285,7 +285,7 @@ void HadifixProc::ackFinished()
     if (d->state == psFinished)
     {
         d->state = psIdle;
-        d->synthFilename = QString::null;
+        d->synthFilename = TQString::null;
     }
 }
 
@@ -345,27 +345,27 @@ void HadifixProc::slotWroteStdin(KProcess*)
 * Static function to determine whether the voice file is male or female.
 * @param mbrola the mbrola executable
 * @param voice the voice file
-* @param output the output of mbrola will be written into this QString*
+* @param output the output of mbrola will be written into this TQString*
 * @return HadifixSpeech::MaleGender if the voice is male,
 *         HadifixSpeech::FemaleGender if the voice is female,
 *         HadifixSpeech::NoGender if the gender cannot be determined,
 *         HadifixSpeech::NoVoice if there is an error in the voice file
 */
-HadifixProc::VoiceGender HadifixProc::determineGender(QString mbrola, QString voice, QString *output)
+HadifixProc::VoiceGender HadifixProc::determineGender(TQString mbrola, TQString voice, TQString *output)
 {
-   QString command = mbrola + " -i " + voice + " - -";
+   TQString command = mbrola + " -i " + voice + " - -";
 
    // create a new process
    HadifixProc speech;
    KShellProcess proc;
    proc << command;
-   connect(&proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
-     &speech, SLOT(receivedStdout(KProcess *, char *, int)));
-   connect(&proc, SIGNAL(receivedStderr(KProcess *, char *, int)),
-     &speech, SLOT(receivedStderr(KProcess *, char *, int)));
+   connect(&proc, TQT_SIGNAL(receivedStdout(KProcess *, char *, int)),
+     &speech, TQT_SLOT(receivedStdout(KProcess *, char *, int)));
+   connect(&proc, TQT_SIGNAL(receivedStderr(KProcess *, char *, int)),
+     &speech, TQT_SLOT(receivedStderr(KProcess *, char *, int)));
 
-   speech.stdOut = QString::null;
-   speech.stdErr = QString::null;
+   speech.stdOut = TQString::null;
+   speech.stdErr = TQString::null;
    proc.start (KProcess::Block, KProcess::AllOutput);
 
    VoiceGender result;
@@ -389,11 +389,11 @@ HadifixProc::VoiceGender HadifixProc::determineGender(QString mbrola, QString vo
 }
 
 void HadifixProc::receivedStdout (KProcess *, char *buffer, int buflen) {
-   stdOut += QString::fromLatin1(buffer, buflen);
+   stdOut += TQString::fromLatin1(buffer, buflen);
 }
 
 void HadifixProc::receivedStderr (KProcess *, char *buffer, int buflen) {
-   stdErr += QString::fromLatin1(buffer, buflen);
+   stdErr += TQString::fromLatin1(buffer, buflen);
 }
 
 /**
@@ -405,7 +405,7 @@ void HadifixProc::receivedStderr (KProcess *, char *buffer, int buflen) {
  * tags and converts the file to plain text.
  * @return            Name of the XSLT file.
  */
-QString HadifixProc::getSsmlXsltFilename()
+TQString HadifixProc::getSsmlXsltFilename()
 {
     return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/hadifix/xslt/SSMLtoTxt2pho.xsl";
 }

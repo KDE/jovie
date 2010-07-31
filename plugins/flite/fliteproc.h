@@ -25,8 +25,8 @@
 #define _FLITEPROC_H_
 
 // Qt includes.
-#include <qstringlist.h>
-#include <qmutex.h>
+#include <tqstringlist.h>
+#include <tqmutex.h>
 
 // KTTS includes.
 #include <pluginproc.h>
@@ -40,7 +40,7 @@ class FliteProc : public PlugInProc{
         /**
          * Constructor
          */
-        FliteProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        FliteProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor
@@ -52,13 +52,13 @@ class FliteProc : public PlugInProc{
          * @param config          Settings object.
          * @param configGroup     Settings Group.
          */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init(KConfig *config, const TQString &configGroup);
         
         /**
          * Say a text string.
          * @param text            The text to speak.
          */
-        virtual void sayText(const QString &text);
+        virtual void sayText(const TQString &text);
 
         /**
         * Synthesize text into an audio file, but do not send to the audio device.
@@ -70,7 +70,7 @@ class FliteProc : public PlugInProc{
         *
         * If the plugin supports asynchronous operation, it should return immediately.
         */
-        virtual void synthText(const QString& text, const QString& suggestedFilename);
+        virtual void synthText(const TQString& text, const TQString& suggestedFilename);
         
         /**
         * Get the generated audio filename from synthText.
@@ -79,7 +79,7 @@ class FliteProc : public PlugInProc{
         *
         * The plugin must not re-use the filename.
         */
-        virtual QString getFilename();
+        virtual TQString getFilename();
         
         /**
         * Stop current operation (saying or synthesizing text).
@@ -144,9 +144,9 @@ class FliteProc : public PlugInProc{
         * @param fliteExePath            Path to the flite executable.
         */
         void synth(
-            const QString &text,
-            const QString &synthFilename,
-            const QString &fliteExePath);
+            const TQString &text,
+            const TQString &synthFilename,
+            const TQString &fliteExePath);
     
     private slots:
         void slotProcessExited(KProcess* proc);
@@ -159,7 +159,7 @@ class FliteProc : public PlugInProc{
         /**
         * Path to flite executable (from config).
         */
-        QString m_fliteExePath;
+        TQString m_fliteExePath;
         
         /**
          * Flite process
@@ -169,7 +169,7 @@ class FliteProc : public PlugInProc{
         /**
         * Synthesis filename.
         */
-        QString m_synthFilename;
+        TQString m_synthFilename;
         
         /**
         * Plugin state.

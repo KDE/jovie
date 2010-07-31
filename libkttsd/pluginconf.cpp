@@ -20,9 +20,9 @@
 #include <sys/param.h>
 
 // Qt includes.
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <tqfile.h>
+#include <tqfileinfo.h>
+#include <tqstring.h>
 
 // KDE includes.
 #include <kglobal.h>
@@ -36,12 +36,12 @@
 /**
 * Constructor 
 */
-PlugInConf::PlugInConf( QWidget *parent, const char *name) : QWidget(parent, name){
+PlugInConf::PlugInConf( TQWidget *parent, const char *name) : TQWidget(parent, name){
     kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
     KGlobal::locale()->insertCatalogue("kttsd");
-    QString systemPath(getenv("PATH"));
+    TQString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
-    m_path = QStringList::split(":", systemPath);
+    m_path = TQStringList::split(":", systemPath);
     m_player = 0;
 }
 
@@ -66,7 +66,7 @@ PlugInConf::~PlugInConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void PlugInConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
+void PlugInConf::load(KConfig* /*config*/, const TQString& /*configGroup*/){
     kdDebug() << "PlugInConf::load: Running" << endl;
 }
 
@@ -80,7 +80,7 @@ void PlugInConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void PlugInConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
+void PlugInConf::save(KConfig* /*config*/, const TQString& /*configGroup*/){
     kdDebug() << "PlugInConf::save: Running" << endl;
 }
 
@@ -110,22 +110,22 @@ bool PlugInConf::supportsMultiInstance() { return true; }
 * This function informs the plugin of the desired language to be spoken
 * by the plugin.  The plugin should attempt to adapt itself to the
 * specified language code, choosing sensible defaults if necessary.
-* If the passed-in code is QString::null, no specific language has
+* If the passed-in code is TQString::null, no specific language has
 * been chosen.
 * @param lang        The desired language code or Null if none.
 *
 * If the plugin is unable to support the desired language, that is OK.
 */
-void PlugInConf::setDesiredLanguage(const QString& /*lang*/ ) { }
+void PlugInConf::setDesiredLanguage(const TQString& /*lang*/ ) { }
 
 /**
 * Return fully-specified talker code for the configured plugin.  This code
 * uniquely identifies the configured instance of the plugin and distinquishes
 * one instance from another.  If the plugin has not been fully configured,
-* i.e., cannot yet synthesize, return QString::null.
+* i.e., cannot yet synthesize, return TQString::null.
 * @return            Fully-specified talker code.
 */
-QString PlugInConf::getTalkerCode() { return QString::null; }
+TQString PlugInConf::getTalkerCode() { return TQString::null; }
 
 /**
 * Return a list of all the languages currently supported by the plugin.
@@ -136,9 +136,9 @@ QString PlugInConf::getTalkerCode() { return QString::null; }
 * plugin might support.
 * If your plugin cannot yet determine the languages supported, return Null.
 * If your plugin can support any language, return Null.
-* @return            A QStringList of supported language codes, or Null if unknown.
+* @return            A TQStringList of supported language codes, or Null if unknown.
 */
-QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }
+TQStringList PlugInConf::getSupportedLanguages() { return TQStringList(); }
 
 /**
 * Return the full path to any program in the $PATH environmental variable
@@ -146,29 +146,29 @@ QStringList PlugInConf::getSupportedLanguages() { return QStringList(); }
 * @returns           The path to the file on success, a blank QString
 *                    if its not found.
 */
-QString PlugInConf::getLocation(const QString &name) {
+TQString PlugInConf::getLocation(const TQString &name) {
     // Iterate over the path and see if 'name' exists in it. Return the
-    // full path to it if it does. Else return an empty QString.
+    // full path to it if it does. Else return an empty TQString.
     
     // If it's a file or a symlink pointing to a file, that's cool.
-    QFileInfo fileinfo(name);
-    if (fileinfo.isFile() || (fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile()))
+    TQFileInfo fileinfo(name);
+    if (fileinfo.isFile() || (fileinfo.isSymLink() && TQFileInfo(fileinfo.readLink()).isFile()))
         return name;
     kdDebug() << "PluginConf::getLocation: Searching for " << name << " in the path.." << endl;
     kdDebug() << m_path << endl;
-    for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
-        QString fullName = *it;
+    for(TQStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
+        TQString fullName = *it;
 
         fullName += "/";
         fullName += name;
         fileinfo.setFile(fullName);
         // The user either has the directory of the file in the path...
-        if(fileinfo.isFile() || (fileinfo.isSymLink() && QFileInfo(fileinfo.readLink()).isFile())) {
+        if(fileinfo.isFile() || (fileinfo.isSymLink() && TQFileInfo(fileinfo.readLink()).isFile())) {
             return fullName;
 //             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
         // ....Or the file itself in the path (slightly freaky but hey.)
-        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+        else if(TQFileInfo(*it).baseName().append(TQString(".").append(TQFileInfo(*it).extension())) == name) {
             return fullName;
 //             kdDebug() << "PluginConf:getLocation: " << fullName << endl;
         }
@@ -182,41 +182,41 @@ QString PlugInConf::getLocation(const QString &name) {
 * @return countryCode   Just the country code part (if any).
 * @return               Just the language code part.
 */
-QString PlugInConf::splitLanguageCode(const QString& languageCode, QString& countryCode)
+TQString PlugInConf::splitLanguageCode(const TQString& languageCode, TQString& countryCode)
 {
-    QString locale = languageCode;
-    QString langCode;
-    QString charSet;
+    TQString locale = languageCode;
+    TQString langCode;
+    TQString charSet;
     KGlobal::locale()->splitLocale(locale, langCode, countryCode, charSet);
     return langCode;
 }
 
-/*static*/ QString PlugInConf::realFilePath(const QString &filename)
+/*static*/ TQString PlugInConf::realFilePath(const TQString &filename)
 {
     char realpath_buffer[MAXPATHLEN + 1];
     memset(realpath_buffer, 0, MAXPATHLEN + 1);
 
     /* If the path contains symlinks, get the real name */
-    if (realpath( QFile::encodeName(filename).data(), realpath_buffer) != 0) {
+    if (realpath( TQFile::encodeName(filename).data(), realpath_buffer) != 0) {
         // succes, use result from realpath
-        return QFile::decodeName(realpath_buffer);
+        return TQFile::decodeName(realpath_buffer);
     }
     return filename;
 }
 
-/*static*/ QString PlugInConf::testMessage(const QString& languageCode)
+/*static*/ TQString PlugInConf::testMessage(const TQString& languageCode)
 {
-    QString key = "Name[" + languageCode + "]";
-    QString result;
-    QString def;
-    QFile file(locate("data", "kttsd/kcmkttsd_testmessage.desktop"));
+    TQString key = "Name[" + languageCode + "]";
+    TQString result;
+    TQString def;
+    TQFile file(locate("data", "kttsd/kcmkttsd_testmessage.desktop"));
     if (file.open(IO_ReadOnly))
     {
-        QTextStream stream(&file);
-        stream.setEncoding(QTextStream::UnicodeUTF8);
+        TQTextStream stream(&file);
+        stream.setEncoding(TQTextStream::UnicodeUTF8);
         while ( !stream.atEnd() ) {
-            QString line = stream.readLine(); // line of text excluding '\n'
-            QStringList keyAndValue = QStringList::split("=", line);
+            TQString line = stream.readLine(); // line of text excluding '\n'
+            TQStringList keyAndValue = TQStringList::split("=", line);
             if (keyAndValue.count() == 2)
             {
                 if (keyAndValue[0] == key)

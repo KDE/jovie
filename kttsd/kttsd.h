@@ -36,7 +36,7 @@
 * @author Gary Cramblitt <garycramblitt@comcast.net>
 */
 
-class KTTSD : public QObject, virtual public KSpeech
+class KTTSD : public TQObject, virtual public KSpeech
 {
     Q_OBJECT
     K_DCOP
@@ -48,7 +48,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Create objects, speechData and speaker.
         * Start thread
         */
-        KTTSD(const QCString& objId, QObject *parent=0, const char *name=0);
+        KTTSD(const TQCString& objId, TQObject *parent=0, const char *name=0);
 
         /**
         * Destructor.
@@ -68,7 +68,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *                       talker supports the indicated speech markup language.
         * @see kttsdMarkupType
         */
-        virtual bool supportsMarkup(const QString &talker=NULL, const uint markupType = 0) const;
+        virtual bool supportsMarkup(const TQString &talker=NULL, const uint markupType = 0) const;
 
         /**
         * Determine whether the currently-configured speech plugin supports markers in speech markup.
@@ -77,7 +77,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * @return               True if the plugin currently configured for the indicated
         *                       talker supports markers.
         */
-        virtual bool supportsMarkers(const QString &talker=NULL) const;
+        virtual bool supportsMarkers(const TQString &talker=NULL) const;
 
         /**
         * Say a message as soon as possible, interrupting any other speech in progress.
@@ -92,7 +92,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
         * replaced with this new message.
         */
-        virtual ASYNC sayScreenReaderOutput(const QString &msg, const QString &talker=NULL);
+        virtual ASYNC sayScreenReaderOutput(const TQString &msg, const TQString &talker=NULL);
 
         /**
         * Say a warning.  The warning will be spoken when the current sentence
@@ -105,7 +105,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC sayWarning(const QString &warning, const QString &talker=NULL);
+        virtual ASYNC sayWarning(const TQString &warning, const TQString &talker=NULL);
 
         /**
         * Say a message.  The message will be spoken when the current sentence stops speaking
@@ -118,7 +118,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *                       If no talker has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC sayMessage(const QString &message, const QString &talker=NULL);
+        virtual ASYNC sayMessage(const TQString &message, const TQString &talker=NULL);
 
         /**
         * Sets the GREP pattern that will be used as the sentence delimiter.
@@ -134,7 +134,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Changing the sentence delimiter does not affect other applications.
         * @see sentenceparsing
         */
-        virtual ASYNC setSentenceDelimiter(const QString &delimiter);
+        virtual ASYNC setSentenceDelimiter(const TQString &delimiter);
 
         /**
         * Queue a text job.  Does not start speaking the text.
@@ -158,7 +158,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * @see getTextCount
         * @see startText
         */
-        virtual uint setText(const QString &text, const QString &talker=NULL);
+        virtual uint setText(const TQString &text, const TQString &talker=NULL);
 
         /**
         * Say a plain text job.  This is a convenience method that
@@ -188,7 +188,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *
         * @since KDE 3.5
         */
-        virtual uint sayText(const QString &text, const QString &talker);
+        virtual uint sayText(const TQString &text, const TQString &talker);
 
         /**
         * Adds another part to a text job.  Does not start speaking the text.
@@ -205,7 +205,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * @see setText.
         * @see startText.
         */
-        int appendText(const QString &text, const uint jobNum=0);
+        int appendText(const TQString &text, const uint jobNum=0);
 
         /**
         * Queue a text job from the contents of a file.  Does not start speaking the text.
@@ -231,8 +231,8 @@ class KTTSD : public QObject, virtual public KSpeech
         * @see getTextCount
         * @see startText
         */
-        virtual uint setFile(const QString &filename, const QString &talker=NULL,
-            const QString& encoding=NULL);
+        virtual uint setFile(const TQString &filename, const TQString &talker=NULL,
+            const TQString& encoding=NULL);
 
         /**
         * Get the number of sentences in a text job.
@@ -267,7 +267,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Get a comma-separated list of text job numbers in the queue.
         * @return               Comma-separated list of text job numbers in the queue.
         */
-        virtual QString getTextJobNumbers();
+        virtual TQString getTextJobNumbers();
 
         /**
         * Get the state of a text job.
@@ -285,13 +285,13 @@ class KTTSD : public QObject, virtual public KSpeech
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
         *                       but if no such job, applies to the current job (if any).
-        * @return               A QDataStream containing information about the job.
+        * @return               A TQDataStream containing information about the job.
         *                       Blank if no such job.
         *
         * The stream contains the following elements:
         *   - int state         Job state.
-        *   - QCString appId    DCOP senderId of the application that requested the speech job.
-        *   - QString talker    Language code in which to speak the text.
+        *   - TQCString appId    DCOP senderId of the application that requested the speech job.
+        *   - TQString talker    Language code in which to speak the text.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
         *   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
@@ -302,11 +302,11 @@ class KTTSD : public QObject, virtual public KSpeech
         *
         * The following sample code will decode the stream:
                 @verbatim
-                    QByteArray jobInfo = getTextJobInfo(jobNum);
-                    QDataStream stream(jobInfo, IO_ReadOnly);
+                    TQByteArray jobInfo = getTextJobInfo(jobNum);
+                    TQDataStream stream(jobInfo, IO_ReadOnly);
                     int state;
-                    QCString appId;
-                    QString talker;
+                    TQCString appId;
+                    TQString talker;
                     int seq;
                     int sentenceCount;
                     int partNum;
@@ -320,7 +320,7 @@ class KTTSD : public QObject, virtual public KSpeech
                     stream >> partCount;
                 @endverbatim
         */
-        virtual QByteArray getTextJobInfo(const uint jobNum=0);
+        virtual TQByteArray getTextJobInfo(const uint jobNum=0);
 
         /**
         * Given a Talker Code, returns the Talker ID of the talker that would speak
@@ -328,7 +328,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * @param talkerCode     Talker Code.
         * @return               Talker ID of the talker that would speak the text job.
         */
-        virtual QString talkerCodeToTalkerId(const QString& talkerCode);
+        virtual TQString talkerCodeToTalkerId(const TQString& talkerCode);
 
         /**
         * Return a sentence of a job.
@@ -339,7 +339,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * @return               The specified sentence in the specified job.  If not such
         *                       job or sentence, returns "".
         */
-        virtual QString getTextJobSentence(const uint jobNum=0, const uint seq=1);
+        virtual TQString getTextJobSentence(const uint jobNum=0, const uint seq=1);
 
         /**
         * Determine if kttsd is currently speaking any text jobs.
@@ -436,12 +436,12 @@ class KTTSD : public QObject, virtual public KSpeech
 
         /**
         * Get a list of the talkers configured in KTTS.
-        * @return               A QStringList of fully-specified talker codes, one
+        * @return               A TQStringList of fully-specified talker codes, one
         *                       for each talker user has configured.
         *
         * @see talkers
         */
-        virtual QStringList getTalkers();
+        virtual TQStringList getTalkers();
 
         /**
         * Change the talker for a text job.
@@ -453,7 +453,7 @@ class KTTSD : public QObject, virtual public KSpeech
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC changeTextTalker(const QString &talker, uint jobNum=0);
+        virtual ASYNC changeTextTalker(const TQString &talker, uint jobNum=0);
 
         /**
         * Get the user's default talker.
@@ -462,7 +462,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * @see talkers
         * @see getTalkers
         */
-        virtual QString userDefaultTalker();
+        virtual TQString userDefaultTalker();
 
         /**
         * Move a text job down in the queue so that it is spoken later.
@@ -531,7 +531,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Return the KTTSD deamon version number.
         * @since KDE 3.5
         */
-        virtual QString version();
+        virtual TQString version();
 
     protected:
 
@@ -539,8 +539,8 @@ class KTTSD : public QObject, virtual public KSpeech
         /**
         * This signal is emitted by KNotify when a notification event occurs.
         */
-        void notificationSignal(const QString &event, const QString &fromApp,
-                                const QString &text, const QString &sound, const QString &file,
+        void notificationSignal(const TQString &event, const TQString &fromApp,
+                                const TQString &text, const TQString &sound, const TQString &file,
                                 const int present, const int level, const int winId, const int eventId );
 
     private slots:
@@ -548,22 +548,22 @@ class KTTSD : public QObject, virtual public KSpeech
          * These functions are called whenever
          * the status of the speaker object has changed
          */
-        void slotSentenceStarted(QString text, QString language, 
-            const QCString& appId, const uint jobNum, const uint seq);
-        void slotSentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
+        void slotSentenceStarted(TQString text, TQString language, 
+            const TQCString& appId, const uint jobNum, const uint seq);
+        void slotSentenceFinished(const TQCString& appId, const uint jobNum, const uint seq);
 
         /*
          * These functions are called whenever
          * the status of the speechData object has changed
          */
-        void slotTextSet(const QCString& appId, const uint jobNum);
-        void slotTextAppended(const QCString& appId, const uint jobNum, const int partNum);
-        void slotTextStarted(const QCString& appId, const uint jobNum);
-        void slotTextFinished(const QCString& appId, const uint jobNum);
-        void slotTextStopped(const QCString& appId, const uint jobNum);
-        void slotTextPaused(const QCString& appId, const uint jobNum);
-        void slotTextResumed(const QCString& appId, const uint jobNum);
-        void slotTextRemoved(const QCString& appId, const uint jobNum);
+        void slotTextSet(const TQCString& appId, const uint jobNum);
+        void slotTextAppended(const TQCString& appId, const uint jobNum, const int partNum);
+        void slotTextStarted(const TQCString& appId, const uint jobNum);
+        void slotTextFinished(const TQCString& appId, const uint jobNum);
+        void slotTextStopped(const TQCString& appId, const uint jobNum);
+        void slotTextPaused(const TQCString& appId, const uint jobNum);
+        void slotTextResumed(const TQCString& appId, const uint jobNum);
+        void slotTextRemoved(const TQCString& appId, const uint jobNum);
 
         /*
          * Fires whenever user clicks Apply or OK buttons in Settings dialog.
@@ -596,7 +596,7 @@ class KTTSD : public QObject, virtual public KSpeech
         * Returns the senderId (appId) of the DCOP application that called us.
         * @return appId         The DCOP sendId of calling application.  NULL if called internally by kttsd itself.
         */
-        const QCString getAppId();
+        const TQCString getAppId();
 
         /*
         * If a job number is 0, returns the default job number for a command.
@@ -608,9 +608,9 @@ class KTTSD : public QObject, virtual public KSpeech
 
         /*
         * Fixes a talker argument passed in via dcop.
-        * If NULL or "0" return QString::null.
+        * If NULL or "0" return TQString::null.
         */
-        QString fixNullString(const QString &talker) const;
+        TQString fixNullString(const TQString &talker) const;
 
         /*
          * SpeechData containing all the data and the manipulating methods for all KTTSD
@@ -629,47 +629,47 @@ class KTTSD : public QObject, virtual public KSpeech
 };
 
 // kspeech is obsolete.  Applications should use KSpeech instead.
-class kspeech : public QObject, virtual public KSpeech
+class kspeech : public TQObject, virtual public KSpeech
 {
     Q_OBJECT
     K_DCOP
 
     public:
         // Constructor.
-        kspeech(const QCString& objId, QObject *parent=0, const char *name=0);
+        kspeech(const TQCString& objId, TQObject *parent=0, const char *name=0);
 
         // Destructor.
         ~kspeech();
 
         // Delegate all DCOP methods to KTTSD object.
-        virtual bool supportsMarkup(const QString &talker, uint markupType = 0) const;
-        virtual bool supportsMarkers(const QString &talker) const;
-        virtual ASYNC sayScreenReaderOutput(const QString &msg, const QString &talker);
-        virtual ASYNC sayWarning(const QString &warning, const QString &talker);
-        virtual ASYNC sayMessage(const QString &message, const QString &talker);
-        virtual ASYNC setSentenceDelimiter(const QString &delimiter);
-        virtual uint setText(const QString &text, const QString &talker);
-        virtual uint sayText(const QString &text, const QString &talker);
-        virtual int appendText(const QString &text, uint jobNum=0);
-        virtual uint setFile(const QString &filename, const QString &talker,
-                             const QString& encoding);
+        virtual bool supportsMarkup(const TQString &talker, uint markupType = 0) const;
+        virtual bool supportsMarkers(const TQString &talker) const;
+        virtual ASYNC sayScreenReaderOutput(const TQString &msg, const TQString &talker);
+        virtual ASYNC sayWarning(const TQString &warning, const TQString &talker);
+        virtual ASYNC sayMessage(const TQString &message, const TQString &talker);
+        virtual ASYNC setSentenceDelimiter(const TQString &delimiter);
+        virtual uint setText(const TQString &text, const TQString &talker);
+        virtual uint sayText(const TQString &text, const TQString &talker);
+        virtual int appendText(const TQString &text, uint jobNum=0);
+        virtual uint setFile(const TQString &filename, const TQString &talker,
+                             const TQString& encoding);
         virtual int getTextCount(uint jobNum=0);
         virtual uint getCurrentTextJob();
         virtual uint getTextJobCount();
-        virtual QString getTextJobNumbers();
+        virtual TQString getTextJobNumbers();
         virtual int getTextJobState(uint jobNum=0);
-        virtual QByteArray getTextJobInfo(uint jobNum=0);
-        virtual QString talkerCodeToTalkerId(const QString& talkerCode);
-        virtual QString getTextJobSentence(uint jobNum=0, uint seq=0);
+        virtual TQByteArray getTextJobInfo(uint jobNum=0);
+        virtual TQString talkerCodeToTalkerId(const TQString& talkerCode);
+        virtual TQString getTextJobSentence(uint jobNum=0, uint seq=0);
         virtual bool isSpeakingText() const;
         virtual ASYNC removeText(uint jobNum=0);
         virtual ASYNC startText(uint jobNum=0);
         virtual ASYNC stopText(uint jobNum=0);
         virtual ASYNC pauseText(uint jobNum=0);
         virtual ASYNC resumeText(uint jobNum=0);
-        virtual QStringList getTalkers();
-        virtual ASYNC changeTextTalker(const QString &talker, uint jobNum=0 );
-        virtual QString userDefaultTalker();
+        virtual TQStringList getTalkers();
+        virtual ASYNC changeTextTalker(const TQString &talker, uint jobNum=0 );
+        virtual TQString userDefaultTalker();
         virtual ASYNC moveTextLater(uint jobNum=0);
         virtual int jumpToTextPart(int partNum, uint jobNum=0);
         virtual uint moveRelTextSentence(int n, uint jobNum=0);
@@ -677,7 +677,7 @@ class kspeech : public QObject, virtual public KSpeech
         virtual void showDialog();
         virtual void kttsdExit();
         virtual void reinit();
-        virtual QString version();
+        virtual TQString version();
 
     private:
         KTTSD m_kttsd;

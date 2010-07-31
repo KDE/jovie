@@ -19,8 +19,8 @@
 #define _FREETTSPROC_H_
 
 
-#include <qstringlist.h>
-#include <qmutex.h>
+#include <tqstringlist.h>
+#include <tqmutex.h>
 
 #include <pluginproc.h>
 
@@ -33,7 +33,7 @@ public:
 	/**
 	* Constructor
 	*/
-	FreeTTSProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+	FreeTTSProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
 	/**
 	* Destructor
@@ -45,13 +45,13 @@ public:
 	* @param config         Settings object.
     * @param configGroup        Settings group.
 	*/
-    virtual bool init(KConfig *config, const QString &configGroup);
+    virtual bool init(KConfig *config, const TQString &configGroup);
 	
 	/**
 	* Say a text string.
 	* @param text            The text to speak.
 	*/
-	virtual void sayText(const QString &text);
+	virtual void sayText(const TQString &text);
 
 	/**
 	* Synthesize text into an audio file, but do not send to the audio device.
@@ -63,7 +63,7 @@ public:
 	*
 	* If the plugin supports asynchronous operation, it should return immediately.
 	*/
-	virtual void synthText(const QString& text, const QString& suggestedFilename);
+	virtual void synthText(const TQString& text, const TQString& suggestedFilename);
 	
 	/**
 	* Get the generated audio filename from synthText.
@@ -72,7 +72,7 @@ public:
 	*
 	* The plugin must not re-use the filename.
 	*/
-	virtual QString getFilename();
+	virtual TQString getFilename();
 	
 	/**
 	* Stop current operation (saying or synthesizing text).
@@ -137,9 +137,9 @@ public:
 	* @param freettsJarPath            Path to the freetts jar file.
 	*/
 	void synth(
-	const QString &text,
-	const QString &synthFilename,
-	const QString &freettsJarPath);
+	const TQString &text,
+	const TQString &synthFilename,
+	const TQString &freettsJarPath);
 
 private slots:
 	void slotProcessExited(KProcess* proc);
@@ -152,7 +152,7 @@ private:
 	/**
 	 * Path to FreeTTS jar file (from config).
 	 */
-	QString m_freettsJarPath;
+	TQString m_freettsJarPath;
 	
 	/**
 	 * FreeTTS process
@@ -162,7 +162,7 @@ private:
 	/**
 	 * Synthesis filename.
 	 */
-	QString m_synthFilename;
+	TQString m_synthFilename;
 	
 	/**
 	 * Plugin state.

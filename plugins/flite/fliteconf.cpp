@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qlayout.h>
-#include <qfile.h>
-#include <qapplication.h>
+#include <tqlayout.h>
+#include <tqfile.h>
+#include <tqapplication.h>
 
 // KDE includes.
 #include <klocale.h>
@@ -42,14 +42,14 @@
 #include "fliteconf.moc"
 
 /** Constructor */
-FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
+FliteConf::FliteConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
     PlugInConf(parent, name)
 {
     // kdDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;
     m_progressDlg = 0;
     
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "FliteConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new FliteConfWidget(this, "FliteConfigWidget");
@@ -57,24 +57,24 @@ FliteConf::FliteConf( QWidget* parent, const char* name, const QStringList& /*ar
     
     defaults();
     
-    connect(m_widget->flitePath, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
-    connect(m_widget->fliteTest, SIGNAL(clicked()), this, SLOT(slotFliteTest_clicked()));
+    connect(m_widget->flitePath, TQT_SIGNAL(textChanged(const TQString&)),
+        this, TQT_SLOT(configChanged()));
+    connect(m_widget->fliteTest, TQT_SIGNAL(clicked()), this, TQT_SLOT(slotFliteTest_clicked()));
 }
 
 /** Destructor */
 FliteConf::~FliteConf(){
     // kdDebug() << "Running: FliteConf::~FliteConf()" << endl;
-    if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
+    if (!m_waveFile.isNull()) TQFile::remove(m_waveFile);
     delete m_fliteProc;
     delete m_progressDlg;
 }
 
-void FliteConf::load(KConfig *config, const QString &configGroup){
+void FliteConf::load(KConfig *config, const TQString &configGroup){
     // kdDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup(configGroup);
-    QString fliteExe = config->readEntry("FliteExePath", QString::null);
+    TQString fliteExe = config->readEntry("FliteExePath", TQString::null);
     if (fliteExe.isEmpty())
     {
         config->setGroup("Flite");
@@ -83,7 +83,7 @@ void FliteConf::load(KConfig *config, const QString &configGroup){
     m_widget->flitePath->setURL(fliteExe);
 }
 
-void FliteConf::save(KConfig *config, const QString &configGroup){
+void FliteConf::save(KConfig *config, const TQString &configGroup){
     // kdDebug() << "FliteConf::save: Saving configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup("Flite");
@@ -99,19 +99,19 @@ void FliteConf::defaults(){
     m_widget->flitePath->setURL("flite");
 }
 
-void FliteConf::setDesiredLanguage(const QString &lang)
+void FliteConf::setDesiredLanguage(const TQString &lang)
 {
     m_languageCode = lang;
 }
 
-QString FliteConf::getTalkerCode()
+TQString FliteConf::getTalkerCode()
 {
-    QString fliteExe = realFilePath(m_widget->flitePath->url());
+    TQString fliteExe = realFilePath(m_widget->flitePath->url());
     if (!fliteExe.isEmpty())
     {
         if (!getLocation(fliteExe).isEmpty())
         {
-            return QString(
+            return TQString(
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
@@ -123,7 +123,7 @@ QString FliteConf::getTalkerCode()
                     .arg("Festival Lite (flite)");
         }
     }
-    return QString::null;
+    return TQString::null;
 }
 
 void FliteConf::slotFliteTest_clicked()
@@ -135,15 +135,15 @@ void FliteConf::slotFliteTest_clicked()
     else
     {
         m_fliteProc = new FliteProc();
-        connect (m_fliteProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
+        connect (m_fliteProc, TQT_SIGNAL(stopped()), this, TQT_SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "fliteplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->name();
+    TQString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
 
     // Get test message in the language of the voice.
-    QString testMsg = testMessage(m_languageCode);
+    TQString testMsg = testMessage(m_languageCode);
 
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_flite_testdlg",
@@ -154,7 +154,7 @@ void FliteConf::slotFliteTest_clicked()
     m_progressDlg->setAllowCancel(true);
 
     // Play an English test.  Flite only supports English.
-    connect (m_fliteProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    connect (m_fliteProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
     m_fliteProc->synth(
         testMsg,
         tmpWaveFile,
@@ -163,7 +163,7 @@ void FliteConf::slotFliteTest_clicked()
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
     m_progressDlg->exec();
-    disconnect (m_fliteProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    disconnect (m_fliteProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
     if (m_progressDlg->wasCancelled()) m_fliteProc->stopText();
     delete m_progressDlg;
     m_progressDlg = 0;
@@ -186,14 +186,14 @@ void FliteConf::slotSynthFinished()
     // Play the wave file (possibly adjusting its Speed).
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
-    QFile::remove(m_waveFile);
-    m_waveFile = QString::null;
+    TQFile::remove(m_waveFile);
+    m_waveFile = TQString::null;
     if (m_progressDlg) m_progressDlg->close();
 }
 
 void FliteConf::slotSynthStopped()
 {
     // Clean up after canceling test.
-    QString filename = m_fliteProc->getFilename();
-    if (!filename.isNull()) QFile::remove(filename);
+    TQString filename = m_fliteProc->getFilename();
+    if (!filename.isNull()) TQFile::remove(filename);
 }

@@ -19,10 +19,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
-#include <qdict.h>
-#include <qxml.h>
-#include <qfile.h>
+#include <tqstring.h>
+#include <tqdict.h>
+#include <tqxml.h>
+#include <tqfile.h>
 #include <iostream>
 
 #include "xmlelement.h"
@@ -32,13 +32,13 @@
 /// Document parsing begin. Init stuff here.
 bool XHTMLToSSMLParser::startDocument() {
     /// Read the file which maps xhtml tags -> ssml tags. Look at the file for more information.
-    QFile file("tagmappingrc");
+    TQFile file("tagmappingrc");
     if(!file.open(IO_ReadOnly)) {
         std::cerr << "Could not read config file 'tagmappingrc'. Please check that it exists and is readable.\n";
         // Kill further parsing
         return false;
     }
-    QTextStream stream(&file);
+    TQTextStream stream(&file);
     // File parsing.
     bool linestatus = true;
     while(!stream.atEnd()) {
@@ -51,37 +51,37 @@ bool XHTMLToSSMLParser::startDocument() {
     return true;
 }
 
-bool XHTMLToSSMLParser::startElement(const QString &, const QString &, const QString &qName, const QXmlAttributes &atts) {
-    QString attributes = "";
+bool XHTMLToSSMLParser::startElement(const TQString &, const TQString &, const TQString &qName, const TQXmlAttributes &atts) {
+    TQString attributes = "";
     if(atts.length() > 0) {
         const int attsLength = atts.lenght();
         for(int i = 0; i < attsLength; ++i)
             attributes += " " + atts.qName(i) + "=\"" + atts.value(i) + "\"";
     }
-    QString fromelement = qName + attributes;
+    TQString fromelement = qName + attributes;
     // If this element is one of the keys that was specified in the configuration file, get what it should be converted to and 
     // append to the output string.
-    QString toelement = m_xhtml2ssml[fromelement];
+    TQString toelement = m_xhtml2ssml[fromelement];
     if(toelement)
         m_output.append(XMLElement::fromQString(toelement).startTag());
     return true;
 }
 
-bool XHTMLToSSMLParser::endElement(const QString &, const QString &, const QString &qName) {
-    QString fromelement = qName;
-    QString toelement = m_xhtml2ssml[fromelement];
+bool XHTMLToSSMLParser::endElement(const TQString &, const TQString &, const TQString &qName) {
+    TQString fromelement = qName;
+    TQString toelement = m_xhtml2ssml[fromelement];
     if(toelement)
         m_output.append(XMLElement::fromQString(toelement).endTag());
     return true;
 }
 
-bool XHTMLToSSMLParser::characters(const QString &characters) {
+bool XHTMLToSSMLParser::characters(const TQString &characters) {
     m_output.append(characters);
     return true;
 }
 
 
-QString XHTMLToSSMLParser::convertedText() {
+TQString XHTMLToSSMLParser::convertedText() {
     return m_output.simplifyWhiteSpace();
 }
 
@@ -89,7 +89,7 @@ QString XHTMLToSSMLParser::convertedText() {
 /// It makes entries in the m_xhtml2ssml map accordingly.
 /// @param line               A line from a file to parse
 /// @returns                     true if the syntax of the line was okay and the parsing succeeded - false otherwise.
-bool XHTMLToSSMLParser::readFileConfigEntry(const QString &line) {
+bool XHTMLToSSMLParser::readFileConfigEntry(const TQString &line) {
     // comments
     if(line.stripWhiteSpace().startsWith("#")) {
         return true;
@@ -97,7 +97,7 @@ bool XHTMLToSSMLParser::readFileConfigEntry(const QString &line) {
     // break into QStringList
     // the second parameter to split is the string, with all space simplified and all space around the : removed, i.e
     //  "something     :      somethingelse"   ->  "something:somethingelse"
-    QStringList keyvalue = QStringList::split(":", line.simplifyWhiteSpace().replace(" :", ":").replace(": ", ":"));
+    TQStringList keyvalue = TQStringList::split(":", line.simplifyWhiteSpace().replace(" :", ":").replace(": ", ":"));
     if(keyvalue.count() != 2)
         return false;
     m_xhtml2ssml[keyvalue[0]] = keyvalue[1];

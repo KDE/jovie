@@ -16,8 +16,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <qobject.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqstringlist.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
 #include "kglobal.h"
@@ -33,7 +33,7 @@ public:
     virtual ~Player() {}
 
 //    virtual void play(const FileHandle &file = FileHandle::null()) = 0;
-    virtual void startPlay(const QString& file) = 0;
+    virtual void startPlay(const TQString& file) = 0;
     virtual void pause() = 0;
     virtual void stop() = 0;
 
@@ -50,11 +50,11 @@ public:
     virtual void seek(int seekTime) = 0;
     virtual void seekPosition(int position) = 0;
 
-    virtual QStringList getPluginList( const QCString& classname ) {
+    virtual TQStringList getPluginList( const TQCString& classname ) {
         Q_UNUSED(classname);
-        return QStringList();
+        return TQStringList();
     }
-    virtual void setSinkName(const QString &sinkName) { Q_UNUSED(sinkName); }
+    virtual void setSinkName(const TQString &sinkName) { Q_UNUSED(sinkName); }
     virtual bool requireVersion(uint major, uint minor, uint micro) {
         Q_UNUSED(major);
         Q_UNUSED(minor);
@@ -66,8 +66,8 @@ public:
     virtual void setPeriods(uint periods) {Q_UNUSED(periods); }
 
 protected:
-    Player(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList() ) :
-        QObject(parent, name) {
+    Player(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList() ) :
+        TQObject(parent, name) {
         Q_UNUSED(args);
     }
 

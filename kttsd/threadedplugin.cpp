@@ -21,8 +21,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#include <qevent.h>
-#include <qapplication.h>
+#include <tqevent.h>
+#include <tqapplication.h>
 
 #include <kdebug.h>
 
@@ -33,11 +33,11 @@
 * Constructor.
 */
 ThreadedPlugIn::ThreadedPlugIn(PlugInProc* plugin, 
-    QObject *parent /*= 0*/, const char *name /*= 0*/):
+    TQObject *parent /*= 0*/, const char *name /*= 0*/):
     PlugInProc(parent, name),
-    QThread(),
+    TQThread(),
     m_plugin(plugin),
-    m_filename(QString::null),
+    m_filename(TQString::null),
     m_requestExit(false),
     m_supportsSynth(false)
 {
@@ -71,7 +71,7 @@ ThreadedPlugIn::~ThreadedPlugIn()
 /**
 * Initialize the speech plugin.
 */
-bool ThreadedPlugIn::init(KConfig *config, const QString &configGroup)
+bool ThreadedPlugIn::init(KConfig *config, const TQString &configGroup)
 {
     bool stat = m_plugin->init(config, configGroup);
     m_supportsSynth = m_plugin->supportsSynth();
@@ -87,7 +87,7 @@ bool ThreadedPlugIn::init(KConfig *config, const QString &configGroup)
 * If the plugin supports asynchronous operation, it should return immediately
 * and emit sayFinished signal when synthesis and audibilizing is finished.
 */
-void ThreadedPlugIn::sayText(const QString &text)
+void ThreadedPlugIn::sayText(const TQString &text)
 {
     kdDebug() << "ThreadedPlugin::sayText running with text " << text << endl;
     waitThreadNotBusy();
@@ -108,7 +108,7 @@ void ThreadedPlugIn::sayText(const QString &text)
 * If the plugin supports asynchronous operation, it should return immediately
 * and emit synthFinished signal when synthesis is completed.
 */
-void ThreadedPlugIn::synthText(const QString &text, const QString &suggestedFilename)
+void ThreadedPlugIn::synthText(const TQString &text, const TQString &suggestedFilename)
 {
     waitThreadNotBusy();
     m_action = paSynthText;
@@ -125,7 +125,7 @@ void ThreadedPlugIn::synthText(const QString &text, const QString &suggestedFile
 *
 * The plugin must not re-use the filename.
 */
-QString ThreadedPlugIn::getFilename()
+TQString ThreadedPlugIn::getFilename()
 {
     return m_filename;
 }
@@ -188,7 +188,7 @@ void ThreadedPlugIn::ackFinished()
 {
     // Since plugin should not be running, don't bother with Mutex here.
     if (m_state == psFinished) m_state = psIdle;
-    m_filename = QString::null;
+    m_filename = TQString::null;
 }
 
 /**
@@ -264,8 +264,8 @@ void ThreadedPlugIn::run()
                     m_stateMutex.lock();
                     m_state = psSynthing;
                     m_stateMutex.unlock();
-                    QString filename = m_filename;
-                    m_filename = QString::null;
+                    TQString filename = m_filename;
+                    m_filename = TQString::null;
                     kdDebug() << "ThreadedPlugIn::run calling synthText" << endl;
                     m_plugin->synthText(m_text, filename);
                     kdDebug() << "ThreadedPlugIn::run back from synthText" << endl;

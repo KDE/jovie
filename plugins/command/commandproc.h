@@ -19,7 +19,7 @@
 #define _COMMANDPROC_H_
 
 // Qt includes.
-#include <qstringlist.h> 
+#include <tqstringlist.h> 
 
 // KTTS includes.
 #include <pluginproc.h>
@@ -32,20 +32,20 @@ class CommandProc : public PlugInProc{
 
     public:
         /** Constructor */
-        CommandProc( QObject* parent = 0, const char* name = 0,
-            const QStringList &args = QStringList());
+        CommandProc( TQObject* parent = 0, const char* name = 0,
+            const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~CommandProc();
 
         /** Initializate the speech */
-        bool init (KConfig *config, const QString &configGroup);
+        bool init (KConfig *config, const TQString &configGroup);
 
         /**
          * Say a text string.
          * @param text            The text to speak.
          */
-        virtual void sayText(const QString &text);
+        virtual void sayText(const TQString &text);
 
         /**
         * Synthesize text into an audio file, but do not send to the audio device.
@@ -57,7 +57,7 @@ class CommandProc : public PlugInProc{
         *
         * If the plugin supports asynchronous operation, it should return immediately.
         */
-        virtual void synthText(const QString& text, const QString& suggestedFilename);
+        virtual void synthText(const TQString& text, const TQString& suggestedFilename);
 
         /**
         * Get the generated audio filename from synthText.
@@ -66,7 +66,7 @@ class CommandProc : public PlugInProc{
         *
         * The plugin must not re-use the filename.
         */
-        virtual QString getFilename();
+        virtual TQString getFilename();
 
         /**
         * Stop current operation (saying or synthesizing text).
@@ -134,9 +134,9 @@ class CommandProc : public PlugInProc{
         * @param codec                   Codec for encoding the text.
         * @param language                The language code (used for the %l macro)
         */
-        void synth(const QString& inputText, const QString& suggestedFilename,
-            const QString& userCmd, bool stdIn,
-            QTextCodec *codec, QString& language);
+        void synth(const TQString& inputText, const TQString& suggestedFilename,
+            const TQString& userCmd, bool stdIn,
+            TQTextCodec *codec, TQString& language);
 
     private slots:
         void slotProcessExited(KProcess* proc);
@@ -154,7 +154,7 @@ class CommandProc : public PlugInProc{
         /**
         * TTS command
         */
-        QString m_ttsCommand;
+        TQString m_ttsCommand;
 
         /**
         * True if process should use Stdin.
@@ -164,12 +164,12 @@ class CommandProc : public PlugInProc{
         /**
         * Language Group.
         */
-        QString m_language;
+        TQString m_language;
 
         /**
         * Codec.
         */
-        QTextCodec* m_codec;
+        TQTextCodec* m_codec;
 
         /**
          * Flite process
@@ -179,12 +179,12 @@ class CommandProc : public PlugInProc{
         /**
         * Name of temporary file containing text.
         */
-        QString m_textFilename;
+        TQString m_textFilename;
 
         /**
         * Synthesis filename.
         */
-        QString m_synthFilename;
+        TQString m_synthFilename;
 
         /**
         * Plugin state.

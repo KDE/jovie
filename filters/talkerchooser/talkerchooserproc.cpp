@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qregexp.h>
+#include <tqregexp.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -38,7 +38,7 @@
 /**
  * Constructor.
  */
-TalkerChooserProc::TalkerChooserProc( QObject *parent, const char *name, const QStringList& /*args*/ ) :
+TalkerChooserProc::TalkerChooserProc( TQObject *parent, const char *name, const TQStringList& /*args*/ ) :
     KttsFilterProc(parent, name) 
 {
     // kdDebug() << "TalkerChooserProc::TalkerChooserProc: Running" << endl;
@@ -61,14 +61,14 @@ TalkerChooserProc::~TalkerChooserProc()
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
+bool TalkerChooserProc::init(KConfig* config, const TQString& configGroup){
     // kdDebug() << "PlugInProc::init: Running" << endl;
     config->setGroup( configGroup );
     m_re = config->readEntry( "MatchRegExp" );
     m_appIdList = config->readListEntry( "AppIDs" );
     m_chosenTalkerCode = TalkerCode(config->readEntry("TalkerCode"), false);
     // Legacy settings.
-    QString s = config->readEntry( "LanguageCode" );
+    TQString s = config->readEntry( "LanguageCode" );
     if (!s.isEmpty()) m_chosenTalkerCode.setFullLanguageCode(s);
     s = config->readEntry( "SynthInName" );
     if (!s.isEmpty()) m_chosenTalkerCode.setPlugInName(s);
@@ -102,12 +102,12 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString TalkerChooserProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QCString& appId)
+/*virtual*/ TQString TalkerChooserProc::convert(const TQString& inputText, TalkerCode* talkerCode,
+    const TQCString& appId)
 {
     if ( !m_re.isEmpty() )
     {
-        int pos = inputText.find( QRegExp(m_re) );
+        int pos = inputText.find( TQRegExp(m_re) );
         if ( pos < 0 ) return inputText;
     }
     // If appId doesn't match, return input unmolested.
@@ -116,7 +116,7 @@ bool TalkerChooserProc::init(KConfig* config, const QString& configGroup){
         // kdDebug() << "TalkerChooserProc::convert: converting " << inputText << " if appId "
         //      << appId << " matches " << m_appIdList << endl;
         bool found = false;
-        QString appIdStr = appId;
+        TQString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )

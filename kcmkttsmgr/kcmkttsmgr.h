@@ -22,8 +22,8 @@
 #include "config.h"
 
 // Qt includes.
-#include <qmap.h>
-#include <qlistview.h>
+#include <tqmap.h>
+#include <tqlistview.h>
 
 // KDE includes.
 #include <kcmodule.h>
@@ -57,7 +57,7 @@ class KCMKttsMgr :
     Q_OBJECT
 
     public:
-        KCMKttsMgr(QWidget *parent, const char *name, const QStringList &);
+        KCMKttsMgr(TQWidget *parent, const char *name, const TQStringList &);
 
         ~KCMKttsMgr();
 
@@ -109,7 +109,7 @@ class KCMKttsMgr :
         * This function returns the small quickhelp.
         * That is displayed in the sidebar in the KControl
         */
-        QString quickHelp() const;
+        TQString quickHelp() const;
 
         /**
         * Return the about information for this module
@@ -147,7 +147,7 @@ class KCMKttsMgr :
         */
         virtual void kttsdExiting();
 
-        // virtual void resizeEvent( QResizeEvent ev );
+        // virtual void resizeEvent( TQResizeEvent ev );
 
     private:
         enum widgetPages
@@ -226,28 +226,28 @@ class KCMKttsMgr :
         *   <prosody volume="medium" rate="medium"/>
         *   <kttsd synthesizer="Festival" />
         */
-        QString defaultTalkerCode(const QString &languageCode, const QString &plugInName);
+        TQString defaultTalkerCode(const TQString &languageCode, const TQString &plugInName);
 
         /**
         * Given an item in the talker listview and a talker code, sets the columns of the item.
-        * @param talkerItem       QListViewItem.
+        * @param talkerItem       TQListViewItem.
         * @param talkerCode       Talker Code.
         */
-        void updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode);
+        void updateTalkerItem(TQListViewItem* talkerItem, const TQString &talkerCode);
 
         /**
         * Loads the configuration plugin for a named Talker plugin.
         * @param name             DesktopEntryName of the Synthesizer.
         * @return                 Pointer to the configuration plugin for the Talker.
         */
-        PlugInConf* loadTalkerPlugin(const QString& name);
+        PlugInConf* loadTalkerPlugin(const TQString& name);
 
         /**
         * Loads the configuration plugin for a named Filter plugin.
         * @param plugInName       DesktopEntryName of the plugin.
         * @return                 Pointer to the configuration plugin for the Filter.
         */
-        KttsFilterConf* loadFilterPlugin(const QString& plugInName);
+        KttsFilterConf* loadFilterPlugin(const TQString& plugInName);
 
         /**
         * Display the Talker Configuration Dialog.
@@ -279,42 +279,42 @@ class KCMKttsMgr :
         /**
         * Count number of configured Filters with the specified plugin name.
         */
-        int countFilterPlugins(const QString& filterPlugInName);
+        int countFilterPlugins(const TQString& filterPlugInName);
 
         /**
          * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
          * @param name                   The translated plugin name.  From Name= line in .desktop file.
          * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-         *                               QString::null if not found.
+         *                               TQString::null if not found.
          */
-        QString FilterNameToDesktopEntryName(const QString& name);
+        TQString FilterNameToDesktopEntryName(const TQString& name);
 
         /**
          * Uses KTrader to convert a DesktopEntryName into a translated Filter Plugin Name.
          * @param desktopEntryName       The DesktopEntryName.
          * @return                       The translated Name of the plugin, from Name= line in .desktop file.
          */
-        QString FilterDesktopEntryNameToName(const QString& desktopEntryName);
+        TQString FilterDesktopEntryNameToName(const TQString& desktopEntryName);
 
         /**
          * Loads notify events from a file.  Clearing listview if clear is True.
          */
-        QString loadNotifyEventsFromFile( const QString& filename, bool clear);
+        TQString loadNotifyEventsFromFile( const TQString& filename, bool clear);
 
         /**
          * Saves notify events to a file.
          */
-        QString saveNotifyEventsToFile(const QString& filename);
+        TQString saveNotifyEventsToFile(const TQString& filename);
 
         /**
          * Adds an item to the notify listview.
          * message is only needed if action = nactSpeakCustom.
          */
-        QListViewItem* addNotifyItem(
-            const QString& eventSrc,
-            const QString& event,
+        TQListViewItem* addNotifyItem(
+            const TQString& eventSrc,
+            const TQString& event,
             int action,
-            const QString& message,
+            const TQString& message,
             TalkerCode& talkerCode);
 
         /**
@@ -340,7 +340,7 @@ class KCMKttsMgr :
         /**
         * Sentence Boundary Detector button popup menu.
         */
-        QPopupMenu* m_sbdPopmenu;
+        TQPopupMenu* m_sbdPopmenu;
 
         /**
         * Talker(synth) Plugin currently loaded into configuration dialog.
@@ -381,17 +381,17 @@ class KCMKttsMgr :
         /**
         * Dictionary mapping language names to codes.
         */
-        QMap<QString, QString> m_languagesToCodes;
+        TQMap<TQString, TQString> m_languagesToCodes;
 
         /**
-        * A QMap of languages codes indexed by synthesizer that supports them.
+        * A TQMap of languages codes indexed by synthesizer that supports them.
         */
         SynthToLangMap m_synthToLangMap;
 
         /**
         * Default Talker Code for notifications.
         */
-        QString m_defaultNotifyTalkerCode;
+        TQString m_defaultNotifyTalkerCode;
 
     private slots:
         /**
@@ -499,7 +499,7 @@ class KCMKttsMgr :
         void slotNotifyPresentComboBox_activated(int index);
         void slotNotifyActionComboBox_activated(int index);
         void slotNotifyTestButton_clicked();
-        void slotNotifyMsgLineEdit_textChanged(const QString& text);
+        void slotNotifyMsgLineEdit_textChanged(const TQString& text);
         void slotNotifyTalkerButton_clicked();
 
         /**
@@ -513,11 +513,11 @@ class KCMKttsMgr :
 class KttsCheckListItem : public QCheckListItem
 {
     public:
-        KttsCheckListItem( QListView *parent,
-            const QString &text, Type tt = RadioButtonController,
+        KttsCheckListItem( TQListView *parent,
+            const TQString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
-        KttsCheckListItem( QListView *parent, QListViewItem *after,
-            const QString &text, Type tt = RadioButtonController,
+        KttsCheckListItem( TQListView *parent, TQListViewItem *after,
+            const TQString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
 
     protected:

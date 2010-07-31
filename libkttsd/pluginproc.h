@@ -19,8 +19,8 @@
 #ifndef _PLUGINPROC_H_
 #define _PLUGINPROC_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <tqobject.h>
+#include <tqstring.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
 #include <kconfig.h>
@@ -110,7 +110,7 @@
 * psFinished.
 *
 * If @ref supportsAsync returns False, KTTSD will run the plugin in a separate
-* QThread.  As a consequence, the plugin must not make use of the KDE Library,
+* TQThread.  As a consequence, the plugin must not make use of the KDE Library,
 * when @ref sayText or @ref synthText is called,
 * with the exception of KProcess and family (KProcIO, KShellProcess).
 * This restriction comes about because the KDE Libraries make use of the
@@ -241,7 +241,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         /**
         * Constructor.
         */
-        PlugInProc( QObject *parent = 0, const char *name = 0);
+        PlugInProc( TQObject *parent = 0, const char *name = 0);
 
         /**
         * Destructor.
@@ -263,7 +263,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
             config->setGroup(configGroup);
           @endverbatim
         */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init(KConfig *config, const TQString &configGroup);
 
         /** 
         * Say a text.  Synthesize and audibilize it.
@@ -274,7 +274,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         * It must also implement the @ref getState method, which must return
         * psFinished, when saying is completed.
         */
-        virtual void sayText(const QString &text);
+        virtual void sayText(const TQString &text);
 
         /**
         * Synthesize text into an audio file, but do not send to the audio device.
@@ -289,7 +289,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         * It must also implement the @ref getState method, which must return
         * psFinished, when synthesis is completed.
         */
-        virtual void synthText(const QString &text, const QString &suggestedFilename);
+        virtual void synthText(const TQString &text, const TQString &suggestedFilename);
 
         /**
         * Get the generated audio filename from call to @ref synthText.
@@ -300,7 +300,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         * be locked when this method is called.  The file will be deleted when
         * KTTSD is finished using it.
         */
-        virtual QString getFilename();
+        virtual TQString getFilename();
 
         /**
         * Stop current operation (saying or synthesizing text).
@@ -373,30 +373,30 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         * tags and converts the file to plain text.
         * @return            Name of the XSLT file.
         */
-        virtual QString getSsmlXsltFilename();
+        virtual TQString getSsmlXsltFilename();
 
         /**
-        * Given the name of a codec, returns the QTextCodec for the name.
+        * Given the name of a codec, returns the TQTextCodec for the name.
         * Handles the following "special" codec names:
         *   Local               The user's current Locale codec.
         *   Latin1              Latin1 (ISO 8859-1)
         *   Unicode             UTF-16
         * @param codecName      Name of desired codec.
         * @return               The codec object.  Calling program must not delete this object
-        *                       as it is a reference to an existing QTextCodec object.
+        *                       as it is a reference to an existing TQTextCodec object.
         *
         * Caution: Do not pass translated codec names to this routine.
         */
-        static QTextCodec* codecNameToCodec(const QString &codecName);
+        static TQTextCodec* codecNameToCodec(const TQString &codecName);
 
         /**
-        * Builds a list of codec names, suitable for display in a QComboBox.
+        * Builds a list of codec names, suitable for display in a TQComboBox.
         * The list includes the 3 special codec names (translated) at the top:
         *   Local               The user's current Locale codec.
         *   Latin1              Latin1 (ISO 8859-1)
         *   Unicode             UTF-16
         */
-        static QStringList buildCodecList();
+        static TQStringList buildCodecList();
 
         /**
         * Given the name of a codec, returns index into the codec list.
@@ -406,19 +406,19 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         *   Unicode             UTF-16
         * @param codecName      Name of the codec.
         * @param codecList      List of codec names. The first 3 entries may be translated names.
-        * @return               QTextCodec object.  Caller must not delete this object.
+        * @return               TQTextCodec object.  Caller must not delete this object.
         *
         * Caution: Do not pass translated codec names to this routine in codecName parameter.
         */
-        static int codecNameToListIndex(const QString &codecName, const QStringList &codecList);
+        static int codecNameToListIndex(const TQString &codecName, const TQStringList &codecList);
 
         /**
         * Given index into codec list, returns the codec object.
         * @param codecNum       Index of the codec.
         * @param codecList      List of codec names. The first 3 entries may be translated names.
-        * @return               QTextCodec object.  Caller must not delete this object.
+        * @return               TQTextCodec object.  Caller must not delete this object.
         */
-        static QTextCodec* codecIndexToCodec(int codecNum, const QStringList &codecList);
+        static TQTextCodec* codecIndexToCodec(int codecNum, const TQStringList &codecList);
 
         /**
         * Given index into codec list, returns the codec Name.
@@ -430,7 +430,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         * @param codecList      List of codec names. The first 3 entries may be translated names.
         * @return               Untranslated name of the codec.
         */
-        static QString codecIndexToCodecName(int codecNum, const QStringList &codecList);
+        static TQString codecIndexToCodecName(int codecNum, const TQStringList &codecList);
 
     signals:
         /**
@@ -460,7 +460,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         * @see Error-handling
         *
         */
-        void error(bool keepGoing, const QString &msg);
+        void error(bool keepGoing, const TQString &msg);
 };
 
 #endif // _PLUGINPROC_H_

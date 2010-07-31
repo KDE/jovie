@@ -16,12 +16,12 @@
  ***************************************************************************/
 
 // Qt includes. 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qapplication.h>
+#include <tqlayout.h>
+#include <tqlabel.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqfile.h>
+#include <tqapplication.h>
 
 // KDE includes.
 #include <kdialog.h>
@@ -40,14 +40,14 @@
 #include "freettsconfigwidget.h"
 
 /** Constructor */
-FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/*args*/) : 
+FreeTTSConf::FreeTTSConf( TQWidget* parent, const char* name, const TQStringList&/*args*/) : 
 	PlugInConf( parent, name ) {
 	
 	// kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
 	m_freettsProc = 0;
         m_progressDlg = 0;
 	
-	QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+	TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
 								KDialog::spacingHint(), "FreeTTSConfigWidgetLayout");
 	layout->setAlignment (Qt::AlignTop);
 	m_widget = new FreeTTSConfWidget(this, "FreeTTSConfigWidget");
@@ -55,28 +55,28 @@ FreeTTSConf::FreeTTSConf( QWidget* parent, const char* name, const QStringList&/
 		
 	defaults();
 	
-	connect(m_widget->freettsPath, SIGNAL(textChanged(const QString&)),
-		this, SLOT(configChanged()));
-	connect(m_widget->freettsTest, SIGNAL(clicked()), this, SLOT(slotFreeTTSTest_clicked()));
+	connect(m_widget->freettsPath, TQT_SIGNAL(textChanged(const TQString&)),
+		this, TQT_SLOT(configChanged()));
+	connect(m_widget->freettsTest, TQT_SIGNAL(clicked()), this, TQT_SLOT(slotFreeTTSTest_clicked()));
 }
 
 /** Destructor */
 FreeTTSConf::~FreeTTSConf() {
 	// kdDebug() << "Running: FreeTTSConf::~FreeTTSConf()" << endl;
-	if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
+	if (!m_waveFile.isNull()) TQFile::remove(m_waveFile);
 	delete m_freettsProc;
         delete m_progressDlg;
 }
 
-void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
+void FreeTTSConf::load(KConfig *config, const TQString &configGroup) {
 	// kdDebug() << "FreeTTSConf::load: Running" << endl;
 
 	config->setGroup(configGroup);
-        QString freeTTSJar = config->readEntry("FreeTTSJarPath", QString::null);
+        TQString freeTTSJar = config->readEntry("FreeTTSJarPath", TQString::null);
         if (freeTTSJar.isEmpty())
         {
             config->setGroup("FreeTTS");
-            freeTTSJar = config->readEntry("FreeTTSJarPath", QString::null);
+            freeTTSJar = config->readEntry("FreeTTSJarPath", TQString::null);
         }
 	if (freeTTSJar.isEmpty())
 	    freeTTSJar = getLocation("freetts.jar");
@@ -84,7 +84,7 @@ void FreeTTSConf::load(KConfig *config, const QString &configGroup) {
 	/// If freettsPath is still empty, then we couldn't find the file in the path.
 }
 
-void FreeTTSConf::save(KConfig *config, const QString &configGroup){
+void FreeTTSConf::save(KConfig *config, const TQString &configGroup){
 	// kdDebug() << "FreeTTSConf::save: Running" << endl;
 
     config->setGroup("FreeTTS");
@@ -103,19 +103,19 @@ void FreeTTSConf::defaults(){
 	m_widget->freettsPath->setURL("");
 }
 
-void FreeTTSConf::setDesiredLanguage(const QString &lang)
+void FreeTTSConf::setDesiredLanguage(const TQString &lang)
 {
     m_languageCode = lang;
 }
 
-QString FreeTTSConf::getTalkerCode()
+TQString FreeTTSConf::getTalkerCode()
 {
-    QString freeTTSJar = realFilePath(m_widget->freettsPath->url());
+    TQString freeTTSJar = realFilePath(m_widget->freettsPath->url());
     if (!freeTTSJar.isEmpty())
     {
         if (!getLocation(freeTTSJar).isEmpty())
         {
-            return QString(
+            return TQString(
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
@@ -127,25 +127,25 @@ QString FreeTTSConf::getTalkerCode()
                     .arg("FreeTTS");
         }
     }
-    return QString::null;
+    return TQString::null;
 }
 
-// QString FreeTTSConf::getLocation(const QString &name) {
+// TQString FreeTTSConf::getLocation(const TQString &name) {
 // 	/// Iterate over the path and see if 'name' exists in it. Return the
-// 	/// full path to it if it does. Else return an empty QString.
+// 	/// full path to it if it does. Else return an empty TQString.
 // 	kdDebug() << "FreeTTSConf::getLocation: Searching for " << name << " in the path... " << endl;
 // 	kdDebug() << m_path << endl;
-// 	for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
-// 		QString fullName = *it;
+// 	for(TQStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
+// 		TQString fullName = *it;
 // 		fullName += "/";
 // 		fullName += name;
 // 		/// The user either has the directory of the file in the path...
-// 		if(QFile::exists(fullName)) {
+// 		if(TQFile::exists(fullName)) {
 // 			return fullName;
 // 			kdDebug() << fullName << endl;
 // 		}
 // 		/// ....Or the file itself
-// 		else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+// 		else if(TQFileInfo(*it).baseName().append(TQString(".").append(TQFileInfo(*it).extension())) == name) {
 // 			return fullName;
 // 			kdDebug() << fullName << endl;
 // 		}
@@ -163,15 +163,15 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
 	else
         {
 		m_freettsProc = new FreeTTSProc();
-                connect (m_freettsProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
+                connect (m_freettsProc, TQT_SIGNAL(stopped()), this, TQT_SLOT(slotSynthStopped()));
         }
         // Create a temp file name for the wave file.
 	KTempFile tempFile (locateLocal("tmp", "freettsplugin-"), ".wav");
-	QString tmpWaveFile = tempFile.file()->name();
+	TQString tmpWaveFile = tempFile.file()->name();
 	tempFile.close();
 
     // Get test message in the language of the voice.
-    QString testMsg = testMessage(m_languageCode);
+    TQString testMsg = testMessage(m_languageCode);
 
         // Tell user to wait.
         m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_freetts_testdlg",
@@ -183,7 +183,7 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
 
 	// I think FreeTTS only officialy supports English, but if anyone knows of someone
 	// whos built up a different language lexicon and has it working with FreeTTS gimme an email at ceruleanblaze@gmail.com
-        connect (m_freettsProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        connect (m_freettsProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
         m_freettsProc->synth(
             testMsg,
             tmpWaveFile,
@@ -192,7 +192,7 @@ void FreeTTSConf::slotFreeTTSTest_clicked()
         // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
         // or if user clicks Cancel button.
         m_progressDlg->exec();
-        disconnect (m_freettsProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+        disconnect (m_freettsProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
         if (m_progressDlg->wasCancelled()) m_freettsProc->stopText();
         delete m_progressDlg;
         m_progressDlg = 0;
@@ -215,16 +215,16 @@ void FreeTTSConf::slotSynthFinished()
     // Play the wave file (possibly adjusting its Speed).
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
-    QFile::remove(m_waveFile);
-    m_waveFile = QString::null;
+    TQFile::remove(m_waveFile);
+    m_waveFile = TQString::null;
     if (m_progressDlg) m_progressDlg->close();
 }
 
 void FreeTTSConf::slotSynthStopped()
 {
     // Clean up after canceling test.
-    QString filename = m_freettsProc->getFilename();
-    if (!filename.isNull()) QFile::remove(filename);
+    TQString filename = m_freettsProc->getFilename();
+    if (!filename.isNull()) TQFile::remove(filename);
 }
 
 #include "freettsconf.moc"

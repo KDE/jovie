@@ -26,8 +26,8 @@
 #define _FILTERPROC_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqstringlist.h>
 
 // KDE includes.
 #include <kdemacros.h>
@@ -51,7 +51,7 @@ public:
     /**
      * Constructor.
      */
-    KttsFilterProc( QObject *parent, const char *name );
+    KttsFilterProc( TQObject *parent, const char *name );
 
     /**
      * Destructor.
@@ -67,7 +67,7 @@ public:
      * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
      * separate configuration files of their own.
      */
-    virtual bool init(KConfig *config, const QString &configGroup);
+    virtual bool init(KConfig *config, const TQString &configGroup);
 
     /**
      * Returns True if this filter is a Sentence Boundary Detector.
@@ -97,7 +97,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual TQString convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -113,7 +113,7 @@ public:
      * program may then call @ref getOutput to retrieve converted text.  Calling
      * program must call @ref ackFinished to acknowledge the conversion.
      */
-    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual bool asyncConvert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
     /**
      * Waits for a previous call to asyncConvert to finish.
@@ -128,7 +128,7 @@ public:
     /**
      * Returns the filtered output.
      */
-    virtual QString getOutput();
+    virtual TQString getOutput();
 
     /**
      * Acknowledges the finished filtering.
@@ -153,7 +153,7 @@ public:
      *
      * @param re            The sentence delimiter regular expression.
      */
-    virtual void setSbRegExp(const QString& re);
+    virtual void setSbRegExp(const TQString& re);
 
 signals:
     /**
@@ -173,7 +173,7 @@ signals:
      * @param keepGoing         False if the filter should not be called in the future.
      * @param msg               Error message.
      */
-    void error(bool keepGoing, const QString &msg);
+    void error(bool keepGoing, const TQString &msg);
 };
 
 #endif      // _FILTERPROC_H_

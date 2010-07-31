@@ -29,11 +29,11 @@
 #include <sys/poll.h>
 
 // Qt includes.
-#include <qstring.h>
-#include <qobject.h>
-#include <qthread.h>
-#include <qfile.h>
-#include <qmutex.h>
+#include <tqstring.h>
+#include <tqobject.h>
+#include <tqthread.h>
+#include <tqfile.h>
+#include <tqmutex.h>
 
 // KDE includes.
 #include <config.h>
@@ -68,10 +68,10 @@ class KDE_EXPORT AlsaPlayer : public Player, QThread
     Q_OBJECT
 
 public:
-    AlsaPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
+    AlsaPlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     ~AlsaPlayer();
 
-    virtual void startPlay(const QString& file);
+    virtual void startPlay(const TQString& file);
     virtual void pause();
     virtual void stop();
 
@@ -88,8 +88,8 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const QCString& classname );
-    virtual void setSinkName(const QString &sinkName);
+    virtual TQStringList getPluginList( const TQCString& classname );
+    virtual void setSinkName(const TQString &sinkName);
 
     virtual void setDebugLevel(uint level) { m_debugLevel = level; }
     virtual void setPeriodSize(uint periodSize) { m_defPeriodSize = periodSize; }
@@ -106,7 +106,7 @@ private:
     void stopAndExit();
     int wait_for_poll(int draining);
 
-    QString timestamp() const;
+    TQString timestamp() const;
 
     ssize_t safe_read(int fd, void *buf, size_t count);
     int test_vocfile(void *buffer);
@@ -130,12 +130,12 @@ private:
 
     KURL m_currentURL;
     float m_currentVolume;
-    QString m_pcmName;
+    TQString m_pcmName;
     char* pcm_name;
-    mutable QMutex m_mutex;
+    mutable TQMutex m_mutex;
 
-    QFile audiofile;
-    QString name;
+    TQFile audiofile;
+    TQString name;
     bool canPause;
 
     snd_pcm_t *handle;
@@ -151,7 +151,7 @@ private:
     snd_pcm_stream_t stream;
     int mmap_flag;
     int interleaved;
-    QByteArray audioBuffer;
+    TQByteArray audioBuffer;
     char *audiobuf;
     snd_pcm_uframes_t chunk_size;
     snd_pcm_uframes_t period_frames;
@@ -174,7 +174,7 @@ private:
 
     int alsa_stop_pipe[2];          /* Pipe for communication about stop requests*/
     int alsa_fd_count;              /* Counter of descriptors to poll */
-    QByteArray alsa_poll_fds_barray;
+    TQByteArray alsa_poll_fds_barray;
     struct pollfd *alsa_poll_fds;   /* Descriptors to poll */
     unsigned int m_defPeriodSize;
     unsigned int m_defPeriods;

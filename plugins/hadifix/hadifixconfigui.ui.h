@@ -51,7 +51,7 @@ void HadifixConfigUI::init () {
    female = KGlobal::iconLoader()->loadIcon("female", KIcon::Small);
 }
 
-void HadifixConfigUI::addVoice (const QString &filename, bool isMale) {
+void HadifixConfigUI::addVoice (const TQString &filename, bool isMale) {
    if (isMale) {
       if (!maleVoices.contains(filename)) {
          int id = voiceCombo->count();
@@ -68,7 +68,7 @@ void HadifixConfigUI::addVoice (const QString &filename, bool isMale) {
    }
 }
 
-void HadifixConfigUI::addVoice (const QString &filename, bool isMale, const QString &displayname) {
+void HadifixConfigUI::addVoice (const TQString &filename, bool isMale, const TQString &displayname) {
    addVoice (filename, isMale);
    
    if (isMale) {
@@ -81,7 +81,7 @@ void HadifixConfigUI::addVoice (const QString &filename, bool isMale, const QStr
    }
 }
 
-void HadifixConfigUI::setVoice (const QString &filename, bool isMale) {
+void HadifixConfigUI::setVoice (const TQString &filename, bool isMale) {
    addVoice (filename, isMale);
    if (isMale)
       voiceCombo->setCurrentItem (maleVoices[filename]);
@@ -89,10 +89,10 @@ void HadifixConfigUI::setVoice (const QString &filename, bool isMale) {
       voiceCombo->setCurrentItem (femaleVoices[filename]);
 }
 
-QString HadifixConfigUI::getVoiceFilename() {
+TQString HadifixConfigUI::getVoiceFilename() {
    int curr = voiceCombo->currentItem();
 
-   QString filename = voiceCombo->text(curr);
+   TQString filename = voiceCombo->text(curr);
    if (defaultVoices.contains(curr))
       filename = defaultVoices[curr];
 
@@ -101,7 +101,7 @@ QString HadifixConfigUI::getVoiceFilename() {
 
 bool HadifixConfigUI::isMaleVoice() {
    int curr = voiceCombo->currentItem();
-   QString filename = getVoiceFilename();
+   TQString filename = getVoiceFilename();
 
    if (maleVoices.contains(filename))
       return maleVoices[filename] == curr;
@@ -109,6 +109,6 @@ bool HadifixConfigUI::isMaleVoice() {
       return false;
 }
 
-void HadifixConfigUI::changed (const QString &) {
+void HadifixConfigUI::changed (const TQString &) {
    emit changed (true);
 }

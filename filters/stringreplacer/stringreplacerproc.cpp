@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qdom.h>
-#include <qfile.h>
-#include <qlistview.h>
+#include <tqdom.h>
+#include <tqfile.h>
+#include <tqlistview.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -44,7 +44,7 @@
 /**
  * Constructor.
  */
-StringReplacerProc::StringReplacerProc( QObject *parent, const char *name, const QStringList& ) :
+StringReplacerProc::StringReplacerProc( TQObject *parent, const char *name, const TQStringList& ) :
     KttsFilterProc(parent, name)
 {
 }
@@ -68,9 +68,9 @@ StringReplacerProc::StringReplacerProc( QObject *parent, const char *name, const
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
+bool StringReplacerProc::init(KConfig* config, const TQString& configGroup){
     // kdDebug() << "StringReplacerProc::init: Running" << endl;
-    QString wordsFilename =
+    TQString wordsFilename =
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false );
     if ( wordsFilename.isEmpty() ) return false;
     wordsFilename += configGroup;
@@ -78,10 +78,10 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     wordsFilename = config->readEntry( "WordListFile", wordsFilename );
 
     // Open existing word list.
-    QFile file( wordsFilename );
+    TQFile file( wordsFilename );
     if ( !file.open( IO_ReadOnly ) )
         return false;
-    QDomDocument doc( "" );
+    TQDomDocument doc( "" );
     if ( !doc.setContent( &file ) ) {
         file.close();
         return false;
@@ -94,54 +94,54 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
     m_substList.clear();
 
     // Name setting.
-    // QDomNodeList nameList = doc.elementsByTagName( "name" );
-    // QDomNode nameNode = nameList.item( 0 );
+    // TQDomNodeList nameList = doc.elementsByTagName( "name" );
+    // TQDomNode nameNode = nameList.item( 0 );
     // m_widget->nameLineEdit->setText( nameNode.toElement().text() );
 
     // Language Codes setting.  List may be single element of comma-separated values,
     // or multiple elements.
     m_languageCodeList.clear();
-    QDomNodeList languageList = doc.elementsByTagName( "language-code" );
+    TQDomNodeList languageList = doc.elementsByTagName( "language-code" );
     for ( uint ndx=0; ndx < languageList.count(); ++ndx )
     {
-        QDomNode languageNode = languageList.item( ndx );
-        m_languageCodeList += QStringList::split(',', languageNode.toElement().text(), false);
+        TQDomNode languageNode = languageList.item( ndx );
+        m_languageCodeList += TQStringList::split(',', languageNode.toElement().text(), false);
     }
 
     // AppId.  Apply this filter only if DCOP appId of application that queued
     // the text contains this string.  List may be single element of comma-separated values,
     // or multiple elements.
     m_appIdList.clear();
-    QDomNodeList appIdList = doc.elementsByTagName( "appid" );
+    TQDomNodeList appIdList = doc.elementsByTagName( "appid" );
     for ( uint ndx=0; ndx < appIdList.count(); ++ndx )
     {
-        QDomNode appIdNode = appIdList.item( ndx );
-        m_appIdList += QStringList::split(',', appIdNode.toElement().text(), false);
+        TQDomNode appIdNode = appIdList.item( ndx );
+        m_appIdList += TQStringList::split(',', appIdNode.toElement().text(), false);
     }
 
     // Word list.
-    QDomNodeList wordList = doc.elementsByTagName("word");
+    TQDomNodeList wordList = doc.elementsByTagName("word");
     const int wordListCount = wordList.count();
     for (int wordIndex = 0; wordIndex < wordListCount; ++wordIndex)
     {
-        QDomNode wordNode = wordList.item(wordIndex);
-        QDomNodeList propList = wordNode.childNodes();
-        QString wordType;
-        QString matchCase = "No"; // Default for old (v<=3.5.3) config files with no <case/>.
-        QString match;
-        QString subst;
+        TQDomNode wordNode = wordList.item(wordIndex);
+        TQDomNodeList propList = wordNode.childNodes();
+        TQString wordType;
+        TQString matchCase = "No"; // Default for old (v<=3.5.3) config files with no <case/>.
+        TQString match;
+        TQString subst;
         const int propListCount = propList.count();
         for (int propIndex = 0; propIndex < propListCount; ++propIndex)
         {
-            QDomNode propNode = propList.item(propIndex);
-            QDomElement prop = propNode.toElement();
+            TQDomNode propNode = propList.item(propIndex);
+            TQDomElement prop = propNode.toElement();
             if (prop.tagName() == "type") wordType = prop.text();
 	    if (prop.tagName() == "case") matchCase = prop.text();
             if (prop.tagName() == "match") match = prop.text();
             if (prop.tagName() == "subst") subst = prop.text();
         }
         // Build Regular Expression for each word's match string.
-        QRegExp rx;
+        TQRegExp rx;
         rx.setCaseSensitive(matchCase == "Yes");
         if ( wordType == "Word" )
         {
@@ -171,13 +171,13 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString StringReplacerProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+/*virtual*/ TQString StringReplacerProc::convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId)
 {
     m_wasModified = false;
     // If language doesn't match, return input unmolested.
     if ( !m_languageCodeList.isEmpty() )
     {
-        QString languageCode = talkerCode->languageCode();
+        TQString languageCode = talkerCode->languageCode();
         // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
         //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
         if ( !m_languageCodeList.contains( languageCode ) )
@@ -197,7 +197,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
         // kdDebug() << "StringReplacerProc::convert: converting " << inputText << " if appId "
         //     << appId << " matches " << m_appIdList << endl;
         bool found = false;
-        QString appIdStr = appId;
+        TQString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
@@ -212,7 +212,7 @@ bool StringReplacerProc::init(KConfig* config, const QString& configGroup){
             return inputText;
         }
     }
-    QString newText = inputText;
+    TQString newText = inputText;
     const int listCount = m_matchList.count();
     for ( int index = 0; index < listCount; ++index )
     {

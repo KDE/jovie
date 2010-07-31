@@ -27,10 +27,10 @@
 #define _TALKERCODE_H_
 
 // Qt includes.
-#include <qstring.h>
+#include <tqstring.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
-#include <qvaluelist.h>
+#include <tqvaluelist.h>
 
 class KDE_EXPORT TalkerCode
 {
@@ -38,7 +38,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Constructor.
          */
-        TalkerCode(const QString &code=QString::null, bool normal=false);
+        TalkerCode(const TQString &code=TQString::null, bool normal=false);
         /**
          * Copy Constructor.
          */
@@ -49,46 +49,46 @@ class KDE_EXPORT TalkerCode
          */
         ~TalkerCode();
 
-        typedef QValueList<TalkerCode> TalkerCodeList;
+        typedef TQValueList<TalkerCode> TalkerCodeList;
 
         /**
          * Properties.
          */
-        QString languageCode() const;       /* lang="xx" */
-        QString countryCode() const;        /* lang="yy_xx */
-        QString voice() const;              /* name="xxx" */
-        QString gender() const;             /* gender="xxx" */
-        QString volume() const;             /* volume="xxx" */
-        QString rate() const;               /* rate="xxx" */
-        QString plugInName() const;         /* synthesizer="xxx" */
+        TQString languageCode() const;       /* lang="xx" */
+        TQString countryCode() const;        /* lang="yy_xx */
+        TQString voice() const;              /* name="xxx" */
+        TQString gender() const;             /* gender="xxx" */
+        TQString volume() const;             /* volume="xxx" */
+        TQString rate() const;               /* rate="xxx" */
+        TQString plugInName() const;         /* synthesizer="xxx" */
 
         /**
          * Returns the language code plus country code (if any).
          */
-        QString fullLanguageCode() const;
+        TQString fullLanguageCode() const;
 
-        void setLanguageCode(const QString &languageCode);
-        void setCountryCode(const QString &countryCode);
-        void setVoice(const QString &voice);
-        void setGender(const QString &gender);
-        void setVolume(const QString &volume);
-        void setRate(const QString &rate);
-        void setPlugInName(const QString plugInName);
+        void setLanguageCode(const TQString &languageCode);
+        void setCountryCode(const TQString &countryCode);
+        void setVoice(const TQString &voice);
+        void setGender(const TQString &gender);
+        void setVolume(const TQString &volume);
+        void setRate(const TQString &rate);
+        void setPlugInName(const TQString plugInName);
 
         /**
          * Sets the language code and country code (if given).
          */
-        void setFullLanguageCode(const QString &fullLanguageCode);
+        void setFullLanguageCode(const TQString &fullLanguageCode);
 
         /**
          * The Talker Code returned in XML format.
          */
-        QString getTalkerCode() const;
+        TQString getTalkerCode() const;
 
         /**
          * The Talker Code translated for display.
          */
-        QString getTranslatedDescription() const;
+        TQString getTranslatedDescription() const;
 
         /**
          * Normalizes the Talker Code by filling in defaults.
@@ -102,7 +102,7 @@ class KDE_EXPORT TalkerCode
          * @return fullLanguageCode  Language code from the talker code (including country code if any).
          * @return                   Normalized talker code.
          */
-        static QString normalizeTalkerCode(const QString &talkerCode, QString &fullLanguageCode);
+        static TQString normalizeTalkerCode(const TQString &talkerCode, TQString &fullLanguageCode);
 
         /**
          * Given a language code that might contain a country code, splits the code into
@@ -114,7 +114,7 @@ class KDE_EXPORT TalkerCode
          * If the input code begins with an asterisk, it is ignored and removed from the returned
          * languageCode.
          */
-        static void splitFullLanguageCode(const QString &lang, QString &languageCode, QString &countryCode);
+        static void splitFullLanguageCode(const TQString &lang, TQString &languageCode, TQString &countryCode);
 
         /**
          * Given a language code and plugin name, returns a normalized default talker code.
@@ -127,22 +127,22 @@ class KDE_EXPORT TalkerCode
          *   <prosody volume="medium" rate="medium"/>
          *   <kttsd synthesizer="Festival" />
          */
-        static QString defaultTalkerCode(const QString &fullLanguageCode, const QString &plugInName);
+        static TQString defaultTalkerCode(const TQString &fullLanguageCode, const TQString &plugInName);
 
         /**
          * Converts a language code plus optional country code to language description.
          */
-        static QString languageCodeToLanguage(const QString &languageCode);
+        static TQString languageCodeToLanguage(const TQString &languageCode);
 
         /**
          * These functions return translated Talker Code attributes.
          */
-        static QString translatedGender(const QString &gender);
-        static QString translatedVolume(const QString &volume);
-        static QString translatedRate(const QString &rate);
-        static QString untranslatedGender(const QString &gender);
-        static QString untranslatedVolume(const QString &volume);
-        static QString untranslatedRate(const QString &rate);
+        static TQString translatedGender(const TQString &gender);
+        static TQString translatedVolume(const TQString &volume);
+        static TQString translatedRate(const TQString &rate);
+        static TQString untranslatedGender(const TQString &gender);
+        static TQString untranslatedVolume(const TQString &volume);
+        static TQString untranslatedRate(const TQString &rate);
 
         /**
          * Given a list of parsed talker codes and a desired talker code, finds the closest
@@ -155,43 +155,43 @@ class KDE_EXPORT TalkerCode
          */
         static int findClosestMatchingTalker(
             const TalkerCodeList& talkers,
-            const QString& talker,
+            const TQString& talker,
             bool assumeDefaultLang = true);
 
         /**
          * Strips leading * from a code.
          */
-        static QString stripPrefer( const QString& code, bool& preferred);
+        static TQString stripPrefer( const TQString& code, bool& preferred);
 
         /**
         * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
         * @param name                   The translated plugin name.  From Name= line in .desktop file.
         * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        *                               QString::null if not found.
+        *                               TQString::null if not found.
         */
-        static QString TalkerNameToDesktopEntryName(const QString& name);
+        static TQString TalkerNameToDesktopEntryName(const TQString& name);
 
         /**
         * Uses KTrader to convert a DesktopEntryName into a translated Synth Plugin Name.
         * @param desktopEntryName       The DesktopEntryName.
         * @return                       The translated Name of the plugin, from Name= line in .desktop file.
         */
-        static QString TalkerDesktopEntryNameToName(const QString& desktopEntryName);
+        static TQString TalkerDesktopEntryNameToName(const TQString& desktopEntryName);
 
     private:
         /**
          * Given a talker code, parses out the attributes.
          * @param talkerCode       The talker code.
          */
-        void parseTalkerCode(const QString &talkerCode);
+        void parseTalkerCode(const TQString &talkerCode);
 
-        QString m_languageCode;       /* lang="xx" */
-        QString m_countryCode;        /* lang="yy_xx */
-        QString m_voice;              /* name="xxx" */
-        QString m_gender;             /* gender="xxx" */
-        QString m_volume;             /* volume="xxx" */
-        QString m_rate;               /* rate="xxx" */
-        QString m_plugInName;         /* synthesizer="xxx" */
+        TQString m_languageCode;       /* lang="xx" */
+        TQString m_countryCode;        /* lang="yy_xx */
+        TQString m_voice;              /* name="xxx" */
+        TQString m_gender;             /* gender="xxx" */
+        TQString m_volume;             /* volume="xxx" */
+        TQString m_rate;               /* rate="xxx" */
+        TQString m_plugInName;         /* synthesizer="xxx" */
 };
 
 #endif      // _TALKERCODE_H_

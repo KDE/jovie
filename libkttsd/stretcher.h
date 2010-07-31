@@ -38,7 +38,7 @@ class KDE_EXPORT Stretcher : public QObject{
         /**
          * Constructor.
          */
-        Stretcher(QObject *parent = 0, const char *name = 0);
+        Stretcher(TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor.
@@ -57,7 +57,7 @@ class KDE_EXPORT Stretcher : public QObject{
          * @param outFilename       Name of output audio file.
          * @param stretchFactor     Amount to stretch.  2.0 is twice as slow.  0.5 is twice as fast.
          */
-        bool stretch(const QString &inFilename, const QString &outFilename, float stretchFactor);
+        bool stretch(const TQString &inFilename, const TQString &outFilename, float stretchFactor);
 
         /**
         * Returns the state of the Stretcher.
@@ -67,7 +67,7 @@ class KDE_EXPORT Stretcher : public QObject{
         /**
          * Returns the output filename (as given in call to stretch).
          */
-        QString getOutFilename();
+        TQString getOutFilename();
 
         /**
         * Acknowledges the finished stretching.
@@ -91,7 +91,7 @@ class KDE_EXPORT Stretcher : public QObject{
         KProcess* m_stretchProc;
 
         // Output file name.
-        QString m_outFilename;
+        TQString m_outFilename;
 };
 
 #endif      // _STRETCHER_H_

@@ -34,8 +34,8 @@
 /**
  * Constructor.
  */
-Stretcher::Stretcher(QObject *parent, const char *name) :
-    QObject(parent, name)
+Stretcher::Stretcher(TQObject *parent, const char *name) :
+    TQObject(parent, name)
 {
     m_state = 0;
     m_stretchProc = 0;
@@ -56,15 +56,15 @@ Stretcher::~Stretcher()
  * @param stretchFactor     Amount to stretch.  2.0 is twice as slow.  0.5 is twice as fast.
  * @return                  False if an error occurs.
  */
-bool Stretcher::stretch(const QString &inFilename, const QString &outFilename, float stretchFactor)
+bool Stretcher::stretch(const TQString &inFilename, const TQString &outFilename, float stretchFactor)
 {
     if (m_stretchProc) return false;
     m_outFilename = outFilename;
     m_stretchProc = new KProcess;
-    QString stretchStr = QString("%1").arg(stretchFactor, 0, 'f', 3);
+    TQString stretchStr = TQString("%1").arg(stretchFactor, 0, 'f', 3);
     *m_stretchProc << "sox" << inFilename << outFilename << "stretch" << stretchStr;
-    connect(m_stretchProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
+    connect(m_stretchProc, TQT_SIGNAL(processExited(KProcess*)),
+        this, TQT_SLOT(slotProcessExited(KProcess*)));
     if (!m_stretchProc->start(KProcess::NotifyOnExit, KProcess::NoCommunication))
     {
         kdDebug() << "Stretcher::stretch: Error starting audio stretcher process.  Is sox installed?" << endl;
@@ -90,7 +90,7 @@ int Stretcher::getState() { return m_state; }
 /**
  * Returns the output filename (as given in call to stretch).
  */
-QString Stretcher::getOutFilename() { return m_outFilename; }
+TQString Stretcher::getOutFilename() { return m_outFilename; }
 
 /**
  * Acknowledges the finished stretching.

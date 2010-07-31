@@ -36,7 +36,7 @@ public:
     /**
      * Constructor.
      */
-    TalkerChooserProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
+    TalkerChooserProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.
@@ -52,7 +52,7 @@ public:
      * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
      * separate configuration files of their own.
      */
-    virtual bool init(KConfig *config, const QString &configGroup);
+    virtual bool init(KConfig *config, const TQString &configGroup);
 
      /**
       * Returns True if the plugin supports asynchronous processing,
@@ -75,12 +75,12 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual TQString convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
 private:
 
-    QString         m_re;
-    QStringList     m_appIdList;
+    TQString         m_re;
+    TQStringList     m_appIdList;
     TalkerCode      m_chosenTalkerCode;
 };
 

@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qimage.h>
+#include <tqimage.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -81,7 +81,7 @@ int main (int argc, char *argv[])
     KUniqueApplication app;
 
 #if KDE_VERSION >= KDE_MAKE_VERSION (3,3,90)
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Panel);
+    TQPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Panel);
     aboutdata.setProgramLogo(icon.convertToImage());
 #endif
 
@@ -135,11 +135,11 @@ int main (int argc, char *argv[])
 
 /*  KttsToolTip class */
 
-KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
+KttsToolTip::KttsToolTip ( TQWidget* parent ) : TQToolTip(parent)
 {
 }
 
-/*virtual*/ void KttsToolTip::maybeTip ( const QPoint & p )
+/*virtual*/ void KttsToolTip::maybeTip ( const TQPoint & p )
 {
     Q_UNUSED(p);
 
@@ -148,11 +148,11 @@ KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
 
     KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
 
-    QRect r(kttsMgrTray->geometry());
+    TQRect r(kttsMgrTray->geometry());
     if ( !r.isValid() )
         return;
 
-    QString status = "<qt><b>KTTSMgr</b> - ";
+    TQString status = "<qt><b>KTTSMgr</b> - ";
     status += i18n("<qt>Text-to-Speech Manager");
     status += "<br/><br/>";
     status += kttsMgrTray->getStatus();
@@ -163,15 +163,15 @@ KttsToolTip::KttsToolTip ( QWidget* parent ) : QToolTip(parent)
 
 /*  KttsMgrTray class */
 
-KttsMgrTray::KttsMgrTray(QWidget *parent):
+KttsMgrTray::KttsMgrTray(TQWidget *parent):
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kkttsmgr_kspeechsink"),
     KSystemTray(parent, "kttsmgrsystemtray")
 {
-    QPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
+    TQPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
 
-    // QToolTip::add(this, i18n("Text-to-speech manager"));
+    // TQToolTip::add(this, i18n("Text-to-speech manager"));
     m_toolTip = new KttsToolTip(this);
 
     int id;
@@ -179,25 +179,25 @@ KttsMgrTray::KttsMgrTray(QWidget *parent):
     if (id != -1) contextMenu()->changeTitle(id, icon, "KTTSMgr");
 
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("klipper", KIcon::Small),
-        i18n("&Speak Clipboard Contents"), this, SLOT(speakClipboardSelected()));
+        i18n("&Speak Clipboard Contents"), this, TQT_SLOT(speakClipboardSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("stop", KIcon::Small),
-        i18n("&Hold"), this, SLOT(holdSelected()));
+        i18n("&Hold"), this, TQT_SLOT(holdSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("exec", KIcon::Small),
-        i18n("Resume"), this, SLOT(resumeSelected()));
+        i18n("Resume"), this, TQT_SLOT(resumeSelected()));
     id = contextMenu()->insertSeparator();
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("contents", KIcon::Small),
-        i18n("KTTS &Handbook"), this, SLOT(helpSelected()));
+        i18n("KTTS &Handbook"), this, TQT_SLOT(helpSelected()));
     id = contextMenu()->insertItem (KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small),
-        i18n("&About KTTSMgr"), this, SLOT(aboutSelected()));
+        i18n("&About KTTSMgr"), this, TQT_SLOT(aboutSelected()));
 
-    connect(this, SIGNAL(quitSelected()), this, SLOT(quitSelected()));
+    connect(this, TQT_SIGNAL(quitSelected()), this, TQT_SLOT(quitSelected()));
     // If --autoexit option given, exit when speaking stops.
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("autoexit"))
     {
         connectDCOPSignal("kttsd", "KSpeech",
-            "textFinished(QCString,uint)",
-            "textFinished(QCString,uint)",
+            "textFinished(TQCString,uint)",
+            "textFinished(TQCString,uint)",
             false);
         // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
         parent->installEventFilter(this);
@@ -209,15 +209,15 @@ KttsMgrTray::~KttsMgrTray()
     delete m_toolTip;
 }
 
-void KttsMgrTray::textFinished(const QCString& /*appId*/, uint /*jobNum*/)
+void KttsMgrTray::textFinished(const TQCString& /*appId*/, uint /*jobNum*/)
 {
     // kdDebug() << "KttsMgrTray::textFinished: running" << endl;
     exitWhenFinishedSpeaking();
 }
 
-/*virtual*/ bool KttsMgrTray::eventFilter( QObject* /*o*/, QEvent* e )
+/*virtual*/ bool KttsMgrTray::eventFilter( TQObject* /*o*/, TQEvent* e )
 {
-    if ( e->type() == QEvent::Hide ) exitWhenFinishedSpeaking();
+    if ( e->type() == TQEvent::Hide ) exitWhenFinishedSpeaking();
     return false;
 }
 
@@ -225,8 +225,8 @@ void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kdDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
     if ( parentWidget()->isShown() ) return;
-    QString jobNums = getTextJobNumbers();
-    QStringList jobNumsList = QStringList::split(jobNums, ",");
+    TQString jobNums = getTextJobNumbers();
+    TQStringList jobNumsList = TQStringList::split(jobNums, ",");
     uint jobNumsListCount = jobNumsList.count();
     // Since there can only be 2 Finished jobs at a time, more than 2 jobs means at least
     // one job is not Finished.
@@ -244,7 +244,7 @@ void KttsMgrTray::exitWhenFinishedSpeaking()
 * @param state          KTTSD job state
 * @return               Display string for the state.
 */
-QString KttsMgrTray::stateToStr(int state)
+TQString KttsMgrTray::stateToStr(int state)
 {
     switch( state )
     {
@@ -257,11 +257,11 @@ QString KttsMgrTray::stateToStr(int state)
     }
 }
 
-QString KttsMgrTray::getStatus()
+TQString KttsMgrTray::getStatus()
 {
     if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
     uint jobCount = getTextJobCount();
-    QString status = i18n("1 job", "%n jobs", jobCount);
+    TQString status = i18n("1 job", "%n jobs", jobCount);
     if (jobCount > 0)
     {
         uint job = getCurrentTextJob();
@@ -283,8 +283,8 @@ void KttsMgrTray::speakClipboardSelected()
 {
     if (!isKttsdRunning())
     {
-        QString error;
-        if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error) != 0)
+        TQString error;
+        if (KApplication::startServiceByDesktopName("kttsd", TQStringList(), &error) != 0)
             kdError() << "Starting KTTSD failed with message " << error << endl;
     }
     speakClipboard();
@@ -298,7 +298,7 @@ void KttsMgrTray::aboutSelected()
 
 void KttsMgrTray::helpSelected()
 {
-    kapp->invokeHelp(QString::null,"kttsd");
+    kapp->invokeHelp(TQString::null,"kttsd");
 }
 
 void KttsMgrTray::quitSelected()

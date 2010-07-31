@@ -11,7 +11,7 @@
 void VoiceFileWidget::genderButton_clicked()
 {
     HadifixProc::VoiceGender gender;
-    QString details;
+    TQString details;
     gender = HadifixProc::determineGender(mbrola, voiceFileURL->url(), &details);
     
     if (gender == HadifixProc::MaleGender) {

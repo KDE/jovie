@@ -37,8 +37,8 @@ public:
     * @param name               Inherited KDialog parameter.
     * @param initEventSrc       Event source to start with.
     */
-    SelectEvent(QWidget* parent = 0, const char* name = 0, WFlags fl = 0,
-        const QString& initEventSrc = QString::null );
+    SelectEvent(TQWidget* parent = 0, const char* name = 0, WFlags fl = 0,
+        const TQString& initEventSrc = TQString::null );
 
     /**
     * Destructor.
@@ -48,12 +48,12 @@ public:
     /**
      * Returns the chosen event source (app name).
      */
-    QString getEventSrc();
+    TQString getEventSrc();
 
     /**
      * Returns the chosen event.
      */
-    QString getEvent();
+    TQString getEvent();
 
 private slots:
     void slotEventSrcComboBox_activated(int index);
@@ -61,9 +61,9 @@ private slots:
 private:
     // returns e.g. "kwin/eventsrc" from a given path
     // "/opt/kde3/share/apps/kwin/eventsrc"
-    QString makeRelative( const QString& fullPath );
+    TQString makeRelative( const TQString& fullPath );
 
-    QStringList m_eventSrcNames;
+    TQStringList m_eventSrcNames;
 };
 
 #endif              // _SELECTEVENT_H_

@@ -31,8 +31,8 @@
 /**
  * Constructor.
  */
-KttsFilterProc::KttsFilterProc( QObject *parent, const char *name) :
-        QObject(parent, name) 
+KttsFilterProc::KttsFilterProc( TQObject *parent, const char *name) :
+        TQObject(parent, name) 
 {
     // kdDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
 }
@@ -54,7 +54,7 @@ KttsFilterProc::~KttsFilterProc()
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
+bool KttsFilterProc::init(KConfig* /*config*/, const TQString& /*configGroup*/){
     // kdDebug() << "PlugInProc::init: Running" << endl;
     return false;
 }
@@ -87,8 +87,8 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString KttsFilterProc::convert(const QString& inputText, TalkerCode* /*talkerCode*/,
-    const QCString& /*appId*/)
+/*virtual*/ TQString KttsFilterProc::convert(const TQString& inputText, TalkerCode* /*talkerCode*/,
+    const TQCString& /*appId*/)
 {
     return inputText;
 }
@@ -107,8 +107,8 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  * program may then call @ref getOutput to retrieve converted text.  Calling
  * program must call @ref ackFinished to acknowledge the conversion.
  */
-/*virtual*/ bool KttsFilterProc::asyncConvert(const QString& /*inputText*/,
-    TalkerCode* /*talkerCode*/, const QCString& /*appId*/) { return false; }
+/*virtual*/ bool KttsFilterProc::asyncConvert(const TQString& /*inputText*/,
+    TalkerCode* /*talkerCode*/, const TQCString& /*appId*/) { return false; }
 
 /**
  * Waits for a previous call to asyncConvert to finish.
@@ -123,7 +123,7 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
 /**
  * Returns the filtered output.
  */
-/*virtual*/ QString KttsFilterProc::getOutput() { return QString::null; }
+/*virtual*/ TQString KttsFilterProc::getOutput() { return TQString::null; }
 
 /**
  * Acknowledges the finished filtering.
@@ -148,6 +148,6 @@ bool KttsFilterProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
  *
  * @param re            The sentence delimiter regular expression.
  */
-/*virtual*/ void KttsFilterProc::setSbRegExp(const QString& /*re*/) { }
+/*virtual*/ void KttsFilterProc::setSbRegExp(const TQString& /*re*/) { }
 
 #include "filterproc.moc"

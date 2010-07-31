@@ -46,11 +46,11 @@
 #define _SBDPROC_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qthread.h>
-#include <qvaluestack.h>
-#include <qevent.h>
+#include <tqobject.h>
+#include <tqstringlist.h>
+#include <tqthread.h>
+#include <tqvaluestack.h>
+#include <tqevent.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -60,7 +60,7 @@ class KConfig;
 class QDomElement;
 class QDomNode;
 
-class SbdThread: public QObject, public QThread
+class SbdThread: public TQObject, public QThread
 {
     Q_OBJECT
 
@@ -68,7 +68,7 @@ class SbdThread: public QObject, public QThread
         /**
          * Constructor.
          */
-        SbdThread( QObject *parent = 0, const char *name = 0);
+        SbdThread( TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor.
@@ -78,8 +78,8 @@ class SbdThread: public QObject, public QThread
         /**
          * Get/Set text being processed.
          */
-        void setText( const QString& text );
-        QString text();
+        void setText( const TQString& text );
+        TQString text();
 
         /**
          * Set/Get TalkerCode.
@@ -93,14 +93,14 @@ class SbdThread: public QObject, public QThread
          *
          * @param re            The sentence delimiter regular expression.
          */
-        void setSbRegExp( const QString& re );
+        void setSbRegExp( const TQString& re );
 
         /**
          * The configured Sentence Boundary Regular Expression.
          *
          * @param re            The sentence delimiter regular expression.
          */
-        void setConfiguredSbRegExp( const QString& re );
+        void setConfiguredSbRegExp( const TQString& re );
 
         /**
          * The configured Sentence Boundary that replaces SB regular expression.
@@ -108,7 +108,7 @@ class SbdThread: public QObject, public QThread
          * @param sb            The sentence boundary replacement.
          *
          */
-        void setConfiguredSentenceBoundary( const QString& sb );
+        void setConfiguredSentenceBoundary( const TQString& sb );
 
         /**
          * Did this filter do anything?  If the filter returns the input as output
@@ -122,7 +122,7 @@ class SbdThread: public QObject, public QThread
 
     protected:
         virtual void run();
-        virtual bool event ( QEvent * e );
+        virtual bool event ( TQEvent * e );
 
     private:
         enum TextType {
@@ -143,94 +143,94 @@ class SbdThread: public QObject, public QThread
 
         // Speak Element.
         struct SpeakElem {
-            QString lang;               // xml:lang="en".
+            TQString lang;               // xml:lang="en".
         };
 
         // Voice Element.
         struct VoiceElem {
-            QString lang;               // xml:lang="en".
-            QString gender;             // "male", "female", or "neutral".
+            TQString lang;               // xml:lang="en".
+            TQString gender;             // "male", "female", or "neutral".
             uint age;                   // Age in years.
-            QString name;               // Synth-specific voice name.
-            QString variant;            // Ignored.
+            TQString name;               // Synth-specific voice name.
+            TQString variant;            // Ignored.
         };
 
         // Prosody Element.
         struct ProsodyElem {
-            QString pitch;              // "x-low", "low", "medium", "high", "x-high", "default".
-            QString contour;            // Pitch contour (ignored).
-            QString range;              // "x-low", "low", "medium", "high", "x-high", "default".
-            QString rate;               // "x-slow", "slow", "medium", "fast", "x-fast", "default".
-            QString duration;           // Ignored.
-            QString volume;             // "silent", "x-soft", "soft", "medium", "load", "x-load", "default".
+            TQString pitch;              // "x-low", "low", "medium", "high", "x-high", "default".
+            TQString contour;            // Pitch contour (ignored).
+            TQString range;              // "x-low", "low", "medium", "high", "x-high", "default".
+            TQString rate;               // "x-slow", "slow", "medium", "fast", "x-fast", "default".
+            TQString duration;           // Ignored.
+            TQString volume;             // "silent", "x-soft", "soft", "medium", "load", "x-load", "default".
         };
 
         // Emphasis Element.
         struct EmphasisElem {
-            QString level;              // "strong", "moderate", "none" and "reduced"
+            TQString level;              // "strong", "moderate", "none" and "reduced"
         };
 
         // Break Element.
         struct BreakElem {
-            QString strength;           // "x-weak", "weak", "medium" (default value), "strong",
+            TQString strength;           // "x-weak", "weak", "medium" (default value), "strong",
                                         // or "x-strong", "none"
-            QString time;               // Ignored.
+            TQString time;               // Ignored.
         };
 
         // Paragraph and Sentence Elements.
         struct PSElem {
-            QString lang;               // xml:lang="en".
+            TQString lang;               // xml:lang="en".
         };
 
         // Given a tag name, returns SsmlElemType.
-        SsmlElemType tagToSsmlElemType(const QString tagName);
+        SsmlElemType tagToSsmlElemType(const TQString tagName);
         // Parses an SSML element, pushing current settings onto the context stack.
-        void pushSsmlElem( SsmlElemType et, const QDomElement& elem );
+        void pushSsmlElem( SsmlElemType et, const TQDomElement& elem );
         // Given an attribute name and value, constructs an XML representation of the attribute,
         // i.e., name="value".
-        QString makeAttr( const QString& name, const QString& value );
+        TQString makeAttr( const TQString& name, const TQString& value );
         // Returns an XML representation of an SSML tag from the top of the context stack.
-        QString makeSsmlElem( SsmlElemType et );
+        TQString makeSsmlElem( SsmlElemType et );
         // Pops element from the indicated context stack.
         void popSsmlElem( SsmlElemType et );
-        QString makeBreakElem( const QDomElement& e );
+        TQString makeBreakElem( const TQDomElement& e );
         // Converts a text fragment into a CDATA section.
-        QString makeCDATA( const QString& text );
+        TQString makeCDATA( const TQString& text );
         // Returns an XML representation of an utterance node consisting of voice,
         // prosody, and emphasis elements.
-        QString makeSentence( const QString& text );
+        TQString makeSentence( const TQString& text );
         // Starts a sentence by returning a speak tag.
-        QString startSentence();
+        TQString startSentence();
         // Ends a sentence and appends a Tab.
-        QString endSentence();
+        TQString endSentence();
         // Parses a node of the SSML tree and recursively parses its children.
         // Returns the filtered text with each sentence a complete ssml tree.
-        QString parseSsmlNode( QDomNode& n, const QString& re );
+        TQString parseSsmlNode( TQDomNode& n, const TQString& re );
 
         // Parses Ssml.
-        QString parseSsml( const QString& inputText, const QString& re );
+        TQString parseSsml( const TQString& inputText, const TQString& re );
         // Parses code.  Each newline is converted into a tab character (\t).
-        QString parseCode( const QString& inputText );
+        TQString parseCode( const TQString& inputText );
         // Parses plain text.
-        QString parsePlainText( const QString& inputText, const QString& re );
+        TQString parsePlainText( const TQString& inputText, const TQString& re );
 
         // Context stacks.
-        QValueStack<SpeakElem> m_speakStack;
-        QValueStack<VoiceElem> m_voiceStack;
-        QValueStack<ProsodyElem> m_prosodyStack;
-        QValueStack<EmphasisElem> m_emphasisStack;
-        QValueStack<PSElem> m_psStack;
+        TQValueStack<SpeakElem> m_speakStack;
+        TQValueStack<VoiceElem> m_voiceStack;
+        TQValueStack<ProsodyElem> m_prosodyStack;
+        TQValueStack<EmphasisElem> m_emphasisStack;
+        TQValueStack<PSElem> m_psStack;
 
         // The text being processed.
-        QString m_text;
+        TQString m_text;
         // Talker Code.
         TalkerCode* m_talkerCode;
         // Configured default Sentence Delimiter regular expression.
-        QString m_configuredRe;
+        TQString m_configuredRe;
         // Configured Sentence Boundary replacement expression.
-        QString m_configuredSentenceBoundary;
+        TQString m_configuredSentenceBoundary;
         // Application-specified Sentence Delimiter regular expression (if any).
-        QString m_re;
+        TQString m_re;
         // False if input was not modified.
         bool m_wasModified;
         // True when a sentence has been started.
@@ -245,7 +245,7 @@ class SbdProc : virtual public KttsFilterProc
         /**
          * Constructor.
          */
-        SbdProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
+        SbdProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
          * Destructor.
@@ -261,7 +261,7 @@ class SbdProc : virtual public KttsFilterProc
          * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
          * separate configuration files of their own.
          */
-        virtual bool init( KConfig *config, const QString &configGroup );
+        virtual bool init( KConfig *config, const TQString &configGroup );
 
         /**
          * Returns True if this filter is a Sentence Boundary Detector.
@@ -291,7 +291,7 @@ class SbdProc : virtual public KttsFilterProc
          * @param appId             The DCOP appId of the application that queued the text.
          *                          Also useful for hints about how to do the filtering.
          */
-        virtual QString convert( const QString& inputText, TalkerCode* talkerCode, const QCString& appId );
+        virtual TQString convert( const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId );
 
         /**
          * Convert input.  Runs asynchronously.
@@ -307,7 +307,7 @@ class SbdProc : virtual public KttsFilterProc
          * program may then call @ref getOutput to retrieve converted text.  Calling
          * program must call @ref ackFinished to acknowledge the conversion.
          */
-        virtual bool asyncConvert( const QString& inputText, TalkerCode* talkerCode, const QCString& appId );
+        virtual bool asyncConvert( const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId );
 
         /**
          * Waits for a previous call to asyncConvert to finish.
@@ -322,7 +322,7 @@ class SbdProc : virtual public KttsFilterProc
         /**
          * Returns the filtered output.
          */
-        virtual QString getOutput();
+        virtual TQString getOutput();
 
         /**
          * Acknowledges the finished filtering.
@@ -344,7 +344,7 @@ class SbdProc : virtual public KttsFilterProc
         /**
          * Set Sentence Boundary Regular Expression.
          */
-        virtual void setSbRegExp( const QString& re );
+        virtual void setSbRegExp( const TQString& re );
 
     private slots:
         // Received when SBD Thread finishes.
@@ -352,15 +352,15 @@ class SbdProc : virtual public KttsFilterProc
 
     private:
         // If not empty, apply filters only to apps using talkers speaking these language codes.
-        QStringList m_languageCodeList;
+        TQStringList m_languageCodeList;
         // If not empty, apply filter only to apps containing this string.
-        QStringList m_appIdList;
+        TQStringList m_appIdList;
         // SBD Thread Object.
         SbdThread* m_sbdThread;
         // State.
         int m_state;
         // Configured default Sentence Delimiter regular expression.
-        QString m_configuredRe;
+        TQString m_configuredRe;
 };
 
 #endif      // _SBDPROC_H_

@@ -26,10 +26,10 @@
 #include <math.h>
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-#include <qfile.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqtextcodec.h>
+#include <tqfile.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -43,7 +43,7 @@
 #include "eposproc.moc"
 
 /** Constructor */
-EposProc::EposProc( QObject* parent, const char* name, const QStringList& ) : 
+EposProc::EposProc( TQObject* parent, const char* name, const TQStringList& ) : 
     PlugInProc( parent, name ){
     kdDebug() << "EposProc::EposProc: Running" << endl;
     m_state = psIdle;
@@ -64,7 +64,7 @@ EposProc::~EposProc(){
 }
 
 /** Initialize the speech */
-bool EposProc::init(KConfig* config, const QString& configGroup)
+bool EposProc::init(KConfig* config, const TQString& configGroup)
 {
     // kdDebug() << "EposProc::init: Running" << endl;
     // kdDebug() << "Initializing plug in: Epos" << endl;
@@ -72,15 +72,15 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
     config->setGroup(configGroup);
     m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readEntry("EposClientExePath", "say");
-    m_eposLanguage = config->readEntry("Language", QString::null);
+    m_eposLanguage = config->readEntry("Language", TQString::null);
     m_time = config->readNumEntry("time", 100);
     m_pitch = config->readNumEntry("pitch", 100);
-    m_eposServerOptions = config->readEntry("EposServerOptions", QString::null);
-    m_eposClientOptions = config->readEntry("EposClientOptions", QString::null);
+    m_eposServerOptions = config->readEntry("EposServerOptions", TQString::null);
+    m_eposClientOptions = config->readEntry("EposClientOptions", TQString::null);
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
     kdDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
 
-    QString codecString = config->readEntry("Codec", "Local");
+    TQString codecString = config->readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
     // Start the Epos server if not already started.
     if (!m_eposServerProc)
@@ -89,10 +89,10 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
         *m_eposServerProc << m_eposServerExePath;
         if (!m_eposServerOptions.isEmpty())
             *m_eposServerProc << m_eposServerOptions;
-        connect(m_eposServerProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        connect(m_eposServerProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_eposServerProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
         m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
     }
 
@@ -107,9 +107,9 @@ bool EposProc::init(KConfig* config, const QString& configGroup)
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void EposProc::sayText(const QString &text)
+void EposProc::sayText(const TQString &text)
 {
-    synth(text, QString::null, m_eposServerExePath, m_eposClientExePath,
+    synth(text, TQString::null, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
         m_codec, m_eposLanguage, m_time, m_pitch);
 }
@@ -124,7 +124,7 @@ void EposProc::sayText(const QString &text)
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void EposProc::synthText(const QString& text, const QString& suggestedFilename)
+void EposProc::synthText(const TQString& text, const TQString& suggestedFilename)
 {
     synth(text, suggestedFilename, m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
@@ -147,18 +147,18 @@ void EposProc::synthText(const QString& text, const QString& suggestedFilename)
 * @param pitch                   Pitch persentage.  50 to 200.
 */
 void EposProc::synth(
-    const QString &text,
-    const QString &suggestedFilename,
-    const QString& eposServerExePath,
-    const QString& eposClientExePath,
-    const QString& eposServerOptions,
-    const QString& eposClientOptions,
-    QTextCodec *codec,
-    const QString& eposLanguage,
+    const TQString &text,
+    const TQString &suggestedFilename,
+    const TQString& eposServerExePath,
+    const TQString& eposClientExePath,
+    const TQString& eposServerOptions,
+    const TQString& eposClientOptions,
+    TQTextCodec *codec,
+    const TQString& eposLanguage,
     int time,
     int pitch)
 {
-    // kdDebug() << "Running: EposProc::synth(const QString &text)" << endl;
+    // kdDebug() << "Running: EposProc::synth(const TQString &text)" << endl;
 
     if (m_eposProc)
     {
@@ -173,18 +173,18 @@ void EposProc::synth(
         *m_eposServerProc << eposServerExePath;
         if (!eposServerOptions.isEmpty())
             *m_eposServerProc << eposServerOptions;
-        connect(m_eposServerProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_eposServerProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        connect(m_eposServerProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_eposServerProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
         m_eposServerProc->start(KProcess::DontCare, KProcess::AllOutput);
         kdDebug() << "EposProc:: Epos server process started" << endl;
     }
 
 //     // Encode the text.
 //     // 1.a) encode the text
-//     m_encText = QCString();
-//     QTextStream ts (m_encText, IO_WriteOnly);
+//     m_encText = TQCString();
+//     TQTextStream ts (m_encText, IO_WriteOnly);
 //     ts.setCodec(codec);
 //     ts << text;
 //     ts << endl; // Some synths need this, eg. flite.
@@ -197,7 +197,7 @@ void EposProc::synth(
     // kdDebug()<< "EposProc::synth: Creating Epos object" << endl;
     m_eposProc = new KProcess;
     m_eposProc->setUseShell(true);
-    QString languageCode;
+    TQString languageCode;
     if (eposLanguage == "czech")
         languageCode == "cz";
     else if (eposLanguage == "slovak")
@@ -210,7 +210,7 @@ void EposProc::synth(
     *m_eposProc << eposClientExePath;
     // Language.
     if (!eposLanguage.isEmpty())
-        *m_eposProc << QString("--language=%1").arg(eposLanguage);
+        *m_eposProc << TQString("--language=%1").arg(eposLanguage);
     // Rate (speed).
     // Map 50% to 200% onto 0 to 1000.
     // slider = alpha * (log(percent)-log(50))
@@ -221,10 +221,10 @@ void EposProc::synth(
     slider = slider - 500;
     // Map -500 to 500 onto 45 to -45 then shift to 130 to 40 (85 midpoint).
     float stretchValue = (-float(slider) * 45.0 / 500.0) + 85.0;
-    QString timeMsg = QString("--init_t=%1").arg(stretchValue, 0, 'f', 3);
+    TQString timeMsg = TQString("--init_t=%1").arg(stretchValue, 0, 'f', 3);
     *m_eposProc << timeMsg;
     // Pitch.  Map 50% to 200% onto 50 to 200.  easy.
-    QString pitchMsg = QString("--init_f=%1").arg(pitch);
+    TQString pitchMsg = TQString("--init_f=%1").arg(pitch);
     *m_eposProc << pitchMsg;
     // Output file.
     if (!suggestedFilename.isEmpty()) 
@@ -234,14 +234,14 @@ void EposProc::synth(
     *m_eposProc << "-";   // Read from StdIn.
     if (!suggestedFilename.isEmpty()) 
         *m_eposProc << " >" + suggestedFilename;
-    connect(m_eposProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_eposProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_eposProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_eposProc, SIGNAL(wroteStdin(KProcess*)),
-        this, SLOT(slotWroteStdin(KProcess* )));
+    connect(m_eposProc, TQT_SIGNAL(processExited(KProcess*)),
+        this, TQT_SLOT(slotProcessExited(KProcess*)));
+    connect(m_eposProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+        this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(m_eposProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+        this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    connect(m_eposProc, TQT_SIGNAL(wroteStdin(KProcess*)),
+        this, TQT_SLOT(slotWroteStdin(KProcess* )));
     if (suggestedFilename.isEmpty())
         m_state = psSaying;
     else
@@ -270,7 +270,7 @@ void EposProc::synth(
 *
 * The plugin must not re-use the filename.
 */
-QString EposProc::getFilename()
+TQString EposProc::getFilename()
 {
     kdDebug() << "EposProc::getFilename: returning " << m_synthFilename << endl;
     return m_synthFilename;
@@ -326,13 +326,13 @@ void EposProc::slotProcessExited(KProcess*)
 
 void EposProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "EposProc::slotReceivedStdout: Received output from Epos: " << buf << endl;
 }
 
 void EposProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "EposProc::slotReceivedStderr: Received error from Epos: " << buf << endl;
 }
 
@@ -340,7 +340,7 @@ void EposProc::slotWroteStdin(KProcess*)
 {
     // kdDebug() << "EposProc::slotWroteStdin: closing Stdin" << endl;
     m_eposProc->closeStdin();
-    m_encText = QCString();
+    m_encText = TQCString();
 }
 
 /**
@@ -365,7 +365,7 @@ void EposProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename = TQString::null;
     }
 }
 

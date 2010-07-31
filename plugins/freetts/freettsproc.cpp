@@ -15,9 +15,9 @@
  *																					 *
  ***************************************************************************/
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qfileinfo.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqfileinfo.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -27,7 +27,7 @@
 #include "freettsproc.h" 
 
 /** Constructor */
-FreeTTSProc::FreeTTSProc( QObject* parent, const char* name, const QStringList& /*args*/) : 
+FreeTTSProc::FreeTTSProc( TQObject* parent, const char* name, const TQStringList& /*args*/) : 
 	PlugInProc( parent, name ) {
 	kdDebug() << "Running: FreeTTSProc::FreeTTSProc" << endl;
 	m_state = psIdle;
@@ -45,7 +45,7 @@ FreeTTSProc::~FreeTTSProc() {
 }
 
 /** Initializate the speech */
-bool FreeTTSProc::init(KConfig *config, const QString &configGroup) {
+bool FreeTTSProc::init(KConfig *config, const TQString &configGroup) {
 	kdDebug() << "Running: FreeTTSProc::init()" << endl;
 	kdDebug() << "Initializing plug in: FreeTTS" << endl;
 	config->setGroup(configGroup);
@@ -60,8 +60,8 @@ bool FreeTTSProc::init(KConfig *config, const QString &configGroup) {
  *
  * If the plugin supports asynchronous operation, it should return immediately.
  */
-void FreeTTSProc::sayText(const QString &text) {
-	synth(text, QString::null, m_freettsJarPath);
+void FreeTTSProc::sayText(const TQString &text) {
+	synth(text, TQString::null, m_freettsJarPath);
 }
 
 /**
@@ -74,24 +74,24 @@ void FreeTTSProc::sayText(const QString &text) {
  *
  * If the plugin supports asynchronous operation, it should return immediately.
  */
-void FreeTTSProc::synthText(const QString& text, const QString& suggestedFilename) {
+void FreeTTSProc::synthText(const TQString& text, const TQString& suggestedFilename) {
 	kdDebug() << "Running: FreeTTSProc::synthText" << endl;
 	synth(text, suggestedFilename, m_freettsJarPath);
 }
 
-// A little helper function because KDE 3.2 kdDebug() does not support QValueList<QCString>.
-QStringList argsToQStringList(const QValueList<QCString> list)
+// A little helper function because KDE 3.2 kdDebug() does not support TQValueList<TQCString>.
+TQStringList argsToQStringList(const TQValueList<TQCString> list)
 {
-    QStringList newList;
-    QValueList<QCString>::ConstIterator it = list.begin();
+    TQStringList newList;
+    TQValueList<TQCString>::ConstIterator it = list.begin();
     for ( ; it != list.end(); ++it ) newList.append(*it);
     return newList;
 }
 
 void FreeTTSProc::synth(
-	const QString &text,
-	const QString &synthFilename,
-	const QString& freettsJarPath) {
+	const TQString &text,
+	const TQString &synthFilename,
+	const TQString& freettsJarPath) {
     
 	kdDebug() << "Running: FreeTTSProc::synth" << endl;
 
@@ -103,21 +103,21 @@ void FreeTTSProc::synth(
 	}
 	
 	m_freettsProc = new KProcess;
-	connect(m_freettsProc, SIGNAL(processExited(KProcess*)),
-		   this, SLOT(slotProcessExited(KProcess*)));
-	connect(m_freettsProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-		   this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-	connect(m_freettsProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-		   this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-	connect(m_freettsProc, SIGNAL(wroteStdin(KProcess*)),
-		   this, SLOT(slotWroteStdin(KProcess* )));
+	connect(m_freettsProc, TQT_SIGNAL(processExited(KProcess*)),
+		   this, TQT_SLOT(slotProcessExited(KProcess*)));
+	connect(m_freettsProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+		   this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+	connect(m_freettsProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+		   this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
+	connect(m_freettsProc, TQT_SIGNAL(wroteStdin(KProcess*)),
+		   this, TQT_SLOT(slotWroteStdin(KProcess* )));
 	if (synthFilename.isNull())
 		m_state = psSaying;
 	else
 		m_state = psSynthing;
 
 	
-	QString saidText = text;
+	TQString saidText = text;
 	saidText += "\n";
 	
 	/// As freetts.jar doesn't seem to like being called from an absolute path, 
@@ -125,8 +125,8 @@ void FreeTTSProc::synth(
 	/// KProcess::setWorkingDirectory()
 	/// We could just strip off 11 characters from the end of the path to freetts.jar, but thats
 	/// not exactly very portable...
-	QString filename = QFileInfo(freettsJarPath).baseName().append(QString(".").append(QFileInfo(freettsJarPath).extension()));
-	QString freettsJarDir = freettsJarPath.left((freettsJarPath.length() - filename.length()) - 1);
+	TQString filename = TQFileInfo(freettsJarPath).baseName().append(TQString(".").append(TQFileInfo(freettsJarPath).extension()));
+	TQString freettsJarDir = freettsJarPath.left((freettsJarPath.length() - filename.length()) - 1);
 
 	m_freettsProc->setWorkingDirectory(freettsJarDir);
 	kdDebug() << "FreeTTSProc::synthText: moved to directory '" << freettsJarDir << "'" << endl;
@@ -154,7 +154,7 @@ void FreeTTSProc::synth(
  * Returning the filename of the synth'd text
  * @returns                    The filename of the last synth'd text
  */
-QString FreeTTSProc::getFilename() {
+TQString FreeTTSProc::getFilename() {
 	kdDebug() << "FreeTTSProc::getFilename: returning " << m_synthFilename << endl;
 	return m_synthFilename;
 }
@@ -206,12 +206,12 @@ void FreeTTSProc::slotProcessExited(KProcess*) {
 }
 
 void FreeTTSProc::slotReceivedStdout(KProcess*, char* buffer, int buflen) {
-	QString buf = QString::fromLatin1(buffer, buflen);
+	TQString buf = TQString::fromLatin1(buffer, buflen);
 	kdDebug() << "FreeTTSProc::slotReceivedStdout: Received output from FreeTTS: " << buf << endl;
 }
 
 void FreeTTSProc::slotReceivedStderr(KProcess*, char* buffer, int buflen) {
-	QString buf = QString::fromLatin1(buffer, buflen);
+	TQString buf = TQString::fromLatin1(buffer, buflen);
 	kdDebug() << "FreeTTSProc::slotReceivedStderr: Received error from FreeTTS: " << buf << endl;
 }
 
@@ -242,7 +242,7 @@ pluginState FreeTTSProc::getState() {
 void FreeTTSProc::ackFinished() {
 	if (m_state == psFinished) {
 		m_state = psIdle;
-		m_synthFilename = QString::null;
+		m_synthFilename = TQString::null;
 	}
 }
 

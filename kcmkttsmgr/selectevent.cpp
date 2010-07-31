@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qcombobox.h>
+#include <tqcombobox.h>
 
 // KDE includes
 #include <kstandarddirs.h>
@@ -36,17 +36,17 @@
 #include "utils.h"
 #include "selectevent.h"
 
-SelectEvent::SelectEvent(QWidget* parent, const char* name, WFlags fl, const QString& initEventSrc)
+SelectEvent::SelectEvent(TQWidget* parent, const char* name, WFlags fl, const TQString& initEventSrc)
     : SelectEventWidget(parent,name,fl)
 {
     // Load list of event sources (applications).
-    QStringList fullpaths =
+    TQStringList fullpaths =
         KGlobal::dirs()->findAllResources("data", "*/eventsrc", false, true );
-    QStringList::ConstIterator it = fullpaths.begin();
-    QStringList relativePaths;
+    TQStringList::ConstIterator it = fullpaths.begin();
+    TQStringList relativePaths;
     for ( ; it != fullpaths.end(); ++it)
     {
-        QString relativePath = *it;
+        TQString relativePath = *it;
         if ( relativePath.at(0) == '/' && KStandardDirs::exists( relativePath ) )
         {
             relativePath = makeRelative( relativePath );
@@ -57,18 +57,18 @@ SelectEvent::SelectEvent(QWidget* parent, const char* name, WFlags fl, const QSt
     it = relativePaths.begin();
     for ( ; it != relativePaths.end(); ++it)
     {
-        QString relativePath = *it;
+        TQString relativePath = *it;
         if ( !relativePath.isEmpty() )
         {
             KConfig* config = new KConfig(relativePath, true, false, "data");
-            config->setGroup( QString::fromLatin1("!Global!") );
-            QString icon = config->readEntry(QString::fromLatin1("IconName"),
-                QString::fromLatin1("misc"));
-            QString description = config->readEntry( QString::fromLatin1("Comment"),
+            config->setGroup( TQString::fromLatin1("!Global!") );
+            TQString icon = config->readEntry(TQString::fromLatin1("IconName"),
+                TQString::fromLatin1("misc"));
+            TQString description = config->readEntry( TQString::fromLatin1("Comment"),
                 i18n("No description available") );
             delete config;
             int index = relativePath.find( '/' );
-            QString appname;
+            TQString appname;
             if ( index >= 0 )
                 appname = relativePath.left( index );
             else
@@ -79,7 +79,7 @@ SelectEvent::SelectEvent(QWidget* parent, const char* name, WFlags fl, const QSt
         }
     }
     slotEventSrcComboBox_activated(eventSrcComboBox->currentItem());
-    connect (eventSrcComboBox, SIGNAL(activated(int)), this, SLOT(slotEventSrcComboBox_activated(int)));
+    connect (eventSrcComboBox, TQT_SIGNAL(activated(int)), this, TQT_SLOT(slotEventSrcComboBox_activated(int)));
 }
 
 SelectEvent::~SelectEvent() { }
@@ -87,20 +87,20 @@ SelectEvent::~SelectEvent() { }
 void SelectEvent::slotEventSrcComboBox_activated(int index)
 {
     eventsListView->clear();
-    QListViewItem* item = 0;
-    QString eventSrc = m_eventSrcNames[index];
-    QString configFilename = eventSrc + QString::fromLatin1( "/eventsrc" );
+    TQListViewItem* item = 0;
+    TQString eventSrc = m_eventSrcNames[index];
+    TQString configFilename = eventSrc + TQString::fromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
-    QStringList eventNames = config->groupList();
+    TQStringList eventNames = config->groupList();
     uint eventNamesCount = eventNames.count();
     for (uint ndx = 0; ndx < eventNamesCount; ++ndx)
     {
-        QString eventName = eventNames[ndx];
+        TQString eventName = eventNames[ndx];
         if ( eventName != "!Global!" )
         {
             config->setGroup( eventName );
-            QString eventDesc = config->readEntry( QString::fromLatin1( "Comment" ),
-                config->readEntry( QString::fromLatin1( "Name" )));
+            TQString eventDesc = config->readEntry( TQString::fromLatin1( "Comment" ),
+                config->readEntry( TQString::fromLatin1( "Name" )));
             if ( !item )
                 item = new KListViewItem( eventsListView, eventDesc, eventName );
             else
@@ -110,7 +110,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     delete config;
     eventsListView->sort();
     item = eventsListView->lastChild();
-    QString eventDesc = i18n("All other %1 events").arg(eventSrcComboBox->currentText());
+    TQString eventDesc = i18n("All other %1 events").arg(eventSrcComboBox->currentText());
     if ( !item )
         item = new KListViewItem( eventsListView, eventDesc, "default" );
     else
@@ -118,29 +118,29 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
 
 }
 
-QString SelectEvent::getEventSrc()
+TQString SelectEvent::getEventSrc()
 {
     return m_eventSrcNames[eventSrcComboBox->currentItem()];
 }
 
-QString SelectEvent::getEvent()
+TQString SelectEvent::getEvent()
 {
-    QListViewItem* item = eventsListView->currentItem();
+    TQListViewItem* item = eventsListView->currentItem();
     if ( item )
         return item->text(1);
     else
-        return QString::null;
+        return TQString::null;
 }
 
 // returns e.g. "kwin/eventsrc" from a given path
 // "/opt/kde3/share/apps/kwin/eventsrc"
-QString SelectEvent::makeRelative( const QString& fullPath )
+TQString SelectEvent::makeRelative( const TQString& fullPath )
 {
     int slash = fullPath.findRev( '/' ) - 1;
     slash = fullPath.findRev( '/', slash );
 
     if ( slash < 0 )
-        return QString::null;
+        return TQString::null;
 
     return fullPath.mid( slash+1 );
 }

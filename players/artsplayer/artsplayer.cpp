@@ -22,8 +22,8 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
-#include <qdir.h>
-#include <qapplication.h>
+#include <tqdir.h>
+#include <tqapplication.h>
 
 #include <kartsserver.h>
 #include <kartsdispatcher.h>
@@ -40,7 +40,7 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-ArtsPlayer::ArtsPlayer(QObject* parent, const char* name, const QStringList& args) : 
+ArtsPlayer::ArtsPlayer(TQObject* parent, const char* name, const TQStringList& args) : 
     Player(parent, name, args),
     m_dispatcher(0),
     m_server(0),
@@ -62,7 +62,7 @@ ArtsPlayer::~ArtsPlayer()
 }
 
 //void ArtsPlayer::play(const FileHandle &file)
-void ArtsPlayer::startPlay(const QString &file)
+void ArtsPlayer::startPlay(const TQString &file)
 {
     if (!m_dispatcher)
         setupPlayer();
@@ -87,7 +87,7 @@ void ArtsPlayer::startPlay(const QString &file)
         m_playobject = m_factory->createPlayObject(m_currentURL, false);
 
         if(m_playobject->object().isNull())
-            connect(m_playobject, SIGNAL(playObjectCreated()), SLOT(playObjectCreated()));
+            connect(m_playobject, TQT_SIGNAL(playObjectCreated()), TQT_SLOT(playObjectCreated()));
         else
             playObjectCreated();
     }
@@ -254,7 +254,7 @@ void ArtsPlayer::setupPlayer()
     m_dispatcher = new KArtsDispatcher;
     m_server = new KArtsServer;
     setupArtsObjects();
-    connect(m_server, SIGNAL(restartedServer()), SLOT(setupArtsObjects()));
+    connect(m_server, TQT_SIGNAL(restartedServer()), TQT_SLOT(setupArtsObjects()));
 }
 
 void ArtsPlayer::setupVolumeControl()

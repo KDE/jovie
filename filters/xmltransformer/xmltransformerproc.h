@@ -25,8 +25,8 @@
 #define _XMLTRANSFORMERPROC_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqstringlist.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    XmlTransformerProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
+    XmlTransformerProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.
@@ -57,7 +57,7 @@ public:
      * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
      * separate configuration files of their own.
      */
-    virtual bool init(KConfig *config, const QString &configGroup);
+    virtual bool init(KConfig *config, const TQString &configGroup);
 
     /**
      * Returns True if the plugin supports asynchronous processing,
@@ -80,7 +80,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual TQString convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
     /**
      * Convert input.  Runs asynchronously.
@@ -96,7 +96,7 @@ public:
      * program may then call @ref getOutput to retrieve converted text.  Calling
      * program must call @ref ackFinished to acknowledge the conversion.
      */
-    virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual bool asyncConvert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
     /**
      * Waits for a previous call to asyncConvert to finish.
@@ -111,7 +111,7 @@ public:
     /**
      * Returns the filtered output.
      */
-    virtual QString getOutput();
+    virtual TQString getOutput();
 
     /**
      * Acknowledges the finished filtering.
@@ -140,26 +140,26 @@ private:
     void processOutput();
 
     // If not empty, only apply to text queued by an applications containing one of these strings.
-    QStringList m_appIdList;
+    TQStringList m_appIdList;
     // If not empty, only apply to XML that has the specified root element.
-    QStringList m_rootElementList;
+    TQStringList m_rootElementList;
     // If not empty, only apply to XML that has the specified DOCTYPE spec.
-    QStringList m_doctypeList;
+    TQStringList m_doctypeList;
     // The text that is being filtered.
-    QString m_text;
+    TQString m_text;
     // Processing state.
     int m_state;
     // xsltproc process.
     KProcess* m_xsltProc;
     // Input and Output filenames.
-    QString m_inFilename;
-    QString m_outFilename;
+    TQString m_inFilename;
+    TQString m_outFilename;
     // User's name for the filter.
-    QString m_UserFilterName;
+    TQString m_UserFilterName;
     // XSLT file.
-    QString m_xsltFilePath;
+    TQString m_xsltFilePath;
     // Path to xsltproc processor.
-    QString m_xsltprocPath;
+    TQString m_xsltprocPath;
     // Did this filter modify the text?
     bool m_wasModified;
 };

@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "xmlelement.h"
-#include <qstringlist.h>
+#include <tqstringlist.h>
 #include <iostream>
 
 /// Constructors
@@ -27,7 +27,7 @@ XMLElement::XMLElement() {
     m_name = "";
     m_attrmapper = AttributeToValueMap();
 }
-XMLElement::XMLElement(const QString &name) {
+XMLElement::XMLElement(const TQString &name) {
     m_name = name;
     m_attrmapper = AttributeToValueMap();
 }
@@ -49,11 +49,11 @@ XMLElement XMLElement::operator=(const XMLElement &element) {
     return *this;
 }
 
-QString XMLElement::name() {
+TQString XMLElement::name() {
     return m_name;
 }
-QString XMLElement::startTag() {
-    QString output = "<" + m_name + " ";
+TQString XMLElement::startTag() {
+    TQString output = "<" + m_name + " ";
     for(AttributeToValueMap::Iterator it = m_attrmapper.begin(); it != m_attrmapper.end(); ++it) {
         output.append(it.key() + "=\"" + it.data() + "\" ");
     }
@@ -63,25 +63,25 @@ QString XMLElement::startTag() {
     return output;
 }
 
-QString XMLElement::endTag() {
+TQString XMLElement::endTag() {
     return "</" + m_name + ">";
 }
 
-void XMLElement::setAttribute(const QString &attr, const QString &value) {
+void XMLElement::setAttribute(const TQString &attr, const TQString &value) {
     m_attrmapper[attr] = value;
 }
-QString XMLElement::attribute(const QString &attr) {
+TQString XMLElement::attribute(const TQString &attr) {
     return m_attrmapper[attr];
 }
 
-QString XMLElement::toQString() {
-    QString tag = startTag();
+TQString XMLElement::toQString() {
+    TQString tag = startTag();
     return tag.left(tag.length() - 1).right(tag.length() - 2);
 }
 
-XMLElement XMLElement::fromQString(const QString &str) {
-    QStringList sections = QStringList::split(" ", str);
-    QString tagname = sections[0];
+XMLElement XMLElement::fromQString(const TQString &str) {
+    TQStringList sections = TQStringList::split(" ", str);
+    TQString tagname = sections[0];
     XMLElement e(tagname.latin1());
     
     sections.pop_front();
@@ -89,7 +89,7 @@ XMLElement XMLElement::fromQString(const QString &str) {
     if(sections.count()) {
         const int sectionsCount = sections.count();
         for(int i = 0; i < sectionsCount; ++i) {
-            QStringList list = QStringList::split("=", sections[i]);
+            TQStringList list = TQStringList::split("=", sections[i]);
             if(list.count() != 2) {
                 std::cerr << "XMLElement::fromQString: Cannot convert list: " << list.join("|") << ". `" << str << "' is not in valid format.\n";
                 return XMLElement(" ");

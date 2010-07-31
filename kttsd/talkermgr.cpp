@@ -37,8 +37,8 @@
 /**
  * Constructor.
  */
-TalkerMgr::TalkerMgr(QObject *parent, const char *name) :
-    QObject( parent, name )
+TalkerMgr::TalkerMgr(TQObject *parent, const char *name) :
+    TQObject( parent, name )
 {
     m_loadedPlugIns.setAutoDelete(true);
 }
@@ -66,23 +66,23 @@ int TalkerMgr::loadPlugIns(KConfig* config)
     m_loadedTalkerIds.clear();
 
     config->setGroup("General");
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    TQStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
     if (!talkerIDsList.isEmpty())
     {
         KLibFactory *factory;
-        QStringList::ConstIterator itEnd(talkerIDsList.constEnd());
-        for( QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
+        TQStringList::ConstIterator itEnd(talkerIDsList.constEnd());
+        for( TQStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
         {
             // kdDebug() << "Loading plugInProc for Talker ID " << *it << endl;
 
             // Talker ID.
-            QString talkerID = *it;
+            TQString talkerID = *it;
 
             // Set the group for the language we're loading
             config->setGroup("Talker_" + talkerID);
 
             // Get the DesktopEntryName of the plugin we will try to load.
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString::null);
+            TQString desktopEntryName = config->readEntry("DesktopEntryName", TQString::null);
 
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
@@ -91,7 +91,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString synthName = config->readEntry("PlugIn", QString::null);
+                TQString synthName = config->readEntry("PlugIn", TQString::null);
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
@@ -99,15 +99,15 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             }
 
             // Get the talker code.
-            QString talkerCode = config->readEntry("TalkerCode", QString::null);
+            TQString talkerCode = config->readEntry("TalkerCode", TQString::null);
 
             // Normalize the talker code.
-            QString fullLanguageCode;
+            TQString fullLanguageCode;
             talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
 
             // Find the KTTSD SynthPlugin.
             KTrader::OfferList offers = KTrader::self()->query(
-                "KTTSD/SynthPlugin", QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+                "KTTSD/SynthPlugin", TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
             if(offers.count() > 1){
                 ++bad;
@@ -134,7 +134,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                         } else {
                             // Synchronous plugins are run in a separate thread.
                             // Init will start the thread and it will immediately go to sleep.
-                            QString threadedPlugInName = QString::fromLatin1("threaded") + desktopEntryName;
+                            TQString threadedPlugInName = TQString::fromLatin1("threaded") + desktopEntryName;
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
                                     this, threadedPlugInName.latin1());
                             speechThread->init(config, "Talker_" + talkerCode);
@@ -172,12 +172,12 @@ int TalkerMgr::loadPlugIns(KConfig* config)
 
 /**
  * Get a list of the talkers configured in KTTS.
- * @return               A QStringList of fully-specified talker codes, one
+ * @return               A TQStringList of fully-specified talker codes, one
  *                       for each talker user has configured.
  */
-QStringList TalkerMgr::getTalkers()
+TQStringList TalkerMgr::getTalkers()
 {
-    QStringList talkerList;
+    TQStringList talkerList;
     for (int ndx = 0; ndx < int(m_loadedPlugIns.count()); ++ndx)
     {
         talkerList.append(m_loadedTalkerCodes[ndx].getTalkerCode());
@@ -188,7 +188,7 @@ QStringList TalkerMgr::getTalkers()
 /**
  * Returns a list of all the loaded plugins.
  */
-QPtrList<PlugInProc> TalkerMgr::getLoadedPlugIns()
+TQPtrList<PlugInProc> TalkerMgr::getLoadedPlugIns()
 {
     return m_loadedPlugIns;
 }
@@ -201,7 +201,7 @@ QPtrList<PlugInProc> TalkerMgr::getLoadedPlugIns()
  * If a plugin has not been loaded to match the talker, returns the default
  * plugin.
  */
-int TalkerMgr::talkerToPluginIndex(const QString& talker) const
+int TalkerMgr::talkerToPluginIndex(const TQString& talker) const
 {
     // kdDebug() << "TalkerMgr::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
     // If we have a cached match, return that.
@@ -228,10 +228,10 @@ int TalkerMgr::talkerToPluginIndex(const QString& talker) const
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
  */
-PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker) const
+PlugInProc* TalkerMgr::talkerToPlugin(const TQString& talker) const
 {
     int talkerNdx = talkerToPluginIndex(talker);
-    return const_cast< QPtrList<PlugInProc>* >(&m_loadedPlugIns)->at(talkerNdx);
+    return const_cast< TQPtrList<PlugInProc>* >(&m_loadedPlugIns)->at(talkerNdx);
 }
 
 /**
@@ -249,7 +249,7 @@ PlugInProc* TalkerMgr::talkerToPlugin(const QString& talker) const
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
  */
-TalkerCode* TalkerMgr::talkerToTalkerCode(const QString& talker)
+TalkerCode* TalkerMgr::talkerToTalkerCode(const TQString& talker)
 {
     int talkerNdx = talkerToPluginIndex(talker);
     return new TalkerCode(&m_loadedTalkerCodes[talkerNdx]);
@@ -261,7 +261,7 @@ TalkerCode* TalkerMgr::talkerToTalkerCode(const QString& talker)
  * @param talkerCode     Talker Code.
  * @return               Talker ID of the talker that would speak the text job.
  */
-QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
+TQString TalkerMgr::talkerCodeToTalkerId(const TQString& talkerCode)
 {
     int talkerNdx = talkerToPluginIndex(talkerCode);
     return m_loadedTalkerIds[talkerNdx];
@@ -274,7 +274,7 @@ QString TalkerMgr::talkerCodeToTalkerId(const QString& talkerCode)
  * @see talkers
  * @see getTalkers
  */
-QString TalkerMgr::userDefaultTalker() const
+TQString TalkerMgr::userDefaultTalker() const
 {
     return m_loadedTalkerCodes[0].getTalkerCode();
 }
@@ -288,25 +288,25 @@ QString TalkerMgr::userDefaultTalker() const
  *                       talker supports the indicated speech markup language.
  * @see kttsdMarkupType
  */
-bool TalkerMgr::supportsMarkup(const QString& talker, const uint /*markupType*/) const
+bool TalkerMgr::supportsMarkup(const TQString& talker, const uint /*markupType*/) const
 {
     kdDebug() << "TalkerMgr::supportsMarkup: Testing talker " << talker << endl;
-    QString matchingTalker = talker;
+    TQString matchingTalker = talker;
     if (matchingTalker.isEmpty()) matchingTalker = userDefaultTalker();
     PlugInProc* plugin = talkerToPlugin(matchingTalker);
     return ( plugin->getSsmlXsltFilename() !=
             KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl");
 }
 
-bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
+bool TalkerMgr::autoconfigureTalker(const TQString& langCode, KConfig* config)
 {
     // Not yet implemented.
     // return false;
 
-    QString languageCode = langCode;
+    TQString languageCode = langCode;
 
     // Get last TalkerID from config.
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    TQStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
     int lastTalkerID = 0;
     for (uint talkerIdNdx = 0; talkerIdNdx < talkerIDsList.count(); ++talkerIdNdx)
     {
@@ -315,7 +315,7 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     }
 
     // Assign a new Talker ID for the talker.  Wraps around to 1.
-    QString talkerID = QString::number(lastTalkerID + 1);
+    TQString talkerID = TQString::number(lastTalkerID + 1);
 
     // Query for all the KTTSD SynthPlugins.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
@@ -324,10 +324,10 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
     for(unsigned int i=0; i < offers.count() ; ++i)
     {
         // See if this plugin supports the desired language.
-        QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
+        TQStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
         if (languageCodes.contains(languageCode))
         {
-            QString desktopEntryName = offers[i]->desktopEntryName();
+            TQString desktopEntryName = offers[i]->desktopEntryName();
 
             // Load the plugin.
             KLibFactory *factory = KLibLoader::self()->factory(offers[0]->library().latin1());
@@ -342,22 +342,22 @@ bool TalkerMgr::autoconfigureTalker(const QString& langCode, KConfig* config)
                 {
                     // Give plugin the language code and permit plugin to autoconfigure itself.
                     loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-                    loadedTalkerPlugIn->load(config, QString("Talker_")+talkerID);
+                    loadedTalkerPlugIn->load(config, TQString("Talker_")+talkerID);
 
                     // If plugin was able to configure itself, it returns a full talker code.
-                    QString talkerCode = loadedTalkerPlugIn->getTalkerCode();
+                    TQString talkerCode = loadedTalkerPlugIn->getTalkerCode();
 
                     if (!talkerCode.isEmpty())
                     {
                         // Erase extraneous Talker configuration entries that might be there.
-                        config->deleteGroup(QString("Talker_")+talkerID);
+                        config->deleteGroup(TQString("Talker_")+talkerID);
 
                         // Let plugin save its configuration.
-                        config->setGroup(QString("Talker_")+talkerID);
-                        loadedTalkerPlugIn->save(config, QString("Talker_"+talkerID));
+                        config->setGroup(TQString("Talker_")+talkerID);
+                        loadedTalkerPlugIn->save(config, TQString("Talker_"+talkerID));
 
                         // Record configuration data.
-                        config->setGroup(QString("Talker_")+talkerID);
+                        config->setGroup(TQString("Talker_")+talkerID);
                         config->writeEntry("DesktopEntryName", desktopEntryName);
                         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
                         config->writeEntry("TalkerCode", talkerCode);

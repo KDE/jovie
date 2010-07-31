@@ -37,7 +37,7 @@
 /**
  * Constructor.
  */
-FilterMgr::FilterMgr( QObject *parent, const char *name) :
+FilterMgr::FilterMgr( TQObject *parent, const char *name) :
     KttsFilterProc(parent, name) 
 {
     // kdDebug() << "FilterMgr::FilterMgr: Running" << endl;
@@ -64,11 +64,11 @@ FilterMgr::~FilterMgr()
  * @param config          Settings object.
  * @return                False if FilterMgr is not ready to filter.
  */
-bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
+bool FilterMgr::init(KConfig *config, const TQString& /*configGroup*/)
 {
     // Load each of the filters and initialize.
     config->setGroup("General");
-    QStringList filterIDsList = config->readListEntry("FilterIDs", ',');
+    TQStringList filterIDsList = config->readListEntry("FilterIDs", ',');
     // kdDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList << endl;
     // If no filters have been configured, automatically configure the standard SBD.
     if (filterIDsList.isEmpty())
@@ -87,13 +87,13 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
     }
     if ( !filterIDsList.isEmpty() )
     {
-        QStringList::ConstIterator itEnd = filterIDsList.constEnd();
-        for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
+        TQStringList::ConstIterator itEnd = filterIDsList.constEnd();
+        for (TQStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
         {
-            QString filterID = *it;
-            QString groupName = "Filter_" + filterID;
+            TQString filterID = *it;
+            TQString groupName = "Filter_" + filterID;
             config->setGroup( groupName );
-            QString desktopEntryName = config->readEntry( "DesktopEntryName" );
+            TQString desktopEntryName = config->readEntry( "DesktopEntryName" );
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
@@ -101,7 +101,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                QString filterPlugInName = config->readEntry("PlugInName", QString::null);
+                TQString filterPlugInName = config->readEntry("PlugInName", TQString::null);
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
@@ -154,7 +154,7 @@ bool FilterMgr::init(KConfig *config, const QString& /*configGroup*/)
  *                          Also useful for hints about how to do the filtering.
  * @return                  Converted text.
  */
-QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+TQString FilterMgr::convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId)
 {
     m_text = inputText;
     m_talkerCode = talkerCode;
@@ -180,7 +180,7 @@ QString FilterMgr::convert(const QString& inputText, TalkerCode* talkerCode, con
  * When the input text has been converted, filteringFinished signal will be emitted
  * and caller can retrieve using getOutput();
 */
-bool FilterMgr::asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+bool FilterMgr::asyncConvert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId)
 {
     m_text = inputText;
     m_talkerCode = talkerCode;
@@ -202,7 +202,7 @@ void FilterMgr::nextFilter()
         {
             m_text = m_filterProc->getOutput();
             m_filterProc->ackFinished();
-            disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+            disconnect( m_filterProc, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotFilteringFinished()) );
         }
         // if ( m_filterProc->wasModified() )
         //     kdDebug() << "FilterMgr::nextFilter: Filter# " << m_filterIndex << " modified the text." << endl;
@@ -210,8 +210,8 @@ void FilterMgr::nextFilter()
         {
             m_state = fsFinished;
             // Post an event which will be later emitted as a signal.
-            QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-            QApplication::postEvent(this, ev);
+            TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 301);
+            TQApplication::postEvent(this, ev);
             return;
         }
     }
@@ -220,8 +220,8 @@ void FilterMgr::nextFilter()
     {
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-        QApplication::postEvent(this, ev);
+        TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 301);
+        TQApplication::postEvent(this, ev);
         return;
     }
     m_filterProc = m_filterList.at(m_filterIndex);
@@ -229,8 +229,8 @@ void FilterMgr::nextFilter()
     {
         m_state = fsFinished;
         // Post an event which will be later emitted as a signal.
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-        QApplication::postEvent(this, ev);
+        TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 301);
+        TQApplication::postEvent(this, ev);
         return;
     }
     m_filterProc->setSbRegExp( m_re );
@@ -239,10 +239,10 @@ void FilterMgr::nextFilter()
         if ( m_filterProc->supportsAsync() )
         {
             // kdDebug() << "FilterMgr::nextFilter: calling asyncConvert on filter " << m_filterIndex << endl;
-            connect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+            connect( m_filterProc, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotFilteringFinished()) );
             if ( !m_filterProc->asyncConvert( m_text, m_talkerCode, m_appId ) )
             {
-                disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+                disconnect( m_filterProc, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotFilteringFinished()) );
                 m_filterProc = 0;
                 nextFilter();
             }
@@ -261,15 +261,15 @@ void FilterMgr::slotFilteringFinished()
     nextFilter();
 }
 
-bool FilterMgr::event ( QEvent * e )
+bool FilterMgr::event ( TQEvent * e )
 {
-    if ( e->type() == (QEvent::User + 301) )
+    if ( e->type() == (TQEvent::User + 301) )
     {
         // kdDebug() << "FilterMgr::event: emitting filteringFinished signal." << endl;
         emit filteringFinished();
         return true;
     }
-    if ( e->type() == (QEvent::User + 302) )
+    if ( e->type() == (TQEvent::User + 302) )
     {
         // kdDebug() << "FilterMgr::event: emitting filteringStopped signal." << endl;
         emit filteringStopped();
@@ -284,7 +284,7 @@ bool FilterMgr::event ( QEvent * e )
 void FilterMgr::waitForFinished()
 {
     if ( m_state != fsFiltering ) return;
-    disconnect(m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+    disconnect(m_filterProc, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotFilteringFinished()) );
     m_async = false;
     m_filterProc->waitForFinished();
     while ( m_state == fsFiltering )
@@ -299,7 +299,7 @@ int FilterMgr::getState() { return m_state; }
 /**
  * Returns the filtered output.
  */
-QString FilterMgr::getOutput()
+TQString FilterMgr::getOutput()
 {
     return m_text;
 }
@@ -310,7 +310,7 @@ QString FilterMgr::getOutput()
 void FilterMgr::ackFinished()
 {
     m_state = fsIdle;
-    m_text = QString::null;
+    m_text = TQString::null;
 }
 
 /**
@@ -321,11 +321,11 @@ void FilterMgr::stopFiltering()
 {
     if ( m_state != fsFiltering ) return;
     if ( m_async )
-        disconnect( m_filterProc, SIGNAL(filteringFinished()), this, SLOT(slotFilteringFinished()) );
+        disconnect( m_filterProc, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotFilteringFinished()) );
     m_filterProc->stopFiltering();
     m_state = fsIdle;
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 302);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 302);
+    TQApplication::postEvent(this, ev);
 }
 
 /**
@@ -334,7 +334,7 @@ void FilterMgr::stopFiltering()
  *
  * @param re            The sentence delimiter regular expression.
  */
-/*virtual*/ void FilterMgr::setSbRegExp(const QString& re)
+/*virtual*/ void FilterMgr::setSbRegExp(const TQString& re)
 {
     m_re = re;
 }
@@ -346,13 +346,13 @@ void FilterMgr::setNoSBD(bool noSBD) { m_noSBD = noSBD; }
 bool FilterMgr::noSBD() { return m_noSBD; }
 
 // Loads the processing plug in for a filter plug in given its DesktopEntryName.
-KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
+KttsFilterProc* FilterMgr::loadFilterPlugin(const TQString& desktopEntryName)
 {
     // kdDebug() << "FilterMgr::loadFilterPlugin: Running"<< endl;
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+        TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
     {
@@ -366,7 +366,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
             KttsFilterProc *plugIn =
                     KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterProc>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
-            QStringList(), &errorNo);
+            TQStringList(), &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
                 return plugIn;
@@ -392,14 +392,14 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
  * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
  * @param name                   The translated plugin name.  From Name= line in .desktop file.
  * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
- *                               QString::null if not found.
+ *                               TQString::null if not found.
  */
-QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
+TQString FilterMgr::FilterNameToDesktopEntryName(const TQString& name)
 {
-    if (name.isEmpty()) return QString::null;
+    if (name.isEmpty()) return TQString::null;
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
     for (uint ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return QString::null;
+    return TQString::null;
 }
 

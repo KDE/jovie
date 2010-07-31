@@ -24,25 +24,25 @@
 
 /**
  * SsmlConvert class: 
- * Receives a QStringList of talkers and, based on that information, 
+ * Receives a TQStringList of talkers and, based on that information, 
  * evaluates received SSML to discover which of the given talkers best
  * suits it. It can then convert the given SSML into a format understandable
  * by the talker.
  */
 
 // Qt includes
-#include <qobject.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqstringlist.h>
 
 class KProcess;
 class QString;
 
-class SSMLConvert : public QObject {
+class SSMLConvert : public TQObject {
     Q_OBJECT
 public:
     /** Constructors */
     SSMLConvert();
-    SSMLConvert(const QStringList &talkers);
+    SSMLConvert(const TQStringList &talkers);
     /** Destructor   */
     virtual ~SSMLConvert();
 
@@ -56,19 +56,19 @@ public:
     * Set the talker codes to be used.
     * @param talkers           talker codes to be used.
     */
-    void setTalkers(const QStringList &talkers);
+    void setTalkers(const TQStringList &talkers);
 
     /**
     * Extract the synth name from a talker code (i.e festival, flite, freetts).
     * @param talkercode        the talker code to extract the talker from.
     * @returns                 the talker.
     */
-    QString extractTalker(const QString &talkercode);
+    TQString extractTalker(const TQString &talkercode);
 
     /**
     * Returns the most appropriate talker for the text to synth's talker code.
     * @param text               the text that will be parsed.
-    * @returns                  the appropriate talker for the job as a talker code QString.
+    * @returns                  the appropriate talker for the job as a talker code TQString.
     *
     * The appropriate talker is the one that has the most features that are required in some
     * SSML markup. In the future i'm hoping to make the importance of individual features 
@@ -79,7 +79,7 @@ public:
     * 
     * See the implementation file for more detail.
     */
-    QString appropriateTalker(const QString &text) const;
+    TQString appropriateTalker(const TQString &text) const;
 
     /**
     * Applies the spreadsheet for a talker to the SSML and returns the talker-native output.
@@ -90,7 +90,7 @@ public:
     * This converts a piece of SSML into a format the given talker can understand. It applies
     * an XSLT spreadsheet to the SSML and returns the output.
     */
-    bool transform(const QString &text, const QString &xsltFilename);
+    bool transform(const TQString &text, const TQString &xsltFilename);
 
     /**
     * Returns current processing state.
@@ -100,7 +100,7 @@ public:
     /**
     * Returns the output from call to transform.
     */
-    QString getOutput();
+    TQString getOutput();
 
 signals:
     /**
@@ -115,15 +115,15 @@ private:
     /// The XSLT processor.
     KProcess *m_xsltProc;
     /// Current talkers.
-    QStringList m_talkers;
+    TQStringList m_talkers;
     // Current state.
     int m_state;
     // Name of XSLT file.
-    QString m_xsltFilename;
+    TQString m_xsltFilename;
     // Name of temporary input file.
-    QString m_inFilename;
+    TQString m_inFilename;
     // Name of temporary output file.
-    QString m_outFilename;
+    TQString m_outFilename;
 };
 
 #endif      // _SSMLCONVERT_H_

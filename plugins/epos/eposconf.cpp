@@ -25,11 +25,11 @@
 #include <math.h>
 
 // Qt includes.
-#include <qfile.h>
-#include <qapplication.h>
-#include <qtextcodec.h>
-#include <qlayout.h>
-#include <qslider.h>
+#include <tqfile.h>
+#include <tqapplication.h>
+#include <tqtextcodec.h>
+#include <tqlayout.h>
+#include <tqslider.h>
 
 // KDE includes.
 #include <kdialog.h>
@@ -48,14 +48,14 @@
 #include "eposconf.moc"
 
 /** Constructor */
-EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args*/) :
+EposConf::EposConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
     PlugInConf(parent, name)
 {
     // kdDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;
     m_progressDlg = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "EposConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new EposConfWidget(this, "EposConfigWidget");
@@ -68,41 +68,41 @@ EposConf::EposConf( QWidget* parent, const char* name, const QStringList& /*args
 
     defaults();
 
-    connect(m_widget->eposServerPath, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
-    connect(m_widget->eposClientPath, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-    connect(m_widget->timeBox, SIGNAL(valueChanged(int)),
-            this, SLOT(timeBox_valueChanged(int)));
-    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)),
-            this, SLOT(frequencyBox_valueChanged(int)));
-    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(timeSlider_valueChanged(int)));
-    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)),
-            this, SLOT(frequencySlider_valueChanged(int)));
-    connect(m_widget->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->frequencyBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->frequencySlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_widget->characterCodingBox, SIGNAL(activated(const QString&)),
-        this, SLOT(configChanged()));
-    connect(m_widget->eposServerOptions, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-    connect(m_widget->eposClientOptions, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
-    connect(m_widget->eposTest, SIGNAL(clicked()),
-        this, SLOT(slotEposTest_clicked()));
+    connect(m_widget->eposServerPath, TQT_SIGNAL(textChanged(const TQString&)),
+        this, TQT_SLOT(configChanged()));
+    connect(m_widget->eposClientPath, TQT_SIGNAL(textChanged(const TQString&)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->timeBox, TQT_SIGNAL(valueChanged(int)),
+            this, TQT_SLOT(timeBox_valueChanged(int)));
+    connect(m_widget->frequencyBox, TQT_SIGNAL(valueChanged(int)),
+            this, TQT_SLOT(frequencyBox_valueChanged(int)));
+    connect(m_widget->timeSlider, TQT_SIGNAL(valueChanged(int)),
+            this, TQT_SLOT(timeSlider_valueChanged(int)));
+    connect(m_widget->frequencySlider, TQT_SIGNAL(valueChanged(int)),
+            this, TQT_SLOT(frequencySlider_valueChanged(int)));
+    connect(m_widget->timeBox, TQT_SIGNAL(valueChanged(int)), this, TQT_SLOT(configChanged()));
+    connect(m_widget->timeSlider, TQT_SIGNAL(valueChanged(int)), this, TQT_SLOT(configChanged()));
+    connect(m_widget->frequencyBox, TQT_SIGNAL(valueChanged(int)), this, TQT_SLOT(configChanged()));
+    connect(m_widget->frequencySlider, TQT_SIGNAL(valueChanged(int)), this, TQT_SLOT(configChanged()));
+    connect(m_widget->characterCodingBox, TQT_SIGNAL(activated(const TQString&)),
+        this, TQT_SLOT(configChanged()));
+    connect(m_widget->eposServerOptions, TQT_SIGNAL(textChanged(const TQString&)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->eposClientOptions, TQT_SIGNAL(textChanged(const TQString&)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->eposTest, TQT_SIGNAL(clicked()),
+        this, TQT_SLOT(slotEposTest_clicked()));
 }
 
 /** Destructor */
 EposConf::~EposConf(){
     // kdDebug() << "Running: EposConf::~EposConf()" << endl;
-    if (!m_waveFile.isNull()) QFile::remove(m_waveFile);
+    if (!m_waveFile.isNull()) TQFile::remove(m_waveFile);
     delete m_eposProc;
     delete m_progressDlg;
 }
 
-void EposConf::load(KConfig *config, const QString &configGroup){
+void EposConf::load(KConfig *config, const TQString &configGroup){
     // kdDebug() << "EposConf::load: Running " << endl;
 
     config->setGroup(configGroup);
@@ -110,7 +110,7 @@ void EposConf::load(KConfig *config, const QString &configGroup){
     m_widget->eposClientPath->setURL(config->readEntry("EposClientExePath", "say-epos"));
     m_widget->eposServerOptions->setText(config->readEntry("EposServerOptions", ""));
     m_widget->eposClientOptions->setText(config->readEntry("EposClientOptions", ""));
-    QString codecString = config->readEntry("Codec", "ISO 8859-2");
+    TQString codecString = config->readEntry("Codec", "ISO 8859-2");
     int codec = PlugInProc::codecNameToListIndex(codecString, m_codecList);
     m_widget->timeBox->setValue(config->readNumEntry("time", 100));
     m_widget->frequencyBox->setValue(config->readNumEntry("pitch", 100));
@@ -120,15 +120,15 @@ void EposConf::load(KConfig *config, const QString &configGroup){
 /**
 * Converts a language code into the language setting passed to Epos synth.
 */
-QString EposConf::languageCodeToEposLanguage(const QString &languageCode)
+TQString EposConf::languageCodeToEposLanguage(const TQString &languageCode)
 {
-    QString eposLanguage;
+    TQString eposLanguage;
     if (languageCode.left(2) == "cs") eposLanguage = "czech";
     if (languageCode.left(2) == "sk") eposLanguage = "slovak";
     return eposLanguage;
 }
 
-void EposConf::save(KConfig *config, const QString &configGroup){
+void EposConf::save(KConfig *config, const TQString &configGroup){
     // kdDebug() << "EposConf::save: Running" << endl;
 
     config->setGroup("Epos");
@@ -154,7 +154,7 @@ void EposConf::defaults(){
     // kdDebug() << "EposConf::defaults: Running" << endl;
     // Epos server command changed from epos to eposd.  Epos client command changed from
     // say to say-epos.  These changes appeared around Epos v2.5.35.  Try for these automatically.
-    QString exeName = "eposd";
+    TQString exeName = "eposd";
     if (realFilePath(exeName).isEmpty())
         if (!realFilePath("epos").isEmpty())
             exeName = "epos";
@@ -174,23 +174,23 @@ void EposConf::defaults(){
     m_widget->characterCodingBox->setCurrentItem(codec);
 }
 
-void EposConf::setDesiredLanguage(const QString &lang)
+void EposConf::setDesiredLanguage(const TQString &lang)
 {
     m_languageCode = lang;
 }
 
-QString EposConf::getTalkerCode()
+TQString EposConf::getTalkerCode()
 {
-    QString eposServerExe = realFilePath(m_widget->eposServerPath->url());
-    QString eposClientExe = realFilePath(m_widget->eposClientPath->url());
+    TQString eposServerExe = realFilePath(m_widget->eposServerPath->url());
+    TQString eposClientExe = realFilePath(m_widget->eposClientPath->url());
     if (!eposServerExe.isEmpty() && !eposClientExe.isEmpty())
     {
         if (!getLocation(eposServerExe).isEmpty() && !getLocation(eposClientExe).isEmpty())
         {
-            QString rate = "medium";
+            TQString rate = "medium";
             if (m_widget->timeBox->value() < 75) rate = "slow";
             if (m_widget->timeBox->value() > 125) rate = "fast";
-            return QString(
+            return TQString(
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
@@ -202,7 +202,7 @@ QString EposConf::getTalkerCode()
                     .arg("Epos TTS Synthesis System");
         }
     }
-    return QString::null;
+    return TQString::null;
 }
 
 void EposConf::slotEposTest_clicked()
@@ -214,15 +214,15 @@ void EposConf::slotEposTest_clicked()
     else
     {
         m_eposProc = new EposProc();
-        connect (m_eposProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
+        connect (m_eposProc, TQT_SIGNAL(stopped()), this, TQT_SLOT(slotSynthStopped()));
     }
     // Create a temp file name for the wave file.
     KTempFile tempFile (locateLocal("tmp", "eposplugin-"), ".wav");
-    QString tmpWaveFile = tempFile.file()->name();
+    TQString tmpWaveFile = tempFile.file()->name();
     tempFile.close();
 
     // Get test message in the language of the voice.
-    QString testMsg = testMessage(m_languageCode);
+    TQString testMsg = testMessage(m_languageCode);
 
     // Tell user to wait.
     m_progressDlg = new KProgressDialog(m_widget, "kttsmgr_epos_testdlg",
@@ -234,7 +234,7 @@ void EposConf::slotEposTest_clicked()
 
     // TODO: Whenever server options change, the server must be restarted.
     // TODO: Do codec names contain non-ASCII characters?
-    connect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    connect (m_eposProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
     m_eposProc->synth(
         testMsg,
         tmpWaveFile,
@@ -251,7 +251,7 @@ void EposConf::slotEposTest_clicked()
     // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
     // or if user clicks Cancel button.
     m_progressDlg->exec();
-    disconnect (m_eposProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+    disconnect (m_eposProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
     if (m_progressDlg->wasCancelled()) m_eposProc->stopText();
     delete m_progressDlg;
     m_progressDlg = 0;
@@ -274,16 +274,16 @@ void EposConf::slotSynthFinished()
     // Play the wave file (possibly adjusting its Speed).
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
-    QFile::remove(m_waveFile);
-    m_waveFile = QString::null;
+    TQFile::remove(m_waveFile);
+    m_waveFile = TQString::null;
     if (m_progressDlg) m_progressDlg->close();
 }
 
 void EposConf::slotSynthStopped()
 {
     // Clean up after canceling test.
-    QString filename = m_eposProc->getFilename();
-    if (!filename.isNull()) QFile::remove(filename);
+    TQString filename = m_eposProc->getFilename();
+    if (!filename.isNull()) TQFile::remove(filename);
 }
 
 // Basically the slider values are logarithmic (0,...,1000) whereas percent

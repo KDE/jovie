@@ -24,16 +24,16 @@
 #include <math.h>
 
 // Qt includes.
-#include <qwidget.h>
-#include <qtabwidget.h>
-#include <qcheckbox.h>
-#include <qvbox.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qslider.h>
-#include <qlabel.h>
-#include <qpopupmenu.h>
-#include <qbuttongroup.h>
+#include <tqwidget.h>
+#include <tqtabwidget.h>
+#include <tqcheckbox.h>
+#include <tqvbox.h>
+#include <tqlayout.h>
+#include <tqradiobutton.h>
+#include <tqslider.h>
+#include <tqlabel.h>
+#include <tqpopupmenu.h>
+#include <tqbuttongroup.h>
 
 // KDE includes.
 #include <dcopclient.h>
@@ -80,23 +80,23 @@ const bool notifyEnableCheckBoxValue = false;
 const bool notifyExcludeEventsWithSoundCheckBoxValue = true;
 
 const bool textPreMsgCheckValue = true;
-const QString textPreMsgValue = i18n("Text interrupted. Message.");
+const TQString textPreMsgValue = i18n("Text interrupted. Message.");
 
 const bool textPreSndCheckValue = false;
-const QString textPreSndValue = "";
+const TQString textPreSndValue = "";
 
 const bool textPostMsgCheckValue = true;
-const QString textPostMsgValue = i18n("Resuming text.");
+const TQString textPostMsgValue = i18n("Resuming text.");
 
 const bool textPostSndCheckValue = false;
-const QString textPostSndValue = "";
+const TQString textPostSndValue = "";
 
 const int timeBoxValue = 100;
 
 const bool keepAudioCheckBoxValue = false;
 
 // Make this a plug in.
-typedef KGenericFactory<KCMKttsMgr, QWidget> KCMKttsMgrFactory;
+typedef KGenericFactory<KCMKttsMgr, TQWidget> KCMKttsMgrFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kttsd") )
 
 /**
@@ -104,7 +104,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kttsd") )
 * Makes the list of plug ins.
 * And the languages acording to the plug ins.
 */
-KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
+KCMKttsMgr::KCMKttsMgr(TQWidget *parent, const char *name, const TQStringList &) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kcmkttsmgr_kspeechsink"),
     KCModule(KCMKttsMgrFactory::instance(), parent, name)
@@ -119,7 +119,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_suppressConfigChanged = false;
 
     // Add the KTTS Manager widget
-    QGridLayout *layout = new QGridLayout(this, 0, 0);
+    TQGridLayout *layout = new TQGridLayout(this, 0, 0);
     m_kttsmgrw = new KCMKttsMgrWidget(this, "kttsmgrw");
     // m_kttsmgrw = new KCMKttsMgrWidget(this);
     layout->addWidget(m_kttsmgrw, 0, 0);
@@ -162,14 +162,14 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     m_kttsmgrw->pcmComboBox->setEditable(false);
 
     // Construct a popup menu for the Sentence Boundary Detector buttons on Filter tab.
-    m_sbdPopmenu = new QPopupMenu( m_kttsmgrw, "SbdPopupMenu" );
-    m_sbdPopmenu->insertItem( i18n("&Edit..."), this, SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
+    m_sbdPopmenu = new TQPopupMenu( m_kttsmgrw, "SbdPopupMenu" );
+    m_sbdPopmenu->insertItem( i18n("&Edit..."), this, TQT_SLOT(slot_configureSbdFilter()), 0, sbdBtnEdit );
     m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("up", KIcon::Small),
-                              i18n("U&p"), this, SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
+                              i18n("U&p"), this, TQT_SLOT(slot_higherSbdFilterPriority()), 0, sbdBtnUp );
     m_sbdPopmenu->insertItem( KGlobal::iconLoader()->loadIconSet("down", KIcon::Small),
-                              i18n("Do&wn"), this, SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
-    m_sbdPopmenu->insertItem( i18n("&Add..."), this, SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
-    m_sbdPopmenu->insertItem( i18n("&Remove"), this, SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
+                              i18n("Do&wn"), this, TQT_SLOT(slot_lowerSbdFilterPriority()), 0, sbdBtnDown );
+    m_sbdPopmenu->insertItem( i18n("&Add..."), this, TQT_SLOT(slot_addSbdFilter()), 0, sbdBtnAdd );
+    m_sbdPopmenu->insertItem( i18n("&Remove"), this, TQT_SLOT(slot_removeSbdFilter()), 0, sbdBtnRemove );
     m_kttsmgrw->sbdButton->setPopup( m_sbdPopmenu );
 
     // If aRts is available, enable its radio button.
@@ -192,7 +192,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         m_kttsmgrw->gstreamerRadioButton->setEnabled(true);
         m_kttsmgrw->sinkLabel->setEnabled(true);
         m_kttsmgrw->sinkComboBox->setEnabled(true);
-        QStringList sinkList = player->getPluginList("Sink/Audio");
+        TQStringList sinkList = player->getPluginList("Sink/Audio");
         // kdDebug() << "KCMKttsMgr::KCMKttsMgr: GStreamer Sink List = " << sinkList << endl;
         m_kttsmgrw->sinkComboBox->clear();
         m_kttsmgrw->sinkComboBox->insertStringList(sinkList);
@@ -209,7 +209,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         m_kttsmgrw->alsaRadioButton->setEnabled(true);
         m_kttsmgrw->pcmLabel->setEnabled(true);
         m_kttsmgrw->pcmComboBox->setEnabled(true);
-        QStringList pcmList = player->getPluginList("");
+        TQStringList pcmList = player->getPluginList("");
         pcmList.append("custom");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: ALSA pcmList = " << pcmList << endl;
         m_kttsmgrw->pcmComboBox->clear();
@@ -227,7 +227,7 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
         m_kttsmgrw->akodeRadioButton->setEnabled(true);
         m_kttsmgrw->akodeSinkLabel->setEnabled(true);
         m_kttsmgrw->akodeComboBox->setEnabled(true);
-        QStringList pcmList = player->getPluginList("");
+        TQStringList pcmList = player->getPluginList("");
         kdDebug() << "KCMKttsMgr::KCMKttsMgr: aKode Sink List = " << pcmList << endl;
         m_kttsmgrw->akodeComboBox->clear();
         m_kttsmgrw->akodeComboBox->insertStringList(pcmList);
@@ -248,94 +248,94 @@ KCMKttsMgr::KCMKttsMgr(QWidget *parent, const char *name, const QStringList &) :
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
     // Talker tab.
-    connect(m_kttsmgrw->addTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slot_addTalker()));
-    connect(m_kttsmgrw->higherTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_higherTalkerPriority()));
-    connect(m_kttsmgrw->lowerTalkerPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_lowerTalkerPriority()));
-    connect(m_kttsmgrw->removeTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slot_removeTalker()));
-    connect(m_kttsmgrw->configureTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slot_configureTalker()));
-    connect(m_kttsmgrw->talkersList, SIGNAL(selectionChanged()),
-            this, SLOT(updateTalkerButtons()));
+    connect(m_kttsmgrw->addTalkerButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_addTalker()));
+    connect(m_kttsmgrw->higherTalkerPriorityButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_higherTalkerPriority()));
+    connect(m_kttsmgrw->lowerTalkerPriorityButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_lowerTalkerPriority()));
+    connect(m_kttsmgrw->removeTalkerButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_removeTalker()));
+    connect(m_kttsmgrw->configureTalkerButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_configureTalker()));
+    connect(m_kttsmgrw->talkersList, TQT_SIGNAL(selectionChanged()),
+            this, TQT_SLOT(updateTalkerButtons()));
 
     // Filter tab.
-    connect(m_kttsmgrw->addFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_addNormalFilter()));
-    connect(m_kttsmgrw->higherFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_higherNormalFilterPriority()));
-    connect(m_kttsmgrw->lowerFilterPriorityButton, SIGNAL(clicked()),
-            this, SLOT(slot_lowerNormalFilterPriority()));
-    connect(m_kttsmgrw->removeFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_removeNormalFilter()));
-    connect(m_kttsmgrw->configureFilterButton, SIGNAL(clicked()),
-            this, SLOT(slot_configureNormalFilter()));
-    connect(m_kttsmgrw->filtersList, SIGNAL(selectionChanged()),
-            this, SLOT(updateFilterButtons()));
-    //connect(m_kttsmgrw->filtersList, SIGNAL(stateChanged()),
-    //        this, SLOT(configChanged()));
-    connect(m_kttsmgrw->sbdsList, SIGNAL(selectionChanged()),
-            this, SLOT(updateSbdButtons()));
+    connect(m_kttsmgrw->addFilterButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_addNormalFilter()));
+    connect(m_kttsmgrw->higherFilterPriorityButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_higherNormalFilterPriority()));
+    connect(m_kttsmgrw->lowerFilterPriorityButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_lowerNormalFilterPriority()));
+    connect(m_kttsmgrw->removeFilterButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_removeNormalFilter()));
+    connect(m_kttsmgrw->configureFilterButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slot_configureNormalFilter()));
+    connect(m_kttsmgrw->filtersList, TQT_SIGNAL(selectionChanged()),
+            this, TQT_SLOT(updateFilterButtons()));
+    //connect(m_kttsmgrw->filtersList, TQT_SIGNAL(stateChanged()),
+    //        this, TQT_SLOT(configChanged()));
+    connect(m_kttsmgrw->sbdsList, TQT_SIGNAL(selectionChanged()),
+            this, TQT_SLOT(updateSbdButtons()));
 
     // Audio tab.
-    connect(m_kttsmgrw->gstreamerRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotGstreamerRadioButton_toggled(bool)));
-    connect(m_kttsmgrw->alsaRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotAlsaRadioButton_toggled(bool)));
-    connect(m_kttsmgrw->pcmComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotPcmComboBox_activated()));
-    connect(m_kttsmgrw->akodeRadioButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotAkodeRadioButton_toggled(bool)));
-    connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)),
-            this, SLOT(timeBox_valueChanged(int)));
-    connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(timeSlider_valueChanged(int)));
-    connect(m_kttsmgrw->timeBox, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_kttsmgrw->timeSlider, SIGNAL(valueChanged(int)), this, SLOT(configChanged()));
-    connect(m_kttsmgrw->keepAudioCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(keepAudioCheckBox_toggled(bool)));
-    connect(m_kttsmgrw->keepAudioPath, SIGNAL(textChanged(const QString&)),
-            this, SLOT(configChanged()));
+    connect(m_kttsmgrw->gstreamerRadioButton, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(slotGstreamerRadioButton_toggled(bool)));
+    connect(m_kttsmgrw->alsaRadioButton, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(slotAlsaRadioButton_toggled(bool)));
+    connect(m_kttsmgrw->pcmComboBox, TQT_SIGNAL(activated(int)),
+            this, TQT_SLOT(slotPcmComboBox_activated()));
+    connect(m_kttsmgrw->akodeRadioButton, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(slotAkodeRadioButton_toggled(bool)));
+    connect(m_kttsmgrw->timeBox, TQT_SIGNAL(valueChanged(int)),
+            this, TQT_SLOT(timeBox_valueChanged(int)));
+    connect(m_kttsmgrw->timeSlider, TQT_SIGNAL(valueChanged(int)),
+            this, TQT_SLOT(timeSlider_valueChanged(int)));
+    connect(m_kttsmgrw->timeBox, TQT_SIGNAL(valueChanged(int)), this, TQT_SLOT(configChanged()));
+    connect(m_kttsmgrw->timeSlider, TQT_SIGNAL(valueChanged(int)), this, TQT_SLOT(configChanged()));
+    connect(m_kttsmgrw->keepAudioCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(keepAudioCheckBox_toggled(bool)));
+    connect(m_kttsmgrw->keepAudioPath, TQT_SIGNAL(textChanged(const TQString&)),
+            this, TQT_SLOT(configChanged()));
 
     // General tab.
-    connect(m_kttsmgrw->enableKttsdCheckBox, SIGNAL(toggled(bool)),
-            SLOT(enableKttsdToggled(bool)));
+    connect(m_kttsmgrw->enableKttsdCheckBox, TQT_SIGNAL(toggled(bool)),
+            TQT_SLOT(enableKttsdToggled(bool)));
 
     // Notify tab.
-    connect(m_kttsmgrw->notifyEnableCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNotifyEnableCheckBox_toggled(bool)));
-    connect(m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_kttsmgrw->notifyAddButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyAddButton_clicked()));
-    connect(m_kttsmgrw->notifyRemoveButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyRemoveButton_clicked()));
-    connect(m_kttsmgrw->notifyClearButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyClearButton_clicked()));
-    connect(m_kttsmgrw->notifyLoadButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyLoadButton_clicked()));
-    connect(m_kttsmgrw->notifySaveButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifySaveButton_clicked()));
-    connect(m_kttsmgrw->notifyListView, SIGNAL(selectionChanged()),
-            this, SLOT(slotNotifyListView_selectionChanged()));
-    connect(m_kttsmgrw->notifyPresentComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNotifyPresentComboBox_activated(int)));
-    connect(m_kttsmgrw->notifyActionComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNotifyActionComboBox_activated(int)));
-    connect(m_kttsmgrw->notifyTestButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyTestButton_clicked()));
-    connect(m_kttsmgrw->notifyMsgLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotNotifyMsgLineEdit_textChanged(const QString&)));
-    connect(m_kttsmgrw->notifyTalkerButton, SIGNAL(clicked()),
-            this, SLOT(slotNotifyTalkerButton_clicked()));
+    connect(m_kttsmgrw->notifyEnableCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(slotNotifyEnableCheckBox_toggled(bool)));
+    connect(m_kttsmgrw->notifyExcludeEventsWithSoundCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_kttsmgrw->notifyAddButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifyAddButton_clicked()));
+    connect(m_kttsmgrw->notifyRemoveButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifyRemoveButton_clicked()));
+    connect(m_kttsmgrw->notifyClearButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifyClearButton_clicked()));
+    connect(m_kttsmgrw->notifyLoadButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifyLoadButton_clicked()));
+    connect(m_kttsmgrw->notifySaveButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifySaveButton_clicked()));
+    connect(m_kttsmgrw->notifyListView, TQT_SIGNAL(selectionChanged()),
+            this, TQT_SLOT(slotNotifyListView_selectionChanged()));
+    connect(m_kttsmgrw->notifyPresentComboBox, TQT_SIGNAL(activated(int)),
+            this, TQT_SLOT(slotNotifyPresentComboBox_activated(int)));
+    connect(m_kttsmgrw->notifyActionComboBox, TQT_SIGNAL(activated(int)),
+            this, TQT_SLOT(slotNotifyActionComboBox_activated(int)));
+    connect(m_kttsmgrw->notifyTestButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifyTestButton_clicked()));
+    connect(m_kttsmgrw->notifyMsgLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+            this, TQT_SLOT(slotNotifyMsgLineEdit_textChanged(const TQString&)));
+    connect(m_kttsmgrw->notifyTalkerButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotNotifyTalkerButton_clicked()));
 
     // Others.
-    connect(m_kttsmgrw, SIGNAL( configChanged() ),
-            this, SLOT( configChanged() ) );
-    connect(m_kttsmgrw->mainTab, SIGNAL(currentChanged(QWidget*)),
-            this, SLOT(slotTabChanged()));
+    connect(m_kttsmgrw, TQT_SIGNAL( configChanged() ),
+            this, TQT_SLOT( configChanged() ) );
+    connect(m_kttsmgrw->mainTab, TQT_SIGNAL(currentChanged(TQWidget*)),
+            this, TQT_SLOT(slotTabChanged()));
 
     // Connect KTTSD DCOP signals to our slots.
     if (!connectDCOPSignal("kttsd", "KSpeech",
@@ -430,7 +430,7 @@ void KCMKttsMgr::load()
     loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
     slotNotifyEnableCheckBox_toggled( m_kttsmgrw->notifyEnableCheckBox->isChecked() );
     // Auto-expand and position on the Default item.
-    QListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
+    TQListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
     if ( item )
         if ( item->childCount() > 0 ) item = item->firstChild();
     if ( item ) m_kttsmgrw->notifyListView->ensureItemVisible( item );
@@ -477,30 +477,30 @@ void KCMKttsMgr::load()
     // Load existing Talkers into the listview.
     m_kttsmgrw->talkersList->clear();
     m_kttsmgrw->talkersList->setSortColumn(-1);
-    QStringList talkerIDsList = m_config->readListEntry("TalkerIDs", ',');
+    TQStringList talkerIDsList = m_config->readListEntry("TalkerIDs", ',');
     if (!talkerIDsList.isEmpty())
     {
-        QListViewItem* talkerItem = 0;
-        QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
-        for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
+        TQListViewItem* talkerItem = 0;
+        TQStringList::ConstIterator itEnd = talkerIDsList.constEnd();
+        for (TQStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
         {
-            QString talkerID = *it;
+            TQString talkerID = *it;
             // kdDebug() << "KCMKttsMgr::load: talkerID = " << talkerID << endl;
-            m_config->setGroup(QString("Talker_") + talkerID);
-            QString talkerCode = m_config->readEntry("TalkerCode");
-            QString fullLanguageCode;
+            m_config->setGroup(TQString("Talker_") + talkerID);
+            TQString talkerCode = m_config->readEntry("TalkerCode");
+            TQString fullLanguageCode;
             talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, fullLanguageCode);
-            QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
-            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString::null);
+            TQString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
+            TQString desktopEntryName = m_config->readEntry("DesktopEntryName", TQString::null);
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
             // DesktopEntryNames are better because user can change their desktop language
             // and DesktopEntryName won't change.
-            QString synthName;
+            TQString synthName;
             if (desktopEntryName.isEmpty())
             {
-                synthName = m_config->readEntry("PlugIn", QString::null);
+                synthName = m_config->readEntry("PlugIn", TQString::null);
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
@@ -529,13 +529,13 @@ void KCMKttsMgr::load()
     // Iterate thru the possible plug ins getting their language support codes.
     for(unsigned int i=0; i < offers.count() ; ++i)
     {
-        QString synthName = offers[i]->name();
-        QStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
+        TQString synthName = offers[i]->name();
+        TQStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
         // Add language codes to the language-to-language code map.
-        QStringList::ConstIterator endLanguages(languageCodes.constEnd());
-        for( QStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
+        TQStringList::ConstIterator endLanguages(languageCodes.constEnd());
+        for( TQStringList::ConstIterator it = languageCodes.constBegin(); it != endLanguages; ++it )
         {
-            QString language = TalkerCode::languageCodeToLanguage(*it);
+            TQString language = TalkerCode::languageCodeToLanguage(*it);
             m_languagesToCodes[language] = *it;
         }
 
@@ -552,32 +552,32 @@ void KCMKttsMgr::load()
     m_languagesToCodes[i18n("Other")] = "other";
 
     // Load Filters.
-    QListViewItem* filterItem = 0;
+    TQListViewItem* filterItem = 0;
     m_kttsmgrw->filtersList->clear();
     m_kttsmgrw->sbdsList->clear();
     m_kttsmgrw->filtersList->setSortColumn(-1);
     m_kttsmgrw->sbdsList->setSortColumn(-1);
     m_config->setGroup("General");
-    QStringList filterIDsList = m_config->readListEntry("FilterIDs", ',');
+    TQStringList filterIDsList = m_config->readListEntry("FilterIDs", ',');
     // kdDebug() << "KCMKttsMgr::load: FilterIDs = " << filterIDsList << endl;
     if (!filterIDsList.isEmpty())
     {
-        QStringList::ConstIterator itEnd = filterIDsList.constEnd();
-        for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
+        TQStringList::ConstIterator itEnd = filterIDsList.constEnd();
+        for (TQStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
         {
-            QString filterID = *it;
+            TQString filterID = *it;
             // kdDebug() << "KCMKttsMgr::load: filterID = " << filterID << endl;
             m_config->setGroup("Filter_" + filterID);
-            QString desktopEntryName = m_config->readEntry("DesktopEntryName", QString::null);
+            TQString desktopEntryName = m_config->readEntry("DesktopEntryName", TQString::null);
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
             // Try to convert the translated plugin name to a DesktopEntryName.
             // DesktopEntryNames are better because user can change their desktop language
             // and DesktopEntryName won't change.
-            QString filterPlugInName;
+            TQString filterPlugInName;
             if (desktopEntryName.isEmpty())
             {
-                filterPlugInName = m_config->readEntry("PlugInName", QString::null);
+                filterPlugInName = m_config->readEntry("PlugInName", TQString::null);
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
@@ -586,7 +586,7 @@ void KCMKttsMgr::load()
             filterPlugInName = FilterDesktopEntryNameToName(desktopEntryName);
             if (!filterPlugInName.isEmpty())
             {
-                QString userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
+                TQString userFilterName = m_config->readEntry("UserFilterName", filterPlugInName);
                 bool multiInstance = m_config->readBoolEntry("MultiInstance", false);
                 // Determine if this filter is a Sentence Boundary Detector (SBD).
                 bool isSbd = m_config->readBoolEntry("IsSBD", false);
@@ -604,11 +604,11 @@ void KCMKttsMgr::load()
                     filterItem = m_kttsmgrw->filtersList->lastChild();
                     if (!filterItem)
                         filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
-                            userFilterName, QCheckListItem::CheckBox, this);
+                            userFilterName, TQCheckListItem::CheckBox, this);
                     else
                         filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                            userFilterName, QCheckListItem::CheckBox, this);
-                    dynamic_cast<QCheckListItem*>(filterItem)->setOn(checked);
+                            userFilterName, TQCheckListItem::CheckBox, this);
+                    dynamic_cast<TQCheckListItem*>(filterItem)->setOn(checked);
                 }
                 filterItem->setText(flvcFilterID, filterID);
                 filterItem->setText(flvcPlugInName, filterPlugInName);
@@ -626,8 +626,8 @@ void KCMKttsMgr::load()
     offers = KTrader::self()->query("KTTSD/FilterPlugin");
     for (unsigned int i=0; i < offers.count() ; ++i)
     {
-        QString filterPlugInName = offers[i]->name();
-        QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+        TQString filterPlugInName = offers[i]->name();
+        TQString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
         if (!desktopEntryName.isEmpty() && (countFilterPlugins(filterPlugInName) == 0))
         {
             // Must load plugin to determine if it supports multiple instances
@@ -636,10 +636,10 @@ void KCMKttsMgr::load()
             if (filterPlugIn)
             {
                 ++m_lastFilterID;
-                QString filterID = QString::number(m_lastFilterID);
-                QString groupName = "Filter_" + filterID;
+                TQString filterID = TQString::number(m_lastFilterID);
+                TQString groupName = "Filter_" + filterID;
                 filterPlugIn->load(m_config, groupName);
-                QString userFilterName = filterPlugIn->userPlugInName();
+                TQString userFilterName = filterPlugIn->userPlugInName();
                 if (!userFilterName.isEmpty())
                 {
                     kdDebug() << "KCMKttsMgr::load: auto-configuring filter " << userFilterName << endl;
@@ -659,11 +659,11 @@ void KCMKttsMgr::load()
                         filterItem = m_kttsmgrw->filtersList->lastChild();
                         if (!filterItem)
                             filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList,
-                                userFilterName, QCheckListItem::CheckBox, this);
+                                userFilterName, TQCheckListItem::CheckBox, this);
                         else
                             filterItem = new KttsCheckListItem(m_kttsmgrw->filtersList, filterItem,
-                                userFilterName, QCheckListItem::CheckBox, this);
-                        dynamic_cast<QCheckListItem*>(filterItem)->setOn(false);
+                                userFilterName, TQCheckListItem::CheckBox, this);
+                        dynamic_cast<TQCheckListItem*>(filterItem)->setOn(false);
                     }
                     filterItem->setText(flvcFilterID, filterID);
                     filterItem->setText(flvcPlugInName, filterPlugInName);
@@ -688,7 +688,7 @@ void KCMKttsMgr::load()
         }
     }
     // Rewrite list of FilterIDs in case we added any.
-    QString filterIDs = filterIDsList.join(",");
+    TQString filterIDs = filterIDsList.join(",");
     m_config->setGroup("General");
     m_config->writeEntry("FilterIDs", filterIDs);
     m_config->sync();
@@ -801,67 +801,67 @@ void KCMKttsMgr::save()
     m_config->writeEntry("KeepAudioPath", m_kttsmgrw->keepAudioPath->url());
 
     // Get ordered list of all talker IDs.
-    QStringList talkerIDsList;
-    QListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
+    TQStringList talkerIDsList;
+    TQListViewItem* talkerItem = m_kttsmgrw->talkersList->firstChild();
     while (talkerItem)
     {
-        QListViewItem* nextTalkerItem = talkerItem->itemBelow();
-        QString talkerID = talkerItem->text(tlvcTalkerID);
+        TQListViewItem* nextTalkerItem = talkerItem->itemBelow();
+        TQString talkerID = talkerItem->text(tlvcTalkerID);
         talkerIDsList.append(talkerID);
         talkerItem = nextTalkerItem;
     }
-    QString talkerIDs = talkerIDsList.join(",");
+    TQString talkerIDs = talkerIDsList.join(",");
     m_config->writeEntry("TalkerIDs", talkerIDs);
 
     // Erase obsolete Talker_nn sections.
-    QStringList groupList = m_config->groupList();
+    TQStringList groupList = m_config->groupList();
     int groupListCount = groupList.count();
     for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
     {
-        QString groupName = groupList[groupNdx];
+        TQString groupName = groupList[groupNdx];
         if (groupName.left(7) == "Talker_")
         {
-            QString groupTalkerID = groupName.mid(7);
+            TQString groupTalkerID = groupName.mid(7);
             if (!talkerIDsList.contains(groupTalkerID)) m_config->deleteGroup(groupName);
         }
     }
 
     // Get ordered list of all filter IDs.  Record enabled state of each filter.
-    QStringList filterIDsList;
-    QListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
+    TQStringList filterIDsList;
+    TQListViewItem* filterItem = m_kttsmgrw->filtersList->firstChild();
     while (filterItem)
     {
-        QListViewItem* nextFilterItem = filterItem->itemBelow();
-        QString filterID = filterItem->text(flvcFilterID);
+        TQListViewItem* nextFilterItem = filterItem->itemBelow();
+        TQString filterID = filterItem->text(flvcFilterID);
         filterIDsList.append(filterID);
-        bool checked = dynamic_cast<QCheckListItem*>(filterItem)->isOn();
+        bool checked = dynamic_cast<TQCheckListItem*>(filterItem)->isOn();
         m_config->setGroup("Filter_" + filterID);
         m_config->writeEntry("Enabled", checked);
         m_config->writeEntry("IsSBD", false);
         filterItem = nextFilterItem;
     }
-    QListViewItem* sbdItem = m_kttsmgrw->sbdsList->firstChild();
+    TQListViewItem* sbdItem = m_kttsmgrw->sbdsList->firstChild();
     while (sbdItem)
     {
-        QListViewItem* nextSbdItem = sbdItem->itemBelow();
-        QString filterID = sbdItem->text(slvcFilterID);
+        TQListViewItem* nextSbdItem = sbdItem->itemBelow();
+        TQString filterID = sbdItem->text(slvcFilterID);
         filterIDsList.append(filterID);
         m_config->setGroup("Filter_" + filterID);
         m_config->writeEntry("Enabled", true);
         m_config->writeEntry("IsSBD", true);
         sbdItem = nextSbdItem;
     }
-    QString filterIDs = filterIDsList.join(",");
+    TQString filterIDs = filterIDsList.join(",");
     m_config->setGroup("General");
     m_config->writeEntry("FilterIDs", filterIDs);
 
     // Erase obsolete Filter_nn sections.
     for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx)
     {
-        QString groupName = groupList[groupNdx];
+        TQString groupName = groupList[groupNdx];
         if (groupName.left(7) == "Filter_")
         {
-            QString groupFilterID = groupName.mid(7);
+            TQString groupFilterID = groupName.mid(7);
             if (!filterIDsList.contains(groupFilterID)) m_config->deleteGroup(groupName);
         }
     }
@@ -892,7 +892,7 @@ void KCMKttsMgr::save()
         if (kttsdRunning)
         {
             kdDebug() << "Restarting KTTSD" << endl;
-            QByteArray data;
+            TQByteArray data;
             client->send("kttsd", "KSpeech", "reinit()", data);
         }
     }
@@ -1066,7 +1066,7 @@ int KCMKttsMgr::buttons() {
 * This function returns the small quickhelp.
 * That is displayed in the sidebar in the KControl
 */
-QString KCMKttsMgr::quickHelp() const{
+TQString KCMKttsMgr::quickHelp() const{
     // kdDebug() << "KCMKttsMgr::quickHelp: Running"<< endl;
     return i18n(
         "<h1>Text-to-Speech</h1>"
@@ -1094,13 +1094,13 @@ const KAboutData* KCMKttsMgr::aboutData() const{
 * @param name             DesktopEntryName of the Synthesizer.
 * @return                 Pointer to the configuration plugin for the Talker.
 */
-PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
+PlugInConf* KCMKttsMgr::loadTalkerPlugin(const TQString& name)
 {
     // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-        QString("DesktopEntryName == '%1'").arg(name));
+        TQString("DesktopEntryName == '%1'").arg(name));
 
     if (offers.count() == 1)
     {
@@ -1138,13 +1138,13 @@ PlugInConf* KCMKttsMgr::loadTalkerPlugin(const QString& name)
  * @param plugInName       DesktopEntryName of the plugin.
  * @return                 Pointer to the configuration plugin for the Filter.
  */
-KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
+KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const TQString& plugInName)
 {
     // kdDebug() << "KCMKttsMgr::loadPlugin: Running"<< endl;
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("DesktopEntryName == '%1'").arg(plugInName));
+        TQString("DesktopEntryName == '%1'").arg(plugInName));
 
     if (offers.count() == 1)
     {
@@ -1158,7 +1158,7 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
             KttsFilterConf *plugIn =
                 KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterConf>(
                     offers[0]->library().latin1(), NULL, offers[0]->library().latin1(),
-                    QStringList(), &errorNo);
+                    TQStringList(), &errorNo);
             if(plugIn){
                 // If everything went ok, return the plug in pointer.
                 return plugIn;
@@ -1180,16 +1180,16 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin(const QString& plugInName)
 
 /**
 * Given an item in the talker listview and a talker code, sets the columns of the item.
-* @param talkerItem       QListViewItem.
+* @param talkerItem       TQListViewItem.
 * @param talkerCode       Talker Code.
 */
-void KCMKttsMgr::updateTalkerItem(QListViewItem* talkerItem, const QString &talkerCode)
+void KCMKttsMgr::updateTalkerItem(TQListViewItem* talkerItem, const TQString &talkerCode)
 {
     TalkerCode parsedTalkerCode(talkerCode);
-    QString fullLanguageCode = parsedTalkerCode.fullLanguageCode();
+    TQString fullLanguageCode = parsedTalkerCode.fullLanguageCode();
     if (!fullLanguageCode.isEmpty())
     {
-        QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
+        TQString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
         if (!language.isEmpty())
         {
             m_languagesToCodes[language] = fullLanguageCode;
@@ -1227,26 +1227,26 @@ void KCMKttsMgr::slot_addTalker()
     dlg->setMainWidget(addTalkerWidget);
     dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
-    QString languageCode = addTalkerWidget->getLanguageCode();
-    QString synthName = addTalkerWidget->getSynthesizer();
+    TQString languageCode = addTalkerWidget->getLanguageCode();
+    TQString synthName = addTalkerWidget->getSynthesizer();
     delete dlg;
     // TODO: Also delete addTalkerWidget?
-    if (dlgResult != QDialog::Accepted) return;
+    if (dlgResult != TQDialog::Accepted) return;
 
     // If user chose "Other", must now get a language from him.
     if(languageCode == "other")
     {
-        // Create a  QHBox to host KListView.
-        QHBox* hBox = new QHBox(m_kttsmgrw, "SelectLanguage_hbox");
+        // Create a  TQHBox to host KListView.
+        TQHBox* hBox = new TQHBox(m_kttsmgrw, "SelectLanguage_hbox");
         // Create a KListView and fill with all known languages.
         KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
         langLView->addColumn(i18n("Language"));
         langLView->addColumn(i18n("Code"));
-        QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-        QString locale;
-        QString countryCode;
-        QString charSet;
-        QString language;
+        TQStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
+        TQString locale;
+        TQString countryCode;
+        TQString charSet;
+        TQString language;
         const int allLocalesCount = allLocales.count();
         for (int ndx=0; ndx < allLocalesCount; ++ndx)
         {
@@ -1269,30 +1269,30 @@ void KCMKttsMgr::slot_addTalker()
             true);
         dlg->setMainWidget(hBox);
         dlg->setHelp("select-plugin", "kttsd");
-        dlg->setInitialSize(QSize(200, 500), false);
+        dlg->setInitialSize(TQSize(200, 500), false);
         dlgResult = dlg->exec();
-        languageCode = QString::null;
+        languageCode = TQString::null;
         if (langLView->selectedItem()) languageCode = langLView->selectedItem()->text(1);
         delete dlg;
         // TODO: Also delete KListView and QHBox?
-        if (dlgResult != QDialog::Accepted) return;
+        if (dlgResult != TQDialog::Accepted) return;
     }
 
     if (languageCode.isEmpty()) return;
-    QString language = TalkerCode::languageCodeToLanguage(languageCode);
+    TQString language = TalkerCode::languageCodeToLanguage(languageCode);
     if (language.isEmpty()) return;
 
     m_languagesToCodes[language] = languageCode;
 
     // Assign a new Talker ID for the talker.  Wraps around to 1.
-    QString talkerID = QString::number(m_lastTalkerID + 1);
+    TQString talkerID = TQString::number(m_lastTalkerID + 1);
 
     // Erase extraneous Talker configuration entries that might be there.
-    m_config->deleteGroup(QString("Talker_")+talkerID);
+    m_config->deleteGroup(TQString("Talker_")+talkerID);
     m_config->sync();
 
     // Convert translated plugin name to DesktopEntryName.
-    QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
+    TQString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
     // This shouldn't happen, but just in case.
     if (desktopEntryName.isEmpty()) return;
 
@@ -1302,11 +1302,11 @@ void KCMKttsMgr::slot_addTalker()
 
     // Give plugin the user's language code and permit plugin to autoconfigure itself.
     m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
+    m_loadedTalkerPlugIn->load(m_config, TQString("Talker_")+talkerID);
 
     // If plugin was able to configure itself, it returns a full talker code.
     // If not, display configuration dialog for user to configure the plugin.
-    QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
+    TQString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
     if (talkerCode.isEmpty())
     {
         // Display configuration dialog.
@@ -1326,27 +1326,27 @@ void KCMKttsMgr::slot_addTalker()
     if (!talkerCode.isEmpty())
     {
         // Let plugin save its configuration.
-        m_config->setGroup(QString("Talker_")+talkerID);
-        m_loadedTalkerPlugIn->save(m_config, QString("Talker_"+talkerID));
+        m_config->setGroup(TQString("Talker_")+talkerID);
+        m_loadedTalkerPlugIn->save(m_config, TQString("Talker_"+talkerID));
 
         // Record last Talker ID used for next add.
         m_lastTalkerID = talkerID.toInt();
 
         // Record configuration data.  Note, might as well do this now.
-        m_config->setGroup(QString("Talker_")+talkerID);
+        m_config->setGroup(TQString("Talker_")+talkerID);
         m_config->writeEntry("DesktopEntryName", desktopEntryName);
         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
         m_config->sync();
 
         // Add listview item.
-        QListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
+        TQListViewItem* talkerItem = m_kttsmgrw->talkersList->lastChild();
         if (talkerItem)
             talkerItem =  new KListViewItem(m_kttsmgrw->talkersList, talkerItem,
-                QString::number(m_lastTalkerID), language, synthName);
+                TQString::number(m_lastTalkerID), language, synthName);
         else
             talkerItem = new KListViewItem(m_kttsmgrw->talkersList,
-                QString::number(m_lastTalkerID), language, synthName);
+                TQString::number(m_lastTalkerID), language, synthName);
 
         // Set additional columns of the listview item.
         updateTalkerItem(talkerItem, talkerCode);
@@ -1394,8 +1394,8 @@ void KCMKttsMgr::addFilter( bool sbd)
     KListView* lView = m_kttsmgrw->filtersList;
     if (sbd) lView = m_kttsmgrw->sbdsList;
 
-    QStringList filterPlugInNames;
-    QListViewItem* item = lView->firstChild();
+    TQStringList filterPlugInNames;
+    TQListViewItem* item = lView->firstChild();
     while (item)
     {
         if (item->text(flvcMultiInstance) == "T")
@@ -1409,10 +1409,10 @@ void KCMKttsMgr::addFilter( bool sbd)
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
     for (unsigned int i=0; i < offers.count() ; ++i)
     {
-        QString filterPlugInName = offers[i]->name();
+        TQString filterPlugInName = offers[i]->name();
         if (countFilterPlugins(filterPlugInName) == 0)
         {
-            QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+            TQString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
             KttsFilterConf* filterConf = loadFilterPlugin(desktopEntryName);
             if (filterConf)
             {
@@ -1429,7 +1429,7 @@ void KCMKttsMgr::addFilter( bool sbd)
 
     // If exactly one choice, skip selection dialog, otherwise display list to user to select from.
     bool okChosen = false;
-    QString filterPlugInName;
+    TQString filterPlugInName;
     if (filterPlugInNames.count() > 1)
     {
         filterPlugInName = KInputDialog::getItem(
@@ -1446,14 +1446,14 @@ void KCMKttsMgr::addFilter( bool sbd)
         filterPlugInName = filterPlugInNames[0];
 
     // Assign a new Filter ID for the filter.  Wraps around to 1.
-    QString filterID = QString::number(m_lastFilterID + 1);
+    TQString filterID = TQString::number(m_lastFilterID + 1);
 
     // Erase extraneous Filter configuration entries that might be there.
-    m_config->deleteGroup(QString("Filter_")+filterID);
+    m_config->deleteGroup(TQString("Filter_")+filterID);
     m_config->sync();
 
     // Get DesktopEntryName from the translated name.
-    QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+    TQString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
     // This shouldn't happen, but just in case.
     if (desktopEntryName.isEmpty()) return;
 
@@ -1462,7 +1462,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     if (!m_loadedFilterPlugIn) return;
 
     // Permit plugin to autoconfigure itself.
-    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
+    m_loadedFilterPlugIn->load(m_config, TQString("Filter_")+filterID);
 
     // Display configuration dialog for user to configure the plugin.
     configureFilter();
@@ -1477,14 +1477,14 @@ void KCMKttsMgr::addFilter( bool sbd)
     }
 
     // Get user's name for Filter.
-    QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
+    TQString userFilterName = m_loadedFilterPlugIn->userPlugInName();
 
     // If user properly configured the plugin, save its configuration.
     if ( !userFilterName.isEmpty() )
     {
         // Let plugin save its configuration.
-        m_config->setGroup(QString("Filter_")+filterID);
-        m_loadedFilterPlugIn->save(m_config, QString("Filter_"+filterID));
+        m_config->setGroup(TQString("Filter_")+filterID);
+        m_loadedFilterPlugIn->save(m_config, TQString("Filter_"+filterID));
 
         // Record last Filter ID used for next add.
         m_lastFilterID = filterID.toInt();
@@ -1493,7 +1493,7 @@ void KCMKttsMgr::addFilter( bool sbd)
         bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
 
         // Record configuration data.  Note, might as well do this now.
-        m_config->setGroup(QString("Filter_")+filterID);
+        m_config->setGroup(TQString("Filter_")+filterID);
         m_config->writeEntry("DesktopEntryName", desktopEntryName);
         m_config->writeEntry("UserFilterName", userFilterName);
         m_config->writeEntry("MultiInstance", multiInstance);
@@ -1502,7 +1502,7 @@ void KCMKttsMgr::addFilter( bool sbd)
         m_config->sync();
 
         // Add listview item.
-        QListViewItem* filterItem = lView->lastChild();
+        TQListViewItem* filterItem = lView->lastChild();
         if (sbd)
         {
             if (filterItem)
@@ -1514,13 +1514,13 @@ void KCMKttsMgr::addFilter( bool sbd)
         {
             if (filterItem)
                 filterItem = new KttsCheckListItem(lView, filterItem,
-                    userFilterName, QCheckListItem::CheckBox, this);
+                    userFilterName, TQCheckListItem::CheckBox, this);
             else
                 filterItem = new KttsCheckListItem(lView,
-                    userFilterName, QCheckListItem::CheckBox, this);
-            dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+                    userFilterName, TQCheckListItem::CheckBox, this);
+            dynamic_cast<TQCheckListItem*>(filterItem)->setOn(true);
         }
-        filterItem->setText(flvcFilterID, QString::number(m_lastFilterID));
+        filterItem->setText(flvcFilterID, TQString::number(m_lastFilterID));
         filterItem->setText(flvcPlugInName, filterPlugInName);
         if (multiInstance)
             filterItem->setText(flvcMultiInstance, "T");
@@ -1558,11 +1558,11 @@ void KCMKttsMgr::slot_removeTalker(){
     // kdDebug() << "KCMKttsMgr::removeTalker: Running"<< endl;
 
     // Get the selected talker.
-    QListViewItem *itemToRemove = m_kttsmgrw->talkersList->selectedItem();
+    TQListViewItem *itemToRemove = m_kttsmgrw->talkersList->selectedItem();
     if (!itemToRemove) return;
 
     // Delete the talker from configuration file.
-//    QString talkerID = itemToRemove->text(tlvcTalkerID);
+//    TQString talkerID = itemToRemove->text(tlvcTalkerID);
 //    m_config->deleteGroup("Talker_"+talkerID, true, false);
 
     // Delete the talker from list view.
@@ -1594,11 +1594,11 @@ void KCMKttsMgr::removeFilter( bool sbd )
     KListView* lView = m_kttsmgrw->filtersList;
     if (sbd) lView = m_kttsmgrw->sbdsList;
     // Get the selected filter.
-    QListViewItem *itemToRemove = lView->selectedItem();
+    TQListViewItem *itemToRemove = lView->selectedItem();
     if (!itemToRemove) return;
 
     // Delete the filter from configuration file.
-//    QString filterID = itemToRemove->text(flvcFilterID);
+//    TQString filterID = itemToRemove->text(flvcFilterID);
 //    m_config->deleteGroup("Filter_"+filterID, true, false);
 
     // Delete the filter from list view.
@@ -1636,9 +1636,9 @@ void KCMKttsMgr::slot_higherSbdFilterPriority()
 */
 void KCMKttsMgr::higherItemPriority( KListView* lView )
 {
-    QListViewItem* item = lView->selectedItem();
+    TQListViewItem* item = lView->selectedItem();
     if (!item) return;
-    QListViewItem* prevItem = item->itemAbove();
+    TQListViewItem* prevItem = item->itemAbove();
     if (!prevItem) return;
     prevItem->moveItem(item);
     lView->setSelected(item, true);
@@ -1669,9 +1669,9 @@ void KCMKttsMgr::slot_lowerSbdFilterPriority()
 */
 void KCMKttsMgr::lowerItemPriority( KListView* lView )
 {
-    QListViewItem* item = lView->selectedItem();
+    TQListViewItem* item = lView->selectedItem();
     if (!item) return;
-    QListViewItem* nextItem = item->itemBelow();
+    TQListViewItem* nextItem = item->itemBelow();
     if (!nextItem) return;
     item->moveItem(nextItem);
     lView->setSelected(item, true);
@@ -1705,7 +1705,7 @@ void KCMKttsMgr::updateTalkerButtons(){
 */
 void KCMKttsMgr::updateFilterButtons(){
     // kdDebug() << "KCMKttsMgr::updateFilterButtons: Running"<< endl;
-    QListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->filtersList->selectedItem();
     if (item) {
         m_kttsmgrw->removeFilterButton->setEnabled(true);
         m_kttsmgrw->configureFilterButton->setEnabled(true);
@@ -1727,7 +1727,7 @@ void KCMKttsMgr::updateFilterButtons(){
  */
 void KCMKttsMgr::updateSbdButtons(){
     // kdDebug() << "KCMKttsMgr::updateSbdButtons: Running"<< endl;
-    QListViewItem* item = m_kttsmgrw->sbdsList->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->sbdsList->selectedItem();
     if (item) {
         m_sbdPopmenu->setItemEnabled( sbdBtnEdit, true );
         m_sbdPopmenu->setItemEnabled( sbdBtnUp,
@@ -1763,8 +1763,8 @@ void KCMKttsMgr::enableKttsdToggled(bool)
         if (!kttsdRunning)
         {
             // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Starting KTTSD" << endl;
-            QString error;
-            if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
+            TQString error;
+            if (KApplication::startServiceByDesktopName("kttsd", TQStringList(), &error))
             {
                 kdDebug() << "Starting KTTSD failed with message " << error << endl;
                 m_kttsmgrw->enableKttsdCheckBox->setChecked(false);
@@ -1778,7 +1778,7 @@ void KCMKttsMgr::enableKttsdToggled(bool)
     if (kttsdRunning)
         {
             // kdDebug() << "KCMKttsMgr::enableKttsdToggled:: Stopping KTTSD" << endl;
-            QByteArray data;
+            TQByteArray data;
             client->send("kttsd", "KSpeech", "kttsdExit()", data);
         }
     }
@@ -1882,22 +1882,22 @@ void KCMKttsMgr::kttsdExiting()
 void KCMKttsMgr::slot_configureTalker()
 {
     // Get highlighted plugin from Talker ListView and load into memory.
-    QListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
+    TQListViewItem* talkerItem = m_kttsmgrw->talkersList->selectedItem();
     if (!talkerItem) return;
-    QString talkerID = talkerItem->text(tlvcTalkerID);
-    QString synthName = talkerItem->text(tlvcSynthName);
-    QString language = talkerItem->text(tlvcLanguage);
-    QString languageCode = m_languagesToCodes[language];
-    QString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
+    TQString talkerID = talkerItem->text(tlvcTalkerID);
+    TQString synthName = talkerItem->text(tlvcSynthName);
+    TQString language = talkerItem->text(tlvcLanguage);
+    TQString languageCode = m_languagesToCodes[language];
+    TQString desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
     m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
     if (!m_loadedTalkerPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureTalker: plugin for " << synthName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
-    m_config->setGroup(QString("Talker_")+talkerID);
+    m_config->setGroup(TQString("Talker_")+talkerID);
     m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
     // kdDebug() << "KCMKttsMgr::slot_configureTalker: about to call plugin load() method with Talker ID = " << talkerID << endl;
-    m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
+    m_loadedTalkerPlugIn->load(m_config, TQString("Talker_")+talkerID);
 
     // Display configuration dialog.
     configureTalker();
@@ -1912,14 +1912,14 @@ void KCMKttsMgr::slot_configureTalker()
     }
 
     // Get Talker Code.  Note that plugin may return a code different from before.
-    QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
+    TQString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
 
     // If plugin was successfully configured, save its configuration.
     if (!talkerCode.isEmpty())
     {
-        m_config->setGroup(QString("Talker_")+talkerID);
-        m_loadedTalkerPlugIn->save(m_config, QString("Talker_")+talkerID);
-        m_config->setGroup(QString("Talker_")+talkerID);
+        m_config->setGroup(TQString("Talker_")+talkerID);
+        m_loadedTalkerPlugIn->save(m_config, TQString("Talker_")+talkerID);
+        m_config->setGroup(TQString("Talker_")+talkerID);
         talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
         m_config->writeEntry("TalkerCode", talkerCode);
         m_config->sync();
@@ -1956,20 +1956,20 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     // Get highlighted plugin from Filter ListView and load into memory.
     KListView* lView = m_kttsmgrw->filtersList;
     if (sbd) lView = m_kttsmgrw->sbdsList;
-    QListViewItem* filterItem = lView->selectedItem();
+    TQListViewItem* filterItem = lView->selectedItem();
     if (!filterItem) return;
-    QString filterID = filterItem->text(flvcFilterID);
-    QString filterPlugInName = filterItem->text(flvcPlugInName);
-    QString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
+    TQString filterID = filterItem->text(flvcFilterID);
+    TQString filterPlugInName = filterItem->text(flvcPlugInName);
+    TQString desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
     if (desktopEntryName.isEmpty()) return;
     m_loadedFilterPlugIn = loadFilterPlugin(desktopEntryName);
     if (!m_loadedFilterPlugIn) return;
     // kdDebug() << "KCMKttsMgr::slot_configureFilter: plugin for " << filterPlugInName << " loaded successfully." << endl;
 
     // Tell plugin to load its configuration.
-    m_config->setGroup(QString("Filter_")+filterID);
+    m_config->setGroup(TQString("Filter_")+filterID);
     // kdDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID << endl;
-    m_loadedFilterPlugIn->load(m_config, QString("Filter_")+filterID);
+    m_loadedFilterPlugIn->load(m_config, TQString("Filter_")+filterID);
 
     // Display configuration dialog.
     configureFilter();
@@ -1984,15 +1984,15 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
     }
 
     // Get user's name for the plugin.
-    QString userFilterName = m_loadedFilterPlugIn->userPlugInName();
+    TQString userFilterName = m_loadedFilterPlugIn->userPlugInName();
 
     // If user properly configured the plugin, save the configuration.
     if ( !userFilterName.isEmpty() )
     {
 
         // Let plugin save its configuration.
-        m_config->setGroup(QString("Filter_")+filterID);
-        m_loadedFilterPlugIn->save(m_config, QString("Filter_")+filterID);
+        m_config->setGroup(TQString("Filter_")+filterID);
+        m_loadedFilterPlugIn->save(m_config, TQString("Filter_")+filterID);
 
         // Save configuration.
         m_config->setGroup("Filter_"+filterID);
@@ -2007,7 +2007,7 @@ void KCMKttsMgr::configureFilterItem( bool sbd )
         // Update display.
         filterItem->setText(flvcUserName, userFilterName);
         if (!sbd)
-            dynamic_cast<QCheckListItem*>(filterItem)->setOn(true);
+            dynamic_cast<TQCheckListItem*>(filterItem)->setOn(true);
 
         // Inform Control Center that configuration has changed.
         configChanged();
@@ -2036,16 +2036,16 @@ void KCMKttsMgr::configureTalker()
         "configureTalker_dlg",
         true,
         true);
-    m_configDlg->setInitialSize(QSize(700, 300), false);
+    m_configDlg->setInitialSize(TQSize(700, 300), false);
     m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
     m_configDlg->setHelp("configure-plugin", "kttsd");
     m_configDlg->enableButtonOK(false);
-    connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
-    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));
-    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
+    connect(m_loadedTalkerPlugIn, TQT_SIGNAL( changed(bool) ), this, TQT_SLOT( slotConfigTalkerDlg_ConfigChanged() ));
+    connect(m_configDlg, TQT_SIGNAL( defaultClicked() ), this, TQT_SLOT( slotConfigTalkerDlg_DefaultClicked() ));
+    connect(m_configDlg, TQT_SIGNAL( cancelClicked() ), this, TQT_SLOT (slotConfigTalkerDlg_CancelClicked() ));
     // Create a Player object for the plugin to use for testing.
     int playerOption = 0;
-    QString sinkName;
+    TQString sinkName;
     if (m_kttsmgrw->gstreamerRadioButton->isChecked()) {
         playerOption = 1;
         sinkName = m_kttsmgrw->sinkComboBox->currentText();
@@ -2092,15 +2092,15 @@ void KCMKttsMgr::configureFilter()
         "configureFilter_dlg",
         true,
         true);
-    m_configDlg->setInitialSize(QSize(600, 450), false);
+    m_configDlg->setInitialSize(TQSize(600, 450), false);
     m_loadedFilterPlugIn->setMinimumSize(m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget(m_loadedFilterPlugIn);
     m_configDlg->setHelp("configure-filter", "kttsd");
     m_configDlg->enableButtonOK(false);
-    connect(m_loadedFilterPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigFilterDlg_ConfigChanged() ));
-    connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigFilterDlg_DefaultClicked() ));
-    connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigFilterDlg_CancelClicked() ));
+    connect(m_loadedFilterPlugIn, TQT_SIGNAL( changed(bool) ), this, TQT_SLOT( slotConfigFilterDlg_ConfigChanged() ));
+    connect(m_configDlg, TQT_SIGNAL( defaultClicked() ), this, TQT_SLOT( slotConfigFilterDlg_DefaultClicked() ));
+    connect(m_configDlg, TQT_SIGNAL( cancelClicked() ), this, TQT_SLOT (slotConfigFilterDlg_CancelClicked() ));
     // Display the dialog.
     m_configDlg->exec();
 }
@@ -2108,10 +2108,10 @@ void KCMKttsMgr::configureFilter()
 /**
 * Count number of configured Filters with the specified plugin name.
 */
-int KCMKttsMgr::countFilterPlugins(const QString& filterPlugInName)
+int KCMKttsMgr::countFilterPlugins(const TQString& filterPlugInName)
 {
     int cnt = 0;
-    QListViewItem* item = m_kttsmgrw->filtersList->firstChild();
+    TQListViewItem* item = m_kttsmgrw->filtersList->firstChild();
     while (item)
     {
         if (item->text(flvcPlugInName) == filterPlugInName) ++cnt;
@@ -2201,15 +2201,15 @@ void KCMKttsMgr::slotFiltersList_stateChanged()
  * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
  * @param name                   The translated plugin name.  From Name= line in .desktop file.
  * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
- *                               QString::null if not found.
+ *                               TQString::null if not found.
  */
-QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
+TQString KCMKttsMgr::FilterNameToDesktopEntryName(const TQString& name)
 {
-    if (name.isEmpty()) return QString::null;
+    if (name.isEmpty()) return TQString::null;
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
     for (uint ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return QString::null;
+    return TQString::null;
 }
 
 /**
@@ -2217,31 +2217,31 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName(const QString& name)
  * @param desktopEntryName       The DesktopEntryName.
  * @return                       The translated Name of the plugin, from Name= line in .desktop file.
  */
-QString KCMKttsMgr::FilterDesktopEntryNameToName(const QString& desktopEntryName)
+TQString KCMKttsMgr::FilterDesktopEntryNameToName(const TQString& desktopEntryName)
 {
-    if (desktopEntryName.isEmpty()) return QString::null;
+    if (desktopEntryName.isEmpty()) return TQString::null;
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+        TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();
     else
-        return QString::null;
+        return TQString::null;
 }
 
 /**
  * Loads notify events from a file.  Clearing listview if clear is True.
  */
-QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clear)
+TQString KCMKttsMgr::loadNotifyEventsFromFile( const TQString& filename, bool clear)
 {
     // Open existing event list.
-    QFile file( filename );
+    TQFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
     {
         return i18n("Unable to open file.") + filename;
     }
-    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
-    QDomDocument doc( "" );
+    // TQDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
+    TQDomDocument doc( "" );
     if ( !doc.setContent( &file ) ) {
         file.close();
         return i18n("File not in proper XML format.");
@@ -2253,22 +2253,22 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
     if ( clear ) m_kttsmgrw->notifyListView->clear();
 
     // Event list.
-    QDomNodeList eventList = doc.elementsByTagName("notifyEvent");
+    TQDomNodeList eventList = doc.elementsByTagName("notifyEvent");
     const int eventListCount = eventList.count();
     for (int eventIndex = 0; eventIndex < eventListCount; ++eventIndex)
     {
-        QDomNode eventNode = eventList.item(eventIndex);
-        QDomNodeList propList = eventNode.childNodes();
-        QString eventSrc;
-        QString event;
-        QString actionName;
-        QString message;
+        TQDomNode eventNode = eventList.item(eventIndex);
+        TQDomNodeList propList = eventNode.childNodes();
+        TQString eventSrc;
+        TQString event;
+        TQString actionName;
+        TQString message;
         TalkerCode talkerCode;
         const int propListCount = propList.count();
         for (int propIndex = 0; propIndex < propListCount; ++propIndex)
         {
-            QDomNode propNode = propList.item(propIndex);
-            QDomElement prop = propNode.toElement();
+            TQDomNode propNode = propList.item(propIndex);
+            TQDomElement prop = propNode.toElement();
             if (prop.tagName() == "eventSrc") eventSrc = prop.text();
             if (prop.tagName() == "event") event = prop.text();
             if (prop.tagName() == "action") actionName = prop.text();
@@ -2278,37 +2278,37 @@ QString KCMKttsMgr::loadNotifyEventsFromFile( const QString& filename, bool clea
         addNotifyItem(eventSrc, event, NotifyAction::action( actionName ), message, talkerCode);
     }
 
-    return QString::null;
+    return TQString::null;
 }
 
 /**
  * Saves notify events to a file.
  */
-QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
+TQString KCMKttsMgr::saveNotifyEventsToFile(const TQString& filename)
 {
-    QFile file( filename );
+    TQFile file( filename );
     if ( !file.open( IO_WriteOnly ) )
         return i18n("Unable to open file ") + filename;
 
-    QDomDocument doc( "" );
+    TQDomDocument doc( "" );
 
-    QDomElement root = doc.createElement( "notifyEventList" );
+    TQDomElement root = doc.createElement( "notifyEventList" );
     doc.appendChild( root );
 
     // Events.
     KListView* lv = m_kttsmgrw->notifyListView;
-    QListViewItemIterator it(lv);
+    TQListViewItemIterator it(lv);
     while ( it.current() )
     {
-        QListViewItem* item = *it;
+        TQListViewItem* item = *it;
         if ( item->depth() > 0 )
         {
-            QDomElement wordTag = doc.createElement( "notifyEvent" );
+            TQDomElement wordTag = doc.createElement( "notifyEvent" );
             root.appendChild( wordTag );
 
-            QDomElement propTag = doc.createElement( "eventSrc" );
+            TQDomElement propTag = doc.createElement( "eventSrc" );
             wordTag.appendChild( propTag);
-            QDomText t = doc.createTextNode( item->text(nlvcEventSrc) );
+            TQDomText t = doc.createTextNode( item->text(nlvcEventSrc) );
             propTag.appendChild( t );
 
             propTag = doc.createElement( "event" );
@@ -2325,7 +2325,7 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
             {
                 propTag = doc.createElement( "message" );
                 wordTag.appendChild( propTag);
-                QString msg = item->text(nlvcActionName);
+                TQString msg = item->text(nlvcActionName);
                 int msglen = msg.length();
                 msg = msg.mid( 1, msglen-2 );
                 t = doc.createCDATASection( msg );
@@ -2341,13 +2341,13 @@ QString KCMKttsMgr::saveNotifyEventsToFile(const QString& filename)
     }
 
     // Write it all out.
-    QTextStream ts( &file );
-    ts.setEncoding( QTextStream::UnicodeUTF8 );
+    TQTextStream ts( &file );
+    ts.setEncoding( TQTextStream::UnicodeUTF8 );
     ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     ts << doc.toString();
     file.close();
 
-    return QString::null;
+    return TQString::null;
 }
 
 void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
@@ -2359,7 +2359,7 @@ void KCMKttsMgr::slotNotifyEnableCheckBox_toggled(bool checked)
 
 void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( !item ) return;        // should not happen
     item->setText( nlvcEvent, NotifyPresent::presentName( index ) );
     item->setText( nlvcEventName, NotifyPresent::presentDisplayName( index ) );
@@ -2380,7 +2380,7 @@ void KCMKttsMgr::slotNotifyPresentComboBox_activated(int index)
 
 void KCMKttsMgr::slotNotifyListView_selectionChanged()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
     {
         bool topLevel = ( item->depth() == 0 );
@@ -2409,7 +2409,7 @@ void KCMKttsMgr::slotNotifyListView_selectionChanged()
             if ( action == NotifyAction::SpeakCustom )
             {
                 m_kttsmgrw->notifyMsgLineEdit->setEnabled( true );
-                QString msg = item->text( nlvcActionName );
+                TQString msg = item->text( nlvcActionName );
                 int msglen = msg.length();
                 msg = msg.mid( 1, msglen-2 );
                 m_kttsmgrw->notifyMsgLineEdit->setText( msg );
@@ -2436,7 +2436,7 @@ void KCMKttsMgr::slotNotifyListView_selectionChanged()
 
 void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
@@ -2452,9 +2452,9 @@ void KCMKttsMgr::slotNotifyActionComboBox_activated(int index)
     configChanged();
 }
 
-void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
+void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const TQString& text)
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
@@ -2467,10 +2467,10 @@ void KCMKttsMgr::slotNotifyMsgLineEdit_textChanged(const QString& text)
 
 void KCMKttsMgr::slotNotifyTestButton_clicked()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (item)
     {
-        QString msg;
+        TQString msg;
         int action = NotifyAction::action(item->text(nlvcAction));
         switch (action)
         {
@@ -2493,16 +2493,16 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
 
 void KCMKttsMgr::slotNotifyTalkerButton_clicked()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if ( item )
         if ( item->depth() == 0 ) item = 0;
     if ( !item ) return;  // This shouldn't happen.
-    QString talkerCode = item->text( nlvcTalker );
+    TQString talkerCode = item->text( nlvcTalker );
     SelectTalkerDlg dlg( m_kttsmgrw, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
     int dlgResult = dlg.exec();
     if ( dlgResult != KDialogBase::Accepted ) return;
     item->setText( nlvcTalker, dlg.getSelectedTalkerCode() );
-    QString talkerName = dlg.getSelectedTranslatedDescription();
+    TQString talkerName = dlg.getSelectedTranslatedDescription();
     item->setText( nlvcTalkerName, talkerName );
     m_kttsmgrw->notifyTalkerLineEdit->setText( talkerName );
     configChanged();
@@ -2512,22 +2512,22 @@ void KCMKttsMgr::slotNotifyTalkerButton_clicked()
  * Adds an item to the notify listview.
  * message is only needed if action = naSpeakCustom.
  */
-QListViewItem* KCMKttsMgr::addNotifyItem(
-    const QString& eventSrc,
-    const QString& event,
+TQListViewItem* KCMKttsMgr::addNotifyItem(
+    const TQString& eventSrc,
+    const TQString& event,
     int action,
-    const QString& message,
+    const TQString& message,
     TalkerCode& talkerCode)
 {
     KListView* lv = m_kttsmgrw->notifyListView;
-    QListViewItem* item = 0;
-    QString iconName;
-    QString eventSrcName;
+    TQListViewItem* item = 0;
+    TQString iconName;
+    TQString eventSrcName;
     if (eventSrc == "default")
         eventSrcName = i18n("Default (all other events)");
     else
         eventSrcName = NotifyEvent::getEventSrcName(eventSrc, iconName);
-    QString eventName;
+    TQString eventName;
     if (eventSrc == "default")
         eventName = NotifyPresent::presentDisplayName( event );
     else
@@ -2537,21 +2537,21 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
         else
             eventName = NotifyEvent::getEventName(eventSrc, event);
     }
-    QString actionName = NotifyAction::actionName( action );
-    QString actionDisplayName = NotifyAction::actionDisplayName( action );
+    TQString actionName = NotifyAction::actionName( action );
+    TQString actionDisplayName = NotifyAction::actionDisplayName( action );
     if (action == NotifyAction::SpeakCustom) actionDisplayName = "\"" + message + "\"";
-    QString talkerName = talkerCode.getTranslatedDescription();
+    TQString talkerName = talkerCode.getTranslatedDescription();
     if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
     {
-        QListViewItem* parentItem = lv->findItem(eventSrcName, nlvcEventSrcName);
+        TQListViewItem* parentItem = lv->findItem(eventSrcName, nlvcEventSrcName);
         if (!parentItem)
         {
             item = lv->lastItem();
             if (!item)
-                parentItem = new KListViewItem(lv, eventSrcName, QString::null, QString::null,
+                parentItem = new KListViewItem(lv, eventSrcName, TQString::null, TQString::null,
                     eventSrc);
             else
-                parentItem = new KListViewItem(lv, item, eventSrcName, QString::null, QString::null,
+                parentItem = new KListViewItem(lv, item, eventSrcName, TQString::null, TQString::null,
                     eventSrc);
             if ( !iconName.isEmpty() )
                 parentItem->setPixmap( nlvcEventSrcName, SmallIcon( iconName ) );
@@ -2571,9 +2571,9 @@ QListViewItem* KCMKttsMgr::addNotifyItem(
 
 void KCMKttsMgr::slotNotifyAddButton_clicked()
 {
-    QListView* lv = m_kttsmgrw->notifyListView;
-    QListViewItem* item = lv->selectedItem();
-    QString eventSrc;
+    TQListView* lv = m_kttsmgrw->notifyListView;
+    TQListViewItem* item = lv->selectedItem();
+    TQString eventSrc;
     if ( item ) eventSrc = item->text( nlvcEventSrc );
     SelectEvent* selectEventWidget = new SelectEvent( this, "SelectEvent_widget", 0, eventSrc );
     KDialogBase* dlg = new KDialogBase(
@@ -2586,18 +2586,18 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
         true,
         true);
     dlg->setMainWidget( selectEventWidget );
-    dlg->setInitialSize( QSize(500, 400) );
+    dlg->setInitialSize( TQSize(500, 400) );
     // dlg->setHelp("select-plugin", "kttsd");
     int dlgResult = dlg->exec();
     eventSrc = selectEventWidget->getEventSrc();
-    QString event = selectEventWidget->getEvent();
+    TQString event = selectEventWidget->getEvent();
     delete dlg;
-    if ( dlgResult != QDialog::Accepted ) return;
+    if ( dlgResult != TQDialog::Accepted ) return;
     if ( eventSrc.isEmpty() || event.isEmpty() ) return;
     // Use Default action, message, and talker.
-    QString actionName;
+    TQString actionName;
     int action = NotifyAction::DoNotSpeak;
-    QString msg;
+    TQString msg;
     TalkerCode talkerCode;
     item = lv->findItem( "default", nlvcEventSrc );
     if ( item )
@@ -2626,14 +2626,14 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
 void KCMKttsMgr::slotNotifyClearButton_clicked()
 {
     m_kttsmgrw->notifyListView->clear();
-    TalkerCode talkerCode( QString::null );
-    QListViewItem* item = addNotifyItem(
-        QString("default"),
+    TalkerCode talkerCode( TQString::null );
+    TQListViewItem* item = addNotifyItem(
+        TQString("default"),
         NotifyPresent::presentName(NotifyPresent::Passive),
         NotifyAction::SpeakEventName,
-        QString::null,
+        TQString::null,
         talkerCode );
-    QListView* lv = m_kttsmgrw->notifyListView;
+    TQListView* lv = m_kttsmgrw->notifyListView;
     lv->ensureItemVisible( item );
     lv->setSelected( item, true );
     slotNotifyListView_selectionChanged();
@@ -2642,9 +2642,9 @@ void KCMKttsMgr::slotNotifyClearButton_clicked()
 
 void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 {
-    QListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
+    TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (!item) return;
-    QListViewItem* parentItem = item->parent();
+    TQListViewItem* parentItem = item->parent();
     delete item;
     if (parentItem)
     {
@@ -2656,15 +2656,15 @@ void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 
 void KCMKttsMgr::slotNotifyLoadButton_clicked()
 {
-    // QString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
-    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/notify/").last();
-    QString filename = KFileDialog::getOpenFileName(
+    // TQString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
+    TQString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/notify/").last();
+    TQString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
         m_kttsmgrw,
         "event_loadfile");
     if ( filename.isEmpty() ) return;
-    QString errMsg = loadNotifyEventsFromFile( filename, true );
+    TQString errMsg = loadNotifyEventsFromFile( filename, true );
     slotNotifyListView_selectionChanged();
     if ( !errMsg.isEmpty() )
         KMessageBox::sorry( m_kttsmgrw, errMsg, i18n("Error Opening File") );
@@ -2674,13 +2674,13 @@ void KCMKttsMgr::slotNotifyLoadButton_clicked()
 
 void KCMKttsMgr::slotNotifySaveButton_clicked()
 {
-    QString filename = KFileDialog::getSaveFileName(
+    TQString filename = KFileDialog::getSaveFileName(
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/notify/", false ),
         "*.xml|" + i18n("file type", "Notification Event List") + " (*.xml)",
         m_kttsmgrw,
         "event_savefile");
     if ( filename.isEmpty() ) return;
-    QString errMsg = saveNotifyEventsToFile( filename );
+    TQString errMsg = saveNotifyEventsToFile( filename );
     slotNotifyListView_selectionChanged();
     if ( !errMsg.isEmpty() )
         KMessageBox::sorry( m_kttsmgrw, errMsg, i18n("Error Opening File") );
@@ -2688,16 +2688,16 @@ void KCMKttsMgr::slotNotifySaveButton_clicked()
 
 // ----------------------------------------------------------------------------
 
-KttsCheckListItem::KttsCheckListItem( QListView *parent, QListViewItem *after,
-    const QString &text, Type tt,
+KttsCheckListItem::KttsCheckListItem( TQListView *parent, TQListViewItem *after,
+    const TQString &text, Type tt,
     KCMKttsMgr* kcmkttsmgr ) :
-        QCheckListItem(parent, after, text, tt),
+        TQCheckListItem(parent, after, text, tt),
         m_kcmkttsmgr(kcmkttsmgr) { }
 
-KttsCheckListItem::KttsCheckListItem( QListView *parent,
-    const QString &text, Type tt,
+KttsCheckListItem::KttsCheckListItem( TQListView *parent,
+    const TQString &text, Type tt,
     KCMKttsMgr* kcmkttsmgr ) :
-        QCheckListItem(parent, text, tt),
+        TQCheckListItem(parent, text, tt),
         m_kcmkttsmgr(kcmkttsmgr) { }
 
 /*virtual*/ void KttsCheckListItem::stateChange(bool)
@@ -2705,7 +2705,7 @@ KttsCheckListItem::KttsCheckListItem( QListView *parent,
     if (m_kcmkttsmgr) m_kcmkttsmgr->slotFiltersList_stateChanged();
 }
 
-/*virtual*/ /*void resizeEvent( QResizeEvent ev )
+/*virtual*/ /*void resizeEvent( TQResizeEvent ev )
 {
     dynamic_cast<KCModule>(resizeEvent(ev));
     updateGeometry();

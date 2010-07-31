@@ -25,7 +25,7 @@
 #define _STRINGREPLACERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <tqwidget.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -48,7 +48,7 @@ class StringReplacerConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        StringReplacerConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        StringReplacerConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 
@@ -78,7 +78,7 @@ class StringReplacerConf : public KttsFilterConf
         * any instance-specific parameters to load, but it may still wish
         * to load parameters that apply to all instances of the plugin.
         */
-        virtual void load(KConfig *config, const QString &configGroup);
+        virtual void load(KConfig *config, const TQString &configGroup);
 
         /**
         * This function gets called when the user wants to save the settings in 
@@ -90,7 +90,7 @@ class StringReplacerConf : public KttsFilterConf
         * @param configGroup Call config->setGroup with this argument before
         *                    saving your configuration.
         */
-        virtual void save(KConfig *config, const QString &configGroup);
+        virtual void save(KConfig *config, const TQString &configGroup);
 
         /** 
         * This function is called to set the settings in the module to sensible
@@ -116,7 +116,7 @@ class StringReplacerConf : public KttsFilterConf
          * return an empty string.
          * @return          Filter instance name.
          */
-        virtual QString userPlugInName();
+        virtual TQString userPlugInName();
 
     private slots:
         void slotLanguageBrowseButton_clicked();
@@ -125,7 +125,7 @@ class StringReplacerConf : public KttsFilterConf
         void slotDownButton_clicked();
         void slotEditButton_clicked();
         void slotRemoveButton_clicked();
-        void slotMatchLineEdit_textChanged(const QString& text);
+        void slotMatchLineEdit_textChanged(const TQString& text);
         void slotTypeButtonGroup_clicked();
         void slotMatchButton_clicked();
         void slotLoadButton_clicked();
@@ -139,9 +139,9 @@ class StringReplacerConf : public KttsFilterConf
         // Displays the add/edit string replacement dialog.
         void addOrEditSubstitution(bool isAdd);
         // Loads word list and settings from a file.  Clearing configuration if clear is True.
-        QString loadFromFile( const QString& filename, bool clear);
+        TQString loadFromFile( const TQString& filename, bool clear);
         // Saves word list and settings to a file.
-        QString saveToFile( const QString& filename );
+        TQString saveToFile( const TQString& filename );
 
 
         // Configuration Widget.
@@ -152,7 +152,7 @@ class StringReplacerConf : public KttsFilterConf
         // True if kdeutils Regular Expression Editor is installed.
         bool m_reEditorInstalled;
         // Language Codes.
-        QStringList m_languageCodeList;
+        TQStringList m_languageCodeList;
 };
 
 #endif  //_STRINGREPLACERCONF_H_

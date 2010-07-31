@@ -27,8 +27,8 @@
 
 #include <kurl.h>
 
-#include <qstring.h>
-#include <qobject.h>
+#include <tqstring.h>
+#include <tqobject.h>
 #include <artsflow.h>
 
 class KArtsDispatcher;
@@ -45,11 +45,11 @@ class KDE_EXPORT ArtsPlayer : public Player
     Q_OBJECT
 
 public:
-    ArtsPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
+    ArtsPlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     ~ArtsPlayer();
 
 //    virtual void play(const FileHandle &file = FileHandle::null());
-    virtual void startPlay(const QString& file);
+    virtual void startPlay(const TQString& file);
     virtual void pause();
     virtual void stop();
 

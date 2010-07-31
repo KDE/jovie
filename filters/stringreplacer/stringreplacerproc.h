@@ -26,11 +26,11 @@
 #define _STRINGREPLACERPROC_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qtextstream.h>
-#include <qvaluelist.h>
-#include <qregexp.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqtextstream.h>
+#include <tqvaluelist.h>
+#include <tqregexp.h>
+#include <tqstringlist.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      */
-    StringReplacerProc( QObject *parent, const char *name, const QStringList &args = QStringList() );
+    StringReplacerProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.
@@ -59,7 +59,7 @@ public:
      * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
      * separate configuration files of their own.
      */
-    virtual bool init(KConfig *config, const QString &configGroup);
+    virtual bool init(KConfig *config, const TQString &configGroup);
 
     /**
      * Convert input, returning output.
@@ -70,7 +70,7 @@ public:
      * @param appId             The DCOP appId of the application that queued the text.
      *                          Also useful for hints about how to do the filtering.
      */
-    virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+    virtual TQString convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
     /**
      * Did this filter do anything?  If the filter returns the input as output
@@ -80,16 +80,16 @@ public:
 
 private:
     // Language codes supported by the filter.
-    QStringList m_languageCodeList;
+    TQStringList m_languageCodeList;
     // If not empty, apply filter only to apps containing one or more of these strings.
-    QStringList m_appIdList;
+    TQStringList m_appIdList;
 
     // List of regular expressions to match.
-    QValueList<QRegExp> m_matchList;
+    TQValueList<TQRegExp> m_matchList;
     // List of match case flag
-    QValueList<QString> m_caseList;
+    TQValueList<TQString> m_caseList;
     // List of substitutions to replace matches.
-    QValueList<QString> m_substList;
+    TQValueList<TQString> m_substList;
     // True if this filter did anything to the text.
     bool m_wasModified;
 };

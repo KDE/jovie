@@ -13,7 +13,7 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
+#include <tqfile.h>
 
 // KDE includes.
 #include <kapplication.h>
@@ -29,7 +29,7 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GStreamerPlayer::GStreamerPlayer(QObject* parent, const char* name, const QStringList& args) :
+GStreamerPlayer::GStreamerPlayer(TQObject* parent, const char* name, const TQStringList& args) :
     Player(parent, name, args),
     m_initialized(false),
     m_pipeline(0),
@@ -49,7 +49,7 @@ GStreamerPlayer::~GStreamerPlayer()
 }
 
 //void GStreamerPlayer::play(const FileHandle &file)
-void GStreamerPlayer::startPlay(const QString &file)
+void GStreamerPlayer::startPlay(const TQString &file)
 {
     if(!file.isNull()) {
         stop();
@@ -127,14 +127,14 @@ void GStreamerPlayer::seekPosition(int position)
  * @param classname             Desired class.  Use "Sink/Audio" for sinks.
  * @return                      List of plugin names.
  */
-QStringList GStreamerPlayer::getPluginList( const QCString& classname )
+TQStringList GStreamerPlayer::getPluginList( const TQCString& classname )
 {
     GList * pool_registries = NULL;
     GList* registries = NULL;
     GList* plugins = NULL;
     GList* features = NULL;
-    QString name;
-    QStringList results;
+    TQString name;
+    TQStringList results;
 
     if(!m_initialized) {
         int argc = kapp->argc();
@@ -189,16 +189,16 @@ bool GStreamerPlayer::requireVersion(uint major, uint minor, uint micro)
     }
 
     gst_version(&gmajor, &gminor, &gmicro);
-    // kdDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    // kdDebug() << TQString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
     if (gmajor > major) return true;
     if (gminor > minor) return true;
     if (gmicro >= micro) return true;
-    kdDebug() << QString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
-    kdDebug() << QString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").arg(major).arg(minor).arg(micro) << endl;
+    kdDebug() << TQString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    kdDebug() << TQString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").arg(major).arg(minor).arg(micro) << endl;
     return false;
 }
 
-void GStreamerPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkName; }
+void GStreamerPlayer::setSinkName(const TQString &sinkName) { m_sinkName = sinkName; }
 
 ////////////////////////////////////////////////////////////////////////////////
 // private methods
@@ -207,7 +207,7 @@ void GStreamerPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkNa
 void GStreamerPlayer::readConfig()
 {
     KConfigGroup config(KGlobal::config(), "GStreamerPlayer");
-    m_sinkName = config.readEntry("SinkName", QString::null);
+    m_sinkName = config.readEntry("SinkName", TQString::null);
 }
 
 void GStreamerPlayer::setupPipeline()

@@ -24,8 +24,8 @@
 #ifndef _FESTIVALINTPROC_H_
 #define _FESTIVALINTPROC_H_
 
-#include <qstringlist.h>
-#include <qmutex.h>
+#include <tqstringlist.h>
+#include <tqmutex.h>
 
 #include <kprocess.h>
 
@@ -46,7 +46,7 @@ class FestivalIntProc : public PlugInProc{
         /**
          * Constructor
          */
-        FestivalIntProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        FestivalIntProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor
@@ -58,7 +58,7 @@ class FestivalIntProc : public PlugInProc{
          * @param config          Settings object.
          * @param configGroup     Settings group.
          */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init(KConfig *config, const TQString &configGroup);
 
         /**
          * Returns true when festival is ready to speak a sentence.
@@ -69,7 +69,7 @@ class FestivalIntProc : public PlugInProc{
          * Say a text string.
          * @param text            The text to speak.
          */
-        virtual void sayText(const QString &text);
+        virtual void sayText(const TQString &text);
 
         /**
         * Synthesize text into an audio file, but do not send to the audio device.
@@ -84,7 +84,7 @@ class FestivalIntProc : public PlugInProc{
         * It must also implement the @ref getState method, which must return
         * psFinished, when synthesis is completed.
         */
-        virtual void synthText(const QString &text, const QString &suggestedFilename);
+        virtual void synthText(const TQString &text, const TQString &suggestedFilename);
 
         /**
         * Get the generated audio filename from call to @ref synthText.
@@ -95,7 +95,7 @@ class FestivalIntProc : public PlugInProc{
         * be locked when this method is called.  The file will be deleted when
         * KTTSD is finished using it.
         */
-        virtual QString getFilename();
+        virtual TQString getFilename();
 
         /**
         * Stop current operation (saying or synthesizing text).
@@ -171,10 +171,10 @@ class FestivalIntProc : public PlugInProc{
         * @param volume                  Volume percentage.  50 to 200.
         * @param languageCode            Language code, for example, "en".
         */
-        void synth(const QString &festivalExePath, const QString &text,
-            const QString &synthFilename, const QString& voiceCode,
-            int time, int pitch, int volume, const QString &languageCode,
-            QTextCodec* codec);
+        void synth(const TQString &festivalExePath, const TQString &text,
+            const TQString &synthFilename, const TQString& voiceCode,
+            int time, int pitch, int volume, const TQString &languageCode,
+            TQTextCodec* codec);
 
         /**
         * Sends commands to Festival to query for a list of supported voice codes.
@@ -182,7 +182,7 @@ class FestivalIntProc : public PlugInProc{
         * @return                       False if busy doing something else and therefore cannot
         *                               do the query.
         */
-        bool queryVoices(const QString &festivalExePath);
+        bool queryVoices(const TQString &festivalExePath);
 
         /**
         * Returns the name of an XSLT stylesheet that will convert a valid SSML file
@@ -193,7 +193,7 @@ class FestivalIntProc : public PlugInProc{
         * tags and converts the file to plain text.
         * @return            Name of the XSLT file.
         */
-        QString getSsmlXsltFilename();
+        TQString getSsmlXsltFilename();
 
         /**
         * Whether Festival supports SSML or not.
@@ -208,7 +208,7 @@ class FestivalIntProc : public PlugInProc{
         * This signal fires upon completion of a queryVoices operation.
         * The list of voice codes do not have "voice_" prefix.
         */
-        void queryVoicesFinished(const QStringList &voiceCodes);
+        void queryVoicesFinished(const TQStringList &voiceCodes);
 
     private slots:
         void slotProcessExited(KProcess* proc);
@@ -223,15 +223,15 @@ class FestivalIntProc : public PlugInProc{
         * @param voiceCode               Voice code in which to speak text.
         * @param languageCode            Language code, for example, "en".
         */
-        void startEngine(const QString &festivalExePath, const QString &voiceCode,
-            const QString &languageCode, QTextCodec* codec);
+        void startEngine(const TQString &festivalExePath, const TQString &voiceCode,
+            const TQString &languageCode, TQTextCodec* codec);
 
         /**
         * If ready for more output, sends the given text to Festival process, otherwise,
         * puts it in the queue.
         * @param text                    Text to send or queue.
         */
-        void sendToFestival(const QString& text);
+        void sendToFestival(const TQString& text);
 
         /**
         * If Festival is ready for more input and there is more output to send, send it.
@@ -247,7 +247,7 @@ class FestivalIntProc : public PlugInProc{
         * Determine if the text has SABLE tags.  If so, we will have to use a different
         * synthesis method.
         */
-        bool isSable(const QString &text);
+        bool isSable(const TQString &text);
 
         /**
         * We attempt to shorten sentences longer than this by replacing commas with periods.
@@ -257,12 +257,12 @@ class FestivalIntProc : public PlugInProc{
         /**
         * Path to the Festival executable.
         */
-        QString m_festivalExePath;
+        TQString m_festivalExePath;
 
         /**
         * Selected voice (from config).
         */
-        QString m_voiceCode;
+        TQString m_voiceCode;
 
         /**
         * True if the voice is preloaded.  Also used as a flag to supress killing
@@ -288,7 +288,7 @@ class FestivalIntProc : public PlugInProc{
         /**
         * Running voice.
         */
-        QString m_runningVoiceCode;
+        TQString m_runningVoiceCode;
 
         /**
         * Running time (speed).
@@ -308,7 +308,7 @@ class FestivalIntProc : public PlugInProc{
         /**
         * Synthesis filename.
         */
-        QString m_synthFilename;
+        TQString m_synthFilename;
 
         /**
          * True when festival is ready for another input.
@@ -337,19 +337,19 @@ class FestivalIntProc : public PlugInProc{
         * sending the next command, this queue allows us to queue up multiple
         * commands and send each one when the ReceivedStdOut signal fires.
         */
-        QStringList m_outputQueue;
+        TQStringList m_outputQueue;
 
         bool m_writingStdin;
 
         /**
         * Language code.
         */
-        QString m_languageCode;
+        TQString m_languageCode;
 
         /**
         * Codec.
         */
-        QTextCodec* m_codec;
+        TQTextCodec* m_codec;
 
         /**
         * Flag if SSML is supported.  Festival cannot support SABLE (and therefore SSML)

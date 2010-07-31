@@ -22,7 +22,7 @@
 #define _KSPEECH_H_
 
 #include <dcopobject.h>
-#include <qstringlist.h>
+#include <tqstringlist.h>
 
 /**
  * @interface KSpeech
@@ -207,7 +207,7 @@
  *     "kttsd", object "KSpeech".
  *
    @verbatim
-     MyPart::MyPart(QWidget *parent, const char *name) :
+     MyPart::MyPart(TQWidget *parent, const char *name) :
         KParts::ReadOnlyPart(parent, name),
         DCOPStub("kttsd", "KSpeech") {
    @endverbatim
@@ -218,8 +218,8 @@
      DCOPClient *client = dcopClient();
      client->attach();
      if (!client->isApplicationRegistered("kttsd")) {
-         QString error;
-         if (KApplication::startServiceByDesktopName("kttsd", QStringList(), &error))
+         TQString error;
+         if (KApplication::startServiceByDesktopName("kttsd", TQStringList(), &error))
              cout << "Starting KTTSD failed with message " << error << endl;
      }
    @endverbatim
@@ -271,7 +271,7 @@
          virtual public KSpeechSink
      {
          protected:
-            ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+            ASYNC sentenceStarted(const TQCString& appId, const uint jobNum, const uint seq);
    @endverbatim
  *
  *     You can combine sending and receiving in one object.
@@ -284,7 +284,7 @@
          virtual public KSpeechSink
      {
          protected:
-            ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+            ASYNC sentenceStarted(const TQCString& appId, const uint jobNum, const uint seq);
    @endverbatim
  *
  *     See below for the signals you can declare.
@@ -293,7 +293,7 @@
  *     receiving object.
  *
    @verbatim
-     MyPart::MyPart(QWidget *parent, const char *name) :
+     MyPart::MyPart(TQWidget *parent, const char *name) :
          KParts::ReadOnlyPart(parent, name),
          DCOPObject("mypart_kspeechsink") {
    @endverbatim
@@ -314,8 +314,8 @@
      }
      // Connect KTTSD DCOP signals to our slots.
      connectDCOPSignal("kttsd", "KSpeech",
-         "sentenceStarted(QCString,uint,uint)",
-         "sentenceStarted(QCString,uint,uint)",
+         "sentenceStarted(TQCString,uint,uint)",
+         "sentenceStarted(TQCString,uint,uint)",
          false);
    @endverbatim
  *
@@ -323,13 +323,13 @@
  *     example
  *
    @verbatim
-     ASYNC sentenceStarted(const QCString& appId, const uint jobNum, const uint seq);
+     ASYNC sentenceStarted(const TQCString& appId, const uint jobNum, const uint seq);
    @endverbatim
  *
  *     becomes
  *
    @verbatim
-       "sentenceStarted(QCString,uint,uint)",
+       "sentenceStarted(TQCString,uint,uint)",
    @endverbatim
  *
  *     in the connectDCOPSignal call.
@@ -338,7 +338,7 @@
  *     is intended for your application.
  *
    @verbatim
-     ASYNC MyPart::sentenceStarted(const QCString& appId, const uint jobNum, const uint seq)
+     ASYNC MyPart::sentenceStarted(const TQCString& appId, const uint jobNum, const uint seq)
      {
          // Check appId to determine if this is our signal.
          if (appId != dcopClient()->appId()) return;
@@ -685,7 +685,7 @@ class KSpeech : virtual public DCOPObject {
         *                       talker supports the indicated speech markup language.
         * @see kttsdMarkupType
         */
-        virtual bool supportsMarkup(const QString &talker, uint markupType = 0) const = 0;
+        virtual bool supportsMarkup(const TQString &talker, uint markupType = 0) const = 0;
 
         /**
         * Determine whether the currently-configured speech plugin supports markers in speech markup.
@@ -694,7 +694,7 @@ class KSpeech : virtual public DCOPObject {
         * @return               True if the plugin currently configured for the indicated
         *                       talker supports markers.
         */
-        virtual bool supportsMarkers(const QString &talker) const = 0;
+        virtual bool supportsMarkers(const TQString &talker) const = 0;
 
         /**
         * Say a message as soon as possible, interrupting any other speech in progress.
@@ -709,7 +709,7 @@ class KSpeech : virtual public DCOPObject {
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
         * replaced with this new message.
         */
-        virtual ASYNC sayScreenReaderOutput(const QString &msg, const QString &talker) = 0;
+        virtual ASYNC sayScreenReaderOutput(const TQString &msg, const TQString &talker) = 0;
 
         /**
         * Say a warning.  The warning will be spoken when the current sentence
@@ -722,7 +722,7 @@ class KSpeech : virtual public DCOPObject {
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC sayWarning(const QString &warning, const QString &talker) = 0;
+        virtual ASYNC sayWarning(const TQString &warning, const TQString &talker) = 0;
 
         /**
         * Say a message.  The message will be spoken when the current sentence stops speaking
@@ -735,7 +735,7 @@ class KSpeech : virtual public DCOPObject {
         *                       If no talker has been configured for the specified talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC sayMessage(const QString &message, const QString &talker) = 0;
+        virtual ASYNC sayMessage(const TQString &message, const TQString &talker) = 0;
 
         /**
         * Sets the GREP pattern that will be used as the sentence delimiter.
@@ -751,7 +751,7 @@ class KSpeech : virtual public DCOPObject {
         * with a single space, and then replaces the sentence delimiters using
         * the following statement:
           @verbatim
-              QString::replace(sentenceDelimiter, "\\1\t");
+              TQString::replace(sentenceDelimiter, "\\1\t");
           @endverbatim
         *
         * which replaces all sentence delimiters with a tab, but
@@ -763,7 +763,7 @@ class KSpeech : virtual public DCOPObject {
         *
         * @see sentenceparsing
         */
-        virtual ASYNC setSentenceDelimiter(const QString &delimiter) = 0;
+        virtual ASYNC setSentenceDelimiter(const TQString &delimiter) = 0;
 
         /**
         * Queue a text job.  Does not start speaking the text.
@@ -789,7 +789,7 @@ class KSpeech : virtual public DCOPObject {
         * @see getTextCount
         * @see startText
         */
-        virtual uint setText(const QString &text, const QString &talker) = 0;
+        virtual uint setText(const TQString &text, const TQString &talker) = 0;
 
         /**
         * Say a plain text job.  This is a convenience method that
@@ -819,7 +819,7 @@ class KSpeech : virtual public DCOPObject {
         *
         * @since KDE 3.5
         */
-        virtual uint sayText(const QString &text, const QString &talker) = 0;
+        virtual uint sayText(const TQString &text, const TQString &talker) = 0;
 
         /**
         * Adds another part to a text job.  Does not start speaking the text.
@@ -836,7 +836,7 @@ class KSpeech : virtual public DCOPObject {
         * @see setText.
         * @see startText.
         */
-        virtual int appendText(const QString &text, uint jobNum=0) = 0;
+        virtual int appendText(const TQString &text, uint jobNum=0) = 0;
 
         /**
         * Queue a text job from the contents of a file.  Does not start speaking the text.
@@ -863,8 +863,8 @@ class KSpeech : virtual public DCOPObject {
         * @see getTextCount
         * @see startText
         */
-        virtual uint setFile(const QString &filename, const QString &talker,
-            const QString& encoding) = 0;
+        virtual uint setFile(const TQString &filename, const TQString &talker,
+            const TQString& encoding) = 0;
 
         /**
         * Get the number of sentences in a text job.
@@ -900,7 +900,7 @@ class KSpeech : virtual public DCOPObject {
         * Get a comma-separated list of text job numbers in the queue.
         * @return               Comma-separated list of text job numbers in the queue.
         */
-        virtual QString getTextJobNumbers() = 0;
+        virtual TQString getTextJobNumbers() = 0;
 
         /**
         * Get the state of a text job.
@@ -918,13 +918,13 @@ class KSpeech : virtual public DCOPObject {
         * @param jobNum         Job number of the text job.
         *                       If zero, applies to the last job queued by the application,
         *                       but if no such job, applies to the current job (if any).
-        * @return               A QDataStream containing information about the job.
+        * @return               A TQDataStream containing information about the job.
         *                       Blank if no such job.
         *
         * The stream contains the following elements:
         *   - int state        - Job state.
-        *   - QCString appId   - DCOP senderId of the application that requested the speech job.
-        *   - QString talker   - Talker Code requested by application.
+        *   - TQCString appId   - DCOP senderId of the application that requested the speech job.
+        *   - TQString talker   - Talker Code requested by application.
         *   - int seq          - Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount - Total number of sentences in the job.
         *   - int partNum      - Current part of the job begin spoken.  Parts are numbered starting at 1.
@@ -935,11 +935,11 @@ class KSpeech : virtual public DCOPObject {
         *
         * The following sample code will decode the stream:
                 @code
-                    QByteArray jobInfo = getTextJobInfo(jobNum);
-                    QDataStream stream(jobInfo, IO_ReadOnly);
+                    TQByteArray jobInfo = getTextJobInfo(jobNum);
+                    TQDataStream stream(jobInfo, IO_ReadOnly);
                     int state;
-                    QCString appId;
-                    QString talker;
+                    TQCString appId;
+                    TQString talker;
                     int seq;
                     int sentenceCount;
                     int partNum;
@@ -953,7 +953,7 @@ class KSpeech : virtual public DCOPObject {
                     stream >> partCount;
                 @endcode
          */
-        virtual QByteArray getTextJobInfo(uint jobNum=0) = 0;
+        virtual TQByteArray getTextJobInfo(uint jobNum=0) = 0;
 
         /**
         * Given a Talker Code, returns the Talker ID of the talker that would speak
@@ -961,7 +961,7 @@ class KSpeech : virtual public DCOPObject {
         * @param talkerCode     Talker Code.
         * @return               Talker ID of the talker that would speak the text job.
         */
-        virtual QString talkerCodeToTalkerId(const QString& talkerCode) = 0;
+        virtual TQString talkerCodeToTalkerId(const TQString& talkerCode) = 0;
 
         /**
         * Return a sentence of a job.
@@ -972,7 +972,7 @@ class KSpeech : virtual public DCOPObject {
         * @return               The specified sentence in the specified job.  If no such
         *                       job or sentence, returns "".
         */
-        virtual QString getTextJobSentence(uint jobNum=0, uint seq=0) = 0;
+        virtual TQString getTextJobSentence(uint jobNum=0, uint seq=0) = 0;
 
         /**
         * Determine if kttsd is currently speaking any text jobs.
@@ -1080,12 +1080,12 @@ class KSpeech : virtual public DCOPObject {
 
         /**
         * Get a list of the talkers configured in KTTS.
-        * @return               A QStringList of fully-specified talker codes, one
+        * @return               A TQStringList of fully-specified talker codes, one
         *                       for each talker user has configured.
         *
         * @see talkers
         */
-        virtual QStringList getTalkers() = 0;
+        virtual TQStringList getTalkers() = 0;
 
         /**
         * Change the talker for a text job.
@@ -1097,7 +1097,7 @@ class KSpeech : virtual public DCOPObject {
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        virtual ASYNC changeTextTalker(const QString &talker, uint jobNum=0 ) = 0;
+        virtual ASYNC changeTextTalker(const TQString &talker, uint jobNum=0 ) = 0;
 
         /**
         * Get the user's default talker.
@@ -1106,7 +1106,7 @@ class KSpeech : virtual public DCOPObject {
         * @see talkers
         * @see getTalkers
         */
-        virtual QString userDefaultTalker() = 0;
+        virtual TQString userDefaultTalker() = 0;
 
         /**
         * Move a text job down in the queue so that it is spoken later.
@@ -1175,7 +1175,7 @@ class KSpeech : virtual public DCOPObject {
         * Return the KTTSD deamon version number.
         * @since KDE 3.5
         */
-        virtual QString version() = 0;
+        virtual TQString version() = 0;
         //@}
 
     k_dcop_signals:
@@ -1199,7 +1199,7 @@ class KSpeech : virtual public DCOPObject {
         *
         * @see markers
         */
-        void markerSeen(const QCString& appId, const QString& markerName);
+        void markerSeen(const TQCString& appId, const TQString& markerName);
         /**
         * This signal is emitted whenever a sentence begins speaking.
         * @param appId          DCOP application ID of the application that queued the text.
@@ -1208,7 +1208,7 @@ class KSpeech : virtual public DCOPObject {
         *
         * @see getTextCount
         */
-        void sentenceStarted(const QCString& appId, uint jobNum, uint seq);
+        void sentenceStarted(const TQCString& appId, uint jobNum, uint seq);
         /**
         * This signal is emitted when a sentence has finished speaking.
         * @param appId          DCOP application ID of the application that queued the text.
@@ -1217,14 +1217,14 @@ class KSpeech : virtual public DCOPObject {
         *
         * @see getTextCount
         */
-        void sentenceFinished(const QCString& appId, uint jobNum, uint seq);
+        void sentenceFinished(const TQCString& appId, uint jobNum, uint seq);
 
         /**
         * This signal is emitted whenever a new text job is added to the queue.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textSet(const QCString& appId, uint jobNum);
+        void textSet(const TQCString& appId, uint jobNum);
 
         /**
         * This signal is emitted whenever a new part is appended to a text job.
@@ -1233,14 +1233,14 @@ class KSpeech : virtual public DCOPObject {
         * @param partNum        Part number of the new part.  Parts are numbered starting
         *                       at 1.
         */
-        void textAppended(const QCString& appId, uint jobNum, int partNum);
+        void textAppended(const TQCString& appId, uint jobNum, int partNum);
 
         /**
         * This signal is emitted whenever speaking of a text job begins.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textStarted(const QCString& appId, uint jobNum);
+        void textStarted(const TQCString& appId, uint jobNum);
         /**
         * This signal is emitted whenever a text job is finished.  The job has
         * been marked for deletion from the queue and will be deleted when another
@@ -1250,7 +1250,7 @@ class KSpeech : virtual public DCOPObject {
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textFinished(const QCString& appId, uint jobNum);
+        void textFinished(const TQCString& appId, uint jobNum);
         /**
         * This signal is emitted whenever a speaking text job stops speaking.
         * @param appId          The DCOP senderId of the application that created the job.
@@ -1259,26 +1259,26 @@ class KSpeech : virtual public DCOPObject {
         * The signal is only emitted if stopText() is called and the job is currently
         * speaking.
         */
-        void textStopped(const QCString& appId, uint jobNum);
+        void textStopped(const TQCString& appId, uint jobNum);
         /**
         * This signal is emitted whenever a speaking text job is paused.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textPaused(const QCString& appId, uint jobNum);
+        void textPaused(const TQCString& appId, uint jobNum);
         /**
         * This signal is emitted when a text job, that was previously paused, resumes speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textResumed(const QCString& appId, uint jobNum);
+        void textResumed(const TQCString& appId, uint jobNum);
         /**
         * This signal is emitted whenever a text job is deleted from the queue.
         * The job is no longer in the queue when this signal is emitted.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textRemoved(const QCString& appId, uint jobNum);
+        void textRemoved(const TQCString& appId, uint jobNum);
         //@}
 };
 

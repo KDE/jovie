@@ -22,7 +22,7 @@ extern "C" {
 #include <gst/gstversion.h>
 }
 #include <gst/gst.h>
-#include <qstring.h>
+#include <tqstring.h>
 #include "player.h"
 
 class GStreamerPlayer : public Player
@@ -30,11 +30,11 @@ class GStreamerPlayer : public Player
     Q_OBJECT
 
 public:
-    GStreamerPlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
+    GStreamerPlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     virtual ~GStreamerPlayer();
 
     // virtual void play(const FileHandle &file = FileHandle::null());
-    virtual void startPlay(const QString& file);
+    virtual void startPlay(const TQString& file);
 
     virtual void setVolume(float volume = 1.0);
     virtual float volume() const;
@@ -49,8 +49,8 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const QCString& classname );
-    virtual void setSinkName(const QString &sinkName);
+    virtual TQStringList getPluginList( const TQCString& classname );
+    virtual void setSinkName(const TQString &sinkName);
 
     virtual bool requireVersion(uint major, uint minor, uint micro);
 
@@ -62,7 +62,7 @@ private:
     void setupPipeline();
     long long time(GstQueryType type) const;
 
-    QString m_sinkName;
+    TQString m_sinkName;
     // True once gst_init() has been called.
     bool m_initialized;
 

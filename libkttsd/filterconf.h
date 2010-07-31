@@ -26,7 +26,7 @@
 #define _FILTERCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <tqwidget.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -41,7 +41,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         /**
         * Constructor 
         */
-        KttsFilterConf( QWidget *parent = 0, const char *name = 0);
+        KttsFilterConf( TQWidget *parent = 0, const char *name = 0);
 
         /**
         * Destructor 
@@ -66,7 +66,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         * any instance-specific parameters to load, but it may still wish
         * to load parameters that apply to all instances of the plugin.
         */
-        virtual void load(KConfig *config, const QString &configGroup);
+        virtual void load(KConfig *config, const TQString &configGroup);
 
         /**
         * This function gets called when the user wants to save the settings in 
@@ -78,7 +78,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         * @param configGroup Call config->setGroup with this argument before
         *                    saving your configuration.
         */
-        virtual void save(KConfig *config, const QString &configGroup);
+        virtual void save(KConfig *config, const TQString &configGroup);
 
         /** 
         * This function is called to set the settings in the module to sensible
@@ -104,7 +104,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
          * return an empty string.
          * @return          Filter instance name.
          */
-        virtual QString userPlugInName();
+        virtual TQString userPlugInName();
 
         /**
          * Returns True if this filter is a Sentence Boundary Detector.
@@ -112,7 +112,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
          */
         virtual bool isSBD();
 
-        static QString realFilePath(const QString &filename);
+        static TQString realFilePath(const TQString &filename);
 
     public slots:
         /**
@@ -140,10 +140,10 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         * @returns           The path to the file on success, a blank QString
         *                    if its not found.
         */
-        QString getLocation(const QString &name);
+        TQString getLocation(const TQString &name);
 
-        /// The system path in a QStringList.
-        QStringList m_path;
+        /// The system path in a TQStringList.
+        TQStringList m_path;
 };
 
 #endif  //_FILTERCONF_H_

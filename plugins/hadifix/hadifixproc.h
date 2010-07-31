@@ -18,7 +18,7 @@
 #ifndef _HADIFIXPROC_H_
 #define _HADIFIXPROC_H_
 
-#include <qstringlist.h> 
+#include <tqstringlist.h> 
 
 #include <pluginproc.h>
 
@@ -37,13 +37,13 @@ class HadifixProc : public PlugInProc{
     };
     
     /** Constructor */
-    HadifixProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+    HadifixProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
     
     /** Destructor */
     ~HadifixProc();
     
     /** Initializate the speech */
-    virtual bool init (KConfig *config, const QString &configGroup);
+    virtual bool init (KConfig *config, const TQString &configGroup);
     
     /** 
     * Say a text.  Synthesize and audibilize it.
@@ -54,7 +54,7 @@ class HadifixProc : public PlugInProc{
     * It must also implement the @ref getState method, which must return
     * psFinished, when saying is completed.
     */
-    virtual void sayText(const QString &text);
+    virtual void sayText(const TQString &text);
     
     /**
     * Synthesize text into an audio file, but do not send to the audio device.
@@ -69,7 +69,7 @@ class HadifixProc : public PlugInProc{
     * It must also implement the @ref getState method, which must return
     * psFinished, when synthesis is completed.
     */
-    virtual void synthText(const QString &text, const QString &suggestedFilename);
+    virtual void synthText(const TQString &text, const TQString &suggestedFilename);
     
     /**
     * Get the generated audio filename from call to @ref synthText.
@@ -80,7 +80,7 @@ class HadifixProc : public PlugInProc{
     * be locked when this method is called.  The file will be deleted when
     * KTTSD is finished using it.
     */
-    virtual QString getFilename();
+    virtual TQString getFilename();
     
     /**
     * Stop current operation (saying or synthesizing text).
@@ -156,24 +156,24 @@ class HadifixProc : public PlugInProc{
     * @param pitch           Frequency. 100 = normal
     * @param waveFilename    Name of file to synthesize to.
     */
-    void synth(QString text,
-                            QString hadifix, bool isMale,
-                            QString mbrola,  QString voice,
+    void synth(TQString text,
+                            TQString hadifix, bool isMale,
+                            TQString mbrola,  TQString voice,
                             int volume, int time, int pitch,
-                            QTextCodec* codec,
-                            const QString waveFilename);
+                            TQTextCodec* codec,
+                            const TQString waveFilename);
     
     /**
     * Static function to determine whether the voice file is male or female.
     * @param mbrola the mbrola executable
     * @param voice the voice file
-    * @param output the output of mbrola will be written into this QString*
+    * @param output the output of mbrola will be written into this TQString*
     * @return HadifixSpeech::MaleGender if the voice is male,
     *         HadifixSpeech::FemaleGender if the voice is female,
     *         HadifixSpeech::NoGender if the gender cannot be determined,
     *         HadifixSpeech::NoVoice if there is an error in the voice file
     */
-    static VoiceGender determineGender(QString mbrola, QString voice, QString *output = 0);
+    static VoiceGender determineGender(TQString mbrola, TQString voice, TQString *output = 0);
 
     /**
      * Returns the name of an XSLT stylesheet that will convert a valid SSML file
@@ -184,7 +184,7 @@ class HadifixProc : public PlugInProc{
      * tags and converts the file to plain text.
      * @return            Name of the XSLT file.
      */
-    virtual QString getSsmlXsltFilename();
+    virtual TQString getSsmlXsltFilename();
 
   private slots:
     void slotProcessExited(KProcess*);
@@ -196,8 +196,8 @@ class HadifixProc : public PlugInProc{
   private:
      HadifixProcPrivate *d;
      
-     QString stdOut;
-     QString stdErr;
+     TQString stdOut;
+     TQString stdErr;
 };
 
 #endif

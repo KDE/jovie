@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qregexp.h>
-#include <qdom.h>
-#include <qapplication.h>
+#include <tqregexp.h>
+#include <tqdom.h>
+#include <tqapplication.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -41,9 +41,9 @@
 /**
  * Constructor.
  */
-SbdThread::SbdThread( QObject *parent, const char *name ) :
-    QObject( parent, name ),
-    QThread()
+SbdThread::SbdThread( TQObject *parent, const char *name ) :
+    TQObject( parent, name ),
+    TQThread()
 {
 }
 
@@ -57,8 +57,8 @@ SbdThread::SbdThread( QObject *parent, const char *name ) :
 /**
  * Get/Set text being processed.
  */
-void SbdThread::setText( const QString& text ) { m_text = text; }
-QString SbdThread::text() { return m_text; }
+void SbdThread::setText( const TQString& text ) { m_text = text; }
+TQString SbdThread::text() { return m_text; }
 
 /**
  * Set/Get TalkerCode.
@@ -72,14 +72,14 @@ TalkerCode* SbdThread::talkerCode() { return m_talkerCode; }
  *
  * @param re            The sentence delimiter regular expression.
  */
-void SbdThread::setSbRegExp( const QString& re ) { m_re = re; }
+void SbdThread::setSbRegExp( const TQString& re ) { m_re = re; }
 
 /**
  * The configured Sentence Boundary Regular Expression.
  *
  * @param re            The sentence delimiter regular expression.
  */
-void SbdThread::setConfiguredSbRegExp( const QString& re ) { m_configuredRe = re; }
+void SbdThread::setConfiguredSbRegExp( const TQString& re ) { m_configuredRe = re; }
 
 /**
  * The configured Sentence Boundary that replaces SB regular expression.
@@ -87,7 +87,7 @@ void SbdThread::setConfiguredSbRegExp( const QString& re ) { m_configuredRe = re
  * @param sb            The sentence boundary replacement.
  *
  */
-void SbdThread::setConfiguredSentenceBoundary( const QString& sb ) { m_configuredSentenceBoundary = sb; }
+void SbdThread::setConfiguredSentenceBoundary( const TQString& sb ) { m_configuredSentenceBoundary = sb; }
 
 /**
  * Did this filter do anything?  If the filter returns the input as output
@@ -97,7 +97,7 @@ void SbdThread::setWasModified(bool wasModified) { m_wasModified = wasModified; 
 bool SbdThread::wasModified() { return m_wasModified; }
 
 // Given a tag name, returns SsmlElemType.
-SbdThread::SsmlElemType SbdThread::tagToSsmlElemType( const QString tagName )
+SbdThread::SsmlElemType SbdThread::tagToSsmlElemType( const TQString tagName )
 {
     if ( tagName == "speak" )       return etSpeak;
     if ( tagName == "voice" )       return etVoice;
@@ -110,12 +110,12 @@ SbdThread::SsmlElemType SbdThread::tagToSsmlElemType( const QString tagName )
 }
 
 // Parses an SSML element, pushing current settings onto the context stack.
-void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
+void SbdThread::pushSsmlElem( SsmlElemType et, const TQDomElement& elem )
 {
     // TODO: Need to convert relative values into absolute values and also convert
     // only to values recognized by SSML2SABLE stylesheet.  Either that or enhance all
     // the synth stylesheets.
-    QDomNamedNodeMap attrList = elem.attributes();
+    TQDomNamedNodeMap attrList = elem.attributes();
     int attrCount = attrList.count();
     switch ( et )
     {
@@ -123,7 +123,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             SpeakElem e = m_speakStack.top();
             for ( int ndx=0; ndx < attrCount; ++ndx )
             {
-                QDomAttr a = attrList.item( ndx ).toAttr();
+                TQDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "lang" )      e.lang = a.value();
             }
             m_speakStack.push( e );
@@ -139,7 +139,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             ProsodyElem e = m_prosodyStack.top();
             for ( int ndx=0; ndx < attrCount; ++ndx )
             {
-                QDomAttr a = attrList.item( ndx ).toAttr();
+                TQDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "pitch" )    e.pitch = a.value();
                 if ( a.name() == "contour" )  e.contour = a.value();
                 if ( a.name() == "range" )    e.range = a.value();
@@ -153,7 +153,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             EmphasisElem e = m_emphasisStack.top();
             for ( int ndx=0; ndx < attrCount; ++ndx )
             {
-                QDomAttr a = attrList.item( ndx ).toAttr();
+                TQDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "level" )    e.level = a.value();
             }
             m_emphasisStack.push( e );
@@ -162,7 +162,7 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
             PSElem e = m_psStack.top();
             for ( int ndx=0; ndx < attrCount; ++ndx )
             {
-                QDomAttr a = attrList.item( ndx ).toAttr();
+                TQDomAttr a = attrList.item( ndx ).toAttr();
                 if ( a.name() == "lang" )     e.lang = a.value();
             }
             m_psStack.push( e );
@@ -173,17 +173,17 @@ void SbdThread::pushSsmlElem( SsmlElemType et, const QDomElement& elem )
 
 // Given an attribute name and value, constructs an XML representation of the attribute,
 // i.e., name="value".
-QString SbdThread::makeAttr( const QString& name, const QString& value )
+TQString SbdThread::makeAttr( const TQString& name, const TQString& value )
 {
-    if ( value.isEmpty() ) return QString::null;
+    if ( value.isEmpty() ) return TQString::null;
     return " " + name + "=\"" + value + "\"";
 }
 
 // Returns an XML representation of an SSML tag from the top of the context stack.
-QString SbdThread::makeSsmlElem( SsmlElemType et )
+TQString SbdThread::makeSsmlElem( SsmlElemType et )
 {
-    QString s;
-    QString a;
+    TQString s;
+    TQString a;
     switch ( et )
     {
         // Must always output speak tag, otherwise kttsd won't think each sentence is SSML.
@@ -198,7 +198,7 @@ QString SbdThread::makeSsmlElem( SsmlElemType et )
             VoiceElem e = m_voiceStack.top();
             a += makeAttr( "lang",     e.lang );
             a += makeAttr( "gender",   e.gender );
-            a += makeAttr( "age",      QString::number(e.age) );
+            a += makeAttr( "age",      TQString::number(e.age) );
             a += makeAttr( "name",     e.name );
             a += makeAttr( "variant",  e.variant );
             if ( !a.isEmpty() ) s = "<voice" + a + ">";
@@ -240,14 +240,14 @@ void SbdThread::popSsmlElem( SsmlElemType et )
 }
 
 // Returns an XML representation of a break element.
-QString SbdThread::makeBreakElem( const QDomElement& e )
+TQString SbdThread::makeBreakElem( const TQDomElement& e )
 {
-    QString s = "<break";
-    QDomNamedNodeMap attrList = e.attributes();
+    TQString s = "<break";
+    TQDomNamedNodeMap attrList = e.attributes();
     int attrCount = attrList.count();
     for ( int ndx=0; ndx < attrCount; ++ndx )
     {
-        QDomAttr a = attrList.item( ndx ).toAttr();
+        TQDomAttr a = attrList.item( ndx ).toAttr();
         s += makeAttr( a.name(), a.value() );
     }
     s += ">";
@@ -255,9 +255,9 @@ QString SbdThread::makeBreakElem( const QDomElement& e )
 }
 
 // Converts a text fragment into a CDATA section.
-QString SbdThread::makeCDATA( const QString& text )
+TQString SbdThread::makeCDATA( const TQString& text )
 {
-    QString s =  "<![CDATA[";
+    TQString s =  "<![CDATA[";
     s += text;
     s += "]]>";
     return s;
@@ -265,20 +265,20 @@ QString SbdThread::makeCDATA( const QString& text )
 
 // Returns an XML representation of an utterance node consisting of voice,
 // prosody, and emphasis elements.
-QString SbdThread::makeSentence( const QString& text )
+TQString SbdThread::makeSentence( const TQString& text )
 {
-    QString s;
-    QString v = makeSsmlElem( etVoice );
-    QString p = makeSsmlElem( etProsody );
-    QString e = makeSsmlElem( etEmphasis );
+    TQString s;
+    TQString v = makeSsmlElem( etVoice );
+    TQString p = makeSsmlElem( etProsody );
+    TQString e = makeSsmlElem( etEmphasis );
     // TODO: Lang settings from psStack.
     if ( !v.isEmpty() ) s += v;
     if ( !p.isEmpty() ) s += p;
     if ( !e.isEmpty() ) s += e;
     // Escape ampersands and less thans.
-    QString newText = text;
-    newText.replace(QRegExp("&(?!amp;)"), "&amp;");
-    newText.replace(QRegExp("<(?!lt;)"), "&lt;");
+    TQString newText = text;
+    newText.replace(TQRegExp("&(?!amp;)"), "&amp;");
+    newText.replace(TQRegExp("<(?!lt;)"), "&lt;");
     s += newText;
     if ( !e.isEmpty() ) s += "</emphasis>";
     if ( !p.isEmpty() ) s += "</prosody>";
@@ -287,20 +287,20 @@ QString SbdThread::makeSentence( const QString& text )
 }
 
 // Starts a sentence by returning a speak tag.
-QString SbdThread::startSentence()
+TQString SbdThread::startSentence()
 {
-    if ( m_sentenceStarted ) return QString::null;
-    QString s;
+    if ( m_sentenceStarted ) return TQString::null;
+    TQString s;
     s += makeSsmlElem( etSpeak );
     m_sentenceStarted = true;
     return s;
 }
 
 // Ends a sentence and appends a Tab.
-QString SbdThread::endSentence()
+TQString SbdThread::endSentence()
 {
-    if ( !m_sentenceStarted ) return QString::null;
-    QString s = "</speak>";
+    if ( !m_sentenceStarted ) return TQString::null;
+    TQString s = "</speak>";
     s += "\t";
     m_sentenceStarted = false;
     return s;
@@ -308,14 +308,14 @@ QString SbdThread::endSentence()
 
 // Parses a node of the SSML tree and recursively parses its children.
 // Returns the filtered text with each sentence a complete ssml tree.
-QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
+TQString SbdThread::parseSsmlNode( TQDomNode& n, const TQString& re )
 {
-    QString result;
+    TQString result;
     switch ( n.nodeType() )
     {
-        case QDomNode::ElementNode: {               // = 1
-            QDomElement e = n.toElement();
-            QString tagName = e.tagName();
+        case TQDomNode::ElementNode: {               // = 1
+            TQDomElement e = n.toElement();
+            TQString tagName = e.tagName();
             SsmlElemType et = tagToSsmlElemType( tagName );
             switch ( et )
             {
@@ -326,7 +326,7 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
                 case etPS:
                 {
                     pushSsmlElem( et, e );
-                    QDomNode t = n.firstChild();
+                    TQDomNode t = n.firstChild();
                     while ( !t.isNull() )
                     {
                         result += parseSsmlNode( t, re );
@@ -346,14 +346,14 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
                 default: break;
             }
             break; }
-        case QDomNode::AttributeNode: {             // = 2
+        case TQDomNode::AttributeNode: {             // = 2
             break; }
-        case QDomNode::TextNode: {                  // = 3
-            QString s = parsePlainText( n.toText().data(), re );
-            // QString d = s;
+        case TQDomNode::TextNode: {                  // = 3
+            TQString s = parsePlainText( n.toText().data(), re );
+            // TQString d = s;
             // d.replace("\t", "\\t");
             // kdDebug() << "SbdThread::parseSsmlNode: parsedPlainText = [" << d << "]" << endl;
-            QStringList sentenceList = QStringList::split( '\t', s, false );
+            TQStringList sentenceList = TQStringList::split( '\t', s, false );
             int lastNdx = sentenceList.count() - 1;
             for ( int ndx=0; ndx < lastNdx; ++ndx )
             {
@@ -369,9 +369,9 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
                 if ( s.endsWith( "\t" ) ) result += endSentence();
             }
             break; }
-        case QDomNode::CDATASectionNode: {          // = 4
-            QString s = parsePlainText( n.toCDATASection().data(), re );
-            QStringList sentenceList = QStringList::split( '\t', s, false );
+        case TQDomNode::CDATASectionNode: {          // = 4
+            TQString s = parsePlainText( n.toCDATASection().data(), re );
+            TQStringList sentenceList = TQStringList::split( '\t', s, false );
             int lastNdx = sentenceList.count() - 1;
             for ( int ndx=0; ndx < lastNdx; ++ndx )
             {
@@ -387,37 +387,37 @@ QString SbdThread::parseSsmlNode( QDomNode& n, const QString& re )
                 if ( s.endsWith( "\t" ) ) result += endSentence();
             }
             break; }
-        case QDomNode::EntityReferenceNode: {       // = 5
+        case TQDomNode::EntityReferenceNode: {       // = 5
             break; }
-        case QDomNode::EntityNode: {                // = 6
+        case TQDomNode::EntityNode: {                // = 6
             break; }
-        case QDomNode::ProcessingInstructionNode: { // = 7
+        case TQDomNode::ProcessingInstructionNode: { // = 7
             break; }
-        case QDomNode::CommentNode: {               // = 8
+        case TQDomNode::CommentNode: {               // = 8
             break; }
-        case QDomNode::DocumentNode: {              // = 9
+        case TQDomNode::DocumentNode: {              // = 9
             break; }
-        case QDomNode::DocumentTypeNode: {          // = 10
+        case TQDomNode::DocumentTypeNode: {          // = 10
             break; }
-        case QDomNode::DocumentFragmentNode: {      // = 11
+        case TQDomNode::DocumentFragmentNode: {      // = 11
             break; }
-        case QDomNode::NotationNode: {              // = 12
+        case TQDomNode::NotationNode: {              // = 12
             break; }
-        case QDomNode::BaseNode: {                  // = 21
+        case TQDomNode::BaseNode: {                  // = 21
             break; }
-        case QDomNode::CharacterDataNode: {         // = 22
+        case TQDomNode::CharacterDataNode: {         // = 22
             break; }
     }
     return result;
 }
 
 // Parses Ssml.
-QString SbdThread::parseSsml( const QString& inputText, const QString& re )
+TQString SbdThread::parseSsml( const TQString& inputText, const TQString& re )
 {
-    QRegExp sentenceDelimiter = QRegExp( re );
+    TQRegExp sentenceDelimiter = TQRegExp( re );
 
     // Read the text into xml dom tree.
-    QDomDocument doc( "" );
+    TQDomDocument doc( "" );
     // If an error occurs parsing the SSML, return "invalid S S M L".
     if ( !doc.setContent( inputText ) ) return i18n("Invalid S S M L.");
 
@@ -442,9 +442,9 @@ QString SbdThread::parseSsml( const QString& inputText, const QString& re )
     m_sentenceStarted = false;
 
     // Get the root element (speak) and recursively process its children.
-    QDomElement docElem = doc.documentElement();
-    QDomNode n = docElem.firstChild();
-    QString ssml = parseSsmlNode( docElem, re );
+    TQDomElement docElem = doc.documentElement();
+    TQDomNode n = docElem.firstChild();
+    TQString ssml = parseSsmlNode( docElem, re );
 
     // Close out last sentence.
     if ( m_sentenceStarted ) ssml += "</speak>";
@@ -453,37 +453,37 @@ QString SbdThread::parseSsml( const QString& inputText, const QString& re )
 }
 
 // Parses code.  Each newline is converted into a tab character (\t).
-QString SbdThread::parseCode( const QString& inputText )
+TQString SbdThread::parseCode( const TQString& inputText )
 {
-    QString temp = inputText;
+    TQString temp = inputText;
     // Replace newlines with tabs.
     temp.replace("\n","\t");
     // Remove leading spaces.
-    temp.replace(QRegExp("\\t +"), "\t");
+    temp.replace(TQRegExp("\\t +"), "\t");
     // Remove trailing spaces.
-    temp.replace(QRegExp(" +\\t"), "\t");
+    temp.replace(TQRegExp(" +\\t"), "\t");
     // Remove blank lines.
-    temp.replace(QRegExp("\t\t+"),"\t");
+    temp.replace(TQRegExp("\t\t+"),"\t");
     return temp;
 }
 
 // Parses plain text.
-QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
+TQString SbdThread::parsePlainText( const TQString& inputText, const TQString& re )
 {
     // kdDebug() << "SbdThread::parsePlainText: parsing " << inputText << " with re " << re << endl;
-    QRegExp sentenceDelimiter = QRegExp( re );
-    QString temp = inputText;
+    TQRegExp sentenceDelimiter = TQRegExp( re );
+    TQString temp = inputText;
     // Replace sentence delimiters with tab.
     temp.replace(sentenceDelimiter, m_configuredSentenceBoundary);
     // Replace remaining newlines with spaces.
     temp.replace("\n"," ");
     temp.replace("\r"," ");
     // Remove leading spaces.
-    temp.replace(QRegExp("\\t +"), "\t");
+    temp.replace(TQRegExp("\\t +"), "\t");
     // Remove trailing spaces.
-    temp.replace(QRegExp(" +\\t"), "\t");
+    temp.replace(TQRegExp(" +\\t"), "\t");
     // Remove blank lines.
-    temp.replace(QRegExp("\t\t+"),"\t");
+    temp.replace(TQRegExp("\t\t+"),"\t");
     return temp;
 }
 
@@ -502,8 +502,8 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     else
     {
         // Examine just the first 500 chars to see if it is code.
-        QString p = m_text.left( 500 );
-        if ( p.contains( QRegExp( "(/\\*)|(if\\b\\()|(^#include\\b)" ) ) )
+        TQString p = m_text.left( 500 );
+        if ( p.contains( TQRegExp( "(/\\*)|(if\\b\\()|(^#include\\b)" ) ) )
             textType = ttCode;
         else
             textType = ttPlain;
@@ -511,11 +511,11 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
 
     // If application specified a sentence delimiter regular expression, use that,
     // otherwise use configured default.
-    QString re = m_re;
+    TQString re = m_re;
     if ( re.isEmpty() ) re = m_configuredRe;
 
     // Replace spaces, tabs, and formfeeds with a single space.
-    m_text.replace(QRegExp("[ \\t\\f]+"), " ");
+    m_text.replace(TQRegExp("[ \\t\\f]+"), " ");
 
     // Perform the filtering based on type of text.
     switch ( textType )
@@ -534,7 +534,7 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
     }
 
     // Clear app-specified sentence delimiter.  App must call setSbRegExp for each conversion.
-    m_re = QString::null;
+    m_re = TQString::null;
 
     // kdDebug() << "SbdThread::run: filtered text = " << m_text << endl;
 
@@ -542,13 +542,13 @@ QString SbdThread::parsePlainText( const QString& inputText, const QString& re )
 
     // Post an event.  We need to emit filterFinished signal, but not from the
     // separate thread.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 301);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 301);
+    TQApplication::postEvent(this, ev);
 }
 
-bool SbdThread::event ( QEvent * e )
+bool SbdThread::event ( TQEvent * e )
 {
-    if ( e->type() == (QEvent::User + 301) )
+    if ( e->type() == (TQEvent::User + 301) )
     {
         // kdDebug() << "SbdThread::event: emitting filteringFinished signal." << endl;
         emit filteringFinished();
@@ -562,12 +562,12 @@ bool SbdThread::event ( QEvent * e )
 /**
  * Constructor.
  */
-SbdProc::SbdProc( QObject *parent, const char *name, const QStringList& /*args*/) :
+SbdProc::SbdProc( TQObject *parent, const char *name, const TQStringList& /*args*/) :
     KttsFilterProc(parent, name) 
 {
     // kdDebug() << "SbdProc::SbdProc: Running" << endl;
     m_sbdThread = new SbdThread( parent, *name + "_thread" );
-    connect( m_sbdThread, SIGNAL(filteringFinished()), this, SLOT(slotSbdThreadFilteringFinished()) );
+    connect( m_sbdThread, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotSbdThreadFilteringFinished()) );
 }
 
 /**
@@ -596,13 +596,13 @@ SbdProc::~SbdProc()
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool SbdProc::init(KConfig* config, const QString& configGroup){
+bool SbdProc::init(KConfig* config, const TQString& configGroup){
     // kdDebug() << "PlugInProc::init: Running" << endl;
     config->setGroup( configGroup );
 //    m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])\\s|(\\n *\\n)" );
     m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
-    QString sb = config->readEntry( "SentenceBoundary", "\\1\t" );
+    TQString sb = config->readEntry( "SentenceBoundary", "\\1\t" );
     sb.replace( "\\t", "\t" );
     m_sbdThread->setConfiguredSentenceBoundary( sb );
     m_appIdList = config->readListEntry( "AppID" );
@@ -638,7 +638,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString SbdProc::convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId)
+/*virtual*/ TQString SbdProc::convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId)
 {
     if ( asyncConvert( inputText, talkerCode, appId) )
     {
@@ -662,14 +662,14 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  * program may then call @ref getOutput to retrieve converted text.  Calling
  * program must call @ref ackFinished to acknowledge the conversion.
  */
-/*virtual*/ bool SbdProc::asyncConvert(const QString& inputText, TalkerCode* talkerCode,
-    const QCString& appId)
+/*virtual*/ bool SbdProc::asyncConvert(const TQString& inputText, TalkerCode* talkerCode,
+    const TQCString& appId)
 {
     m_sbdThread->setWasModified( false );
     // If language doesn't match, return input unmolested.
     if ( !m_languageCodeList.isEmpty() )
     {
-        QString languageCode = talkerCode->languageCode();
+        TQString languageCode = talkerCode->languageCode();
         // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
         // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
         if ( !m_languageCodeList.contains( languageCode ) )
@@ -689,7 +689,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
         // kdDebug() << "SbdProc::convert: converting " << inputText << " if appId "
         //     << appId << " matches " << m_appIdList << endl;
         bool found = false;
-        QString appIdStr = appId;
+        TQString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
             if ( appIdStr.contains(m_appIdList[ndx]) )
@@ -729,7 +729,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 /**
  * Returns the filtered output.
  */
-/*virtual*/ QString SbdProc::getOutput() { return m_sbdThread->text(); }
+/*virtual*/ TQString SbdProc::getOutput() { return m_sbdThread->text(); }
 
 /**
  * Acknowledges the finished filtering.
@@ -737,7 +737,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
 /*virtual*/ void SbdProc::ackFinished()
 {
      m_state = fsIdle;
-     m_sbdThread->setText( QString::null );
+     m_sbdThread->setText( TQString::null );
 }
 
 /**
@@ -753,7 +753,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
         delete m_sbdThread;
         m_sbdThread = new SbdThread();
         m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
-        connect( m_sbdThread, SIGNAL(filteringFinished()), this, SLOT(slotSbdThreadFilteringFinished()) );
+        connect( m_sbdThread, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotSbdThreadFilteringFinished()) );
         m_state = fsIdle;
         emit filteringStopped();
     }
@@ -771,7 +771,7 @@ bool SbdProc::init(KConfig* config, const QString& configGroup){
  *
  * @param re            The sentence delimiter regular expression.
  */
-/*virtual*/ void SbdProc::setSbRegExp(const QString& re) { m_sbdThread->setSbRegExp( re ); }
+/*virtual*/ void SbdProc::setSbRegExp(const TQString& re) { m_sbdThread->setSbRegExp( re ); }
 
 // Received when SBD Thread finishes.
 void SbdProc::slotSbdThreadFilteringFinished()

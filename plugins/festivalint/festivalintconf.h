@@ -25,8 +25,8 @@
 #define _FESTIVALINTCONF_H_
 
 // Qt includes.
-#include <qstringlist.h>
-#include <qvaluelist.h>
+#include <tqstringlist.h>
+#include <tqvaluelist.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -43,11 +43,11 @@ class KProgressDialog;
 class QDomNode;
 
 typedef struct voiceStruct{
-    QString code;               // Code as sent to Festival
-    QString name;               // Name as displayed and returned in Talker Code.
-    QString languageCode;       // Language code (en, es, etc)
-    QString codecName;          // Character encoding codec name (eg. ISO 8859-1)
-    QString gender;             // male, female, or neutral
+    TQString code;               // Code as sent to Festival
+    TQString name;               // Name as displayed and returned in Talker Code.
+    TQString languageCode;       // Language code (en, es, etc)
+    TQString codecName;          // Character encoding codec name (eg. ISO 8859-1)
+    TQString gender;             // male, female, or neutral
     bool preload;               // Start Festival and load this language when KTTSD is started.
     bool volumeAdjustable;      // True if the voice supports volume adjustments.
     bool rateAdjustable;        // True if the voice supports rate adjustments.
@@ -59,7 +59,7 @@ class FestivalIntConf : public PlugInConf {
 
     public:
         /** Constructor */
-        FestivalIntConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        FestivalIntConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~FestivalIntConf();
@@ -71,14 +71,14 @@ class FestivalIntConf : public PlugInConf {
         *  valid settings. NOTE that this is not called after the modules is loaded,
         *  so you probably want to call this method in the constructor.
         */
-        void load(KConfig *config, const QString &configGroup);
+        void load(KConfig *config, const TQString &configGroup);
 
         /** This function gets called when the user wants to save the settings in 
         *  the user interface, updating the config files or wherever the 
         *  configuration is stored. The method is called when the user clicks "Apply" 
         *  or "Ok". 
         */
-        void save(KConfig *config, const QString &configGroup);
+        void save(KConfig *config, const TQString &configGroup);
 
         /** This function is called to set the settings in the module to sensible
         *  default values. It gets called when hitting the "Default" button. The 
@@ -90,7 +90,7 @@ class FestivalIntConf : public PlugInConf {
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
         * specified language code, choosing sensible defaults if necessary.
-        * If the passed-in code is QString::null, no specific language has
+        * If the passed-in code is TQString::null, no specific language has
         * been chosen.
         * @param lang        The desired language code or Null if none.
         *
@@ -102,16 +102,16 @@ class FestivalIntConf : public PlugInConf {
         * not the given country, treat it as though the country
         * code were not specified, i.e., adapt to the given language.
         */
-        void setDesiredLanguage(const QString &lang);
+        void setDesiredLanguage(const TQString &lang);
 
         /**
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
         * one instance from another.  If the plugin has not been fully configured,
-        * i.e., cannot yet synthesize, return QString::null.
+        * i.e., cannot yet synthesize, return TQString::null.
         * @return            Fully-specified talker code.
         */
-        QString getTalkerCode();
+        TQString getTalkerCode();
 
     private slots:
         /** Scan for the different voices in festivalPath/lib */
@@ -131,7 +131,7 @@ class FestivalIntConf : public PlugInConf {
         void frequencySlider_valueChanged(int sliderValue);
         void slotFestivalPath_textChanged();
         void slotSelectVoiceCombo_activated();
-        void slotQueryVoicesFinished(const QStringList &voiceCodes);
+        void slotQueryVoicesFinished(const TQStringList &voiceCodes);
 
    private:
         int percentToSlider(int percentValue);
@@ -141,19 +141,19 @@ class FestivalIntConf : public PlugInConf {
         * Given an XML node and child element name, returns the string value from the child element.
         * If no such child element, returns def.
         */
-        QString readXmlString(QDomNode &node, const QString &elementName, const QString &def);
+        TQString readXmlString(TQDomNode &node, const TQString &elementName, const TQString &def);
 
         /**
         * Given an XML node and child element name, returns the boolean value from the child element.
         * If no such child element, returns def.
         */
-        bool readXmlBool(QDomNode &node, const QString &elementName, bool def);
+        bool readXmlBool(TQDomNode &node, const TQString &elementName, bool def);
 
         /**
         * Given a voice code, returns index into m_voiceList array (and voiceCombo box).
         * -1 if not found.
         */
-        int voiceCodeToListIndex(const QString& voiceCode) const;
+        int voiceCodeToListIndex(const TQString& voiceCode) const;
 
         /**
         * Chooses a default voice given scanned list of voices in m_voiceList and current
@@ -166,21 +166,21 @@ class FestivalIntConf : public PlugInConf {
         FestivalIntConfWidget* m_widget;
 
         // Language code.
-        QString m_languageCode;
+        TQString m_languageCode;
         // Language country code (if any).
-        QString m_countryCode;
+        TQString m_countryCode;
         // List of voices */
-        QValueList<voice> m_voiceList;
+        TQValueList<voice> m_voiceList;
         // Festival synthesizer.
         FestivalIntProc* m_festProc;
         // Synthesized wave file name.
-        QString m_waveFile;
+        TQString m_waveFile;
         // Progress dialog.
         KProgressDialog* m_progressDlg;
         // List of voice codes supported by Festival.
-        QStringList m_supportedVoiceCodes;
+        TQStringList m_supportedVoiceCodes;
         // List of displayed codec names.
-        QStringList m_codecList;
+        TQStringList m_codecList;
         // Whether Festival supports SSML or not.
         FestivalIntProc::SupportsSSML m_supportsSSML;
 };

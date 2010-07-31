@@ -38,23 +38,23 @@ public:
      * @param elementName      The element to check for in the document.
      * @returns                             true if the root element exists in the document, false otherwise.
      */
-    static bool hasRootElement(const QString &xmldoc, const QString &elementName);
+    static bool hasRootElement(const TQString &xmldoc, const TQString &elementName);
 
     /** 
      * Check if an XML document has a certain DOCTYPE.
      * @param xmldoc             The document to check for the doctype.
-     * @param name                The doctype name to check for. Pass QString::null to not check the name.
-     * @param publicId           The public ID to check for. Pass QString::null to not check the ID.
-     * @param systemId          The system ID to check for. Pass QString::null to not check the ID.
+     * @param name                The doctype name to check for. Pass TQString::null to not check the name.
+     * @param publicId           The public ID to check for. Pass TQString::null to not check the ID.
+     * @param systemId          The system ID to check for. Pass TQString::null to not check the ID.
      * @returns                         true if the parameters match the doctype, false otherwise.
      */
-    static bool hasDoctype(const QString &xmldoc, const QString &name/*, const QString &publicId, const QString &systemId*/);
+    static bool hasDoctype(const TQString &xmldoc, const TQString &name/*, const TQString &publicId, const TQString &systemId*/);
 
     /**
      * Sets the current item in the given combobox to the item with the given text.
      * If item with the text not found, does nothing.
      */
-    static void setCbItemFromText(QComboBox* cb, const QString& text);
+    static void setCbItemFromText(TQComboBox* cb, const TQString& text);
 
 };
 

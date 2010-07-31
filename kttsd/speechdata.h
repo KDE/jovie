@@ -26,11 +26,11 @@
 #define _SPEECHDATA_H_
 
 // Qt includes.
-#include <qptrqueue.h>
-#include <qptrlist.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qmap.h>
+#include <tqptrqueue.h>
+#include <tqptrlist.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqmap.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -48,9 +48,9 @@ class TalkerMgr;
 * the ID of the application that requested it be spoken, and a sequence number.
 */
 struct mlText{
-    QString talker;              /* Requested Talker code for the sentence. */
-    QString text;                /* Text of sentence. */
-    QCString appId;              /* DCOP senderId of the application that requested the speech. */
+    TQString talker;              /* Requested Talker code for the sentence. */
+    TQString text;                /* Text of sentence. */
+    TQCString appId;              /* DCOP senderId of the application that requested the speech. */
     uint jobNum;                 /* Text jobNum.  Only applies to text messages; not warning and messages. */
     uint seq;                    /* Sequence number. */
 };
@@ -61,11 +61,11 @@ struct mlText{
 struct mlJob {
     uint jobNum;                 /* Job number. */
     KSpeech::kttsdJobState state; /* Job state. */
-    QCString appId;              /* DCOP senderId of the application that requested the speech job. */
-    QString talker;              /* Requested Talker code in which to speak the text. */
+    TQCString appId;              /* DCOP senderId of the application that requested the speech job. */
+    TQString talker;              /* Requested Talker code in which to speak the text. */
     int seq;                     /* Current sentence being spoken. */
-    QValueList<int> partSeqNums; /* List containing last sequence number for each part of a job. */
-    QStringList sentences;       /* List of sentences in the job. */
+    TQValueList<int> partSeqNums; /* List containing last sequence number for each part of a job. */
+    TQStringList sentences;       /* List of sentences in the job. */
     int partCount;               /* Number of parts in the job. */
 };
 
@@ -84,21 +84,21 @@ struct PooledFilterMgr {
  * Struct used to keep notification options.
  */
 struct NotifyOptions {
-    QString eventName;
+    TQString eventName;
     int action;
-    QString talker;
-    QString customMsg;
+    TQString talker;
+    TQString customMsg;
 };
 
 /**
  * A list of notification options for a single app, indexed by event.
  */
-typedef QMap<QString, NotifyOptions> NotifyEventMap;
+typedef TQMap<TQString, NotifyOptions> NotifyEventMap;
 
 /**
  * A list of notification event maps for all apps, indexed by app.
  */
-typedef QMap<QString, NotifyEventMap> NotifyAppMap;
+typedef TQMap<TQString, NotifyEventMap> NotifyAppMap;
 
 /**
  * SpeechData class which is in charge of maintaining all the data on the memory.
@@ -108,7 +108,7 @@ typedef QMap<QString, NotifyEventMap> NotifyAppMap;
  * (dcop service) and the Speaker class (speaker, loads plug ins, call plug in
  * functions)
  */
-class SpeechData : public QObject {
+class SpeechData : public TQObject {
     Q_OBJECT
 
     public:
@@ -142,8 +142,8 @@ class SpeechData : public QObject {
         * If an existing Screen Reader output is in progress, it is stopped and discarded and
         * replaced with this new message.
         */
-        void setScreenReaderOutput(const QString &msg, const QString &talker,
-            const QCString& appId);
+        void setScreenReaderOutput(const TQString &msg, const TQString &talker,
+            const TQCString& appId);
 
         /**
         * Given an appId, returns the last (most recently queued) Job Number with that appId,
@@ -154,7 +154,7 @@ class SpeechData : public QObject {
         * If appId is NULL, returns the Job Number of the last job in the queue.
         * Does not change textJobs.current().
         */
-        uint findAJobNumByAppId(const QCString& appId);
+        uint findAJobNumByAppId(const TQCString& appId);
 
         /**
         * Retrieves the Screen Reader Output.
@@ -169,8 +169,8 @@ class SpeechData : public QObject {
        /**
         * Add a new warning to the queue.
         */
-        void enqueueWarning( const QString &, const QString &talker,
-            const QCString& appId);
+        void enqueueWarning( const TQString &, const TQString &talker,
+            const TQCString& appId);
 
         /**
         * Pop (get and erase) a warning from the queue.
@@ -188,8 +188,8 @@ class SpeechData : public QObject {
         /**
         * Add a new message to the queue.
         */
-        void enqueueMessage( const QString &, const QString &talker,
-            const QCString&);
+        void enqueueMessage( const TQString &, const TQString &talker,
+            const TQCString&);
 
         /**
         * Pop (get and erase) a message from the queue.
@@ -219,7 +219,7 @@ class SpeechData : public QObject {
         * Changing the sentence delimiter does not affect other applications.
         * @see sentenceparsing
         */
-        void setSentenceDelimiter(const QString &delimiter, const QCString appId);
+        void setSentenceDelimiter(const TQString &delimiter, const TQCString appId);
 
         /* The following methods correspond to the methods in KSpeech interface. */
 
@@ -239,7 +239,7 @@ class SpeechData : public QObject {
         * job is the first speakable job in the queue, speaking will begin.
         * @see startText.
         */
-        uint setText(const QString &text, const QString &talker, const QCString& appId);
+        uint setText(const TQString &text, const TQString &talker, const TQCString& appId);
 
         /**
         * Adds another part to a text job.  Does not start speaking the text.
@@ -255,7 +255,7 @@ class SpeechData : public QObject {
         * @see setText.
         * @see startText.
         */
-        int appendText(const QString &text, const uint jobNum, const QCString& appId);
+        int appendText(const TQString &text, const uint jobNum, const TQCString& appId);
 
         /**
         * Get the number of sentences in a text job.
@@ -279,7 +279,7 @@ class SpeechData : public QObject {
         * Get a comma-separated list of text job numbers in the queue.
         * @return               Comma-separated list of text job numbers in the queue.
         */
-        QString getTextJobNumbers();
+        TQString getTextJobNumbers();
 
         /**
         * Get the state of a text job.
@@ -300,13 +300,13 @@ class SpeechData : public QObject {
         /**
         * Get information about a text job.
         * @param jobNum         Job number of the text job.
-        * @return               A QDataStream containing information about the job.
+        * @return               A TQDataStream containing information about the job.
         *                       Blank if no such job.
         *
         * The stream contains the following elements:
         *   - int state         Job state.
-        *   - QCString appId    DCOP senderId of the application that requested the speech job.
-        *   - QString talker    Talker code as requested by application.
+        *   - TQCString appId    DCOP senderId of the application that requested the speech job.
+        *   - TQString talker    Talker code as requested by application.
         *   - int seq           Current sentence being spoken.  Sentences are numbered starting at 1.
         *   - int sentenceCount Total number of sentences in the job.
         *   - int partNum       Current part of the job begin spoken.  Parts are numbered starting at 1.
@@ -317,11 +317,11 @@ class SpeechData : public QObject {
         *
         * The following sample code will decode the stream:
                 @verbatim
-                    QByteArray jobInfo = getTextJobInfo(jobNum);
-                    QDataStream stream(jobInfo, IO_ReadOnly);
+                    TQByteArray jobInfo = getTextJobInfo(jobNum);
+                    TQDataStream stream(jobInfo, IO_ReadOnly);
                     int state;
-                    QCString appId;
-                    QString talker;
+                    TQCString appId;
+                    TQString talker;
                     int seq;
                     int sentenceCount;
                     int partNum;
@@ -335,7 +335,7 @@ class SpeechData : public QObject {
                     stream >> partCount;
                 @endverbatim
         */
-        QByteArray getTextJobInfo(const uint jobNum);
+        TQByteArray getTextJobInfo(const uint jobNum);
 
         /**
         * Return a sentence of a job.
@@ -344,7 +344,7 @@ class SpeechData : public QObject {
         * @return               The specified sentence in the specified job.  If no such
         *                       job or sentence, returns "".
         */
-        QString getTextJobSentence(const uint jobNum, const uint seq=1);
+        TQString getTextJobSentence(const uint jobNum, const uint seq=1);
 
         /**
         * Remove a text job from the queue.
@@ -363,7 +363,7 @@ class SpeechData : public QObject {
         *                       If no plugin has been configured for the specified Talker code,
         *                       defaults to the closest matching talker.
         */
-        void changeTextTalker(const QString &talker, uint jobNum);
+        void changeTextTalker(const TQString &talker, uint jobNum);
 
         /**
         * Move a text job down in the queue so that it is spoken later.
@@ -451,7 +451,7 @@ class SpeechData : public QObject {
         * If no such job, returns "".
         * Does not change textJobs.current().
         */
-        QCString getAppIdByJobNum(const uint jobNum);
+        TQCString getAppIdByJobNum(const uint jobNum);
 
         /**
         * Sets pointer to the TalkerMgr object.
@@ -463,7 +463,7 @@ class SpeechData : public QObject {
         /**
         * Text pre message
         */
-        QString textPreMsg;
+        TQString textPreMsg;
 
         /**
         * Text pre message enabled ?
@@ -473,7 +473,7 @@ class SpeechData : public QObject {
         /**
         * Text pre sound
         */
-        QString textPreSnd;
+        TQString textPreSnd;
 
         /**
         * Text pre sound enabled ?
@@ -483,7 +483,7 @@ class SpeechData : public QObject {
         /**
         * Text post message
         */
-        QString textPostMsg;
+        TQString textPostMsg;
 
         /**
         * Text post message enabled ?
@@ -493,7 +493,7 @@ class SpeechData : public QObject {
         /**
         * Text post sound
         */
-        QString textPostSnd;
+        TQString textPostSnd;
 
         /**
         * Text post sound enabled ?
@@ -503,7 +503,7 @@ class SpeechData : public QObject {
         /**
         * Paragraph pre message
         */
-        QString parPreMsg;
+        TQString parPreMsg;
 
         /**
         * Paragraph pre message enabled ?
@@ -513,7 +513,7 @@ class SpeechData : public QObject {
         /**
         * Paragraph pre sound
         */
-        QString parPreSnd;
+        TQString parPreSnd;
 
         /**
         * Paragraph pre sound enabled ?
@@ -523,7 +523,7 @@ class SpeechData : public QObject {
         /**
         * Paragraph post message
         */
-        QString parPostMsg;
+        TQString parPostMsg;
 
         /**
         * Paragraph post message enabled ?
@@ -533,7 +533,7 @@ class SpeechData : public QObject {
         /**
         * Paragraph post sound
         */
-        QString parPostSnd;
+        TQString parPostSnd;
 
         /**
         * Paragraph post sound enabled ?
@@ -544,7 +544,7 @@ class SpeechData : public QObject {
         * Keep audio files.  Do not delete generated tmp wav files.
         */
         bool keepAudio;
-        QString keepAudioPath;
+        TQString keepAudioPath;
 
         /**
         * Notification settings.
@@ -581,7 +581,7 @@ class SpeechData : public QObject {
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textSet(const QCString& appId, const uint jobNum);
+        void textSet(const TQCString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a new part is appended to a text job.
@@ -590,7 +590,7 @@ class SpeechData : public QObject {
         * @param partNum        Part number of the new part.  Parts are numbered starting
         *                       at 1.
         */
-        void textAppended(const QCString& appId, const uint jobNum, const int partNum);
+        void textAppended(const TQCString& appId, const uint jobNum, const int partNum);
 
         /**
         * This signal is emitted whenever a text job is deleted from the queue.
@@ -598,7 +598,7 @@ class SpeechData : public QObject {
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textRemoved(const QCString& appId, const uint jobNum);
+        void textRemoved(const TQCString& appId, const uint jobNum);
 
     private:
         /**
@@ -609,17 +609,17 @@ class SpeechData : public QObject {
         /**
         * Queue of warnings
         */
-        QPtrQueue<mlJob> warnings;
+        TQPtrQueue<mlJob> warnings;
 
         /**
         * Queue of messages
         */
-        QPtrQueue<mlJob> messages;
+        TQPtrQueue<mlJob> messages;
 
         /**
         * Queue of text jobs.
         */
-        QPtrList<mlJob> textJobs;
+        TQPtrList<mlJob> textJobs;
 
         /**
         * TalkerMgr object local pointer.
@@ -629,7 +629,7 @@ class SpeechData : public QObject {
         /**
         * Pool of FilterMgrs.
         */
-        QPtrList<PooledFilterMgr> m_pooledFilterMgrs;
+        TQPtrList<PooledFilterMgr> m_pooledFilterMgrs;
 
         /**
         * Job counter.  Each new job increments this counter.
@@ -639,17 +639,17 @@ class SpeechData : public QObject {
         /**
         * Talker of the text
         */
-        QString textTalker;
+        TQString textTalker;
 
         /**
         * Map of sentence delimiters.  One per app.  If none specified for an app, uses default.
         */
-        QMap<QCString, QString> sentenceDelimiters;
+        TQMap<TQCString, TQString> sentenceDelimiters;
 
         /**
         * Determines whether the given text is SSML markup.
         */
-        bool isSsml(const QString &text);
+        bool isSsml(const TQString &text);
 
         /**
         * Given an appId, returns the last (most recently queued) job with that appId.
@@ -659,7 +659,7 @@ class SpeechData : public QObject {
         * If appId is NULL, returns the last job in the queue.
         * Does not change textJobs.current().
         */
-        mlJob* findLastJobByAppId(const QCString& appId);
+        mlJob* findLastJobByAppId(const TQCString& appId);
 
         /**
         * Given an appId, returns the last (most recently queued) job with that appId,
@@ -670,7 +670,7 @@ class SpeechData : public QObject {
         * If appId is NULL, returns the last job in the queue.
         * Does not change textJobs.current().
         */
-        mlJob* findAJobByAppId(const QCString& appId);
+        mlJob* findAJobByAppId(const TQCString& appId);
 
         /**
         * Given a job and a sequence number, returns the part that sentence is in.
@@ -690,7 +690,7 @@ class SpeechData : public QObject {
         * @return               List of parsed sentences.
         */
 
-        QStringList parseText(const QString &text, const QCString &appId);
+        TQStringList parseText(const TQString &text, const TQCString &appId);
 
         /**
         * Delete expired jobs.  At most, one finished job is kept on the queue.
@@ -703,7 +703,7 @@ class SpeechData : public QObject {
         /**
         * Assigns a FilterMgr to a job and starts filtering on it.
         */
-        void startJobFiltering(mlJob* job, const QString& text, bool noSBD);
+        void startJobFiltering(mlJob* job, const TQString& text, bool noSBD);
 
         /**
         * Waits for filtering to be completed on a job.
@@ -721,7 +721,7 @@ class SpeechData : public QObject {
         /**
         * Loads notify events from a file.  Clearing data if clear is True.
         */
-        void loadNotifyEventsFromFile( const QString& filename, bool clear);
+        void loadNotifyEventsFromFile( const TQString& filename, bool clear);
 
     private slots:
         void slotFilterMgrFinished();

@@ -19,7 +19,7 @@
 #define _PLUGINCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <tqwidget.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -125,7 +125,7 @@
 * Next, @ref getTalkerCode
 * will be called.  If your plugin can automatically configure itself to the desired
 * language, it should do so and return a fully-specified talker code.  If your
-* plugin is not yet ready and requires user help, return QString::null. Note that
+* plugin is not yet ready and requires user help, return TQString::null. Note that
 * @ref setDesiredLanguage may be Null, in which case, you should allow the
 * user to configure your plugin to any of your supported languages.
 *
@@ -138,7 +138,7 @@
 * - @e lang.         If user has completed configuring your plugin, i.e., it is
 *                    ready to begin synthesizing, return the ISO 639-1 language code
 *                    for the language it can synthesize.  If your plugin is not yet 
-*                    fully configured, you should return QString::null for the entire
+*                    fully configured, you should return TQString::null for the entire
 *                    talker code.  If your plugin supports a specific national version
 *                    of a language, that should also be included using the ISO 3166
 *                    country code separated from the language code by underscore (_).
@@ -214,7 +214,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         /**
         * Constructor 
         */
-        PlugInConf( QWidget *parent = 0, const char *name = 0);
+        PlugInConf( TQWidget *parent = 0, const char *name = 0);
 
         /**
         * Destructor 
@@ -241,7 +241,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * 
         * @see loadandsavemethods
         */
-        virtual void load(KConfig *config, const QString &configGroup);
+        virtual void load(KConfig *config, const TQString &configGroup);
 
         /**
         * This function gets called when the user wants to save the settings in 
@@ -257,7 +257,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * it is not necessary to save the language code, unless your plugin needs it in
         * order to synthesize speech.
         */
-        virtual void save(KConfig *config, const QString &configGroup);
+        virtual void save(KConfig *config, const TQString &configGroup);
 
         /** 
         * This function is called to set the settings in the module to sensible
@@ -281,7 +281,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
         * specified language code, choosing sensible defaults if necessary.
-        * If the passed-in code is QString::null, no specific language has
+        * If the passed-in code is TQString::null, no specific language has
         * been chosen.
         * @param lang        The desired language code or Null if none.
         *
@@ -293,21 +293,21 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * not the given country, treat it as though the country
         * code were not specified, i.e., adapt to the given language.
         */
-        virtual void setDesiredLanguage(const QString &lang);
+        virtual void setDesiredLanguage(const TQString &lang);
 
         /**
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
         * one instance from another.  If the plugin has not been fully configured,
-        * i.e., cannot yet synthesize, return QString::null.
+        * i.e., cannot yet synthesize, return TQString::null.
         * @return            Fully-specified talker code.
         */
-        virtual QString getTalkerCode();
+        virtual TQString getTalkerCode();
 
         /**
         * Return a list of all the languages possibly supported by the plugin.
         * If your plugin can support any language, return Null.
-        * @return            A QStringList of supported language and optional country
+        * @return            A TQStringList of supported language and optional country
         *                    codes, or Null if any.
         *
         * The languge codes are given in ISO 639-1.  Lowercase should be used.
@@ -321,7 +321,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         *   es_CL
         * The list you return should be as specific as practicable.
         */
-        virtual QStringList getSupportedLanguages();
+        virtual TQStringList getSupportedLanguages();
 
         /**
         * Player object that can be used by the plugin for testing playback of synthed files.
@@ -329,9 +329,9 @@ class KDE_EXPORT PlugInConf : public QWidget{
         void setPlayer(TestPlayer* player);
         TestPlayer* getPlayer();
 
-        static QString realFilePath(const QString &filename);
+        static TQString realFilePath(const TQString &filename);
 
-        static QString testMessage(const QString& languageCode);
+        static TQString testMessage(const TQString& languageCode);
 
     public slots:
         /**
@@ -359,7 +359,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * @returns           The path to the file on success, a blank QString
         *                    if its not found.
         */
-        QString getLocation(const QString &name);
+        TQString getLocation(const TQString &name);
 
         /**
         * Breaks a language code into the language code and country code (if any).
@@ -367,10 +367,10 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * @return countryCode   Just the country code part (if any).
         * @return               Just the language code part.
         */
-        QString splitLanguageCode(const QString& languageCode, QString& countryCode);
+        TQString splitLanguageCode(const TQString& languageCode, TQString& countryCode);
 
-        /// The system path in a QStringList.
-        QStringList m_path;
+        /// The system path in a TQStringList.
+        TQStringList m_path;
 
         TestPlayer* m_player;
 };

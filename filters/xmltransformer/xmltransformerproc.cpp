@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
-#include <qregexp.h>
+#include <tqfile.h>
+#include <tqregexp.h>
 
 // KDE includes.
 #include <kdeversion.h>
@@ -44,7 +44,7 @@
 /**
  * Constructor.
  */
-XmlTransformerProc::XmlTransformerProc( QObject *parent, const char *name, const QStringList& ) :
+XmlTransformerProc::XmlTransformerProc( TQObject *parent, const char *name, const TQStringList& ) :
     KttsFilterProc(parent, name)
 {
     m_xsltProc = 0;
@@ -56,8 +56,8 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const char *name, const
 /*virtual*/ XmlTransformerProc::~XmlTransformerProc()
 {
     delete m_xsltProc;
-    if (!m_inFilename.isEmpty()) QFile::remove(m_inFilename);
-    if (!m_outFilename.isEmpty()) QFile::remove(m_outFilename);
+    if (!m_inFilename.isEmpty()) TQFile::remove(m_inFilename);
+    if (!m_outFilename.isEmpty()) TQFile::remove(m_outFilename);
 }
 
 /**
@@ -69,7 +69,7 @@ XmlTransformerProc::XmlTransformerProc( QObject *parent, const char *name, const
  * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
  * separate configuration files of their own.
  */
-bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
+bool XmlTransformerProc::init(KConfig* config, const TQString& configGroup)
 {
     // kdDebug() << "XmlTransformerProc::init: Running." << endl;
     config->setGroup( configGroup );
@@ -105,8 +105,8 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * @param appId             The DCOP appId of the application that queued the text.
  *                          Also useful for hints about how to do the filtering.
  */
-/*virtual*/ QString XmlTransformerProc::convert(const QString& inputText, TalkerCode* talkerCode,
-    const QCString& appId)
+/*virtual*/ TQString XmlTransformerProc::convert(const TQString& inputText, TalkerCode* talkerCode,
+    const TQCString& appId)
 {
     // kdDebug() << "XmlTransformerProc::convert: Running." << endl;
     // If not properly configured, do nothing.
@@ -139,8 +139,8 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
  * program may then call @ref getOutput to retrieve converted text.  Calling
  * program must call @ref ackFinished to acknowledge the conversion.
  */
-/*virtual*/ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* /*talkerCode*/,
-    const QCString& appId)
+/*virtual*/ bool XmlTransformerProc::asyncConvert(const TQString& inputText, TalkerCode* /*talkerCode*/,
+    const TQCString& appId)
 {
     m_wasModified = false;
 
@@ -192,7 +192,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     // If appId doesn't match, return input unmolested.
     if ( !m_appIdList.isEmpty() )
     {
-        QString appIdStr = appId;
+        TQString appIdStr = appId;
         // kdDebug() << "XmlTransformrProc::convert: converting " << inputText << " if appId "
         //     << appId << " matches " << m_appIdList << endl;
         found = false;
@@ -214,7 +214,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     /// Write @param text to a temporary file.
     KTempFile inFile(locateLocal("tmp", "kttsd-"), ".xml");
     m_inFilename = inFile.file()->name();
-    QTextStream* wstream = inFile.textStream();
+    TQTextStream* wstream = inFile.textStream();
     if (wstream == 0) {
         /// wtf...
         kdDebug() << "XmlTransformerProc::convert: Can't write to " << m_inFilename << endl;;
@@ -226,8 +226,8 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     // FIXME: Temporary Fix until Konqi returns properly formatted xhtml with & coded as &amp;
     // This will change & inside a CDATA section, which is not good, and also within comments and
     // processing instructions, which is OK because we don't speak those anyway.
-    QString text = inputText;
-    text.replace(QRegExp("&(?!amp;)"),"&amp;");
+    TQString text = inputText;
+    text.replace(TQRegExp("&(?!amp;)"),"&amp;");
     *wstream << text;
     inFile.close();
 #if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)
@@ -250,12 +250,12 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
     //     m_xsltProc->args() << endl;
 
     m_state = fsFiltering;
-    connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
-            this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_xsltProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_xsltProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    connect(m_xsltProc, TQT_SIGNAL(processExited(KProcess*)),
+            this, TQT_SLOT(slotProcessExited(KProcess*)));
+    connect(m_xsltProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+            this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(m_xsltProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+            this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
     if (!m_xsltProc->start(KProcess::NotifyOnExit,
          static_cast<KProcess::Communication>(KProcess::Stdout | KProcess::Stderr)))
     {
@@ -269,7 +269,7 @@ bool XmlTransformerProc::init(KConfig* config, const QString& configGroup)
 // Process output when xsltproc exits.
 void XmlTransformerProc::processOutput()
 {
-    QFile::remove(m_inFilename);
+    TQFile::remove(m_inFilename);
 
     int exitStatus = 11;
     if (m_xsltProc->normalExit())
@@ -284,27 +284,27 @@ void XmlTransformerProc::processOutput()
     {
         kdDebug() << "XmlTransformerProc::processOutput: xsltproc abnormal exit.  Status = " << exitStatus << endl;
         m_state = fsFinished;
-        QFile::remove(m_outFilename);
+        TQFile::remove(m_outFilename);
         emit filteringFinished();
         return;
     }
 
     /// Read back the data that was written to /tmp/fileName.output.
-    QFile readfile(m_outFilename);
+    TQFile readfile(m_outFilename);
     if(!readfile.open(IO_ReadOnly)) {
         /// uhh yeah... Issues writing to the output file.
         kdDebug() << "XmlTransformerProc::processOutput: Could not read file " << m_outFilename << endl;
         m_state = fsFinished;
         emit filteringFinished();
     }
-    QTextStream rstream(&readfile);
+    TQTextStream rstream(&readfile);
     m_text = rstream.read();
     readfile.close();
 
     kdDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath << endl;
 
     // Clean up.
-    QFile::remove(m_outFilename);
+    TQFile::remove(m_outFilename);
 
     m_state = fsFinished;
     m_wasModified = true;
@@ -338,7 +338,7 @@ void XmlTransformerProc::processOutput()
 /**
  * Returns the filtered output.
  */
-/*virtual*/ QString XmlTransformerProc::getOutput() { return m_text; }
+/*virtual*/ TQString XmlTransformerProc::getOutput() { return m_text; }
 
 /**
  * Acknowledges the finished filtering.
@@ -346,7 +346,7 @@ void XmlTransformerProc::processOutput()
 /*virtual*/ void XmlTransformerProc::ackFinished()
 {
     m_state = fsIdle;
-    m_text = QString::null;
+    m_text = TQString::null;
 }
 
 /**
@@ -373,13 +373,13 @@ void XmlTransformerProc::slotProcessExited(KProcess*)
 
 void XmlTransformerProc::slotReceivedStdout(KProcess*, char* /*buffer*/, int /*buflen*/)
 {
-    // QString buf = QString::fromLatin1(buffer, buflen);
+    // TQString buf = TQString::fromLatin1(buffer, buflen);
     // kdDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf << endl;
 }
 
 void XmlTransformerProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf << endl;
 }
 

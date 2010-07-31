@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
+#include <tqfile.h>
 
 // KDE includes.
 #include <kapplication.h>
@@ -44,9 +44,9 @@
 /**
  * Constructor.
  */
-TestPlayer::TestPlayer(QObject *parent, const char *name,
-    const int playerOption, const float audioStretchFactor, const QString &sinkName) :
-    QObject(parent, name)
+TestPlayer::TestPlayer(TQObject *parent, const char *name,
+    const int playerOption, const float audioStretchFactor, const TQString &sinkName) :
+    TQObject(parent, name)
 {
     m_playerOption = playerOption;
     m_audioStretchFactor = audioStretchFactor;
@@ -82,19 +82,19 @@ void TestPlayer::setPlayerOption(const int playerOption) { m_playerOption = play
 void TestPlayer::setAudioStretchFactor(const float audioStretchFactor)
     { m_audioStretchFactor = audioStretchFactor; }
 
-void TestPlayer::setSinkName(const QString &sinkName) { m_sinkName = sinkName; }
+void TestPlayer::setSinkName(const TQString &sinkName) { m_sinkName = sinkName; }
 
 /**
  * Plays the specifified audio file and waits for completion.
  * The audio file speed is adjusted according to the stretch factor.
  * @param waveFile              Name of the audio file to play.
  */
-void TestPlayer::play(const QString &waveFile)
+void TestPlayer::play(const TQString &waveFile)
 {
     // kdDebug() << "TestPlayer::play: running" << endl;
     // Create a Stretcher object to adjust the audio Speed.
-    QString playFile = waveFile;
-    QString tmpFile;
+    TQString playFile = waveFile;
+    TQString tmpFile;
     if (m_audioStretchFactor != 1.0)
     {
         tmpFile = makeSuggestedFilename();
@@ -128,7 +128,7 @@ void TestPlayer::play(const QString &waveFile)
     m_player->stop();
     delete m_player;
     m_player = 0;
-    if (!tmpFile.isEmpty()) QFile::remove(tmpFile);
+    if (!tmpFile.isEmpty()) TQFile::remove(tmpFile);
 }
 
 /**
@@ -137,7 +137,7 @@ void TestPlayer::play(const QString &waveFile)
 Player* TestPlayer::createPlayerObject(int playerOption)
 {
     Player* player = 0;
-    QString plugInName;
+    TQString plugInName;
     switch(playerOption)
     {
         case 1 :
@@ -162,7 +162,7 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         }
     }
     KTrader::OfferList offers = KTrader::self()->query(
-            "KTTSD/AudioPlugin", QString("DesktopEntryName == '%1'").arg(plugInName));
+            "KTTSD/AudioPlugin", TQString("DesktopEntryName == '%1'").arg(plugInName));
 
     if(offers.count() == 1)
     {
@@ -197,12 +197,12 @@ Player* TestPlayer::createPlayerObject(int playerOption)
  * for synthesis to write to.
  * @return                        Full pathname of suggested file.
  */
-QString TestPlayer::makeSuggestedFilename()
+TQString TestPlayer::makeSuggestedFilename()
 {
     KTempFile tempFile (locateLocal("tmp", "kttsmgr-"), ".wav");
-    QString waveFile = tempFile.file()->name();
+    TQString waveFile = tempFile.file()->name();
     tempFile.close();
-    QFile::remove(waveFile);
+    TQFile::remove(waveFile);
     // kdDebug() << "TestPlayer::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return PlugInConf::realFilePath(waveFile);
 }

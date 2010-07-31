@@ -26,8 +26,8 @@
 #define _EPOSPROC_H_
 
 // Qt includes.
-#include <qstringlist.h>
-#include <qmutex.h>
+#include <tqstringlist.h>
+#include <tqmutex.h>
 
 // KTTS includes.
 #include <pluginproc.h>
@@ -42,7 +42,7 @@ class EposProc : public PlugInProc{
         /**
          * Constructor
          */
-        EposProc( QObject* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        EposProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor
@@ -54,13 +54,13 @@ class EposProc : public PlugInProc{
          * @param config          Settings object.
          * @param configGroup     Settings group.
          */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init(KConfig *config, const TQString &configGroup);
 
         /**
          * Say a text string.
          * @param text            The text to speak.
          */
-        virtual void sayText(const QString &text);
+        virtual void sayText(const TQString &text);
 
         /**
         * Synthesize text into an audio file, but do not send to the audio device.
@@ -72,7 +72,7 @@ class EposProc : public PlugInProc{
         *
         * If the plugin supports asynchronous operation, it should return immediately.
         */
-        virtual void synthText(const QString& text, const QString& suggestedFilename);
+        virtual void synthText(const TQString& text, const TQString& suggestedFilename);
 
         /**
         * Get the generated audio filename from synthText.
@@ -81,7 +81,7 @@ class EposProc : public PlugInProc{
         *
         * The plugin must not re-use the filename.
         */
-        virtual QString getFilename();
+        virtual TQString getFilename();
 
         /**
         * Stop current operation (saying or synthesizing text).
@@ -154,14 +154,14 @@ class EposProc : public PlugInProc{
         * @param pitch                   Pitch persentage.  50 to 200.
         */
         void synth(
-            const QString &text,
-            const QString &suggestedFilename,
-            const QString& eposServerExePath,
-            const QString& eposClientExePath,
-            const QString& eposServerOptions,
-            const QString& eposClientOptions,
-            QTextCodec *codec,
-            const QString& eposLanguage,
+            const TQString &text,
+            const TQString &suggestedFilename,
+            const TQString& eposServerExePath,
+            const TQString& eposClientExePath,
+            const TQString& eposServerOptions,
+            const TQString& eposClientOptions,
+            TQTextCodec *codec,
+            const TQString& eposLanguage,
             int time,
             int pitch);
 
@@ -176,14 +176,14 @@ class EposProc : public PlugInProc{
         /**
         * Path to epos executables (from config).
         */
-        QString m_eposServerExePath;
-        QString m_eposClientExePath;
+        TQString m_eposServerExePath;
+        TQString m_eposClientExePath;
 
         /**
         * User options passed to executables (from config).
         */
-        QString m_eposServerOptions;
-        QString m_eposClientOptions;
+        TQString m_eposServerOptions;
+        TQString m_eposClientOptions;
 
         /**
         * Epos Server process.
@@ -198,7 +198,7 @@ class EposProc : public PlugInProc{
         /**
         * Epos language setting.  "czech", "slovak", or Null (use default language).
         */
-        QString m_eposLanguage;
+        TQString m_eposLanguage;
 
         /**
         * Rate (speed) from config file.
@@ -213,17 +213,17 @@ class EposProc : public PlugInProc{
         /**
         * Codec.
         */
-        QTextCodec* m_codec;
+        TQTextCodec* m_codec;
 
         /**
         * Encoded buffer to be sent to Epos client.
          */
-        QCString m_encText;
+        TQCString m_encText;
 
         /**
         * Synthesis filename.
         */
-        QString m_synthFilename;
+        TQString m_synthFilename;
 
         /**
         * Plugin state.

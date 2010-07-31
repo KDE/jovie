@@ -16,13 +16,13 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
-#include <qstring.h>
-#include <qvaluelist.h>
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <qtextcodec.h>
-#include <qvaluestack.h>
+#include <tqfile.h>
+#include <tqstring.h>
+#include <tqvaluelist.h>
+#include <tqstringlist.h>
+#include <tqregexp.h>
+#include <tqtextcodec.h>
+#include <tqvaluestack.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -39,7 +39,7 @@
 #include "commandproc.moc"
 
 /** Constructor */
-CommandProc::CommandProc( QObject* parent, const char* name, const QStringList& /*args*/) : 
+CommandProc::CommandProc( TQObject* parent, const char* name, const TQStringList& /*args*/) : 
     PlugInProc( parent, name )
 {
     kdDebug() << "CommandProc::CommandProc: Running" << endl;
@@ -59,12 +59,12 @@ CommandProc::~CommandProc()
         if (m_commandProc->isRunning()) m_commandProc->kill();
         delete m_commandProc;
         // Don't delete synth file.  That is responsibility of caller.
-        if (!m_textFilename.isNull()) QFile::remove(m_textFilename);
+        if (!m_textFilename.isNull()) TQFile::remove(m_textFilename);
     }
 }
 
 /** Initialize */
-bool CommandProc::init(KConfig *config, const QString &configGroup){
+bool CommandProc::init(KConfig *config, const TQString &configGroup){
     kdDebug() << "CommandProc::init: Initializing plug in: Command " << endl;
 
     config->setGroup(configGroup);
@@ -75,7 +75,7 @@ bool CommandProc::init(KConfig *config, const QString &configGroup){
     // Support separate synthesis if the TTS command contains %w macro.
     m_supportsSynth = (m_ttsCommand.contains("%w"));
 
-    QString codecString = config->readEntry("Codec", "Local");
+    TQString codecString = config->readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
     kdDebug() << "CommandProc::init: Initialized with command: " << m_ttsCommand << " codec: " << codecString << endl;
     return true;
@@ -87,9 +87,9 @@ bool CommandProc::init(KConfig *config, const QString &configGroup){
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void CommandProc::sayText(const QString &text)
+void CommandProc::sayText(const TQString &text)
 {
-    synth(text, QString::null,
+    synth(text, TQString::null,
         m_ttsCommand, m_stdin, m_codec, m_language);
 }
 
@@ -103,7 +103,7 @@ void CommandProc::sayText(const QString &text)
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void CommandProc::synthText(const QString& text, const QString& suggestedFilename)
+void CommandProc::synthText(const TQString& text, const TQString& suggestedFilename)
 {
     synth(text, suggestedFilename,
         m_ttsCommand, m_stdin, m_codec, m_language);
@@ -116,56 +116,56 @@ void CommandProc::synthText(const QString& text, const QString& suggestedFilenam
 *                                synthesize and audibilize the text.
 * @param userCmd                 The program that shall be executed for speaking
 * @param stdIn                   True if the program shall recieve its data via standard input
-* @param codec                   The QTextCodec if encoding==UseCodec
+* @param codec                   The TQTextCodec if encoding==UseCodec
 * @param language                The language code (used for the %l macro)
 */
-void CommandProc::synth(const QString& inputText, const QString& suggestedFilename,
-    const QString& userCmd, bool stdIn, QTextCodec *codec, QString& language)
+void CommandProc::synth(const TQString& inputText, const TQString& suggestedFilename,
+    const TQString& userCmd, bool stdIn, TQTextCodec *codec, TQString& language)
 {
     if (m_commandProc)
     {
         if (m_commandProc->isRunning()) m_commandProc->kill();
         delete m_commandProc;
         m_commandProc = 0;
-        m_synthFilename = QString::null;
-        if (!m_textFilename.isNull()) QFile::remove(m_textFilename);
-        m_textFilename = QString::null;
+        m_synthFilename = TQString::null;
+        if (!m_textFilename.isNull()) TQFile::remove(m_textFilename);
+        m_textFilename = TQString::null;
     }
-    QString command = userCmd;
-    QString text = inputText.stripWhiteSpace();
+    TQString command = userCmd;
+    TQString text = inputText.stripWhiteSpace();
     if (text.isEmpty()) return;
      // 1. prepare the text:
      // 1.a) encode the text
     text += "\n";
-    QCString encodedText;
+    TQCString encodedText;
     if (codec)
         encodedText = codec->fromUnicode(text);
     else
         encodedText = text.latin1();  // Should not happen, but just in case.
 
     // 1.b) quote the text as one parameter
-    QString escText = KShellProcess::quote(text);
+    TQString escText = KShellProcess::quote(text);
 
     // 1.c) create a temporary file for the text, if %f macro is used.
     if (command.contains("%f"))
     {
         KTempFile tempFile(locateLocal("tmp", "commandplugin-"), ".txt");
-        QTextStream* fs = tempFile.textStream();
+        TQTextStream* fs = tempFile.textStream();
         fs->setCodec(codec);
         *fs << text;
         *fs << endl;
         m_textFilename = tempFile.file()->name();
         tempFile.close();
-    } else m_textFilename = QString::null;
+    } else m_textFilename = TQString::null;
 
     // 2. replace variables with values
-    QValueStack<bool> stack;
+    TQValueStack<bool> stack;
     bool issinglequote=false;
     bool isdoublequote=false;
     int noreplace=0;
-    QRegExp re_noquote("(\"|'|\\\\|`|\\$\\(|\\$\\{|\\(|\\{|\\)|\\}|%%|%t|%f|%l|%w)");
-    QRegExp re_singlequote("('|%%|%t|%f|%l|%w)");
-    QRegExp re_doublequote("(\"|\\\\|`|\\$\\(|\\$\\{|%%|%t|%f|%l|%w)");
+    TQRegExp re_noquote("(\"|'|\\\\|`|\\$\\(|\\$\\{|\\(|\\{|\\)|\\}|%%|%t|%f|%l|%w)");
+    TQRegExp re_singlequote("('|%%|%t|%f|%l|%w)");
+    TQRegExp re_doublequote("(\"|\\\\|`|\\$\\(|\\$\\{|%%|%t|%f|%l|%w)");
 
     for	( int i = re_noquote.search(command);
         i != -1;
@@ -220,7 +220,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         {
             // Replace all `...` with safer $(...)
             command.replace (i, 1, "$(");
-            QRegExp re_backticks("(`|\\\\`|\\\\\\\\|\\\\\\$)");
+            TQRegExp re_backticks("(`|\\\\`|\\\\\\\\|\\\\\\$)");
             for (	int i2=re_backticks.search(command,i+2);
                 i2!=-1;
                 i2=re_backticks.search(command,i2)
@@ -241,7 +241,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
         }
         else if (noreplace == 0) // do not replace macros within ${...}
         {
-            QString match, v;
+            TQString match, v;
 
             // get match
             if (issinglequote)
@@ -290,14 +290,14 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
     m_commandProc->setEnvironment("LANG", language + "." + codec->mimeName());
     m_commandProc->setEnvironment("LC_CTYPE", language + "." + codec->mimeName());
     *m_commandProc << command;
-    connect(m_commandProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_commandProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_commandProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_commandProc, SIGNAL(wroteStdin(KProcess*)),
-        this, SLOT(slotWroteStdin(KProcess* )));
+    connect(m_commandProc, TQT_SIGNAL(processExited(KProcess*)),
+        this, TQT_SLOT(slotProcessExited(KProcess*)));
+    connect(m_commandProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+        this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(m_commandProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+        this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    connect(m_commandProc, TQT_SIGNAL(wroteStdin(KProcess*)),
+        this, TQT_SLOT(slotWroteStdin(KProcess* )));
 
     // 4. start the process
 
@@ -326,7 +326,7 @@ void CommandProc::synth(const QString& inputText, const QString& suggestedFilena
 *
 * The plugin must not re-use the filename.
 */
-QString CommandProc::getFilename()
+TQString CommandProc::getFilename()
 {
     kdDebug() << "CommandProc::getFilename: returning " << m_synthFilename << endl;
     return m_synthFilename;
@@ -382,13 +382,13 @@ void CommandProc::slotProcessExited(KProcess*)
 
 void CommandProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "CommandProc::slotReceivedStdout: Received output from Command: " << buf << endl;
 }
 
 void CommandProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "CommandProc::slotReceivedStderr: Received error from Command: " << buf << endl;
 }
 
@@ -420,9 +420,9 @@ void CommandProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
-        if (!m_textFilename.isNull()) QFile::remove(m_textFilename);
-        m_textFilename = QString::null;
+        m_synthFilename = TQString::null;
+        if (!m_textFilename.isNull()) TQFile::remove(m_textFilename);
+        m_textFilename = TQString::null;
     }
 }
 

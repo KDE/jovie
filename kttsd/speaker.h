@@ -24,9 +24,9 @@
 #define _SPEAKER_H_
 
 // Qt includes.
-#include <qobject.h>
-#include <qvaluevector.h>
-#include <qevent.h>
+#include <tqobject.h>
+#include <tqvaluevector.h>
+#include <tqevent.h>
 
 // KTTSD includes.
 #include <speechdata.h>
@@ -89,7 +89,7 @@ struct Utt{
     SSMLConvert* transformer;    /* XSLT transformer. */
     PlugInProc* plugin;          /* The plugin that synthesizes the utterance. */
     Stretcher* audioStretcher;   /* Audio stretcher object.  Adjusts speed. */
-    QString audioUrl;            /* Filename containing synthesized audio.  Null if
+    TQString audioUrl;            /* Filename containing synthesized audio.  Null if
                                     plugin has not yet synthesized the utterance, or if
                                     plugin does not support synthesis. */
     Player* audioPlayer;         /* The audio player audibilizing the utterance.  Null
@@ -100,7 +100,7 @@ struct Utt{
 /**
 * Iterator for queue of utterances.
 */
-typedef QValueVector<Utt>::iterator uttIterator;
+typedef TQValueVector<Utt>::iterator uttIterator;
 
 // Timer interval for checking whether audio playback is finished.
 const int timerInterval = 500;
@@ -118,7 +118,7 @@ class Speaker : public QObject{
          * Calls load plug ins
          */
         Speaker(SpeechData* speechData, TalkerMgr* talkerMgr,
-                QObject *parent = 0, const char *name = 0);
+                TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor
@@ -296,7 +296,7 @@ class Speaker : public QObject{
         * @param markerName     The name of the marker seen.
         * @see markers
         */
-        void markerSeen(const QCString& appId, const QString& markerName);
+        void markerSeen(const TQCString& appId, const TQString& markerName);
 
         /**
         * This signal is emitted whenever a sentence begins speaking.
@@ -304,7 +304,7 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         * @param seq            Sequence number of the text.
         */
-        void sentenceStarted(QString text, QString language, const QCString& appId,
+        void sentenceStarted(TQString text, TQString language, const TQCString& appId,
             const uint jobNum, const uint seq);
 
         /**
@@ -313,14 +313,14 @@ class Speaker : public QObject{
         * @param jobNum         Job number of the text job.
         * @param seq            Sequence number of the text.
         */        
-        void sentenceFinished(const QCString& appId, const uint jobNum, const uint seq);
+        void sentenceFinished(const TQCString& appId, const uint jobNum, const uint seq);
 
         /**
         * This signal is emitted whenever speaking of a text job begins.
         * @param appId          The DCOP senderId of the application that created the job.  NULL if kttsd.
         * @param jobNum         Job number of the text job.
         */
-        void textStarted(const QCString& appId, const uint jobNum);
+        void textStarted(const TQCString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a text job is finished.  The job has
@@ -331,32 +331,32 @@ class Speaker : public QObject{
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textFinished(const QCString& appId, const uint jobNum);
+        void textFinished(const TQCString& appId, const uint jobNum);
 
         /**
         * This signal is emitted whenever a speaking text job stops speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textStopped(const QCString& appId, const uint jobNum);
+        void textStopped(const TQCString& appId, const uint jobNum);
         /**
         * This signal is emitted whenever a speaking text job is paused.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textPaused(const QCString& appId, const uint jobNum);
+        void textPaused(const TQCString& appId, const uint jobNum);
         /**
         * This signal is emitted when a text job, that was previously paused, resumes speaking.
         * @param appId          The DCOP senderId of the application that created the job.
         * @param jobNum         Job number of the text job.
         */
-        void textResumed(const QCString& appId, const uint jobNum);
+        void textResumed(const TQCString& appId, const uint jobNum);
 
     protected:
         /**
         * Processes events posted by ThreadedPlugIns.
         */
-        virtual bool event ( QEvent * e );
+        virtual bool event ( TQEvent * e );
 
     private slots:
         /**
@@ -386,7 +386,7 @@ class Speaker : public QObject{
         *                                the speech engine could not be started.
         * @param msg                     Error message.
         */
-        void slotError(bool keepGoing, const QString &msg);
+        void slotError(bool keepGoing, const TQString &msg);
         /**
         * Received from Timer when it fires.
         * Check audio player to see if it is finished.
@@ -400,33 +400,33 @@ class Speaker : public QObject{
         * @param state           Utterance state.
         * @return                Displayable string for utterance state.
         */
-        QString uttStateToStr(uttState state);
+        TQString uttStateToStr(uttState state);
 
         /**
         * Converts an utterance type enumerator to a displayable string.
         * @param utType          Utterance type.
         * @return                Displayable string for utterance type.
         */
-        QString uttTypeToStr(uttType utType);
+        TQString uttTypeToStr(uttType utType);
 
         /**
         * Converts a plugin state enumerator to a displayable string.
         * @param state           Plugin state.
         * @return                Displayable string for plugin state.
         */
-        QString pluginStateToStr(pluginState state);
+        TQString pluginStateToStr(pluginState state);
 
         /**
         * Converts a job state enumerator to a displayable string.
         * @param state           Job state.
         * @return                Displayable string for job state.
         */
-        QString jobStateToStr(int state);
+        TQString jobStateToStr(int state);
 
         /**
         * Determines whether the given text is SSML markup.
         */
-        bool isSsml(const QString &text);
+        bool isSsml(const TQString &text);
 
         /**
         * Determines the initial state of an utterance.  If the utterance contains
@@ -510,7 +510,7 @@ class Speaker : public QObject{
         * for synthesis to write to.
         * @return                        Full pathname of suggested file.
         */
-        QString makeSuggestedFilename();
+        TQString makeSuggestedFilename();
 
         /**
         * Creates and returns a player object based on user option.
@@ -535,7 +535,7 @@ class Speaker : public QObject{
         /**
         * Queue of utterances we are currently processing.
         */
-        QValueVector<Utt> m_uttQueue;
+        TQValueVector<Utt> m_uttQueue;
 
         /**
         * True when text job reading has been interrupted.
@@ -563,12 +563,12 @@ class Speaker : public QObject{
         /**
         * GStreamer sink name to use, or ALSA PCM device name.
         */
-        QString m_sinkName;
+        TQString m_sinkName;
 
         /**
         * Timer for monitoring audio player.
         */
-        QTimer* m_timer;
+        TQTimer* m_timer;
 
         /**
         * Current Text job being processed.
@@ -579,7 +579,7 @@ class Speaker : public QObject{
         * Job Number, appId, and sequence number of the last text sentence queued.
         */
         uint m_lastJobNum;
-        QCString m_lastAppId;
+        TQCString m_lastAppId;
         uint m_lastSeq;
 
         /**

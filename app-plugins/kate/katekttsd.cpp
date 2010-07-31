@@ -18,9 +18,9 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qmessagebox.h>
+#include <tqmessagebox.h>
 #include <dcopclient.h>
-#include <qtimer.h>
+#include <tqtimer.h>
 
 // KDE includes.
 #include <ktexteditor/editinterface.h>
@@ -38,7 +38,7 @@
 
 K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
-KateKttsdPlugin::KateKttsdPlugin( QObject *parent, const char* name, const QStringList& )
+KateKttsdPlugin::KateKttsdPlugin( TQObject *parent, const char* name, const TQStringList& )
     : KTextEditor::Plugin ( (KTextEditor::Document*) parent, name )
 {
 }
@@ -68,13 +68,13 @@ void KateKttsdPlugin::removeView(KTextEditor::View *view)
 
 
 KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *name )
-    : QObject( view, name ),
+    : TQObject( view, name ),
     KXMLGUIClient( view )
 {
     view->insertChildClient( this );
     setInstance( KGenericFactory<KateKttsdPlugin>::instance() );
     KGlobal::locale()->insertCatalogue("kttsd");
-    (void) new KAction( i18n("Speak Text"), "kttsd", 0, this, SLOT(slotReadOut()), actionCollection(), "tools_kttsd" );
+    (void) new KAction( i18n("Speak Text"), "kttsd", 0, this, TQT_SLOT(slotReadOut()), actionCollection(), "tools_kttsd" );
     setXMLFile( "ktexteditor_kttsdui.rc" );
 }
 
@@ -82,7 +82,7 @@ void KateKttsdPluginView::slotReadOut()
 {
     KTextEditor::View *v = (KTextEditor::View*)parent();
     KTextEditor::SelectionInterface *si = KTextEditor::selectionInterface( v->document() );
-    QString text;
+    TQString text;
 
     if ( si->hasSelection() )
       text = si->selection();
@@ -95,26 +95,26 @@ void KateKttsdPluginView::slotReadOut()
     // If KTTSD not running, start it.
     if (!client->isApplicationRegistered("kttsd"))
     {
-        QString error;
-        if (kapp->startServiceByDesktopName("kttsd", QStringList(), &error))
-            QMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
+        TQString error;
+        if (kapp->startServiceByDesktopName("kttsd", TQStringList(), &error))
+            TQMessageBox::warning(0, i18n( "Starting KTTSD Failed"), error );
     }
-    QByteArray  data;
-    QByteArray  data2;
-    QCString    replyType;
-    QByteArray  replyData;
-    QDataStream arg(data, IO_WriteOnly);
+    TQByteArray  data;
+    TQByteArray  data2;
+    TQCString    replyType;
+    TQByteArray  replyData;
+    TQDataStream arg(data, IO_WriteOnly);
     arg << text << "";
-    if ( !client->call("kttsd", "KSpeech", "setText(QString,QString)",
+    if ( !client->call("kttsd", "KSpeech", "setText(TQString,TQString)",
                        data, replyType, replyData, true) )
-       QMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
+       TQMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
                                  i18n( "The DCOP call setText failed." ));
-    QDataStream arg2(data2, IO_WriteOnly);
+    TQDataStream arg2(data2, IO_WriteOnly);
 
     arg2 << 0;
     if ( !client->call("kttsd", "KSpeech", "startText(uint)",
                        data2, replyType, replyData, true) )
-       QMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
+       TQMessageBox::warning( 0, i18n( "DCOP Call Failed" ),
                                 i18n( "The DCOP call startText failed." ));
 }
 

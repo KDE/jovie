@@ -16,8 +16,8 @@
  ***************************************************************************/
 
 // Qt includes. 
-#include <qstring.h>
-#include <qtextcodec.h>
+#include <tqstring.h>
+#include <tqtextcodec.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -31,7 +31,7 @@
 /**
 * Constructor
 */
-PlugInProc::PlugInProc( QObject *parent, const char *name) : QObject(parent, name){
+PlugInProc::PlugInProc( TQObject *parent, const char *name) : TQObject(parent, name){
     // kdDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 
@@ -45,7 +45,7 @@ PlugInProc::~PlugInProc(){
 /**
 * Initializate the speech plugin.
 */
-bool PlugInProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
+bool PlugInProc::init(KConfig* /*config*/, const TQString& /*configGroup*/){
     // kdDebug() << "PlugInProc::init: Running" << endl;
     return false;
 }
@@ -56,7 +56,7 @@ bool PlugInProc::init(KConfig* /*config*/, const QString& /*configGroup*/){
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void PlugInProc::sayText(const QString& /*text*/){
+void PlugInProc::sayText(const TQString& /*text*/){
     // kdDebug() << "PlugInProc::sayText: Running" << endl;
 }
 
@@ -70,7 +70,7 @@ void PlugInProc::sayText(const QString& /*text*/){
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void PlugInProc::synthText(const QString& /*text*/, const QString& /*suggestedFilename*/) { }
+void PlugInProc::synthText(const TQString& /*text*/, const TQString& /*suggestedFilename*/) { }
 
 /**
 * Get the generated audio filename from synthText.
@@ -79,7 +79,7 @@ void PlugInProc::synthText(const QString& /*text*/, const QString& /*suggestedFi
 *
 * The plugin must not re-use the filename.
 */
-QString PlugInProc::getFilename() { return QString::null; }
+TQString PlugInProc::getFilename() { return TQString::null; }
 
 /**
 * Stop current operation (saying or synthesizing text).
@@ -133,62 +133,62 @@ bool PlugInProc::supportsSynth() { return false; }
 * tags and converts the file to plain text.
 * @return            Name of the XSLT file.
 */
-QString PlugInProc::getSsmlXsltFilename()
+TQString PlugInProc::getSsmlXsltFilename()
 {
     return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/xslt/SSMLtoPlainText.xsl";
 }
 
 /**
-* Given the name of a codec, returns the QTextCodec for the name.
+* Given the name of a codec, returns the TQTextCodec for the name.
 * Handles the following "special" codec names:
 *   Local               The user's current Locale codec.
 *   Latin1              Latin1 (ISO 8859-1)
 *   Unicode             UTF-16
 * @param codecName      Name of desired codec.
 * @return               The codec object.  Calling program must not delete this object
-*                       as it is a reference to an existing QTextCodec object.
+*                       as it is a reference to an existing TQTextCodec object.
 *
 * Caution: Do not pass translated codec names to this routine.
 */
-/*static*/ QTextCodec* PlugInProc::codecNameToCodec(const QString &codecName)
+/*static*/ TQTextCodec* PlugInProc::codecNameToCodec(const TQString &codecName)
 {
-    QTextCodec* codec = 0;
+    TQTextCodec* codec = 0;
     if (codecName == "Local")
-        codec = QTextCodec::codecForLocale();
+        codec = TQTextCodec::codecForLocale();
     else if (codecName == "Latin1")
-        codec = QTextCodec::codecForName("ISO8859-1");
+        codec = TQTextCodec::codecForName("ISO8859-1");
     else if (codecName == "Unicode")
-        codec = QTextCodec::codecForName("utf16");
+        codec = TQTextCodec::codecForName("utf16");
     else
-        codec = QTextCodec::codecForName(codecName.latin1());
+        codec = TQTextCodec::codecForName(codecName.latin1());
     if (!codec)
     {
         kdDebug() << "PluginProc::codecNameToCodec: Invalid codec name " << codecName << endl;
         kdDebug() << "PluginProc::codecNameToCodec: Defaulting to ISO 8859-1" << endl;
-        codec = QTextCodec::codecForName("ISO8859-1");
+        codec = TQTextCodec::codecForName("ISO8859-1");
     }
     return codec;
 }
 
 /**
-* Builds a list of codec names, suitable for display in a QComboBox.
+* Builds a list of codec names, suitable for display in a TQComboBox.
 * The list includes the 3 special codec names (translated) at the top:
 *   Local               The user's current Locale codec.
 *   Latin1              Latin1 (ISO 8859-1)
 *   Unicode             UTF-16
 */
-/*static*/ QStringList PlugInProc::buildCodecList()
+/*static*/ TQStringList PlugInProc::buildCodecList()
 {
     // kdDebug() << "PlugInConf::buildCodecList: Running" << endl;
-    QStringList codecList;
-    QString local = i18n("Local")+" (";
-    local += QTextCodec::codecForLocale()->name();
+    TQStringList codecList;
+    TQString local = i18n("Local")+" (";
+    local += TQTextCodec::codecForLocale()->name();
     local += ")";
     codecList.append(local);
     codecList.append(i18n("Latin1"));
     codecList.append(i18n("Unicode"));
-    for (int i = 0; (QTextCodec::codecForIndex(i)); ++i )
-        codecList.append(QTextCodec::codecForIndex(i)->name());
+    for (int i = 0; (TQTextCodec::codecForIndex(i)); ++i )
+        codecList.append(TQTextCodec::codecForIndex(i)->name());
     return codecList;
 }
 
@@ -200,11 +200,11 @@ QString PlugInProc::getSsmlXsltFilename()
 *   Unicode             UTF-16
 * @param codecName      Name of the codec.
 * @param codecList      List of codec names. The first 3 entries may be translated names.
-* @return               QTextCodec object.  Caller must not delete this object.
+* @return               TQTextCodec object.  Caller must not delete this object.
 *
 * Caution: Do not pass translated codec names to this routine in codecName parameter.
 */
-/*static*/ int PlugInProc::codecNameToListIndex(const QString &codecName, const QStringList &codecList)
+/*static*/ int PlugInProc::codecNameToListIndex(const TQString &codecName, const TQStringList &codecList)
 {
     int codec;
     if (codecName == "Local")
@@ -227,30 +227,30 @@ QString PlugInProc::getSsmlXsltFilename()
 * Given index into codec list, returns the codec object.
 * @param codecNum       Index of the codec.
 * @param codecList      List of codec names. The first 3 entries may be translated names.
-* @return               QTextCodec object.  Caller must not delete this object.
+* @return               TQTextCodec object.  Caller must not delete this object.
 */
-/*static*/ QTextCodec* PlugInProc::codecIndexToCodec(int codecNum, const QStringList &codecList)
+/*static*/ TQTextCodec* PlugInProc::codecIndexToCodec(int codecNum, const TQStringList &codecList)
 {
-    QTextCodec* codec = 0;
+    TQTextCodec* codec = 0;
     switch (codecNum) {
         case PlugInProc::Local:
-            codec = QTextCodec::codecForLocale();
+            codec = TQTextCodec::codecForLocale();
             break;
         case PlugInProc::Latin1:
-            codec = QTextCodec::codecForName("ISO8859-1");
+            codec = TQTextCodec::codecForName("ISO8859-1");
             break;
         case PlugInProc::Unicode:
-            codec = QTextCodec::codecForName("utf16");
+            codec = TQTextCodec::codecForName("utf16");
             break;
         default:
-            codec = QTextCodec::codecForName(codecList[codecNum].latin1());
+            codec = TQTextCodec::codecForName(codecList[codecNum].latin1());
             break;
     }
     if (!codec)
     {
         kdDebug() << "PlugInProc::codecIndexToCodec: Invalid codec index " << codecNum << endl;
         kdDebug() << "PlugInProc::codecIndexToCodec: Defaulting to ISO 8859-1" << endl;
-        codec = QTextCodec::codecForName("ISO8859-1");
+        codec = TQTextCodec::codecForName("ISO8859-1");
     }
     return codec;
 }
@@ -265,9 +265,9 @@ QString PlugInProc::getSsmlXsltFilename()
 * @param codecList      List of codec names. The first 3 entries may be translated names.
 * @return               Untranslated name of the codec.
 */
-/*static*/ QString PlugInProc::codecIndexToCodecName(int codecNum, const QStringList &codecList)
+/*static*/ TQString PlugInProc::codecIndexToCodecName(int codecNum, const TQStringList &codecList)
 {
-    QString codecName;
+    TQString codecName;
     switch (codecNum) {
         case PlugInProc::Local:
             codecName = "Local";

@@ -21,11 +21,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-#include <qstring.h>
+#include <tqstring.h>
 #include <iostream>
 using namespace std;
 
-#include <qtextstream.h>
+#include <tqtextstream.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -81,17 +81,17 @@ int main(int argc, char *argv[])
         const int offersCount = offers.count();
         for(int ndx=0; ndx < offersCount ; ++ndx)
         {
-            QString name = offers[ndx]->name();
+            TQString name = offers[ndx]->name();
             cout << name.latin1() << endl;
         }
         return 0;
     }
 
-    QString filterName;
+    TQString filterName;
     if (args->count() > 0) filterName = args->arg(0);
-    QString talker = args->getOption("talker");
-    QCString appId = args->getOption("appid");
-    QString groupName = args->getOption("group");
+    TQString talker = args->getOption("talker");
+    TQCString appId = args->getOption("appid");
+    TQString groupName = args->getOption("group");
 
     if (filterName.isEmpty()) kdError(1) << "No filter name given." << endl;
 
@@ -111,14 +111,14 @@ int main(int argc, char *argv[])
                 KttsFilterProc *plugIn =
                     KParts::ComponentFactory::createInstanceFromLibrary<KttsFilterProc>(
                     offers[ndx]->library().latin1(), NULL, offers[ndx]->library().latin1(),
-                        QStringList(), &errorNo);
+                        TQStringList(), &errorNo);
                     if(plugIn)
                     {
                         KConfig* config = new KConfig("kttsdrc");
                         config->setGroup( "General" );
                         plugIn->init( config, groupName );
-                        QTextStream inp ( stdin,  IO_ReadOnly );
-                        QString text;
+                        TQTextStream inp ( stdin,  IO_ReadOnly );
+                        TQString text;
                         text = inp.read();
                         TalkerCode* talkerCode = new TalkerCode( talker );
                         text = plugIn->convert( text, talkerCode, appId );

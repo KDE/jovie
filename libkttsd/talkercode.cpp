@@ -34,7 +34,7 @@
 /**
  * Constructor.
  */
-TalkerCode::TalkerCode(const QString &code/*=QString::null*/, bool normal /*=false*/)
+TalkerCode::TalkerCode(const TQString &code/*=TQString::null*/, bool normal /*=false*/)
 {
     if (!code.isEmpty())
         parseTalkerCode(code);
@@ -64,26 +64,26 @@ TalkerCode::~TalkerCode() { }
 /**
  * Properties.
  */
-QString TalkerCode::languageCode() const { return m_languageCode; }
-QString TalkerCode::countryCode() const { return m_countryCode; }
-QString TalkerCode::voice() const { return m_voice; }
-QString TalkerCode::gender() const { return m_gender; }
-QString TalkerCode::volume() const { return m_volume; }
-QString TalkerCode::rate() const { return m_rate; }
-QString TalkerCode::plugInName() const { return m_plugInName; }
+TQString TalkerCode::languageCode() const { return m_languageCode; }
+TQString TalkerCode::countryCode() const { return m_countryCode; }
+TQString TalkerCode::voice() const { return m_voice; }
+TQString TalkerCode::gender() const { return m_gender; }
+TQString TalkerCode::volume() const { return m_volume; }
+TQString TalkerCode::rate() const { return m_rate; }
+TQString TalkerCode::plugInName() const { return m_plugInName; }
 
-void TalkerCode::setLanguageCode(const QString &languageCode) { m_languageCode = languageCode; }
-void TalkerCode::setCountryCode(const QString &countryCode) { m_countryCode = countryCode; }
-void TalkerCode::setVoice(const QString &voice) { m_voice = voice; }
-void TalkerCode::setGender(const QString &gender) { m_gender = gender; }
-void TalkerCode::setVolume(const QString &volume) { m_volume = volume; }
-void TalkerCode::setRate(const QString &rate) { m_rate = rate; }
-void TalkerCode::setPlugInName(const QString plugInName) { m_plugInName = plugInName; }
+void TalkerCode::setLanguageCode(const TQString &languageCode) { m_languageCode = languageCode; }
+void TalkerCode::setCountryCode(const TQString &countryCode) { m_countryCode = countryCode; }
+void TalkerCode::setVoice(const TQString &voice) { m_voice = voice; }
+void TalkerCode::setGender(const TQString &gender) { m_gender = gender; }
+void TalkerCode::setVolume(const TQString &volume) { m_volume = volume; }
+void TalkerCode::setRate(const TQString &rate) { m_rate = rate; }
+void TalkerCode::setPlugInName(const TQString plugInName) { m_plugInName = plugInName; }
 
 /**
  * Sets the language code and country code (if given).
  */
-void TalkerCode::setFullLanguageCode(const QString &fullLanguageCode)
+void TalkerCode::setFullLanguageCode(const TQString &fullLanguageCode)
 {
     splitFullLanguageCode(fullLanguageCode, m_languageCode, m_countryCode);
 }
@@ -91,7 +91,7 @@ void TalkerCode::setFullLanguageCode(const QString &fullLanguageCode)
 /**
  * Returns the language code plus country code (if any).
  */
-QString TalkerCode::fullLanguageCode() const
+TQString TalkerCode::fullLanguageCode() const
 {
     if (!m_countryCode.isEmpty())
         return m_languageCode + "_" + m_countryCode;
@@ -102,16 +102,16 @@ QString TalkerCode::fullLanguageCode() const
 /**
  * The Talker Code returned in XML format.
  */
-QString TalkerCode::getTalkerCode() const
+TQString TalkerCode::getTalkerCode() const
 {
-    QString code;
-    QString languageCode = m_languageCode;
+    TQString code;
+    TQString languageCode = m_languageCode;
     if (!m_countryCode.isEmpty()) languageCode += "_" + m_countryCode;
     if (!languageCode.isEmpty()) code = "lang=\"" + languageCode + "\" ";
     if (!m_voice.isEmpty()) code += "name=\"" + m_voice + "\" ";
     if (!m_gender.isEmpty()) code += "gender=\"" + m_gender + "\" ";
     if (!code.isEmpty()) code = "<voice " + code + "/>";
-    QString prosody;
+    TQString prosody;
     if (!m_volume.isEmpty()) prosody = "volume=\"" + m_volume + "\" ";
     if (!m_rate.isEmpty()) prosody += "rate=\"" + m_rate + "\" ";
     if (!prosody.isEmpty()) code += "<prosody " + prosody + "/>";
@@ -122,11 +122,11 @@ QString TalkerCode::getTalkerCode() const
 /**
  * The Talker Code translated for display.
  */
-QString TalkerCode::getTranslatedDescription() const
+TQString TalkerCode::getTranslatedDescription() const
 {
-    QString code;
+    TQString code;
     bool prefer;
-    QString fullLangCode = fullLanguageCode();
+    TQString fullLangCode = fullLanguageCode();
     if (!fullLangCode.isEmpty()) code = languageCodeToLanguage( fullLangCode );
     // TODO: The PlugInName is always English.  Need a way to convert this to a translated
     // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
@@ -159,7 +159,7 @@ void TalkerCode::normalize()
  * @return fullLanguageCode     Language code from the talker code (including country code if any).
  * @return                      Normalized talker code.
  */
-/*static*/ QString TalkerCode::normalizeTalkerCode(const QString &talkerCode, QString &fullLanguageCode)
+/*static*/ TQString TalkerCode::normalizeTalkerCode(const TQString &talkerCode, TQString &fullLanguageCode)
 {
     TalkerCode tmpTalkerCode(talkerCode);
     tmpTalkerCode.normalize();
@@ -177,11 +177,11 @@ void TalkerCode::normalize()
  * If the input code begins with an asterisk, it is ignored and removed from the returned
  * languageCode.
  */
-/*static*/ void TalkerCode::splitFullLanguageCode(const QString &lang, QString &languageCode, QString &countryCode)
+/*static*/ void TalkerCode::splitFullLanguageCode(const TQString &lang, TQString &languageCode, TQString &countryCode)
 {
-    QString language = lang;
+    TQString language = lang;
     if (language.left(1) == "*") language = language.mid(1);
-    QString charSet;
+    TQString charSet;
     KGlobal::locale()->splitLocale(language, languageCode, countryCode, charSet);
 }
 
@@ -196,7 +196,7 @@ void TalkerCode::normalize()
  *   <prosody volume="medium" rate="medium"/>
  *   <kttsd synthesizer="Festival" />
  */
-/*static*/ QString TalkerCode::defaultTalkerCode(const QString &fullLanguageCode, const QString &plugInName)
+/*static*/ TQString TalkerCode::defaultTalkerCode(const TQString &fullLanguageCode, const TQString &plugInName)
 {
     TalkerCode tmpTalkerCode;
     tmpTalkerCode.setFullLanguageCode(fullLanguageCode);
@@ -208,11 +208,11 @@ void TalkerCode::normalize()
 /**
  * Converts a language code plus optional country code to language description.
  */
-/*static*/ QString TalkerCode::languageCodeToLanguage(const QString &languageCode)
+/*static*/ TQString TalkerCode::languageCodeToLanguage(const TQString &languageCode)
 {
-    QString twoAlpha;
-    QString countryCode;
-    QString language;
+    TQString twoAlpha;
+    TQString countryCode;
+    TQString language;
     if (languageCode == "other")
         language = i18n("Other");
     else
@@ -222,7 +222,7 @@ void TalkerCode::normalize()
     }
     if (!countryCode.isEmpty())
     {
-        QString countryName = KGlobal::locale()->twoAlphaToCountryName(countryCode);
+        TQString countryName = KGlobal::locale()->twoAlphaToCountryName(countryCode);
         // Some abbreviations to save screen space.
         if (countryName == i18n("full country name", "United States of America"))
             countryName = i18n("abbreviated country name", "USA");
@@ -236,7 +236,7 @@ void TalkerCode::normalize()
 /**
  * These functions return translated Talker Code attributes.
  */
-/*static*/ QString TalkerCode::translatedGender(const QString &gender)
+/*static*/ TQString TalkerCode::translatedGender(const TQString &gender)
 {
     if (gender == "male")
         return i18n("male");
@@ -246,7 +246,7 @@ void TalkerCode::normalize()
         return i18n("neutral gender", "neutral");
     else return gender;
 }
-/*static*/ QString TalkerCode::untranslatedGender(const QString &gender)
+/*static*/ TQString TalkerCode::untranslatedGender(const TQString &gender)
 {
     if (gender == i18n("male"))
         return "male";
@@ -256,7 +256,7 @@ void TalkerCode::normalize()
         return "neutral";
     else return gender;
 }
-/*static*/ QString TalkerCode::translatedVolume(const QString &volume)
+/*static*/ TQString TalkerCode::translatedVolume(const TQString &volume)
 {
     if (volume == "medium")
         return i18n("medium sound", "medium");
@@ -266,7 +266,7 @@ void TalkerCode::normalize()
         return i18n("soft sound", "soft");
     else return volume;
 }
-/*static*/ QString TalkerCode::untranslatedVolume(const QString &volume)
+/*static*/ TQString TalkerCode::untranslatedVolume(const TQString &volume)
 {
     if (volume == i18n("medium sound", "medium"))
         return "medium";
@@ -276,7 +276,7 @@ void TalkerCode::normalize()
         return "soft";
     else return volume;
 }
-/*static*/ QString TalkerCode::translatedRate(const QString &rate)
+/*static*/ TQString TalkerCode::translatedRate(const TQString &rate)
 {
     if (rate == "medium")
         return i18n("medium speed", "medium");
@@ -286,7 +286,7 @@ void TalkerCode::normalize()
         return i18n("slow speed", "slow");
     else return rate;
 }
-/*static*/ QString TalkerCode::untranslatedRate(const QString &rate)
+/*static*/ TQString TalkerCode::untranslatedRate(const TQString &rate)
 {
     if (rate == i18n("medium speed", "medium"))
         return "medium";
@@ -301,9 +301,9 @@ void TalkerCode::normalize()
  * Given a talker code, parses out the attributes.
  * @param talkerCode       The talker code.
  */
-void TalkerCode::parseTalkerCode(const QString &talkerCode)
+void TalkerCode::parseTalkerCode(const TQString &talkerCode)
 {
-    QString fullLanguageCode;
+    TQString fullLanguageCode;
     if (talkerCode.contains("\""))
     {
         fullLanguageCode = talkerCode.section("lang=", 1, 1);
@@ -311,8 +311,8 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     }
     else
         fullLanguageCode = talkerCode;
-    QString languageCode;
-    QString countryCode;
+    TQString languageCode;
+    TQString countryCode;
     splitFullLanguageCode(fullLanguageCode, languageCode, countryCode);
     m_languageCode = languageCode;
     if (fullLanguageCode.left(1) == "*") countryCode = "*" + countryCode;
@@ -340,7 +340,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
  */
 /*static*/ int TalkerCode::findClosestMatchingTalker(
     const TalkerCodeList& talkers,
-    const QString& talker,
+    const TQString& talker,
     bool assumeDefaultLang)
 {
     // kdDebug() << "TalkerCode::findClosestMatchingTalker: matching on talker code " << talker << endl;
@@ -356,7 +356,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     }
     // The talker that matches on the most priority attributes wins.
     int talkersCount = int(talkers.count());
-    QMemArray<int> priorityMatch(talkersCount);
+    TQMemArray<int> priorityMatch(talkersCount);
     for (int ndx = 0; ndx < talkersCount; ++ndx)
     {
         priorityMatch[ndx] = 0;
@@ -412,7 +412,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     // (first configured) will be chosen.
     if (winnerCount > 1)
     {
-        QMemArray<int> preferredMatch(talkersCount);
+        TQMemArray<int> preferredMatch(talkersCount);
         for (int ndx = 0; ndx < talkersCount; ++ndx)
         {
             preferredMatch[ndx] = 0;
@@ -471,7 +471,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     return winner;
 }
 
-/*static*/ QString TalkerCode::stripPrefer( const QString& code, bool& preferred)
+/*static*/ TQString TalkerCode::stripPrefer( const TQString& code, bool& preferred)
 {
     if ( code.left(1) == "*" )
     {
@@ -487,15 +487,15 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
 * @param name                   The translated plugin name.  From Name= line in .desktop file.
 * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-*                               QString::null if not found.
+*                               TQString::null if not found.
 */
-/*static*/ QString TalkerCode::TalkerNameToDesktopEntryName(const QString& name)
+/*static*/ TQString TalkerCode::TalkerNameToDesktopEntryName(const TQString& name)
 {
-    if (name.isEmpty()) return QString::null;
+    if (name.isEmpty()) return TQString::null;
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
     for (uint ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return QString::null;
+    return TQString::null;
 }
 
 /**
@@ -503,15 +503,15 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 * @param desktopEntryName       The DesktopEntryName.
 * @return                       The translated Name of the plugin, from Name= line in .desktop file.
 */
-/*static*/ QString TalkerCode::TalkerDesktopEntryNameToName(const QString& desktopEntryName)
+/*static*/ TQString TalkerCode::TalkerDesktopEntryNameToName(const TQString& desktopEntryName)
 {
-    if (desktopEntryName.isEmpty()) return QString::null;
+    if (desktopEntryName.isEmpty()) return TQString::null;
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-    QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+    TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();
     else
-        return QString::null;
+        return TQString::null;
 }
 

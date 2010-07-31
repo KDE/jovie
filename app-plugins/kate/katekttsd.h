@@ -23,26 +23,26 @@
 #include <ktexteditor/plugin.h>
 #include <ktexteditor/view.h>
 #include <kxmlguiclient.h>
-#include <qobject.h>
+#include <tqobject.h>
 
 class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginViewInterface
 {
     Q_OBJECT
 
     public:
-        KateKttsdPlugin( QObject *parent = 0,
+        KateKttsdPlugin( TQObject *parent = 0,
                          const char* name = 0,
-                         const QStringList &args = QStringList() );
+                         const TQStringList &args = TQStringList() );
         virtual ~KateKttsdPlugin();
 
         void addView (KTextEditor::View *view);
         void removeView (KTextEditor::View *view);
 
     private:
-        QPtrList<class KateKttsdPluginView> m_views;
+        TQPtrList<class KateKttsdPluginView> m_views;
 };
 
-class KateKttsdPluginView : public QObject, public KXMLGUIClient
+class KateKttsdPluginView : public TQObject, public KXMLGUIClient
 {
     Q_OBJECT
 

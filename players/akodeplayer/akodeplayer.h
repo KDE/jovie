@@ -19,7 +19,7 @@
 #include <config.h>
 #include "kdeexportfix.h"
 
-#include <qstring.h>
+#include <tqstring.h>
 
 #include "player.h"
 #include <kdemacros.h>
@@ -33,11 +33,11 @@ class KDE_EXPORT aKodePlayer : public Player
     Q_OBJECT
 
 public:
-    aKodePlayer(QObject* parent = 0, const char* name = 0, const QStringList& args=QStringList());
+    aKodePlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     virtual ~aKodePlayer();
 
     // virtual void play(const FileHandle &file = FileHandle::null());
-    virtual void startPlay(const QString &file);
+    virtual void startPlay(const TQString &file);
 
     virtual void setVolume(float volume = 1.0);
     virtual float volume() const;
@@ -52,8 +52,8 @@ public:
     virtual void seek(int seekTime);
     virtual void seekPosition(int position);
 
-    virtual QStringList getPluginList( const QCString& classname );
-    virtual void setSinkName(const QString &sinkName);
+    virtual TQStringList getPluginList( const TQCString& classname );
+    virtual void setSinkName(const TQString &sinkName);
 
 public slots:
     void pause();
@@ -61,7 +61,7 @@ public slots:
 
 private:
     aKode::Player *m_player;
-    QString m_sinkName;
+    TQString m_sinkName;
 };
 
 #endif

@@ -20,11 +20,11 @@
  ***************************************************************************/
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdom.h>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqdom.h>
+#include <tqfile.h>
+#include <tqtextstream.h>
 
 // KDE includes.
 #include <kdeversion.h>
@@ -39,13 +39,13 @@
 
 /// Constructor.
 SSMLConvert::SSMLConvert() {
-    m_talkers = QStringList();
+    m_talkers = TQStringList();
     m_xsltProc = 0;
     m_state = tsIdle;
 }
 
 /// Constructor. Set the talkers to be used as reference for entered text.
-SSMLConvert::SSMLConvert(const QStringList &talkers) {
+SSMLConvert::SSMLConvert(const TQStringList &talkers) {
     m_talkers = talkers;
     m_xsltProc = 0;
     m_state = tsIdle;
@@ -54,17 +54,17 @@ SSMLConvert::SSMLConvert(const QStringList &talkers) {
 /// Destructor.
 SSMLConvert::~SSMLConvert() {
     delete m_xsltProc;
-    if (!m_inFilename.isEmpty()) QFile::remove(m_inFilename);
-    if (!m_outFilename.isEmpty()) QFile::remove(m_outFilename);
+    if (!m_inFilename.isEmpty()) TQFile::remove(m_inFilename);
+    if (!m_outFilename.isEmpty()) TQFile::remove(m_outFilename);
 }
 
 /// Set the talkers to be used as reference for entered text.
-void SSMLConvert::setTalkers(const QStringList &talkers) {
+void SSMLConvert::setTalkers(const TQStringList &talkers) {
     m_talkers = talkers;
 }
 
-QString SSMLConvert::extractTalker(const QString &talkercode) {
-    QString t = talkercode.section("synthesizer=", 1, 1);
+TQString SSMLConvert::extractTalker(const TQString &talkercode) {
+    TQString t = talkercode.section("synthesizer=", 1, 1);
     t = t.section('"', 1, 1);
     if(t.contains("flite"))
         return "flite";
@@ -103,17 +103,17 @@ QString SSMLConvert::extractTalker(const QString &talkercode) {
 * 
 * QDom is the item of choice for the matching. Just walk the tree..
 */
-QString SSMLConvert::appropriateTalker(const QString &text) const {
-    QDomDocument ssml;
+TQString SSMLConvert::appropriateTalker(const TQString &text) const {
+    TQDomDocument ssml;
     ssml.setContent(text, false);  // No namespace processing.
     /// Matches are stored here. Obviously to begin with every talker matches.
-    QStringList matches = m_talkers;
+    TQStringList matches = m_talkers;
 
     /// Check that this is (well formed) SSML and all our searching will not be in vain.
-    QDomElement root = ssml.documentElement();
+    TQDomElement root = ssml.documentElement();
     if(root.tagName() != "speak") {
         // Not SSML.
-        return QString::null;
+        return TQString::null;
     }
 
     /** 
@@ -122,14 +122,14 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     *
     * Storage for talker code components.
     */
-    QString talklang, talkvoice, talkgender, talkvolume, talkrate, talkname;
+    TQString talklang, talkvoice, talkgender, talkvolume, talkrate, talkname;
 
     kdDebug() << "SSMLConvert::appropriateTalker: BEFORE LANGUAGE SEARCH: " << matches.join(" ") << endl;;
     /**
     * Language searching
     */
     if(root.hasAttribute("xml:lang")) {
-        QString lang = root.attribute("xml:lang");
+        TQString lang = root.attribute("xml:lang");
         kdDebug() << "SSMLConvert::appropriateTalker: xml:lang found (" << lang << ")" << endl;
         /// If it is set to en*, then match all english speakers. They all sound the same anyways.
         if(lang.contains("en-")) {
@@ -153,7 +153,7 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     * ignore the choice and just use female.
     */
     if(root.hasAttribute("gender")) {
-        QString gender = root.attribute("gender");
+        TQString gender = root.attribute("gender");
         kdDebug() << "SSMLConvert::appropriateTalker: gender found (" << gender << ")" << endl;
         /// If the gender found is not 'male' or 'female' then ignore it.
         if(!(gender == "male" || gender == "female")) {
@@ -178,7 +178,7 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     matches.grep("synthesizer=\"Hadifix").count() >= 1) {
 
         kdDebug() << "SSMLConvert::appropriateTalker: Prosody allowed" << endl;
-        QStringList tmpmatches = matches.grep("synthesizer=\"Festival Interactive");
+        TQStringList tmpmatches = matches.grep("synthesizer=\"Festival Interactive");
         matches = matches.grep("synthesizer=\"Hadifix");
         matches = tmpmatches + matches;
     }
@@ -203,12 +203,12 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
 * the transformed text.
 */
 
-bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
+bool SSMLConvert::transform(const TQString &text, const TQString &xsltFilename) {
     m_xsltFilename = xsltFilename;
     /// Write @param text to a temporary file.
     KTempFile inFile(locateLocal("tmp", "kttsd-"), ".ssml");
     m_inFilename = inFile.file()->name();
-    QTextStream* wstream = inFile.textStream();
+    TQTextStream* wstream = inFile.textStream();
     if (wstream == 0) {
         /// wtf...
         kdDebug() << "SSMLConvert::transform: Can't write to " << m_inFilename << endl;;
@@ -239,8 +239,8 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     // kdDebug() << "SSMLConvert::transform: executing command: " <<
     //     m_xsltProc->args() << endl;
 
-    connect(m_xsltProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
+    connect(m_xsltProc, TQT_SIGNAL(processExited(KProcess*)),
+        this, TQT_SLOT(slotProcessExited(KProcess*)));
     if (!m_xsltProc->start(KProcess::NotifyOnExit, KProcess::NoCommunication))
     {
         kdDebug() << "SSMLConvert::transform: Error starting xsltproc" << endl;
@@ -266,26 +266,26 @@ int SSMLConvert::getState() { return m_state; }
 /**
 * Returns the output from call to transform.
 */
-QString SSMLConvert::getOutput()
+TQString SSMLConvert::getOutput()
 {
     /// Read back the data that was written to /tmp/fileName.output.
-    QFile readfile(m_outFilename);
+    TQFile readfile(m_outFilename);
     if(!readfile.open(IO_ReadOnly)) {
         /// uhh yeah... Issues writing to the SSML file.
         kdDebug() << "SSMLConvert::slotProcessExited: Could not read file " << m_outFilename << endl;
-        return QString::null;
+        return TQString::null;
     }
-    QTextStream rstream(&readfile);
-    QString convertedData = rstream.read();
+    TQTextStream rstream(&readfile);
+    TQString convertedData = rstream.read();
     readfile.close();
 
     // kdDebug() << "SSMLConvert::slotProcessExited: Read SSML file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilename << endl;
 
     // Clean up.
-    QFile::remove(m_inFilename);
-    m_inFilename = QString::null;
-    QFile::remove(m_outFilename);
-    m_outFilename = QString::null;
+    TQFile::remove(m_inFilename);
+    m_inFilename = TQString::null;
+    TQFile::remove(m_outFilename);
+    m_outFilename = TQString::null;
 
     // Ready for another transform.
     m_state = tsIdle;

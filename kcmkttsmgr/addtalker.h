@@ -26,12 +26,12 @@
 #define ADDTALKER_H
 
 // Qt includes.
-#include <qmap.h>
+#include <tqmap.h>
 
 #include "addtalkerwidget.h"
 
-typedef QMap<QString,QStringList> SynthToLangMap;
-typedef QMap<QString,QStringList> LangToSynthMap;
+typedef TQMap<TQString,TQStringList> SynthToLangMap;
+typedef TQMap<TQString,TQStringList> LangToSynthMap;
 
 class AddTalker : public AddTalkerWidget
 {
@@ -40,11 +40,11 @@ class AddTalker : public AddTalkerWidget
 public:
     /**
     * Constructor.
-    * @param synthToLangMap     QMap of supported language codes indexed by synthesizer.
+    * @param synthToLangMap     TQMap of supported language codes indexed by synthesizer.
     * @param parent             Inherited KDialog parameter.
     * @param name               Inherited KDialog parameter.
     */
-    AddTalker(SynthToLangMap synthToLangMap, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
 
     /**
     * Destructor.
@@ -54,29 +54,29 @@ public:
     /**
     * Returns user's chosen language code.
     */
-    QString getLanguageCode();
+    TQString getLanguageCode();
 
     /**
     * Returns user's chosen synthesizer.
     */
-    QString getSynthesizer();
+    TQString getSynthesizer();
 
 
 private:
     /**
     * Set the synthesizer-to-languages map.
-    * @param synthToLang        QMap of supported language codes indexed by synthesizer.
+    * @param synthToLang        TQMap of supported language codes indexed by synthesizer.
     */
     void setSynthToLangMap(SynthToLangMap synthToLangMap);
 
     // Converts a language code plus optional country code to language description.
-    QString languageCodeToLanguage(const QString &languageCode);
+    TQString languageCodeToLanguage(const TQString &languageCode);
 
-    // QMap of language descriptions to language codes.
-    QMap<QString,QString> m_languageToLanguageCodeMap;
-    // QMap of supported languages indexed by synthesizer.
+    // TQMap of language descriptions to language codes.
+    TQMap<TQString,TQString> m_languageToLanguageCodeMap;
+    // TQMap of supported languages indexed by synthesizer.
     SynthToLangMap m_synthToLangMap;
-    // QMap of synthesizers indexed by language code they support.
+    // TQMap of synthesizers indexed by language code they support.
     LangToSynthMap m_langToSynthMap;
 
 private slots:

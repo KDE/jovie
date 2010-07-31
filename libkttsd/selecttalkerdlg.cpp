@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qhbox.h>
-#include <qgroupbox.h>
+#include <tqcheckbox.h>
+#include <tqradiobutton.h>
+#include <tqhbox.h>
+#include <tqgroupbox.h>
 
 // KDE includes.
 #include <kcombobox.h>
@@ -45,10 +45,10 @@
 #include "selecttalkerdlg.moc"
 
 SelectTalkerDlg::SelectTalkerDlg(
-    QWidget* parent,
+    TQWidget* parent,
     const char* name,
-    const QString& caption,
-    const QString& talkerCode,
+    const TQString& caption,
+    const TQString& talkerCode,
     bool runningTalkers) :
 
     KDialogBase(
@@ -61,33 +61,33 @@ SelectTalkerDlg::SelectTalkerDlg(
 {
     m_widget = new SelectTalkerWidget( this );
     // TODO: How do I do this in a general way and still get KDialogBase to properly resize?
-    m_widget->setMinimumSize( QSize(700,500) );
-    // setInitialSize( QSize(700,600) );
+    m_widget->setMinimumSize( TQSize(700,500) );
+    // setInitialSize( TQSize(700,600) );
     setMainWidget( m_widget );
     m_runningTalkers = runningTalkers;
     m_talkerCode = TalkerCode( talkerCode, false );
 
     // Fill combo boxes.
     KComboBox* cb = m_widget->genderComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( TQString::null );
     cb->insertItem( TalkerCode::translatedGender("male") );
     cb->insertItem( TalkerCode::translatedGender("female") );
     cb->insertItem( TalkerCode::translatedGender("neutral") );
 
     cb = m_widget->volumeComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( TQString::null );
     cb->insertItem( TalkerCode::translatedVolume("medium") );
     cb->insertItem( TalkerCode::translatedVolume("loud") );
     cb->insertItem( TalkerCode::translatedVolume("soft") );
 
     cb = m_widget->rateComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( TQString::null );
     cb->insertItem( TalkerCode::translatedRate("medium") );
     cb->insertItem( TalkerCode::translatedRate("fast") );
     cb->insertItem( TalkerCode::translatedRate("slow") );
 
     cb = m_widget->synthComboBox;
-    cb->insertItem( QString::null );
+    cb->insertItem( TQString::null );
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
     for(unsigned int i=0; i < offers.count() ; ++i)
         cb->insertItem(offers[i]->name());
@@ -101,7 +101,7 @@ SelectTalkerDlg::SelectTalkerDlg(
         m_widget->useDefaultRadioButton->setChecked(true);
     else
     {
-        QString dummy;
+        TQString dummy;
         if (talkerCode == TalkerCode::normalizeTalkerCode(talkerCode, dummy))
             m_widget->useSpecificTalkerRadioButton->setChecked(true);
         else
@@ -111,67 +111,67 @@ SelectTalkerDlg::SelectTalkerDlg(
     applyTalkerCodeToControls();
     enableDisableControls();
 
-    connect(m_widget->useDefaultRadioButton, SIGNAL(clicked()),
-            this, SLOT(configChanged()));
-    connect(m_widget->useClosestMatchRadioButton, SIGNAL(clicked()),
-            this, SLOT(configChanged()));
-    connect(m_widget->useSpecificTalkerRadioButton, SIGNAL(clicked()),
-            this, SLOT(configChanged()));
+    connect(m_widget->useDefaultRadioButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->useClosestMatchRadioButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->useSpecificTalkerRadioButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(configChanged()));
 
-    connect(m_widget->languageBrowseButton, SIGNAL(clicked()),
-            this, SLOT(slotLanguageBrowseButton_clicked()));
+    connect(m_widget->languageBrowseButton, TQT_SIGNAL(clicked()),
+            this, TQT_SLOT(slotLanguageBrowseButton_clicked()));
 
-    connect(m_widget->synthComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(configChanged()));
-    connect(m_widget->genderComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(configChanged()));
-    connect(m_widget->volumeComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(configChanged()));
-    connect(m_widget->rateComboBox, SIGNAL(activated(const QString&)),
-            this, SLOT(configChanged()));
+    connect(m_widget->synthComboBox, TQT_SIGNAL(activated(const TQString&)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->genderComboBox, TQT_SIGNAL(activated(const TQString&)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->volumeComboBox, TQT_SIGNAL(activated(const TQString&)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->rateComboBox, TQT_SIGNAL(activated(const TQString&)),
+            this, TQT_SLOT(configChanged()));
 
-    connect(m_widget->synthCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_widget->genderCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_widget->volumeCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
-    connect(m_widget->rateCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(configChanged()));
+    connect(m_widget->synthCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->genderCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->volumeCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(configChanged()));
+    connect(m_widget->rateCheckBox, TQT_SIGNAL(toggled(bool)),
+            this, TQT_SLOT(configChanged()));
 
-    connect(m_widget->talkersListView, SIGNAL(selectionChanged()),
-            this, SLOT(slotTalkersListView_selectionChanged()));
+    connect(m_widget->talkersListView, TQT_SIGNAL(selectionChanged()),
+            this, TQT_SLOT(slotTalkersListView_selectionChanged()));
 
     m_widget->talkersListView->setMinimumHeight( 120 );
 }
 
 SelectTalkerDlg::~SelectTalkerDlg() { }
 
-QString SelectTalkerDlg::getSelectedTalkerCode()
+TQString SelectTalkerDlg::getSelectedTalkerCode()
 {
     return m_talkerCode.getTalkerCode();
 }
 
-QString SelectTalkerDlg::getSelectedTranslatedDescription()
+TQString SelectTalkerDlg::getSelectedTranslatedDescription()
 {
     return m_talkerCode.getTranslatedDescription();
 }
 
 void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host KListView.
-    QHBox* hBox = new QHBox(m_widget, "SelectLanguage_hbox");
+    // Create a  TQHBox to host KListView.
+    TQHBox* hBox = new TQHBox(m_widget, "SelectLanguage_hbox");
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(QListView::Single);
-    QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-    QString locale;
-    QString language;
+    langLView->setSelectionMode(TQListView::Single);
+    TQStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
+    TQString locale;
+    TQString language;
     // Blank line so user can select no language.
-    // Note: Don't use QString::null, which gets displayed at bottom of list, rather than top.
-    QListViewItem* item = new KListViewItem(langLView, "", "");
+    // Note: Don't use TQString::null, which gets displayed at bottom of list, rather than top.
+    TQListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
@@ -196,12 +196,12 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
         true);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500), false);
+    dlg->setInitialSize(TQSize(300, 500), false);
     // TODO: This isn't working.  Furthermore, item appears selected but is not.
     langLView->ensureItemVisible(langLView->selectedItem());
     int dlgResult = dlg->exec();
-    language = QString::null;
-    if (dlgResult == QDialog::Accepted)
+    language = TQString::null;
+    if (dlgResult == TQDialog::Accepted)
     {
         if (langLView->selectedItem())
         {
@@ -217,7 +217,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
 
 void SelectTalkerDlg::slotTalkersListView_selectionChanged()
 {
-    QListViewItem* item = m_widget->talkersListView->selectedItem();
+    TQListViewItem* item = m_widget->talkersListView->selectedItem();
     if ( !item ) return;
     if (!m_widget->useSpecificTalkerRadioButton->isChecked()) return;
     configChanged();
@@ -233,7 +233,7 @@ void SelectTalkerDlg::configChanged()
 void SelectTalkerDlg::applyTalkerCodeToControls()
 {
     bool preferred = false;
-    QString code = m_talkerCode.getTalkerCode();
+    TQString code = m_talkerCode.getTalkerCode();
 
     // TODO: Need to display translated Synth names.
     KttsUtils::setCbItemFromText(m_widget->synthComboBox,
@@ -259,7 +259,7 @@ void SelectTalkerDlg::applyTalkerCodeToControls()
     // Select closest matching specific Talker.
     int talkerIndex = TalkerCode::findClosestMatchingTalker(m_talkers, m_talkerCode.getTalkerCode(), false);
     KListView* lv = m_widget->talkersListView;
-    QListViewItem* item = lv->firstChild();
+    TQListViewItem* item = lv->firstChild();
     if ( item )
     {
         while ( talkerIndex > 0 )
@@ -274,12 +274,12 @@ void SelectTalkerDlg::applyTalkerCodeToControls()
 void SelectTalkerDlg::applyControlsToTalkerCode()
 {
     if ( m_widget->useDefaultRadioButton->isChecked() )
-        m_talkerCode = TalkerCode(QString::null, false);
+        m_talkerCode = TalkerCode(TQString::null, false);
     else if ( m_widget->useClosestMatchRadioButton->isChecked() )
     {
         // Language already stored in talker code.
 
-        QString t = m_widget->synthComboBox->currentText();
+        TQString t = m_widget->synthComboBox->currentText();
         if ( !t.isEmpty() && m_widget->synthCheckBox->isChecked() ) t.prepend("*");
         m_talkerCode.setPlugInName( t );
 
@@ -297,7 +297,7 @@ void SelectTalkerDlg::applyControlsToTalkerCode()
     }
     else if (m_widget->useSpecificTalkerRadioButton->isChecked() )
     {
-        QListViewItem* item = m_widget->talkersListView->selectedItem();
+        TQListViewItem* item = m_widget->talkersListView->selectedItem();
         if ( item )
         {
             int itemIndex = -1;
@@ -316,27 +316,27 @@ void SelectTalkerDlg::loadTalkers(bool /*runningTalkers*/)
     m_talkers.clear();
     KListView* lv = m_widget->talkersListView;
     lv->clear();
-    QListViewItem* item;
+    TQListViewItem* item;
     KConfig* config = new KConfig("kttsdrc");
     config->setGroup("General");
-    QStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
+    TQStringList talkerIDsList = config->readListEntry("TalkerIDs", ',');
     if (!talkerIDsList.isEmpty())
     {
-        QStringList::ConstIterator itEnd(talkerIDsList.constEnd());
-        for( QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
+        TQStringList::ConstIterator itEnd(talkerIDsList.constEnd());
+        for( TQStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it )
         {
-            QString talkerID = *it;
+            TQString talkerID = *it;
             config->setGroup("Talker_" + talkerID);
-            QString talkerCode = config->readEntry("TalkerCode", QString::null);
+            TQString talkerCode = config->readEntry("TalkerCode", TQString::null);
             // Parse and normalize the talker code.
             TalkerCode talker = TalkerCode(talkerCode, true);
             m_talkers.append(talker);
-            QString desktopEntryName = config->readEntry("DesktopEntryName", QString::null);
-            QString synthName = TalkerCode::TalkerDesktopEntryNameToName(desktopEntryName);
+            TQString desktopEntryName = config->readEntry("DesktopEntryName", TQString::null);
+            TQString synthName = TalkerCode::TalkerDesktopEntryNameToName(desktopEntryName);
             // Display in List View using translated strings.
             item = new KListViewItem(lv, item);
-            QString fullLanguageCode = talker.fullLanguageCode();
-            QString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
+            TQString fullLanguageCode = talker.fullLanguageCode();
+            TQString language = TalkerCode::languageCodeToLanguage(fullLanguageCode);
             item->setText(tlvcLanguage, language);
             // Don't update the Synthesizer name with plugInName.  The former is a translated
             // name; the latter an English name.

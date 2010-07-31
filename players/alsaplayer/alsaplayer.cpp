@@ -39,9 +39,9 @@
 #endif
 
 // Qt includes.
-#include <qdir.h>
-#include <qapplication.h>
-#include <qcstring.h>
+#include <tqdir.h>
+#include <tqapplication.h>
+#include <tqcstring.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -55,15 +55,15 @@
 
 #if !defined(__GNUC__) || __GNUC__ >= 3
 #define ERR(...) do {\
-    QString dbgStr;\
-    QString s = dbgStr.sprintf( "%s:%d: ERROR ", __FUNCTION__, __LINE__); \
+    TQString dbgStr;\
+    TQString s = dbgStr.sprintf( "%s:%d: ERROR ", __FUNCTION__, __LINE__); \
     s += dbgStr.sprintf( __VA_ARGS__); \
     kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
 } while (0)
 #else
 #define ERR(args...) do {\
-    QString dbgStr;\
-    QString s = dbgStr.sprintf( "%s:%d: ERROR ", __FUNCTION__, __LINE__); \
+    TQString dbgStr;\
+    TQString s = dbgStr.sprintf( "%s:%d: ERROR ", __FUNCTION__, __LINE__); \
     s += dbgStr.sprintf( ##args ); \
     kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
 } while (0)
@@ -72,8 +72,8 @@
 #if !defined(__GNUC__) || __GNUC__ >= 3
 #define MSG(...) do {\
     if (m_debugLevel >= 1) {\
-        QString dbgStr; \
-        QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
+        TQString dbgStr; \
+        TQString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( __VA_ARGS__); \
         kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
@@ -81,8 +81,8 @@
 #else
 #define MSG(args...) do {\
     if (m_debugLevel >= 1) {\
-        QString dbgStr; \
-        QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
+        TQString dbgStr; \
+        TQString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( ##args ); \
         kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
@@ -92,8 +92,8 @@
 #if !defined(__GNUC__) || __GNUC__ >= 3
 #define DBG(...) do {\
     if (m_debugLevel >= 2) {\
-        QString dbgStr; \
-        QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
+        TQString dbgStr; \
+        TQString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( __VA_ARGS__); \
         kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
@@ -101,15 +101,15 @@
 #else
 #define DBG(args...) do {\
     if (m_debugLevel >= 2) {\
-        QString dbgStr; \
-        QString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
+        TQString dbgStr; \
+        TQString s = dbgStr.sprintf( "%s:%d: ", __FUNCTION__, __LINE__); \
         s += dbgStr.sprintf( ##args ); \
         kdDebug() << timestamp() << "AlsaPlayer::" << s << endl; \
     }; \
 } while (0)
 #endif
 
-QString AlsaPlayer::timestamp() const
+TQString AlsaPlayer::timestamp() const
 {
     time_t t;
     struct timeval tv;
@@ -118,7 +118,7 @@ QString AlsaPlayer::timestamp() const
     tstr = strdup(ctime(&t));
     tstr[strlen(tstr)-1] = 0;
     gettimeofday(&tv,NULL);
-    QString ts;
+    TQString ts;
     ts.sprintf(" %s [%d] ",tstr, (int) tv.tv_usec);
     free(tstr);
     return ts;
@@ -128,7 +128,7 @@ QString AlsaPlayer::timestamp() const
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-AlsaPlayer::AlsaPlayer(QObject* parent, const char* name, const QStringList& args) : 
+AlsaPlayer::AlsaPlayer(TQObject* parent, const char* name, const TQStringList& args) : 
     Player(parent, name, args),
     m_currentVolume(1.0),
     m_pcmName("default"),
@@ -149,7 +149,7 @@ AlsaPlayer::~AlsaPlayer()
 }
 
 //void AlsaPlayer::play(const FileHandle &file)
-void AlsaPlayer::startPlay(const QString &file)
+void AlsaPlayer::startPlay(const TQString &file)
 {
     if (running()) {
         if (paused()) {
@@ -169,7 +169,7 @@ void AlsaPlayer::startPlay(const QString &file)
 
 /*virtual*/ void AlsaPlayer::run()
 {
-    QString pName = m_pcmName.section(" ", 0, 0);
+    TQString pName = m_pcmName.section(" ", 0, 0);
     DBG("pName = %s", pName.ascii());
     pcm_name = qstrdup(pName.ascii());
     int err;
@@ -395,7 +395,7 @@ void AlsaPlayer::seekPosition(int /*position*/)
  * It uses plughw:xx instead of hw:xx for specifiers, because hw:xx are not practical to
  * use (e.g. they require a resampler/channel mixer in the application).
  */
-QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
+TQStringList AlsaPlayer::getPluginList( const TQCString& /*classname*/ )
 {
     int err = 0;
     int card = -1, device = -1;
@@ -404,7 +404,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
     snd_pcm_info_t *pcminfo;
     snd_ctl_card_info_alloca(&info);
     snd_pcm_info_alloca(&pcminfo);
-    QStringList result;
+    TQStringList result;
 
     result.append("default");
     for (;;) {
@@ -426,16 +426,16 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
                 snd_pcm_info_set_subdevice(pcminfo, 0);
                 snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_PLAYBACK);
                 if ((err = snd_ctl_pcm_info(handle, pcminfo)) < 0) continue;
-                QString infoName = " ";
+                TQString infoName = " ";
                 infoName += snd_ctl_card_info_get_name(info);
                 infoName += " (";
                 infoName += snd_pcm_info_get_name(pcminfo);
                 infoName += ")";
                 if (0 == devCnt) {
-                    QString pcmName = QString("default:%1").arg(card);
+                    TQString pcmName = TQString("default:%1").arg(card);
                     result.append(pcmName + infoName);
                 }
-                QString pcmName = QString("plughw:%1,%2").arg(card).arg(device);
+                TQString pcmName = TQString("plughw:%1,%2").arg(card).arg(device);
                 result.append(pcmName + infoName);
             }
             snd_ctl_close(handle);
@@ -444,9 +444,9 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
     return result;
 }
 
-// QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
+// TQStringList AlsaPlayer::getPluginList( const TQCString& /*classname*/ )
 // {
-//     QStringList assumed("default");
+//     TQStringList assumed("default");
 //     snd_config_t *conf;
 //     int err = snd_config_update();
 //     if (err < 0) {
@@ -454,12 +454,12 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
 //         return assumed;
 //     }
 //     err = snd_config_search(snd_config, "pcm", &conf);
-//     if (err < 0) return QStringList();
+//     if (err < 0) return TQStringList();
 //     snd_config_iterator_t it = snd_config_iterator_first(conf);
 //     snd_config_iterator_t itEnd = snd_config_iterator_end(conf);
 //     const char* id;
 //     snd_config_t *entry;
-//     QStringList result;
+//     TQStringList result;
 //     snd_ctl_card_info_t *info;
 //     snd_ctl_card_info_alloca(&info);
 //     snd_pcm_info_t *pcminfo;
@@ -468,7 +468,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
 //         entry = snd_config_iterator_entry(it);
 //         err = snd_config_get_id(entry, &id);
 //         if (err >= 0) {
-//             if (QString(id) != "default")
+//             if (TQString(id) != "default")
 //             {
 //                 int card = -1;
 //                 while (snd_card_next(&card) >= 0 && card >= 0) {
@@ -485,9 +485,9 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
 //                                 snd_pcm_info_set_subdevice(pcminfo, 0);
 //                                 snd_pcm_info_set_stream(pcminfo, stream);
 //                                 if ((err = snd_ctl_pcm_info(handle, pcminfo)) >= 0) {
-//                                     QString pluginName = name;
+//                                     TQString pluginName = name;
 //                                     pluginName += ",";
-//                                     pluginName += QString::number(dev);
+//                                     pluginName += TQString::number(dev);
 //                                     pluginName += " ";
 //                                     pluginName += snd_ctl_card_info_get_name(info);
 //                                     pluginName += ",";
@@ -509,7 +509,7 @@ QStringList AlsaPlayer::getPluginList( const QCString& /*classname*/ )
 //     return result;
 // }
 
-void AlsaPlayer::setSinkName(const QString& sinkName) { m_pcmName = sinkName; }
+void AlsaPlayer::setSinkName(const TQString& sinkName) { m_pcmName = sinkName; }
 
 /////////////////////////////////////////////////////////////////////////////////
 // private
@@ -1205,7 +1205,7 @@ void AlsaPlayer::voc_write_silence(unsigned x)
     unsigned l;
     char *buf;
 
-    QByteArray buffer(chunk_bytes);
+    TQByteArray buffer(chunk_bytes);
     // buf = (char *) malloc(chunk_bytes);
     buf = buffer.data();
     if (buf == NULL) {
@@ -1259,7 +1259,7 @@ void AlsaPlayer::voc_play(int fd, int ofs, const char* name)
 #define COUNT(x)    nextblock -= x; in_buffer -= x; data += x
 #define COUNT1(x)    in_buffer -= x; data += x
 
-    QByteArray buffer(64 * 1024);
+    TQByteArray buffer(64 * 1024);
     // data = buf = (u_char *)malloc(64 * 1024);
     data = buf = (u_char*)buffer.data();
     buffer_pos = 0;
@@ -1490,13 +1490,13 @@ void AlsaPlayer::header(int /*rtype*/, const char* /*name*/)
 //            (stream == SND_PCM_STREAM_PLAYBACK) ? "Playing" : "Recording",
 //            fmt_rec_table[rtype].what,
 //            name);
-    QString channels;
+    TQString channels;
     if (hwdata.channels == 1)
         channels = "Mono";
     else if (hwdata.channels == 2)
         channels = "Stereo";
     else
-        channels = QString("Channels %1").arg(hwdata.channels);
+        channels = TQString("Channels %1").arg(hwdata.channels);
     DBG("Format: %s, Rate %d Hz, %s",
         snd_pcm_format_description(hwdata.format),
         hwdata.rate,

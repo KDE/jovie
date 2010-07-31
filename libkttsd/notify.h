@@ -36,10 +36,10 @@ public:
     };
 
     static int count();
-    static QString actionName( const int action );
-    static int action( const QString& actionName );
-    static QString actionDisplayName( const int action );
-    static QString actionDisplayName( const QString& actionName );
+    static TQString actionName( const int action );
+    static int action( const TQString& actionName );
+    static TQString actionDisplayName( const int action );
+    static TQString actionDisplayName( const TQString& actionName );
 };
 
 // --------------------------------------------------------------------
@@ -59,10 +59,10 @@ public:
     };
 
     static int count();
-    static QString presentName( const int present );
-    static int present( const QString& presentName );
-    static QString presentDisplayName( const int present );
-    static QString presentDisplayName( const QString& presentName );
+    static TQString presentName( const int present );
+    static int present( const TQString& presentName );
+    static TQString presentDisplayName( const int present );
+    static TQString presentDisplayName( const TQString& presentName );
 };
 
 // --------------------------------------------------------------------
@@ -74,12 +74,12 @@ public:
     /**
      * Retrieves the displayable name for an event source.
      */
-    static QString getEventSrcName(const QString& eventSrc, QString& iconName);
+    static TQString getEventSrcName(const TQString& eventSrc, TQString& iconName);
 
     /**
      * Retrieves the displayable name for an event from an event source.
      */
-    static QString getEventName(const QString& eventSrc, const QString& event);
+    static TQString getEventName(const TQString& eventSrc, const TQString& event);
 };
 
 #endif              // _NOTIFYACTION_H

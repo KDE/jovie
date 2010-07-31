@@ -24,15 +24,15 @@
 #ifndef _THREADEDPLUGIN_H_
 #define _THREADEDPLUGIN_H_
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
+#include <tqthread.h>
+#include <tqmutex.h>
+#include <tqwaitcondition.h>
 
 #include "pluginproc.h"
 
 class Speaker;
 
-class ThreadedPlugIn : public PlugInProc, public QThread 
+class ThreadedPlugIn : public PlugInProc, public TQThread 
 {
     public:
         enum pluginAction
@@ -45,7 +45,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         /**
         * Constructor.
         */
-        ThreadedPlugIn(PlugInProc* plugin, QObject *parent = 0, const char *name = 0);
+        ThreadedPlugIn(PlugInProc* plugin, TQObject *parent = 0, const char *name = 0);
 
         /**
         * Destructor.
@@ -55,7 +55,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         /**
         * Initializate the speech plugin.
         */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init(KConfig *config, const TQString &configGroup);
 
         /** 
         * Say a text.  Synthesize and audibilize it.
@@ -64,7 +64,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         * If the plugin supports asynchronous operation, it should return immediately
         * and emit sayFinished signal when synthesis and audibilizing is finished.
         */
-        virtual void sayText(const QString &text);
+        virtual void sayText(const TQString &text);
 
         /**
         * Synthesize text into an audio file, but do not send to the audio device.
@@ -77,7 +77,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         * If the plugin supports asynchronous operation, it should return immediately
         * and emit synthFinished signal when synthesis is completed.
         */
-        virtual void synthText(const QString &text, const QString &suggestedFilename);
+        virtual void synthText(const TQString &text, const TQString &suggestedFilename);
         
         /**
         * Get the generated audio filename from synthText.
@@ -86,7 +86,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         *
         * The plugin must not re-use the filename.
         */
-        virtual QString getFilename();
+        virtual TQString getFilename();
         
         /**
         * Stop current operation (saying or synthesizing text).
@@ -154,7 +154,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         /**
         * A text buffer to go with an action (if applicable).
         */
-        QString m_text;
+        TQString m_text;
 
         /**
         * Current state of the plugin.
@@ -164,7 +164,7 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         /**
         * Mutext for accessing state variable.
         */
-        QMutex m_stateMutex;
+        TQMutex m_stateMutex;
         
         /**
         * True when stopText was called but the plugin did not stop.
@@ -174,17 +174,17 @@ class ThreadedPlugIn : public PlugInProc, public QThread
         /**
         * Locked when thread is running.
         */
-        QMutex m_threadRunningMutex;
+        TQMutex m_threadRunningMutex;
         
         /**
         * Filename for generated synthesized text.
         */
-        QString m_filename;
+        TQString m_filename;
         
         /**
         * Thread wait condition.
         */
-        QWaitCondition m_waitCondition;
+        TQWaitCondition m_waitCondition;
 
         /**
         * Thread exit flag.

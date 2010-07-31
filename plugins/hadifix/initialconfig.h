@@ -5,31 +5,31 @@
  * installation directories.
  */
 void findInitialConfig() {
-   QString hadifixDataPath = findHadifixDataPath();
+   TQString hadifixDataPath = findHadifixDataPath();
    
    defaultHadifixExec = findExecutable("txt2pho", hadifixDataPath+"/../");
    
-   QStringList list; list += "mbrola"; list += "mbrola-linux-i386";
+   TQStringList list; list += "mbrola"; list += "mbrola-linux-i386";
    defaultMbrolaExec = findExecutable(list, hadifixDataPath+"/../../mbrola/");
    
    defaultVoices = findVoices (defaultMbrolaExec, hadifixDataPath);
 }
 
 /** Tries to find the hadifix data path by looking into a number of files. */
-QString findHadifixDataPath () {
-   QStringList files;
+TQString findHadifixDataPath () {
+   TQStringList files;
    files += "/etc/txt2pho";
-   files += QDir::homeDirPath()+"/.txt2phorc";
+   files += TQDir::homeDirPath()+"/.txt2phorc";
    
-   QStringList::iterator it;
+   TQStringList::iterator it;
    for (it = files.begin(); it != files.end(); ++it) {
 
-      QFile file(*it);
+      TQFile file(*it);
       if ( file.open(IO_ReadOnly) ) {
-         QTextStream stream(&file);
+         TQTextStream stream(&file);
          
          while (!stream.atEnd()) {
-            QString s = stream.readLine().stripWhiteSpace();
+            TQString s = stream.readLine().stripWhiteSpace();
 	    // look for a line "DATAPATH=..."
 	    
 	    if (s.startsWith("DATAPATH")) {
@@ -39,7 +39,7 @@ QString findHadifixDataPath () {
 		  if (s.startsWith("/"))
 		     return s;
 		  else {
-		     QFileInfo info (QFileInfo(*it).dirPath() + "/" + s);
+		     TQFileInfo info (TQFileInfo(*it).dirPath() + "/" + s);
 		     return info.absFilePath();
 		  }
 	       }
@@ -52,81 +52,81 @@ QString findHadifixDataPath () {
 }
 
 /** Tries to find the an executable by looking onto the hard disk. */
-QString findExecutable (const QStringList &names, const QString &possiblePath) {
+TQString findExecutable (const TQStringList &names, const TQString &possiblePath) {
    // a) Try to find it directly
-   QStringList::ConstIterator it;
-   QStringList::ConstIterator itEnd = names.constEnd();
+   TQStringList::ConstIterator it;
+   TQStringList::ConstIterator itEnd = names.constEnd();
    for (it = names.constBegin(); it != itEnd; ++it) {
-      QString executable = KStandardDirs::findExe (*it);
+      TQString executable = KStandardDirs::findExe (*it);
       if (!executable.isNull() && !executable.isEmpty())
          return executable;
    }
 
    // b) Try to find it in the path specified by the second parameter
    for (it = names.constBegin(); it != itEnd; ++it) {
-      QFileInfo info (possiblePath+*it);
+      TQFileInfo info (possiblePath+*it);
       if (info.exists() && info.isExecutable() && info.isFile()) {
          return info.absFilePath();
       }
    }
 
    // Both tries failed, so the user has to locate the executable.
-   return QString::null;
+   return TQString::null;
 }
 
 /** Tries to find the voice files by looking onto the hard disk. */
-QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
+TQStringList findVoices(TQString mbrolaExec, const TQString &hadifixDataPath) {
    
    // First of all:
    // dereference links to the mbrola executable (if mbrolaExec is a link).
    for (int i = 0; i < 10; ++i) {
       // If we have a chain of more than ten links something is surely wrong.
-      QFileInfo info (mbrolaExec);
+      TQFileInfo info (mbrolaExec);
       if (info.exists() && info.isSymLink())
             mbrolaExec = info.readLink();
    }
 
    // Second:
    // create a list of directories that possibly contain voice files
-   QStringList list;
+   TQStringList list;
    
    // 2a) search near the mbrola executable
-   QFileInfo info (mbrolaExec);
+   TQFileInfo info (mbrolaExec);
    if (info.exists() && info.isFile() && info.isExecutable()) {
-      QString mbrolaPath = info.dirPath (true);
+      TQString mbrolaPath = info.dirPath (true);
       list += mbrolaPath;
    }
 
    // 2b) search near the hadifix data path
    info.setFile(hadifixDataPath + "../../mbrola");
-   QString mbrolaPath = info.dirPath (true) + "/mbrola";
+   TQString mbrolaPath = info.dirPath (true) + "/mbrola";
    if (!list.contains(mbrolaPath))
       list += mbrolaPath;
 
    // 2c) broaden the search by adding subdirs (with a depth of 2)
-   QStringList subDirs = findSubdirs (list);
-   QStringList subSubDirs = findSubdirs (subDirs);
+   TQStringList subDirs = findSubdirs (list);
+   TQStringList subSubDirs = findSubdirs (subDirs);
    list += subDirs;
    list += subSubDirs;
 
    // Third:
    // look into each of these directories and search for voice files.
-   QStringList result;
-   QStringList::iterator it;
+   TQStringList result;
+   TQStringList::iterator it;
    for (it = list.begin(); it != list.end(); ++it) {
-      QDir baseDir (*it, QString::null,
-                    QDir::Name|QDir::IgnoreCase, QDir::Files);
-      QStringList files = baseDir.entryList();
+      TQDir baseDir (*it, TQString::null,
+                    TQDir::Name|TQDir::IgnoreCase, TQDir::Files);
+      TQStringList files = baseDir.entryList();
 
-      QStringList::iterator iter;
+      TQStringList::iterator iter;
       for (iter = files.begin(); iter != files.end(); ++iter) {
          // Voice files start with "MBROLA", but are afterwards binary files
-	 QString filename = *it + "/" + *iter;
-         QFile file (filename);
+	 TQString filename = *it + "/" + *iter;
+         TQFile file (filename);
          if (file.open(IO_ReadOnly)) {
-            QTextStream stream(&file);
+            TQTextStream stream(&file);
             if (!stream.atEnd()) {
-               QString s = stream.readLine();
+               TQString s = stream.readLine();
                if (s.startsWith("MBROLA"))
 	          if (HadifixProc::determineGender(mbrolaExec, filename)
 		   != HadifixProc::NoVoice
@@ -141,20 +141,20 @@ QStringList findVoices(QString mbrolaExec, const QString &hadifixDataPath) {
 }
 
 /** Returns a list of subdirs (with absolute paths) */
-QStringList findSubdirs (const QStringList &baseDirs) {
-   QStringList result;
+TQStringList findSubdirs (const TQStringList &baseDirs) {
+   TQStringList result;
 
-   QStringList::ConstIterator it;
-   QStringList::ConstIterator itEnd = baseDirs.constEnd();
+   TQStringList::ConstIterator it;
+   TQStringList::ConstIterator itEnd = baseDirs.constEnd();
    for (it = baseDirs.constBegin(); it != itEnd; ++it) {
       // a) get a list of directory names
-      QDir baseDir (*it, QString::null,
-                    QDir::Name|QDir::IgnoreCase, QDir::Dirs);
-      QStringList list = baseDir.entryList();
+      TQDir baseDir (*it, TQString::null,
+                    TQDir::Name|TQDir::IgnoreCase, TQDir::Dirs);
+      TQStringList list = baseDir.entryList();
 
       // b) produce absolute paths
-      QStringList::ConstIterator iter;
-      QStringList::ConstIterator iterEnd = list.constEnd();
+      TQStringList::ConstIterator iter;
+      TQStringList::ConstIterator iterEnd = list.constEnd();
       for (iter = list.constBegin(); iter != iterEnd; ++iter) {
          if ((*iter != ".") && (*iter != ".."))
             result += *it + "/" + *iter;

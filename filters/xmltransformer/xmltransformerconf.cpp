@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qstring.h>
-#include <qlayout.h>
+#include <tqstring.h>
+#include <tqlayout.h>
 
 // KDE includes.
 #include <klocale.h>
@@ -43,13 +43,13 @@
 /**
 * Constructor 
 */
-XmlTransformerConf::XmlTransformerConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
+XmlTransformerConf::XmlTransformerConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
     KttsFilterConf(parent, name)
 {
     // kdDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "XmlTransformerConfWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new XmlTransformerConfWidget(this, "XmlTransformerConfigWidget");
@@ -59,18 +59,18 @@ XmlTransformerConf::XmlTransformerConf( QWidget *parent, const char *name, const
     defaults();
 
     // Connect signals.
-    connect( m_widget->nameLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()));
-    connect( m_widget->xsltPath, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->xsltprocPath, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->rootElementLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->doctypeLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
+    connect( m_widget->nameLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()));
+    connect( m_widget->xsltPath, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->xsltprocPath, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->rootElementLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->doctypeLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->appIdLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
 }
 
 /**
@@ -93,7 +93,7 @@ XmlTransformerConf::~XmlTransformerConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
+void XmlTransformerConf::load(KConfig* config, const TQString& configGroup){
     // kdDebug() << "XmlTransformerConf::load: Running" << endl;
     config->setGroup( configGroup );
     m_widget->nameLineEdit->setText( config->readEntry( "UserFilterName", m_widget->nameLineEdit->text() ) );
@@ -117,7 +117,7 @@ void XmlTransformerConf::load(KConfig* config, const QString& configGroup){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void XmlTransformerConf::save(KConfig* config, const QString& configGroup){
+void XmlTransformerConf::save(KConfig* config, const TQString& configGroup){
     // kdDebug() << "XmlTransformerConf::save: Running" << endl;
     config->setGroup( configGroup );
     config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
@@ -167,16 +167,16 @@ bool XmlTransformerConf::supportsMultiInstance() { return true; }
  * return an empty string.
  * @return          Filter instance name.
  */
-QString XmlTransformerConf::userPlugInName()
+TQString XmlTransformerConf::userPlugInName()
 {
-    QString filePath = realFilePath(m_widget->xsltprocPath->url());
-    if (filePath.isEmpty()) return QString::null;
-    if (getLocation(filePath).isEmpty()) return QString::null;
+    TQString filePath = realFilePath(m_widget->xsltprocPath->url());
+    if (filePath.isEmpty()) return TQString::null;
+    if (getLocation(filePath).isEmpty()) return TQString::null;
 
     filePath = realFilePath(m_widget->xsltPath->url());
-    if (filePath.isEmpty()) return QString::null;
-    if (getLocation(filePath).isEmpty()) return QString::null;
-    if (!QFileInfo(filePath).isFile()) return QString::null;
+    if (filePath.isEmpty()) return TQString::null;
+    if (getLocation(filePath).isEmpty()) return TQString::null;
+    if (!TQFileInfo(filePath).isFile()) return TQString::null;
 
     return m_widget->nameLineEdit->text();
 }

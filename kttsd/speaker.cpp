@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 // Qt includes. 
-#include <qfile.h>
-#include <qtimer.h>
-#include <qdir.h>
+#include <tqfile.h>
+#include <tqtimer.h>
+#include <tqdir.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -107,8 +107,8 @@
 * Loads plugins.
 */
 Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
-    QObject *parent, const char *name) :
-    QObject(parent, name), 
+    TQObject *parent, const char *name) :
+    TQObject(parent, name), 
     m_speechData(speechData),
     m_talkerMgr(talkerMgr)
 {
@@ -119,7 +119,7 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
     m_lastAppId = 0;
     m_lastJobNum = 0;
     m_lastSeq = 0;
-    m_timer = new QTimer(this, "kttsdAudioTimer");
+    m_timer = new TQTimer(this, "kttsdAudioTimer");
     m_speechData->config->setGroup("General");
     m_playerOption = m_speechData->config->readNumEntry("AudioOutputMethod", 0);  // default to aRts.
     // Map 50% to 100% onto 2.0 to 0.5.
@@ -152,22 +152,22 @@ Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
             break;
     }
     // Connect timer timeout signal.
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+    connect(m_timer, TQT_SIGNAL(timeout()), this, TQT_SLOT(slotTimeout()));
 
     // Connect plugins to slots.
-    QPtrList<PlugInProc> plugins = m_talkerMgr->getLoadedPlugIns();
+    TQPtrList<PlugInProc> plugins = m_talkerMgr->getLoadedPlugIns();
     const int pluginsCount = plugins.count();
     for (int ndx = 0; ndx < pluginsCount; ++ndx)
     {
         PlugInProc* speech = plugins.at(ndx);
-        connect(speech, SIGNAL(synthFinished()),
-            this, SLOT(slotSynthFinished()));
-        connect(speech, SIGNAL(sayFinished()),
-            this, SLOT(slotSayFinished()));
-        connect(speech, SIGNAL(stopped()),
-            this, SLOT(slotStopped()));
-        connect(speech, SIGNAL(error(bool, const QString&)),
-            this, SLOT(slotError(bool, const QString&)));
+        connect(speech, TQT_SIGNAL(synthFinished()),
+            this, TQT_SLOT(slotSynthFinished()));
+        connect(speech, TQT_SIGNAL(sayFinished()),
+            this, TQT_SLOT(slotSayFinished()));
+        connect(speech, TQT_SIGNAL(stopped()),
+            this, TQT_SLOT(slotStopped()));
+        connect(speech, TQT_SIGNAL(error(bool, const TQString&)),
+            this, TQT_SLOT(slotError(bool, const TQString&)));
     }
 }
 
@@ -228,9 +228,9 @@ void Speaker::doUtterances()
 //         kdDebug() << "Speaker::doUtterances: queue dump:" << endl;
 //         for (it = m_uttQueue.begin(); it != m_uttQueue.end(); ++it)
 //         {
-//             QString pluginState = "no plugin";
+//             TQString pluginState = "no plugin";
 //             if (it->plugin) pluginState = pluginStateToStr(it->plugin->getState());
-//             QString jobState =
+//             TQString jobState =
 //                     jobStateToStr(m_speechData->getTextJobState(it->sentence->jobNum));
 //             kdDebug() << 
 //                     "  State: " << uttStateToStr(it->state) << 
@@ -275,8 +275,8 @@ void Speaker::doUtterances()
                     {
                         // Create an XSLT transformer and transform the text.
                         it->transformer = new SSMLConvert();
-                        connect(it->transformer, SIGNAL(transformFinished()),
-                            this, SLOT(slotTransformFinished()));
+                        connect(it->transformer, TQT_SIGNAL(transformFinished()),
+                            this, TQT_SLOT(slotTransformFinished()));
                         if (it->transformer->transform(it->sentence->text,
                             it->plugin->getSsmlXsltFilename()))
                         {
@@ -345,8 +345,8 @@ void Speaker::doUtterances()
                         else
                         {
                             it->audioStretcher = new Stretcher();
-                            connect(it->audioStretcher, SIGNAL(stretchFinished()),
-                                this, SLOT(slotStretchFinished()));
+                            connect(it->audioStretcher, TQT_SIGNAL(stretchFinished()),
+                                this, TQT_SLOT(slotStretchFinished()));
                             if (it->audioStretcher->stretch(it->audioUrl, makeSuggestedFilename(),
                                 m_audioStretchFactor))
                             {
@@ -370,7 +370,7 @@ void Speaker::doUtterances()
                         // See if Stretcher is finished.
                         if (it->audioStretcher->getState() == Stretcher::ssFinished)
                         {
-                            QFile::remove(it->audioUrl);
+                            TQFile::remove(it->audioUrl);
                             it->audioUrl = it->audioStretcher->getOutFilename();
                             it->state = usStretched;
                             delete it->audioStretcher;
@@ -786,7 +786,7 @@ uint Speaker::moveRelTextSentence(const int n, const uint jobNum)
  * Converts an utterance state enumerator to a displayable string.
  * @param state           Utterance state.
  */
-QString Speaker::uttStateToStr(uttState state)
+TQString Speaker::uttStateToStr(uttState state)
 {
     switch (state)
     {
@@ -806,7 +806,7 @@ QString Speaker::uttStateToStr(uttState state)
         case usPreempted:           return "usPreempted";
         case usFinished:            return "usFinished";
     }
-    return QString::null;
+    return TQString::null;
 }
 
 /**
@@ -814,7 +814,7 @@ QString Speaker::uttStateToStr(uttState state)
  * @param utType          Utterance type.
  * @return                Displayable string for utterance type.
  */
-QString Speaker::uttTypeToStr(uttType utType)
+TQString Speaker::uttTypeToStr(uttType utType)
 {
     switch (utType)
     {
@@ -829,7 +829,7 @@ QString Speaker::uttTypeToStr(uttType utType)
         case utStartOfJob:   return "utStartOfJob";
         case utEndOfJob:     return "utEndOfJob";
     }
-    return QString::null;
+    return TQString::null;
 }
 
 /**
@@ -837,7 +837,7 @@ QString Speaker::uttTypeToStr(uttType utType)
  * @param state           Plugin state.
  * @return                Displayable string for plugin state.
  */
-QString Speaker::pluginStateToStr(pluginState state)
+TQString Speaker::pluginStateToStr(pluginState state)
 {
     switch( state )
     {
@@ -846,7 +846,7 @@ QString Speaker::pluginStateToStr(pluginState state)
         case psSynthing:     return "psSynthing";
         case psFinished:     return "psFinished";
     }
-    return QString::null;
+    return TQString::null;
 }
 
 /**
@@ -854,7 +854,7 @@ QString Speaker::pluginStateToStr(pluginState state)
  * @param state           Job state.
  * @return                Displayable string for job state.
  */
-QString Speaker::jobStateToStr(int state)
+TQString Speaker::jobStateToStr(int state)
 {
     switch ( state )
     {
@@ -864,7 +864,7 @@ QString Speaker::jobStateToStr(int state)
         case KSpeech::jsPaused:      return "jsPaused";
         case KSpeech::jsFinished:    return "jsFinished";
     }
-    return QString::null;
+    return TQString::null;
 }
 
 /**
@@ -920,7 +920,7 @@ void Speaker::pauseUtteranceByJobNum(const uint jobNum)
 /**
  * Determines whether the given text is SSML markup.
  */
-bool Speaker::isSsml(const QString &text)
+bool Speaker::isSsml(const TQString &text)
 {
     return KttsUtils::hasRootElement( text, "speak" );
 }
@@ -1019,7 +1019,7 @@ bool Speaker::getNextUtterance()
         utt->state = usNone;
         utt->audioPlayer = 0;
         utt->audioStretcher = 0;
-        utt->audioUrl = QString::null;
+        utt->audioUrl = TQString::null;
         utt->plugin = m_talkerMgr->talkerToPlugin(utt->sentence->talker);
         // Save some time by setting initial state now.
         setInitialUtteranceState(*utt);
@@ -1079,7 +1079,7 @@ bool Speaker::getNextUtterance()
                     {
                         Utt intrUtt;
                         intrUtt.sentence = new mlText;
-                        intrUtt.sentence->text = QString::null;
+                        intrUtt.sentence->text = TQString::null;
                         intrUtt.sentence->talker = utt->sentence->talker;
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
@@ -1099,11 +1099,11 @@ bool Speaker::getNextUtterance()
                         intrUtt.sentence = new mlText;
                         intrUtt.sentence->text = m_speechData->textPreMsg;
                         // Interruptions are spoken using default Talker.
-                        intrUtt.sentence->talker = QString::null;
+                        intrUtt.sentence->talker = TQString::null;
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
                         intrUtt.sentence->seq = 0;
-                        intrUtt.audioUrl = QString::null;
+                        intrUtt.audioUrl = TQString::null;
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptMsg;
                         intrUtt.isSSML = isSsml(intrUtt.sentence->text);
@@ -1125,7 +1125,7 @@ bool Speaker::getNextUtterance()
                 {
                     Utt resUtt;
                     resUtt.sentence = new mlText;
-                    resUtt.sentence->text = QString::null;
+                    resUtt.sentence->text = TQString::null;
                     resUtt.sentence->talker = utt->sentence->talker;
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
@@ -1144,11 +1144,11 @@ bool Speaker::getNextUtterance()
                     Utt resUtt;
                     resUtt.sentence = new mlText;
                     resUtt.sentence->text = m_speechData->textPostMsg;
-                    resUtt.sentence->talker = QString::null;
+                    resUtt.sentence->talker = TQString::null;
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
                     resUtt.sentence->seq = 0;
-                    resUtt.audioUrl = QString::null;
+                    resUtt.audioUrl = TQString::null;
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeMsg;
                     resUtt.isSSML = isSsml(resUtt.sentence->text);
@@ -1173,12 +1173,12 @@ bool Speaker::getNextUtterance()
                     {
                         Utt jobUtt;
                         jobUtt.sentence = new mlText;
-                        jobUtt.sentence->text = QString::null;
-                        jobUtt.sentence->talker = QString::null;
+                        jobUtt.sentence->text = TQString::null;
+                        jobUtt.sentence->talker = TQString::null;
                         jobUtt.sentence->appId = m_lastAppId;
                         jobUtt.sentence->jobNum = m_lastJobNum;
                         jobUtt.sentence->seq = 0;
-                        jobUtt.audioUrl = QString::null;
+                        jobUtt.audioUrl = TQString::null;
                         jobUtt.utType = utEndOfJob;
                         jobUtt.isSSML = false;
                         jobUtt.plugin = 0;
@@ -1194,12 +1194,12 @@ bool Speaker::getNextUtterance()
                 {
                     Utt jobUtt;
                     jobUtt.sentence = new mlText;
-                    jobUtt.sentence->text = QString::null;
-                    jobUtt.sentence->talker = QString::null;
+                    jobUtt.sentence->text = TQString::null;
+                    jobUtt.sentence->talker = TQString::null;
                     jobUtt.sentence->appId = m_lastAppId;
                     jobUtt.sentence->jobNum = m_lastJobNum;
                     jobUtt.sentence->seq = utt->sentence->seq;
-                    jobUtt.audioUrl = QString::null;
+                    jobUtt.audioUrl = TQString::null;
                     jobUtt.utType = utStartOfJob;
                     jobUtt.isSSML = false;
                     jobUtt.plugin = 0;
@@ -1220,12 +1220,12 @@ bool Speaker::getNextUtterance()
             {
                 Utt jobUtt;
                 jobUtt.sentence = new mlText;
-                jobUtt.sentence->text = QString::null;
-                jobUtt.sentence->talker = QString::null;
+                jobUtt.sentence->text = TQString::null;
+                jobUtt.sentence->talker = TQString::null;
                 jobUtt.sentence->appId = m_lastAppId;
                 jobUtt.sentence->jobNum = m_lastJobNum;
                 jobUtt.sentence->seq = 0;
-                jobUtt.audioUrl = QString::null;
+                jobUtt.audioUrl = TQString::null;
                 jobUtt.utType = utEndOfJob;
                 jobUtt.isSSML = false;
                 jobUtt.plugin = 0;
@@ -1311,14 +1311,14 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
         {
             if (m_speechData->keepAudio)
             {
-                QCString seqStr;
+                TQCString seqStr;
                 seqStr.sprintf("%08i", it->sentence->seq);    // Zero-fill to 8 chars.
-                QCString jobStr;
+                TQCString jobStr;
                 jobStr.sprintf("%08i", it->sentence->jobNum);
-                QString dest = m_speechData->keepAudioPath + "/kttsd-" +
-                    QString("%1-%2").arg(jobStr).arg(seqStr) + ".wav";
-                QFile::remove(dest);
-                QDir d;
+                TQString dest = m_speechData->keepAudioPath + "/kttsd-" +
+                    TQString("%1-%2").arg(jobStr).arg(seqStr) + ".wav";
+                TQFile::remove(dest);
+                TQDir d;
                 d.rename(it->audioUrl, dest);
                 // TODO: This is always producing the following.  Why and how to fix?
                 // It moves the files just fine.
@@ -1328,7 +1328,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
                 // KIO::move(it->audioUrl, dest, false);
             }
             else
-                QFile::remove(it->audioUrl);
+                TQFile::remove(it->audioUrl);
         }
     }
     // Delete the utterance from queue.
@@ -1418,7 +1418,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                  (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
                 // kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
-                it->audioPlayer->startPlay(QString::null);  // resume
+                it->audioPlayer->startPlay(TQString::null);  // resume
                 it->state = usPlaying;
                 if (!m_timer->start(timerInterval, FALSE))
                     kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
@@ -1431,7 +1431,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         {
                 // Preempted playback automatically resumes.
                 // Note: Must call stop(), even if player not currently playing.  Why?
-            it->audioPlayer->startPlay(QString::null);  // resume
+            it->audioPlayer->startPlay(TQString::null);  // resume
             it->state = usPlaying;
             if (!m_timer->start(timerInterval, FALSE))
                 kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
@@ -1500,12 +1500,12 @@ void Speaker::postPlaySignals(uttIterator it)
  * for synthesis to write to.
  * @return                        Full pathname of suggested file.
  */
-QString Speaker::makeSuggestedFilename()
+TQString Speaker::makeSuggestedFilename()
 {
     KTempFile tempFile (locateLocal("tmp", "kttsd-"), ".wav");
-    QString waveFile = tempFile.file()->name();
+    TQString waveFile = tempFile.file()->name();
     tempFile.close();
-    QFile::remove(waveFile);
+    TQFile::remove(waveFile);
     // kdDebug() << "Speaker::makeSuggestedFilename: Suggesting filename: " << waveFile << endl;
     return KStandardDirs::realFilePath(waveFile);
 }
@@ -1516,7 +1516,7 @@ QString Speaker::makeSuggestedFilename()
 Player* Speaker::createPlayerObject()
 {
     Player* player = 0;
-    QString plugInName;
+    TQString plugInName;
     switch(m_playerOption)
     {
         case 1 :
@@ -1541,7 +1541,7 @@ Player* Speaker::createPlayerObject()
             }
     }
     KTrader::OfferList offers = KTrader::self()->query(
-            "KTTSD/AudioPlugin", QString("DesktopEntryName == '%1'").arg(plugInName));
+            "KTTSD/AudioPlugin", TQString("DesktopEntryName == '%1'").arg(plugInName));
 
     if(offers.count() == 1)
     {
@@ -1595,8 +1595,8 @@ void Speaker::slotSayFinished()
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 101);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 101);
+    TQApplication::postEvent(this, ev);
 }
 
 /**
@@ -1606,8 +1606,8 @@ void Speaker::slotSynthFinished()
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 102);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 102);
+    TQApplication::postEvent(this, ev);
 }
 
 /**
@@ -1617,8 +1617,8 @@ void Speaker::slotStopped()
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 103);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 103);
+    TQApplication::postEvent(this, ev);
 }
 
 /**
@@ -1627,8 +1627,8 @@ void Speaker::slotStopped()
 void Speaker::slotStretchFinished()
 {
     // Convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 104);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 104);
+    TQApplication::postEvent(this, ev);
 }
 
 /**
@@ -1637,8 +1637,8 @@ void Speaker::slotStretchFinished()
 void Speaker::slotTransformFinished()
 {
     // Convert to postEvent and return immediately.
-    QCustomEvent* ev = new QCustomEvent(QEvent::User + 105);
-    QApplication::postEvent(this, ev);
+    TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 105);
+    TQApplication::postEvent(this, ev);
 }
 
 /** Received from PlugIn object when they encounter an error.
@@ -1647,17 +1647,17 @@ void Speaker::slotTransformFinished()
 *                                the speech engine could not be started.
 * @param msg                     Error message.
 */
-void Speaker::slotError(bool /*keepGoing*/, const QString& /*msg*/)
+void Speaker::slotError(bool /*keepGoing*/, const TQString& /*msg*/)
 {
     // Since this signal handler may be running from a plugin's thread,
     // convert to postEvent and return immediately.
     // TODO: Do something with error messages.
     /*
     if (keepGoing)
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 106);
+        TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 106);
     else
-        QCustomEvent* ev = new QCustomEvent(QEvent::User + 107);
-    QApplication::postEvent(this, ev);
+        TQCustomEvent* ev = new TQCustomEvent(TQEvent::User + 107);
+    TQApplication::postEvent(this, ev);
     */
 }
 
@@ -1686,11 +1686,11 @@ void Speaker::slotTimeout()
 * Processes events posted by plugins.  When asynchronous plugins emit signals
 * they are converted into these events.
 */
-bool Speaker::event ( QEvent * e )
+bool Speaker::event ( TQEvent * e )
 {
     // TODO: Do something with event numbers 106 (error; keepGoing=True)
     // and 107 (error; keepGoing=False).
-    if ((e->type() >= (QEvent::User + 101)) && (e->type() <= (QEvent::User + 105)))
+    if ((e->type() >= (TQEvent::User + 101)) && (e->type() <= (TQEvent::User + 105)))
     {
         // kdDebug() << "Speaker::event: received event." << endl;
         doUtterances();

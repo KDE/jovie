@@ -1,7 +1,7 @@
 #ifndef _HADIFIXCONF_H_
 #define _HADIFIXCONF_H_
 
-#include <qstringlist.h>
+#include <tqstringlist.h>
 
 #include <kconfig.h>
 
@@ -15,7 +15,7 @@ class HadifixConf : public PlugInConf {
 
     public:
         /** Constructor */
-        HadifixConf( QWidget* parent = 0, const char* name = 0, const QStringList &args = QStringList());
+        HadifixConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~HadifixConf();
@@ -26,13 +26,13 @@ class HadifixConf : public PlugInConf {
             the control center, to undo all of his changes and restore the currently 
             valid settings. NOTE that this is not called after the modules is loaded,
             so you probably want to call this method in the constructor.*/
-        void load(KConfig *config, const QString &configGroup);
+        void load(KConfig *config, const TQString &configGroup);
 
         /** This function gets called when the user wants to save the settings in 
             the user interface, updating the config files or wherever the 
             configuration is stored. The method is called when the user clicks "Apply" 
             or "Ok". */
-        void save(KConfig *config, const QString &configGroup);
+        void save(KConfig *config, const TQString &configGroup);
 
         /** This function is called to set the settings in the module to sensible
             default values. It gets called when hitting the "Default" button. The 
@@ -44,7 +44,7 @@ class HadifixConf : public PlugInConf {
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
         * specified language code, choosing sensible defaults if necessary.
-        * If the passed-in code is QString::null, no specific language has
+        * If the passed-in code is TQString::null, no specific language has
         * been chosen.
         * @param lang        The desired language code or Null if none.
         *
@@ -56,16 +56,16 @@ class HadifixConf : public PlugInConf {
         * not the given country, treat it as though the country
         * code were not specified, i.e., adapt to the given language.
         */
-        void setDesiredLanguage(const QString &lang);
+        void setDesiredLanguage(const TQString &lang);
 
         /**
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
         * one instance from another.  If the plugin has not been fully configured,
-        * i.e., cannot yet synthesize, return QString::null.
+        * i.e., cannot yet synthesize, return TQString::null.
         * @return            Fully-specified talker code.
         */
-        QString getTalkerCode();
+        TQString getTalkerCode();
 
     public slots:
         void configChanged(bool t = true){emit changed(t);};

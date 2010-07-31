@@ -16,7 +16,7 @@
 
 #include <kdebug.h>
 
-#include <qfile.h>
+#include <tqfile.h>
 
 #include "akode/player.h"
 #include "akode/decoder.h"
@@ -29,7 +29,7 @@ using namespace aKode;
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-aKodePlayer::aKodePlayer(QObject* parent, const char* name, const QStringList& args) :
+aKodePlayer::aKodePlayer(TQObject* parent, const char* name, const TQStringList& args) :
     Player(parent, name, args),
     m_player(0)
 {}
@@ -40,7 +40,7 @@ aKodePlayer::~aKodePlayer()
 }
 
 //void aKodePlayer::play(const FileHandle &file)
-void aKodePlayer::startPlay(const QString &file)
+void aKodePlayer::startPlay(const TQString &file)
 {
     kdDebug() << k_funcinfo << endl;
 
@@ -53,7 +53,7 @@ void aKodePlayer::startPlay(const QString &file)
         return;
     }
 
-    // QString filename = file.absFilePath();
+    // TQString filename = file.absFilePath();
 
     kdDebug() << "Opening: " << file << endl;
 
@@ -68,7 +68,7 @@ void aKodePlayer::startPlay(const QString &file)
         }
     }
 
-    if (m_player->load(QFile::encodeName(file)))
+    if (m_player->load(TQFile::encodeName(file)))
         m_player->play();
 
 }
@@ -169,11 +169,11 @@ void aKodePlayer::seekPosition(int position)
         m_player->decoder()->seek((position * m_player->decoder()->length())/1000);
 }
 
-QStringList aKodePlayer::getPluginList( const QCString& /*classname*/ )
+TQStringList aKodePlayer::getPluginList( const TQCString& /*classname*/ )
 {
-    return QStringList::split("|", "auto|polyp|alsa|jack|oss");
+    return TQStringList::split("|", "auto|polyp|alsa|jack|oss");
 }
 
-void aKodePlayer::setSinkName(const QString& sinkName) { m_sinkName = sinkName; }
+void aKodePlayer::setSinkName(const TQString& sinkName) { m_sinkName = sinkName; }
 
 #include "akodeplayer.moc"

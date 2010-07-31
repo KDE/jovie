@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -36,7 +36,7 @@
 #include "fliteproc.moc"
  
 /** Constructor */
-FliteProc::FliteProc( QObject* parent, const char* name, const QStringList& ) : 
+FliteProc::FliteProc( TQObject* parent, const char* name, const TQStringList& ) : 
     PlugInProc( parent, name ){
     kdDebug() << "FliteProc::FliteProc: Running" << endl;
     m_state = psIdle;
@@ -55,8 +55,8 @@ FliteProc::~FliteProc(){
 }
 
 /** Initialize the speech */
-bool FliteProc::init(KConfig* config, const QString& configGroup){
-    // kdDebug() << "Running: FliteProc::init(const QString &lang)" << endl;
+bool FliteProc::init(KConfig* config, const TQString& configGroup){
+    // kdDebug() << "Running: FliteProc::init(const TQString &lang)" << endl;
     // kdDebug() << "Initializing plug in: Flite" << endl;
     // Retrieve path to flite executable.
     config->setGroup(configGroup);
@@ -71,9 +71,9 @@ bool FliteProc::init(KConfig* config, const QString& configGroup){
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void FliteProc::sayText(const QString &text)
+void FliteProc::sayText(const TQString &text)
 {
-    synth(text, QString::null, m_fliteExePath);
+    synth(text, TQString::null, m_fliteExePath);
 }
 
 /**
@@ -86,7 +86,7 @@ void FliteProc::sayText(const QString &text)
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void FliteProc::synthText(const QString& text, const QString& suggestedFilename)
+void FliteProc::synthText(const TQString& text, const TQString& suggestedFilename)
 {
     synth(text, suggestedFilename, m_fliteExePath);
 }
@@ -98,11 +98,11 @@ void FliteProc::synthText(const QString& text, const QString& suggestedFilename)
 *                                synthesize and audibilize the text.
 */
 void FliteProc::synth(
-    const QString &text,
-    const QString &synthFilename,
-    const QString& fliteExePath)
+    const TQString &text,
+    const TQString &synthFilename,
+    const TQString& fliteExePath)
 {
-    // kdDebug() << "Running: FliteProc::synth(const QString &text)" << endl;
+    // kdDebug() << "Running: FliteProc::synth(const TQString &text)" << endl;
 
     if (m_fliteProc)
     {
@@ -112,14 +112,14 @@ void FliteProc::synth(
     }
     // kdDebug()<< "FliteProc::synth: Creating Flite object" << endl;
     m_fliteProc = new KProcess;
-    connect(m_fliteProc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(slotProcessExited(KProcess*)));
-    connect(m_fliteProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(m_fliteProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-    connect(m_fliteProc, SIGNAL(wroteStdin(KProcess*)),
-        this, SLOT(slotWroteStdin(KProcess* )));
+    connect(m_fliteProc, TQT_SIGNAL(processExited(KProcess*)),
+        this, TQT_SLOT(slotProcessExited(KProcess*)));
+    connect(m_fliteProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+        this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(m_fliteProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+        this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    connect(m_fliteProc, TQT_SIGNAL(wroteStdin(KProcess*)),
+        this, TQT_SLOT(slotWroteStdin(KProcess* )));
     if (synthFilename.isNull())
         m_state = psSaying;
     else
@@ -127,7 +127,7 @@ void FliteProc::synth(
 
     
     // Encode quotation characters.
-    QString saidText = text;
+    TQString saidText = text;
 /*
     saidText.replace("\\\"", "#!#!");
     saidText.replace("\"", "\\\"");
@@ -162,7 +162,7 @@ void FliteProc::synth(
 *
 * The plugin must not re-use the filename.
 */
-QString FliteProc::getFilename()
+TQString FliteProc::getFilename()
 {
     kdDebug() << "FliteProc::getFilename: returning " << m_synthFilename << endl;
     return m_synthFilename;
@@ -218,13 +218,13 @@ void FliteProc::slotProcessExited(KProcess*)
 
 void FliteProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "FliteProc::slotReceivedStdout: Received output from Flite: " << buf << endl;
 }
 
 void FliteProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "FliteProc::slotReceivedStderr: Received error from Flite: " << buf << endl;
 }
 
@@ -256,7 +256,7 @@ void FliteProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename = TQString::null;
     }
 }
 

@@ -27,7 +27,7 @@
 #define _FILTERMGR_H_
 
 // Qt includes.
-#include <qptrlist.h>
+#include <tqptrlist.h>
 
 // KTTS includes.
 #include "filterproc.h"
@@ -35,7 +35,7 @@
 class KConfig;
 class TalkerCode;
 
-typedef QPtrList<KttsFilterProc> FilterList;
+typedef TQPtrList<KttsFilterProc> FilterList;
 
 class FilterMgr : public KttsFilterProc
 {
@@ -45,7 +45,7 @@ class FilterMgr : public KttsFilterProc
         /**
          * Constructor.
          */
-        FilterMgr(QObject *parent = 0, const char *name = 0);
+        FilterMgr(TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor.
@@ -61,7 +61,7 @@ class FilterMgr : public KttsFilterProc
          * Note: The parameters are for reading from kttsdrc file.  Plugins may wish to maintain
          * separate configuration files of their own.
          */
-        virtual bool init(KConfig *config, const QString &configGroup);
+        virtual bool init(KConfig *config, const TQString &configGroup);
 
         /**
          * Returns True if this filter is a Sentence Boundary Detector.
@@ -92,7 +92,7 @@ class FilterMgr : public KttsFilterProc
          *                          Also useful for hints about how to do the filtering.
          * @return                  Converted text.
          */
-        virtual QString convert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+        virtual TQString convert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
         /**
          * Asynchronously convert input.
@@ -106,7 +106,7 @@ class FilterMgr : public KttsFilterProc
          * When the input text has been converted, filteringFinished signal will be emitted
          * and caller can retrieve using getOutput();
          */
-        virtual bool asyncConvert(const QString& inputText, TalkerCode* talkerCode, const QCString& appId);
+        virtual bool asyncConvert(const TQString& inputText, TalkerCode* talkerCode, const TQCString& appId);
 
         /**
          * Waits for filtering to finish.
@@ -121,7 +121,7 @@ class FilterMgr : public KttsFilterProc
         /**
          * Returns the filtered output.
          */
-        virtual QString getOutput();
+        virtual TQString getOutput();
 
         /**
          * Acknowledges the finished filtering.
@@ -140,7 +140,7 @@ class FilterMgr : public KttsFilterProc
          *
          * @param re            The sentence delimiter regular expression.
          */
-        virtual void setSbRegExp(const QString& re);
+        virtual void setSbRegExp(const TQString& re);
 
         /**
          * Do not call SBD filters.
@@ -154,26 +154,26 @@ class FilterMgr : public KttsFilterProc
         bool supportsHTML() { return m_supportsHTML; }
 
     protected:
-        bool event ( QEvent * e );
+        bool event ( TQEvent * e );
 
     private slots:
         void slotFilteringFinished();
 
     private:
         // Loads the processing plug in for a named filter plug in.
-        KttsFilterProc* loadFilterPlugin(const QString& plugInName);
+        KttsFilterProc* loadFilterPlugin(const TQString& plugInName);
         // Finishes up with current filter (if any) and goes on to the next filter.
         void nextFilter();
         // Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
         // @param name                   The translated plugin name.  From Name= line in .desktop file.
         // @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        //                               QString::null if not found.
-        QString FilterNameToDesktopEntryName(const QString& name);
+        //                               TQString::null if not found.
+        TQString FilterNameToDesktopEntryName(const TQString& name);
 
         // List of filters.
         FilterList m_filterList;
         // Text being filtered.
-        QString m_text;
+        TQString m_text;
         // Index to list of filters.
         int m_filterIndex;
         // Current filter.
@@ -183,9 +183,9 @@ class FilterMgr : public KttsFilterProc
         // Talker Code.
         TalkerCode* m_talkerCode;
         // AppId.
-        QCString m_appId;
+        TQCString m_appId;
         // Sentence Boundary regular expression (if app overrode the default).
-        QString m_re;
+        TQString m_re;
         // True if any of the filters modified the text.
         bool m_wasModified;
         // FilterMgr state.

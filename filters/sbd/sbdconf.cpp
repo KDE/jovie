@@ -22,14 +22,14 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qhbox.h>
-#include <qlayout.h>
-#include <qdom.h>
-#include <qfile.h>
-#include <qradiobutton.h>
+#include <tqfile.h>
+#include <tqfileinfo.h>
+#include <tqstring.h>
+#include <tqhbox.h>
+#include <tqlayout.h>
+#include <tqdom.h>
+#include <tqfile.h>
+#include <tqradiobutton.h>
 
 // KDE includes.
 #include <kglobal.h>
@@ -56,13 +56,13 @@
 /**
 * Constructor 
 */
-SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/) :
+SbdConf::SbdConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
     KttsFilterConf(parent, name)
 {
     // kdDebug() << "SbdConf::SbdConf: Running" << endl;
 
     // Create configuration widget.
-    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "SbdConfigWidgetLayout");
     layout->setAlignment (Qt::AlignTop);
     m_widget = new SbdConfWidget(this, "SbdConfigWidget");
@@ -73,24 +73,24 @@ SbdConf::SbdConf( QWidget *parent, const char *name, const QStringList& /*args*/
 
     m_widget->reButton->setEnabled( m_reEditorInstalled );
     if ( m_reEditorInstalled )
-        connect( m_widget->reButton, SIGNAL(clicked()), this, SLOT(slotReButton_clicked()) );
+        connect( m_widget->reButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(slotReButton_clicked()) );
 
-    connect( m_widget->reLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->sbLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->nameLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect( m_widget->appIdLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(configChanged()) );
-    connect(m_widget->languageBrowseButton, SIGNAL(clicked()),
-         this, SLOT(slotLanguageBrowseButton_clicked()));
-    connect(m_widget->loadButton, SIGNAL(clicked()),
-         this, SLOT(slotLoadButton_clicked()));
-    connect(m_widget->saveButton, SIGNAL(clicked()),
-         this, SLOT(slotSaveButton_clicked()));
-    connect(m_widget->clearButton, SIGNAL(clicked()),
-         this, SLOT(slotClearButton_clicked()));
+    connect( m_widget->reLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->sbLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->nameLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect( m_widget->appIdLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
+         this, TQT_SLOT(configChanged()) );
+    connect(m_widget->languageBrowseButton, TQT_SIGNAL(clicked()),
+         this, TQT_SLOT(slotLanguageBrowseButton_clicked()));
+    connect(m_widget->loadButton, TQT_SIGNAL(clicked()),
+         this, TQT_SLOT(slotLoadButton_clicked()));
+    connect(m_widget->saveButton, TQT_SIGNAL(clicked()),
+         this, TQT_SLOT(slotSaveButton_clicked()));
+    connect(m_widget->clearButton, TQT_SIGNAL(clicked()),
+         this, TQT_SLOT(slotClearButton_clicked()));
 
     // Set up defaults.
     defaults();
@@ -116,7 +116,7 @@ SbdConf::~SbdConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void SbdConf::load(KConfig* config, const QString& configGroup){
+void SbdConf::load(KConfig* config, const TQString& configGroup){
     // kdDebug() << "SbdConf::load: Running" << endl;
     config->setGroup( configGroup );
     m_widget->nameLineEdit->setText( 
@@ -125,10 +125,10 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
         config->readEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text()) );
     m_widget->sbLineEdit->setText(
         config->readEntry("SentenceBoundary", m_widget->sbLineEdit->text()) );
-    QStringList langCodeList = config->readListEntry("LanguageCodes");
+    TQStringList langCodeList = config->readListEntry("LanguageCodes");
     if (!langCodeList.isEmpty())
         m_languageCodeList = langCodeList;
-    QString language = "";
+    TQString language = "";
     for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
         if (!language.isEmpty()) language += ",";
@@ -149,7 +149,7 @@ void SbdConf::load(KConfig* config, const QString& configGroup){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void SbdConf::save(KConfig* config, const QString& configGroup){
+void SbdConf::save(KConfig* config, const TQString& configGroup){
     // kdDebug() << "SbdConf::save: Running" << endl;
     config->setGroup( configGroup );
     config->writeEntry("UserFilterName", m_widget->nameLineEdit->text() );
@@ -192,10 +192,10 @@ bool SbdConf::supportsMultiInstance() { return true; }
  * return an empty string.
  * @return          Filter instance name.
  */
-QString SbdConf::userPlugInName()
+TQString SbdConf::userPlugInName()
 {
     if ( m_widget->reLineEdit->text().isEmpty() )
-        return QString::null;
+        return TQString::null;
     else
         return m_widget->nameLineEdit->text();
 }
@@ -210,8 +210,8 @@ void SbdConf::slotReButton_clicked()
 {
     // Show Regular Expression Editor dialog if it is installed.
     if ( !m_reEditorInstalled ) return;
-    QDialog *editorDialog = 
-            KParts::ComponentFactory::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
+    TQDialog *editorDialog = 
+            KParts::ComponentFactory::createInstanceFromQuery<TQDialog>( "KRegExpEditor/KRegExpEditor" );
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
@@ -220,9 +220,9 @@ void SbdConf::slotReButton_clicked()
         Q_ASSERT( reEditor ); // This should not fail!// now use the editor.
         reEditor->setRegExp( m_widget->reLineEdit->text() );
         int dlgResult = editorDialog->exec();
-        if ( dlgResult == QDialog::Accepted )
+        if ( dlgResult == TQDialog::Accepted )
         {
-            QString re = reEditor->regExp();
+            TQString re = reEditor->regExp();
             m_widget->reLineEdit->setText( re );
             configChanged();
         }
@@ -232,21 +232,21 @@ void SbdConf::slotReButton_clicked()
 
 void SbdConf::slotLanguageBrowseButton_clicked()
 {
-    // Create a  QHBox to host KListView.
-    QHBox* hBox = new QHBox(m_widget, "SelectLanguage_hbox");
+    // Create a  TQHBox to host KListView.
+    TQHBox* hBox = new TQHBox(m_widget, "SelectLanguage_hbox");
     // Create a KListView and fill with all known languages.
     KListView* langLView = new KListView(hBox, "SelectLanguage_lview");
     langLView->addColumn(i18n("Language"));
     langLView->addColumn(i18n("Code"));
-    langLView->setSelectionMode(QListView::Extended);
-    QStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
-    QString locale;
-    QString languageCode;
-    QString countryCode;
-    QString charSet;
-    QString language;
+    langLView->setSelectionMode(TQListView::Extended);
+    TQStringList allLocales = KGlobal::locale()->allLanguagesTwoAlpha();
+    TQString locale;
+    TQString languageCode;
+    TQString countryCode;
+    TQString charSet;
+    TQString language;
     // Blank line so user can select no language.
-    QListViewItem* item = new KListViewItem(langLView, "", "");
+    TQListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_languageCodeList.isEmpty()) item->setSelected(true);
     const int allLocalesCount = allLocales.count();
     for (int ndx=0; ndx < allLocalesCount; ++ndx)
@@ -256,7 +256,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         language = KGlobal::locale()->twoAlphaToLanguageName(languageCode);
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
-        QListViewItem* item = new KListViewItem(langLView, language, locale);
+        TQListViewItem* item = new KListViewItem(langLView, language, locale);
         if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
@@ -274,13 +274,13 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     true);
     dlg->setMainWidget(hBox);
     dlg->setHelp("", "kttsd");
-    dlg->setInitialSize(QSize(300, 500), false);
+    dlg->setInitialSize(TQSize(300, 500), false);
     int dlgResult = dlg->exec();
-    languageCode = QString::null;
-    if (dlgResult == QDialog::Accepted)
+    languageCode = TQString::null;
+    if (dlgResult == TQDialog::Accepted)
     {
         m_languageCodeList.clear();
-        QListViewItem* item = langLView->firstChild();
+        TQListViewItem* item = langLView->firstChild();
         while (item)
         {
             if (item->isSelected()) m_languageCodeList += item->text(1);
@@ -289,7 +289,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     }
     delete dlg;
     // TODO: Also delete KListView and QHBox?
-    if (dlgResult != QDialog::Accepted) return;
+    if (dlgResult != TQDialog::Accepted) return;
     language = "";
     for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
@@ -302,9 +302,9 @@ void SbdConf::slotLanguageBrowseButton_clicked()
 
 void SbdConf::slotLoadButton_clicked()
 {
-    // QString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
-    QString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/sbd/").last();
-    QString filename = KFileDialog::getOpenFileName(
+    // TQString dataDir = KGlobal::dirs()->resourceDirs("data").last() + "/kttsd/stringreplacer/";
+    TQString dataDir = KGlobal::dirs()->findAllResources("data", "kttsd/sbd/").last();
+    TQString filename = KFileDialog::getOpenFileName(
         dataDir,
         "*rc|SBD Config (*rc)",
         m_widget,
@@ -318,7 +318,7 @@ void SbdConf::slotLoadButton_clicked()
 
 void SbdConf::slotSaveButton_clicked()
 {
-    QString filename = KFileDialog::getSaveFileName(
+    TQString filename = KFileDialog::getSaveFileName(
         KGlobal::dirs()->saveLocation( "data" ,"kttsd/sbd/", false ),
         "*rc|SBD Config (*rc)",
         m_widget,
@@ -331,11 +331,11 @@ void SbdConf::slotSaveButton_clicked()
 
 void SbdConf::slotClearButton_clicked()
 {
-    m_widget->nameLineEdit->setText( QString::null );
-    m_widget->reLineEdit->setText( QString::null );
-    m_widget->sbLineEdit->setText( QString::null );
+    m_widget->nameLineEdit->setText( TQString::null );
+    m_widget->reLineEdit->setText( TQString::null );
+    m_widget->sbLineEdit->setText( TQString::null );
     m_languageCodeList.clear();
-    m_widget->languageLineEdit->setText( QString::null );
-    m_widget->appIdLineEdit->setText( QString::null );
+    m_widget->languageLineEdit->setText( TQString::null );
+    m_widget->appIdLineEdit->setText( TQString::null );
     configChanged();
 }

@@ -15,14 +15,14 @@
  ***************************************************************************/
 
 // Qt includes. 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qgroupbox.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
+#include <tqlayout.h>
+#include <tqlabel.h>
+#include <tqgroupbox.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqdir.h>
+#include <tqfileinfo.h>
+#include <tqfile.h>
 
 // KDE includes.
 #include <ktempfile.h>
@@ -63,16 +63,16 @@ class HadifixConfPrivate {
       ~HadifixConfPrivate() {
          if (hadifixProc) hadifixProc->stopText();
          delete hadifixProc;
-         if (!waveFile.isNull()) QFile::remove(waveFile);
+         if (!waveFile.isNull()) TQFile::remove(waveFile);
          delete progressDlg;
       };
       
       #include "initialconfig.h"
 
-      void setConfiguration (QString hadifixExec,  QString mbrolaExec,
-                             QString voice,        bool male,
+      void setConfiguration (TQString hadifixExec,  TQString mbrolaExec,
+                             TQString voice,        bool male,
                              int volume, int time, int pitch,
-                             QString codecName)
+                             TQString codecName)
       {
          configWidget->hadifixURL->setURL (hadifixExec);
          configWidget->mbrolaURL->setURL (mbrolaExec);
@@ -86,10 +86,10 @@ class HadifixConfPrivate {
       }
 
       void initializeVoices () {
-         QStringList::iterator it;
+         TQStringList::iterator it;
          for (it = defaultVoices.begin(); it != defaultVoices.end(); ++it) {
             HadifixProc::VoiceGender gender;
-            QString name = QFileInfo(*it).fileName();
+            TQString name = TQFileInfo(*it).fileName();
             gender = HadifixProc::determineGender(defaultMbrolaExec, *it);
             if (gender == HadifixProc::MaleGender)
                 configWidget->addVoice(*it, true, i18n("Male voice \"%1\"").arg(name));
@@ -114,10 +114,10 @@ class HadifixConfPrivate {
       }
 
       void setDefaultEncodingFromVoice() {
-         QString voiceFile = configWidget->getVoiceFilename();
-         QString voiceCode = QFileInfo(voiceFile).baseName(false);
+         TQString voiceFile = configWidget->getVoiceFilename();
+         TQString voiceCode = TQFileInfo(voiceFile).baseName(false);
          voiceCode = voiceCode.left(2);
-         QString codecName = "Local";
+         TQString codecName = "Local";
          if (voiceCode == "de") codecName = "ISO 8859-1";
          if (voiceCode == "hu") codecName = "ISO 8859-2";
          configWidget->characterCodingBox->setCurrentItem(PlugInProc::codecNameToListIndex(
@@ -125,14 +125,14 @@ class HadifixConfPrivate {
 }
 
       void setDefaults () {
-         QStringList::iterator it = defaultVoices.begin();
+         TQStringList::iterator it = defaultVoices.begin();
          // Find a voice that matches language code, if any.
          if (!languageCode.isEmpty())
          {
-            QString justLang = languageCode.left(2);
+            TQString justLang = languageCode.left(2);
             for (;it != defaultVoices.end();++it)
             {
-               QString voiceCode = QFileInfo(*it).baseName(false).left(2);
+               TQString voiceCode = TQFileInfo(*it).baseName(false).left(2);
                if (voiceCode == justLang) break;
             }
             if (it == defaultVoices.end()) it = defaultVoices.begin();
@@ -145,19 +145,19 @@ class HadifixConfPrivate {
                            100, 100, 100, "Local");
       };
 
-      void load (KConfig *config, const QString &configGroup) {
+      void load (KConfig *config, const TQString &configGroup) {
          config->setGroup(configGroup);
          
-         QString voice = config->readEntry("voice", configWidget->getVoiceFilename());
+         TQString voice = config->readEntry("voice", configWidget->getVoiceFilename());
          
          HadifixProc::VoiceGender gender;
          gender = HadifixProc::determineGender(defaultMbrolaExec, voice);
          bool isMale = (gender == HadifixProc::MaleGender);
 
-         QString defaultCodecName = "Local";
+         TQString defaultCodecName = "Local";
          // TODO: Need a better way to determine proper codec for each voice.
          // This will do for now.
-         QString voiceCode = QFileInfo(voice).baseName(false);
+         TQString voiceCode = TQFileInfo(voice).baseName(false);
          if (voiceCode.left(2) == "de") defaultCodecName = "ISO 8859-1";
          if (voiceCode.left(2) == "hu") defaultCodecName = "ISO 8859-2";
          
@@ -173,7 +173,7 @@ class HadifixConfPrivate {
          );
       };
 
-      void save (KConfig *config, const QString &configGroup) {
+      void save (KConfig *config, const TQString &configGroup) {
          config->setGroup(configGroup);
          config->writeEntry ("hadifixExec", PlugInConf::realFilePath(configWidget->hadifixURL->url()));
          config->writeEntry ("mbrolaExec", PlugInConf::realFilePath(configWidget->mbrolaURL->url()));
@@ -188,14 +188,14 @@ class HadifixConfPrivate {
 
       HadifixConfigUI *configWidget;
 
-      QString languageCode;
-      QString defaultHadifixExec;
-      QString defaultMbrolaExec;
-      QStringList defaultVoices;
-      QStringList codecList;
+      TQString languageCode;
+      TQString defaultHadifixExec;
+      TQString defaultMbrolaExec;
+      TQStringList defaultVoices;
+      TQStringList codecList;
 
       // Wave file playing on play object.
-      QString waveFile;
+      TQString waveFile;
       // Synthesizer.
       HadifixProc* hadifixProc;
       // Progress Dialog.
@@ -203,24 +203,24 @@ class HadifixConfPrivate {
 };
 
 /** Constructor */
-HadifixConf::HadifixConf( QWidget* parent, const char* name, const QStringList &) : 
+HadifixConf::HadifixConf( TQWidget* parent, const char* name, const TQStringList &) : 
    PlugInConf( parent, name ){
    // kdDebug() << "HadifixConf::HadifixConf: Running" << endl;
-   QVBoxLayout *layout = new QVBoxLayout (this, KDialog::marginHint(), KDialog::spacingHint(), "CommandConfigWidgetLayout");
+   TQVBoxLayout *layout = new TQVBoxLayout (this, KDialog::marginHint(), KDialog::spacingHint(), "CommandConfigWidgetLayout");
    layout->setAlignment (Qt::AlignTop); 
 
    d = new HadifixConfPrivate();
    d->configWidget = new HadifixConfigUI (this, "configWidget");
    
-   QString file = locate("data", "LICENSES/LGPL_V2");
+   TQString file = locate("data", "LICENSES/LGPL_V2");
    i18n("This plugin is distributed under the terms of the GPL v2 or later.");
    
-   connect(d->configWidget->voiceButton, SIGNAL(clicked()), this, SLOT(voiceButton_clicked()));
-   connect(d->configWidget->testButton, SIGNAL(clicked()), this, SLOT(testButton_clicked()));
-   connect(d->configWidget, SIGNAL(changed(bool)), this, SLOT(configChanged (bool)));
-   connect(d->configWidget->characterCodingBox, SIGNAL(textChanged(const QString&)),
-        this, SLOT(configChanged()));
-   connect(d->configWidget->voiceCombo, SIGNAL(activated(int)), this, SLOT(voiceCombo_activated(int)));
+   connect(d->configWidget->voiceButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(voiceButton_clicked()));
+   connect(d->configWidget->testButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(testButton_clicked()));
+   connect(d->configWidget, TQT_SIGNAL(changed(bool)), this, TQT_SLOT(configChanged (bool)));
+   connect(d->configWidget->characterCodingBox, TQT_SIGNAL(textChanged(const TQString&)),
+        this, TQT_SLOT(configChanged()));
+   connect(d->configWidget->voiceCombo, TQT_SIGNAL(activated(int)), this, TQT_SLOT(voiceCombo_activated(int)));
    d->initializeCharacterCodes();
    d->initializeVoices();
    d->setDefaults();
@@ -233,13 +233,13 @@ HadifixConf::~HadifixConf(){
    delete d;
 }
 
-void HadifixConf::load(KConfig *config, const QString &configGroup) {
+void HadifixConf::load(KConfig *config, const TQString &configGroup) {
    // kdDebug() << "HadifixConf::load: Running" << endl;
    d->setDefaults();
    d->load (config, configGroup);
 }
 
-void HadifixConf::save(KConfig *config, const QString &configGroup) {
+void HadifixConf::save(KConfig *config, const TQString &configGroup) {
    // kdDebug() << "HadifixConf::save: Running" << endl;
    d->save (config, configGroup);
 }
@@ -249,22 +249,22 @@ void HadifixConf::defaults() {
    d->setDefaults();
 }
 
-void HadifixConf::setDesiredLanguage(const QString &lang)
+void HadifixConf::setDesiredLanguage(const TQString &lang)
 {
     d->languageCode = lang;
 }
 
-QString HadifixConf::getTalkerCode()
+TQString HadifixConf::getTalkerCode()
 {
     if (!d->configWidget->hadifixURL->url().isEmpty() && !d->configWidget->mbrolaURL->url().isEmpty())
     {
-        QString voiceFile = d->configWidget->getVoiceFilename();
-        if (QFileInfo(voiceFile).exists())
+        TQString voiceFile = d->configWidget->getVoiceFilename();
+        if (TQFileInfo(voiceFile).exists())
         {
             // mbrola voice file names usually start with two-letter language code,
             // but this is by no means guaranteed.
-            QString voiceCode = QFileInfo(voiceFile).baseName(false);
-            QString voiceLangCode = voiceCode.left(2);
+            TQString voiceCode = TQFileInfo(voiceFile).baseName(false);
+            TQString voiceLangCode = voiceCode.left(2);
             if (d->languageCode.left(2) != voiceLangCode)
             {
                // Verify that first two letters of voice filename are a valid language code.
@@ -272,15 +272,15 @@ QString HadifixConf::getTalkerCode()
                if (!TalkerCode::languageCodeToLanguage(voiceLangCode).isEmpty())
                    d->languageCode = voiceLangCode;
             }
-            QString gender = "male";
+            TQString gender = "male";
             if (!d->configWidget->isMaleVoice()) gender = "female";
-            QString volume = "medium";
+            TQString volume = "medium";
             if (d->configWidget->volumeBox->value() < 75) volume = "soft";
             if (d->configWidget->volumeBox->value() > 125) volume = "loud";
-            QString rate = "medium";
+            TQString rate = "medium";
             if (d->configWidget->timeBox->value() < 75) rate = "slow";
             if (d->configWidget->timeBox->value() > 125) rate = "fast";
-            return QString(
+            return TQString(
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
@@ -292,7 +292,7 @@ QString HadifixConf::getTalkerCode()
                     .arg("Hadifix");
         }
     }
-    return QString::null;
+    return TQString::null;
 }
 
 void HadifixConf::voiceButton_clicked () {
@@ -308,7 +308,7 @@ void HadifixConf::voiceButton_clicked () {
    widget->voiceFileURL->setURL(d->configWidget->getVoiceFilename());
    widget->mbrola = d->defaultMbrolaExec;
 
-   if (dialog->exec() == QDialog::Accepted) {
+   if (dialog->exec() == TQDialog::Accepted) {
       d->configWidget->setVoice (widget->voiceFileURL->url(),
                                  widget->maleOption->isChecked());
       d->setDefaultEncodingFromVoice();
@@ -330,11 +330,11 @@ void HadifixConf::testButton_clicked () {
    else
    {
       d->hadifixProc = new HadifixProc();
-      connect (d->hadifixProc, SIGNAL(stopped()), this, SLOT(slotSynthStopped()));
+      connect (d->hadifixProc, TQT_SIGNAL(stopped()), this, TQT_SLOT(slotSynthStopped()));
    }
    // Create a temp file name for the wave file.
    KTempFile tempFile (locateLocal("tmp", "hadifixplugin-"), ".wav");
-   QString tmpWaveFile = tempFile.file()->name();
+   TQString tmpWaveFile = tempFile.file()->name();
    tempFile.close();
 
     // Tell user to wait.
@@ -352,9 +352,9 @@ void HadifixConf::testButton_clicked () {
    // italian, and a few others, written in perl, but they have many issues.
    // Go to the mbrola website and click on "TTS" to learn more.
 
-   // QString testMsg = "K D E ist eine moderne grafische Arbeitsumgebung für UNIX-Computer.";
-   QString testMsg = testMessage(d->languageCode);
-   connect (d->hadifixProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+   // TQString testMsg = "K D E ist eine moderne grafische Arbeitsumgebung für UNIX-Computer.";
+   TQString testMsg = testMessage(d->languageCode);
+   connect (d->hadifixProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
    d->hadifixProc->synth (testMsg,
       realFilePath(d->configWidget->hadifixURL->url()),
       d->configWidget->isMaleVoice(),
@@ -369,7 +369,7 @@ void HadifixConf::testButton_clicked () {
    // Display progress dialog modally.  Processing continues when plugin signals synthFinished,
    // or if user clicks Cancel button.
    d->progressDlg->exec();
-   disconnect (d->hadifixProc, SIGNAL(synthFinished()), this, SLOT(slotSynthFinished()));
+   disconnect (d->hadifixProc, TQT_SIGNAL(synthFinished()), this, TQT_SLOT(slotSynthFinished()));
    if (d->progressDlg->wasCancelled()) d->hadifixProc->stopText();
    delete d->progressDlg;
    d->progressDlg = 0;
@@ -392,15 +392,15 @@ void HadifixConf::slotSynthFinished()
     // Play the wave file (possibly adjusting its Speed).
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(d->waveFile);
-    QFile::remove(d->waveFile);
-    d->waveFile = QString::null;
+    TQFile::remove(d->waveFile);
+    d->waveFile = TQString::null;
     if (d->progressDlg) d->progressDlg->close();
 }
 
 void HadifixConf::slotSynthStopped()
 {
     // Clean up after canceling test.
-    QString filename = d->hadifixProc->getFilename();
+    TQString filename = d->hadifixProc->getFilename();
     // kdDebug() << "HadifixConf::slotSynthStopped: filename = " << filename << endl;
-    if (!filename.isNull()) QFile::remove(filename);
+    if (!filename.isNull()) TQFile::remove(filename);
 }

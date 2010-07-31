@@ -25,10 +25,10 @@
 #define _TALKERMGR_H_
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qmap.h>
-#include <qptrlist.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqmap.h>
+#include <tqptrlist.h>
 
 // KTTS includes.
 #include "talkercode.h"
@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    TalkerMgr(QObject *parent = 0, const char *name = 0);
+    TalkerMgr(TQObject *parent = 0, const char *name = 0);
 
     /**
      * Destructor.
@@ -55,15 +55,15 @@ public:
 
     /**
      * Get a list of the talkers configured in KTTS.
-     * @return               A QStringList of fully-specified talker codes, one
+     * @return               A TQStringList of fully-specified talker codes, one
      *                       for each talker user has configured.
      */
-    QStringList getTalkers();
+    TQStringList getTalkers();
 
     /**
      * Returns a list of all the loaded plugins.
      */
-    QPtrList<PlugInProc> getLoadedPlugIns();
+    TQPtrList<PlugInProc> getLoadedPlugIns();
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.
@@ -73,7 +73,7 @@ public:
      * If a plugin has not been loaded to match the talker, returns the default
      * plugin.
      */
-    int talkerToPluginIndex(const QString& talker) const;
+    int talkerToPluginIndex(const TQString& talker) const;
 
     /**
      * Given a talker code, returns pointer to the closest matching plugin.
@@ -83,7 +83,7 @@ public:
      * If a plugin has not been loaded to match the talker, returns the default
      * plugin.
      */
-    PlugInProc* talkerToPlugin(const QString& talker) const;
+    PlugInProc* talkerToPlugin(const TQString& talker) const;
 
     /**
      * Given a talker code, returns the parsed TalkerCode of the closest matching Talker.
@@ -100,7 +100,7 @@ public:
      * overrides all other attributes, i.e, it is treated as an automatic "top priority"
      * attribute.
      */
-    TalkerCode* talkerToTalkerCode(const QString& talker);
+    TalkerCode* talkerToTalkerCode(const TQString& talker);
 
     /**
      * Given a Talker Code, returns the Talker ID of the talker that would speak
@@ -108,7 +108,7 @@ public:
      * @param talkerCode     Talker Code.
      * @return               Talker ID of the talker that would speak the text job.
      */
-    QString talkerCodeToTalkerId(const QString& talkerCode);
+    TQString talkerCodeToTalkerId(const TQString& talkerCode);
 
     /**
      * Get the user's default talker.
@@ -117,7 +117,7 @@ public:
      * @see talkers
      * @see getTalkers
      */
-    QString userDefaultTalker() const;
+    TQString userDefaultTalker() const;
 
     /**
      * Determine whether the currently-configured speech plugin supports a speech markup language.
@@ -128,7 +128,7 @@ public:
      *                       talker supports the indicated speech markup language.
      * @see kttsdMarkupType
      */
-    bool supportsMarkup(const QString& talker, const uint markupType) const;
+    bool supportsMarkup(const TQString& talker, const uint markupType) const;
 
     /**
      * Try to automatically configure a Talker in the specified language.
@@ -138,7 +138,7 @@ public:
      *
      * If successful, the KConfig rc file is updated but the talker has not been loaded.
      */
-    bool autoconfigureTalker(const QString& langCode, KConfig* config);
+    bool autoconfigureTalker(const TQString& langCode, KConfig* config);
 
 private:
 
@@ -146,14 +146,14 @@ private:
      * Array of the loaded plug ins for different Talkers.
      * Array of parsed Talker Codes for the plugins.
      */
-    QPtrList<PlugInProc> m_loadedPlugIns;
-    QStringList m_loadedTalkerIds;
+    TQPtrList<PlugInProc> m_loadedPlugIns;
+    TQStringList m_loadedTalkerIds;
     TalkerCode::TalkerCodeList m_loadedTalkerCodes;
 
     /**
      * Cache of talker codes and index of closest matching Talker.
      */
-    mutable QMap<QString,int> m_talkerToPlugInCache;
+    mutable TQMap<TQString,int> m_talkerToPlugInCache;
 };
 
 #endif      // _TALKERMGR_H_

@@ -27,9 +27,9 @@
 #include <sys/param.h>
 
 // Qt includes.
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <tqfile.h>
+#include <tqfileinfo.h>
+#include <tqstring.h>
 
 // KDE includes.
 #include <kglobal.h>
@@ -42,12 +42,12 @@
 /**
 * Constructor 
 */
-KttsFilterConf::KttsFilterConf( QWidget *parent, const char *name) : QWidget(parent, name){
+KttsFilterConf::KttsFilterConf( TQWidget *parent, const char *name) : TQWidget(parent, name){
     // kdDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
-    QString systemPath(getenv("PATH"));
+    TQString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
     KGlobal::locale()->insertCatalogue("kttsd");
-    m_path = QStringList::split(":", systemPath);
+    m_path = TQStringList::split(":", systemPath);
 }
 
 /**
@@ -70,7 +70,7 @@ KttsFilterConf::~KttsFilterConf(){
 * @param configGroup Call config->setGroup with this argument before
 *                    loading your configuration.
 */
-void KttsFilterConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
+void KttsFilterConf::load(KConfig* /*config*/, const TQString& /*configGroup*/){
     // kdDebug() << "KttsFilterConf::load: Running" << endl;
 }
 
@@ -84,7 +84,7 @@ void KttsFilterConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
 * @param configGroup Call config->setGroup with this argument before
 *                    saving your configuration.
 */
-void KttsFilterConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
+void KttsFilterConf::save(KConfig* /*config*/, const TQString& /*configGroup*/){
     // kdDebug() << "KttsFilterConf::save: Running" << endl;
 }
 
@@ -114,7 +114,7 @@ bool KttsFilterConf::supportsMultiInstance() { return false; }
  * return an empty string.
  * @return           Filter instance name.
  */
-QString KttsFilterConf::userPlugInName() { return QString::null; }
+TQString KttsFilterConf::userPlugInName() { return TQString::null; }
 
 /**
  * Returns True if this filter is a Sentence Boundary Detector.
@@ -128,23 +128,23 @@ bool KttsFilterConf::isSBD() { return false; }
 * @returns           The path to the file on success, a blank QString
 *                    if its not found.
 */
-QString KttsFilterConf::getLocation(const QString &name) {
+TQString KttsFilterConf::getLocation(const TQString &name) {
     // Iterate over the path and see if 'name' exists in it. Return the
-    // full path to it if it does. Else return an empty QString.
-    if (QFile::exists(name)) return name;
+    // full path to it if it does. Else return an empty TQString.
+    if (TQFile::exists(name)) return name;
     // kdDebug() << "KttsFilterConf::getLocation: Searching for " << name << " in the path.." << endl;
     // kdDebug() << m_path << endl;
-    for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
-        QString fullName = *it;
+    for(TQStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
+        TQString fullName = *it;
         fullName += "/";
         fullName += name;
         // The user either has the directory of the file in the path...
-        if(QFile::exists(fullName)) {
+        if(TQFile::exists(fullName)) {
             // kdDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
             return fullName;
         }
         // ....Or the file itself
-        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).extension())) == name) {
+        else if(TQFileInfo(*it).baseName().append(TQString(".").append(TQFileInfo(*it).extension())) == name) {
             // kdDebug() << "KttsFilterConf:getLocation: " << fullName << endl;
             return fullName;
         }
@@ -152,15 +152,15 @@ QString KttsFilterConf::getLocation(const QString &name) {
     return "";
 }
 
-/*static*/ QString KttsFilterConf::realFilePath(const QString &filename)
+/*static*/ TQString KttsFilterConf::realFilePath(const TQString &filename)
 {
     char realpath_buffer[MAXPATHLEN + 1];
     memset(realpath_buffer, 0, MAXPATHLEN + 1);
 
     /* If the path contains symlinks, get the real name */
-    if (realpath( QFile::encodeName(filename).data(), realpath_buffer) != 0) {
+    if (realpath( TQFile::encodeName(filename).data(), realpath_buffer) != 0) {
         //succes, use result from realpath
-        return QFile::decodeName(realpath_buffer);
+        return TQFile::decodeName(realpath_buffer);
     }
     return filename;
 }

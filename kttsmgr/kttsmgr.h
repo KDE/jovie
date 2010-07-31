@@ -26,8 +26,8 @@
 #define KTTSMGR_H
 
 // Qt includes.
-#include <qevent.h>
-#include <qtooltip.h>
+#include <tqevent.h>
+#include <tqtooltip.h>
 
 // KDE includes.
 #include <ksystemtray.h>
@@ -39,10 +39,10 @@
 class KttsToolTip: public QToolTip
 {
     public:
-        KttsToolTip ( QWidget* parent );
+        KttsToolTip ( TQWidget* parent );
 
     protected:
-        virtual void maybeTip ( const QPoint & p );
+        virtual void maybeTip ( const TQPoint & p );
 };
 
 class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
@@ -50,16 +50,16 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
     Q_OBJECT
 
     public:
-        KttsMgrTray(QWidget *parent=0);
+        KttsMgrTray(TQWidget *parent=0);
         ~KttsMgrTray();
 
         void setExitWhenFinishedSpeaking();
-        QString getStatus();
+        TQString getStatus();
 
     protected:
-        // ASYNC textStarted(const QCString& appId, uint jobNum);
-        ASYNC textFinished(const QCString& appId, uint jobNum);
-        virtual bool eventFilter( QObject* o, QEvent* e );
+        // ASYNC textStarted(const TQCString& appId, uint jobNum);
+        ASYNC textFinished(const TQCString& appId, uint jobNum);
+        virtual bool eventFilter( TQObject* o, TQEvent* e );
 
     private slots:
 
@@ -76,7 +76,7 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
          * @param state          KTTSD job state
          * @return               Display string for the state.
          */
-        QString stateToStr(int state);
+        TQString stateToStr(int state);
 
         bool isKttsdRunning();
         void exitWhenFinishedSpeaking();

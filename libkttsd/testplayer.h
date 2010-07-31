@@ -40,9 +40,9 @@ class KDE_EXPORT TestPlayer : public QObject{
          * @param playerOption
          * @param audioStretchFactor
          */
-        TestPlayer(QObject *parent = 0, const char *name = 0,
+        TestPlayer(TQObject *parent = 0, const char *name = 0,
             const int playerOption = 0, const float audioStretchFactor = 1.0,
-            const QString &sinkName = QString::null);
+            const TQString &sinkName = TQString::null);
 
         /**
          * Destructor.
@@ -69,12 +69,12 @@ class KDE_EXPORT TestPlayer : public QObject{
          * The audio file speed is adjusted according to the stretch factor.
          * @param waveFile              Name of the audio file to play.
          */
-        void play(const QString &waveFile);
+        void play(const TQString &waveFile);
 
         /**
         * Sets the GStreamer Sink Name.  Examples: "alsasink", "osssink", "nassink".
         */
-        void setSinkName(const QString &sinkName);
+        void setSinkName(const TQString &sinkName);
 
         /**
          * Creates and returns a player object based on user option.
@@ -88,7 +88,7 @@ class KDE_EXPORT TestPlayer : public QObject{
          * for synthesis to write to.
          * @return                        Full pathname of suggested file.
          */
-        QString makeSuggestedFilename();
+        TQString makeSuggestedFilename();
 
          /**
          * Which audio player to use.
@@ -105,7 +105,7 @@ class KDE_EXPORT TestPlayer : public QObject{
         /**
         * GStreamer sink name.
         */
-        QString m_sinkName;
+        TQString m_sinkName;
 
         /**
          * Stretcher object.

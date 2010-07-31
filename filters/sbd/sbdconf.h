@@ -25,7 +25,7 @@
 #define _SBDCONF_H_
 
 // Qt includes.
-#include <qwidget.h>
+#include <tqwidget.h>
 
 // KDE includes.
 #include <kconfig.h>
@@ -48,7 +48,7 @@ class SbdConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        SbdConf( QWidget *parent, const char *name, const QStringList &args = QStringList() );
+        SbdConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 
@@ -73,7 +73,7 @@ class SbdConf : public KttsFilterConf
         * any instance-specific parameters to load, but it may still wish
         * to load parameters that apply to all instances of the plugin.
         */
-        virtual void load(KConfig *config, const QString &configGroup);
+        virtual void load(KConfig *config, const TQString &configGroup);
 
         /**
         * This function gets called when the user wants to save the settings in 
@@ -85,7 +85,7 @@ class SbdConf : public KttsFilterConf
         * @param configGroup Call config->setGroup with this argument before
         *                    saving your configuration.
         */
-        virtual void save(KConfig *config, const QString &configGroup);
+        virtual void save(KConfig *config, const TQString &configGroup);
 
         /** 
         * This function is called to set the settings in the module to sensible
@@ -111,7 +111,7 @@ class SbdConf : public KttsFilterConf
          * return an empty string.
          * @return          Filter instance name.
          */
-        virtual QString userPlugInName();
+        virtual TQString userPlugInName();
 
         /**
          * Returns True if this filter is a Sentence Boundary Detector.
@@ -133,7 +133,7 @@ class SbdConf : public KttsFilterConf
         // True if kdeutils Regular Expression Editor is installed.
         bool m_reEditorInstalled;
         // Language Code.
-        QStringList m_languageCodeList;
+        TQStringList m_languageCodeList;
 };
 
 #endif  //_SBDCONF_H_

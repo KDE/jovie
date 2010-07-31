@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 // Qt includes.
-#include <qradiobutton.h>
+#include <tqradiobutton.h>
 
 // KDE includes.
 #include <kcombobox.h>
@@ -34,7 +34,7 @@
 // KTTS includes.
 #include "addtalker.h"
 
-AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char* name, WFlags fl)
+AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent, const char* name, WFlags fl)
     : AddTalkerWidget(parent,name,fl)
 {
     // Build maps.
@@ -44,13 +44,13 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char*
     applyFilter();
 
     // Default to user's desktop language.
-    QString languageCode = KGlobal::locale()->defaultLanguage();
+    TQString languageCode = KGlobal::locale()->defaultLanguage();
     // If there is not a synth that supports the locale, try stripping country code.
     if (!m_langToSynthMap.contains(languageCode))
     {
-        QString countryCode;
-        QString charSet;
-        QString twoAlpha;
+        TQString countryCode;
+        TQString charSet;
+        TQString twoAlpha;
         KGlobal::locale()->splitLocale(languageCode, twoAlpha, countryCode, charSet);
         languageCode = twoAlpha;
     }
@@ -58,17 +58,17 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, QWidget* parent, const char*
     if (!m_langToSynthMap.contains(languageCode)) languageCode = "other";
 
     // Select the language in the language combobox.
-    QString language = languageCodeToLanguage(languageCode);
+    TQString language = languageCodeToLanguage(languageCode);
     languageSelection->setCurrentItem(language, false);
 
     // Filter comboboxes.
     applyFilter();
 
     // Connect widgets to slots.
-    connect(languageRadioButton, SIGNAL(clicked()), this, SLOT(applyFilter()));
-    connect(synthesizerRadioButton, SIGNAL(clicked()), this, SLOT(applyFilter()));
-    connect(languageSelection, SIGNAL(activated(int)), this, SLOT(applyFilter()));
-    connect(synthesizerSelection, SIGNAL(activated(int)), this, SLOT(applyFilter()));
+    connect(languageRadioButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(applyFilter()));
+    connect(synthesizerRadioButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(applyFilter()));
+    connect(languageSelection, TQT_SIGNAL(activated(int)), this, TQT_SLOT(applyFilter()));
+    connect(synthesizerSelection, TQT_SIGNAL(activated(int)), this, TQT_SLOT(applyFilter()));
 }
 
 AddTalker::~AddTalker()
@@ -78,7 +78,7 @@ AddTalker::~AddTalker()
 /**
 * Returns user's chosen language code.
 */
-QString AddTalker::getLanguageCode()
+TQString AddTalker::getLanguageCode()
 {
      return m_languageToLanguageCodeMap[languageSelection->currentText()];
 }
@@ -86,47 +86,47 @@ QString AddTalker::getLanguageCode()
 /**
 * Returns user's chosen synthesizer.
 */
-QString AddTalker::getSynthesizer() { return synthesizerSelection->currentText(); }
+TQString AddTalker::getSynthesizer() { return synthesizerSelection->currentText(); }
 
 // Set the synthesizer-to-languages map.
-// @param synthToLang        QMap of supported language codes indexed by synthesizer.
+// @param synthToLang        TQMap of supported language codes indexed by synthesizer.
 void AddTalker::setSynthToLangMap(SynthToLangMap synthToLangMap)
 {
     m_synthToLangMap = synthToLangMap;
     // "Invert" the map, i.e., map language codes to synthesizers.
-    QStringList synthList = m_synthToLangMap.keys();
+    TQStringList synthList = m_synthToLangMap.keys();
     const int synthListCount = synthList.count();
     for (int synthNdx=0; synthNdx < synthListCount; ++synthNdx)
     {
-        QString synth = synthList[synthNdx];
-        QStringList languageCodeList = m_synthToLangMap[synth];
+        TQString synth = synthList[synthNdx];
+        TQStringList languageCodeList = m_synthToLangMap[synth];
         const int languageCodeListCount = languageCodeList.count();
         for (int langNdx=0; langNdx < languageCodeListCount; ++langNdx)
         {
-            QString languageCode = languageCodeList[langNdx];
-            QStringList synthesizerList = m_langToSynthMap[languageCode];
+            TQString languageCode = languageCodeList[langNdx];
+            TQStringList synthesizerList = m_langToSynthMap[languageCode];
             synthesizerList.append(synth);
             m_langToSynthMap[languageCode] = synthesizerList;
         }
     }
     // Fill language to language code map.
-    QStringList languageCodeList = m_langToSynthMap.keys();
+    TQStringList languageCodeList = m_langToSynthMap.keys();
     const int languageCodeListCount = languageCodeList.count();
     for (int ndx = 0; ndx < languageCodeListCount; ++ndx)
     {
-        QString languageCode = languageCodeList[ndx];
-        QString language = languageCodeToLanguage(languageCode);
+        TQString languageCode = languageCodeList[ndx];
+        TQString language = languageCodeToLanguage(languageCode);
         m_languageToLanguageCodeMap[language] = languageCode;
     }
 }
 
 // Converts a language code plus optional country code to language description.
-QString AddTalker::languageCodeToLanguage(const QString &languageCode)
+TQString AddTalker::languageCodeToLanguage(const TQString &languageCode)
 {
-    QString twoAlpha;
-    QString countryCode;
-    QString charSet;
-    QString language;
+    TQString twoAlpha;
+    TQString countryCode;
+    TQString charSet;
+    TQString language;
     if (languageCode == "other")
         language = i18n("Other");
     else
@@ -146,12 +146,12 @@ void AddTalker::applyFilter()
     if (languageRadioButton->isChecked())
     {
         // Get current language.
-        QString language = languageSelection->currentText();
+        TQString language = languageSelection->currentText();
         // Fill language combobox will all possible languages.
         languageSelection->clear();
-        QStringList languageCodeList = m_langToSynthMap.keys();
+        TQStringList languageCodeList = m_langToSynthMap.keys();
         const int languageCodeListCount = languageCodeList.count();
-        QStringList languageList;
+        TQStringList languageList;
         for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
             languageList.append(languageCodeToLanguage(languageCodeList[ndx]));
@@ -166,11 +166,11 @@ void AddTalker::applyFilter()
         // Get current language selection.
         language = languageSelection->currentText();
         // Map current language to language code.
-        QString languageCode = m_languageToLanguageCodeMap[language];
+        TQString languageCode = m_languageToLanguageCodeMap[language];
         // Get list of synths that support this language code.
-        QStringList synthList = m_langToSynthMap[languageCode];
+        TQStringList synthList = m_langToSynthMap[languageCode];
         // Get current user's synth selection.
-        QString synth = synthesizerSelection->currentText();
+        TQString synth = synthesizerSelection->currentText();
         // Fill synthesizer combobox.
         synthesizerSelection->clear();
         synthList.sort();
@@ -185,10 +185,10 @@ void AddTalker::applyFilter()
     else
     {
         // Get current synth selection.
-        QString synth = synthesizerSelection->currentText();
+        TQString synth = synthesizerSelection->currentText();
         // Fill synthesizer combobox with all possible synths.
         synthesizerSelection->clear();
-        QStringList synthList = m_synthToLangMap.keys();
+        TQStringList synthList = m_synthToLangMap.keys();
         synthList.sort();
         const int synthListCount = synthList.count();
         for (int ndx=0; ndx < synthListCount; ++ndx)
@@ -200,13 +200,13 @@ void AddTalker::applyFilter()
         // Get current synth selection.
         synth = synthesizerSelection->currentText();
         // Get list of supported language codes.
-        QStringList languageCodeList = m_synthToLangMap[synth];
+        TQStringList languageCodeList = m_synthToLangMap[synth];
         // Get current user's language selection.
-        QString language = languageSelection->currentText();
+        TQString language = languageSelection->currentText();
         // Fill language combobox with language descriptions.
         languageSelection->clear();
         const int languageCodeListCount = languageCodeList.count();
-        QStringList languageList;
+        TQStringList languageList;
         for (int ndx=0; ndx < languageCodeListCount; ++ndx)
         {
             languageList.append(languageCodeToLanguage(languageCodeList[ndx]));

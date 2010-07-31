@@ -28,7 +28,7 @@
 #define _SELECTTALKERDLG_H_
 
 // Qt includes.
-#include <qvaluelist.h>
+#include <tqvaluelist.h>
 
 // KDE includes.
 #include <kdialogbase.h>
@@ -55,10 +55,10 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
          *                              (which may not yet have been Applied).
          */
         SelectTalkerDlg(
-            QWidget* parent = 0,
+            TQWidget* parent = 0,
             const char* name = "selecttalkerdialog",
-            const QString& caption = i18n("Select Talker"),
-            const QString& talkerCode = QString::null,
+            const TQString& caption = i18n("Select Talker"),
+            const TQString& talkerCode = TQString::null,
             bool runningTalkers = false);
 
         /**
@@ -67,14 +67,14 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
         ~SelectTalkerDlg();
 
         /**
-         * Returns the Talker Code user chose.  QString::null if default Talker chosen.
+         * Returns the Talker Code user chose.  TQString::null if default Talker chosen.
          * Note that if user did not choose a specific Talker, this will be a partial Talker Code.
          */
-        QString getSelectedTalkerCode();
+        TQString getSelectedTalkerCode();
         /**
          * Returns the Talker user chose in a translated displayable format.
          */
-        QString getSelectedTranslatedDescription();
+        TQString getSelectedTranslatedDescription();
 
     private slots:
         void slotLanguageBrowseButton_clicked();

@@ -25,10 +25,10 @@
 #include <math.h>
 
 // Qt includes.
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qthread.h>
-#include <qtextcodec.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqthread.h>
+#include <tqtextcodec.h>
 
 // KDE includes.
 #include <kdebug.h>
@@ -43,7 +43,7 @@
 #include "festivalintproc.moc"
 
 /** Constructor */
-FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStringList& ) : 
+FestivalIntProc::FestivalIntProc( TQObject* parent, const char* name, const TQStringList& ) : 
     PlugInProc( parent, name ){
     // kdDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
     m_ready = true;
@@ -54,7 +54,7 @@ FestivalIntProc::FestivalIntProc( QObject* parent, const char* name, const QStri
     m_state = psIdle;
     m_supportsSSML = ssUnknown;
     m_languageCode = "en";
-    m_codec = QTextCodec::codecForName("ISO8859-1");
+    m_codec = TQTextCodec::codecForName("ISO8859-1");
 }
 
 /** Destructor */
@@ -84,7 +84,7 @@ FestivalIntProc::~FestivalIntProc(){
 }
 
 /** Initialize the speech */
-bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
+bool FestivalIntProc::init(KConfig *config, const TQString &configGroup)
 {
     // kdDebug() << "FestivalIntProc::init: Initializing plug in: Festival" << endl;
 
@@ -99,7 +99,7 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
     m_preload = config->readBoolEntry("Preload", false);
     m_languageCode = config->readEntry("LanguageCode", "en");
     m_supportsSSML = static_cast<SupportsSSML>(config->readNumEntry("SupportsSSML", ssUnknown));
-    QString codecName = config->readEntry("Codec", "Latin1");
+    TQString codecName = config->readEntry("Codec", "Latin1");
     m_codec = codecNameToCodec(codecName);
     if (m_preload) startEngine(m_festivalExePath, m_voiceCode, m_languageCode, m_codec);
     return true;
@@ -111,9 +111,9 @@ bool FestivalIntProc::init(KConfig *config, const QString &configGroup)
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void FestivalIntProc::sayText(const QString &text)
+void FestivalIntProc::sayText(const TQString &text)
 {
-    synth(m_festivalExePath, text, QString::null, m_voiceCode, m_time, m_pitch, m_volume,
+    synth(m_festivalExePath, text, TQString::null, m_voiceCode, m_time, m_pitch, m_volume,
         m_languageCode, m_codec);
 }
 
@@ -127,7 +127,7 @@ void FestivalIntProc::sayText(const QString &text)
 *
 * If the plugin supports asynchronous operation, it should return immediately.
 */
-void FestivalIntProc::synthText(const QString& text, const QString& suggestedFilename)
+void FestivalIntProc::synthText(const TQString& text, const TQString& suggestedFilename)
 {
     synth(m_festivalExePath, text, suggestedFilename, m_voiceCode, m_time, m_pitch, m_volume,
         m_languageCode, m_codec);
@@ -139,12 +139,12 @@ void FestivalIntProc::synthText(const QString& text, const QString& suggestedFil
 * @return                       False if busy doing something else and therefore cannot
 *                               do the query.
 */
-bool FestivalIntProc::queryVoices(const QString &festivalExePath)
+bool FestivalIntProc::queryVoices(const TQString &festivalExePath)
 {
     // kdDebug() << "FestivalIntProc::queryVoices: Running" << endl;
     if (m_state != psIdle && m_waitingQueryVoices && m_waitingStop) return false;
     // Start Festival if not already running.
-    startEngine(festivalExePath, QString::null, m_languageCode, m_codec);
+    startEngine(festivalExePath, TQString::null, m_languageCode, m_codec);
     // Set state, waiting for voice codes list from Festival.
     m_waitingQueryVoices = true;
     // Voice rab_diphone is needed in order to support SSML.
@@ -160,8 +160,8 @@ bool FestivalIntProc::queryVoices(const QString &festivalExePath)
 * @param voiceCode               Voice code in which to speak text.
 * @param languageCode            Language code, for example, "en".
 */
-void FestivalIntProc::startEngine(const QString &festivalExePath, const QString &voiceCode,
-    const QString &languageCode, QTextCodec* codec)
+void FestivalIntProc::startEngine(const TQString &festivalExePath, const TQString &voiceCode,
+    const TQString &languageCode, TQTextCodec* codec)
 {
     // Initialize Festival only if it's not initialized.
     if (m_festProc)
@@ -184,19 +184,19 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
         m_festProc->setEnvironment("LANG", languageCode + "." + codec->mimeName());
         m_festProc->setEnvironment("LC_CTYPE", languageCode + "." + codec->mimeName());
         // kdDebug() << "FestivalIntProc::startEngine: setting LANG = LC_CTYPE = " << languageCode << "." << codec->mimeName() << endl;
-        connect(m_festProc, SIGNAL(processExited(KProcess*)),
-                this, SLOT(slotProcessExited(KProcess*)));
-        connect(m_festProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-                this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
-        connect(m_festProc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-                this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
-        connect(m_festProc, SIGNAL(wroteStdin(KProcess*)),
-                this, SLOT(slotWroteStdin(KProcess*)));
+        connect(m_festProc, TQT_SIGNAL(processExited(KProcess*)),
+                this, TQT_SLOT(slotProcessExited(KProcess*)));
+        connect(m_festProc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+                this, TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+        connect(m_festProc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+                this, TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
+        connect(m_festProc, TQT_SIGNAL(wroteStdin(KProcess*)),
+                this, TQT_SLOT(slotWroteStdin(KProcess*)));
     }
     if (!m_festProc->isRunning())
     {
         // kdDebug() << "FestivalIntProc::startEngine: Starting Festival process" << endl;
-        m_runningVoiceCode = QString::null;
+        m_runningVoiceCode = TQString::null;
         m_runningTime = 100;
         m_runningPitch = 100;
         m_ready = false;
@@ -239,15 +239,15 @@ void FestivalIntProc::startEngine(const QString &festivalExePath, const QString 
 * @param languageCode            Language code, for example, "en".
 */
 void FestivalIntProc::synth(
-    const QString &festivalExePath,
-    const QString &text,
-    const QString &synthFilename,
-    const QString &voiceCode,
+    const TQString &festivalExePath,
+    const TQString &text,
+    const TQString &synthFilename,
+    const TQString &voiceCode,
     int time,
     int pitch,
     int volume,
-    const QString &languageCode,
-    QTextCodec* codec)
+    const TQString &languageCode,
+    TQTextCodec* codec)
 {
     // kdDebug() << "FestivalIntProc::synth: festivalExePath = " << festivalExePath
     //         << " voiceCode = " << voiceCode << endl;
@@ -256,7 +256,7 @@ void FestivalIntProc::synth(
     startEngine(festivalExePath, voiceCode, languageCode, codec);
     // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
-        QString timeMsg;
+        TQString timeMsg;
         if (voiceCode.contains("_hts") > 0)
         {
             // Map 50% to 200% onto 0 to 1000.
@@ -268,11 +268,11 @@ void FestivalIntProc::synth(
             slider = slider - 500;
             // Map -500 to 500 onto 0.15 to -0.15.
             float stretchValue = -float(slider) * 0.15 / 500.0;
-            timeMsg = QString("(set! hts_duration_stretch %1)").arg(
+            timeMsg = TQString("(set! hts_duration_stretch %1)").arg(
                     stretchValue, 0, 'f', 3);
         }
         else
-            timeMsg = QString("(Parameter.set 'Duration_Stretch %1)").arg(
+            timeMsg = TQString("(Parameter.set 'Duration_Stretch %1)").arg(
                 1.0/(float(time)/100.0), 0, 'f', 2);
         sendToFestival(timeMsg);
         m_runningTime = time;
@@ -290,14 +290,14 @@ void FestivalIntProc::synth(
         {
             pitchValue = (((pitch - 100) * 395) / 100) + 105;
         }
-        QString pitchMsg = QString(
+        TQString pitchMsg = TQString(
             "(set! int_lr_params '((target_f0_mean %1) (target_f0_std 14)"
             "(model_f0_mean 170) (model_f0_std 34)))").arg(pitchValue, 0, 10);
         sendToFestival(pitchMsg);
         m_runningPitch = pitch;
     }
 
-    QString saidText = text;
+    TQString saidText = text;
 
     // Split really long sentences into shorter sentences, by looking for commas and converting
     // to periods.
@@ -307,7 +307,7 @@ void FestivalIntProc::synth(
         len = saidText.findRev(", ", len - (c_tooLong * 2 / 3), true);
         if (len != -1)
         {
-            QString c = saidText.mid(len+2, 1);
+            TQString c = saidText.mid(len+2, 1);
             if (c != c.upper())
             {
                 saidText.replace(len, 2, ". ");
@@ -329,7 +329,7 @@ void FestivalIntProc::synth(
     if (synthFilename.isNull())
     {
         m_state = psSaying;
-        m_synthFilename = QString::null;
+        m_synthFilename = TQString::null;
         // kdDebug() << "FestivalIntProc::synth: Saying text: '" << saidText << "' using Festival plug in with voice "
         //    << voiceCode << endl;
         saidText = "(SayText \"" + saidText + "\")";
@@ -351,7 +351,7 @@ void FestivalIntProc::synth(
             saidText =
                 "(ktts_sabletowave \"" + saidText + "\" \"" +
                 synthFilename + "\" " +
-                QString::number(volumeValue) + ")";
+                TQString::number(volumeValue) + ")";
         }
         else
         {
@@ -362,7 +362,7 @@ void FestivalIntProc::synth(
                 // Synth the text and adjust volume.
                 "(set! utt1 (Utterance Text \"" +  saidText + 
                 "\"))(utt.synth utt1)" +
-                "(utt.wave.rescale utt1 " + QString::number(volumeValue) + " t)" +
+                "(utt.wave.rescale utt1 " + TQString::number(volumeValue) + " t)" +
                 "(utt.save.wave utt1 \"" + synthFilename + "\")";
         }
         sendToFestival(saidText);
@@ -374,7 +374,7 @@ void FestivalIntProc::synth(
 * puts it in the queue.
 * @param text                    Text to send or queue.
 */
-void FestivalIntProc::sendToFestival(const QString& text)
+void FestivalIntProc::sendToFestival(const TQString& text)
 {
     if (text.isNull()) return;
     m_outputQueue.append(text);
@@ -395,9 +395,9 @@ bool FestivalIntProc::sendIfReady()
     if (m_writingStdin) return true;
     if (m_outputQueue.isEmpty()) return false;
     if (!m_festProc->isRunning()) return false;
-    QString text = m_outputQueue[0];
+    TQString text = m_outputQueue[0];
     text += "\n";
-    QCString encodedText;
+    TQCString encodedText;
     if (m_codec)
         encodedText = m_codec->fromUnicode(text);
     else
@@ -414,7 +414,7 @@ bool FestivalIntProc::sendIfReady()
 * Determine if the text has SABLE tags.  If so, we will have to use a different
 * synthesis method.
 */
-bool FestivalIntProc::isSable(const QString &text)
+bool FestivalIntProc::isSable(const TQString &text)
 {
     return KttsUtils::hasRootElement( text, "SABLE" );
 }
@@ -426,7 +426,7 @@ bool FestivalIntProc::isSable(const QString &text)
 *
 * The plugin must not re-use the filename.
 */
-QString FestivalIntProc::getFilename() { return m_synthFilename; }
+TQString FestivalIntProc::getFilename() { return m_synthFilename; }
 
 /**
  * Stop text
@@ -500,11 +500,11 @@ void FestivalIntProc::slotProcessExited(KProcess*)
 
 void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     // kdDebug() << "FestivalIntProc::slotReceivedStdout: Received from Festival: " << buf << endl;
     bool promptSeen = (buf.contains("festival>") > 0);
     bool emitQueryVoicesFinished = false;
-    QStringList voiceCodesList;
+    TQStringList voiceCodesList;
     if (m_waitingQueryVoices && m_outputQueue.isEmpty())
     {
         // Look for opening ( and closing ).
@@ -522,7 +522,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 					// Extract contents between parens.
 					buf = buf.mid(1, rightParen - 1);
 					// Space separated list.
-					voiceCodesList = QStringList::split(" ", buf, false);
+					voiceCodesList = TQStringList::split(" ", buf, false);
 					emitQueryVoicesFinished = true;
 				}
 			}
@@ -569,7 +569,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 
 void FestivalIntProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::fromLatin1(buffer, buflen);
     kdDebug() << "FestivalIntProc::slotReceivedStderr: Received error from Festival: " << buf << endl;
 }
 
@@ -620,7 +620,7 @@ void FestivalIntProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = QString::null;
+        m_synthFilename = TQString::null;
     }
 }
 
@@ -652,7 +652,7 @@ bool FestivalIntProc::supportsSynth() { return true; }
 * tags and converts the file to plain text.
 * @return            Name of the XSLT file.
 */
-QString FestivalIntProc::getSsmlXsltFilename()
+TQString FestivalIntProc::getSsmlXsltFilename()
 {
     if (m_supportsSSML == ssYes)
         return KGlobal::dirs()->resourceDirs("data").last() + "kttsd/festivalint/xslt/SSMLtoSable.xsl";
