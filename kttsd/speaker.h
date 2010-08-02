@@ -36,7 +36,7 @@
 #include <ssmlconvert.h>
 
 class Player;
-class QTimer;
+class TQTimer;
 class TalkerMgr;
 
 /**

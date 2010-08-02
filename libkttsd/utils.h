@@ -21,8 +21,8 @@
 #include <kdemacros.h>
 #include "kdeexportfix.h"
 
-class QString;
-class QComboBox;
+class TQString;
+class TQComboBox;
 
 class KDE_EXPORT KttsUtils {
 

@@ -26,7 +26,7 @@
 #include <tqmap.h>
 
 typedef TQMap<TQString, TQString> QStringMap;
-class QString;
+class TQString;
 
 class XHTMLToSSMLParser : public TQXmlDefaultHandler {
 

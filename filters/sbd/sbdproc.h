@@ -57,8 +57,8 @@
 
 class TalkerCode;
 class KConfig;
-class QDomElement;
-class QDomNode;
+class TQDomElement;
+class TQDomNode;
 
 class SbdThread: public TQObject, public QThread
 {

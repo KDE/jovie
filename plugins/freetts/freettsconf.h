@@ -28,7 +28,7 @@
 #include "freettsconfigwidget.h"
 #include "freettsproc.h"
 
-class QStringList;
+class TQStringList;
 class KProgressDialog;
 
 class FreeTTSConf : public PlugInConf {

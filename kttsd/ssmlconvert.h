@@ -35,7 +35,7 @@
 #include <tqstringlist.h>
 
 class KProcess;
-class QString;
+class TQString;
 
 class SSMLConvert : public TQObject {
     Q_OBJECT

@@ -42,7 +42,7 @@ class KttsFilterConf;
 class KListViewItem;
 class KAboutData;
 class KConfig;
-class QPopupMenu;
+class TQPopupMenu;
 
 /**
 * @author José Pablo Ezequiel "Pupeno" Fernández

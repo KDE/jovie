@@ -40,7 +40,7 @@
 #include "festivalintproc.h"
 
 class KProgressDialog;
-class QDomNode;
+class TQDomNode;
 
 typedef struct voiceStruct{
     TQString code;               // Code as sent to Festival

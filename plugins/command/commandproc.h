@@ -25,7 +25,7 @@
 #include <pluginproc.h>
 
 class KProcess;
-class QTextCodec;
+class TQTextCodec;
 
 class CommandProc : public PlugInProc{
     Q_OBJECT 

@@ -217,7 +217,7 @@
 * the plugin will be destroyed and re-created.
 */
 
-class QTextCodec;
+class TQTextCodec;
 
 enum pluginState
 {

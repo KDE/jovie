@@ -24,7 +24,7 @@
 
 #include <tqmap.h>
 
-class QString;
+class TQString;
 
 typedef TQMap<TQString, TQString> AttributeToValueMap;
 

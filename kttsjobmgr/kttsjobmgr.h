@@ -30,8 +30,8 @@ class KAboutData;
 class KInstance;
 class KttsJobMgrBrowserExtension;
 class KListView;
-class QListViewItem;
-class QVBox;
+class TQListViewItem;
+class TQVBox;
 class KTextEdit;
 
 class KttsJobMgrFactory : public KLibFactory

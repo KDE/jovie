@@ -33,7 +33,7 @@
 #include <pluginproc.h>
 
 class KProcess;
-class QTextCodec;
+class TQTextCodec;
 
 class EposProc : public PlugInProc{
     Q_OBJECT 

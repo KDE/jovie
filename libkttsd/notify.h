@@ -20,7 +20,7 @@
 
 #include <kdemacros.h>
 
-class QString;
+class TQString;
 
 class KDE_EXPORT NotifyAction
 {

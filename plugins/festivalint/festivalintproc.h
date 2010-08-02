@@ -31,7 +31,7 @@
 
 #include <pluginproc.h>
 
-class QTextCodec;
+class TQTextCodec;
 
 class FestivalIntProc : public PlugInProc{
     Q_OBJECT 
