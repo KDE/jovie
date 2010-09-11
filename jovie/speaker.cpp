@@ -474,7 +474,7 @@ QStringList Speaker::outputModules()
 QStringList Speaker::languagesByModule(const QString & module)
 {
     QStringList languages;
-    if (spd_set_output_module(d->connection, module.toUtf8().data()) == 0)
+    if (d->connection && spd_set_output_module(d->connection, module.toUtf8().data()) == 0)
     {
         SPDVoice ** voices = spd_list_synthesis_voices(d->connection);
         while (voices != NULL && voices[0] != NULL)
@@ -489,7 +489,9 @@ QStringList Speaker::languagesByModule(const QString & module)
 
 void Speaker::setSpeed(int speed)
 {
-    spd_set_voice_rate(d->connection, speed);
+    if (d->connection) {
+        spd_set_voice_rate(d->connection, speed);
+    }
 }
 
 int Speaker::speed()
@@ -499,7 +501,9 @@ int Speaker::speed()
 
 void Speaker::setPitch(int pitch)
 {
-    spd_set_voice_pitch(d->connection, pitch);
+    if (d->connection) {
+        spd_set_voice_pitch(d->connection, pitch);
+    }
 }
 
 int Speaker::pitch()
@@ -509,7 +513,9 @@ int Speaker::pitch()
 
 void Speaker::setVolume(int volume)
 {
-    spd_set_volume(d->connection, volume);
+    if (d->connection) {
+        spd_set_volume(d->connection, volume);
+    }
 }
 
 int Speaker::volume()
@@ -519,8 +525,10 @@ int Speaker::volume()
 
 void Speaker::setOutputModule(const QString & module)
 {
-    int result = spd_set_output_module(d->connection, module.toUtf8().data());
-    // discard result for now, TODO: add error reporting
+    if (d->connection) {
+        int result = spd_set_output_module(d->connection, module.toUtf8().data());
+        // discard result for now, TODO: add error reporting
+    }
 }
 
 QString Speaker::outputModule()
@@ -530,8 +538,10 @@ QString Speaker::outputModule()
 
 void Speaker::setLanguage(const QString & language)
 {
-    int result = spd_set_language(d->connection, language.toUtf8().data());
-    // discard result for now, TODO: add error reporting
+    if (d->connection) {
+        int result = spd_set_language(d->connection, language.toUtf8().data());
+        // discard result for now, TODO: add error reporting
+    }
 }
 
 QString Speaker::language()
@@ -541,8 +551,10 @@ QString Speaker::language()
 
 void Speaker::setVoiceType(int voiceType)
 {
-    int result = spd_set_voice_type(d->connection, SPDVoiceType(voiceType));
-    // discard result for now, TODO: add error reporting
+    if (d->connection) {
+        int result = spd_set_voice_type(d->connection, SPDVoiceType(voiceType));
+        // discard result for now, TODO: add error reporting
+    }
 }
 
 int Speaker::voiceType()
