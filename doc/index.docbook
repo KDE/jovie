@@ -363,7 +363,7 @@ any talkers.</para>
 
 <para>You are almost ready to begin using &jovie;.
 Now go back to the <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  This
+<guilabel>Enable Text-to-Speech System (Jovie)</guilabel> box.  This
 will start the &kde; TTS Daemon.  See <xref linkend="general" />.
 You may now begin using &jovie; to
 speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
@@ -464,7 +464,7 @@ all changes to settings on other screens are applied (if any).</para></callout>
 
 <note><para>The <guilabel>Jobs</guilabel> tab only appears when KTTSD is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
 <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech (KTTSD)</guilabel> box.</para>
+<guilabel>Enable Text-to-Speech (Jovie)</guilabel> box.</para>
 </note>
 
 </sect1>
