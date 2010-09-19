@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 {
     KAboutData aboutdata(
         "testfilter", 0, ki18n("testfilter"),
-        "0.1.0", ki18n("A utility for testing KTTSD filter plugins."),
+        "0.1.0", ki18n("A utility for testing Jovie filter plugins."),
          KAboutData::License_GPL, ki18n("Copyright 2005, Gary Cramblitt &lt;garycramblitt@comcast.net&gt;"));
     aboutdata.addAuthor(ki18n("Gary Cramblitt"), ki18n("Maintainer"),"garycramblitt@comcast.net");
 
@@ -24,11 +24,11 @@ int main(int argc, char *argv[])
     // Tell which options are supported
 
     KCmdLineOptions options;
-    options.add("+pluginName", ki18n("Name of a KTTSD filter plugin (required)"));
+    options.add("+pluginName", ki18n("Name of a Jovie filter plugin (required)"));
     options.add("t");
     options.add("talker <talker>", ki18n("Talker code passed to filter"), "en");
     options.add("a");
-    options.add("appid <appID>", ki18n("DCOP application ID passed to filter"), "testfilter");
+    options.add("appid <appID>", ki18n("D-Bus application ID passed to filter"), "testfilter");
     options.add("g");
     options.add("group <filterID>", ki18n("Config file group name passed to filter"), "testfilter");
     options.add("list", ki18n("Display list of available Filter PlugIns and exit"));
