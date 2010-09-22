@@ -51,7 +51,7 @@
 JovieTrayIcon::JovieTrayIcon(QWidget *parent)
     :KStatusNotifierItem("jovie", parent)
 {
-    setObjectName("jovietrayicon");
+    setObjectName( QLatin1String("jovietrayicon" ));
     setStatus(KStatusNotifierItem::Active);
     setCategory(ApplicationStatus);
 
