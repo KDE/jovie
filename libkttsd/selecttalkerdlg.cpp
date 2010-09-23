@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Description: 
+  Description:
      A dialog for user to select a Talker, either by specifying
      selected Talker attributes, or by specifying all attributes
      of an existing configured Talker.
@@ -96,7 +96,7 @@ SelectTalkerDlg::SelectTalkerDlg(
     //    cb->addItem(offers[i]->name());
 
     // Fill List View with list of Talkers.
-    KConfig config("kttsdrc");
+    KConfig config(QLatin1String( "kttsdrc" ));
     m_talkerListModel->loadTalkerCodesFromConfig(&config);
 
     // Set initial radio button state.
@@ -121,9 +121,9 @@ SelectTalkerDlg::SelectTalkerDlg(
     m_widget->talkersView->setMinimumHeight( 120 );
 }
 
-SelectTalkerDlg::~SelectTalkerDlg() 
+SelectTalkerDlg::~SelectTalkerDlg()
 {
-   delete m_widget;	
+   delete m_widget;
 }
 
 QString SelectTalkerDlg::getSelectedTalkerCode()

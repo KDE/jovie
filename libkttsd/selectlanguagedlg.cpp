@@ -1,5 +1,5 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  Description: 
+  Description:
      A dialog for user to select one or more languages from the list
      of KDE global languages.
 
@@ -82,11 +82,11 @@ SelectLanguageDlg::SelectLanguageDlg(
     // If blank is allowed, add to top of the list.
     if (blankMode == BlankAllowed) {
         m_langList->insertRow(0);
-        m_langList->setItem(0, 0, new QTableWidgetItem(""));
-        m_langList->setItem(0, 1, new QTableWidgetItem(""));
+        m_langList->setItem(0, 0, new QTableWidgetItem(QLatin1String( "" )));
+        m_langList->setItem(0, 1, new QTableWidgetItem(QLatin1String( "" )));
     }
     setMainWidget(m_langList);
-    setHelp("select-language", "jovie");
+    setHelp(QLatin1String( "select-language" ), QLatin1String( "jovie" ));
     QSize size = m_langList->minimumSize();
     size.setHeight(500);
     m_langList->setMinimumSize(size);

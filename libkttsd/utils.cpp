@@ -28,7 +28,7 @@ KttsUtils::KttsUtils() {
 KttsUtils::~KttsUtils() {
 }
 
-/** 
+/**
  * Check if an XML document has a certain root element.
  * @param xmldoc             The document to check for the element.
  * @param elementName        The element to check for in the document.
@@ -38,10 +38,10 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
     // Strip all whitespace and go from there.
     QString doc = xmldoc.simplified();
     // Take off the <?xml...?> if it exists
-    if(doc.startsWith(QString("<?xml"))) {
+    if(doc.startsWith(QLatin1String("<?xml"))) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
-        int xmlStatementEnd = doc.indexOf("?>");
+        int xmlStatementEnd = doc.indexOf(QLatin1String( "?>" ));
         if(xmlStatementEnd == -1) {
             kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -50,8 +50,8 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
         doc = doc.right(doc.length() - xmlStatementEnd);
     }
     // Take off leading comments, if they exist.
-    while(doc.startsWith(QString("<!--")) || doc.startsWith(QString(" <!--"))) {
-        int commentStatementEnd = doc.indexOf("-->");
+    while(doc.startsWith(QLatin1String("<!--")) || doc.startsWith(QLatin1String(" <!--"))) {
+        int commentStatementEnd = doc.indexOf(QLatin1String( "-->" ));
         if(commentStatementEnd == -1) {
             kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -60,8 +60,8 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
         doc = doc.right(doc.length() - commentStatementEnd);
     }
     // Take off the doctype statement if it exists.
-    while(doc.startsWith(QString("<!DOCTYPE")) || doc.startsWith(QString(" <!DOCTYPE"))) {
-        int doctypeStatementEnd = doc.indexOf(">");
+    while(doc.startsWith(QLatin1String("<!DOCTYPE")) || doc.startsWith(QLatin1String(" <!DOCTYPE"))) {
+        int doctypeStatementEnd = doc.indexOf(QLatin1Char( '>' ));
         if(doctypeStatementEnd == -1) {
             kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -70,17 +70,17 @@ bool KttsUtils::hasRootElement(const QString &xmldoc, const QString &elementName
         doc = doc.right(doc.length() - doctypeStatementEnd);
     }
     // We should (hopefully) be left with the root element.
-    return (doc.startsWith(QString('<' + elementName)) || doc.startsWith(QString(" <" + elementName)));
+    return (doc.startsWith(QString(QLatin1Char( '<' ) + elementName)) || doc.startsWith(QString(QLatin1String( " <" ) + elementName)));
 }
 
 bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name) {
     // Strip all whitespace and go from there.
     QString doc = xmldoc.trimmed();
     // Take off the <?xml...?> if it exists
-    if(doc.startsWith(QString("<?xml"))) {
+    if(doc.startsWith(QLatin1String("<?xml"))) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
-        int xmlStatementEnd = doc.indexOf("?>");
+        int xmlStatementEnd = doc.indexOf(QLatin1String( "?>" ));
         if(xmlStatementEnd == -1) {
             kDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
@@ -90,8 +90,8 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name) {
         doc = doc.trimmed();
     }
     // Take off leading comments, if they exist.
-    while(doc.startsWith(QString("<!--"))) {
-        int commentStatementEnd = doc.indexOf("-->");
+    while(doc.startsWith(QLatin1String("<!--"))) {
+        int commentStatementEnd = doc.indexOf(QLatin1String( "-->" ));
         if(commentStatementEnd == -1) {
             kDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
@@ -102,7 +102,7 @@ bool KttsUtils::hasDoctype(const QString &xmldoc, const QString &name) {
     }
     // Match the doctype statement if it exists.
     // kDebug() << "KttsUtils::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name;
-    return (doc.startsWith(QString("<!DOCTYPE " + name)));
+    return (doc.startsWith(QString(QLatin1String( "<!DOCTYPE " ) + name)));
 }
 
 /**

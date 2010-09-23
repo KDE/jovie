@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Convenience object for manipulating Talker Codes.
-  For an explanation of what a Talker Code is, see kspeech.h. 
+  For an explanation of what a Talker Code is, see kspeech.h.
   -------------------
   Copyright: (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
   Copyright: (C) 2009 - 2010 by Jeremy Whiting <jpwhiting@kde.org>
@@ -96,8 +96,8 @@ void TalkerCode::setTalkerCode(const QString& code)
 
 QString TalkerCode::getTalkerCode() const
 {
-    QString code = QString("<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\" voiceType=\"%4\">").arg(m_name).arg(m_language).arg(m_outputModule).arg(m_voiceType);
-    code += QString("<prosody volume=\"%1\" rate=\"%2\" pitch=\"%3\" /></voice>").arg(m_volume).arg(m_rate).arg(m_pitch);
+    QString code = QString(QLatin1String( "<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\" voiceType=\"%4\">" )).arg(m_name).arg(m_language).arg(m_outputModule).arg(m_voiceType);
+    code += QString(QLatin1String( "<prosody volume=\"%1\" rate=\"%2\" pitch=\"%3\" /></voice>" )).arg(m_volume).arg(m_rate).arg(m_pitch);
     return code;
 }
 
@@ -113,7 +113,7 @@ QString TalkerCode::getTranslatedDescription() const
     // TODO: The PlugInName is always English.  Need a way to convert this to a translated
     // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
     // from the config file).
-    if (!m_outputModule.isEmpty()) code += ' ' + stripPrefer(m_outputModule, prefer);
+    if (!m_outputModule.isEmpty()) code += QLatin1Char( ' ' ) + stripPrefer(m_outputModule, prefer);
     //if (!m_voiceType.isEmpty()) code += ' ' + stripPrefer(m_voiceType, prefer);
     //if (!m_volume.isEmpty()) code += ' ' + translatedVolume(stripPrefer(m_volume, prefer));
     //if (!m_rate.isEmpty()) code += ' ' + translatedRate(stripPrefer(m_rate, prefer));
@@ -141,7 +141,7 @@ QString TalkerCode::translatedVoiceType(int voiceType)
 /*static*/ void TalkerCode::splitFullLanguageCode(const QString &lang, QString &languageCode, QString &countryCode)
 {
     QString language = lang;
-    if (language.left(1) == "*")
+    if (language.left(1) == QLatin1String( "*" ))
         language = language.mid(1);
     QString modifier;
     QString charSet;
@@ -162,7 +162,7 @@ QString TalkerCode::translatedVoiceType(int voiceType)
     QString langAlpha;
     QString countryCode;
     QString language;
-    if (languageCode == "other")
+    if (languageCode == QLatin1String( "other" ))
         language = i18nc("Other language", "Other");
     else
     {
@@ -177,7 +177,7 @@ QString TalkerCode::translatedVoiceType(int voiceType)
             countryName = i18nc("abbreviated country name", "USA");
         if (countryName == i18nc("full country name", "United Kingdom"))
             countryName = i18nc("abbreviated country name", "UK");
-        language += " (" + countryName + ')';
+        language += QLatin1String( " (" ) + countryName + QLatin1Char( ')' );
     }
     return language;
 }
@@ -190,29 +190,29 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 {
     QDomDocument doc;
     doc.setContent(talkerCode);
-    
-    QDomElement voice = doc.firstChildElement("voice");
+
+    QDomElement voice = doc.firstChildElement(QLatin1String( "voice" ));
     if (!voice.isNull())
     {
-        m_name = voice.attribute("name");
-        m_language = voice.attribute("lang");
-        m_outputModule = voice.attribute("outputModule");
+        m_name = voice.attribute(QLatin1String( "name" ));
+        m_language = voice.attribute(QLatin1String( "lang" ));
+        m_outputModule = voice.attribute(QLatin1String( "outputModule" ));
         bool result = false;
-        m_voiceType = voice.attribute("voiceType").toInt(&result);
+        m_voiceType = voice.attribute(QLatin1String( "voiceType" )).toInt(&result);
         if (!result)
             m_voiceType = 1;
 
-        QDomElement prosody = voice.firstChildElement("prosody");
+        QDomElement prosody = voice.firstChildElement(QLatin1String( "prosody" ));
         if (!prosody.isNull())
         {
             bool result = false;
-            m_volume = prosody.attribute("volume").toInt(&result);
+            m_volume = prosody.attribute(QLatin1String( "volume" )).toInt(&result);
             if (!result)
                 m_volume = 0;
-            m_rate = prosody.attribute("rate").toInt(&result);
+            m_rate = prosody.attribute(QLatin1String( "rate" )).toInt(&result);
             if (!result)
                 m_rate = 0;
-            m_pitch = prosody.attribute("pitch").toInt(&result);
+            m_pitch = prosody.attribute(QLatin1String( "pitch" )).toInt(&result);
             if (!result)
                 m_pitch = 0;
         }
@@ -277,7 +277,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
             winner = ndx;
         }
     }
-    // kDebug() << "Priority phase: winnerCount = " << winnerCount 
+    // kDebug() << "Priority phase: winnerCount = " << winnerCount
     //     << " winner = " << winner
     //     << " maxPriority = " << maxPriority << endl;
     // If a tie, the one that matches on the most priority and preferred attributes wins.
@@ -314,7 +314,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
                 }
             }
         }
-        // kDebug() << "Preferred phase: winnerCount = " << winnerCount 
+        // kDebug() << "Preferred phase: winnerCount = " << winnerCount
         //     << " winner = " << winner
         //     << " maxPreferred = " << maxPreferred << endl;
     }
@@ -326,7 +326,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 
 /*static*/ QString TalkerCode::stripPrefer( const QString& code, bool& preferred)
 {
-    if ( code.left(1) == "*" )
+    if ( code.left(1) == QLatin1String( "*" ) )
     {
         preferred = true;
         return code.mid(1);

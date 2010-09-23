@@ -94,7 +94,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& arg
         this, SLOT(configChanged()));
 
     // Determine if kdeutils Regular Expression Editor is installed.
-    m_reEditorInstalled = !KServiceTypeTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
+    m_reEditorInstalled = !KServiceTypeTrader::self()->query(QLatin1String( "KRegExpEditor/KRegExpEditor" )).isEmpty();
 
     // Set up defaults.
     defaults();
@@ -128,7 +128,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         return i18n("Unable to open file.") + filename;
     }
     // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
-    QDomDocument doc( "" );
+    QDomDocument doc( QLatin1String( "" ) );
     if ( !doc.setContent( &file ) ) {
         file.close();
         return i18n("File not in proper XML format.");
@@ -140,7 +140,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     if ( clear ) substLView->setRowCount(0);
 
     // Name setting.
-    QDomNodeList nameList = doc.elementsByTagName( "name" );
+    QDomNodeList nameList = doc.elementsByTagName( QLatin1String( "name" ) );
     QDomNode nameNode = nameList.item( 0 );
     nameLineEdit->setText( nameNode.toElement().text() );
     // kDebug() << "StringReplacerConf::load: name = " << nameNode.toElement().text();
@@ -148,17 +148,17 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     // Language Codes setting.  List may be single element of comma-separated values,
     // or multiple elements.
     QString languageCodes;
-    QDomNodeList languageList = doc.elementsByTagName( "language-code" );
+    QDomNodeList languageList = doc.elementsByTagName( QLatin1String( "language-code" ) );
     for ( int ndx=0; ndx < languageList.count(); ++ndx )
     {
         QDomNode languageNode = languageList.item( ndx );
-        if (!languageCodes.isEmpty()) languageCodes += ',';
+        if (!languageCodes.isEmpty()) languageCodes += QLatin1Char( ',' );
         languageCodes += languageNode.toElement().text();
     }
     if ( clear )
-        m_languageCodeList = languageCodes.split(',', QString::SkipEmptyParts);
+        m_languageCodeList = languageCodes.split(QLatin1Char( ',' ), QString::SkipEmptyParts);
     else
-        m_languageCodeList += languageCodes.split(',', QString::SkipEmptyParts);
+        m_languageCodeList += languageCodes.split(QLatin1Char( ',' ), QString::SkipEmptyParts);
     QString language;
     m_languageCodeList.sort();
     // Eliminate dups.
@@ -172,7 +172,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     }
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx )
     {
-        if (!language.isEmpty()) language += ',';
+        if (!language.isEmpty()) language += QLatin1Char( ',' );
         language += KGlobal::locale()->languageCodeToName(m_languageCodeList[ndx]);
     }
     languageLineEdit->setText(language);
@@ -180,19 +180,19 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     // AppId.  Apply this filter only if DCOP appId of application that queued
     // the text contains this string.  List may be single element of comma-separated values,
     // or multiple elements.
-    QDomNodeList appIdList = doc.elementsByTagName( "appid" );
+    QDomNodeList appIdList = doc.elementsByTagName( QLatin1String( "appid" ) );
     QString appIds;
     for ( int ndx=0; ndx < appIdList.count(); ++ndx )
     {
         QDomNode appIdNode = appIdList.item( ndx );
-        if (!appIds.isEmpty()) appIds += ',';
+        if (!appIds.isEmpty()) appIds += QLatin1Char( ',' );
         appIds += appIdNode.toElement().text();
     }
     if ( !clear ) appIds = appIdLineEdit->text() + appIds;
     appIdLineEdit->setText( appIds );
 
     // Word list.
-    QDomNodeList wordList = doc.elementsByTagName( "word" );
+    QDomNodeList wordList = doc.elementsByTagName( QLatin1String( "word" ) );
     const int wordListCount = wordList.count();
     for ( int wordIndex = 0; wordIndex < wordListCount; ++wordIndex )
     {
@@ -200,7 +200,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
-        QString matchCase = "No";
+        QString matchCase = QLatin1String( "No" );
         QString match;
         QString subst;
         const int propListCount = propList.count();
@@ -208,16 +208,16 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
         {
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
-            if (prop.tagName() == "type") wordType = prop.text();
-            if (prop.tagName() == "case") matchCase = prop.text();
-            if (prop.tagName() == "match") match = prop.text();
-            if (prop.tagName() == "subst") subst = prop.text();
+            if (prop.tagName() == QLatin1String( "type" )) wordType = prop.text();
+            if (prop.tagName() == QLatin1String( "case" )) matchCase = prop.text();
+            if (prop.tagName() == QLatin1String( "match" )) match = prop.text();
+            if (prop.tagName() == QLatin1String( "subst" )) subst = prop.text();
         }
-        QString wordTypeStr = 
-            (wordType=="RegExp"?i18nc("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
+        QString wordTypeStr =
+            (wordType==QLatin1String( "RegExp" )?i18nc("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
         int tableRow = substLView->rowCount();
-        QString matchCaseStr = 
-            (matchCase=="Yes"?i18nc("Yes or no", "Yes"):i18nc("Yes or no", "No"));  
+        QString matchCaseStr =
+            (matchCase==QLatin1String( "Yes" )?i18nc("Yes or no", "Yes"):i18nc("Yes or no", "No"));
         substLView->setRowCount( tableRow + 1 );
         substLView->setItem( tableRow, 0, new QTableWidgetItem( wordTypeStr ) );
         substLView->setItem( tableRow, 1, new QTableWidgetItem( matchCaseStr ) );
@@ -231,7 +231,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
 void StringReplacerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::save: Running";
     QString wordsFilename =
-        KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", true );
+        KGlobal::dirs()->saveLocation( "data" ,QLatin1String( "kttsd/stringreplacer/" ), true );
     if ( wordsFilename.isEmpty() )
     {
         kDebug() << "StringReplacerConf::save: no save location";
@@ -258,13 +258,13 @@ QString StringReplacerConf::saveToFile(const QString& filename)
         return i18n("Unable to open file ") + filename;
 
     // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
-    QDomDocument doc( "" );
+    QDomDocument doc( QLatin1String( "" ) );
 
-    QDomElement root = doc.createElement( "wordlist" );
+    QDomElement root = doc.createElement( QLatin1String( "wordlist" ) );
     doc.appendChild( root );
 
     // Name.
-    QDomElement name = doc.createElement( "name" );
+    QDomElement name = doc.createElement( QLatin1String( "name" ) );
     root.appendChild( name );
     QDomText t = doc.createTextNode( nameLineEdit->text() );
     name.appendChild( t );
@@ -272,20 +272,20 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     // Language code.
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx )
     {
-        QDomElement languageCode = doc.createElement( "language-code" );
+        QDomElement languageCode = doc.createElement( QLatin1String( "language-code" ) );
         root.appendChild( languageCode );
         t = doc.createTextNode( m_languageCodeList[ndx] );
         languageCode.appendChild( t );
     }
 
     // Application ID
-    QString appId = appIdLineEdit->text().remove(' ');
+    QString appId = appIdLineEdit->text().remove(QLatin1Char( ' ' ));
     if ( !appId.isEmpty() )
     {
-        QStringList appIdList = appId.split( ',', QString::SkipEmptyParts );
+        QStringList appIdList = appId.split( QLatin1Char( ',' ), QString::SkipEmptyParts );
         for ( int ndx=0; ndx < appIdList.count(); ++ndx )
         {
-            QDomElement appIdElem = doc.createElement( "appid" );
+            QDomElement appIdElem = doc.createElement( QLatin1String( "appid" ) );
             root.appendChild( appIdElem );
             t = doc.createTextNode( appIdList[ndx] );
             appIdElem.appendChild( t );
@@ -295,26 +295,26 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     // Words.
     for ( int row = 0; row < substLView->rowCount(); ++row )
     {
-        QDomElement wordTag = doc.createElement( "word" );
+        QDomElement wordTag = doc.createElement( QLatin1String( "word" ) );
         root.appendChild( wordTag );
-        QDomElement propTag = doc.createElement( "type" );
+        QDomElement propTag = doc.createElement( QLatin1String( "type" ) );
         wordTag.appendChild( propTag);
-        QDomText t = doc.createTextNode( 
-            substLView->item(row, 0)->text()==i18n("Word")?"Word":"RegExp" );
+        QDomText t = doc.createTextNode(
+            substLView->item(row, 0)->text()==i18n("Word")?QLatin1String( "Word" ):QLatin1String( "RegExp" ) );
         propTag.appendChild( t );
 
-        propTag = doc.createElement( "case" );
+        propTag = doc.createElement( QLatin1String( "case" ) );
         wordTag.appendChild( propTag);
         t = doc.createTextNode(
-            substLView->item(row, 2)->text()==i18nc("Yes or no", "Yes")?"Yes":"No" );
-        propTag.appendChild( t );      
+            substLView->item(row, 2)->text()==i18nc("Yes or no", "Yes")?QLatin1String( "Yes" ):QLatin1String( "No" ) );
+        propTag.appendChild( t );
 
-        propTag = doc.createElement( "match" );
+        propTag = doc.createElement( QLatin1String( "match" ) );
         wordTag.appendChild( propTag);
         t = doc.createCDATASection( substLView->item(row, 2)->text() );
         propTag.appendChild( t );
 
-        propTag = doc.createElement( "subst" );
+        propTag = doc.createElement( QLatin1String( "subst" ) );
         wordTag.appendChild( propTag);
         t = doc.createCDATASection( substLView->item(row, 3)->text() );
         propTag.appendChild( t );
@@ -335,12 +335,12 @@ void StringReplacerConf::defaults(){
     // kDebug() << "StringReplacerConf::defaults: Running";
     // Default language is none.
     m_languageCodeList.clear();
-    languageLineEdit->setText( "" );
+    languageLineEdit->setText( QLatin1String( "" ) );
     // Default name.
     nameLineEdit->setText( i18n("String Replacer") );
     substLView->setRowCount(0);
     // Default App ID is blank.
-    appIdLineEdit->setText( "" );
+    appIdLineEdit->setText(QLatin1String( "" ) );
     enableDisableButtons();
     // kDebug() << "StringReplacerConf::defaults: Exiting";
 }
@@ -359,7 +359,7 @@ QString StringReplacerConf::userPlugInName()
         if (m_languageCodeList.count() > 1)
             language = i18n("Multiple Languages");
         if (!language.isEmpty())
-            instName = i18n("String Replacer") + " (" + language + ')';
+            instName = i18n("String Replacer") + QLatin1String( " (" ) + language + QLatin1Char( ')' );
     }
     return instName;
 }
@@ -388,10 +388,10 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         m_languageCodeList = dlg->selectedLanguageCodes();
     delete dlg;
     if (dlgResult != QDialog::Accepted) return;
-    QString language("");
+    QString language;
     for ( int ndx=0; ndx < m_languageCodeList.count(); ++ndx)
     {
-        if (!language.isEmpty()) language += ',';
+        if (!language.isEmpty()) language += QLatin1Char( ',' );
         language += KGlobal::locale()->languageCodeToName(m_languageCodeList[ndx]);
     }
     QString s1 = languageLineEdit->text();
@@ -404,8 +404,8 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         s2.replace( s1, language );
         s2.replace( i18n("Multiple Languages"), language );
     }
-    s2.remove(" ()");
-    if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ')';
+    s2.remove(QLatin1String( " ()" ));
+    if ( !s2.contains(QLatin1Char('(' )) && !language.isEmpty() ) s2 += QLatin1String( " (" ) + language + QLatin1Char( ')' );
     nameLineEdit->setText(s2);
     configChanged();
 }
@@ -551,11 +551,11 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     m_editDlg->setDefaultButton(KDialog::Cancel);
     // Disable OK button if match field blank.
     m_editDlg->setMainWidget( w );
-    m_editDlg->setHelp( "", "jovie" );
+    m_editDlg->setHelp( QLatin1String( "" ), QLatin1String( "jovie" ) );
     m_editDlg->enableButton( KDialog::Ok, !m_editWidget->matchLineEdit->text().isEmpty() );
     int dlgResult = m_editDlg->exec();
     QString substType = i18n( "Word" );
-    if ( m_editWidget->regexpRadioButton->isChecked() ) 
+    if ( m_editWidget->regexpRadioButton->isChecked() )
         substType = i18nc("Abbreviation for 'Regular Expression'", "RegExp");
     QString matchCase = m_editWidget->matchCaseCheckBox->isChecked()?i18nc("Yes or no", "Yes"):i18nc("Yes or no", "No");
     QString match = m_editWidget->matchLineEdit->text();
@@ -572,7 +572,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         substLView->setRowCount(row + 1);
         substLView->setCurrentItem(substLView->item(row, 0));
         for (int i = 0; i <= 4; ++i)
-            substLView->setItem(row, i, new QTableWidgetItem(""));
+            substLView->setItem(row, i, new QTableWidgetItem(QLatin1String( "" )));
     }
     substLView->item(row, 0)->setText(substType);
     substLView->item(row, 1)->setText(matchCase);
@@ -616,8 +616,8 @@ void StringReplacerConf::slotMatchButton_clicked()
     if ( !m_editWidget ) return;
     if ( !m_editDlg ) return;
     if ( !m_reEditorInstalled ) return;
-    KDialog *editorDialog = 
-        KServiceTypeTrader::createInstanceFromQuery<KDialog>( "KRegExpEditor/KRegExpEditor" );
+    KDialog *editorDialog =
+        KServiceTypeTrader::createInstanceFromQuery<KDialog>( QLatin1String( "KRegExpEditor/KRegExpEditor" ) );
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
@@ -638,14 +638,14 @@ void StringReplacerConf::slotMatchButton_clicked()
 
 void StringReplacerConf::slotLoadButton_clicked()
 {
-    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/stringreplacer/");
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", QLatin1String( "kttsd/stringreplacer/" ));
     QString dataDir;
     if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
-        "*.xml|String Replacer Word List (*.xml)",
+        QLatin1String( "*.xml|" ) + i18n( "String Replacer Word List (*.xml)" ),
         this,
-        "stringreplacer_loadfile");
+        QLatin1String( "stringreplacer_loadfile" ));
     if ( filename.isEmpty() ) return;
     QString errMsg = loadFromFile( filename, false );
     enableDisableButtons();
@@ -658,10 +658,10 @@ void StringReplacerConf::slotLoadButton_clicked()
 void StringReplacerConf::slotSaveButton_clicked()
 {
     QString filename = KFileDialog::getSaveFileName(
-            KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false ),
-           "*.xml|String Replacer Word List (*.xml)",
+            KGlobal::dirs()->saveLocation( "data" ,QLatin1String( "kttsd/stringreplacer/" ), false ),
+           QLatin1String( "*.xml|" ) + i18n( "String Replacer Word List (*.xml)" ),
             this,
-            "stringreplacer_savefile");
+            QLatin1String( "stringreplacer_savefile" ));
     if ( filename.isEmpty() ) return;
     QString errMsg = saveToFile( filename );
     enableDisableButtons();

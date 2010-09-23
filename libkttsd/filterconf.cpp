@@ -39,14 +39,14 @@
 #include <klocale.h>
 
 /**
-* Constructor 
+* Constructor
 */
 KttsFilterConf::KttsFilterConf( QWidget *parent, const QVariantList &) : QWidget(parent){
     //setObjectName(name);
     // kDebug() << "KttsFilterConf::KttsFilterConf: Running";
-    QString systemPath(qgetenv("PATH"));
+    QString systemPath(QLatin1String( qgetenv("PATH" ) ));
     // kDebug() << "Path is " << systemPath;
-    m_path = systemPath.split( ':');
+    m_path = systemPath.split( QLatin1Char( ':' ));
 }
 
 /**
@@ -57,10 +57,10 @@ KttsFilterConf::~KttsFilterConf(){
 }
 
 /**
-* This method is invoked whenever the module should read its 
-* configuration (most of the times from a config file) and update the 
-* user interface. This happens when the user clicks the "Reset" button in 
-* the control center, to undo all of his changes and restore the currently 
+* This method is invoked whenever the module should read its
+* configuration (most of the times from a config file) and update the
+* user interface. This happens when the user clicks the "Reset" button in
+* the control center, to undo all of his changes and restore the currently
 * valid settings.  Note that kttsmgr calls this when the plugin is
 * loaded, so it not necessary to call it in your constructor.
 * The plugin should read its configuration from the specified group
@@ -74,9 +74,9 @@ void KttsFilterConf::load(KConfig* /*config*/, const QString& /*configGroup*/){
 }
 
 /**
-* This function gets called when the user wants to save the settings in 
-* the user interface, updating the config files or wherever the 
-* configuration is stored. The method is called when the user clicks "Apply" 
+* This function gets called when the user wants to save the settings in
+* the user interface, updating the config files or wherever the
+* configuration is stored. The method is called when the user clicks "Apply"
 * or "Ok". The plugin should save its configuration in the specified
 * group of the specified config file.
 * @param config      Pointer to a KConfig object.
@@ -87,10 +87,10 @@ void KttsFilterConf::save(KConfig* /*config*/, const QString& /*configGroup*/){
     // kDebug() << "KttsFilterConf::save: Running";
 }
 
-/** 
+/**
 * This function is called to set the settings in the module to sensible
-* default values. It gets called when hitting the "Default" button. The 
-* default values should probably be the same as the ones the application 
+* default values. It gets called when hitting the "Default" button. The
+* default values should probably be the same as the ones the application
 * uses when started without a config file.  Note that defaults should
 * be applied to the on-screen widgets; not to the config file.
 */
@@ -135,7 +135,7 @@ QString KttsFilterConf::getLocation(const QString &name) {
     // kDebug() << m_path;
     for(QStringList::iterator it = m_path.begin(); it != m_path.end(); ++it) {
         QString fullName = *it;
-        fullName += '/';
+        fullName += QLatin1Char( '/' );
         fullName += name;
         // The user either has the directory of the file in the path...
         if(QFile::exists(fullName)) {
@@ -143,12 +143,12 @@ QString KttsFilterConf::getLocation(const QString &name) {
             return fullName;
         }
         // ....Or the file itself
-        else if(QFileInfo(*it).baseName().append(QString(".").append(QFileInfo(*it).suffix())) == name) {
+        else if(QFileInfo(*it).baseName().append(QString(QLatin1String( "." )).append(QFileInfo(*it).suffix())) == name) {
             // kDebug() << "KttsFilterConf:getLocation: " << fullName;
             return fullName;
         }
     }
-    return "";
+    return QString();
 }
 
 /*static*/ QString KttsFilterConf::realFilePath(const QString &filename)
