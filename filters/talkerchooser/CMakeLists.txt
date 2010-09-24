@@ -10,7 +10,7 @@ set(jovie_talkerchooserplugin_PART_SRCS talkerchooserconf.cpp talkerchooserproc.
 kde4_add_ui_files(jovie_talkerchooserplugin_PART_SRCS talkerchooserconfwidget.ui )
 
 
-kde4_add_plugin(jovie_talkerchooserplugin WITH_PREFIX ${jovie_talkerchooserplugin_PART_SRCS})
+kde4_add_plugin(jovie_talkerchooserplugin ${jovie_talkerchooserplugin_PART_SRCS})
 
 
 

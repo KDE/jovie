@@ -8,7 +8,7 @@ set(jovie_xmltransformerplugin_PART_SRCS xmltransformerconf.cpp xmltransformerpr
 
 kde4_add_ui_files(jovie_xmltransformerplugin_PART_SRCS xmltransformerconfwidget.ui )
 
-kde4_add_plugin(jovie_xmltransformerplugin WITH_PREFIX ${jovie_xmltransformerplugin_PART_SRCS})
+kde4_add_plugin(jovie_xmltransformerplugin ${jovie_xmltransformerplugin_PART_SRCS})
 
 
 

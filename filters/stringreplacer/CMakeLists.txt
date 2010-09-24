@@ -8,7 +8,7 @@ set(jovie_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerpr
 
 kde4_add_ui_files(jovie_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
 
-kde4_add_plugin(jovie_stringreplacerplugin WITH_PREFIX ${jovie_stringreplacerplugin_PART_SRCS})
+kde4_add_plugin(jovie_stringreplacerplugin ${jovie_stringreplacerplugin_PART_SRCS})
 
 
 
