@@ -127,7 +127,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
     {
         return i18n("Unable to open file.") + filename;
     }
-    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
+    // QDomDocument doc( "http://www.kde.org/share/apps/jovie/stringreplacer/wordlist.dtd []" );
     QDomDocument doc( "" );
     if ( !doc.setContent( &file ) ) {
         file.close();
@@ -231,7 +231,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
 void StringReplacerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::save: Running";
     QString wordsFilename =
-        KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", true );
+        KGlobal::dirs()->saveLocation( "data" ,"jovie/stringreplacer/", true );
     if ( wordsFilename.isEmpty() )
     {
         kDebug() << "StringReplacerConf::save: no save location";
@@ -257,7 +257,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
     if ( !file.open( QIODevice::WriteOnly ) )
         return i18n("Unable to open file ") + filename;
 
-    // QDomDocument doc( "http://www.kde.org/share/apps/kttsd/stringreplacer/wordlist.dtd []" );
+    // QDomDocument doc( "http://www.kde.org/share/apps/jovie/stringreplacer/wordlist.dtd []" );
     QDomDocument doc( "" );
 
     QDomElement root = doc.createElement( "wordlist" );
@@ -638,7 +638,7 @@ void StringReplacerConf::slotMatchButton_clicked()
 
 void StringReplacerConf::slotLoadButton_clicked()
 {
-    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/stringreplacer/");
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "jovie/stringreplacer/");
     QString dataDir;
     if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
@@ -658,7 +658,7 @@ void StringReplacerConf::slotLoadButton_clicked()
 void StringReplacerConf::slotSaveButton_clicked()
 {
     QString filename = KFileDialog::getSaveFileName(
-            KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false ),
+            KGlobal::dirs()->saveLocation( "data" ,"jovie/stringreplacer/", false ),
            "*.xml|String Replacer Word List (*.xml)",
             this,
             "stringreplacer_savefile");
