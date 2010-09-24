@@ -58,7 +58,7 @@ TalkerWidget::TalkerWidget(QWidget* parent)
     connect(mUi->speedSlider, SIGNAL(valueChanged(int)),
             this, SIGNAL(talkerChanged()));
 
-    org::kde::KSpeech* kspeech = new OrgKdeKSpeechInterface("org.kde.KSpeech", "/KSpeech", QDBusConnection::sessionBus());
+    org::kde::KSpeech* kspeech = new OrgKdeKSpeechInterface(QLatin1String( "org.kde.KSpeech" ), QLatin1String( "/KSpeech" ), QDBusConnection::sessionBus());
 
     m_outputModules = kspeech->outputModules();
 

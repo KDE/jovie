@@ -173,7 +173,7 @@ QVariant FilterListModel::headerData (int section, Qt::Orientation orientation, 
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         switch (section) {
         case 0:
-            return "";
+            return QLatin1String( "" );
         case 1:
             return i18n ("Filter");
         };
@@ -268,7 +268,7 @@ KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
     configureFilterButton->setIcon (KIcon ( QLatin1String( "configure" )));
 
     // Object for the KTTSD configuration.
-    m_config = new KConfig ("kttsdrc");
+    m_config = new KConfig (QLatin1String( "kttsdrc" ));
 
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
@@ -312,7 +312,7 @@ KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
              this, SLOT (slotTabChanged()));
 
     // See if Jovie is already running, and if so, create jobs tab.
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered ("org.kde.jovie"))
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered (QLatin1String( "org.kde.jovie" )))
         jovieStarted();
     else
         // Start Jovie if check box is checked.
@@ -416,7 +416,7 @@ void KCMKttsMgr::load()
         for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it) {
             QString filterID = *it;
             // kDebug() << "KCMKttsMgr::load: filterID = " << filterID;
-            KConfigGroup filterConfig (m_config, "Filter_" + filterID);
+            KConfigGroup filterConfig (m_config, QLatin1String( "Filter_" ) + filterID);
             QString desktopEntryName = filterConfig.readEntry ("DesktopEntryName", QString());
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
@@ -492,7 +492,7 @@ void KCMKttsMgr::load()
     //    }
     //}
     // Rewrite list of FilterIDs in case we added any.
-    QString filterIDs = filterIDsList.join (",");
+    QString filterIDs = filterIDsList.join (QLatin1String( "," ));
     generalConfig.writeEntry ("FilterIDs", filterIDs);
     m_config->sync();
 
@@ -549,7 +549,7 @@ void KCMKttsMgr::save()
         talkerIDsList << talker.name();
     }
 
-    QString talkerIDs = talkerIDsList.join (",");
+    QString talkerIDs = talkerIDsList.join (QLatin1String( "," ));
     generalConfig.writeEntry ("TalkerIDs", talkerIDs);
 
     // Erase obsolete Talker_nn sections.
@@ -557,7 +557,7 @@ void KCMKttsMgr::save()
     int groupListCount = groupList.count();
     for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx) {
         QString groupName = groupList[groupNdx];
-        if (groupName.left (7) == "Talker_") {
+        if (groupName.left (7) == QLatin1String( "Talker_" )) {
             QString groupTalkerID = groupName.mid (7);
             if (!talkerIDsList.contains (groupTalkerID))
                 m_config->deleteGroup (groupName, 0);
@@ -569,16 +569,16 @@ void KCMKttsMgr::save()
     for (int i = 0; i < m_filterListModel.rowCount(); ++i) {
         FilterItem fi = m_filterListModel.getRow (i);
         filterIDsList.append (fi.id);
-        KConfigGroup filterConfig (m_config, "Filter_" + fi.id);
+        KConfigGroup filterConfig (m_config, QLatin1String( "Filter_" ) + fi.id);
         filterConfig.writeEntry ("Enabled", fi.enabled);
     }
-    QString filterIDs = filterIDsList.join (",");
+    QString filterIDs = filterIDsList.join (QLatin1String( "," ));
     generalConfig.writeEntry ("FilterIDs", filterIDs);
 
     // Erase obsolete Filter_nn sections.
     for (int groupNdx = 0; groupNdx < groupListCount; ++groupNdx) {
         QString groupName = groupList[groupNdx];
-        if (groupName.left (7) == "Filter_") {
+        if (groupName.left (7) == QLatin1String( "Filter_" )) {
             QString groupFilterID = groupName.mid (7);
             if (!filterIDsList.contains (groupFilterID))
                 m_config->deleteGroup (groupName, 0);
@@ -686,20 +686,20 @@ KttsFilterConf* KCMKttsMgr::loadFilterPlugin (const QString& plugInName)
     // kDebug() << "KCMKttsMgr::loadPlugin: Running";
 
     // Find the plugin.
-    KService::List offers = KServiceTypeTrader::self()->query ("Jovie/FilterPlugin",
-                            QString ("DesktopEntryName == '%1'").arg (plugInName));
+    KService::List offers = KServiceTypeTrader::self()->query (QLatin1String( "Jovie/FilterPlugin" ),
+                            QString (QLatin1String( "DesktopEntryName == '%1'" )).arg (plugInName));
 
     if (offers.count() == 1) {
         // When the entry is found, load the plug in
         // First create a factory for the library
-        KLibFactory *factory = KLibLoader::self()->factory (offers[0]->library().toLatin1());
+        KLibFactory *factory = KLibLoader::self()->factory (QLatin1String( offers[0]->library().toLatin1() ));
         if (factory) {
             // If the factory is created successfully, instantiate the KttsFilterConf class for the
             // specific plug in to get the plug in configuration object.
             int errorNo = 0;
             KttsFilterConf *plugIn =
                 KLibLoader::createInstance<KttsFilterConf> (
-                    offers[0]->library().toLatin1(), NULL, QStringList (offers[0]->library().toLatin1()),
+                    QLatin1String( offers[0]->library().toLatin1() ), NULL, QStringList ( QLatin1String( offers[0]->library().toLatin1() )),
                     &errorNo);
             if (plugIn) {
                 // If everything went ok, return the plug in pointer.
@@ -772,7 +772,7 @@ void KCMKttsMgr::addFilter()
         }
     }
     // Append those available plugins not yet in the list at all.
-    KService::List offers = KServiceTypeTrader::self()->query ("Jovie/FilterPlugin");
+    KService::List offers = KServiceTypeTrader::self()->query (QLatin1String( "Jovie/FilterPlugin" ));
     for (int i = 0; i < offers.count() ; ++i) {
         QString filterPlugInName = offers[i]->name();
         if (countFilterPlugins (filterPlugInName) == 0) {
@@ -811,7 +811,7 @@ void KCMKttsMgr::addFilter()
     QString filterID = QString::number (m_lastFilterID + 1);
 
     // Erase extraneous Filter configuration entries that might be there.
-    m_config->deleteGroup (QString ("Filter_") + filterID, 0);
+    m_config->deleteGroup (QLatin1String ("Filter_") + filterID, 0);
     m_config->sync();
 
     // Get DesktopEntryName from the translated name.
@@ -824,7 +824,7 @@ void KCMKttsMgr::addFilter()
     if (!m_loadedFilterPlugIn) return;
 
     // Permit plugin to autoconfigure itself.
-    m_loadedFilterPlugIn->load (m_config, QString ("Filter_") + filterID);
+    m_loadedFilterPlugIn->load (m_config, QLatin1String ("Filter_") + filterID);
 
     // Display configuration dialog for user to configure the plugin.
     configureFilter();
@@ -842,7 +842,7 @@ void KCMKttsMgr::addFilter()
     // If user properly configured the plugin, save its configuration.
     if (!userFilterName.isEmpty()) {
         // Let plugin save its configuration.
-        m_loadedFilterPlugIn->save (m_config, QString ("Filter_" + filterID));
+        m_loadedFilterPlugIn->save (m_config, QLatin1String ("Filter_" ) + filterID);
 
         // Record last Filter ID used for next add.
         m_lastFilterID = filterID.toInt();
@@ -851,7 +851,7 @@ void KCMKttsMgr::addFilter()
         bool multiInstance = m_loadedFilterPlugIn->supportsMultiInstance();
 
         // Record configuration data.  Note, might as well do this now.
-        KConfigGroup filterConfig (m_config, QString ("Filter_" + filterID));
+        KConfigGroup filterConfig (m_config, QLatin1String ("Filter_" ) + filterID);
         filterConfig.writeEntry ("DesktopEntryName", desktopEntryName);
         filterConfig.writeEntry ("UserFilterName", userFilterName);
         filterConfig.writeEntry ("MultiInstance", multiInstance);
@@ -902,7 +902,7 @@ void KCMKttsMgr::slotRemoveTalkerButton_clicked()
 
     // Delete the talker from configuration file?
     QString talkerID = m_talkerListModel.getRow (modelIndex.row()).name();
-    m_config->deleteGroup (QString ("Talker_") + talkerID, 0);
+    m_config->deleteGroup (QLatin1String ("Talker_") + talkerID, 0);
 
     // Delete the talker from the list of Talkers.
     m_talkerListModel.removeRow (modelIndex.row());
@@ -937,7 +937,7 @@ void KCMKttsMgr::removeFilter()
 
     // Delete the filter from the configuration file?
     kDebug() << "KCMKttsMgr::removeFilter: removing FilterID = " << filterID << " from config file.";
-    m_config->deleteGroup (QString ("Filter_") + filterID, 0);
+    m_config->deleteGroup (QLatin1String ("Filter_") + filterID, 0);
 
     // Emit configuration changed.
     configChanged();
@@ -1043,7 +1043,7 @@ void KCMKttsMgr::slotEnableJovie_toggled (bool)
     if (reenter) return;
     reenter = true;
     // See if Jovie is running.
-    bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered ("org.kde.jovie"));
+    bool kttsdRunning = (QDBusConnection::sessionBus().interface()->isServiceRegistered (QLatin1String( "org.kde.jovie" )));
 
     // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled: kttsdRunning = " << kttsdRunning;
     // If Enable Jovie check box is checked and it is not running, then start Jovie.
@@ -1051,7 +1051,7 @@ void KCMKttsMgr::slotEnableJovie_toggled (bool)
         if (!kttsdRunning) {
             // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Starting Jovie";
             QString error;
-            if (KToolInvocation::startServiceByDesktopName ("jovie", QStringList(), &error)) {
+            if (KToolInvocation::startServiceByDesktopName (QLatin1String( "jovie" ), QStringList(), &error)) {
                 kDebug() << "Starting Jovie failed with message " << error;
                 enableJovieCheckBox->setChecked (false);
 
@@ -1066,7 +1066,7 @@ void KCMKttsMgr::slotEnableJovie_toggled (bool)
         if (kttsdRunning) {
             // kDebug() << "KCMKttsMgr::slotEnableKttsd_toggled:: Stopping Jovie";
             if (!m_kspeech)
-                m_kspeech = new OrgKdeKSpeechInterface ("org.kde.jovie", "/KSpeech", QDBusConnection::sessionBus());
+                m_kspeech = new OrgKdeKSpeechInterface (QLatin1String( "org.kde.jovie" ), QLatin1String( "/KSpeech" ), QDBusConnection::sessionBus());
             m_kspeech->kttsdExit();
             delete m_kspeech;
             m_kspeech = 0;
@@ -1097,9 +1097,9 @@ void KCMKttsMgr::jovieStarted()
     // Check/Uncheck the Enable KTTSD check box.
     if (kttsdLoaded) {
         enableJovieCheckBox->setChecked (true);
-        m_kspeech = new OrgKdeKSpeechInterface ("org.kde.jovie", "/KSpeech", QDBusConnection::sessionBus());
+        m_kspeech = new OrgKdeKSpeechInterface (QLatin1String( "org.kde.jovie" ), QLatin1String( "/KSpeech" ), QDBusConnection::sessionBus());
         m_kspeech->setParent (this);
-        m_kspeech->setApplicationName ("KCMKttsMgr");
+        m_kspeech->setApplicationName (QLatin1String( "KCMKttsMgr" ));
         m_kspeech->setIsSystemManager (true);
         // Connect KTTSD DBUS signals to our slots.
         connect (m_kspeech, SIGNAL (kttsdStarted()),
@@ -1240,7 +1240,7 @@ void KCMKttsMgr::configureFilterItem()
 
     // Tell plugin to load its configuration.
     // kDebug() << "KCMKttsMgr::slot_configureFilter: about to call plugin load() method with Filter ID = " << filterID;
-    m_loadedFilterPlugIn->load (m_config, QString ("Filter_") + filterID);
+    m_loadedFilterPlugIn->load (m_config, QLatin1String ("Filter_") + filterID);
 
     // Display configuration dialog.
     configureFilter();
@@ -1258,10 +1258,10 @@ void KCMKttsMgr::configureFilterItem()
     // If user properly configured the plugin, save the configuration.
     if (!userFilterName.isEmpty()) {
         // Let plugin save its configuration.
-        m_loadedFilterPlugIn->save (m_config, QString ("Filter_") + filterID);
+        m_loadedFilterPlugIn->save (m_config, QLatin1String ("Filter_") + filterID);
 
         // Save configuration.
-        KConfigGroup filterConfig (m_config, QString ("Filter_") + filterID);
+        KConfigGroup filterConfig (m_config, QLatin1String ("Filter_") + filterID);
         filterConfig.writeEntry ("DesktopEntryName", desktopEntryName);
         filterConfig.writeEntry ("UserFilterName", userFilterName);
         filterConfig.writeEntry ("Enabled", true);
@@ -1327,7 +1327,7 @@ void KCMKttsMgr::configureFilter()
     m_loadedFilterPlugIn->setMinimumSize (m_loadedFilterPlugIn->minimumSizeHint());
     m_loadedFilterPlugIn->show();
     m_configDlg->setMainWidget (m_loadedFilterPlugIn);
-    m_configDlg->setHelp ("configure-filter", "jovie");
+    m_configDlg->setHelp (QLatin1String( "configure-filter" ), QLatin1String( "jovie" ));
     m_configDlg->enableButtonOk (false);
     connect (m_loadedFilterPlugIn, SIGNAL (changed (bool)), this, SLOT (slotConfigFilterDlg_ConfigChanged()));
     connect (m_configDlg, SIGNAL (defaultClicked()), this, SLOT (slotConfigFilterDlg_DefaultClicked()));
@@ -1390,7 +1390,7 @@ void KCMKttsMgr::slotConfigFilterDlg_CancelClicked()
 QString KCMKttsMgr::FilterNameToDesktopEntryName (const QString& name)
 {
     if (name.isEmpty()) return QString();
-    const KService::List  offers =  KServiceTypeTrader::self()->query ("Jovie/FilterPlugin");
+    const KService::List  offers =  KServiceTypeTrader::self()->query (QLatin1String( "Jovie/FilterPlugin" ));
     for (int ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name)
             return offers[ndx]->desktopEntryName();
@@ -1405,8 +1405,8 @@ QString KCMKttsMgr::FilterNameToDesktopEntryName (const QString& name)
 QString KCMKttsMgr::FilterDesktopEntryNameToName (const QString& desktopEntryName)
 {
     if (desktopEntryName.isEmpty()) return QString();
-    KService::List offers = KServiceTypeTrader::self()->query ("Jovie/FilterPlugin",
-                            QString ("DesktopEntryName == '%1'").arg (desktopEntryName));
+    KService::List offers = KServiceTypeTrader::self()->query (QLatin1String( "Jovie/FilterPlugin" ),
+                            QString (QLatin1String( "DesktopEntryName == '%1'" )).arg (desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();

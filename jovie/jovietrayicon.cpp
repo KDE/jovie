@@ -49,17 +49,17 @@
 /* ------------------  JovieTrayIcon class ----------------------- */
 
 JovieTrayIcon::JovieTrayIcon(QWidget *parent)
-    :KStatusNotifierItem("jovie", parent)
+    :KStatusNotifierItem(QLatin1String( "jovie" ), parent)
 {
     setObjectName( QLatin1String("jovietrayicon" ));
     setStatus(KStatusNotifierItem::Active);
     setCategory(ApplicationStatus);
 
-    QString status = "Jovie - ";
+    QString status = QLatin1String( "Jovie - " );
     status += i18n("KDE Text-to-Speech Manager");
     setToolTipTitle(status);
-    setToolTipIconByName("preferences-desktop-text-to-speech");
-    setIconByName("preferences-desktop-text-to-speech");
+    setToolTipIconByName(QLatin1String( "preferences-desktop-text-to-speech" ));
+    setIconByName(QLatin1String( "preferences-desktop-text-to-speech" ));
 
     // Set up menu.
     QAction *act;
@@ -106,19 +106,19 @@ void JovieTrayIcon::slotActivateRequested(bool active, const QPoint &pos)
     Q_UNUSED(active)
     Q_UNUSED(pos)
     // pause/resume icon/app
-    if (overlayIconName() == QString("media-playback-pause")) {
+    if (overlayIconName() == QLatin1String("media-playback-pause")) {
         Jovie::Instance()->resume();
-        setOverlayIconByName("");
+        setOverlayIconByName(QLatin1String( "" ));
     }
     else {
         Jovie::Instance()->pause();
-        setOverlayIconByName("media-playback-pause");
+        setOverlayIconByName(QLatin1String( "media-playback-pause" ));
     }
 }
 
 void JovieTrayIcon::contextMenuAboutToShow()
 {
-    const bool configActive = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kcmshell_kcmkttsd"));
+    const bool configActive = (QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String( "org.kde.kcmshell_kcmkttsd" )));
     actConfigure->setEnabled(!configActive);
 }
 
@@ -135,7 +135,7 @@ void JovieTrayIcon::aboutSelected()
 
 void JovieTrayIcon::helpSelected()
 {
-    KToolInvocation::invokeHelp(QString(),"jovie");
+    KToolInvocation::invokeHelp(QString(),QLatin1String( "jovie" ));
 }
 
 void JovieTrayIcon::stopSelected()
@@ -163,8 +163,8 @@ void JovieTrayIcon::repeatSelected()
 void JovieTrayIcon::configureSelected()
 {
     QStringList lst;
-    lst << "kcmkttsd" << "--caption" << i18n("KDE Text-to-Speech");
-    QProcess::startDetached("kcmshell4",lst);
+    lst << QLatin1String( "kcmkttsd" ) << QLatin1String( "--caption" ) << i18n("KDE Text-to-Speech");
+    QProcess::startDetached(QLatin1String( "kcmshell4" ),lst);
 }
 
 #include "jovietrayicon.moc"

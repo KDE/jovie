@@ -62,20 +62,20 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     m_ui = new Ui::kttsjobmgr;
     m_ui->setupUi(this);
 
-    m_kspeech = new OrgKdeKSpeechInterface("org.kde.KSpeech", "/KSpeech", QDBusConnection::sessionBus());
+    m_kspeech = new OrgKdeKSpeechInterface(QLatin1String( "org.kde.KSpeech" ), QLatin1String( "/KSpeech" ), QDBusConnection::sessionBus());
     m_kspeech->setParent(this);
 
     // Establish ourself as a System Manager.
-    m_kspeech->setApplicationName("KCMKttsMgr");
+    m_kspeech->setApplicationName(QLatin1String( "KCMKttsMgr" ));
     m_kspeech->setIsSystemManager(true);
 
     // All the ktts components use the same catalog.
-    KGlobal::locale()->insertCatalog("jovie");
+    KGlobal::locale()->insertCatalog(QLatin1String( "jovie" ));
 
     // Hide the name field
     m_ui->talkerWidget->setNameReadOnly(true);
     connect (m_ui->talkerWidget, SIGNAL(talkerChanged()), this, SIGNAL(configChanged()));
-    
+
     m_ui->stopButton->setIcon(KIcon( QLatin1String( "media-playback-stop" )));
     connect (m_ui->stopButton, SIGNAL(clicked()), this, SLOT(slot_stop()));
     m_ui->cancelButton->setIcon(KIcon( QLatin1String( "edit-clear" )));
@@ -93,7 +93,7 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
 
 KttsJobMgr::~KttsJobMgr()
 {
-    KGlobal::locale()->removeCatalog("jovie");
+    KGlobal::locale()->removeCatalog(QLatin1String( "jovie" ));
     delete m_ui;
 }
 
@@ -123,7 +123,7 @@ void KttsJobMgr::slot_resume()
 void KttsJobMgr::save()
 {
     TalkerCode talker = m_ui->talkerWidget->getTalkerCode();
-    
+
     m_kspeech->setSpeed(talker.rate());
     m_kspeech->setPitch(talker.pitch());
     m_kspeech->setVolume(talker.volume());
@@ -151,18 +151,18 @@ void KttsJobMgr::slot_speak_clipboard()
     const QMimeData* data = cb->mimeData();
     if (data)
     {
-        if (data->hasFormat("text/html"))
+        if (data->hasFormat(QLatin1String( "text/html" )))
         {
             // if (m_kspeech->supportsMarkup(NULL, KSpeech::mtHtml))
                 text = data->html();
                 sayOptions = KSpeech::soHtml;
         }
-        if (data->hasFormat("text/ssml"))
+        if (data->hasFormat(QLatin1String( "text/ssml" )))
         {
             // if (m_kspeech->supportsMarkup(NULL, KSpeech::mtSsml))
             {
-                QByteArray d = data->data("text/ssml");
-                text = QString(d);
+                QByteArray d = data->data(QLatin1String( "text/ssml" ));
+                text = QLatin1String(d);
                 sayOptions = KSpeech::soSsml;
             }
         }

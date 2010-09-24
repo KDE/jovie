@@ -40,7 +40,7 @@ AddTalker::AddTalker(QWidget* parent)
     this->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     this->setDefaultButton(KDialog::Cancel);
     this->enableButtonOk(false);
-    this->setHelp("select-plugin", "jovie");
+    this->setHelp(QLatin1String( "select-plugin" ), QLatin1String( "jovie" ));
 
     mWidget = new TalkerWidget(this);
     connect(mWidget, SIGNAL(talkerChanged()), this, SLOT(slotTalkerChanged()));

@@ -2,7 +2,7 @@
   SSMLConvert class
 
   This class is in charge of converting SSML text into a format that can
-  be handled by individual synths. 
+  be handled by individual synths.
   -------------------
   Copyright:
   (C) 2004 by Paul Giannaros <ceruleanblaze@gmail.com>
@@ -64,12 +64,12 @@ void SSMLConvert::setTalkers(const QStringList &talkers) {
 }
 
 QString SSMLConvert::extractTalker(const QString &talkercode) {
-    QString t = talkercode.section("synthesizer=", 1, 1);
-    t = t.section('"', 1, 1);
-    if(t.contains("flite"))
-        return "flite";
+    QString t = talkercode.section(QLatin1String( "synthesizer=" ), 1, 1);
+    t = t.section(QLatin1Char( '"' ), 1, 1);
+    if(t.contains(QLatin1String( "flite" )))
+        return QLatin1String( "flite" );
     else
-        return t.left(t.indexOf(" ")).toLower();
+        return t.left(t.indexOf(QLatin1String( " " ))).toLower();
 }
 
 /**
@@ -91,16 +91,16 @@ QString SSMLConvert::extractTalker(const QString &talkercode) {
 *      at the moment, and must be specified in the root speak element (<speak xml:lang="en-US">)
 *   - Gender
 *      If a gender is specified, look for talkers that comply. There is no default so if no gender is
-*      specified, no talkers will be removed. The only gender that will be searched for is the one 
+*      specified, no talkers will be removed. The only gender that will be searched for is the one
 *      specified in the root speak element. This should change in the future.
 *   - Prosody
-*      Check if prosody modification is allowed by the talker. Currently this is hardcoded (it 
+*      Check if prosody modification is allowed by the talker. Currently this is hardcoded (it
 *      is stated which talkers do and do not in a variable somewhere).
-* 
+*
 * Bear in mind that the XSL stylesheet that will be applied to the SSML is the same regardless
 * of the how the talker is chosen, meaning that you don't lose some features of the talker if this
 * search doesn't encompass them.
-* 
+*
 * QDom is the item of choice for the matching. Just walk the tree..
 */
 QString SSMLConvert::appropriateTalker(const QString &text) const {
@@ -111,12 +111,12 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
 
     /// Check that this is (well formed) SSML and all our searching will not be in vain.
     QDomElement root = ssml.documentElement();
-    if(root.tagName() != "speak") {
+    if(root.tagName() != QLatin1String( "speak" )) {
         // Not SSML.
         return QString();
     }
 
-    /** 
+    /**
     * For each rule that we are looking through, iterate over all currently
     * matching talkers and remove all the talkers that don't match.
     *
@@ -124,42 +124,42 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     */
     QString talklang, talkvoice, talkgender, talkvolume, talkrate, talkname;
 
-    kDebug() << "SSMLConvert::appropriateTalker: BEFORE LANGUAGE SEARCH: " << matches.join(" ");;
+    kDebug() << "SSMLConvert::appropriateTalker: BEFORE LANGUAGE SEARCH: " << matches.join(QLatin1String( " " ));;
     /**
     * Language searching
     */
-    if(root.hasAttribute("xml:lang")) {
-        QString lang = root.attribute("xml:lang");
+    if(root.hasAttribute(QLatin1String( "xml:lang" ))) {
+        QString lang = root.attribute(QLatin1String( "xml:lang" ));
         kDebug() << "SSMLConvert::appropriateTalker: xml:lang found (" << lang << ")";
         /// If it is set to en*, then match all english speakers. They all sound the same anyways.
-        if(lang.contains("en-")) {
+        if(lang.contains(QLatin1String( "en-" ))) {
             kDebug() << "SSMLConvert::appropriateTalker: English";
-            lang = "en";
+            lang = QLatin1String( "en" );
         }
         /// Find all hits and place them in matches. We don't search for the closing " because if
         /// the talker emits lang="en-UK" or something we'll be ignoring it, which we don't want.
-        matches = matches.filter("lang=\"" + lang);
+        matches = matches.filter(QLatin1String( "lang=\"" ) + lang);
     }
     else {
         kDebug() << "SSMLConvert::appropriateTalker: no xml:lang found. Defaulting to en..";
-        matches = matches.filter("lang=\"en");
+        matches = matches.filter(QLatin1String( "lang=\"en" ));
     }
 
-    kDebug() << "SSMLConvert::appropriateTalker: AFTER LANGUAGE SEARCH: " << matches.join(" ");;
+    kDebug() << "SSMLConvert::appropriateTalker: AFTER LANGUAGE SEARCH: " << matches.join(QLatin1String( " " ));;
 
     /**
     * Gender searching
-    * If, for example, male is specified and only female is found, 
+    * If, for example, male is specified and only female is found,
     * ignore the choice and just use female.
     */
-    if(root.hasAttribute("gender")) {
-        QString gender = root.attribute("gender");
+    if(root.hasAttribute(QLatin1String( "gender" ))) {
+        QString gender = root.attribute(QLatin1String( "gender" ));
         kDebug() << "SSMLConvert::appropriateTalker: gender found (" << gender << ")";
         /// If the gender found is not 'male' or 'female' then ignore it.
-        if(!(gender == "male" || gender == "female")) {
+        if(!(gender == QLatin1String( "male" ) || gender == QLatin1String( "female" ))) {
             /// Make sure that we don't strip away all the talkers because of no matches.
-            if(matches.filter("gender=\"" + gender).count() >= 1)
-                matches = matches.filter("gender=\"" + gender);
+            if(matches.filter(QLatin1String( "gender=\"" ) + gender).count() >= 1)
+                matches = matches.filter(QLatin1String( "gender=\"" ) + gender);
         }
     }
     else {
@@ -174,18 +174,18 @@ QString SSMLConvert::appropriateTalker(const QString &text) const {
     */
     /// Known to support (feel free to add to the list and if search):
     ///   Festival Int (not flite), Hadifix
-    if(matches.filter("synthesizer=\"Festival Interactive").count() >= 1 ||
-    matches.filter("synthesizer=\"Hadifix").count() >= 1) {
+    if(matches.filter(QLatin1String( "synthesizer=\"Festival Interactive" )).count() >= 1 ||
+    matches.filter(QLatin1String( "synthesizer=\"Hadifix" )).count() >= 1) {
 
         kDebug() << "SSMLConvert::appropriateTalker: Prosody allowed";
-        QStringList tmpmatches = matches.filter("synthesizer=\"Festival Interactive");
-        matches = matches.filter("synthesizer=\"Hadifix");
+        QStringList tmpmatches = matches.filter(QLatin1String( "synthesizer=\"Festival Interactive" ));
+        matches = matches.filter(QLatin1String( "synthesizer=\"Hadifix" ));
         matches = tmpmatches + matches;
     }
     else
         kDebug() << "SSMLConvert::appropriateTalker: No prosody-supporting talkers found";
 
-    /// Return the first match that complies. Maybe a discrete way to 
+    /// Return the first match that complies. Maybe a discrete way to
     /// choose between all the matches could be offered in the future. Some form of preference.
     return matches[0];
 }
@@ -207,8 +207,8 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     m_xsltFilename = xsltFilename;
     /// Write @param text to a temporary file.
     KTemporaryFile inFile;
-    inFile.setPrefix("kttsd-");
-    inFile.setSuffix(".ssml");
+    inFile.setPrefix(QLatin1String( "kttsd-" ));
+    inFile.setSuffix(QLatin1String( ".ssml" ));
     inFile.setAutoRemove(false);
     inFile.open();
     m_inFilename = inFile.fileName();
@@ -222,8 +222,8 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
 
     // Get a temporary output file name.
     KTemporaryFile outFile;
-    outFile.setPrefix("kttsd-");
-    outFile.setSuffix(".output");
+    outFile.setPrefix(QLatin1String( "kttsd-" ));
+    outFile.setSuffix(QLatin1String( ".output" ));
     outFile.setAutoRemove(false);
     outFile.open();
     m_outFilename = outFile.fileName();
@@ -231,7 +231,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     /// Spawn an xsltproc process to apply our stylesheet to our SSML file.
 	QStringList args;
     m_xsltProc = new QProcess;
-    args << "-o" << m_outFilename  << "--novalid"
+    args << QLatin1String( "-o" ) << m_outFilename  << QLatin1String( "--novalid" )
         << m_xsltFilename << m_inFilename;
     // Warning: This won't compile under KDE 3.2.  See FreeTTS::argsToStringList().
     // kDebug() << "SSMLConvert::transform: executing command: " <<
@@ -239,7 +239,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
 
     connect(m_xsltProc, SIGNAL(finished(int, QProcess::ExitStatus)),
         this, SLOT(slotProcessExited()));
-    if (!m_xsltProc->execute(QString("xsltproc"), args))
+    if (!m_xsltProc->execute(QLatin1String("xsltproc"), args))
     {
         kDebug() << "SSMLConvert::transform: Error starting xsltproc";
         return false;

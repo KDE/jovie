@@ -65,9 +65,9 @@ FilterMgr::~FilterMgr()
 bool FilterMgr::init()
 {
     // Load each of the filters and initialize.
-    KSharedConfig::Ptr pConfig = KSharedConfig::openConfig( "kttsdrc" );
+    KSharedConfig::Ptr pConfig = KSharedConfig::openConfig( QLatin1String( "kttsdrc" ) );
     KConfigGroup config( pConfig, "General");
-    KConfig* rawconfig = new KConfig("kttsdrc");
+    KConfig* rawconfig = new KConfig(QLatin1String( "kttsdrc" ));
     QStringList filterIDsList = config.readEntry("FilterIDs", QStringList());
     kDebug() << "FilterMgr::init: FilterIDs = " << filterIDsList;
 
@@ -77,7 +77,7 @@ bool FilterMgr::init()
         for (QStringList::ConstIterator it = filterIDsList.constBegin(); it != itEnd; ++it)
         {
             QString filterID = *it;
-            QString groupName = "Filter_" + filterID;
+            QString groupName = QLatin1String( "Filter_" ) + filterID;
             KConfigGroup thisgroup = pConfig->group(groupName);
             QString desktopEntryName = thisgroup.readEntry( "DesktopEntryName" );
             // If a DesktopEntryName is not in the config file, it was configured before
@@ -158,8 +158,8 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
     // kDebug() << "FilterMgr::loadFilterPlugin: Running";
 
     // Find the plugin.
-    KService::List offers = KServiceTypeTrader::self()->query("Jovie/FilterPlugin",
-        QString("DesktopEntryName == '%1'").arg(desktopEntryName));
+    KService::List offers = KServiceTypeTrader::self()->query(QLatin1String( "Jovie/FilterPlugin" ),
+        QString(QLatin1String( "DesktopEntryName == '%1'" )).arg(desktopEntryName));
 
     if (offers.count() == 1)
     {
@@ -222,8 +222,8 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
 QString FilterMgr::FilterNameToDesktopEntryName(const QString& name)
 {
     if (name.isEmpty()) return QString();
-    KService::List offers = KServiceTypeTrader::self()->query("Jovie/FilterPlugin",
-    QString("Name == '%1'").arg(name));
+    KService::List offers = KServiceTypeTrader::self()->query(QLatin1String( "Jovie/FilterPlugin" ),
+    QString(QLatin1String( "Name == '%1'" )).arg(name));
 
     if (offers.count() == 1)
         return offers[0]->desktopEntryName();
