@@ -34,18 +34,15 @@ public:
     AppDataPrivate(const QString& newAppId) :
         appId(newAppId),
         applicationName(appId),
-        defaultTalker(""),
         defaultPriority(KSpeech::jpMessage),
-        sentenceDelimiter("([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))"),
+        sentenceDelimiter(QLatin1String( "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" )),
         filteringOn(true),
         isApplicationPaused(false),
-        htmlFilterXsltFile(""),
-        ssmlFilterXsltFile(""),
         autoConfigureTalkersOn(false),
         isSystemManager(false),
         jobList(),
         unregistered(false) {}
-        
+
     friend class AppData;
 
 protected:
@@ -91,7 +88,7 @@ bool AppData::autoConfigureTalkersOn() const { return d->autoConfigureTalkersOn;
 void AppData::setAutoConfigureTalkersOn(bool autoConfigureTalkersOn) { d->autoConfigureTalkersOn = autoConfigureTalkersOn; }
 bool AppData::isSystemManager() const { return d->isSystemManager; }
 void AppData::setIsSystemManager(bool isSystemManager) { d->isSystemManager = isSystemManager; }
-int AppData::lastJobNum() const 
+int AppData::lastJobNum() const
 {
     if (d->jobList.isEmpty())
         return 0;

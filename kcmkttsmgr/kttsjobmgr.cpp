@@ -76,18 +76,18 @@ KttsJobMgr::KttsJobMgr(QWidget *parent) :
     m_ui->talkerWidget->setNameReadOnly(true);
     connect (m_ui->talkerWidget, SIGNAL(talkerChanged()), this, SIGNAL(configChanged()));
     
-    m_ui->stopButton->setIcon(KIcon("media-playback-stop"));
+    m_ui->stopButton->setIcon(KIcon( QLatin1String( "media-playback-stop" )));
     connect (m_ui->stopButton, SIGNAL(clicked()), this, SLOT(slot_stop()));
-    m_ui->cancelButton->setIcon(KIcon("edit-clear"));
+    m_ui->cancelButton->setIcon(KIcon( QLatin1String( "edit-clear" )));
     connect (m_ui->cancelButton, SIGNAL(clicked()), this, SLOT(slot_cancel()));
-    m_ui->pauseButton->setIcon(KIcon("media-playback-pause"));
+    m_ui->pauseButton->setIcon(KIcon( QLatin1String( "media-playback-pause" )));
     connect (m_ui->pauseButton, SIGNAL(clicked()), this, SLOT(slot_pause()));
-    m_ui->resumeButton->setIcon(KIcon("media-playback-start"));
+    m_ui->resumeButton->setIcon(KIcon( QLatin1String( "media-playback-start" )));
     connect (m_ui->resumeButton, SIGNAL(clicked()), this, SLOT(slot_resume()));
 
-    m_ui->speak_clipboard->setIcon(KIcon("klipper"));
+    m_ui->speak_clipboard->setIcon(KIcon( QLatin1String( "klipper" )));
     connect (m_ui->speak_clipboard, SIGNAL(clicked()), this, SLOT(slot_speak_clipboard()));
-    m_ui->speak_file->setIcon(KIcon("document-open"));
+    m_ui->speak_file->setIcon(KIcon( QLatin1String( "document-open" )));
     connect (m_ui->speak_file, SIGNAL(clicked()), this, SLOT(slot_speak_file()));
 }
 

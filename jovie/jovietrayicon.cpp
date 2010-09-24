@@ -66,30 +66,30 @@ JovieTrayIcon::JovieTrayIcon(QWidget *parent)
 
     actStop = contextMenu()->addAction (
         i18n("&Stop/Delete"), this, SLOT(stopSelected()));
-    actStop->setIcon(KIcon("media-playback-stop"));
+    actStop->setIcon(KIcon( QLatin1String( "media-playback-stop" )));
     actPause = contextMenu()->addAction (
         i18n("&Pause"), this, SLOT(pauseSelected()));
-    actPause->setIcon(KIcon("media-playback-pause"));
+    actPause->setIcon(KIcon( QLatin1String( "media-playback-pause" )));
     actResume = contextMenu()->addAction (
         i18n("&Resume"), this, SLOT(resumeSelected()));
-    actResume->setIcon(KIcon("media-playback-start"));
+    actResume->setIcon(KIcon( QLatin1String( "media-playback-start" )));
     actRepeat = contextMenu()->addAction (
         i18n("R&epeat"), this, SLOT(repeatSelected()));
-    actRepeat->setIcon(KIcon("view-refresh"));
+    actRepeat->setIcon(KIcon( QLatin1String( "view-refresh" )));
     act = contextMenu()->addSeparator();
     actSpeakClipboard = contextMenu()->addAction (
         i18n("Spea&k Clipboard Contents"), this, SLOT(speakClipboardSelected()));
-    act->setIcon(KIcon("klipper"));
+    act->setIcon(KIcon( QLatin1String( "klipper" )));
     actConfigure = contextMenu()->addAction (
         i18n("&Configure"), this, SLOT(configureSelected()));
-    actConfigure->setIcon(KIcon("configure"));
+    actConfigure->setIcon(KIcon( QLatin1String( "configure" )));
     act = contextMenu()->addSeparator();
     act = contextMenu()->addAction (
         i18n("Jovie &Handbook"), this, SLOT(helpSelected()));
-    act->setIcon(KIcon("help-contents"));
+    act->setIcon(KIcon( QLatin1String( "help-contents" )));
     act = contextMenu()->addAction (
         i18n("&About Jovie"), this, SLOT(aboutSelected()));
-    act->setIcon(KIcon("preferences-desktop-text-to-speech"));
+    act->setIcon(KIcon( QLatin1String( "preferences-desktop-text-to-speech" )));
 
     connect(this, SIGNAL(activateRequested(bool, const QPoint &)),
                   SLOT(slotActivateRequested(bool, const QPoint &)));

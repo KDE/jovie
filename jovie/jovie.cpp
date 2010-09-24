@@ -100,7 +100,7 @@ Jovie::~Jovie()
     kDebug() << "Jovie::~Jovie:: Stopping Jovie service";
     Speaker::Instance()->requestExit();
     delete d;
-    announceEvent("~Jovie", "jovieExiting");
+    announceEvent(QLatin1String( "~Jovie" ), QLatin1String( "jovieExiting" ));
     emit kttsdExiting();
 }
 
@@ -397,7 +397,7 @@ QByteArray Jovie::getJobInfo(int jobNum)
 QString Jovie::getJobSentence(int jobNum, int sentenceNum)
 {
     kDebug() << "not implemented in speech-dispatcher yet";
-    return 0;
+    return QString();
 }
 
 QStringList Jovie::getTalkerCodes()
@@ -450,14 +450,14 @@ int Jovie::moveRelSentence(int jobNum, int n)
 
 void Jovie::showManagerDialog()
 {
-    QString cmd = "kcmshell4 kcmkttsd --caption ";
-    cmd += '\'' + i18n("KDE Text-to-Speech") + '\'';
+    QString cmd = QLatin1String( "kcmshell4 kcmkttsd --caption " );
+    cmd += QLatin1Char( '\'' ) + i18n("KDE Text-to-Speech") + QLatin1Char( '\'' );
     KRun::runCommand(cmd,NULL);
 }
 
 void Jovie::kttsdExit()
 {
-    announceEvent("kttsdExit", "kttsdExiting");
+    announceEvent(QLatin1String( "kttsdExit" ), QLatin1String( "kttsdExiting" ));
     emit kttsdExiting();
     qApp->quit();
 }
@@ -466,7 +466,7 @@ void Jovie::init()
 {
     new KSpeechAdaptor(this);
     if (ready()) {
-        QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
+        QDBusConnection::sessionBus().registerObject(QLatin1String( "/KSpeech" ), this, QDBusConnection::ExportAdaptors);
     }
 }
 
@@ -477,9 +477,9 @@ void Jovie::reinit()
     //if (Speaker::Instance()->isSpeaking())
     //    Speaker::Instance()->pause();
     Speaker::Instance()->init();
-    QDBusConnection::sessionBus().unregisterObject("/KSpeech");
+    QDBusConnection::sessionBus().unregisterObject(QLatin1String( "/KSpeech" ));
     if (ready()) {
-        QDBusConnection::sessionBus().registerObject("/KSpeech", this, QDBusConnection::ExportAdaptors);
+        QDBusConnection::sessionBus().registerObject(QLatin1String( "/KSpeech" ), this, QDBusConnection::ExportAdaptors);
     }
 }
 
@@ -506,7 +506,7 @@ bool Jovie::ready()
         return false;
     if (!initializeSpeaker())
         return false;
-    announceEvent("ready", "kttsdStarted");
+    announceEvent(QLatin1String( "ready" ), QLatin1String( "kttsdStarted" ));
     emit kttsdStarted();
     return true;
 }
@@ -529,7 +529,7 @@ bool Jovie::initializeSpeaker()
     Speaker::Instance()->init();
 
     // Establish ourself as a System Manager application.
-    Speaker::Instance()->getAppData("jovie")->setIsSystemManager(true);
+    Speaker::Instance()->getAppData(QLatin1String( "jovie" ))->setIsSystemManager(true);
 
     return true;
 }
@@ -537,13 +537,13 @@ bool Jovie::initializeSpeaker()
 
 void Jovie::slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state)
 {
-    announceEvent("slotJobStateChanged", "jobStateChanged", appId, jobNum, state);
+    announceEvent(QLatin1String( "slotJobStateChanged" ), QLatin1String( "jobStateChanged" ), appId, jobNum, state);
     emit jobStateChanged(appId, jobNum, state);
 }
 
 void Jovie::slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData)
 {
-    announceEvent("slotMarker", "marker", appId, jobNum, markerType, markerData);
+    announceEvent(QLatin1String( "slotMarker" ), QLatin1String( "marker" ), appId, jobNum, markerType, markerData);
     emit marker(appId, jobNum, markerType, markerData);
 }
 

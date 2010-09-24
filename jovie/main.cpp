@@ -49,7 +49,7 @@ int main (int argc, char *argv[]){
     aboutdata.addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
     aboutdata.addCredit(ki18n("Jorge Luis Arzola"), ki18n("Testing"), "arzolacub@hotmail.com");
     aboutdata.addCredit(ki18n("David Powell"), ki18n("Testing"), "achiestdragon@gmail.com");
-    aboutdata.setProgramIconName("preferences-desktop-text-to-speech");
+    aboutdata.setProgramIconName(QLatin1String( "preferences-desktop-text-to-speech" ));
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
     KUniqueApplication::addCmdLineOptions();
@@ -63,12 +63,12 @@ int main (int argc, char *argv[]){
         return (0);
     }
 
-    if (QDBusConnection::sessionBus().interface()->registerService("org.kde.KSpeech")
+    if (QDBusConnection::sessionBus().interface()->registerService(QLatin1String( "org.kde.KSpeech" ))
         != QDBusConnectionInterface::ServiceRegistered) {
         kDebug() << "Could not register on KSpeech";
     }
 
-    if (QDBusConnection::sessionBus().interface()->registerService("org.kde.kttsd")
+    if (QDBusConnection::sessionBus().interface()->registerService(QLatin1String( "org.kde.kttsd" ))
         != QDBusConnectionInterface::ServiceRegistered) {
         kDebug() << "Could not register on KSpeech";
     }

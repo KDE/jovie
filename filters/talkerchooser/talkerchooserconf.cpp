@@ -57,7 +57,7 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QVariantList & args
     setupUi(this);
 
     // Determine if kdeutils Regular Expression Editor is installed.
-    m_reEditorInstalled = !KServiceTypeTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
+    m_reEditorInstalled = !KServiceTypeTrader::self()->query(QLatin1String( "KRegExpEditor/KRegExpEditor" )).isEmpty();
     reEditorButton->setEnabled(m_reEditorInstalled);
 
     connect(nameLineEdit, SIGNAL(textChanged(const QString&)),
@@ -119,7 +119,7 @@ void TalkerChooserConf::save(KConfig* c, const QString& configGroup){
     KConfigGroup config( c, configGroup );
     config.writeEntry( "UserFilterName", nameLineEdit->text() );
     config.writeEntry( "MatchRegExp", reLineEdit->text() );
-    config.writeEntry( "AppIDs", appIdLineEdit->text().remove(' ') );
+    config.writeEntry( "AppIDs", appIdLineEdit->text().remove(QLatin1Char( ' ' )) );
     config.writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
 }
 
@@ -135,9 +135,9 @@ void TalkerChooserConf::defaults(){
     // Default name.
     nameLineEdit->setText( i18n("Talker Chooser") );
     // Default regular expression is blank.
-    reLineEdit->setText( "" );
+    reLineEdit->clear( );
     // Default App ID is blank.
-    appIdLineEdit->setText( "" );
+    appIdLineEdit->clear();
     // Default to using default Talker.
     m_talkerCode = TalkerCode( QString(), false );
     talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
@@ -173,7 +173,7 @@ void TalkerChooserConf::slotReEditorButton_clicked()
     // Show Regular Expression Editor dialog if it is installed.
     if ( !m_reEditorInstalled ) return;
     KDialog *editorDialog =
-        KServiceTypeTrader::createInstanceFromQuery<KDialog>( "KRegExpEditor/KRegExpEditor" );
+        KServiceTypeTrader::createInstanceFromQuery<KDialog>( QLatin1String( "KRegExpEditor/KRegExpEditor" ));
     if ( editorDialog )
     {
         // kdeutils was installed, so the dialog was found.  Fetch the editor interface.
@@ -204,17 +204,17 @@ void TalkerChooserConf::slotTalkerButton_clicked()
 
 void TalkerChooserConf::slotLoadButton_clicked()
 {
-    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", "kttsd/talkerchooser/");
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", QLatin1String( "kttsd/talkerchooser/" ));
     QString dataDir;
     if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
         dataDir,
-        "*rc|Talker Chooser Config (*rc)",
+        QLatin1String( "*rc|" ) + i18n( "Talker Chooser Config (*rc)" ),
         this,
-        "talkerchooser_loadfile");
+        QLatin1String( "talkerchooser_loadfile" ));
     if ( filename.isEmpty() ) return;
     KConfig* cfg = new KConfig( filename );
-    load( cfg, "Filter" );
+    load( cfg, QLatin1String( "Filter" ) );
     delete cfg;
     configChanged();
 }
@@ -222,13 +222,13 @@ void TalkerChooserConf::slotLoadButton_clicked()
 void TalkerChooserConf::slotSaveButton_clicked()
 {
     QString filename = KFileDialog::getSaveFileName(
-        KGlobal::dirs()->saveLocation( "data" ,"kttsd/talkerchooser/", false ),
-       "*rc|Talker Chooser Config (*rc)",
+        KGlobal::dirs()->saveLocation( "data" ,QLatin1String( "kttsd/talkerchooser/" ), false ) ,
+       QLatin1String( "*rc|" ) + i18n( "Talker Chooser Config (*rc)" ),
         this,
-        "talkerchooser_savefile");
+        QLatin1String( "talkerchooser_savefile" ));
     if ( filename.isEmpty() ) return;
     KConfig* cfg = new KConfig( filename );
-    save( cfg, "Filter" );
+    save( cfg, QLatin1String( "Filter" ) );
     delete cfg;
 }
 

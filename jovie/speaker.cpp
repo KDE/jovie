@@ -113,7 +113,7 @@ class SpeakerPrivate
         filterMgr = new FilterMgr();
         filterMgr->init();
 
-        config = new KConfig("kttsdrc");
+        config = new KConfig(QLatin1String( "kttsdrc" ));
     }
 
     ~SpeakerPrivate()
@@ -159,7 +159,7 @@ protected:
             char ** modulenames = spd_list_modules(connection);
             while (modulenames != NULL && modulenames[0] != NULL)
             {
-                outputModules << modulenames[0];
+                outputModules << QLatin1String( modulenames[0] );
                 modulenames++;
                 kDebug() << "added module " << outputModules.last();
             }
@@ -298,7 +298,7 @@ bool Speaker::isSsml(const QString &text)
     ssml.setContent(text, false);  // No namespace processing.
     /// Check to see if this is SSML
     QDomElement root = ssml.documentElement();
-    return (root.tagName() == "speak");
+    return (root.tagName() == QLatin1String( "speak" ));
 }
 
 QStringList Speaker::moduleNames()
@@ -318,20 +318,20 @@ QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL
     QRegExp sentenceDelimiter(getAppData(appId)->sentenceDelimiter());
     QString temp = text;
     // Replace spaces, tabs, and formfeeds with a single space.
-    temp.replace(QRegExp("[ \\t\\f]+"), " ");
+    temp.replace(QRegExp(QLatin1String( "[ \\t\\f]+") ), QLatin1String( " " ));
     // Replace sentence delimiters with tab.
-    temp.replace(sentenceDelimiter, "\\1\t");
+    temp.replace(sentenceDelimiter, QLatin1String( "\\1\t" ));
     // Replace remaining newlines with spaces.
-    temp.replace('\n',' ');
-    temp.replace('\r',' ');
+    temp.replace(QLatin1Char( '\n' ),QLatin1Char( ' ' ));
+    temp.replace(QLatin1Char( '\r' ),QLatin1Char( ' ' ));
     // Remove leading spaces.
-    temp.replace(QRegExp("\\t +"), "\t");
+    temp.replace(QRegExp(QLatin1String( "\\t +" )), QLatin1String( "\t" ));
     // Remove trailing spaces.
-    temp.replace(QRegExp(" +\\t"), "\t");
+    temp.replace(QRegExp(QLatin1String( " +\\t" )), QLatin1String( "\t" ));
     // Remove blank lines.
-    temp.replace(QRegExp("\t\t+"),"\t");
+    temp.replace(QRegExp(QLatin1String( "\t\t+" )),QLatin1String( "\t" ));
     // Split into sentences.
-    QStringList tempList = temp.split( '\t', QString::SkipEmptyParts);
+    QStringList tempList = temp.split( QLatin1Char( '\t' ), QString::SkipEmptyParts);
 
 //    for ( QStringList::Iterator it = tempList.begin(); it != tempList.end(); ++it ) {
 //        kDebug() << "'" << *it << "'";
@@ -461,7 +461,7 @@ QStringList Speaker::outputModules()
         char ** modulenames = spd_list_modules(d->connection);
         while (modulenames != NULL && modulenames[0] != NULL)
         {
-            modules << modulenames[0];
+            modules << QLatin1String( modulenames[0] );
             ++modulenames;
         }
     }
@@ -479,8 +479,8 @@ QStringList Speaker::languagesByModule(const QString & module)
         SPDVoice ** voices = spd_list_synthesis_voices(d->connection);
         while (voices != NULL && voices[0] != NULL)
         {
-            if (!languages.contains(voices[0]->language))
-                languages << voices[0]->language;
+            if (!languages.contains(QLatin1String( voices[0]->language) ))
+                languages << QLatin1String( voices[0]->language );
             ++voices;
         }
     }

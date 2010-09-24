@@ -42,7 +42,7 @@
 * Constructor
 */
 KttsFilterConf::KttsFilterConf( QWidget *parent, const QVariantList &) : QWidget(parent){
-    //setObjectName(name);
+    //setObjectName( QLatin1String( name ) );
     // kDebug() << "KttsFilterConf::KttsFilterConf: Running";
     QString systemPath(QLatin1String( qgetenv("PATH" ) ));
     // kDebug() << "Path is " << systemPath;

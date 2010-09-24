@@ -40,7 +40,7 @@
 #include "filterconf.h"
 
 /**
-* Constructor 
+* Constructor
 */
 XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QVariantList &args) :
     KttsFilterConf(parent, args)
@@ -99,13 +99,13 @@ void XmlTransformerConf::save(KConfig* c, const QString& configGroup){
     config.writeEntry( "XsltprocPath", realFilePath( xsltprocPath->url().path() ) );
     config.writeEntry( "RootElement", rootElementLineEdit->text() );
     config.writeEntry( "DocType", doctypeLineEdit->text() );
-    config.writeEntry( "AppID", appIdLineEdit->text().remove(' ') );
+    config.writeEntry( "AppID", appIdLineEdit->text().remove(QLatin1Char( ' ' )) );
 }
 
-/** 
+/**
 * This function is called to set the settings in the module to sensible
-* default values. It gets called when hitting the "Default" button. The 
-* default values should probably be the same as the ones the application 
+* default values. It gets called when hitting the "Default" button. The
+* default values should probably be the same as the ones the application
 * uses when started without a config file.  Note that defaults should
 * be applied to the on-screen widgets; not to the config file.
 */
@@ -114,15 +114,15 @@ void XmlTransformerConf::defaults(){
     // Default name.
     nameLineEdit->setText(i18n( "XML Transformer" ));
     // Default XSLT path to installed xsl files.
-    xsltPath->setUrl( KUrl::fromPath( KStandardDirs::locate("data", "kttsd/xmltransformer/") ) );
+    xsltPath->setUrl( KUrl::fromPath( KStandardDirs::locate("data", QLatin1String( "kttsd/xmltransformer/" )) ) );
     // Default path to xsltproc.
     xsltprocPath->setUrl( KUrl("xsltproc") );
     // Default root element to "html".
-    rootElementLineEdit->setText( "html" );
+    rootElementLineEdit->setText( QLatin1String( "html" ) );
     // Default doctype to blank.
-    doctypeLineEdit->setText( "" );
+    doctypeLineEdit->clear();
     // Default App ID to blank.
-    appIdLineEdit->setText( "" );
+    appIdLineEdit->clear();
     // kDebug() << "XmlTransformerConf::defaults: Exiting";
 }
 

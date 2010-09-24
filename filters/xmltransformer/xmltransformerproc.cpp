@@ -194,8 +194,8 @@ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talk
 
     /// Write @param text to a temporary file.
     KTemporaryFile inFile;
-    inFile.setPrefix("kttsd-");
-    inFile.setSuffix(".xml");
+    inFile.setPrefix(QLatin1String( "kttsd-" ));
+    inFile.setSuffix(QLatin1String( ".xml" ));
     inFile.setAutoRemove(false);
     inFile.open();
     m_inFilename = inFile.fileName();
@@ -207,14 +207,14 @@ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talk
     // This will change & inside a CDATA section, which is not good, and also within comments and
     // processing instructions, which is OK because we don't speak those anyway.
     QString text = inputText;
-    text.replace(QRegExp("&(?!amp;)"),"&amp;");
+    text.replace(QRegExp(QLatin1String( "&(?!amp;)") ),QLatin1String( "&amp;" ));
     wstream << text;
     inFile.flush();
 
     // Get a temporary output file name.
     KTemporaryFile outFile;
-    outFile.setPrefix("kttsd-");
-    outFile.setSuffix(".output");
+    outFile.setPrefix(QLatin1String( "kttsd-" ));
+    outFile.setSuffix(QLatin1String( ".output" ));
     outFile.setAutoRemove(false);
     outFile.open();
     m_outFilename = outFile.fileName();
@@ -280,7 +280,7 @@ void XmlTransformerProc::processOutput()
     m_text = rstream.readAll();
     readfile.close();
 
-    kDebug() << "XmlTransformerProc::processOutput: Read file at " + m_inFilename + " and created " + m_outFilename + " based on the stylesheet at " << m_xsltFilePath;
+    kDebug() << QLatin1String( "XmlTransformerProc::processOutput: Read file at " ) + m_inFilename + QLatin1String( " and created " ) + m_outFilename + QLatin1String( " based on the stylesheet at " ) << m_xsltFilePath;
 
     // Clean up.
     QFile::remove(m_outFilename);

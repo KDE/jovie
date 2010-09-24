@@ -61,7 +61,7 @@ StringReplacerProc::StringReplacerProc( QObject *parent, QVariantList list) :
 bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     //kDebug() << "StringReplacerProc::init: Running";
     QString wordsFilename =
-        KGlobal::dirs()->saveLocation( "data" ,"kttsd/stringreplacer/", false );
+        KGlobal::dirs()->saveLocation( "data" ,QLatin1String( "kttsd/stringreplacer/" ), false );
     if ( wordsFilename.isEmpty() ) return false;
     wordsFilename += configGroup;
     KConfigGroup config( c, configGroup );
@@ -74,7 +74,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
         //kDebug() << "StringReplacerProc::init: couldn't open file " << wordsFilename;
         return false;
     }
-    QDomDocument doc( "" );
+    QDomDocument doc( QLatin1String( "" ) );
     if ( !doc.setContent( &file ) ) {
         //kDebug() << "StringReplacerProc::init: couldn't get xml from file " << wordsFilename;
         file.close();
@@ -94,33 +94,33 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     // Language Codes setting.  List may be single element of comma-separated values,
     // or multiple elements.
     m_languageCodeList.clear();
-    QDomNodeList languageList = doc.elementsByTagName( "language-code" );
+    QDomNodeList languageList = doc.elementsByTagName( QLatin1String( "language-code" ) );
     for ( int ndx=0; ndx < languageList.count(); ++ndx )
     {
         QDomNode languageNode = languageList.item( ndx );
-        m_languageCodeList += languageNode.toElement().text().split( ',', QString::SkipEmptyParts);
+        m_languageCodeList += languageNode.toElement().text().split( QLatin1Char(','), QString::SkipEmptyParts);
     }
 
     // AppId.  Apply this filter only if DCOP appId of application that queued
     // the text contains this string.  List may be single element of comma-separated values,
     // or multiple elements.
     m_appIdList.clear();
-    QDomNodeList appIdList = doc.elementsByTagName( "appid" );
+    QDomNodeList appIdList = doc.elementsByTagName( QLatin1String( "appid" ) );
     for ( int ndx=0; ndx < appIdList.count(); ++ndx )
     {
         QDomNode appIdNode = appIdList.item( ndx );
-        m_appIdList += appIdNode.toElement().text().split( ',', QString::SkipEmptyParts);
+        m_appIdList += appIdNode.toElement().text().split( QLatin1Char( ',' ), QString::SkipEmptyParts);
     }
 
     // Word list.
-    QDomNodeList wordList = doc.elementsByTagName("word");
+    QDomNodeList wordList = doc.elementsByTagName(QLatin1String( "word" ) );
     const int wordListCount = wordList.count();
     for (int wordIndex = 0; wordIndex < wordListCount; ++wordIndex)
     {
         QDomNode wordNode = wordList.item(wordIndex);
         QDomNodeList propList = wordNode.childNodes();
         QString wordType;
-        QString matchCase = "No"; // Default for old (v<=3.5.3) config files with no <case/>.
+        QString matchCase = QLatin1String( "No" ); // Default for old (v<=3.5.3) config files with no <case/>.
         QString match;
         QString subst;
         const int propListCount = propList.count();
@@ -128,18 +128,18 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
         {
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
-            if (prop.tagName() == "type") wordType = prop.text();
-	    if (prop.tagName() == "case") matchCase = prop.text();
-            if (prop.tagName() == "match") match = prop.text();
-            if (prop.tagName() == "subst") subst = prop.text();
+            if (prop.tagName() == QLatin1String( "type" )) wordType = prop.text();
+	    if (prop.tagName() == QLatin1String( "case" )) matchCase = prop.text();
+            if (prop.tagName() == QLatin1String( "match" )) match = prop.text();
+            if (prop.tagName() == QLatin1String( "subst" )) subst = prop.text();
         }
         // Build Regular Expression for each word's match string.
         QRegExp rx;
-        rx.setCaseSensitivity(matchCase == "Yes"?Qt::CaseInsensitive:Qt::CaseSensitive);
-        if ( wordType == "Word" )
+        rx.setCaseSensitivity(matchCase == QLatin1String( "Yes" )?Qt::CaseInsensitive:Qt::CaseSensitive);
+        if ( wordType == QLatin1String( "Word" ) )
         {
                 // TODO: Does \b honor strange non-Latin1 encodings?
-            rx.setPattern( "\\b" + match + "\\b" );
+            rx.setPattern( QLatin1String( "\\b" ) + match + QLatin1String( "\\b" ) );
         }
         else
         {
@@ -180,7 +180,7 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
     //        if ( !talkerCode->countryCode().isEmpty() )
     //        {
     //            languageCode += '_' + talkerCode->countryCode();
-    //             //kDebug() << "StringReplacerProc::convert: converting " << inputText << 
+    //             //kDebug() << "StringReplacerProc::convert: converting " << inputText <<
     //             //   " if language code " << languageCode << " matches " << m_languageCodeList << endl;
     //            if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
     //        } else return inputText;
