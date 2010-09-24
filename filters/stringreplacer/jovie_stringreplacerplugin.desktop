@@ -94,5 +94,5 @@ Comment[zh_CN]=Jovie 的通用字符串替换过滤插件
 Comment[zh_TW]=Jovie 使用的一般字串置換外掛程式
 Type=Service
 ServiceTypes=Jovie/FilterPlugin
-X-KDE-Library=libjovie_stringreplacerplugin
+X-KDE-Library=jovie_stringreplacerplugin
 X-KDE-Languages=en,en_US,en_GB,en_CA,es,es_mx,cy,de,fi,cs,pl
