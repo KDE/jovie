@@ -1,8 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Generic String Replacement Filter Configuration class.
   -------------------
-  Copyright:
-  (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright: (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -231,7 +231,7 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
 void StringReplacerConf::save(KConfig* c, const QString& configGroup){
     // kDebug() << "StringReplacerConf::save: Running";
     QString wordsFilename =
-        KGlobal::dirs()->saveLocation( "data" ,QLatin1String( "kttsd/stringreplacer/" ), true );
+        KGlobal::dirs()->saveLocation( "data" ,QLatin1String( "jovie/stringreplacer/" ), true );
     if ( wordsFilename.isEmpty() )
     {
         kDebug() << "StringReplacerConf::save: no save location";
@@ -638,7 +638,7 @@ void StringReplacerConf::slotMatchButton_clicked()
 
 void StringReplacerConf::slotLoadButton_clicked()
 {
-    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", QLatin1String( "kttsd/stringreplacer/" ));
+    QStringList dataDirs = KGlobal::dirs()->findAllResources("data", QLatin1String( "jovie/stringreplacer/" ));
     QString dataDir;
     if (!dataDirs.isEmpty()) dataDir = dataDirs.last();
     QString filename = KFileDialog::getOpenFileName(
