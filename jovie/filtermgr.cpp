@@ -173,8 +173,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const QString& desktopEntryName)
                 << desktopEntryName << endl;
             return NULL;
         } else {
-            KttsFilterProc *plugIn = factory->create<KttsFilterProc>(
-               offers[0]->library().toLatin1(), NULL);
+            KttsFilterProc *plugIn = factory->create<KttsFilterProc>();
             if (plugIn) {
                 return plugIn;
             } else {
