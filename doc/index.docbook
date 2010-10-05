@@ -363,7 +363,7 @@ any talkers.</para>
 
 <para>You are almost ready to begin using &jovie;.
 Now go back to the <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech System (KTTSD)</guilabel> box.  This
+<guilabel>Enable Text-to-Speech System (Jovie)</guilabel> box.  This
 will start the &kde; TTS Daemon.  See <xref linkend="general" />.
 You may now begin using &jovie; to
 speak text.  Click the <guilabel>Jobs</guilabel> tab to create and manage text jobs.
@@ -462,9 +462,9 @@ all changes to settings on other screens are applied (if any).</para></callout>
 </calloutlist>
 </para>
 
-<note><para>The <guilabel>Jobs</guilabel> tab only appears when KTTSD is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
+<note><para>The <guilabel>Jobs</guilabel> tab only appears when Jovie is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
 <guilabel>General</guilabel> tab and check the
-<guilabel>Enable Text-to-Speech (KTTSD)</guilabel> box.</para>
+<guilabel>Enable Text-to-Speech (Jovie)</guilabel> box.</para>
 </note>
 
 </sect1>
@@ -499,7 +499,7 @@ hear a lot of &HTML; headers and other invisible tags spoken.</para></tip>
 
 <para>While running the &kde; Advanced Text Editor (&kate;), you can speak the text
 displayed.  First ensure that &jovie; is running and enable the <guilabel>KTextEditor
-KTTSD Plugin</guilabel> in &kate;'s settings dialog.
+Jovie Text-to-Speech Plugin</guilabel> in &kate;'s settings dialog.
 Highlight the text you want spoken and choose
 <menuchoice>
   <guisubmenu>Tools</guisubmenu>
@@ -1232,9 +1232,9 @@ or menu bars. -->
 <itemizedlist>
 <listitem><para>The &kde; Text-to-Speech API, which is used by application
 programmers to give their applications TTS capabilities.  Applications
-communicate with KTTSD via &DBus;.</para></listitem>
-<listitem><para>The KTTSD Plugin API, which is used to add speech
-synthesis plugins to KTTSD so that &jovie; will work with
+communicate with &jovie; via &DBus;.</para></listitem>
+<listitem><para>The &jovie; Text-to-Speech Plugin API, which is used to add speech
+synthesis plugins to &jovie; so that &jovie; will work with
 a new speech synthesis engine.</para></listitem>
 </itemizedlist>
 
@@ -1258,7 +1258,7 @@ Full documentation for both APIs is available online at the
 
 <para>Enter the following commands in a &konsole;.</para>
 
-<para>If KTTSD is not already running</para>
+<para>If &jovie; is not already running</para>
 
 <para><userinput>jovie</userinput></para>
 
