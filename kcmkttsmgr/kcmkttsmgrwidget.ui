@@ -60,7 +60,7 @@
        <item row="0" column="0">
         <widget class="QCheckBox" name="enableJovieCheckBox">
          <property name="whatsThis">
-          <string>Check to start the KTTS Daemon and enable Text-to-Speech.</string>
+          <string>Check to start the Jovie Daemon and enable Text-to-Speech.</string>
          </property>
          <property name="text">
           <string>&amp;Enable Text-to-Speech System (Jovie)</string>
