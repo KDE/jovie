@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    KService::List offers = KServiceTypeTrader::self()->query("KTTSD/FilterPlugin");
+    KService::List offers = KServiceTypeTrader::self()->query(QLatin1String("KTTSD/FilterPlugin"));
 
     if (args->isSet("list"))
     {
@@ -80,17 +80,17 @@ int main(int argc, char *argv[])
                     //    &errorNo);
                     if (plugIn)
                     {
-                        KConfig* config = new KConfig("kttsdrc");
+                        KConfig* config = new KConfig(QLatin1String("kttsdrc"));
                         plugIn->init( config, groupName);
                         QTextStream inp ( stdin,  QIODevice::ReadOnly );
                         QString text;
                         text = inp.readLine();
                         TalkerCode* talkerCode = new TalkerCode( talker );
                         text = plugIn->convert( text, talkerCode, appId );
-                        if ( args->isSet("break") ) 
-                            text.replace( '\t', "\\t" );
+                        if ( args->isSet("break") )
+                            text.replace( QLatin1Char('\t'), QLatin1String("\\t") );
                         else
-                            text.remove( '\t');
+                            text.remove( QLatin1Char('\t'));
                         kDebug() << text;
                         delete config;
                         delete plugIn;
