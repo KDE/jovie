@@ -561,6 +561,7 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
     QString match = m_editWidget->matchLineEdit->text();
     QString subst = m_editWidget->substLineEdit->text();
     delete m_editDlg;
+    delete m_editWidget;
     m_editDlg = 0;
     m_editWidget = 0;
     if (dlgResult != QDialog::Accepted) return;
