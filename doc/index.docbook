@@ -154,7 +154,7 @@ application that explains what it does and where to report
 problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
-<para>&jovie; is a subsysem within &kde; for producing
+<para>&jovie; is a subsystem within &kde; for producing
 Text-to-Speech (TTS).  It provides a common API for &kde; programmers to give
 TTS capabilities to their applications.  It provides some
 nice capabilities for end users as well.</para>
@@ -816,7 +816,7 @@ text, each is replaced by a substitute string you supply.</para>
 <para>
 <calloutlist>
 <callout arearefs="pt-stringreplacer-1"><para>Enter a name for your filter.  Use any
-name you like that distinquishes it from all other filters.</para></callout>
+name you like that distinguishes it from all other filters.</para></callout>
 <callout arearefs="pt-stringreplacer-2"><para>This is the list of words
 and regular expressions.  The filter searches for matches on each string in
 the <guilabel>Match</guilabel> column, replacing the matched string
@@ -915,7 +915,7 @@ It can only be used on well-formed &XML;.  You must have the
 <para>
 <calloutlist>
 <callout arearefs="pt-xmltransformer-1"><para>Enter a name for your filter.  Use any
-name you like that distinquishes it from all other filters.</para></callout>
+name you like that distinguishes it from all other filters.</para></callout>
 <callout arearefs="pt-xmltransformer-2"><para>Enter the full path
 to an existing XSLT file, which will perform the transformation.</para></callout>
 <callout arearefs="pt-xmltransformer-3"><para>Specify the path to the
@@ -924,7 +924,7 @@ PATH, simply enter <command><userinput>xsltproc</userinput></command>.</para></c
 <callout arearefs="pt-xmltransformer-4"><para>If not blank, the filter
 will apply itself only if the &XML; has the specified root element
 or a <command><![CDATA[<!DOCTYPE]]></command> specification
-beginning with the entered string. This distinquishes one
+beginning with the entered string. This distinguishes one
 form of &XML; from another.  For example,
 <command><userinput>html</userinput></command> in the
 <guilabel>DOCTYPE</guilabel> box will match
@@ -1000,7 +1000,7 @@ chosen talker.
 <para>
 <calloutlist>
 <callout arearefs="pt-talkerchooser-1"><para>Enter a name for your filter.  Use any
-name you like that distinquishes it from all other filters.</para></callout>
+name you like that distinguishes it from all other filters.</para></callout>
 <callout arearefs="pt-talkerchooser-2"><para>If not blank, the filter will apply
 itself only if the text contains the entered regular expression.  If it is installed,
 click the browse button to launch the &kde; Regular Expression Editor to assist you at entering
