@@ -38,7 +38,7 @@ AddTalker::AddTalker(QWidget* parent)
 {
     this->setCaption(i18n("Add Talker"));
     this->setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
-    this->setDefaultButton(KDialog::Cancel);
+    this->setDefaultButton(KDialog::Ok);
     this->enableButtonOk(false);
     this->setHelp(QLatin1String( "select-plugin" ), QLatin1String( "jovie" ));
 
