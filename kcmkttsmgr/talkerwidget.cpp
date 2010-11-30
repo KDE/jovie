@@ -24,6 +24,7 @@
 #include "talkerwidget.h"
 
 // Qt includes.
+#include <QtGui/QTableWidgetItem>
 #include <QtGui/QWidget>
 
 // KDE includes.
@@ -122,6 +123,27 @@ void TalkerWidget::setNameReadOnly(bool value)
 
 void TalkerWidget::setTalkerCode(const TalkerCode &talker)
 {
+    mUi->nameEdit->setText(talker.name());
+    mUi->voiceComboBox->setCurrentIndex(talker.voiceType() - 1);
+    mUi->volumeSlider->setValue(talker.volume());
+    mUi->speedSlider->setValue(talker.rate());
+    mUi->pitchSlider->setValue(talker.pitch());
+
+    // Then we need to find the row in the availabletalkerstable that matches
+    // the talker's language and output module.
+    int rowCount = mUi->AvailableTalkersTable->rowCount();
+    for (int i = 0; i < rowCount; ++i) {
+
+        // We match the language with the language column's tooltip since it
+        // contains the language code.
+        if (mUi->AvailableTalkersTable->item(i, kLanguageColumn)->toolTip() ==
+            talker.language() &&
+            mUi->AvailableTalkersTable->item(i, kSynthesizerColumn)->text() ==
+            talker.outputModule()) {
+            mUi->AvailableTalkersTable->setCurrentCell(i, kLanguageColumn);
+            break;
+        }
+    }
 }
 
 QString TalkerWidget::getName() const

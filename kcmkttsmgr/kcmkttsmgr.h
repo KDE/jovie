@@ -207,11 +207,6 @@ class KCMKttsMgr :
         KttsFilterConf* loadFilterPlugin(const QString& plugInName);
 
         /**
-        * Display the Talker Configuration Dialog.
-        */
-        void configureTalker();
-
-        /**
         * Display the Filter Configuration Dialog.
         */
         void configureFilterItem();
@@ -279,11 +274,6 @@ class KCMKttsMgr :
         * Plugin configuration dialog.
         */
         KDialog* m_configDlg;
-
-        /**
-        * Talker(synth) Plugin currently loaded into configuration dialog.
-        */
-        //PlugInConf *m_loadedTalkerPlugIn;
 
         /**
         * Filter Plugin currently loaded into configuration dialog.

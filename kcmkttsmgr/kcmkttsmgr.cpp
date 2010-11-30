@@ -1159,57 +1159,24 @@ void KCMKttsMgr::jovieExiting()
 */
 void KCMKttsMgr::slotConfigureTalkerButton_clicked()
 {
-    //// Get highlighted plugin from Talker ListView and load into memory.
-    //QModelIndex modelIndex = talkersView->currentIndex();
-    //if (!modelIndex.isValid()) return;
-    //TalkerCode tc = m_talkerListModel.getRow(modelIndex.row());
-    //QString talkerID = tc.id();
-    //QString synthName = tc.plugInName();
-    //QString desktopEntryName = tc.desktopEntryName();
-    //QString languageCode = tc.fullLanguageCode();
-    //m_loadedTalkerPlugIn = loadTalkerPlugin(desktopEntryName);
-    //if (!m_loadedTalkerPlugIn) return;
-    //// kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: plugin for " << synthName << " loaded successfully.";
+    // Get highlighted Talker from ListView.
+    QModelIndex modelIndex = talkersView->currentIndex();
 
-    //// Tell plugin to load its configuration.
-    //m_loadedTalkerPlugIn->setDesiredLanguage(languageCode);
-    //// kDebug() << "KCMKttsMgr::slotConfigureTalkerButton_clicked: about to call plugin load() method with Talker ID = " << talkerID;
-    //m_loadedTalkerPlugIn->load(m_config, QString("Talker_")+talkerID);
+    if (!modelIndex.isValid())
+        return;
 
-    //// Display configuration dialog.
-    //configureTalker();
+    TalkerCode tc = m_talkerListModel.getRow(modelIndex.row());
 
-    //// Did user Cancel?
-    //if (!m_loadedTalkerPlugIn)
-    //{
-    //    delete m_configDlg;
-    //    m_configDlg = 0;
-    //    return;
-    //}
+    QPointer<AddTalker> dlg = new AddTalker (this);
+    dlg->setTalkerCode(tc);
+    if (dlg->exec() == QDialog::Accepted) {
+        TalkerCode code = dlg->getTalkerCode();
 
-    //// Get Talker Code.  Note that plugin may return a code different from before.
-    //QString talkerCode = m_loadedTalkerPlugIn->getTalkerCode();
+        // Change the existing talker code to this new code.
+        m_talkerListModel.updateRow(modelIndex.row(), code);
 
-    //// If plugin was successfully configured, save its configuration.
-    //if (!talkerCode.isEmpty())
-    //{
-    //    m_loadedTalkerPlugIn->save(m_config, QString("Talker_")+talkerID);
-    //    talkerCode = TalkerCode::normalizeTalkerCode(talkerCode, languageCode);
-    //    KConfigGroup talkerConfig(m_config, QString("Talker_")+talkerID);
-    //    talkerConfig.writeEntry("TalkerCode", talkerCode);
-    //    m_config->sync();
-
-    //    // Update display.
-    //    tc.setTalkerCode(talkerCode);
-    //    m_talkerListModel.updateRow(modelIndex.row(), tc);
-    //    // Inform Control Center that configuration has changed.
-    //    configChanged();
-    //}
-
-    //delete m_loadedTalkerPlugIn;
-    //m_loadedTalkerPlugIn = 0;
-    //delete m_configDlg;
-    //m_configDlg = 0;
+        configChanged();
+    }
 }
 
 void KCMKttsMgr::slotConfigureFilterButton_clicked()
@@ -1283,34 +1250,6 @@ void KCMKttsMgr::configureFilterItem()
 
     delete m_configDlg;
     m_configDlg = 0;
-}
-
-/**
-* Display talker configuration dialog.  The plugin is assumed already loaded into
-* memory referenced by m_loadedTalkerPlugIn.
-*/
-void KCMKttsMgr::configureTalker()
-{
-    //if (!m_loadedTalkerPlugIn) return;
-    //m_configDlg = new KDialog(this);
-    //m_configDlg->setCaption(i18n("Talker Configuration"));
-    //m_configDlg->setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Cancel);
-    //m_configDlg->setDefaultButton(KDialog::Cancel);
-    ////m_configDlg->setMainWidget(m_loadedTalkerPlugIn);
-    //m_configDlg->setHelp("configure-plugin", "jovie");
-    //m_configDlg->enableButtonOk(false);
-    //connect(m_loadedTalkerPlugIn, SIGNAL( changed(bool) ), this, SLOT( slotConfigTalkerDlg_ConfigChanged() ));
-    //connect(m_configDlg, SIGNAL( defaultClicked() ), this, SLOT( slotConfigTalkerDlg_DefaultClicked() ));
-    //connect(m_configDlg, SIGNAL( cancelClicked() ), this, SLOT (slotConfigTalkerDlg_CancelClicked() ));
-    //// Create a Player object for the plugin to use for testing.
-    //int playerOption = 0;
-    //QString sinkName;
-    //// kDebug() << "KCMKttsMgr::configureTalker: playerOption = " << playerOption << " audioStretchFactor = " << audioStretchFactor << " sink name = " << sinkName;
-    ////TestPlayer* testPlayer = new TestPlayer(this, "ktts_testplayer",
-    ////    playerOption, audioStretchFactor, sinkName);
-    ////m_loadedTalkerPlugIn->setPlayer(testPlayer);
-    //// Display the dialog.
-    //m_configDlg->exec();
 }
 
 /**
