@@ -764,7 +764,7 @@ TQString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const TQString& talkerCode)
 void KttsJobMgrPart::enableJobActions(bool enable)
 {
     if (!m_buttonBox) return;
-    TQObjectList *l = m_buttonBox->queryList( "TQPushButton", "job_*", true, true );
+    TQObjectList *l = m_buttonBox->queryList( TQPUSHBUTTON_OBJECT_NAME_STRING, "job_*", true, true );
     TQObjectListIt it( *l ); // iterate over the buttons
     TQObject *obj;
 
@@ -783,7 +783,7 @@ void KttsJobMgrPart::enableJobActions(bool enable)
         {
             bool enableLater = item->nextSibling();
 
-            l = m_buttonBox->queryList( "TQPushButton", "job_later", false, true );
+            l = m_buttonBox->queryList( TQPUSHBUTTON_OBJECT_NAME_STRING, "job_later", false, true );
             it = TQObjectListIt( *l ); // iterate over the buttons
             if ( (obj = it.current()) != 0 ) {
                 // for each found object...
@@ -801,7 +801,7 @@ void KttsJobMgrPart::enableJobActions(bool enable)
 void KttsJobMgrPart::enableJobPartActions(bool enable)
 {
     if (!m_buttonBox) return;
-    TQObjectList *l = m_buttonBox->queryList( "TQPushButton", "part_*", true, true );
+    TQObjectList *l = m_buttonBox->queryList( TQPUSHBUTTON_OBJECT_NAME_STRING, "part_*", true, true );
     TQObjectListIt it( *l ); // iterate over the buttons
     TQObject *obj;
 
