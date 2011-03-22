@@ -335,7 +335,7 @@ void Jovie::stop()
 
 void Jovie::cancel()
 {
-    Speaker::Instance()->pause();
+    Speaker::Instance()->cancel();
 }
 
 void Jovie::pause()
