@@ -25,5 +25,7 @@ add_subdirectory( jovie )
 add_subdirectory( kcmkttsmgr ) 
 add_subdirectory( icons ) 
   endif(DEFINED SPEECH_LIB)
+else(Q_WS_X11)
+	message(FATAL "Cannot build jovie in !X, sorry")
 endif(Q_WS_X11)
 
