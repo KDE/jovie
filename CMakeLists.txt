@@ -26,6 +26,6 @@ add_subdirectory( kcmkttsmgr )
 add_subdirectory( icons ) 
   endif(DEFINED SPEECH_LIB)
 else(Q_WS_X11)
-	message(FATAL "Cannot build jovie in !X, sorry")
+  message(FATAL_ERROR "Jovie requires a X11-based system.")
 endif(Q_WS_X11)
 
