@@ -11,6 +11,7 @@ if (Q_WS_X11)
 
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+    add_subdirectory( doc )
     add_subdirectory( libkttsd )
     add_subdirectory( filters )
     add_subdirectory( jovie )
