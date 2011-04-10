@@ -1,18 +1,13 @@
-KTTS -- KDE Text-to-Speech -- is a subsystem within the KDE desktop
-for conversion of text to audible speech. KTTS is currently under
+Jovie -- KDE Text-to-Speech -- is a subsystem within the KDE desktop
+for conversion of text to audible speech. Jovie is currently under
 development and aims to become the standard subsystem for all KDE
-applications to provide speech output. Currently, KTTS consists of
+applications to provide speech output. Currently, Jovie consists of
 the following components:
 
-KTTSD
-  The KDE Text-to-Speech Deamon, a non-gui application that runs in
+Jovie
+  The KDE Text-to-Speech Deamon, a system tray application that runs in
 the background, providing TTS support to KDE applications. Applications
-initiate TTS by making DCOP calls to kttsd.
-
-KTTSMGR
-  An application for configuring the KTTS System and for managing in-progress
-speech jobs. kttsmgr provides an icon in the system tray for performing
-these functions as needed.
+initiate TTS by making D-Bus calls to Jovie.
 
 kttsjobmgr
   A KPart for managing in-progress speech jobs.
@@ -30,7 +25,7 @@ khmtl-plugin
 HTML web page.  (Note: this component is in kdebase/konqueror/kttsplugin)
 
 Original Author: José Pablo Ezequiel "Pupeno" Fernández <pupeno@kde.org>
-Current Maintainer: Gary Cramblitt <garycramblitt@comcast.net>
+Current Maintainer: Jeremy Whiting <jpwhiting@kde.org>
 Contributors:
   Olaf Schmidt <ojschmidt@kde.org>
   Gunnar Schmi Dt <gunnar@schmi-dt.de>
@@ -44,12 +39,8 @@ User features:
   * Speak all or part of the text of a web page in Konqueror.
   * Speak all or part of the text in Kate text editor, including
     instances where Kate is embedded in another KDE application.
-  * Long text is parsed into sentences. User may backup by sentence
-    or paragraph, replay, pause, and stop playing.
   * Filter plugins for converting chat emoticons to speakable words,
     fix mispronunciations, and convert xhtml to SSML.
-  * Audio output via aRts, ALSA, GStreamer (version 0.8.7 or later),
-    or aKode.
 
 Programmer features:
   * Priority system for screen reader outputs, warnings and messages,
@@ -57,7 +48,7 @@ Programmer features:
   * Plugin-based architecture for support of a wide variety of speech
     synthesis engines and drivers.
   * Permit generation of speech from the command line (or via shell scripts)
-    using the KDE DCOP utilities.
+    using the KDE D-Bus utilities.
   * Provide a lightweight and easily usable interface for applications
     to generate speech output.
   * Applications need not be concerned about contention over the speech device.
@@ -76,61 +67,18 @@ speak text.
 
 Optional Components
 -------------------
-  * The sox utility is needed for adjusting overall speech rate.
   * The xsltproc utility is needed for SSML support.
-  * GStreamer 0.8.7 or greater.
 
-See the KTTS Handbook
+See the Jovie Handbook
 
   (http://accessibility.kde.org/developer/kttsd/handbook/index.html)
 
 for complete instructions on installing, compiling, configuring, and using
-KTTS.
-
-Audio Plugins
--------------
-KTTS can be built with the following audio plugins.  The "Default Configure
-"Option" column shows the default option for the configure command.
-The "Alternate" column gives the opposite configure option:
-
-  System     Plugin        Default Configure Option  Alternate
-  ------     ------------  ------------------------- ------------------------
-  aRts       artsplayer    --with-arts               --without-arts
-  ALSA       alsaplayer    --with-alsa=check         --with-alsa=no
-  GStreamer  gstplayer     --with-gstreamer=no       --with-gstreamer=check
-  aKode      akodeplayer   --with-akode=no           --with-akode=check
-
-You *must* have at least one of these plugins for KTTS to work.
-
-The aKode and GStreamer players are not built by default because they have issues
-with instant stopping and starting.
-
-Packager Notes
---------------
-The following speech synthesizer plugins are all built by default.
-Some of them are runtime only dependent upon non-free software.
-(Non-free according to Debian Policy). The "Configure Option to
-not build" column shows the configure command to not build the plugin:
-
-  Synth          License   Configure Option to not build
-  -------------  --------  -----------------------------
-  Festival       free      --disable-kttsd-festivalint
-  Festival Lite  free      --disable-kttsd-flite
-  Epos           free      --disable-kttsd-epos
-  Command        free      --disable-kttsd-command
-  Hadifix        non-free  --disable-kttsd-hadifix
-  FreeTTS        non-free  --disable-kttsd-freetts
-
-IMPORTANT NOTE TO BINARY PACKAGERS:
-Please do not distribute binary packages of kdeaccessibility with the
-gstreamer plugin, as this creates unwanted dependencies.  Instead,
-distribute the gstreamer plugin in a separate package, e.g.
-kde-accessibility-extras.  The separate package should require
-gstreamer >= 0.8.7.  Thank you.
+Jovie.
 
 Support
 -------
-The KTTS website is
+The Jovie website is
 
   http://accessibility.kde.org/developer/kttsd
 
@@ -141,26 +89,7 @@ also hang out in IRC (irc.kde.org channel #kde-accessibility).
 
 Directories
 -----------
-libktts            Library for applications desiring to speak text.  This must be built first.
 libkttsd           Library for KTTSD.  Defines the interface for plugins for KTTSD.  Must be built second.
-players            Audio plugins for KTTSD.
-  artsplayer         aRts audio plugin for KTTSD.
-  gstplayer          GStreamer audio plugin for KTTSD.
-  alsaplayer         ALSA audio plugin for KTTSD.
-  akodeplayer        aKode audio plugin for KTTSD.
-plugins            Plugins for KTTSD.  You must have at least one plugin to use KTTSD.
-  festivalint        Plugin for Festival using Festival Interactive mode (festival --interactive).
-  flite              Plugin for Festival Lite.
-  hadifix            Plugin for Hadifix.
-  freetts            Plugin for FreeTTS.
-  epos               Plugin for Epos.
-  command            Generic command plugin.
-kttsd              KTTSD itself.  Non-interactive deamon.
+jovie              Application for managing Speech jobs.  Wrapper for kcmkttsmgr plus a system tray icon.
 icons              Icon for kttsmgr and KTTSD.
-kttsjobmgr         A KPart used by kcmkttsmgr for managing text jobs in KTTSD.
 kcmkttsmgr         A KControl module for managing KTTSD.  Run using "kcmshell kcmkttsd".
-kttsmgr            Application for managing KTTSD.  Wrapper for kcmkttsmgr plus a system tray icon.
-app-plugins        Plugins for other applications to speak text.
-  kate               Embedded Kate plugin.
-compat             Copy of kdelibs/interfaces/kspeech.  Used when compiling for KDE less than 3.4.
-debian             Debian packaging files. (possibly way out of date)
