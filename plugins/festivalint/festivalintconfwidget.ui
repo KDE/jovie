@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>FestivalIntConfWidget</class>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>FestivalIntConfWidget</cstring>
     </property>
@@ -31,7 +31,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="TQGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>festivalConfigurationBox</cstring>
             </property>
@@ -65,7 +65,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0">
+                <widget class="TQLayoutWidget" row="0" column="0">
                     <property name="name">
                         <cstring>voicesPathBox</cstring>
                     </property>
@@ -79,7 +79,7 @@
                         <property name="spacing">
                             <number>6</number>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>festivalPathLabel</cstring>
                             </property>
@@ -94,7 +94,7 @@
                             <property name="text">
                                 <string>&amp;Festival executable:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
@@ -122,7 +122,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="0">
+                <widget class="TQLayoutWidget" row="1" column="0">
                     <property name="name">
                         <cstring>selectVoiceBox</cstring>
                     </property>
@@ -136,14 +136,14 @@
                         <property name="spacing">
                             <number>6</number>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>selectVoiceLabel</cstring>
                             </property>
                             <property name="text">
                                 <string>&amp;Select voice:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
@@ -180,23 +180,23 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="2" column="0">
+                <widget class="TQLayoutWidget" row="2" column="0">
                     <property name="name">
-                        <cstring>layout11</cstring>
+                        <cstring>tqlayout11</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout8</cstring>
+                                <cstring>tqlayout8</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>volumeLabel</cstring>
                                     </property>
@@ -218,7 +218,7 @@
                                         <string>Sets the volume (loudness) of speech.  Slide the slider to the left to lower the volume; to the right to increase volume.  Anything less than 75 percent is considered "soft", and anything greater than 125 percent is considered "loud".</string>
                                     </property>
                                 </widget>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>timeLabel</cstring>
                                     </property>
@@ -240,7 +240,7 @@
                                         <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
                                     </property>
                                 </widget>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>frequencyLabel</cstring>
                                     </property>
@@ -264,9 +264,9 @@
                                 </widget>
                             </vbox>
                         </widget>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout9</cstring>
+                                <cstring>tqlayout9</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -367,15 +367,15 @@
                                 </widget>
                             </vbox>
                         </widget>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout10</cstring>
+                                <cstring>tqlayout10</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QSlider">
+                                <widget class="TQSlider">
                                     <property name="name">
                                         <cstring>volumeSlider</cstring>
                                     </property>
@@ -407,7 +407,7 @@
                                         <string>Sets the volume (loudness) of speech.  Slide the slider to the left to lower the volume; to the right to increase volume.  Anything less than 75 percent is considered "soft", and anything greater than 125 percent is considered "loud".</string>
                                     </property>
                                 </widget>
-                                <widget class="QSlider">
+                                <widget class="TQSlider">
                                     <property name="name">
                                         <cstring>timeSlider</cstring>
                                     </property>
@@ -436,7 +436,7 @@
                                         <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
                                     </property>
                                 </widget>
-                                <widget class="QSlider">
+                                <widget class="TQSlider">
                                     <property name="name">
                                         <cstring>frequencySlider</cstring>
                                     </property>
@@ -469,15 +469,15 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="4" column="0">
+                <widget class="TQLayoutWidget" row="4" column="0">
                     <property name="name">
-                        <cstring>layout6</cstring>
+                        <cstring>tqlayout6</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QCheckBox">
+                        <widget class="TQCheckBox">
                             <property name="name">
                                 <cstring>preloadCheckBox</cstring>
                             </property>
@@ -498,14 +498,14 @@
                             <property name="sizeType">
                                 <enum>Expanding</enum>
                             </property>
-                            <property name="sizeHint">
+                            <property name="tqsizeHint">
                                 <size>
                                     <width>101</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="QPushButton">
+                        <widget class="TQPushButton">
                             <property name="name">
                                 <cstring>testButton</cstring>
                             </property>
@@ -518,15 +518,15 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="3" column="0">
+                <widget class="TQLayoutWidget" row="3" column="0">
                     <property name="name">
-                        <cstring>layout5</cstring>
+                        <cstring>tqlayout5</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>characterCodingLabel</cstring>
                             </property>
@@ -583,7 +583,7 @@
     <include location="global" impldecl="in declaration">kurlrequester.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>

@@ -25,7 +25,7 @@
 #include <tqxml.h>
 #include <tqmap.h>
 
-typedef TQMap<TQString, TQString> QStringMap;
+typedef TQMap<TQString, TQString> TQStringMap;
 class TQString;
 
 class XHTMLToSSMLParser : public TQXmlDefaultHandler {
@@ -53,7 +53,7 @@ public:
 
 private:
     /// Dict of xhtml tags -> ssml tags
-    QStringMap m_xhtml2ssml;
+    TQStringMap m_xhtml2ssml;
     /// The output of the conversion
     TQString m_output;
 };

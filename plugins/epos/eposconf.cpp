@@ -24,7 +24,7 @@
 // C++ includes.
 #include <math.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqapplication.h>
 #include <tqtextcodec.h>
@@ -48,18 +48,18 @@
 #include "eposconf.moc"
 
 /** Constructor */
-EposConf::EposConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(parent, name)
+EposConf::EposConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(tqparent, name)
 {
     // kdDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;
     m_progressDlg = 0;
 
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "EposConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new EposConfWidget(this, "EposConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
 
     // Build codec list and fill combobox.
     m_codecList = PlugInProc::buildCodecList();
@@ -194,15 +194,15 @@ TQString EposConf::getTalkerCode()
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
-                    .arg(m_languageCode)
-                    .arg("fixed")
-                    .arg("neutral")
-                    .arg("medium")
-                    .arg(rate)
-                    .arg("Epos TTS Synthesis System");
+                    .tqarg(m_languageCode)
+                    .tqarg("fixed")
+                    .tqarg("neutral")
+                    .tqarg("medium")
+                    .tqarg(rate)
+                    .tqarg("Epos TTS Synthesis System");
         }
     }
-    return TQString::null;
+    return TQString();
 }
 
 void EposConf::slotEposTest_clicked()
@@ -275,7 +275,7 @@ void EposConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     TQFile::remove(m_waveFile);
-    m_waveFile = TQString::null;
+    m_waveFile = TQString();
     if (m_progressDlg) m_progressDlg->close();
 }
 

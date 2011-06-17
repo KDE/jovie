@@ -24,7 +24,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqcheckbox.h>
 #include <tqradiobutton.h>
 #include <tqhbox.h>
@@ -45,14 +45,14 @@
 #include "selecttalkerdlg.moc"
 
 SelectTalkerDlg::SelectTalkerDlg(
-    TQWidget* parent,
+    TQWidget* tqparent,
     const char* name,
     const TQString& caption,
     const TQString& talkerCode,
     bool runningTalkers) :
 
     KDialogBase(
-        parent,
+        tqparent,
         name,
         true,
         caption,
@@ -69,25 +69,25 @@ SelectTalkerDlg::SelectTalkerDlg(
 
     // Fill combo boxes.
     KComboBox* cb = m_widget->genderComboBox;
-    cb->insertItem( TQString::null );
+    cb->insertItem( TQString() );
     cb->insertItem( TalkerCode::translatedGender("male") );
     cb->insertItem( TalkerCode::translatedGender("female") );
     cb->insertItem( TalkerCode::translatedGender("neutral") );
 
     cb = m_widget->volumeComboBox;
-    cb->insertItem( TQString::null );
+    cb->insertItem( TQString() );
     cb->insertItem( TalkerCode::translatedVolume("medium") );
     cb->insertItem( TalkerCode::translatedVolume("loud") );
     cb->insertItem( TalkerCode::translatedVolume("soft") );
 
     cb = m_widget->rateComboBox;
-    cb->insertItem( TQString::null );
+    cb->insertItem( TQString() );
     cb->insertItem( TalkerCode::translatedRate("medium") );
     cb->insertItem( TalkerCode::translatedRate("fast") );
     cb->insertItem( TalkerCode::translatedRate("slow") );
 
     cb = m_widget->synthComboBox;
-    cb->insertItem( TQString::null );
+    cb->insertItem( TQString() );
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
     for(unsigned int i=0; i < offers.count() ; ++i)
         cb->insertItem(offers[i]->name());
@@ -170,7 +170,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     TQString locale;
     TQString language;
     // Blank line so user can select no language.
-    // Note: Don't use TQString::null, which gets displayed at bottom of list, rather than top.
+    // Note: Don't use TQString(), which gets displayed at bottom of list, rather than top.
     TQListViewItem* item = new KListViewItem(langLView, "", "");
     if (m_talkerCode.languageCode().isEmpty()) item->setSelected(true);
     int allLocalesCount = allLocales.count();
@@ -200,7 +200,7 @@ void SelectTalkerDlg::slotLanguageBrowseButton_clicked()
     // TODO: This isn't working.  Furthermore, item appears selected but is not.
     langLView->ensureItemVisible(langLView->selectedItem());
     int dlgResult = dlg->exec();
-    language = TQString::null;
+    language = TQString();
     if (dlgResult == TQDialog::Accepted)
     {
         if (langLView->selectedItem())
@@ -274,7 +274,7 @@ void SelectTalkerDlg::applyTalkerCodeToControls()
 void SelectTalkerDlg::applyControlsToTalkerCode()
 {
     if ( m_widget->useDefaultRadioButton->isChecked() )
-        m_talkerCode = TalkerCode(TQString::null, false);
+        m_talkerCode = TalkerCode(TQString(), false);
     else if ( m_widget->useClosestMatchRadioButton->isChecked() )
     {
         // Language already stored in talker code.
@@ -327,11 +327,11 @@ void SelectTalkerDlg::loadTalkers(bool /*runningTalkers*/)
         {
             TQString talkerID = *it;
             config->setGroup("Talker_" + talkerID);
-            TQString talkerCode = config->readEntry("TalkerCode", TQString::null);
+            TQString talkerCode = config->readEntry("TalkerCode", TQString());
             // Parse and normalize the talker code.
             TalkerCode talker = TalkerCode(talkerCode, true);
             m_talkers.append(talker);
-            TQString desktopEntryName = config->readEntry("DesktopEntryName", TQString::null);
+            TQString desktopEntryName = config->readEntry("DesktopEntryName", TQString());
             TQString synthName = TalkerCode::TalkerDesktopEntryNameToName(desktopEntryName);
             // Display in List View using translated strings.
             item = new KListViewItem(lv, item);

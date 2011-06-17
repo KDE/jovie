@@ -34,7 +34,8 @@
 class TQTextCodec;
 
 class FestivalIntProc : public PlugInProc{
-    Q_OBJECT 
+    Q_OBJECT
+    TQ_OBJECT
 
     public:
         enum SupportsSSML {
@@ -46,7 +47,7 @@ class FestivalIntProc : public PlugInProc{
         /**
          * Constructor
          */
-        FestivalIntProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        FestivalIntProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor

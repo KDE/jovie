@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqfileinfo.h>
 #include <tqstring.h>
@@ -59,19 +59,19 @@
 /**
 * Constructor 
 */
-StringReplacerConf::StringReplacerConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(parent, name),
+StringReplacerConf::StringReplacerConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(tqparent, name),
     m_editDlg(0),
     m_editWidget(0)
 {
     // kdDebug() << "StringReplacerConf::StringReplacerConf: Running" << endl;
 
     // Create configuration widget.
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "StringReplacerConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new StringReplacerConfWidget(this, "StringReplacerConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
     m_widget->substLView->setSortColumn(-1);
 
     connect(m_widget->nameLineEdit, TQT_SIGNAL(textChanged(const TQString&)),
@@ -244,7 +244,7 @@ TQString StringReplacerConf::loadFromFile( const TQString& filename, bool clear)
             item = new KListViewItem(m_widget->substLView, item, wordTypeStr, matchCaseStr, match, subst);
     }
 
-    return TQString::null;
+    return TQString();
 }
 
 /**
@@ -308,7 +308,7 @@ TQString StringReplacerConf::saveToFile(const TQString& filename)
     }
 
     // Application ID
-    TQString appId = m_widget->appIdLineEdit->text().replace(" ", "");
+    TQString appId = m_widget->appIdLineEdit->text().tqreplace(" ", "");
     if ( !appId.isEmpty() )
     {
         TQStringList appIdList = TQStringList::split(",", appId);
@@ -359,7 +359,7 @@ TQString StringReplacerConf::saveToFile(const TQString& filename)
     // kdDebug() << "StringReplacerConf::saveToFile: writing out " << doc.toString() << endl;
     file.close();
 
-    return TQString::null;
+    return TQString();
 }
 
 /** 
@@ -400,7 +400,7 @@ bool StringReplacerConf::supportsMultiInstance() { return true; }
  */
 TQString StringReplacerConf::userPlugInName()
 {
-    if ( m_widget->substLView->childCount() == 0 ) return TQString::null;
+    if ( m_widget->substLView->childCount() == 0 ) return TQString();
     TQString instName = m_widget->nameLineEdit->text();
     if ( instName.isEmpty() )
     {
@@ -442,7 +442,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
         item = new KListViewItem(langLView, language, locale);
-        if (m_languageCodeList.contains(locale)) item->setSelected(true);
+        if (m_languageCodeList.tqcontains(locale)) item->setSelected(true);
     }
     // Sort by language.
     langLView->setSorting(0);
@@ -461,7 +461,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     dlg->setHelp("", "kttsd");
     dlg->setInitialSize(TQSize(300, 500), false);
     int dlgResult = dlg->exec();
-    languageCode = TQString::null;
+    languageCode = TQString();
     if (dlgResult == TQDialog::Accepted)
     {
         m_languageCodeList.clear();
@@ -473,7 +473,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         }
     }
     delete dlg;
-    // TODO: Also delete KListView and QHBox?
+    // TODO: Also delete KListView and TQHBox?
     if (dlgResult != TQDialog::Accepted) return;
     language = "";
     for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
@@ -488,11 +488,11 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     if (m_languageCodeList.count() > 1) language = i18n("Multiple Languages");
     if ( !s1.isEmpty() )
     {
-        s2.replace( s1, language );
-        s2.replace( i18n("Multiple Languages"), language );
+        s2.tqreplace( s1, language );
+        s2.tqreplace( i18n("Multiple Languages"), language );
     }
-    s2.replace(" ()", "");
-    if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ")";
+    s2.tqreplace(" ()", "");
+    if ( !s2.tqcontains("(") && !language.isEmpty() ) s2 += " (" + language + ")";
     m_widget->nameLineEdit->setText(s2);
     configChanged();
 }

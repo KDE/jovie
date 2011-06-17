@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SelectEventWidget</class>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>SelectEventWidget</cstring>
     </property>
@@ -16,7 +16,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="TQLabel" row="0" column="0">
             <property name="name">
                 <cstring>eventSrcLabel</cstring>
             </property>
@@ -27,7 +27,7 @@
                 <cstring>eventSrcComboBox</cstring>
             </property>
         </widget>
-        <widget class="QComboBox" row="0" column="1">
+        <widget class="TQComboBox" row="0" column="1">
             <property name="name">
                 <cstring>eventSrcComboBox</cstring>
             </property>
@@ -55,7 +55,7 @@
 </widget>
 <customwidgets>
 </customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
 </includehints>

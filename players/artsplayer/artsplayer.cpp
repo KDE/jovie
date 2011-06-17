@@ -40,8 +40,8 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-ArtsPlayer::ArtsPlayer(TQObject* parent, const char* name, const TQStringList& args) : 
-    Player(parent, name, args),
+ArtsPlayer::ArtsPlayer(TQObject* tqparent, const char* name, const TQStringList& args) : 
+    Player(tqparent, name, args),
     m_dispatcher(0),
     m_server(0),
     m_factory(0),
@@ -234,7 +234,7 @@ void ArtsPlayer::setupArtsObjects()
     if(m_amanPlay->isNull() || !m_factory) {
         KMessageBox::error(0, i18n("Connecting/starting aRts soundserver failed. "
                                    "Make sure that artsd is configured properly."));
-        qApp->exit(1);
+        tqApp->exit(1);
     }
 
     m_amanPlay->setTitle(i18n("kttsd"));

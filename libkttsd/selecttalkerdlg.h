@@ -27,7 +27,7 @@
 #ifndef _SELECTTALKERDLG_H_
 #define _SELECTTALKERDLG_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqvaluelist.h>
 
 // KDE includes.
@@ -42,11 +42,12 @@
 class KDE_EXPORT SelectTalkerDlg : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
          * Constructor.
-         * @param parent                The parent for this dialog.
+         * @param tqparent                The tqparent for this dialog.
          * @param name                  Name for this dialog.
          * @param caption               Displayed title for this dialog.
          * @param talkerCode            A suggested starting Talker Code.
@@ -55,10 +56,10 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
          *                              (which may not yet have been Applied).
          */
         SelectTalkerDlg(
-            TQWidget* parent = 0,
+            TQWidget* tqparent = 0,
             const char* name = "selecttalkerdialog",
             const TQString& caption = i18n("Select Talker"),
-            const TQString& talkerCode = TQString::null,
+            const TQString& talkerCode = TQString(),
             bool runningTalkers = false);
 
         /**
@@ -67,7 +68,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
         ~SelectTalkerDlg();
 
         /**
-         * Returns the Talker Code user chose.  TQString::null if default Talker chosen.
+         * Returns the Talker Code user chose.  TQString() if default Talker chosen.
          * Note that if user did not choose a specific Talker, this will be a partial Talker Code.
          */
         TQString getSelectedTalkerCode();

@@ -31,8 +31,8 @@
 /**
  * Constructor.
  */
-KttsFilterProc::KttsFilterProc( TQObject *parent, const char *name) :
-        TQObject(parent, name) 
+KttsFilterProc::KttsFilterProc( TQObject *tqparent, const char *name) :
+        TQObject(tqparent, name) 
 {
     // kdDebug() << "KttsFilterProc::KttsFilterProc: Running" << endl;
 }
@@ -123,7 +123,7 @@ bool KttsFilterProc::init(KConfig* /*config*/, const TQString& /*configGroup*/){
 /**
  * Returns the filtered output.
  */
-/*virtual*/ TQString KttsFilterProc::getOutput() { return TQString::null; }
+/*virtual*/ TQString KttsFilterProc::getOutput() { return TQString(); }
 
 /**
  * Acknowledges the finished filtering.

@@ -25,7 +25,7 @@
 #ifndef _SPEECHDATA_H_
 #define _SPEECHDATA_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqptrqueue.h>
 #include <tqptrlist.h>
 #include <tqstring.h>
@@ -110,6 +110,7 @@ typedef TQMap<TQString, NotifyEventMap> NotifyAppMap;
  */
 class SpeechData : public TQObject {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**

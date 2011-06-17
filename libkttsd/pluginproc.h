@@ -114,8 +114,8 @@
 * when @ref sayText or @ref synthText is called,
 * with the exception of KProcess and family (KProcIO, KShellProcess).
 * This restriction comes about because the KDE Libraries make use of the
-* main Qt event loop, which unfortunately, runs only in the main thread.
-* This restriction will likely be lifted in Qt 4 and later.
+* main TQt event loop, which unfortunately, runs only in the main thread.
+* This restriction will likely be lifted in TQt 4 and later.
 *
 * Since the KDE library is not available from the @ref sayText and @ref synthText methods,
 * it is best if the plugin reads configuration settings in the @ref init method.
@@ -135,7 +135,7 @@
 * running.  Keep this in mind when implementing the code.
 *
 * If the plugin returns True from @ref supportsAsync, you will of course
-* need to deal with similar issues.  If you have to use QThreads
+* need to deal with similar issues.  If you have to use TQThreads
 * to implement asynchronous support, do not be concerned about emitting
 * the @ref sayFinished or @ref synthFinished signals from your threads, since
 * KTTSD will convert the received signals into postEvents and
@@ -227,8 +227,9 @@ enum pluginState
     psFinished = 3               /**< Plugin has finished synthesizing.  Audio file is ready. */
 };
 
-class KDE_EXPORT PlugInProc : virtual public QObject{
+class KDE_EXPORT PlugInProc : virtual public TQObject{
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         enum CharacterCodec {
@@ -241,7 +242,7 @@ class KDE_EXPORT PlugInProc : virtual public QObject{
         /**
         * Constructor.
         */
-        PlugInProc( TQObject *parent = 0, const char *name = 0);
+        PlugInProc( TQObject *tqparent = 0, const char *name = 0);
 
         /**
         * Destructor.

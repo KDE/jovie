@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>FliteConfWidget</class>
 <author>Gary Cramblitt</author>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>FliteConfWidget</cstring>
     </property>
@@ -41,14 +41,14 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
+            <property name="tqsizeHint">
                 <size>
                     <width>20</width>
                     <height>100</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="TQGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>fliteConfigurationBox</cstring>
             </property>
@@ -82,7 +82,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="TQLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>flitePathBox</cstring>
                     </property>
@@ -96,7 +96,7 @@
                         <property name="spacing">
                             <number>6</number>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>flitePathLabel</cstring>
                             </property>
@@ -111,7 +111,7 @@
                             <property name="text">
                                 <string>&amp;Flite executable path:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
@@ -142,7 +142,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QPushButton" row="1" column="1">
+                <widget class="TQPushButton" row="1" column="1">
                     <property name="name">
                         <cstring>fliteTest</cstring>
                     </property>
@@ -160,7 +160,7 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>221</width>
                             <height>20</height>
@@ -177,7 +177,7 @@
     <include location="global" impldecl="in declaration">kurlrequester.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>

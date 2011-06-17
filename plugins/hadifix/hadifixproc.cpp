@@ -35,7 +35,7 @@ class HadifixProcPrivate {
          hadifixProc = 0;
          waitingStop = false;
          state = psIdle;
-         synthFilename = TQString::null;
+         synthFilename = TQString();
          gender = false;
          volume = 100;
          time = 100;
@@ -49,9 +49,9 @@ class HadifixProcPrivate {
 
       void load(KConfig *config, const TQString &configGroup) {
          config->setGroup(configGroup);
-         hadifix  = config->readEntry ("hadifixExec",   TQString::null);
-         mbrola   = config->readEntry ("mbrolaExec",    TQString::null);
-         voice    = config->readEntry ("voice",         TQString::null);
+         hadifix  = config->readEntry ("hadifixExec",   TQString());
+         mbrola   = config->readEntry ("mbrolaExec",    TQString());
+         voice    = config->readEntry ("voice",         TQString());
          gender   = config->readBoolEntry("gender",     false);
          volume   = config->readNumEntry ("volume",     100);
          time     = config->readNumEntry ("time",       100);
@@ -75,8 +75,8 @@ class HadifixProcPrivate {
 };
 
 /** Constructor */
-HadifixProc::HadifixProc( TQObject* parent, const char* name, const TQStringList &) : 
-   PlugInProc( parent, name ){
+HadifixProc::HadifixProc( TQObject* tqparent, const char* name, const TQStringList &) : 
+   PlugInProc( tqparent, name ){
    // kdDebug() << "HadifixProc::HadifixProc: Running" << endl;
    d = 0;
 }
@@ -184,9 +184,9 @@ void HadifixProc::synth(TQString text,
 
    TQString mbrolaCommand = d->hadifixProc->quote(mbrola);
    mbrolaCommand += " -e"; //Ignore fatal errors on unkown diphone
-   mbrolaCommand += TQString(" -v %1").arg(volume/100.0); // volume ratio
-   mbrolaCommand += TQString(" -f %1").arg(pitch/100.0);  // freqency ratio
-   mbrolaCommand += TQString(" -t %1").arg(1/(time/100.0));   // time ratio
+   mbrolaCommand += TQString(" -v %1").tqarg(volume/100.0); // volume ratio
+   mbrolaCommand += TQString(" -f %1").tqarg(pitch/100.0);  // freqency ratio
+   mbrolaCommand += TQString(" -t %1").tqarg(1/(time/100.0));   // time ratio
    mbrolaCommand += " " + d->hadifixProc->quote(voice);
    mbrolaCommand += " - " + d->hadifixProc->quote(waveFilename);
 
@@ -285,7 +285,7 @@ void HadifixProc::ackFinished()
     if (d->state == psFinished)
     {
         d->state = psIdle;
-        d->synthFilename = TQString::null;
+        d->synthFilename = TQString();
     }
 }
 
@@ -364,8 +364,8 @@ HadifixProc::VoiceGender HadifixProc::determineGender(TQString mbrola, TQString 
    connect(&proc, TQT_SIGNAL(receivedStderr(KProcess *, char *, int)),
      &speech, TQT_SLOT(receivedStderr(KProcess *, char *, int)));
 
-   speech.stdOut = TQString::null;
-   speech.stdErr = TQString::null;
+   speech.stdOut = TQString();
+   speech.stdErr = TQString();
    proc.start (KProcess::Block, KProcess::AllOutput);
 
    VoiceGender result;
@@ -377,9 +377,9 @@ HadifixProc::VoiceGender HadifixProc::determineGender(TQString mbrola, TQString 
    else {
       if (output != 0)
          *output = speech.stdOut;
-      if (speech.stdOut.contains("female", false))
+      if (speech.stdOut.tqcontains("female", false))
          result = FemaleGender;
-      else if (speech.stdOut.contains("male", false))
+      else if (speech.stdOut.tqcontains("male", false))
          result = MaleGender;
       else
          result = NoGender;
@@ -389,11 +389,11 @@ HadifixProc::VoiceGender HadifixProc::determineGender(TQString mbrola, TQString 
 }
 
 void HadifixProc::receivedStdout (KProcess *, char *buffer, int buflen) {
-   stdOut += TQString::fromLatin1(buffer, buflen);
+   stdOut += TQString::tqfromLatin1(buffer, buflen);
 }
 
 void HadifixProc::receivedStderr (KProcess *, char *buffer, int buflen) {
-   stdErr += TQString::fromLatin1(buffer, buflen);
+   stdErr += TQString::tqfromLatin1(buffer, buflen);
 }
 
 /**

@@ -26,7 +26,7 @@
 #ifndef _TALKERCODE_H_
 #define _TALKERCODE_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <kdemacros.h>
 #include "kdeexportfix.h"
@@ -38,7 +38,7 @@ class KDE_EXPORT TalkerCode
         /**
          * Constructor.
          */
-        TalkerCode(const TQString &code=TQString::null, bool normal=false);
+        TalkerCode(const TQString &code=TQString(), bool normal=false);
         /**
          * Copy Constructor.
          */
@@ -167,7 +167,7 @@ class KDE_EXPORT TalkerCode
         * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
         * @param name                   The translated plugin name.  From Name= line in .desktop file.
         * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        *                               TQString::null if not found.
+        *                               TQString() if not found.
         */
         static TQString TalkerNameToDesktopEntryName(const TQString& name);
 

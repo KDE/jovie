@@ -29,8 +29,8 @@ using namespace aKode;
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-aKodePlayer::aKodePlayer(TQObject* parent, const char* name, const TQStringList& args) :
-    Player(parent, name, args),
+aKodePlayer::aKodePlayer(TQObject* tqparent, const char* name, const TQStringList& args) :
+    Player(tqparent, name, args),
     m_player(0)
 {}
 

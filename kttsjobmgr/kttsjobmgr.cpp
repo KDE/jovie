@@ -65,10 +65,10 @@ KttsJobMgrFactory::~KttsJobMgrFactory()
     s_instance = 0;
 }
 
-TQObject *KttsJobMgrFactory::createObject(TQObject *parent, const char *name, const char*,
+TQObject *KttsJobMgrFactory::createObject(TQObject *tqparent, const char *name, const char*,
                                const TQStringList& )
 {
-    TQObject *obj = new KttsJobMgrPart((TQWidget*)parent, name);
+    TQObject *obj = new KttsJobMgrPart((TQWidget*)tqparent, name);
     emit objectCreated(obj);
     return obj;
 }
@@ -86,10 +86,10 @@ KAboutData *KttsJobMgrFactory::aboutData()
   return about;
 }
 
-KttsJobMgrPart::KttsJobMgrPart(TQWidget *parent, const char *name) :
+KttsJobMgrPart::KttsJobMgrPart(TQWidget *tqparent, const char *name) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kttsjobmgr_kspeechsink"),
-    KParts::ReadOnlyPart(parent, name)
+    KParts::ReadOnlyPart(TQT_TQOBJECT(tqparent), name)
 {
     // Initialize some variables.
     m_selectOnTextSet = false;
@@ -101,12 +101,12 @@ KttsJobMgrPart::KttsJobMgrPart(TQWidget *parent, const char *name) :
     KGlobal::locale()->insertCatalogue("kttsd");
 
     // Create a TQVBox to host everything.
-    TQVBox* vBox = new TQVBox(parent);
+    TQVBox* vBox = new TQVBox(tqparent);
     vBox->setMargin(6);
 
     // Create a splitter to contain the Job List View and the current sentence.
     TQSplitter* splitter = new TQSplitter(vBox);
-    splitter->setOrientation(TQSplitter::Vertical);
+    splitter->setOrientation(Qt::Vertical);
 
     // Create Job List View widget.
     m_jobListView = new KListView(splitter, "joblistview");
@@ -163,7 +163,7 @@ KttsJobMgrPart::KttsJobMgrPart(TQWidget *parent, const char *name) :
     hbox3->setSpacing(6);
 
     // Do not let button box stretch vertically.
-    m_buttonBox->setSizePolicy(TQSizePolicy(TQSizePolicy::Expanding, TQSizePolicy::Fixed));
+    m_buttonBox->tqsetSizePolicy(TQSizePolicy(TQSizePolicy::Expanding, TQSizePolicy::Fixed));
 
     // All the buttons with "job_" at start of their names will be enabled/disabled when a job is
     // selected in the Job List View.
@@ -274,7 +274,7 @@ KttsJobMgrPart::KttsJobMgrPart(TQWidget *parent, const char *name) :
 
     // Create a label for current sentence.
     TQLabel* currentSentenceLabel = new TQLabel(sentenceVBox);
-    currentSentenceLabel->setSizePolicy(TQSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed));
+    currentSentenceLabel->tqsetSizePolicy(TQSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed));
     currentSentenceLabel->setText(i18n("Current Sentence"));
 
     // Create a box to contain the current sentence.
@@ -490,7 +490,7 @@ void KttsJobMgrPart::slot_job_change_talker()
     {
         TQString talkerID = item->text(jlvcTalkerID);
         TQStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
-        int ndx = talkerIDs.findIndex(talkerID);
+        int ndx = talkerIDs.tqfindIndex(talkerID);
         TQString talkerCode;
         if (ndx >= 0) talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
         SelectTalkerDlg dlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
@@ -506,7 +506,7 @@ void KttsJobMgrPart::slot_job_change_talker()
 void KttsJobMgrPart::slot_speak_clipboard()
 {
     // Get the clipboard object.
-    QClipboard *cb = kapp->clipboard();
+    TQClipboard *cb = kapp->tqclipboard();
 
 
     // Copy text from the clipboard.
@@ -518,7 +518,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
         {
             if (supportsMarkup(NULL, KSpeech::mtHtml))
             {
-                TQByteArray d = data->encodedData("text/html");
+                TQByteArray d = data->tqencodedData("text/html");
                 text = TQString(d);
             }
         }
@@ -526,7 +526,7 @@ void KttsJobMgrPart::slot_speak_clipboard()
         {
             if (supportsMarkup(NULL, KSpeech::mtSsml))
             {
-                TQByteArray d = data->encodedData("text/ssml");
+                TQByteArray d = data->tqencodedData("text/ssml");
                 text = TQString(d);
             }
         }
@@ -632,7 +632,7 @@ int KttsJobMgrPart::getCurrentJobPartCount()
 */
 TQListViewItem* KttsJobMgrPart::findItemByJobNum(const uint jobNum)
 {
-    return m_jobListView->findItem(TQString::number(jobNum), jlvcJobNum);
+    return m_jobListView->tqfindItem(TQString::number(jobNum), jlvcJobNum);
 }
 
 /**
@@ -746,7 +746,7 @@ void KttsJobMgrPart::autoSelectInJobListView()
 TQString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const TQString& talkerCode)
 {
     // If in the cache, return that.
-    if (m_talkerCodesToTalkerIDs.contains(talkerCode))
+    if (m_talkerCodesToTalkerIDs.tqcontains(talkerCode))
         return m_talkerCodesToTalkerIDs[talkerCode];
     else
     {
@@ -952,7 +952,7 @@ ASYNC KttsJobMgrPart::textFinished(const TQCString&, const uint jobNum)
         // Update sentence pointer, since signal may not be emitted for final CR.
         refreshJob(jobNum);
     }
-    m_currentSentence->setText(TQString::null);
+    m_currentSentence->setText(TQString());
 }
 
 /**
@@ -1013,8 +1013,8 @@ ASYNC KttsJobMgrPart::textRemoved(const TQCString&, const uint jobNum)
     autoSelectInJobListView();
 }
 
-KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
-    : KParts::BrowserExtension(parent, "KttsJobMgrBrowserExtension")
+KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *tqparent)
+    : KParts::BrowserExtension(tqparent, "KttsJobMgrBrowserExtension")
 {
 }
 

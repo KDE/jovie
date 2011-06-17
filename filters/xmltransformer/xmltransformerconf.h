@@ -24,7 +24,7 @@
 #ifndef _XMLTRANSFORMERCONF_H_
 #define _XMLTRANSFORMERCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqwidget.h>
 
 // KDE includes.
@@ -40,12 +40,13 @@
 class XmlTransformerConf : public KttsFilterConf
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        XmlTransformerConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
+        XmlTransformerConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

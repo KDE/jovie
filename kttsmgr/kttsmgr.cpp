@@ -22,7 +22,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqimage.h>
 
 // KDE includes.
@@ -135,7 +135,7 @@ int main (int argc, char *argv[])
 
 /*  KttsToolTip class */
 
-KttsToolTip::KttsToolTip ( TQWidget* parent ) : TQToolTip(parent)
+KttsToolTip::KttsToolTip ( TQWidget* tqparent ) : TQToolTip(tqparent)
 {
 }
 
@@ -143,19 +143,19 @@ KttsToolTip::KttsToolTip ( TQWidget* parent ) : TQToolTip(parent)
 {
     Q_UNUSED(p);
 
-    if (!parentWidget()->inherits("KttsMgrTray"))
+    if (!tqparentWidget()->inherits("KttsMgrTray"))
         return;
 
-    KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
+    KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(tqparentWidget());
 
-    TQRect r(kttsMgrTray->geometry());
+    TQRect r(kttsMgrTray->tqgeometry());
     if ( !r.isValid() )
         return;
 
     TQString status = "<qt><b>KTTSMgr</b> - ";
     status += i18n("<qt>Text-to-Speech Manager");
     status += "<br/><br/>";
-    status += kttsMgrTray->getStatus();
+    status += kttsMgrTray->gettqStatus();
     status += "</qt>";
 
     tip(r, status);
@@ -163,10 +163,10 @@ KttsToolTip::KttsToolTip ( TQWidget* parent ) : TQToolTip(parent)
 
 /*  KttsMgrTray class */
 
-KttsMgrTray::KttsMgrTray(TQWidget *parent):
+KttsMgrTray::KttsMgrTray(TQWidget *tqparent):
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kkttsmgr_kspeechsink"),
-    KSystemTray(parent, "kttsmgrsystemtray")
+    KSystemTray(tqparent, "kttsmgrsystemtray")
 {
     TQPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
@@ -200,7 +200,7 @@ KttsMgrTray::KttsMgrTray(TQWidget *parent):
             "textFinished(TQCString,uint)",
             false);
         // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
-        parent->installEventFilter(this);
+        tqparent->installEventFilter(this);
     }
 }
 
@@ -224,7 +224,7 @@ void KttsMgrTray::textFinished(const TQCString& /*appId*/, uint /*jobNum*/)
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kdDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
-    if ( parentWidget()->isShown() ) return;
+    if ( tqparentWidget()->isShown() ) return;
     TQString jobNums = getTextJobNumbers();
     TQStringList jobNumsList = TQStringList::split(jobNums, ",");
     uint jobNumsListCount = jobNumsList.count();
@@ -257,7 +257,7 @@ TQString KttsMgrTray::stateToStr(int state)
     }
 }
 
-TQString KttsMgrTray::getStatus()
+TQString KttsMgrTray::gettqStatus()
 {
     if (!isKttsdRunning()) return i18n("Text-to-Speech System is not running");
     uint jobCount = getTextJobCount();
@@ -268,12 +268,12 @@ TQString KttsMgrTray::getStatus()
         int jobState = 0;
         if (job != 0)
         {
-            // kdDebug() << "KttsMgrTray::getStatus: job = " << job << endl;
+            // kdDebug() << "KttsMgrTray::gettqStatus: job = " << job << endl;
             jobState = getTextJobState(job);
             int sentenceCount = getTextCount(job);
             uint seq = moveRelTextSentence(0, job);
             status += i18n(", current job %1 at sentence %2 of %3 sentences"
-                ).arg(stateToStr(jobState)).arg(seq).arg(sentenceCount);
+                ).tqarg(stateToStr(jobState)).tqarg(seq).tqarg(sentenceCount);
         }
     }
     return status;
@@ -298,7 +298,7 @@ void KttsMgrTray::aboutSelected()
 
 void KttsMgrTray::helpSelected()
 {
-    kapp->invokeHelp(TQString::null,"kttsd");
+    kapp->invokeHelp(TQString(),"kttsd");
 }
 
 void KttsMgrTray::quitSelected()

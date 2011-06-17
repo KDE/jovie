@@ -27,8 +27,8 @@
 #include "freettsproc.h" 
 
 /** Constructor */
-FreeTTSProc::FreeTTSProc( TQObject* parent, const char* name, const TQStringList& /*args*/) : 
-	PlugInProc( parent, name ) {
+FreeTTSProc::FreeTTSProc( TQObject* tqparent, const char* name, const TQStringList& /*args*/) : 
+	PlugInProc( tqparent, name ) {
 	kdDebug() << "Running: FreeTTSProc::FreeTTSProc" << endl;
 	m_state = psIdle;
 	m_waitingStop = false;
@@ -61,7 +61,7 @@ bool FreeTTSProc::init(KConfig *config, const TQString &configGroup) {
  * If the plugin supports asynchronous operation, it should return immediately.
  */
 void FreeTTSProc::sayText(const TQString &text) {
-	synth(text, TQString::null, m_freettsJarPath);
+	synth(text, TQString(), m_freettsJarPath);
 }
 
 /**
@@ -80,7 +80,7 @@ void FreeTTSProc::synthText(const TQString& text, const TQString& suggestedFilen
 }
 
 // A little helper function because KDE 3.2 kdDebug() does not support TQValueList<TQCString>.
-TQStringList argsToQStringList(const TQValueList<TQCString> list)
+TQStringList argsToTQStringList(const TQValueList<TQCString> list)
 {
     TQStringList newList;
     TQValueList<TQCString>::ConstIterator it = list.begin();
@@ -143,7 +143,7 @@ void FreeTTSProc::synth(
 	if (!m_freettsProc->start(KProcess::NotifyOnExit, KProcess::All)) {
 		kdDebug() << "FreeTTSProc::synth: Error starting FreeTTS process.  Is freetts.jar in the PATH?" << endl;
 		m_state = psIdle;
-		kdDebug() << "KProcess args: " << argsToQStringList(m_freettsProc->args()) << endl;
+		kdDebug() << "KProcess args: " << argsToTQStringList(m_freettsProc->args()) << endl;
 		return;
 	}
 	kdDebug()<< "FreeTTSProc:synth: FreeTTS initialized" << endl;
@@ -206,12 +206,12 @@ void FreeTTSProc::slotProcessExited(KProcess*) {
 }
 
 void FreeTTSProc::slotReceivedStdout(KProcess*, char* buffer, int buflen) {
-	TQString buf = TQString::fromLatin1(buffer, buflen);
+	TQString buf = TQString::tqfromLatin1(buffer, buflen);
 	kdDebug() << "FreeTTSProc::slotReceivedStdout: Received output from FreeTTS: " << buf << endl;
 }
 
 void FreeTTSProc::slotReceivedStderr(KProcess*, char* buffer, int buflen) {
-	TQString buf = TQString::fromLatin1(buffer, buflen);
+	TQString buf = TQString::tqfromLatin1(buffer, buflen);
 	kdDebug() << "FreeTTSProc::slotReceivedStderr: Received error from FreeTTS: " << buf << endl;
 }
 
@@ -242,7 +242,7 @@ pluginState FreeTTSProc::getState() {
 void FreeTTSProc::ackFinished() {
 	if (m_state == psFinished) {
 		m_state = psIdle;
-		m_synthFilename = TQString::null;
+		m_synthFilename = TQString();
 	}
 }
 

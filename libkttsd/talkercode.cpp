@@ -34,7 +34,7 @@
 /**
  * Constructor.
  */
-TalkerCode::TalkerCode(const TQString &code/*=TQString::null*/, bool normal /*=false*/)
+TalkerCode::TalkerCode(const TQString &code/*=TQString()*/, bool normal /*=false*/)
 {
     if (!code.isEmpty())
         parseTalkerCode(code);
@@ -304,7 +304,7 @@ void TalkerCode::normalize()
 void TalkerCode::parseTalkerCode(const TQString &talkerCode)
 {
     TQString fullLanguageCode;
-    if (talkerCode.contains("\""))
+    if (talkerCode.tqcontains("\""))
     {
         fullLanguageCode = talkerCode.section("lang=", 1, 1);
         fullLanguageCode = fullLanguageCode.section('"', 1, 1);
@@ -487,15 +487,15 @@ void TalkerCode::parseTalkerCode(const TQString &talkerCode)
 * Uses KTrader to convert a translated Synth Plugin Name to DesktopEntryName.
 * @param name                   The translated plugin name.  From Name= line in .desktop file.
 * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-*                               TQString::null if not found.
+*                               TQString() if not found.
 */
 /*static*/ TQString TalkerCode::TalkerNameToDesktopEntryName(const TQString& name)
 {
-    if (name.isEmpty()) return TQString::null;
+    if (name.isEmpty()) return TQString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin");
     for (uint ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return TQString::null;
+    return TQString();
 }
 
 /**
@@ -505,13 +505,13 @@ void TalkerCode::parseTalkerCode(const TQString &talkerCode)
 */
 /*static*/ TQString TalkerCode::TalkerDesktopEntryNameToName(const TQString& desktopEntryName)
 {
-    if (desktopEntryName.isEmpty()) return TQString::null;
+    if (desktopEntryName.isEmpty()) return TQString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/SynthPlugin",
-    TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
+    TQString("DesktopEntryName == '%1'").tqarg(desktopEntryName));
 
     if (offers.count() == 1)
         return offers[0]->name();
     else
-        return TQString::null;
+        return TQString();
 }
 

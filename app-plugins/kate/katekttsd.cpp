@@ -17,7 +17,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqmessagebox.h>
 #include <dcopclient.h>
 #include <tqtimer.h>
@@ -38,8 +38,8 @@
 
 K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
-KateKttsdPlugin::KateKttsdPlugin( TQObject *parent, const char* name, const TQStringList& )
-    : KTextEditor::Plugin ( (KTextEditor::Document*) parent, name )
+KateKttsdPlugin::KateKttsdPlugin( TQObject *tqparent, const char* name, const TQStringList& )
+    : KTextEditor::Plugin ( (KTextEditor::Document*) tqparent, name )
 {
 }
 
@@ -80,7 +80,7 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
 
 void KateKttsdPluginView::slotReadOut()
 {
-    KTextEditor::View *v = (KTextEditor::View*)parent();
+    KTextEditor::View *v = (KTextEditor::View*)tqparent();
     KTextEditor::SelectionInterface *si = KTextEditor::selectionInterface( v->document() );
     TQString text;
 

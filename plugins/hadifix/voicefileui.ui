@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>VoiceFileWidget</class>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>VoiceFileWidget</cstring>
     </property>
@@ -25,7 +25,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="TQLabel" row="0" column="0">
             <property name="name">
                 <cstring>voiceFileLabel</cstring>
             </property>
@@ -44,7 +44,7 @@
                 <enum>Plain</enum>
             </property>
         </widget>
-        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="TQButtonGroup" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>genderOption</cstring>
             </property>
@@ -61,7 +61,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QRadioButton" row="0" column="0">
+                <widget class="TQRadioButton" row="0" column="0">
                     <property name="name">
                         <cstring>femaleOption</cstring>
                     </property>
@@ -69,7 +69,7 @@
                         <string>Female</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="0" column="1">
+                <widget class="TQRadioButton" row="0" column="1">
                     <property name="name">
                         <cstring>maleOption</cstring>
                     </property>
@@ -106,10 +106,10 @@
 <variables>
     <variable access="public">QString mbrola;</variable>
 </variables>
-<slots>
+<Q_SLOTS>
     <slot>genderButton_clicked()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
+</Q_SLOTS>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>

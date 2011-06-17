@@ -24,7 +24,7 @@
 #ifndef _XMLTRANSFORMERPROC_H_
 #define _XMLTRANSFORMERPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqobject.h>
 #include <tqstringlist.h>
 
@@ -36,12 +36,13 @@ class KProcess;
 class XmlTransformerProc : virtual public KttsFilterProc
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     /**
      * Constructor.
      */
-    XmlTransformerProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
+    XmlTransformerProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.

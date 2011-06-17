@@ -31,12 +31,13 @@
 class TalkerChooserProc : virtual public KttsFilterProc
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     /**
      * Constructor.
      */
-    TalkerChooserProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
+    TalkerChooserProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.

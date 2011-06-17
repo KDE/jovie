@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqlayout.h>
 
@@ -43,17 +43,17 @@
 /**
 * Constructor 
 */
-XmlTransformerConf::XmlTransformerConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(parent, name)
+XmlTransformerConf::XmlTransformerConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(tqparent, name)
 {
     // kdDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
 
     // Create configuration widget.
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "XmlTransformerConfWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new XmlTransformerConfWidget(this, "XmlTransformerConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
 
     // Set up defaults.
     defaults();
@@ -125,7 +125,7 @@ void XmlTransformerConf::save(KConfig* config, const TQString& configGroup){
     config->writeEntry( "XsltprocPath", realFilePath( m_widget->xsltprocPath->url() ) );
     config->writeEntry( "RootElement", m_widget->rootElementLineEdit->text() );
     config->writeEntry( "DocType", m_widget->doctypeLineEdit->text() );
-    config->writeEntry( "AppID", m_widget->appIdLineEdit->text().replace(" ", "") );
+    config->writeEntry( "AppID", m_widget->appIdLineEdit->text().tqreplace(" ", "") );
 }
 
 /** 
@@ -170,13 +170,13 @@ bool XmlTransformerConf::supportsMultiInstance() { return true; }
 TQString XmlTransformerConf::userPlugInName()
 {
     TQString filePath = realFilePath(m_widget->xsltprocPath->url());
-    if (filePath.isEmpty()) return TQString::null;
-    if (getLocation(filePath).isEmpty()) return TQString::null;
+    if (filePath.isEmpty()) return TQString();
+    if (getLocation(filePath).isEmpty()) return TQString();
 
     filePath = realFilePath(m_widget->xsltPath->url());
-    if (filePath.isEmpty()) return TQString::null;
-    if (getLocation(filePath).isEmpty()) return TQString::null;
-    if (!TQFileInfo(filePath).isFile()) return TQString::null;
+    if (filePath.isEmpty()) return TQString();
+    if (getLocation(filePath).isEmpty()) return TQString();
+    if (!TQFileInfo(filePath).isFile()) return TQString();
 
     return m_widget->nameLineEdit->text();
 }

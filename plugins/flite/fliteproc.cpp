@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqstringlist.h>
 
@@ -36,8 +36,8 @@
 #include "fliteproc.moc"
  
 /** Constructor */
-FliteProc::FliteProc( TQObject* parent, const char* name, const TQStringList& ) : 
-    PlugInProc( parent, name ){
+FliteProc::FliteProc( TQObject* tqparent, const char* name, const TQStringList& ) : 
+    PlugInProc( tqparent, name ){
     kdDebug() << "FliteProc::FliteProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;
@@ -73,7 +73,7 @@ bool FliteProc::init(KConfig* config, const TQString& configGroup){
 */
 void FliteProc::sayText(const TQString &text)
 {
-    synth(text, TQString::null, m_fliteExePath);
+    synth(text, TQString(), m_fliteExePath);
 }
 
 /**
@@ -129,11 +129,11 @@ void FliteProc::synth(
     // Encode quotation characters.
     TQString saidText = text;
 /*
-    saidText.replace("\\\"", "#!#!");
-    saidText.replace("\"", "\\\"");
-    saidText.replace("#!#!", "\\\"");
+    saidText.tqreplace("\\\"", "#!#!");
+    saidText.tqreplace("\"", "\\\"");
+    saidText.tqreplace("#!#!", "\\\"");
     // Remove certain comment characters.
-    saidText.replace("--", "");
+    saidText.tqreplace("--", "");
     saidText = "\"" + saidText + "\"";
 */
     saidText += "\n";
@@ -218,13 +218,13 @@ void FliteProc::slotProcessExited(KProcess*)
 
 void FliteProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "FliteProc::slotReceivedStdout: Received output from Flite: " << buf << endl;
 }
 
 void FliteProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "FliteProc::slotReceivedStderr: Received error from Flite: " << buf << endl;
 }
 
@@ -256,7 +256,7 @@ void FliteProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = TQString::null;
+        m_synthFilename = TQString();
     }
 }
 

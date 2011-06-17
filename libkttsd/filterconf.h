@@ -25,7 +25,7 @@
 #ifndef _FILTERCONF_H_
 #define _FILTERCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqwidget.h>
 
 // KDE includes.
@@ -34,14 +34,15 @@
 #include <kdemacros.h>
 #include "kdeexportfix.h"
 
-class KDE_EXPORT KttsFilterConf : public QWidget{
+class KDE_EXPORT KttsFilterConf : public TQWidget{
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        KttsFilterConf( TQWidget *parent = 0, const char *name = 0);
+        KttsFilterConf( TQWidget *tqparent = 0, const char *name = 0);
 
         /**
         * Destructor 
@@ -137,7 +138,7 @@ class KDE_EXPORT KttsFilterConf : public QWidget{
         * Searches the $PATH variable for any file. If that file exists in the PATH, or
         * is contained in any directory in the PATH, it returns the full path to it.
         * @param name        The name of the file to search for.
-        * @returns           The path to the file on success, a blank QString
+        * @returns           The path to the file on success, a blank TQString
         *                    if its not found.
         */
         TQString getLocation(const TQString &name);

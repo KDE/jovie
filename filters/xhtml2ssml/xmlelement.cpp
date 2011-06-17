@@ -74,12 +74,12 @@ TQString XMLElement::attribute(const TQString &attr) {
     return m_attrmapper[attr];
 }
 
-TQString XMLElement::toQString() {
+TQString XMLElement::toTQString() {
     TQString tag = startTag();
     return tag.left(tag.length() - 1).right(tag.length() - 2);
 }
 
-XMLElement XMLElement::fromQString(const TQString &str) {
+XMLElement XMLElement::fromTQString(const TQString &str) {
     TQStringList sections = TQStringList::split(" ", str);
     TQString tagname = sections[0];
     XMLElement e(tagname.latin1());
@@ -91,7 +91,7 @@ XMLElement XMLElement::fromQString(const TQString &str) {
         for(int i = 0; i < sectionsCount; ++i) {
             TQStringList list = TQStringList::split("=", sections[i]);
             if(list.count() != 2) {
-                std::cerr << "XMLElement::fromQString: Cannot convert list: " << list.join("|") << ". `" << str << "' is not in valid format.\n";
+                std::cerr << "XMLElement::fromTQString: Cannot convert list: " << list.join("|") << ". `" << str << "' is not in valid format.\n";
                 return XMLElement(" ");
             }
             e.setAttribute(list[0], list[1].left(list[1].length() - 1).right(list[1].length() -2));

@@ -25,7 +25,7 @@
 #ifndef KTTSMGR_H
 #define KTTSMGR_H
 
-// Qt includes.
+// TQt includes.
 #include <tqevent.h>
 #include <tqtooltip.h>
 
@@ -36,10 +36,10 @@
 #include "kspeech_stub.h"
 #include "kspeechsink.h"
 
-class KttsToolTip: public QToolTip
+class KttsToolTip: public TQToolTip
 {
     public:
-        KttsToolTip ( TQWidget* parent );
+        KttsToolTip ( TQWidget* tqparent );
 
     protected:
         virtual void maybeTip ( const TQPoint & p );
@@ -48,13 +48,14 @@ class KttsToolTip: public QToolTip
 class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpeechSink
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
-        KttsMgrTray(TQWidget *parent=0);
+        KttsMgrTray(TQWidget *tqparent=0);
         ~KttsMgrTray();
 
         void setExitWhenFinishedSpeaking();
-        TQString getStatus();
+        TQString gettqStatus();
 
     protected:
         // ASYNC textStarted(const TQCString& appId, uint jobNum);

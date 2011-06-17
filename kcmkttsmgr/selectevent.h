@@ -29,16 +29,17 @@
 class SelectEvent : public SelectEventWidget
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     /**
     * Constructor.
-    * @param parent             Inherited KDialog parameter.
+    * @param tqparent             Inherited KDialog parameter.
     * @param name               Inherited KDialog parameter.
     * @param initEventSrc       Event source to start with.
     */
-    SelectEvent(TQWidget* parent = 0, const char* name = 0, WFlags fl = 0,
-        const TQString& initEventSrc = TQString::null );
+    SelectEvent(TQWidget* tqparent = 0, const char* name = 0, WFlags fl = 0,
+        const TQString& initEventSrc = TQString() );
 
     /**
     * Destructor.

@@ -18,7 +18,7 @@
 #ifndef _COMMANDPROC_H_
 #define _COMMANDPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqstringlist.h> 
 
 // KTTS includes.
@@ -28,11 +28,12 @@ class KProcess;
 class TQTextCodec;
 
 class CommandProc : public PlugInProc{
-    Q_OBJECT 
+    Q_OBJECT
+    TQ_OBJECT
 
     public:
         /** Constructor */
-        CommandProc( TQObject* parent = 0, const char* name = 0,
+        CommandProc( TQObject* tqparent = 0, const char* name = 0,
             const TQStringList &args = TQStringList());
 
         /** Destructor */

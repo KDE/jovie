@@ -12,7 +12,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 
 // KDE includes.
@@ -29,8 +29,8 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GStreamerPlayer::GStreamerPlayer(TQObject* parent, const char* name, const TQStringList& args) :
-    Player(parent, name, args),
+GStreamerPlayer::GStreamerPlayer(TQObject* tqparent, const char* name, const TQStringList& args) :
+    Player(tqparent, name, args),
     m_initialized(false),
     m_pipeline(0),
     m_source(0),
@@ -94,18 +94,18 @@ bool GStreamerPlayer::paused() const
 
 int GStreamerPlayer::totalTime() const
 {
-    return time(GST_QUERY_TOTAL) / GST_SECOND;
+    return time(GST_TQUERY_TOTAL) / GST_SECOND;
 }
 
 int GStreamerPlayer::currentTime() const
 {
-    return time(GST_QUERY_POSITION) / GST_SECOND;
+    return time(GST_TQUERY_POSITION) / GST_SECOND;
 }
 
 int GStreamerPlayer::position() const
 {
-    long long total   = time(GST_QUERY_TOTAL);
-    long long current = time(GST_QUERY_POSITION);
+    long long total   = time(GST_TQUERY_TOTAL);
+    long long current = time(GST_TQUERY_POSITION);
     return total > 0 ? int((double(current) / double(total)) * double(1000) + 0.5) : 0;
 }
 
@@ -117,7 +117,7 @@ void GStreamerPlayer::seek(int seekTime)
 
 void GStreamerPlayer::seekPosition(int position)
 {
-    long long total = time(GST_QUERY_TOTAL);
+    long long total = time(GST_TQUERY_TOTAL);
     if(total > 0)
         seek(int(double(position) / double(1000) * double(totalTime()) + 0.5));
 }
@@ -189,12 +189,12 @@ bool GStreamerPlayer::requireVersion(uint major, uint minor, uint micro)
     }
 
     gst_version(&gmajor, &gminor, &gmicro);
-    // kdDebug() << TQString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
+    // kdDebug() << TQString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").tqarg(gmajor).tqarg(gminor).tqarg(gmicro) << endl;
     if (gmajor > major) return true;
     if (gminor > minor) return true;
     if (gmicro >= micro) return true;
-    kdDebug() << TQString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").arg(gmajor).arg(gminor).arg(gmicro) << endl;
-    kdDebug() << TQString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").arg(major).arg(minor).arg(micro) << endl;
+    kdDebug() << TQString("GStreamerPlayer::requireVersion: You have gstreamer %1.%2.%3 installed.").tqarg(gmajor).tqarg(gminor).tqarg(gmicro) << endl;
+    kdDebug() << TQString("GStreamerPlayer::requireVersion: This application requires %1.%2.%3 or greater.").tqarg(major).tqarg(minor).tqarg(micro) << endl;
     return false;
 }
 
@@ -207,7 +207,7 @@ void GStreamerPlayer::setSinkName(const TQString &sinkName) { m_sinkName = sinkN
 void GStreamerPlayer::readConfig()
 {
     KConfigGroup config(KGlobal::config(), "GStreamerPlayer");
-    m_sinkName = config.readEntry("SinkName", TQString::null);
+    m_sinkName = config.readEntry("SinkName", TQString());
 }
 
 void GStreamerPlayer::setupPipeline()

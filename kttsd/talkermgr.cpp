@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 
 // KDE includes.
 #include <kdebug.h>
@@ -37,8 +37,8 @@
 /**
  * Constructor.
  */
-TalkerMgr::TalkerMgr(TQObject *parent, const char *name) :
-    TQObject( parent, name )
+TalkerMgr::TalkerMgr(TQObject *tqparent, const char *name) :
+    TQObject( tqparent, name )
 {
     m_loadedPlugIns.setAutoDelete(true);
 }
@@ -82,7 +82,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             config->setGroup("Talker_" + talkerID);
 
             // Get the DesktopEntryName of the plugin we will try to load.
-            TQString desktopEntryName = config->readEntry("DesktopEntryName", TQString::null);
+            TQString desktopEntryName = config->readEntry("DesktopEntryName", TQString());
 
             // If a DesktopEntryName is not in the config file, it was configured before
             // we started using them, when we stored translated plugin names instead.
@@ -91,7 +91,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                TQString synthName = config->readEntry("PlugIn", TQString::null);
+                TQString synthName = config->readEntry("PlugIn", TQString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = TalkerCode::TalkerNameToDesktopEntryName(synthName);
                 // Record the DesktopEntryName from now on.
@@ -99,7 +99,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
             }
 
             // Get the talker code.
-            TQString talkerCode = config->readEntry("TalkerCode", TQString::null);
+            TQString talkerCode = config->readEntry("TalkerCode", TQString());
 
             // Normalize the talker code.
             TQString fullLanguageCode;
@@ -107,7 +107,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
 
             // Find the KTTSD SynthPlugin.
             KTrader::OfferList offers = KTrader::self()->query(
-                "KTTSD/SynthPlugin", TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
+                "KTTSD/SynthPlugin", TQString("DesktopEntryName == '%1'").tqarg(desktopEntryName));
 
             if(offers.count() > 1){
                 ++bad;
@@ -134,7 +134,7 @@ int TalkerMgr::loadPlugIns(KConfig* config)
                         } else {
                             // Synchronous plugins are run in a separate thread.
                             // Init will start the thread and it will immediately go to sleep.
-                            TQString threadedPlugInName = TQString::fromLatin1("threaded") + desktopEntryName;
+                            TQString threadedPlugInName = TQString::tqfromLatin1("threaded") + desktopEntryName;
                             ThreadedPlugIn* speechThread = new ThreadedPlugIn(speech,
                                     this, threadedPlugInName.latin1());
                             speechThread->init(config, "Talker_" + talkerCode);
@@ -205,7 +205,7 @@ int TalkerMgr::talkerToPluginIndex(const TQString& talker) const
 {
     // kdDebug() << "TalkerMgr::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
     // If we have a cached match, return that.
-    if (m_talkerToPlugInCache.contains(talker))
+    if (m_talkerToPlugInCache.tqcontains(talker))
         return m_talkerToPlugInCache[talker];
     else
     {
@@ -223,7 +223,7 @@ int TalkerMgr::talkerToPluginIndex(const TQString& talker) const
  * If a plugin has not been loaded to match the talker, returns the default
  * plugin.
  *
- * TODO: When picking a talker, %KTTSD will automatically determine if text contains
+ * TODO: When picking a talker, %KTTSD will automatically determine if text tqcontains
  * markup and pick a talker that supports that markup, if available.  This
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
@@ -244,7 +244,7 @@ PlugInProc* TalkerMgr::talkerToPlugin(const TQString& talker) const
  *
  * The returned TalkerCode is a copy and should be destroyed by caller.
  *
- * TODO: When picking a talker, %KTTSD will automatically determine if text contains
+ * TODO: When picking a talker, %KTTSD will automatically determine if text tqcontains
  * markup and pick a talker that supports that markup, if available.  This
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
@@ -325,7 +325,7 @@ bool TalkerMgr::autoconfigureTalker(const TQString& langCode, KConfig* config)
     {
         // See if this plugin supports the desired language.
         TQStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
-        if (languageCodes.contains(languageCode))
+        if (languageCodes.tqcontains(languageCode))
         {
             TQString desktopEntryName = offers[i]->desktopEntryName();
 

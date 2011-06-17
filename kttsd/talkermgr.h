@@ -24,7 +24,7 @@
 #ifndef _TALKERMGR_H_
 #define _TALKERMGR_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqstringlist.h>
 #include <tqmap.h>
@@ -34,14 +34,14 @@
 #include "talkercode.h"
 #include "pluginproc.h"
 
-class TalkerMgr: public QObject
+class TalkerMgr: public TQObject
 {
 public:
 
     /**
      * Constructor.
      */
-    TalkerMgr(TQObject *parent = 0, const char *name = 0);
+    TalkerMgr(TQObject *tqparent = 0, const char *name = 0);
 
     /**
      * Destructor.
@@ -95,7 +95,7 @@ public:
      *
      * The returned TalkerCode is a copy and should be destroyed by caller.
      *
-     * TODO: When picking a talker, %KTTSD will automatically determine if text contains
+     * TODO: When picking a talker, %KTTSD will automatically determine if text tqcontains
      * markup and pick a talker that supports that markup, if available.  This
      * overrides all other attributes, i.e, it is treated as an automatic "top priority"
      * attribute.

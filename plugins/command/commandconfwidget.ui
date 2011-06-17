@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CommandConfWidget</class>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>CommandConfWidget</cstring>
     </property>
@@ -22,7 +22,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="TQGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>confiurationBox</cstring>
             </property>
@@ -53,7 +53,7 @@
                         <enum>Horizontal</enum>
                     </property>
                 </widget>
-                <widget class="QLabel" row="2" column="0">
+                <widget class="TQLabel" row="2" column="0">
                     <property name="name">
                         <cstring>urlLabel</cstring>
                     </property>
@@ -72,15 +72,15 @@
                         <string>This field specifies both the command used for speaking texts and its parameters. If you want to pass the text as a parameter, write %t at the place where the text should be inserted.  To pass a file of the text, write %f.  To synthesize only and let KTTSD play the synthesized text, write %w for the generated audio file.</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="5" column="0">
+                <widget class="TQLayoutWidget" row="5" column="0">
                     <property name="name">
-                        <cstring>layout1</cstring>
+                        <cstring>tqlayout1</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QCheckBox">
+                        <widget class="TQCheckBox">
                             <property name="name">
                                 <cstring>stdInButton</cstring>
                             </property>
@@ -101,14 +101,14 @@
                             <property name="sizeType">
                                 <enum>Expanding</enum>
                             </property>
-                            <property name="sizeHint">
+                            <property name="tqsizeHint">
                                 <size>
                                     <width>201</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="QPushButton">
+                        <widget class="TQPushButton">
                             <property name="name">
                                 <cstring>commandTestButton</cstring>
                             </property>
@@ -118,15 +118,15 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="4" column="0">
+                <widget class="TQLayoutWidget" row="4" column="0">
                     <property name="name">
-                        <cstring>layout5</cstring>
+                        <cstring>tqlayout5</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>characterCodingLabel</cstring>
                             </property>
@@ -163,7 +163,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="TQLabel" row="0" column="0">
                     <property name="name">
                         <cstring>explanationLabel</cstring>
                     </property>
@@ -187,7 +187,7 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
+            <property name="tqsizeHint">
                 <size>
                     <width>20</width>
                     <height>30</height>
@@ -214,10 +214,10 @@
     <include location="global" impldecl="in implementation">kpushbutton.h</include>
     <include location="global" impldecl="in implementation">kcombobox.h</include>
 </includes>
-<signals>
+<Q_SIGNALS>
     <signal>configurationChanged()</signal>
-</signals>
-<layoutdefaults spacing="6" margin="11"/>
+</Q_SIGNALS>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>

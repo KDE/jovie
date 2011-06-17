@@ -39,6 +39,7 @@
 class KTTSD : public TQObject, virtual public KSpeech
 {
     Q_OBJECT
+//    TQ_OBJECT
     K_DCOP
 
     public:
@@ -48,7 +49,7 @@ class KTTSD : public TQObject, virtual public KSpeech
         * Create objects, speechData and speaker.
         * Start thread
         */
-        KTTSD(const TQCString& objId, TQObject *parent=0, const char *name=0);
+        KTTSD(const TQCString& objId, TQObject *tqparent=0, const char *name=0);
 
         /**
         * Destructor.
@@ -608,7 +609,7 @@ class KTTSD : public TQObject, virtual public KSpeech
 
         /*
         * Fixes a talker argument passed in via dcop.
-        * If NULL or "0" return TQString::null.
+        * If NULL or "0" return TQString().
         */
         TQString fixNullString(const TQString &talker) const;
 
@@ -632,11 +633,12 @@ class KTTSD : public TQObject, virtual public KSpeech
 class kspeech : public TQObject, virtual public KSpeech
 {
     Q_OBJECT
+//    TQ_OBJECT
     K_DCOP
 
     public:
         // Constructor.
-        kspeech(const TQCString& objId, TQObject *parent=0, const char *name=0);
+        kspeech(const TQCString& objId, TQObject *tqparent=0, const char *name=0);
 
         // Destructor.
         ~kspeech();

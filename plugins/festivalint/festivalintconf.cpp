@@ -24,7 +24,7 @@
 // C++ includes.
 #include <math.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqlayout.h>
 #include <tqlabel.h>
 #include <tqstring.h>
@@ -57,19 +57,19 @@
 #include "festivalintconf.moc"
 
 /** Constructor */
-FestivalIntConf::FestivalIntConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(parent, name)
+FestivalIntConf::FestivalIntConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(tqparent, name)
 {
     // kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
     m_festProc = 0;
     m_progressDlg = 0;
     m_supportsSSML = FestivalIntProc::ssUnknown;
 
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "FestivalIntConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new FestivalIntConfWidget(this, "FestivalIntConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
 
     m_widget->festivalPath->setMode(KFile::File | KFile::ExistingOnly);
     m_widget->festivalPath->setFilter("*");
@@ -210,11 +210,11 @@ void FestivalIntConf::setDesiredLanguage(const TQString &lang)
 
 TQString FestivalIntConf::getTalkerCode()
 {
-    if (!m_widget->selectVoiceCombo->isEnabled()) return TQString::null;
+    if (!m_widget->selectVoiceCombo->isEnabled()) return TQString();
     TQString exePath = realFilePath(m_widget->festivalPath->url());
-    if (exePath.isEmpty()) return TQString::null;
-    if (getLocation(exePath).isEmpty()) return TQString::null;
-    if (m_voiceList.count() == 0) return TQString::null;
+    if (exePath.isEmpty()) return TQString();
+    if (getLocation(exePath).isEmpty()) return TQString();
+    if (m_voiceList.count() == 0) return TQString();
     TQString normalTalkerCode;
     voiceStruct voiceTemp = m_voiceList[m_widget->selectVoiceCombo->currentItem()];
     // Determine volume attribute.  soft < 75% <= medium <= 125% < loud.
@@ -229,12 +229,12 @@ TQString FestivalIntConf::getTalkerCode()
             "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
             "<prosody volume=\"%4\" rate=\"%5\" />"
             "<kttsd synthesizer=\"%6\" />")
-            .arg(voiceTemp.languageCode)
-            .arg(voiceTemp.code)
-            .arg(voiceTemp.gender)
-            .arg(volume)
-            .arg(rate)
-            .arg("Festival Interactive");
+            .tqarg(voiceTemp.languageCode)
+            .tqarg(voiceTemp.code)
+            .tqarg(voiceTemp.gender)
+            .tqarg(volume)
+            .tqarg(rate)
+            .tqarg("Festival Interactive");
     return normalTalkerCode;
 }
 
@@ -485,7 +485,7 @@ void FestivalIntConf::scanVoices()
             for (uint index=0; index < voicesCount; ++index)
             {
                 TQDomNode voiceNode = voices.item(index);
-                TQString voiceCode = readXmlString(voiceNode, "code", TQString::null);
+                TQString voiceCode = readXmlString(voiceNode, "code", TQString());
                 // kdDebug() << "FestivalIntConf::scanVoices: Comparing code " << code << " to " << voiceCode << endl;
                 if (voiceCode == code)
                 {
@@ -621,7 +621,7 @@ void FestivalIntConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     TQFile::remove(m_waveFile);
-    m_waveFile = TQString::null;
+    m_waveFile = TQString();
     if (m_progressDlg) m_progressDlg->close();
 }
 

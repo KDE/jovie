@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>HadifixConfigUI</class>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>HadifixConfigUI</cstring>
     </property>
@@ -28,7 +28,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="TQGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>GroupBox4</cstring>
             </property>
@@ -56,7 +56,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="TQGroupBox" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>basicOptions</cstring>
                     </property>
@@ -81,7 +81,7 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="TQLabel" row="0" column="0">
                             <property name="name">
                                 <cstring>voiceLabel</cstring>
                             </property>
@@ -135,7 +135,7 @@
                                 <string>&amp;Select...</string>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="1" column="0">
+                        <widget class="TQLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>volumeLabel</cstring>
                             </property>
@@ -188,7 +188,7 @@
                                 <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
                             </property>
                         </widget>
-                        <widget class="QSlider" row="1" column="2" rowspan="1" colspan="2">
+                        <widget class="TQSlider" row="1" column="2" rowspan="1" colspan="2">
                             <property name="name">
                                 <cstring>volumeSlider</cstring>
                             </property>
@@ -223,7 +223,7 @@
                                 <string>Adjusts the volume of speech.  Slide to left for softer speech; to the right for louder.</string>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="2" column="0">
+                        <widget class="TQLabel" row="2" column="0">
                             <property name="name">
                                 <cstring>timeLabel</cstring>
                             </property>
@@ -276,7 +276,7 @@
                                 <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
                             </property>
                         </widget>
-                        <widget class="QSlider" row="2" column="2" rowspan="1" colspan="2">
+                        <widget class="TQSlider" row="2" column="2" rowspan="1" colspan="2">
                             <property name="name">
                                 <cstring>timeSlider</cstring>
                             </property>
@@ -305,7 +305,7 @@
                                 <string>Adjusts the speed of speech.  Slide to left for slower speech; to the right for faster.</string>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="3" column="0">
+                        <widget class="TQLabel" row="3" column="0">
                             <property name="name">
                                 <cstring>frequencyLabel</cstring>
                             </property>
@@ -355,7 +355,7 @@
                                 <string>Adjusts the pitch (tone) of speech.  Slide to left for lower speech; to the right for higher.</string>
                             </property>
                         </widget>
-                        <widget class="QSlider" row="3" column="2" rowspan="1" colspan="2">
+                        <widget class="TQSlider" row="3" column="2" rowspan="1" colspan="2">
                             <property name="name">
                                 <cstring>frequencySlider</cstring>
                             </property>
@@ -383,7 +383,7 @@
                         </widget>
                     </grid>
                 </widget>
-                <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+                <widget class="TQGroupBox" row="1" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>advancedOptions</cstring>
                     </property>
@@ -408,7 +408,7 @@
                         <property name="spacing">
                             <number>6</number>
                         </property>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="TQLabel" row="0" column="0">
                             <property name="name">
                                 <cstring>hadifixBinLabel</cstring>
                             </property>
@@ -438,7 +438,7 @@
                                 <string>If the txt2pho program is in your PATH environment variable, simply enter "txt2pho", otherwise specify the full path to the txt2pho executable program.</string>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="1" column="0">
+                        <widget class="TQLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>mbrolaBinLabel</cstring>
                             </property>
@@ -468,15 +468,15 @@
                                 <string>If the Mbrola program is in your PATH environment variable, simply enter "mbrola", otherwise specify the full path to the Mbrola executable program.</string>
                             </property>
                         </widget>
-                        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                        <widget class="TQLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
                             <property name="name">
-                                <cstring>layout5</cstring>
+                                <cstring>tqlayout5</cstring>
                             </property>
                             <hbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>characterCodingLabel</cstring>
                                     </property>
@@ -525,7 +525,7 @@
                     <property name="sizeType">
                         <enum>Preferred</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>240</width>
                             <height>20</height>
@@ -596,84 +596,84 @@
     </connection>
     <connection>
         <sender>voiceCombo</sender>
-        <signal>activated(const QString&amp;)</signal>
+        <signal>activated(const TQString&amp;)</signal>
         <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
+        <slot>changed(const TQString&amp;)</slot>
     </connection>
     <connection>
         <sender>volumeBox</sender>
-        <signal>valueChanged(const QString&amp;)</signal>
+        <signal>valueChanged(const TQString&amp;)</signal>
         <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
+        <slot>changed(const TQString&amp;)</slot>
     </connection>
     <connection>
         <sender>timeBox</sender>
-        <signal>valueChanged(const QString&amp;)</signal>
+        <signal>valueChanged(const TQString&amp;)</signal>
         <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
+        <slot>changed(const TQString&amp;)</slot>
     </connection>
     <connection>
         <sender>frequencyBox</sender>
-        <signal>valueChanged(const QString&amp;)</signal>
+        <signal>valueChanged(const TQString&amp;)</signal>
         <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
+        <slot>changed(const TQString&amp;)</slot>
     </connection>
     <connection>
         <sender>hadifixURL</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <signal>textChanged(const TQString&amp;)</signal>
         <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
+        <slot>changed(const TQString&amp;)</slot>
     </connection>
     <connection>
         <sender>mbrolaURL</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <signal>textChanged(const TQString&amp;)</signal>
         <receiver>HadifixConfigUI</receiver>
-        <slot>changed(const QString&amp;)</slot>
+        <slot>changed(const TQString&amp;)</slot>
     </connection>
 </connections>
 <includes>
-    <include location="global" impldecl="in declaration">qradiobutton.h</include>
-    <include location="global" impldecl="in declaration">qpixmap.h</include>
+    <include location="global" impldecl="in declaration">tqradiobutton.h</include>
+    <include location="global" impldecl="in declaration">tqpixmap.h</include>
     <include location="global" impldecl="in declaration">kurl.h</include>
-    <include location="global" impldecl="in declaration">qmap.h</include>
+    <include location="global" impldecl="in declaration">tqmap.h</include>
     <include location="global" impldecl="in implementation">kglobal.h</include>
-    <include location="global" impldecl="in implementation">qstringlist.h</include>
+    <include location="global" impldecl="in implementation">tqstringlist.h</include>
     <include location="global" impldecl="in implementation">math.h</include>
     <include location="global" impldecl="in implementation">kiconloader.h</include>
 </includes>
 <forwards>
-    <forward>class QStringList;</forward>
+    <forward>class TQStringList;</forward>
 </forwards>
 <variables>
-    <variable>QMap&lt;QString,int&gt; maleVoices;</variable>
-    <variable>QMap&lt;int,QString&gt; defaultVoices;</variable>
+    <variable>TQMap&lt;TQString,int&gt; maleVoices;</variable>
+    <variable>TQMap&lt;int,TQString&gt; defaultVoices;</variable>
     <variable>QPixmap female;</variable>
     <variable>QPixmap male;</variable>
-    <variable>QMap&lt;QString,int&gt; femaleVoices;</variable>
+    <variable>TQMap&lt;TQString,int&gt; femaleVoices;</variable>
 </variables>
-<signals>
+<Q_SIGNALS>
     <signal>changed(bool)</signal>
-</signals>
-<slots>
+</Q_SIGNALS>
+<Q_SLOTS>
     <slot access="protected" specifier="non virtual">volumeBox_valueChanged( int percentValue )</slot>
     <slot access="protected" specifier="non virtual">timeBox_valueChanged( int percentValue )</slot>
     <slot access="protected" specifier="non virtual">frequencyBox_valueChanged( int percentValue )</slot>
     <slot access="protected" specifier="non virtual">volumeSlider_valueChanged( int sliderValue )</slot>
     <slot access="protected" specifier="non virtual">timeSlider_valueChanged( int sliderValue )</slot>
     <slot access="protected" specifier="non virtual">frequencySlider_valueChanged( int sliderValue )</slot>
-    <slot access="protected">changed( const QString &amp; )</slot>
-</slots>
+    <slot access="protected">changed( const TQString &amp; )</slot>
+</Q_SLOTS>
 <functions>
     <function access="protected" specifier="non virtual" returnType="int">percentToSlider( int percentValue )</function>
     <function access="protected" specifier="non virtual" returnType="int">sliderToPercent( int sliderValue )</function>
     <function access="private" specifier="non virtual">init()</function>
-    <function specifier="non virtual">addVoice( const QString &amp;filename, bool isMale )</function>
-    <function specifier="non virtual">addVoice( const QString &amp;filename, bool isMale, const QString &amp;displayname )</function>
-    <function specifier="non virtual">setVoice( const QString &amp;filename, bool isMale )</function>
-    <function specifier="non virtual" returnType="QString">getVoiceFilename()</function>
+    <function specifier="non virtual">addVoice( const TQString &amp;filename, bool isMale )</function>
+    <function specifier="non virtual">addVoice( const TQString &amp;filename, bool isMale, const TQString &amp;displayname )</function>
+    <function specifier="non virtual">setVoice( const TQString &amp;filename, bool isMale )</function>
+    <function specifier="non virtual" returnType="TQString">getVoiceFilename()</function>
     <function specifier="non virtual" returnType="bool">isMaleVoice()</function>
 </functions>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>

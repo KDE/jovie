@@ -33,11 +33,11 @@
 * Constructor.
 */
 ThreadedPlugIn::ThreadedPlugIn(PlugInProc* plugin, 
-    TQObject *parent /*= 0*/, const char *name /*= 0*/):
-    PlugInProc(parent, name),
+    TQObject *tqparent /*= 0*/, const char *name /*= 0*/):
+    PlugInProc(tqparent, name),
     TQThread(),
     m_plugin(plugin),
-    m_filename(TQString::null),
+    m_filename(TQString()),
     m_requestExit(false),
     m_supportsSynth(false)
 {
@@ -188,7 +188,7 @@ void ThreadedPlugIn::ackFinished()
 {
     // Since plugin should not be running, don't bother with Mutex here.
     if (m_state == psFinished) m_state = psIdle;
-    m_filename = TQString::null;
+    m_filename = TQString();
 }
 
 /**
@@ -265,7 +265,7 @@ void ThreadedPlugIn::run()
                     m_state = psSynthing;
                     m_stateMutex.unlock();
                     TQString filename = m_filename;
-                    m_filename = TQString::null;
+                    m_filename = TQString();
                     kdDebug() << "ThreadedPlugIn::run calling synthText" << endl;
                     m_plugin->synthText(m_text, filename);
                     kdDebug() << "ThreadedPlugIn::run back from synthText" << endl;

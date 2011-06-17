@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqstring.h>
 #include <tqvaluelist.h>
@@ -39,8 +39,8 @@
 #include "commandproc.moc"
 
 /** Constructor */
-CommandProc::CommandProc( TQObject* parent, const char* name, const TQStringList& /*args*/) : 
-    PlugInProc( parent, name )
+CommandProc::CommandProc( TQObject* tqparent, const char* name, const TQStringList& /*args*/) : 
+    PlugInProc( tqparent, name )
 {
     kdDebug() << "CommandProc::CommandProc: Running" << endl;
     m_commandProc = 0;
@@ -72,8 +72,8 @@ bool CommandProc::init(KConfig *config, const TQString &configGroup){
     m_stdin = config->readBoolEntry("StdIn", true);
     m_language = config->readEntry("LanguageCode", "en");
 
-    // Support separate synthesis if the TTS command contains %w macro.
-    m_supportsSynth = (m_ttsCommand.contains("%w"));
+    // Support separate synthesis if the TTS command tqcontains %w macro.
+    m_supportsSynth = (m_ttsCommand.tqcontains("%w"));
 
     TQString codecString = config->readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
@@ -89,7 +89,7 @@ bool CommandProc::init(KConfig *config, const TQString &configGroup){
 */
 void CommandProc::sayText(const TQString &text)
 {
-    synth(text, TQString::null,
+    synth(text, TQString(),
         m_ttsCommand, m_stdin, m_codec, m_language);
 }
 
@@ -127,9 +127,9 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
         if (m_commandProc->isRunning()) m_commandProc->kill();
         delete m_commandProc;
         m_commandProc = 0;
-        m_synthFilename = TQString::null;
+        m_synthFilename = TQString();
         if (!m_textFilename.isNull()) TQFile::remove(m_textFilename);
-        m_textFilename = TQString::null;
+        m_textFilename = TQString();
     }
     TQString command = userCmd;
     TQString text = inputText.stripWhiteSpace();
@@ -147,7 +147,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
     TQString escText = KShellProcess::quote(text);
 
     // 1.c) create a temporary file for the text, if %f macro is used.
-    if (command.contains("%f"))
+    if (command.tqcontains("%f"))
     {
         KTempFile tempFile(locateLocal("tmp", "commandplugin-"), ".txt");
         TQTextStream* fs = tempFile.textStream();
@@ -156,13 +156,13 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
         *fs << endl;
         m_textFilename = tempFile.file()->name();
         tempFile.close();
-    } else m_textFilename = TQString::null;
+    } else m_textFilename = TQString();
 
     // 2. replace variables with values
     TQValueStack<bool> stack;
     bool issinglequote=false;
     bool isdoublequote=false;
-    int noreplace=0;
+    int notqreplace=0;
     TQRegExp re_noquote("(\"|'|\\\\|`|\\$\\(|\\$\\{|\\(|\\{|\\)|\\}|%%|%t|%f|%l|%w)");
     TQRegExp re_singlequote("('|%%|%t|%f|%l|%w)");
     TQRegExp re_doublequote("(\"|\\\\|`|\\$\\(|\\$\\{|%%|%t|%f|%l|%w)");
@@ -178,18 +178,18 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
         {
             // assert(isdoublequote == false)
             stack.push(isdoublequote);
-            if (noreplace > 0)
+            if (notqreplace > 0)
                 // count nested braces when within ${...}
-                noreplace++;
+                notqreplace++;
             i++;
         }
         else if (command[i]=='$')
         {
             stack.push(isdoublequote);
             isdoublequote = false;
-            if ((noreplace > 0) || (command[i+1]=='{'))
+            if ((notqreplace > 0) || (command[i+1]=='{'))
                 // count nested braces when within ${...}
-                noreplace++;
+                notqreplace++;
             i+=2;
         }
         else if ((command[i]==')') || (command[i]=='}'))
@@ -199,9 +199,9 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
                 isdoublequote = stack.pop();
             else
                 qWarning("Parse error.");
-            if (noreplace > 0)
+            if (notqreplace > 0)
                 // count nested braces when within ${...}
-                noreplace--;
+                notqreplace--;
             i++;
         }
         else if (command[i]=='\'')
@@ -219,7 +219,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
         else if (command[i]=='`')
         {
             // Replace all `...` with safer $(...)
-            command.replace (i, 1, "$(");
+            command.tqreplace (i, 1, "$(");
             TQRegExp re_backticks("(`|\\\\`|\\\\\\\\|\\\\\\$)");
             for (	int i2=re_backticks.search(command,i+2);
                 i2!=-1;
@@ -228,7 +228,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
             {
                 if (command[i2] == '`')
                 {
-                    command.replace (i2, 1, ")");
+                    command.tqreplace (i2, 1, ")");
                     i2=command.length(); // leave loop
                 }
                 else
@@ -239,7 +239,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
             }
             // Leave i unchanged! We need to process "$("
         }
-        else if (noreplace == 0) // do not replace macros within ${...}
+        else if (notqreplace == 0) // do not replace macros within ${...}
         {
             TQString match, v;
 
@@ -269,7 +269,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
             else if (issinglequote)
                 v="'"+v+"'";
 
-            command.replace (i, match.length(), v);
+            command.tqreplace (i, match.length(), v);
             i+=v.length();
         }
         else
@@ -382,13 +382,13 @@ void CommandProc::slotProcessExited(KProcess*)
 
 void CommandProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "CommandProc::slotReceivedStdout: Received output from Command: " << buf << endl;
 }
 
 void CommandProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "CommandProc::slotReceivedStderr: Received error from Command: " << buf << endl;
 }
 
@@ -420,9 +420,9 @@ void CommandProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = TQString::null;
+        m_synthFilename = TQString();
         if (!m_textFilename.isNull()) TQFile::remove(m_textFilename);
-        m_textFilename = TQString::null;
+        m_textFilename = TQString();
     }
 }
 

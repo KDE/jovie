@@ -19,7 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqstringlist.h>
 #include <tqdom.h>
@@ -66,10 +66,10 @@ void SSMLConvert::setTalkers(const TQStringList &talkers) {
 TQString SSMLConvert::extractTalker(const TQString &talkercode) {
     TQString t = talkercode.section("synthesizer=", 1, 1);
     t = t.section('"', 1, 1);
-    if(t.contains("flite"))
+    if(t.tqcontains("flite"))
         return "flite";
     else
-        return t.left(t.find(" ")).lower();
+        return t.left(t.tqfind(" ")).lower();
 }
 
 /**
@@ -101,7 +101,7 @@ TQString SSMLConvert::extractTalker(const TQString &talkercode) {
 * of the how the talker is chosen, meaning that you don't lose some features of the talker if this
 * search doesn't encompass them.
 * 
-* QDom is the item of choice for the matching. Just walk the tree..
+* TQDom is the item of choice for the matching. Just walk the tree..
 */
 TQString SSMLConvert::appropriateTalker(const TQString &text) const {
     TQDomDocument ssml;
@@ -113,7 +113,7 @@ TQString SSMLConvert::appropriateTalker(const TQString &text) const {
     TQDomElement root = ssml.documentElement();
     if(root.tagName() != "speak") {
         // Not SSML.
-        return TQString::null;
+        return TQString();
     }
 
     /** 
@@ -132,7 +132,7 @@ TQString SSMLConvert::appropriateTalker(const TQString &text) const {
         TQString lang = root.attribute("xml:lang");
         kdDebug() << "SSMLConvert::appropriateTalker: xml:lang found (" << lang << ")" << endl;
         /// If it is set to en*, then match all english speakers. They all sound the same anyways.
-        if(lang.contains("en-")) {
+        if(lang.tqcontains("en-")) {
             kdDebug() << "SSMLConvert::appropriateTalker: English" << endl;
             lang = "en";
         }
@@ -273,7 +273,7 @@ TQString SSMLConvert::getOutput()
     if(!readfile.open(IO_ReadOnly)) {
         /// uhh yeah... Issues writing to the SSML file.
         kdDebug() << "SSMLConvert::slotProcessExited: Could not read file " << m_outFilename << endl;
-        return TQString::null;
+        return TQString();
     }
     TQTextStream rstream(&readfile);
     TQString convertedData = rstream.read();
@@ -283,9 +283,9 @@ TQString SSMLConvert::getOutput()
 
     // Clean up.
     TQFile::remove(m_inFilename);
-    m_inFilename = TQString::null;
+    m_inFilename = TQString();
     TQFile::remove(m_outFilename);
-    m_outFilename = TQString::null;
+    m_outFilename = TQString();
 
     // Ready for another transform.
     m_state = tsIdle;

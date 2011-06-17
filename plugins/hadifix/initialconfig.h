@@ -71,7 +71,7 @@ TQString findExecutable (const TQStringList &names, const TQString &possiblePath
    }
 
    // Both tries failed, so the user has to locate the executable.
-   return TQString::null;
+   return TQString();
 }
 
 /** Tries to find the voice files by looking onto the hard disk. */
@@ -100,7 +100,7 @@ TQStringList findVoices(TQString mbrolaExec, const TQString &hadifixDataPath) {
    // 2b) search near the hadifix data path
    info.setFile(hadifixDataPath + "../../mbrola");
    TQString mbrolaPath = info.dirPath (true) + "/mbrola";
-   if (!list.contains(mbrolaPath))
+   if (!list.tqcontains(mbrolaPath))
       list += mbrolaPath;
 
    // 2c) broaden the search by adding subdirs (with a depth of 2)
@@ -114,7 +114,7 @@ TQStringList findVoices(TQString mbrolaExec, const TQString &hadifixDataPath) {
    TQStringList result;
    TQStringList::iterator it;
    for (it = list.begin(); it != list.end(); ++it) {
-      TQDir baseDir (*it, TQString::null,
+      TQDir baseDir (*it, TQString(),
                     TQDir::Name|TQDir::IgnoreCase, TQDir::Files);
       TQStringList files = baseDir.entryList();
 
@@ -148,7 +148,7 @@ TQStringList findSubdirs (const TQStringList &baseDirs) {
    TQStringList::ConstIterator itEnd = baseDirs.constEnd();
    for (it = baseDirs.constBegin(); it != itEnd; ++it) {
       // a) get a list of directory names
-      TQDir baseDir (*it, TQString::null,
+      TQDir baseDir (*it, TQString(),
                     TQDir::Name|TQDir::IgnoreCase, TQDir::Dirs);
       TQStringList list = baseDir.entryList();
 

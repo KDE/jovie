@@ -24,7 +24,7 @@
 #ifndef _FLITEPROC_H_
 #define _FLITEPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqstringlist.h>
 #include <tqmutex.h>
 
@@ -34,13 +34,14 @@
 class KProcess;
 
 class FliteProc : public PlugInProc{
-    Q_OBJECT 
+    Q_OBJECT
+    TQ_OBJECT
 
     public:
         /**
          * Constructor
          */
-        FliteProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        FliteProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor

@@ -25,7 +25,7 @@
 #ifndef _EPOSPROC_H_
 #define _EPOSPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqstringlist.h>
 #include <tqmutex.h>
 
@@ -36,13 +36,14 @@ class KProcess;
 class TQTextCodec;
 
 class EposProc : public PlugInProc{
-    Q_OBJECT 
+    Q_OBJECT
+    TQ_OBJECT
 
     public:
         /**
          * Constructor
          */
-        EposProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        EposProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor

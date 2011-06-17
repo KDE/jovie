@@ -24,7 +24,7 @@
 #ifndef _EPOSCONF_H_
 #define _EPOSCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 
 // KDE includes.
@@ -42,11 +42,12 @@ class EposProc;
 class KProgressDialog;
 
 class EposConf : public PlugInConf {
-    Q_OBJECT 
+    Q_OBJECT
+    TQ_OBJECT
 
     public:
         /** Constructor */
-        EposConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        EposConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~EposConf();
@@ -78,7 +79,7 @@ class EposConf : public PlugInConf {
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
         * specified language code, choosing sensible defaults if necessary.
-        * If the passed-in code is TQString::null, no specific language has
+        * If the passed-in code is TQString(), no specific language has
         * been chosen.
         * @param lang        The desired language code or Null if none.
         *
@@ -96,7 +97,7 @@ class EposConf : public PlugInConf {
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
         * one instance from another.  If the plugin has not been fully configured,
-        * i.e., cannot yet synthesize, return TQString::null.
+        * i.e., cannot yet synthesize, return TQString().
         * @return            Fully-specified talker code.
         */
         TQString getTalkerCode();

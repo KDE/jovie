@@ -27,13 +27,14 @@
 class KProcess;
 
 class FreeTTSProc : public PlugInProc{
-	Q_OBJECT 
+	Q_OBJECT
+	TQ_OBJECT
 
 public:
 	/**
 	* Constructor
 	*/
-	FreeTTSProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+	FreeTTSProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
 	/**
 	* Destructor

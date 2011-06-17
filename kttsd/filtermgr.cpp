@@ -37,8 +37,8 @@
 /**
  * Constructor.
  */
-FilterMgr::FilterMgr( TQObject *parent, const char *name) :
-    KttsFilterProc(parent, name) 
+FilterMgr::FilterMgr( TQObject *tqparent, const char *name) :
+    KttsFilterProc(tqparent, name) 
 {
     // kdDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;
@@ -101,7 +101,7 @@ bool FilterMgr::init(KConfig *config, const TQString& /*configGroup*/)
             // and DesktopEntryName won't change.
             if (desktopEntryName.isEmpty())
             {
-                TQString filterPlugInName = config->readEntry("PlugInName", TQString::null);
+                TQString filterPlugInName = config->readEntry("PlugInName", TQString());
                 // See if the translated name will untranslate.  If not, well, sorry.
                 desktopEntryName = FilterNameToDesktopEntryName(filterPlugInName);
                 // Record the DesktopEntryName from now on.
@@ -116,8 +116,8 @@ bool FilterMgr::init(KConfig *config, const TQString& /*configGroup*/)
                     filterProc->init( config, groupName );
                     m_filterList.append( filterProc );
                 }
-                if (config->readEntry("DocType").contains("html") ||
-                    config->readEntry("RootElement").contains("html"))
+                if (config->readEntry("DocType").tqcontains("html") ||
+                    config->readEntry("RootElement").tqcontains("html"))
                     m_supportsHTML = true;
             }
         }
@@ -310,7 +310,7 @@ TQString FilterMgr::getOutput()
 void FilterMgr::ackFinished()
 {
     m_state = fsIdle;
-    m_text = TQString::null;
+    m_text = TQString();
 }
 
 /**
@@ -352,7 +352,7 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const TQString& desktopEntryName)
 
     // Find the plugin.
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin",
-        TQString("DesktopEntryName == '%1'").arg(desktopEntryName));
+        TQString("DesktopEntryName == '%1'").tqarg(desktopEntryName));
 
     if (offers.count() == 1)
     {
@@ -392,14 +392,14 @@ KttsFilterProc* FilterMgr::loadFilterPlugin(const TQString& desktopEntryName)
  * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
  * @param name                   The translated plugin name.  From Name= line in .desktop file.
  * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
- *                               TQString::null if not found.
+ *                               TQString() if not found.
  */
 TQString FilterMgr::FilterNameToDesktopEntryName(const TQString& name)
 {
-    if (name.isEmpty()) return TQString::null;
+    if (name.isEmpty()) return TQString();
     KTrader::OfferList offers = KTrader::self()->query("KTTSD/FilterPlugin");
     for (uint ndx = 0; ndx < offers.count(); ++ndx)
         if (offers[ndx]->name() == name) return offers[ndx]->desktopEntryName();
-    return TQString::null;
+    return TQString();
 }
 

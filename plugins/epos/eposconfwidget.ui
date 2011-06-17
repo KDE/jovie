@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EposConfWidget</class>
 <author>Gary Cramblitt</author>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>EposConfWidget</cstring>
     </property>
@@ -31,7 +31,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="TQGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>eposConfigurationBox</cstring>
             </property>
@@ -65,15 +65,15 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget" row="2" column="0">
+                <widget class="TQLayoutWidget" row="2" column="0">
                     <property name="name">
-                        <cstring>layout13</cstring>
+                        <cstring>tqlayout13</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>characterCodingLabel</cstring>
                             </property>
@@ -110,23 +110,23 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="0">
+                <widget class="TQLayoutWidget" row="1" column="0">
                     <property name="name">
-                        <cstring>layout17</cstring>
+                        <cstring>tqlayout17</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout14</cstring>
+                                <cstring>tqlayout14</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>timeLabel</cstring>
                                     </property>
@@ -148,7 +148,7 @@
                                         <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".</string>
                                     </property>
                                 </widget>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>frequencyLabel</cstring>
                                     </property>
@@ -172,9 +172,9 @@
                                 </widget>
                             </vbox>
                         </widget>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout15</cstring>
+                                <cstring>tqlayout15</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -244,15 +244,15 @@
                                 </widget>
                             </vbox>
                         </widget>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout16</cstring>
+                                <cstring>tqlayout16</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QSlider">
+                                <widget class="TQSlider">
                                     <property name="name">
                                         <cstring>timeSlider</cstring>
                                     </property>
@@ -281,7 +281,7 @@
                                         <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".</string>
                                     </property>
                                 </widget>
-                                <widget class="QSlider">
+                                <widget class="TQSlider">
                                     <property name="name">
                                         <cstring>frequencySlider</cstring>
                                     </property>
@@ -314,23 +314,23 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="0" column="0">
+                <widget class="TQLayoutWidget" row="0" column="0">
                     <property name="name">
-                        <cstring>layout13</cstring>
+                        <cstring>tqlayout13</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout11</cstring>
+                                <cstring>tqlayout11</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>eposServerPathLabel</cstring>
                                     </property>
@@ -345,7 +345,7 @@
                                     <property name="text">
                                         <string>Epos server executable path:</string>
                                     </property>
-                                    <property name="alignment">
+                                    <property name="tqalignment">
                                         <set>AlignVCenter</set>
                                     </property>
                                     <property name="buddy" stdset="0">
@@ -355,7 +355,7 @@
                                         <string>If the Epos server program will be found due to your PATH environment variable, simply enter "epos", otherwise enter the full path to the Epos server executable program.</string>
                                     </property>
                                 </widget>
-                                <widget class="QLabel">
+                                <widget class="TQLabel">
                                     <property name="name">
                                         <cstring>eposClientPathLabel</cstring>
                                     </property>
@@ -370,7 +370,7 @@
                                     <property name="text">
                                         <string>Epos client executable path:</string>
                                     </property>
-                                    <property name="alignment">
+                                    <property name="tqalignment">
                                         <set>AlignVCenter</set>
                                     </property>
                                     <property name="buddy" stdset="0">
@@ -382,9 +382,9 @@
                                 </widget>
                             </vbox>
                         </widget>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout12</cstring>
+                                <cstring>tqlayout12</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -432,7 +432,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QGroupBox" row="3" column="0">
+                <widget class="TQGroupBox" row="3" column="0">
                     <property name="name">
                         <cstring>advancedGroupBox</cstring>
                     </property>
@@ -443,23 +443,23 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget" row="0" column="0">
+                        <widget class="TQLayoutWidget" row="0" column="0">
                             <property name="name">
-                                <cstring>layout14</cstring>
+                                <cstring>tqlayout14</cstring>
                             </property>
                             <grid>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLayoutWidget" row="0" column="1">
+                                <widget class="TQLayoutWidget" row="0" column="1">
                                     <property name="name">
-                                        <cstring>layout13</cstring>
+                                        <cstring>tqlayout13</cstring>
                                     </property>
                                     <vbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLineEdit">
+                                        <widget class="TQLineEdit">
                                             <property name="name">
                                                 <cstring>eposServerOptions</cstring>
                                             </property>
@@ -467,7 +467,7 @@
                                                 <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not use "-o".</string>
                                             </property>
                                         </widget>
-                                        <widget class="QLineEdit">
+                                        <widget class="TQLineEdit">
                                             <property name="name">
                                                 <cstring>eposClientOptions</cstring>
                                             </property>
@@ -477,15 +477,15 @@
                                         </widget>
                                     </vbox>
                                 </widget>
-                                <widget class="QLayoutWidget" row="0" column="0">
+                                <widget class="TQLayoutWidget" row="0" column="0">
                                     <property name="name">
-                                        <cstring>layout12</cstring>
+                                        <cstring>tqlayout12</cstring>
                                     </property>
                                     <vbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>eposServerOptionsLabel</cstring>
                                             </property>
@@ -500,7 +500,7 @@
                                             <property name="text">
                                                 <string>Epos server:</string>
                                             </property>
-                                            <property name="alignment">
+                                            <property name="tqalignment">
                                                 <set>AlignVCenter|AlignLeft</set>
                                             </property>
                                             <property name="buddy" stdset="0">
@@ -510,7 +510,7 @@
                                                 <string>Optional.  Enter any server command line options here.  To see available options, enter "epos -h" in a terminal.  Do not use "-o".</string>
                                             </property>
                                         </widget>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>eposClientOptionsLabel</cstring>
                                             </property>
@@ -525,7 +525,7 @@
                                             <property name="text">
                                                 <string>Epos client:</string>
                                             </property>
-                                            <property name="alignment">
+                                            <property name="tqalignment">
                                                 <set>AlignVCenter|AlignLeft</set>
                                             </property>
                                             <property name="buddy" stdset="0">
@@ -541,9 +541,9 @@
                         </widget>
                     </grid>
                 </widget>
-                <widget class="QLayoutWidget" row="4" column="0">
+                <widget class="TQLayoutWidget" row="4" column="0">
                     <property name="name">
-                        <cstring>layout5</cstring>
+                        <cstring>tqlayout5</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -559,14 +559,14 @@
                             <property name="sizeType">
                                 <enum>Expanding</enum>
                             </property>
-                            <property name="sizeHint">
+                            <property name="tqsizeHint">
                                 <size>
                                     <width>410</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="QPushButton">
+                        <widget class="TQPushButton">
                             <property name="name">
                                 <cstring>eposTest</cstring>
                             </property>
@@ -595,7 +595,7 @@
     <include location="global" impldecl="in declaration">kurlrequester.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>knuminput.h</includehint>

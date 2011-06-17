@@ -24,7 +24,7 @@
 #ifndef _STRINGREPLACERCONF_H_
 #define _STRINGREPLACERCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqwidget.h>
 
 // KDE includes.
@@ -43,12 +43,13 @@ class EditReplacementWidget;
 class StringReplacerConf : public KttsFilterConf
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        StringReplacerConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
+        StringReplacerConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

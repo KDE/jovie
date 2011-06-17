@@ -1,7 +1,7 @@
 /****************************************************************************
 ** ui.h extension file, included from the uic-generated form implementation.
 **
-** If you wish to add, delete or rename slots use Qt Designer which will
+** If you wish to add, delete or rename slots use TQt Designer which will
 ** update this file, preserving your code. Create an init() slot in place of
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
@@ -53,14 +53,14 @@ void HadifixConfigUI::init () {
 
 void HadifixConfigUI::addVoice (const TQString &filename, bool isMale) {
    if (isMale) {
-      if (!maleVoices.contains(filename)) {
+      if (!maleVoices.tqcontains(filename)) {
          int id = voiceCombo->count();
          maleVoices.insert (filename, id);
          voiceCombo->insertItem (male, filename, id);
       }
    }
    else {
-      if (!femaleVoices.contains(filename)) {
+      if (!femaleVoices.tqcontains(filename)) {
          int id = voiceCombo->count();
          femaleVoices.insert (filename, id);
          voiceCombo->insertItem (female, filename, id);
@@ -93,7 +93,7 @@ TQString HadifixConfigUI::getVoiceFilename() {
    int curr = voiceCombo->currentItem();
 
    TQString filename = voiceCombo->text(curr);
-   if (defaultVoices.contains(curr))
+   if (defaultVoices.tqcontains(curr))
       filename = defaultVoices[curr];
 
    return filename;
@@ -103,7 +103,7 @@ bool HadifixConfigUI::isMaleVoice() {
    int curr = voiceCombo->currentItem();
    TQString filename = getVoiceFilename();
 
-   if (maleVoices.contains(filename))
+   if (maleVoices.tqcontains(filename))
       return maleVoices[filename] == curr;
    else
       return false;

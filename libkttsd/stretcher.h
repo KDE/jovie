@@ -31,14 +31,15 @@
 
 class KProcess;
 
-class KDE_EXPORT Stretcher : public QObject{
+class KDE_EXPORT Stretcher : public TQObject{
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
          * Constructor.
          */
-        Stretcher(TQObject *parent = 0, const char *name = 0);
+        Stretcher(TQObject *tqparent = 0, const char *name = 0);
 
         /**
          * Destructor.

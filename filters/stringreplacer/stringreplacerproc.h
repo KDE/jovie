@@ -25,7 +25,7 @@
 #ifndef _STRINGREPLACERPROC_H_
 #define _STRINGREPLACERPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqobject.h>
 #include <tqtextstream.h>
 #include <tqvaluelist.h>
@@ -38,12 +38,13 @@
 class StringReplacerProc : virtual public KttsFilterProc
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     /**
      * Constructor.
      */
-    StringReplacerProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
+    StringReplacerProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.

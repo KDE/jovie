@@ -207,8 +207,8 @@
  *     "kttsd", object "KSpeech".
  *
    @verbatim
-     MyPart::MyPart(TQWidget *parent, const char *name) :
-        KParts::ReadOnlyPart(parent, name),
+     MyPart::MyPart(TQWidget *tqparent, const char *name) :
+        KParts::ReadOnlyPart(tqparent, name),
         DCOPStub("kttsd", "KSpeech") {
    @endverbatim
  *
@@ -293,8 +293,8 @@
  *     receiving object.
  *
    @verbatim
-     MyPart::MyPart(TQWidget *parent, const char *name) :
-         KParts::ReadOnlyPart(parent, name),
+     MyPart::MyPart(TQWidget *tqparent, const char *name) :
+         KParts::ReadOnlyPart(tqparent, name),
          DCOPObject("mypart_kspeechsink") {
    @endverbatim
  *
@@ -441,7 +441,7 @@
  * a Spanish synthesizer would likely be unintelligible).  So the language
  * attribute is said to have "priority".
  * If an application does not specify a language attribute, a default one will be assumed.
- * The rest of the attributes are said to be "preferred".  If %KTTSD cannot find
+ * The rest of the attributes are said to be "preferred".  If %KTTSD cannot tqfind
  * a talker with the exact preferred attributes requested, the closest matching
  * talker will likely still be understandable.
  *
@@ -751,11 +751,11 @@ class KSpeech : virtual public DCOPObject {
         * with a single space, and then replaces the sentence delimiters using
         * the following statement:
           @verbatim
-              TQString::replace(sentenceDelimiter, "\\1\t");
+              TQString::tqreplace(sentenceDelimiter, "\\1\t");
           @endverbatim
         *
         * which replaces all sentence delimiters with a tab, but
-        * preserving the first capture text (first parenthesis).  In other
+        * preserving the first capture text (first tqparenthesis).  In other
         * words, the sentence punctuation is preserved.
         * The tab is later used to separate the text into sentences.
         *

@@ -15,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqstringlist.h>
 
@@ -68,7 +68,7 @@ static void notifyaction_init()
 /*static*/ int NotifyAction::action( const TQString& actionName )
 {
     notifyaction_init();
-    return s_actionNames->findIndex( actionName );
+    return s_actionNames->tqfindIndex( actionName );
 }
 
 /*static*/ TQString NotifyAction::actionDisplayName( const int action )
@@ -126,7 +126,7 @@ static void notifypresent_init()
 /*static*/ int NotifyPresent::present( const TQString& presentName )
 {
     notifypresent_init();
-    return s_presentNames->findIndex( presentName );
+    return s_presentNames->tqfindIndex( presentName );
 }
 
 /*static*/ TQString NotifyPresent::presentDisplayName( const int present )
@@ -148,9 +148,9 @@ static void notifypresent_init()
  */
 /*static*/ TQString NotifyEvent::getEventSrcName(const TQString& eventSrc, TQString& iconName)
 {
-    TQString configFilename = eventSrc + TQString::fromLatin1( "/eventsrc" );
+    TQString configFilename = eventSrc + TQString::tqfromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
-    config->setGroup( TQString::fromLatin1( "!Global!" ) );
+    config->setGroup( TQString::tqfromLatin1( "!Global!" ) );
     TQString appDesc = config->readEntry( "Comment", i18n("No description available") );
     iconName = config->readEntry( "IconName" );
     delete config;
@@ -163,13 +163,13 @@ static void notifypresent_init()
 /*static*/ TQString NotifyEvent::getEventName(const TQString& eventSrc, const TQString& event)
 {
     TQString eventName;
-    TQString configFilename = eventSrc + TQString::fromLatin1( "/eventsrc" );
+    TQString configFilename = eventSrc + TQString::tqfromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
     if ( config->hasGroup( event ) )
     {
         config->setGroup( event );
-        eventName = config->readEntry( TQString::fromLatin1( "Comment" ),
-            config->readEntry( TQString::fromLatin1( "Name" )));
+        eventName = config->readEntry( TQString::tqfromLatin1( "Comment" ),
+            config->readEntry( TQString::tqfromLatin1( "Name" )));
     }
     delete config;
     return eventName;

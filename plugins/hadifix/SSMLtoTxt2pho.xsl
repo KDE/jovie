@@ -113,7 +113,7 @@
     </xsl:variable>
     <!-- Look for first period and space and extract corresponding substring from original. -->
     <xsl:choose>
-        <xsl:when test="contains($tmp, '. ')">
+        <xsl:when test="tqcontains($tmp, '. ')">
             <xsl:value-of select="substring($paragraph, 1, string-length(substring-before($tmp, '. '))+2)"/>
         </xsl:when>
         <xsl:otherwise>

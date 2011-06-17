@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqfileinfo.h>
 #include <tqstring.h>
@@ -56,17 +56,17 @@
 /**
 * Constructor 
 */
-SbdConf::SbdConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(parent, name)
+SbdConf::SbdConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(tqparent, name)
 {
     // kdDebug() << "SbdConf::SbdConf: Running" << endl;
 
     // Create configuration widget.
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "SbdConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new SbdConfWidget(this, "SbdConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
 
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
@@ -156,7 +156,7 @@ void SbdConf::save(KConfig* config, const TQString& configGroup){
     config->writeEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text() );
     config->writeEntry("SentenceBoundary", m_widget->sbLineEdit->text() );
     config->writeEntry("LanguageCodes", m_languageCodeList );
-    config->writeEntry("AppID", m_widget->appIdLineEdit->text().replace(" ", "") );
+    config->writeEntry("AppID", m_widget->appIdLineEdit->text().tqreplace(" ", "") );
 }
 
 /** 
@@ -195,7 +195,7 @@ bool SbdConf::supportsMultiInstance() { return true; }
 TQString SbdConf::userPlugInName()
 {
     if ( m_widget->reLineEdit->text().isEmpty() )
-        return TQString::null;
+        return TQString();
     else
         return m_widget->nameLineEdit->text();
 }
@@ -257,7 +257,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
         TQListViewItem* item = new KListViewItem(langLView, language, locale);
-        if (m_languageCodeList.contains(locale)) item->setSelected(true);
+        if (m_languageCodeList.tqcontains(locale)) item->setSelected(true);
     }
     // Sort by language.
     langLView->setSorting(0);
@@ -276,7 +276,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
     dlg->setHelp("", "kttsd");
     dlg->setInitialSize(TQSize(300, 500), false);
     int dlgResult = dlg->exec();
-    languageCode = TQString::null;
+    languageCode = TQString();
     if (dlgResult == TQDialog::Accepted)
     {
         m_languageCodeList.clear();
@@ -288,7 +288,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         }
     }
     delete dlg;
-    // TODO: Also delete KListView and QHBox?
+    // TODO: Also delete KListView and TQHBox?
     if (dlgResult != TQDialog::Accepted) return;
     language = "";
     for ( uint ndx=0; ndx < m_languageCodeList.count(); ++ndx)
@@ -331,11 +331,11 @@ void SbdConf::slotSaveButton_clicked()
 
 void SbdConf::slotClearButton_clicked()
 {
-    m_widget->nameLineEdit->setText( TQString::null );
-    m_widget->reLineEdit->setText( TQString::null );
-    m_widget->sbLineEdit->setText( TQString::null );
+    m_widget->nameLineEdit->setText( TQString() );
+    m_widget->reLineEdit->setText( TQString() );
+    m_widget->sbLineEdit->setText( TQString() );
     m_languageCodeList.clear();
-    m_widget->languageLineEdit->setText( TQString::null );
-    m_widget->appIdLineEdit->setText( TQString::null );
+    m_widget->languageLineEdit->setText( TQString() );
+    m_widget->appIdLineEdit->setText( TQString() );
     configChanged();
 }

@@ -24,7 +24,7 @@
 #ifndef _TALKERCHOOSERCONF_H_
 #define _TALKERCHOOSERCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqwidget.h>
 
 // KDE includes.
@@ -45,12 +45,13 @@ class EditReplacementWidget;
 class TalkerChooserConf : public KttsFilterConf
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        TalkerChooserConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
+        TalkerChooserConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

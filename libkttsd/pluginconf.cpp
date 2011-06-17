@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqfileinfo.h>
 #include <tqstring.h>
@@ -36,7 +36,7 @@
 /**
 * Constructor 
 */
-PlugInConf::PlugInConf( TQWidget *parent, const char *name) : TQWidget(parent, name){
+PlugInConf::PlugInConf( TQWidget *tqparent, const char *name) : TQWidget(tqparent, name){
     kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
     KGlobal::locale()->insertCatalogue("kttsd");
     TQString systemPath(getenv("PATH"));
@@ -110,7 +110,7 @@ bool PlugInConf::supportsMultiInstance() { return true; }
 * This function informs the plugin of the desired language to be spoken
 * by the plugin.  The plugin should attempt to adapt itself to the
 * specified language code, choosing sensible defaults if necessary.
-* If the passed-in code is TQString::null, no specific language has
+* If the passed-in code is TQString(), no specific language has
 * been chosen.
 * @param lang        The desired language code or Null if none.
 *
@@ -122,10 +122,10 @@ void PlugInConf::setDesiredLanguage(const TQString& /*lang*/ ) { }
 * Return fully-specified talker code for the configured plugin.  This code
 * uniquely identifies the configured instance of the plugin and distinquishes
 * one instance from another.  If the plugin has not been fully configured,
-* i.e., cannot yet synthesize, return TQString::null.
+* i.e., cannot yet synthesize, return TQString().
 * @return            Fully-specified talker code.
 */
-TQString PlugInConf::getTalkerCode() { return TQString::null; }
+TQString PlugInConf::getTalkerCode() { return TQString(); }
 
 /**
 * Return a list of all the languages currently supported by the plugin.
@@ -143,7 +143,7 @@ TQStringList PlugInConf::getSupportedLanguages() { return TQStringList(); }
 /**
 * Return the full path to any program in the $PATH environmental variable
 * @param name        The name of the file to search for.
-* @returns           The path to the file on success, a blank QString
+* @returns           The path to the file on success, a blank TQString
 *                    if its not found.
 */
 TQString PlugInConf::getLocation(const TQString &name) {

@@ -75,11 +75,11 @@ public:
     /// Had issues with TQMap and custom classes. For now you can just convert to/from TQString and use
     /// That as the key/value pair.
     /// @returns                    A TQString representation of the XMLAttribute.
-    TQString toQString();
+    TQString toTQString();
     
     /// Create an XMLElement from a TQString.
     /// @param str               The TQString to convert from. Must be of the following syntax- "foo name=\"bar\""
-    static XMLElement fromQString(const TQString &str);
+    static XMLElement fromTQString(const TQString &str);
 
 private:
     /// The name of the tag.

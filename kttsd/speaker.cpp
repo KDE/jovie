@@ -19,7 +19,7 @@
  *                                                                            *
  ******************************************************************************/
 
-// Qt includes. 
+// TQt includes. 
 #include <tqfile.h>
 #include <tqtimer.h>
 #include <tqdir.h>
@@ -77,7 +77,7 @@
 *   You might have to wait for the plugin to complete before asking it
 *   to perform the next operation, but in the meantime, there might be
 *   other useful work that can be performed.
-* - In no case allow the main thread Qt event loop to block.
+* - In no case allow the main thread TQt event loop to block.
 * - Plugins that do not have asynchronous support are wrapped in the
 *   ThreadedPlugin class, which attempts to make them as asynchronous as
 *   it can, but there are limits.
@@ -107,8 +107,8 @@
 * Loads plugins.
 */
 Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
-    TQObject *parent, const char *name) :
-    TQObject(parent, name), 
+    TQObject *tqparent, const char *name) :
+    TQObject(tqparent, name), 
     m_speechData(speechData),
     m_talkerMgr(talkerMgr)
 {
@@ -806,7 +806,7 @@ TQString Speaker::uttStateToStr(uttState state)
         case usPreempted:           return "usPreempted";
         case usFinished:            return "usFinished";
     }
-    return TQString::null;
+    return TQString();
 }
 
 /**
@@ -829,7 +829,7 @@ TQString Speaker::uttTypeToStr(uttType utType)
         case utStartOfJob:   return "utStartOfJob";
         case utEndOfJob:     return "utEndOfJob";
     }
-    return TQString::null;
+    return TQString();
 }
 
 /**
@@ -846,7 +846,7 @@ TQString Speaker::pluginStateToStr(pluginState state)
         case psSynthing:     return "psSynthing";
         case psFinished:     return "psFinished";
     }
-    return TQString::null;
+    return TQString();
 }
 
 /**
@@ -864,7 +864,7 @@ TQString Speaker::jobStateToStr(int state)
         case KSpeech::jsPaused:      return "jsPaused";
         case KSpeech::jsFinished:    return "jsFinished";
     }
-    return TQString::null;
+    return TQString();
 }
 
 /**
@@ -926,7 +926,7 @@ bool Speaker::isSsml(const TQString &text)
 }
 
 /**
- * Determines the initial state of an utterance.  If the utterance contains
+ * Determines the initial state of an utterance.  If the utterance tqcontains
  * SSML, the state is set to usWaitingTransform.  Otherwise, if the plugin
  * supports async synthesis, sets to usWaitingSynth, otherwise usWaitingSay.
  * If an utterance has already been transformed, usWaitingTransform is
@@ -1019,7 +1019,7 @@ bool Speaker::getNextUtterance()
         utt->state = usNone;
         utt->audioPlayer = 0;
         utt->audioStretcher = 0;
-        utt->audioUrl = TQString::null;
+        utt->audioUrl = TQString();
         utt->plugin = m_talkerMgr->talkerToPlugin(utt->sentence->talker);
         // Save some time by setting initial state now.
         setInitialUtteranceState(*utt);
@@ -1079,7 +1079,7 @@ bool Speaker::getNextUtterance()
                     {
                         Utt intrUtt;
                         intrUtt.sentence = new mlText;
-                        intrUtt.sentence->text = TQString::null;
+                        intrUtt.sentence->text = TQString();
                         intrUtt.sentence->talker = utt->sentence->talker;
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
@@ -1099,11 +1099,11 @@ bool Speaker::getNextUtterance()
                         intrUtt.sentence = new mlText;
                         intrUtt.sentence->text = m_speechData->textPreMsg;
                         // Interruptions are spoken using default Talker.
-                        intrUtt.sentence->talker = TQString::null;
+                        intrUtt.sentence->talker = TQString();
                         intrUtt.sentence->appId = utt->sentence->appId;
                         intrUtt.sentence->jobNum = utt->sentence->jobNum;
                         intrUtt.sentence->seq = 0;
-                        intrUtt.audioUrl = TQString::null;
+                        intrUtt.audioUrl = TQString();
                         intrUtt.audioPlayer = 0;
                         intrUtt.utType = utInterruptMsg;
                         intrUtt.isSSML = isSsml(intrUtt.sentence->text);
@@ -1125,7 +1125,7 @@ bool Speaker::getNextUtterance()
                 {
                     Utt resUtt;
                     resUtt.sentence = new mlText;
-                    resUtt.sentence->text = TQString::null;
+                    resUtt.sentence->text = TQString();
                     resUtt.sentence->talker = utt->sentence->talker;
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
@@ -1144,11 +1144,11 @@ bool Speaker::getNextUtterance()
                     Utt resUtt;
                     resUtt.sentence = new mlText;
                     resUtt.sentence->text = m_speechData->textPostMsg;
-                    resUtt.sentence->talker = TQString::null;
+                    resUtt.sentence->talker = TQString();
                     resUtt.sentence->appId = utt->sentence->appId;
                     resUtt.sentence->jobNum = utt->sentence->jobNum;
                     resUtt.sentence->seq = 0;
-                    resUtt.audioUrl = TQString::null;
+                    resUtt.audioUrl = TQString();
                     resUtt.audioPlayer = 0;
                     resUtt.utType = utResumeMsg;
                     resUtt.isSSML = isSsml(resUtt.sentence->text);
@@ -1173,12 +1173,12 @@ bool Speaker::getNextUtterance()
                     {
                         Utt jobUtt;
                         jobUtt.sentence = new mlText;
-                        jobUtt.sentence->text = TQString::null;
-                        jobUtt.sentence->talker = TQString::null;
+                        jobUtt.sentence->text = TQString();
+                        jobUtt.sentence->talker = TQString();
                         jobUtt.sentence->appId = m_lastAppId;
                         jobUtt.sentence->jobNum = m_lastJobNum;
                         jobUtt.sentence->seq = 0;
-                        jobUtt.audioUrl = TQString::null;
+                        jobUtt.audioUrl = TQString();
                         jobUtt.utType = utEndOfJob;
                         jobUtt.isSSML = false;
                         jobUtt.plugin = 0;
@@ -1194,12 +1194,12 @@ bool Speaker::getNextUtterance()
                 {
                     Utt jobUtt;
                     jobUtt.sentence = new mlText;
-                    jobUtt.sentence->text = TQString::null;
-                    jobUtt.sentence->talker = TQString::null;
+                    jobUtt.sentence->text = TQString();
+                    jobUtt.sentence->talker = TQString();
                     jobUtt.sentence->appId = m_lastAppId;
                     jobUtt.sentence->jobNum = m_lastJobNum;
                     jobUtt.sentence->seq = utt->sentence->seq;
-                    jobUtt.audioUrl = TQString::null;
+                    jobUtt.audioUrl = TQString();
                     jobUtt.utType = utStartOfJob;
                     jobUtt.isSSML = false;
                     jobUtt.plugin = 0;
@@ -1220,12 +1220,12 @@ bool Speaker::getNextUtterance()
             {
                 Utt jobUtt;
                 jobUtt.sentence = new mlText;
-                jobUtt.sentence->text = TQString::null;
-                jobUtt.sentence->talker = TQString::null;
+                jobUtt.sentence->text = TQString();
+                jobUtt.sentence->talker = TQString();
                 jobUtt.sentence->appId = m_lastAppId;
                 jobUtt.sentence->jobNum = m_lastJobNum;
                 jobUtt.sentence->seq = 0;
-                jobUtt.audioUrl = TQString::null;
+                jobUtt.audioUrl = TQString();
                 jobUtt.utType = utEndOfJob;
                 jobUtt.isSSML = false;
                 jobUtt.plugin = 0;
@@ -1316,7 +1316,7 @@ uttIterator Speaker::deleteUtterance(uttIterator it)
                 TQCString jobStr;
                 jobStr.sprintf("%08i", it->sentence->jobNum);
                 TQString dest = m_speechData->keepAudioPath + "/kttsd-" +
-                    TQString("%1-%2").arg(jobStr).arg(seqStr) + ".wav";
+                    TQString("%1-%2").tqarg(jobStr.data()).tqarg(seqStr.data()) + ".wav";
                 TQFile::remove(dest);
                 TQDir d;
                 d.rename(it->audioUrl, dest);
@@ -1418,7 +1418,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
                  (m_speechData->getTextJobState(it->sentence->jobNum) != KSpeech::jsPaused))
             {
                 // kdDebug() << "Speaker::startPlayingUtterance: resuming play" << endl;
-                it->audioPlayer->startPlay(TQString::null);  // resume
+                it->audioPlayer->startPlay(TQString());  // resume
                 it->state = usPlaying;
                 if (!m_timer->start(timerInterval, FALSE))
                     kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
@@ -1431,7 +1431,7 @@ bool Speaker::startPlayingUtterance(uttIterator it)
         {
                 // Preempted playback automatically resumes.
                 // Note: Must call stop(), even if player not currently playing.  Why?
-            it->audioPlayer->startPlay(TQString::null);  // resume
+            it->audioPlayer->startPlay(TQString());  // resume
             it->state = usPlaying;
             if (!m_timer->start(timerInterval, FALSE))
                 kdDebug() << "Speaker::startPlayingUtterance: timer.start failed" << endl;
@@ -1541,7 +1541,7 @@ Player* Speaker::createPlayerObject()
             }
     }
     KTrader::OfferList offers = KTrader::self()->query(
-            "KTTSD/AudioPlugin", TQString("DesktopEntryName == '%1'").arg(plugInName));
+            "KTTSD/AudioPlugin", TQString("DesktopEntryName == '%1'").tqarg(plugInName));
 
     if(offers.count() == 1)
     {

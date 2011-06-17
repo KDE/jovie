@@ -38,7 +38,7 @@
 # endif
 #endif
 
-// Qt includes.
+// TQt includes.
 #include <tqdir.h>
 #include <tqapplication.h>
 #include <tqcstring.h>
@@ -128,8 +128,8 @@ TQString AlsaPlayer::timestamp() const
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-AlsaPlayer::AlsaPlayer(TQObject* parent, const char* name, const TQStringList& args) : 
-    Player(parent, name, args),
+AlsaPlayer::AlsaPlayer(TQObject* tqparent, const char* name, const TQStringList& args) : 
+    Player(tqparent, name, args),
     m_currentVolume(1.0),
     m_pcmName("default"),
     m_defPeriodSize(128),
@@ -432,10 +432,10 @@ TQStringList AlsaPlayer::getPluginList( const TQCString& /*classname*/ )
                 infoName += snd_pcm_info_get_name(pcminfo);
                 infoName += ")";
                 if (0 == devCnt) {
-                    TQString pcmName = TQString("default:%1").arg(card);
+                    TQString pcmName = TQString("default:%1").tqarg(card);
                     result.append(pcmName + infoName);
                 }
-                TQString pcmName = TQString("plughw:%1,%2").arg(card).arg(device);
+                TQString pcmName = TQString("plughw:%1,%2").tqarg(card).tqarg(device);
                 result.append(pcmName + infoName);
             }
             snd_ctl_close(handle);
@@ -1001,7 +1001,7 @@ void AlsaPlayer::xrun()
             stream == SND_PCM_STREAM_PLAYBACK ? "underrun" : "overrun",
             diff.tv_sec * 1000 + diff.tv_usec / 1000.0);
         if (m_debugLevel >= 2) {
-            DBG("Status:");
+            DBG("tqStatus:");
             snd_pcm_status_dump(status, log);
         }
         if ((res = snd_pcm_prepare(handle))<0) {
@@ -1011,7 +1011,7 @@ void AlsaPlayer::xrun()
         return;        /* ok, data should be accepted again */
     } if (SND_PCM_STATE_DRAINING == snd_pcm_status_get_state(status)) {
         if (m_debugLevel >= 2) {
-            DBG("Status(DRAINING):");
+            DBG("tqStatus(DRAINING):");
             snd_pcm_status_dump(status, log);
         }
         if (stream == SND_PCM_STREAM_CAPTURE) {
@@ -1024,7 +1024,7 @@ void AlsaPlayer::xrun()
         }
     }
     if (m_debugLevel >= 2) {
-        DBG("Status(R/W):");
+        DBG("tqStatus(R/W):");
         snd_pcm_status_dump(status, log);
     }
     ERR("read/write error, state = %s", snd_pcm_state_name(snd_pcm_status_get_state(status)));
@@ -1496,7 +1496,7 @@ void AlsaPlayer::header(int /*rtype*/, const char* /*name*/)
     else if (hwdata.channels == 2)
         channels = "Stereo";
     else
-        channels = TQString("Channels %1").arg(hwdata.channels);
+        channels = TQString("Channels %1").tqarg(hwdata.channels);
     DBG("Format: %s, Rate %d Hz, %s",
         snd_pcm_format_description(hwdata.format),
         hwdata.rate,

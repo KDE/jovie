@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-// Qt includes.
+// TQt includes.
 #include <tqmap.h>
 #include <tqlistview.h>
 
@@ -55,9 +55,10 @@ class KCMKttsMgr :
     virtual public KSpeechSink
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
-        KCMKttsMgr(TQWidget *parent, const char *name, const TQStringList &);
+        KCMKttsMgr(TQWidget *tqparent, const char *name, const TQStringList &);
 
         ~KCMKttsMgr();
 
@@ -285,7 +286,7 @@ class KCMKttsMgr :
          * Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
          * @param name                   The translated plugin name.  From Name= line in .desktop file.
          * @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-         *                               TQString::null if not found.
+         *                               TQString() if not found.
          */
         TQString FilterNameToDesktopEntryName(const TQString& name);
 
@@ -510,13 +511,13 @@ class KCMKttsMgr :
 
 /// This is a small helper class to detect when user checks/unchecks a Filter in Filters tab
 /// and emit changed() signal.
-class KttsCheckListItem : public QCheckListItem
+class KttsCheckListItem : public TQCheckListItem
 {
     public:
-        KttsCheckListItem( TQListView *parent,
+        KttsCheckListItem( TQListView *tqparent,
             const TQString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
-        KttsCheckListItem( TQListView *parent, TQListViewItem *after,
+        KttsCheckListItem( TQListView *tqparent, TQListViewItem *after,
             const TQString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
 

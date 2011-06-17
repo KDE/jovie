@@ -22,7 +22,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqradiobutton.h>
 
 // KDE includes.
@@ -34,8 +34,8 @@
 // KTTS includes.
 #include "addtalker.h"
 
-AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent, const char* name, WFlags fl)
-    : AddTalkerWidget(parent,name,fl)
+AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* tqparent, const char* name, WFlags fl)
+    : AddTalkerWidget(tqparent,name,fl)
 {
     // Build maps.
     setSynthToLangMap(synthToLangMap);
@@ -46,7 +46,7 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent, const char
     // Default to user's desktop language.
     TQString languageCode = KGlobal::locale()->defaultLanguage();
     // If there is not a synth that supports the locale, try stripping country code.
-    if (!m_langToSynthMap.contains(languageCode))
+    if (!m_langToSynthMap.tqcontains(languageCode))
     {
         TQString countryCode;
         TQString charSet;
@@ -55,7 +55,7 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent, const char
         languageCode = twoAlpha;
     }
     // If there is still not a synth that supports the language code, default to "other".
-    if (!m_langToSynthMap.contains(languageCode)) languageCode = "other";
+    if (!m_langToSynthMap.tqcontains(languageCode)) languageCode = "other";
 
     // Select the language in the language combobox.
     TQString language = languageCodeToLanguage(languageCode);

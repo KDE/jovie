@@ -63,7 +63,7 @@ bool XHTMLToSSMLParser::startElement(const TQString &, const TQString &, const T
     // append to the output string.
     TQString toelement = m_xhtml2ssml[fromelement];
     if(toelement)
-        m_output.append(XMLElement::fromQString(toelement).startTag());
+        m_output.append(XMLElement::fromTQString(toelement).startTag());
     return true;
 }
 
@@ -71,7 +71,7 @@ bool XHTMLToSSMLParser::endElement(const TQString &, const TQString &, const TQS
     TQString fromelement = qName;
     TQString toelement = m_xhtml2ssml[fromelement];
     if(toelement)
-        m_output.append(XMLElement::fromQString(toelement).endTag());
+        m_output.append(XMLElement::fromTQString(toelement).endTag());
     return true;
 }
 
@@ -94,10 +94,10 @@ bool XHTMLToSSMLParser::readFileConfigEntry(const TQString &line) {
     if(line.stripWhiteSpace().startsWith("#")) {
         return true;
     }
-    // break into QStringList
+    // break into TQStringList
     // the second parameter to split is the string, with all space simplified and all space around the : removed, i.e
     //  "something     :      somethingelse"   ->  "something:somethingelse"
-    TQStringList keyvalue = TQStringList::split(":", line.simplifyWhiteSpace().replace(" :", ":").replace(": ", ":"));
+    TQStringList keyvalue = TQStringList::split(":", line.simplifyWhiteSpace().tqreplace(" :", ":").tqreplace(": ", ":"));
     if(keyvalue.count() != 2)
         return false;
     m_xhtml2ssml[keyvalue[0]] = keyvalue[1];

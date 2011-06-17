@@ -34,8 +34,8 @@
 /**
  * Constructor.
  */
-Stretcher::Stretcher(TQObject *parent, const char *name) :
-    TQObject(parent, name)
+Stretcher::Stretcher(TQObject *tqparent, const char *name) :
+    TQObject(tqparent, name)
 {
     m_state = 0;
     m_stretchProc = 0;
@@ -61,7 +61,7 @@ bool Stretcher::stretch(const TQString &inFilename, const TQString &outFilename,
     if (m_stretchProc) return false;
     m_outFilename = outFilename;
     m_stretchProc = new KProcess;
-    TQString stretchStr = TQString("%1").arg(stretchFactor, 0, 'f', 3);
+    TQString stretchStr = TQString("%1").tqarg(stretchFactor, 0, 'f', 3);
     *m_stretchProc << "sox" << inFilename << outFilename << "stretch" << stretchStr;
     connect(m_stretchProc, TQT_SIGNAL(processExited(KProcess*)),
         this, TQT_SLOT(slotProcessExited(KProcess*)));

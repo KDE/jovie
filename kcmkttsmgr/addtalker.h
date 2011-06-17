@@ -25,7 +25,7 @@
 #ifndef ADDTALKER_H
 #define ADDTALKER_H
 
-// Qt includes.
+// TQt includes.
 #include <tqmap.h>
 
 #include "addtalkerwidget.h"
@@ -36,15 +36,16 @@ typedef TQMap<TQString,TQStringList> LangToSynthMap;
 class AddTalker : public AddTalkerWidget
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     /**
     * Constructor.
     * @param synthToLangMap     TQMap of supported language codes indexed by synthesizer.
-    * @param parent             Inherited KDialog parameter.
+    * @param tqparent             Inherited KDialog parameter.
     * @param name               Inherited KDialog parameter.
     */
-    AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    AddTalker(SynthToLangMap synthToLangMap, TQWidget* tqparent = 0, const char* name = 0, WFlags fl = 0 );
 
     /**
     * Destructor.

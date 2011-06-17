@@ -25,9 +25,10 @@
 
 // #include "filehandle.h"
 
-class KDE_EXPORT Player : virtual public QObject
+class KDE_EXPORT Player : virtual public TQObject
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     virtual ~Player() {}
@@ -66,8 +67,8 @@ public:
     virtual void setPeriods(uint periods) {Q_UNUSED(periods); }
 
 protected:
-    Player(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList() ) :
-        TQObject(parent, name) {
+    Player(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList() ) :
+        TQObject(tqparent, name) {
         Q_UNUSED(args);
     }
 

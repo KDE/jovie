@@ -18,7 +18,7 @@
 #ifndef _PLUGINCONF_H_
 #define _PLUGINCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqwidget.h>
 
 // KDE includes.
@@ -125,7 +125,7 @@
 * Next, @ref getTalkerCode
 * will be called.  If your plugin can automatically configure itself to the desired
 * language, it should do so and return a fully-specified talker code.  If your
-* plugin is not yet ready and requires user help, return TQString::null. Note that
+* plugin is not yet ready and requires user help, return TQString(). Note that
 * @ref setDesiredLanguage may be Null, in which case, you should allow the
 * user to configure your plugin to any of your supported languages.
 *
@@ -138,7 +138,7 @@
 * - @e lang.         If user has completed configuring your plugin, i.e., it is
 *                    ready to begin synthesizing, return the ISO 639-1 language code
 *                    for the language it can synthesize.  If your plugin is not yet 
-*                    fully configured, you should return TQString::null for the entire
+*                    fully configured, you should return TQString() for the entire
 *                    talker code.  If your plugin supports a specific national version
 *                    of a language, that should also be included using the ISO 3166
 *                    country code separated from the language code by underscore (_).
@@ -207,14 +207,15 @@
 * order to synthesize speech.
 */
 
-class KDE_EXPORT PlugInConf : public QWidget{
+class KDE_EXPORT PlugInConf : public TQWidget{
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        PlugInConf( TQWidget *parent = 0, const char *name = 0);
+        PlugInConf( TQWidget *tqparent = 0, const char *name = 0);
 
         /**
         * Destructor 
@@ -281,7 +282,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * This function informs the plugin of the desired language to be spoken
         * by the plugin.  The plugin should attempt to adapt itself to the
         * specified language code, choosing sensible defaults if necessary.
-        * If the passed-in code is TQString::null, no specific language has
+        * If the passed-in code is TQString(), no specific language has
         * been chosen.
         * @param lang        The desired language code or Null if none.
         *
@@ -299,7 +300,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * Return fully-specified talker code for the configured plugin.  This code
         * uniquely identifies the configured instance of the plugin and distinquishes
         * one instance from another.  If the plugin has not been fully configured,
-        * i.e., cannot yet synthesize, return TQString::null.
+        * i.e., cannot yet synthesize, return TQString().
         * @return            Fully-specified talker code.
         */
         virtual TQString getTalkerCode();
@@ -356,7 +357,7 @@ class KDE_EXPORT PlugInConf : public QWidget{
         * Searches the $PATH variable for any file. If that file exists in the PATH, or
         * is contained in any directory in the PATH, it returns the full path to it.
         * @param name        The name of the file to search for.
-        * @returns           The path to the file on success, a blank QString
+        * @returns           The path to the file on success, a blank TQString
         *                    if its not found.
         */
         TQString getLocation(const TQString &name);

@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EditReplacementWidget</class>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>EditReplacementWidget</cstring>
     </property>
@@ -21,7 +21,7 @@
             <verstretch>255</verstretch>
         </sizepolicy>
     </property>
-    <property name="minimumSize">
+    <property name="tqminimumSize">
         <size>
             <width>0</width>
             <height>0</height>
@@ -31,15 +31,15 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="TQLayoutWidget">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>tqlayout1</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QButtonGroup">
+                <widget class="TQButtonGroup">
                     <property name="name">
                         <cstring>typeButtonGroup</cstring>
                     </property>
@@ -61,15 +61,15 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget" row="0" column="0">
+                        <widget class="TQLayoutWidget" row="0" column="0">
                             <property name="name">
-                                <cstring>layout3</cstring>
+                                <cstring>tqlayout3</cstring>
                             </property>
                             <hbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QRadioButton">
+                                <widget class="TQRadioButton">
                                     <property name="name">
                                         <cstring>wordRadioButton</cstring>
                                     </property>
@@ -88,7 +88,7 @@
                                         <bool>true</bool>
                                     </property>
                                 </widget>
-                                <widget class="QRadioButton">
+                                <widget class="TQRadioButton">
                                     <property name="name">
                                         <cstring>regexpRadioButton</cstring>
                                     </property>
@@ -108,7 +108,7 @@
                         </widget>
                     </grid>
                 </widget>
-                <widget class="QCheckBox">
+                <widget class="TQCheckBox">
                     <property name="name">
                         <cstring>caseCheckBox</cstring>
                     </property>
@@ -126,23 +126,23 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="TQLayoutWidget">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>tqlayout2</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="TQLayoutWidget">
                     <property name="name">
-                        <cstring>layout6</cstring>
+                        <cstring>tqlayout6</cstring>
                     </property>
                     <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel" row="1" column="0">
+                        <widget class="TQLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>substLabel</cstring>
                             </property>
@@ -157,14 +157,14 @@
                             <property name="text">
                                 <string>&amp;Replace with:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>matchLineEdit</cstring>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="TQLabel" row="0" column="0">
                             <property name="name">
                                 <cstring>matchLabel</cstring>
                             </property>
@@ -179,7 +179,7 @@
                             <property name="text">
                                 <string>&amp;Match:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
@@ -188,9 +188,9 @@
                         </widget>
                     </grid>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="TQLayoutWidget">
                     <property name="name">
-                        <cstring>layout5</cstring>
+                        <cstring>tqlayout5</cstring>
                     </property>
                     <grid>
                         <property name="name">
@@ -254,7 +254,7 @@
     <tabstop>matchButton</tabstop>
     <tabstop>substLineEdit</tabstop>
 </tabstops>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

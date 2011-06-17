@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqfileinfo.h>
 #include <tqstring.h>
@@ -42,7 +42,7 @@
 /**
 * Constructor 
 */
-KttsFilterConf::KttsFilterConf( TQWidget *parent, const char *name) : TQWidget(parent, name){
+KttsFilterConf::KttsFilterConf( TQWidget *tqparent, const char *name) : TQWidget(tqparent, name){
     // kdDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
     TQString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;
@@ -114,7 +114,7 @@ bool KttsFilterConf::supportsMultiInstance() { return false; }
  * return an empty string.
  * @return           Filter instance name.
  */
-TQString KttsFilterConf::userPlugInName() { return TQString::null; }
+TQString KttsFilterConf::userPlugInName() { return TQString(); }
 
 /**
  * Returns True if this filter is a Sentence Boundary Detector.
@@ -125,7 +125,7 @@ bool KttsFilterConf::isSBD() { return false; }
 /**
 * Return the full path to any program in the $PATH environmental variable
 * @param name        The name of the file to search for.
-* @returns           The path to the file on success, a blank QString
+* @returns           The path to the file on success, a blank TQString
 *                    if its not found.
 */
 TQString KttsFilterConf::getLocation(const TQString &name) {

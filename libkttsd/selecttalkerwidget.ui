@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SelectTalkerWidget</class>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>SelectTalkerWidget</cstring>
     </property>
@@ -28,7 +28,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup">
+        <widget class="TQButtonGroup">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
             </property>
@@ -53,7 +53,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <widget class="QRadioButton">
+                <widget class="TQRadioButton">
                     <property name="name">
                         <cstring>useDefaultRadioButton</cstring>
                     </property>
@@ -64,7 +64,7 @@
                         <string>When checked, will use the default Talker, which is the topmost Talker listed in the Talkers tab.</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="TQRadioButton">
                     <property name="name">
                         <cstring>useClosestMatchRadioButton</cstring>
                     </property>
@@ -75,9 +75,9 @@
                         <string>When checked, will use a configured Talker most closely matching the attributes you choose.  Attributes with checks next to them will be preferred over unchecked attributes.  Language is always preferred.</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="TQLayoutWidget">
                     <property name="name">
-                        <cstring>layout6</cstring>
+                        <cstring>tqlayout6</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -93,14 +93,14 @@
                             <property name="sizeType">
                                 <enum>Fixed</enum>
                             </property>
-                            <property name="sizeHint">
+                            <property name="tqsizeHint">
                                 <size>
                                     <width>30</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="QGroupBox">
+                        <widget class="TQGroupBox">
                             <property name="name">
                                 <cstring>closestMatchGroupBox</cstring>
                             </property>
@@ -117,7 +117,7 @@
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-                                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
+                                <widget class="TQLabel" row="3" column="0" rowspan="1" colspan="3">
                                     <property name="name">
                                         <cstring>preferredLabel</cstring>
                                     </property>
@@ -125,22 +125,22 @@
                                         <string>Checked items are preferred over unchecked items.</string>
                                     </property>
                                 </widget>
-                                <widget class="QLayoutWidget" row="0" column="0">
+                                <widget class="TQLayoutWidget" row="0" column="0">
                                     <property name="name">
-                                        <cstring>layout11_2</cstring>
+                                        <cstring>tqlayout11_2</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>synthLabel</cstring>
                                             </property>
                                             <property name="text">
                                                 <string>&amp;Synthesizer:</string>
                                             </property>
-                                            <property name="alignment">
+                                            <property name="tqalignment">
                                                 <set>WordBreak|AlignVCenter|AlignLeft</set>
                                             </property>
                                             <property name="buddy" stdset="0">
@@ -152,7 +152,7 @@
                                                 <cstring>synthComboBox</cstring>
                                             </property>
                                         </widget>
-                                        <widget class="QCheckBox">
+                                        <widget class="TQCheckBox">
                                             <property name="name">
                                                 <cstring>synthCheckBox</cstring>
                                             </property>
@@ -176,15 +176,15 @@
                                         </widget>
                                     </hbox>
                                 </widget>
-                                <widget class="QLayoutWidget" row="0" column="2">
+                                <widget class="TQLayoutWidget" row="0" column="2">
                                     <property name="name">
-                                        <cstring>layout12</cstring>
+                                        <cstring>tqlayout12</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>genderLabel</cstring>
                                             </property>
@@ -200,7 +200,7 @@
                                                 <cstring>genderComboBox</cstring>
                                             </property>
                                         </widget>
-                                        <widget class="QCheckBox">
+                                        <widget class="TQCheckBox">
                                             <property name="name">
                                                 <cstring>genderCheckBox</cstring>
                                             </property>
@@ -241,15 +241,15 @@
                                         <enum>Vertical</enum>
                                     </property>
                                 </widget>
-                                <widget class="QLayoutWidget" row="1" column="0">
+                                <widget class="TQLayoutWidget" row="1" column="0">
                                     <property name="name">
-                                        <cstring>layout14</cstring>
+                                        <cstring>tqlayout14</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>volumeLabel</cstring>
                                             </property>
@@ -265,7 +265,7 @@
                                                 <cstring>volumeComboBox</cstring>
                                             </property>
                                         </widget>
-                                        <widget class="QCheckBox">
+                                        <widget class="TQCheckBox">
                                             <property name="name">
                                                 <cstring>volumeCheckBox</cstring>
                                             </property>
@@ -289,15 +289,15 @@
                                         </widget>
                                     </hbox>
                                 </widget>
-                                <widget class="QLayoutWidget" row="1" column="2">
+                                <widget class="TQLayoutWidget" row="1" column="2">
                                     <property name="name">
-                                        <cstring>layout13</cstring>
+                                        <cstring>tqlayout13</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>rateLabel</cstring>
                                             </property>
@@ -313,7 +313,7 @@
                                                 <cstring>rateComboBox</cstring>
                                             </property>
                                         </widget>
-                                        <widget class="QCheckBox">
+                                        <widget class="TQCheckBox">
                                             <property name="name">
                                                 <cstring>rateCheckBox</cstring>
                                             </property>
@@ -337,15 +337,15 @@
                                         </widget>
                                     </hbox>
                                 </widget>
-                                <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
+                                <widget class="TQLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
                                     <property name="name">
-                                        <cstring>layout10</cstring>
+                                        <cstring>tqlayout10</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QLabel">
+                                        <widget class="TQLabel">
                                             <property name="name">
                                                 <cstring>languageLabel</cstring>
                                             </property>
@@ -385,7 +385,7 @@
                                                 <string>Click to select one or more languages.  This filter will be applied to text jobs of those languages.</string>
                                             </property>
                                         </widget>
-                                        <widget class="QCheckBox">
+                                        <widget class="TQCheckBox">
                                             <property name="name">
                                                 <cstring>languageCheckBox</cstring>
                                             </property>
@@ -413,7 +413,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="TQRadioButton">
                     <property name="name">
                         <cstring>useSpecificTalkerRadioButton</cstring>
                     </property>
@@ -424,9 +424,9 @@
                         <string>When checked, will use the specific Talker (if it is still configured), otherwise the Talker most closely matching.</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="TQLayoutWidget">
                     <property name="name">
-                        <cstring>layout10</cstring>
+                        <cstring>tqlayout10</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -442,7 +442,7 @@
                             <property name="sizeType">
                                 <enum>Fixed</enum>
                             </property>
-                            <property name="sizeHint">
+                            <property name="tqsizeHint">
                                 <size>
                                     <width>30</width>
                                     <height>20</height>
@@ -559,7 +559,7 @@
     <tabstop>useSpecificTalkerRadioButton</tabstop>
     <tabstop>talkersListView</tabstop>
 </tabstops>
-<layoutdefaults spacing="6" margin="0"/>
+<tqlayoutdefaults spacing="6" margin="0"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

@@ -26,7 +26,7 @@
 #ifndef _FILTERMGR_H_
 #define _FILTERMGR_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqptrlist.h>
 
 // KTTS includes.
@@ -40,12 +40,13 @@ typedef TQPtrList<KttsFilterProc> FilterList;
 class FilterMgr : public KttsFilterProc
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
          * Constructor.
          */
-        FilterMgr(TQObject *parent = 0, const char *name = 0);
+        FilterMgr(TQObject *tqparent = 0, const char *name = 0);
 
         /**
          * Destructor.
@@ -167,7 +168,7 @@ class FilterMgr : public KttsFilterProc
         // Uses KTrader to convert a translated Filter Plugin Name to DesktopEntryName.
         // @param name                   The translated plugin name.  From Name= line in .desktop file.
         // @return                       DesktopEntryName.  The name of the .desktop file (less .desktop).
-        //                               TQString::null if not found.
+        //                               TQString() if not found.
         TQString FilterNameToDesktopEntryName(const TQString& name);
 
         // List of filters.

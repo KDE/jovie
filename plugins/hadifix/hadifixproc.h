@@ -26,7 +26,8 @@ class KProcess;
 
 class HadifixProcPrivate;
 class HadifixProc : public PlugInProc{
-  Q_OBJECT 
+  Q_OBJECT
+  TQ_OBJECT
   
   public:
     enum VoiceGender {
@@ -37,7 +38,7 @@ class HadifixProc : public PlugInProc{
     };
     
     /** Constructor */
-    HadifixProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+    HadifixProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
     
     /** Destructor */
     ~HadifixProc();

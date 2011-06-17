@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqlayout.h>
 #include <tqfile.h>
 #include <tqapplication.h>
@@ -42,18 +42,18 @@
 #include "fliteconf.moc"
 
 /** Constructor */
-FliteConf::FliteConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(parent, name)
+FliteConf::FliteConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(tqparent, name)
 {
     // kdDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;
     m_progressDlg = 0;
     
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "FliteConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new FliteConfWidget(this, "FliteConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
     
     defaults();
     
@@ -74,7 +74,7 @@ void FliteConf::load(KConfig *config, const TQString &configGroup){
     // kdDebug() << "FliteConf::load: Loading configuration for language " << langGroup << " with plug in " << "Festival Lite (flite)" << endl;
 
     config->setGroup(configGroup);
-    TQString fliteExe = config->readEntry("FliteExePath", TQString::null);
+    TQString fliteExe = config->readEntry("FliteExePath", TQString());
     if (fliteExe.isEmpty())
     {
         config->setGroup("Flite");
@@ -115,15 +115,15 @@ TQString FliteConf::getTalkerCode()
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
-                    .arg(m_languageCode)
-                    .arg("fixed")
-                    .arg("neutral")
-                    .arg("medium")
-                    .arg("medium")
-                    .arg("Festival Lite (flite)");
+                    .tqarg(m_languageCode)
+                    .tqarg("fixed")
+                    .tqarg("neutral")
+                    .tqarg("medium")
+                    .tqarg("medium")
+                    .tqarg("Festival Lite (flite)");
         }
     }
-    return TQString::null;
+    return TQString();
 }
 
 void FliteConf::slotFliteTest_clicked()
@@ -187,7 +187,7 @@ void FliteConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     TQFile::remove(m_waveFile);
-    m_waveFile = TQString::null;
+    m_waveFile = TQString();
     if (m_progressDlg) m_progressDlg->close();
 }
 

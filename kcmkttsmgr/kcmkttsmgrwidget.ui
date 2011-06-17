@@ -25,7 +25,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTabWidget" row="0" column="0">
+        <widget class="TQTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>mainTab</cstring>
             </property>
@@ -37,7 +37,7 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <widget class="QWidget">
+            <widget class="TQWidget">
                 <property name="name">
                     <cstring>tab</cstring>
                 </property>
@@ -48,7 +48,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <widget class="TQCheckBox" row="0" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>enableKttsdCheckBox</cstring>
                         </property>
@@ -59,7 +59,7 @@
                             <string>Check to start the KTTS Deamon and enable Text-to-Speech.</string>
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+                    <widget class="TQCheckBox" row="2" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>embedInSysTrayCheckBox</cstring>
                         </property>
@@ -83,16 +83,16 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
+                        <property name="tqsizeHint">
                             <size>
                                 <width>20</width>
                                 <height>20</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+                    <widget class="TQLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>layout5</cstring>
+                            <cstring>tqlayout5</cstring>
                         </property>
                         <hbox>
                             <property name="name">
@@ -108,14 +108,14 @@
                                 <property name="sizeType">
                                     <enum>Fixed</enum>
                                 </property>
-                                <property name="sizeHint">
+                                <property name="tqsizeHint">
                                     <size>
                                         <width>20</width>
                                         <height>20</height>
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QCheckBox">
+                            <widget class="TQCheckBox">
                                 <property name="name">
                                     <cstring>showMainWindowOnStartupCheckBox</cstring>
                                 </property>
@@ -131,9 +131,9 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
+                    <widget class="TQLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>layout5_2</cstring>
+                            <cstring>tqlayout5_2</cstring>
                         </property>
                         <hbox>
                             <property name="name">
@@ -149,14 +149,14 @@
                                 <property name="sizeType">
                                     <enum>Fixed</enum>
                                 </property>
-                                <property name="sizeHint">
+                                <property name="tqsizeHint">
                                     <size>
                                         <width>20</width>
                                         <height>20</height>
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QCheckBox">
+                            <widget class="TQCheckBox">
                                 <property name="name">
                                     <cstring>autoexitMgrCheckBox</cstring>
                                 </property>
@@ -172,7 +172,7 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                    <widget class="TQCheckBox" row="4" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>autostartMgrCheckBox</cstring>
                         </property>
@@ -188,7 +188,7 @@
                     </widget>
                 </grid>
             </widget>
-            <widget class="QWidget">
+            <widget class="TQWidget">
                 <property name="name">
                     <cstring>TabPage</cstring>
                 </property>
@@ -284,9 +284,9 @@
                             <string>This is a list of all the configured Talkers.  A Talker is a speech synthesizer that has been configured with a language, voice, gender, speaking rate, and volume.  Talkers higher in the list have higher priority.  The topmost Talker will be used when no talker attributes have been specified by an application.</string>
                         </property>
                     </widget>
-                    <widget class="QLayoutWidget" row="0" column="1">
+                    <widget class="TQLayoutWidget" row="0" column="1">
                         <property name="name">
-                            <cstring>layout9</cstring>
+                            <cstring>tqlayout9</cstring>
                         </property>
                         <vbox>
                             <property name="name">
@@ -315,7 +315,7 @@
                                     <comment>What's this text</comment>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="TQPushButton">
                                 <property name="name">
                                     <cstring>higherTalkerPriorityButton</cstring>
                                 </property>
@@ -331,7 +331,7 @@
                                     <string>U&amp;p</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="TQPushButton">
                                 <property name="name">
                                     <cstring>lowerTalkerPriorityButton</cstring>
                                 </property>
@@ -407,7 +407,7 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
-                                <property name="sizeHint">
+                                <property name="tqsizeHint">
                                     <size>
                                         <width>20</width>
                                         <height>20</height>
@@ -418,7 +418,7 @@
                     </widget>
                 </grid>
             </widget>
-            <widget class="QWidget">
+            <widget class="TQWidget">
                 <property name="name">
                     <cstring>TabPage</cstring>
                 </property>
@@ -429,7 +429,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox" row="1" column="0">
+                    <widget class="TQGroupBox" row="1" column="0">
                         <property name="name">
                             <cstring>notifyGroup</cstring>
                         </property>
@@ -493,15 +493,15 @@
                                     <string>This is a list of configured application events and actions to be taken when received.  The "default" event governs all events not specifically configured.</string>
                                 </property>
                             </widget>
-                            <widget class="QLayoutWidget" row="2" column="0">
+                            <widget class="TQLayoutWidget" row="2" column="0">
                                 <property name="name">
-                                    <cstring>layout21</cstring>
+                                    <cstring>tqlayout21</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLabel">
+                                    <widget class="TQLabel">
                                         <property name="name">
                                             <cstring>notifyPresentLabel</cstring>
                                         </property>
@@ -523,7 +523,7 @@
                                             <string>Applies only to the default event.  Does not affect application-specific events.  Only events that display in the manner which you select will be spoken.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QComboBox">
+                                    <widget class="TQComboBox">
                                         <property name="name">
                                             <cstring>notifyPresentComboBox</cstring>
                                         </property>
@@ -533,15 +533,15 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLayoutWidget" row="0" column="0">
+                            <widget class="TQLayoutWidget" row="0" column="0">
                                 <property name="name">
-                                    <cstring>layout28</cstring>
+                                    <cstring>tqlayout28</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>notifyAddButton</cstring>
                                         </property>
@@ -555,7 +555,7 @@
                                             <string>Click to configure notification for a specific application event.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>notifyRemoveButton</cstring>
                                         </property>
@@ -576,14 +576,14 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
-                                        <property name="sizeHint">
+                                        <property name="tqsizeHint">
                                             <size>
                                                 <width>152</width>
                                                 <height>20</height>
                                             </size>
                                         </property>
                                     </spacer>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>notifyClearButton</cstring>
                                         </property>
@@ -594,7 +594,7 @@
                                             <string>Removes all the application specific events.  The default event remains.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>notifyLoadButton</cstring>
                                         </property>
@@ -605,7 +605,7 @@
                                             <string>Click to read configured notification events from a file.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>notifySaveButton</cstring>
                                         </property>
@@ -618,7 +618,7 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLayoutWidget" row="3" column="0">
+                            <widget class="TQLayoutWidget" row="3" column="0">
                                 <property name="name">
                                     <cstring>notifyExceptionActionLayout</cstring>
                                 </property>
@@ -626,7 +626,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QPushButton" row="0" column="2">
+                                    <widget class="TQPushButton" row="0" column="2">
                                         <property name="name">
                                             <cstring>notifyTestButton</cstring>
                                         </property>
@@ -640,7 +640,7 @@
                                             <string>Click this button to test the notification.  A sample message will be spoken.  Note: The Text-to-Speech system must be enabled.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QLabel" row="0" column="0">
+                                    <widget class="TQLabel" row="0" column="0">
                                         <property name="name">
                                             <cstring>notifyActionLabel</cstring>
                                         </property>
@@ -662,7 +662,7 @@
                                             <string>&lt;qt&gt;Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl&gt;&lt;dt&gt;%e&lt;/dt&gt;&lt;dd&gt;Name of the event&lt;/dd&gt;&lt;dt&gt;%a&lt;/dt&gt;&lt;dd&gt;Application that sent the event&lt;/dd&gt;&lt;dt&gt;%m&lt;/dt&gt;&lt;dd&gt;The message sent by the application&lt;/dd&gt;&lt;/dl&gt;&lt;/qt&gt;</string>
                                         </property>
                                     </widget>
-                                    <widget class="QLineEdit" row="0" column="3">
+                                    <widget class="TQLineEdit" row="0" column="3">
                                         <property name="name">
                                             <cstring>notifyMsgLineEdit</cstring>
                                         </property>
@@ -670,7 +670,7 @@
                                             <string>&lt;qt&gt;Specifies how KTTS should speak the event when received.  If you select "Speak custom text", enter the text in the box.  You may use the following substitution strings in the text:&lt;dl&gt;&lt;dt&gt;%e&lt;/dt&gt;&lt;dd&gt;Name of the event&lt;/dd&gt;&lt;dt&gt;%a&lt;/dt&gt;&lt;dd&gt;Application that sent the event&lt;/dd&gt;&lt;dt&gt;%m&lt;/dt&gt;&lt;dd&gt;The message sent by the application&lt;/dd&gt;&lt;/dl&gt;&lt;/qt&gt;</string>
                                         </property>
                                     </widget>
-                                    <widget class="QComboBox" row="0" column="1">
+                                    <widget class="TQComboBox" row="0" column="1">
                                         <property name="name">
                                             <cstring>notifyActionComboBox</cstring>
                                         </property>
@@ -688,15 +688,15 @@
                                     </widget>
                                 </grid>
                             </widget>
-                            <widget class="QLayoutWidget" row="4" column="0">
+                            <widget class="TQLayoutWidget" row="4" column="0">
                                 <property name="name">
-                                    <cstring>layout19_2</cstring>
+                                    <cstring>tqlayout19_2</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLabel">
+                                    <widget class="TQLabel">
                                         <property name="name">
                                             <cstring>notifyTalkerLabel</cstring>
                                         </property>
@@ -751,15 +751,15 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <widget class="TQLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>layout17</cstring>
+                            <cstring>tqlayout17</cstring>
                         </property>
                         <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox">
+                            <widget class="TQCheckBox">
                                 <property name="name">
                                     <cstring>notifyEnableCheckBox</cstring>
                                 </property>
@@ -780,14 +780,14 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
-                                <property name="sizeHint">
+                                <property name="tqsizeHint">
                                     <size>
                                         <width>16</width>
                                         <height>20</height>
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QCheckBox">
+                            <widget class="TQCheckBox">
                                 <property name="name">
                                     <cstring>notifyExcludeEventsWithSoundCheckBox</cstring>
                                 </property>
@@ -805,7 +805,7 @@
                     </widget>
                 </grid>
             </widget>
-            <widget class="QWidget">
+            <widget class="TQWidget">
                 <property name="name">
                     <cstring>TabPage</cstring>
                 </property>
@@ -816,9 +816,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <widget class="TQLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>layout14</cstring>
+                            <cstring>tqlayout14</cstring>
                         </property>
                         <hbox>
                             <property name="name">
@@ -846,9 +846,9 @@
                                     <string>This is a list of all the configured Filters.  Filters higher in the list are applied first.  Filters modify text before it is spoken.  They can be used to substitute for mispronounced words, transform XML from one form to another, or change the default Talker to be used for speech output.</string>
                                 </property>
                             </widget>
-                            <widget class="QLayoutWidget">
+                            <widget class="TQLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout9_2</cstring>
+                                    <cstring>tqlayout9_2</cstring>
                                 </property>
                                 <vbox>
                                     <property name="name">
@@ -877,7 +877,7 @@
                                             <comment>What's this text</comment>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>higherFilterPriorityButton</cstring>
                                         </property>
@@ -896,7 +896,7 @@
                                             <string>Click to move selected filter up in the list.  Filters higher in the list are applied first.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>lowerFilterPriorityButton</cstring>
                                         </property>
@@ -975,7 +975,7 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
-                                        <property name="sizeHint">
+                                        <property name="tqsizeHint">
                                             <size>
                                                 <width>20</width>
                                                 <height>20</height>
@@ -986,9 +986,9 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QLayoutWidget" row="1" column="0">
+                    <widget class="TQLayoutWidget" row="1" column="0">
                         <property name="name">
-                            <cstring>layout18</cstring>
+                            <cstring>tqlayout18</cstring>
                         </property>
                         <hbox>
                             <property name="name">
@@ -1016,15 +1016,15 @@
                                     <string>This is a list of all the configured Sentence Boundary Detector (SBD) Filters.  SBDs break long text jobs up into sentences, which reduces the time before a job begins speaking, and permits you to advance or rewind through a job.  SBDs are applied in the order listed (top to bottom) after all the normal filters at the top of this screen have been applied.  Filtering stops when the first SBD modifies the text.</string>
                                 </property>
                             </widget>
-                            <widget class="QLayoutWidget">
+                            <widget class="TQLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout16</cstring>
+                                    <cstring>tqlayout16</cstring>
                                 </property>
                                 <vbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="TQPushButton">
                                         <property name="name">
                                             <cstring>sbdButton</cstring>
                                         </property>
@@ -1053,7 +1053,7 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
-                                        <property name="sizeHint">
+                                        <property name="tqsizeHint">
                                             <size>
                                                 <width>20</width>
                                                 <height>11</height>
@@ -1066,7 +1066,7 @@
                     </widget>
                 </grid>
             </widget>
-            <widget class="QWidget">
+            <widget class="TQWidget">
                 <property name="name">
                     <cstring>TabPage</cstring>
                 </property>
@@ -1077,9 +1077,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <widget class="TQLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>layout15</cstring>
+                            <cstring>tqlayout15</cstring>
                         </property>
                         <grid>
                             <property name="name">
@@ -1116,7 +1116,7 @@
                                     <comment>What's this text</comment>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="2" column="0">
+                            <widget class="TQCheckBox" row="2" column="0">
                                 <property name="name">
                                     <cstring>textPostMsgCheck</cstring>
                                 </property>
@@ -1130,7 +1130,7 @@
                                     <string>Check the Post-message box and enter a Post-message, which will be spoken when a text job resumes after being interrupted by another message.</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="1" column="0">
+                            <widget class="TQCheckBox" row="1" column="0">
                                 <property name="name">
                                     <cstring>textPreSndCheck</cstring>
                                 </property>
@@ -1152,7 +1152,7 @@
                                     <string>Check the Pre-sound box and choose a Pre-sound audio file, which will sound when a text job is interrupted by another message.</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="0">
+                            <widget class="TQCheckBox" row="0" column="0">
                                 <property name="name">
                                     <cstring>textPreMsgCheck</cstring>
                                 </property>
@@ -1188,7 +1188,7 @@
                                     <string>Check the Post-sound and choose a Post-sound audio file, which will sound before a text job resumes after being interrupted by another message.</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="0">
+                            <widget class="TQCheckBox" row="3" column="0">
                                 <property name="name">
                                     <cstring>textPostSndCheck</cstring>
                                 </property>
@@ -1229,7 +1229,7 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
+                        <property name="tqsizeHint">
                             <size>
                                 <width>21</width>
                                 <height>180</height>
@@ -1238,7 +1238,7 @@
                     </spacer>
                 </grid>
             </widget>
-            <widget class="QWidget">
+            <widget class="TQWidget">
                 <property name="name">
                     <cstring>TabPage</cstring>
                 </property>
@@ -1249,15 +1249,15 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                    <widget class="TQLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>layout12</cstring>
+                            <cstring>tqlayout12</cstring>
                         </property>
                         <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox">
+                            <widget class="TQCheckBox">
                                 <property name="name">
                                     <cstring>keepAudioCheckBox</cstring>
                                 </property>
@@ -1289,15 +1289,15 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
+                    <widget class="TQLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>layout13</cstring>
+                            <cstring>tqlayout13</cstring>
                         </property>
                         <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLabel">
+                            <widget class="TQLabel">
                                 <property name="name">
                                     <cstring>timeLabel</cstring>
                                 </property>
@@ -1350,7 +1350,7 @@
                                     <string>Sets the speed of speech.  Slide the slider to the left to slow speech down; to the right to increase talking speed.  Anything less than 75 percent is considered "slow", and anything greater than 125 percent is considered "fast".  You cannot change the speed of MultiSyn voices.</string>
                                 </property>
                             </widget>
-                            <widget class="QSlider">
+                            <widget class="TQSlider">
                                 <property name="name">
                                     <cstring>timeSlider</cstring>
                                 </property>
@@ -1391,7 +1391,7 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
+                        <property name="tqsizeHint">
                             <size>
                                 <width>20</width>
                                 <height>40</height>
@@ -1408,14 +1408,14 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
+                        <property name="tqsizeHint">
                             <size>
                                 <width>90</width>
                                 <height>20</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <widget class="TQButtonGroup" row="0" column="0">
                         <property name="name">
                             <cstring>audioButtonGroup</cstring>
                         </property>
@@ -1437,15 +1437,15 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLayoutWidget" row="1" column="1">
+                            <widget class="TQLayoutWidget" row="1" column="1">
                                 <property name="name">
-                                    <cstring>layout8</cstring>
+                                    <cstring>tqlayout8</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLabel">
+                                    <widget class="TQLabel">
                                         <property name="name">
                                             <cstring>sinkLabel</cstring>
                                         </property>
@@ -1480,15 +1480,15 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLayoutWidget" row="3" column="1">
+                            <widget class="TQLayoutWidget" row="3" column="1">
                                 <property name="name">
-                                    <cstring>layout8_2_2</cstring>
+                                    <cstring>tqlayout8_2_2</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLabel">
+                                    <widget class="TQLabel">
                                         <property name="name">
                                             <cstring>akodeSinkLabel</cstring>
                                         </property>
@@ -1523,7 +1523,7 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QRadioButton" row="1" column="0">
+                            <widget class="TQRadioButton" row="1" column="0">
                                 <property name="name">
                                     <cstring>gstreamerRadioButton</cstring>
                                 </property>
@@ -1540,7 +1540,7 @@
                                     <string>&lt;p&gt;Check to use the GStreamer audio output system.  You must also select a &lt;b&gt;Sink&lt;/b&gt; plugin.&lt;/p&gt;</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton" row="0" column="0">
+                            <widget class="TQRadioButton" row="0" column="0">
                                 <property name="name">
                                     <cstring>artsRadioButton</cstring>
                                 </property>
@@ -1557,7 +1557,7 @@
                                     <string>Check to use the KDE aRts system for audio output.</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton" row="3" column="0">
+                            <widget class="TQRadioButton" row="3" column="0">
                                 <property name="name">
                                     <cstring>akodeRadioButton</cstring>
                                 </property>
@@ -1580,15 +1580,15 @@
                                     <string>&lt;p&gt;Check to use aKode for audio output.  You must also select a &lt;b&gt;Sink&lt;/b&gt;.&lt;/p&gt;</string>
                                 </property>
                             </widget>
-                            <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                            <widget class="TQLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>layout21</cstring>
+                                    <cstring>tqlayout21</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QRadioButton">
+                                    <widget class="TQRadioButton">
                                         <property name="name">
                                             <cstring>alsaRadioButton</cstring>
                                         </property>
@@ -1611,15 +1611,15 @@
                                             <string>Check to use Advanced Linux Sound Architecture (ALSA) for audio output.</string>
                                         </property>
                                     </widget>
-                                    <widget class="QLayoutWidget">
+                                    <widget class="TQLayoutWidget">
                                         <property name="name">
-                                            <cstring>layout8_2</cstring>
+                                            <cstring>tqlayout8_2</cstring>
                                         </property>
                                         <hbox>
                                             <property name="name">
                                                 <cstring>unnamed</cstring>
                                             </property>
-                                            <widget class="QLabel">
+                                            <widget class="TQLabel">
                                                 <property name="name">
                                                     <cstring>pcmLabel</cstring>
                                                 </property>
@@ -1654,7 +1654,7 @@
                                             </widget>
                                         </hbox>
                                     </widget>
-                                    <widget class="QLineEdit">
+                                    <widget class="TQLineEdit">
                                         <property name="name">
                                             <cstring>pcmCustom</cstring>
                                         </property>
@@ -1888,13 +1888,13 @@
     <include location="global" impldecl="in implementation">klocale.h</include>
     <include location="global" impldecl="in implementation">kdebug.h</include>
 </includes>
-<signals>
+<Q_SIGNALS>
     <signal>configChanged()</signal>
-</signals>
-<slots>
+</Q_SIGNALS>
+<Q_SLOTS>
     <slot access="private">slotConfigChanged()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="6"/>
+</Q_SLOTS>
+<tqlayoutdefaults spacing="6" margin="6"/>
 <includehints>
     <includehint>kcmodule.h</includehint>
     <includehint>klistview.h</includehint>

@@ -52,22 +52,22 @@
 </xsl:template>
 
 <!--  H1, H2, H3, H4, H5, H6:  ignore tag, speak content as sentence. -->
-<xsl:template match="*[contains('h1|h2|h3|h4|h5|h6|H1|H2|H3|H4|H5|H6|',concat(local-name(),'|'))]">
+<xsl:template match="*[tqcontains('h1|h2|h3|h4|h5|h6|H1|H2|H3|H4|H5|H6|',concat(local-name(),'|'))]">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!-- DFN, LI, DD, DT:  ignore tag, speak content. -->
-<xsl:template match="*[contains('dfn|li|dd|dt|DFN|LI|DD|DT|',concat(local-name(),'|'))]">
+<xsl:template match="*[tqcontains('dfn|li|dd|dt|DFN|LI|DD|DT|',concat(local-name(),'|'))]">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!-- PRE, CODE, TT;  ignore tag, speak content. -->
-<xsl:template match="*[contains('pre|code|tt|PRE|CODE|TT|',concat(local-name(),'|'))]">
+<xsl:template match="*[tqcontains('pre|code|tt|PRE|CODE|TT|',concat(local-name(),'|'))]">
     <xsl:apply-templates/>
 </xsl:template>
 
 <!-- EM, STRONG, I, B, S, STRIKE, U:  speak emphasized.  -->
-<xsl:template match="*[contains('em|strong|i|b|s|strike|EM|STRONG|I|B|S|STRIKE|',concat(local-name(),'|'))]">
+<xsl:template match="*[tqcontains('em|strong|i|b|s|strike|EM|STRONG|I|B|S|STRIKE|',concat(local-name(),'|'))]">
     <emphasis level="strong">
         <xsl:apply-templates/>
     </emphasis>

@@ -30,7 +30,7 @@
  * by the talker.
  */
 
-// Qt includes
+// TQt includes
 #include <tqobject.h>
 #include <tqstringlist.h>
 
@@ -39,6 +39,7 @@ class TQString;
 
 class SSMLConvert : public TQObject {
     Q_OBJECT
+  TQ_OBJECT
 public:
     /** Constructors */
     SSMLConvert();

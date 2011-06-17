@@ -28,7 +28,7 @@
 #include <alsa/asoundlib.h>
 #include <sys/poll.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqobject.h>
 #include <tqthread.h>
@@ -63,12 +63,13 @@ static snd_pcm_sframes_t (*writei_func)(snd_pcm_t *handle, const void *buffer, s
 static snd_pcm_sframes_t (*readn_func)(snd_pcm_t *handle, void **bufs, snd_pcm_uframes_t size);
 static snd_pcm_sframes_t (*writen_func)(snd_pcm_t *handle, void **bufs, snd_pcm_uframes_t size);
 
-class KDE_EXPORT AlsaPlayer : public Player, QThread
+class KDE_EXPORT AlsaPlayer : public Player, TQThread
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    AlsaPlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
+    AlsaPlayer(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     ~AlsaPlayer();
 
     virtual void startPlay(const TQString& file);

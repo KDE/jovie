@@ -18,7 +18,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqcstring.h>
 #include <tqclipboard.h>
 #include <tqtextstream.h>
@@ -49,9 +49,9 @@
 * Note that most of the real tts work occurs in Speaker.
 */
 
-KTTSD::KTTSD(const TQCString& objId, TQObject *parent, const char *name) :
+KTTSD::KTTSD(const TQCString& objId, TQObject *tqparent, const char *name) :
     DCOPObject(objId),
-    TQObject(parent, name)
+    TQObject(tqparent, name)
 {
     // kdDebug() << "KTTSD::KTTSD Running" << endl;
     m_speaker = 0;
@@ -479,7 +479,7 @@ uint KTTSD::getTextJobCount()
 */
 TQString KTTSD::getTextJobNumbers()
 {
-    if (!m_speaker) return TQString::null;
+    if (!m_speaker) return TQString();
     return m_speechData->getTextJobNumbers();
 }
 
@@ -540,7 +540,7 @@ TQByteArray KTTSD::getTextJobInfo(const uint jobNum /*=0*/)
 */
 TQString KTTSD::talkerCodeToTalkerId(const TQString& talkerCode)
 {
-    if (!m_talkerMgr) return TQString::null;
+    if (!m_talkerMgr) return TQString();
     return m_talkerMgr->talkerCodeToTalkerId(fixNullString(talkerCode));
 }
 
@@ -728,7 +728,7 @@ void KTTSD::changeTextTalker(const TQString &talker, uint jobNum)
 */
 TQString KTTSD::userDefaultTalker()
 {
-    if (!m_talkerMgr) return TQString::null;
+    if (!m_talkerMgr) return TQString();
     return m_talkerMgr->userDefaultTalker();
 }
 
@@ -790,7 +790,7 @@ uint KTTSD::moveRelTextSentence(const int n, const uint jobNum /*=0*/)
 void KTTSD::speakClipboard()
 {
     // Get the clipboard object.
-    QClipboard *cb = kapp->clipboard();
+    TQClipboard *cb = kapp->tqclipboard();
 
     // Copy text from the clipboard.
     TQString text = cb->text();
@@ -893,20 +893,20 @@ void KTTSD::notificationSignal( const TQString& event, const TQString& fromApp,
             TQString msg;
             TQString talker;
             // Check for app-specific action.
-            if ( m_speechData->notifyAppMap.contains( fromApp ) )
+            if ( m_speechData->notifyAppMap.tqcontains( fromApp ) )
             {
                 NotifyEventMap notifyEventMap = m_speechData->notifyAppMap[ fromApp ];
-                if ( notifyEventMap.contains( event ) )
+                if ( notifyEventMap.tqcontains( event ) )
                 {
                     found = true;
                     notifyOptions = notifyEventMap[ event ];
                 } else {
                     // Check for app-specific default.
-                    if ( notifyEventMap.contains( "default" ) )
+                    if ( notifyEventMap.tqcontains( "default" ) )
                     {
                         found = true;
                         notifyOptions = notifyEventMap[ "default" ];
-                        notifyOptions.eventName = TQString::null;
+                        notifyOptions.eventName = TQString();
                     }
                 }
             }
@@ -965,14 +965,14 @@ void KTTSD::notificationSignal( const TQString& event, const TQString& fromApp,
                         break;
                     case NotifyAction::SpeakCustom:
                         msg = notifyOptions.customMsg;
-                        msg.replace( "%a", fromApp );
-                        msg.replace( "%m", text );
-                        if ( msg.contains( "%e" ) )
+                        msg.tqreplace( "%a", fromApp );
+                        msg.tqreplace( "%m", text );
+                        if ( msg.tqcontains( "%e" ) )
                         {
                             if ( notifyOptions.eventName.isEmpty() )
-                                msg.replace( "%e", NotifyEvent::getEventName( fromApp, event ) );
+                                msg.tqreplace( "%e", NotifyEvent::getEventName( fromApp, event ) );
                             else
-                                msg.replace( "%e", notifyOptions.eventName );
+                                msg.tqreplace( "%e", notifyOptions.eventName );
                         }
                         break;
                 }
@@ -1084,21 +1084,21 @@ uint KTTSD::applyDefaultJobNum(const uint jobNum)
 
 /*
 * Fixes a string argument passed in via dcop.
-* If NULL or "0" return TQString::null.
+* If NULL or "0" return TQString().
 */
 TQString KTTSD::fixNullString(const TQString &talker) const
 {
-    if (!talker) return TQString::null;
-    if (talker == "0") return TQString::null;
+    if (!talker) return TQString();
+    if (talker == "0") return TQString();
     return talker;
 }
 
 // kspeech is obsolete.  Applications should use KSpeech instead.
 
 // Constructor.
-kspeech::kspeech(const TQCString& objId, TQObject *parent, const char *name) :
+kspeech::kspeech(const TQCString& objId, TQObject *tqparent, const char *name) :
     DCOPObject(objId),
-    TQObject(parent, name),
+    TQObject(tqparent, name),
     m_kttsd("KSpeech")
 {
 }

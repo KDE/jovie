@@ -22,7 +22,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 
 // KDE includes.
@@ -44,9 +44,9 @@
 /**
  * Constructor.
  */
-TestPlayer::TestPlayer(TQObject *parent, const char *name,
+TestPlayer::TestPlayer(TQObject *tqparent, const char *name,
     const int playerOption, const float audioStretchFactor, const TQString &sinkName) :
-    TQObject(parent, name)
+    TQObject(tqparent, name)
 {
     m_playerOption = playerOption;
     m_audioStretchFactor = audioStretchFactor;
@@ -103,7 +103,7 @@ void TestPlayer::play(const TQString &waveFile)
         m_stretcher = new Stretcher();
         if (m_stretcher->stretch(playFile, tmpFile, m_audioStretchFactor))
         {
-            while (m_stretcher->getState() != Stretcher::ssFinished) qApp->processEvents();
+            while (m_stretcher->getState() != Stretcher::ssFinished) tqApp->processEvents();
             playFile = m_stretcher->getOutFilename();
         }
         delete m_stretcher;
@@ -123,7 +123,7 @@ void TestPlayer::play(const TQString &waveFile)
     // cleaning up the play object.  However, because we've been called from DCOP,
     // this seems to be necessary.  The call to processEvents is problematic because
     // it can cause re-entrancy.
-    while (m_player->playing()) qApp->processEvents();
+    while (m_player->playing()) tqApp->processEvents();
     // kdDebug() << "TestPlayer::play: stopping playback." << endl;
     m_player->stop();
     delete m_player;
@@ -162,7 +162,7 @@ Player* TestPlayer::createPlayerObject(int playerOption)
         }
     }
     KTrader::OfferList offers = KTrader::self()->query(
-            "KTTSD/AudioPlugin", TQString("DesktopEntryName == '%1'").arg(plugInName));
+            "KTTSD/AudioPlugin", TQString("DesktopEntryName == '%1'").tqarg(plugInName));
 
     if(offers.count() == 1)
     {

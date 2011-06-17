@@ -33,16 +33,16 @@ class Stretcher;
 
 // TODO: Make this work asynchronously.
 
-class KDE_EXPORT TestPlayer : public QObject{
+class KDE_EXPORT TestPlayer : public TQObject{
     public:
         /**
          * Constructor.
          * @param playerOption
          * @param audioStretchFactor
          */
-        TestPlayer(TQObject *parent = 0, const char *name = 0,
+        TestPlayer(TQObject *tqparent = 0, const char *name = 0,
             const int playerOption = 0, const float audioStretchFactor = 1.0,
-            const TQString &sinkName = TQString::null);
+            const TQString &sinkName = TQString());
 
         /**
          * Destructor.

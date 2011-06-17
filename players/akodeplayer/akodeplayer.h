@@ -31,9 +31,10 @@ namespace aKode {
 class KDE_EXPORT aKodePlayer : public Player
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    aKodePlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
+    aKodePlayer(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     virtual ~aKodePlayer();
 
     // virtual void play(const FileHandle &file = FileHandle::null());

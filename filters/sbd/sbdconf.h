@@ -24,7 +24,7 @@
 #ifndef _SBDCONF_H_
 #define _SBDCONF_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqwidget.h>
 
 // KDE includes.
@@ -43,12 +43,13 @@ class EditReplacementWidget;
 class SbdConf : public KttsFilterConf
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
         * Constructor 
         */
-        SbdConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
+        SbdConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

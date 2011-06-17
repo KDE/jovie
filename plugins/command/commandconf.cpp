@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqlayout.h>
 #include <tqcheckbox.h>
 #include <tqfile.h>
@@ -41,18 +41,18 @@
 #include "commandconf.h"
 
 /** Constructor */
-CommandConf::CommandConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(parent, name)
+CommandConf::CommandConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(tqparent, name)
 {
     // kdDebug() << "CommandConf::CommandConf: Running" << endl;
     m_commandProc = 0;
     m_progressDlg = 0;
 
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "CommandConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new CommandConfWidget(this, "CommandConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
 
     // Build codec list and fill combobox.
     m_codecList = PlugInProc::buildCodecList();
@@ -121,21 +121,21 @@ TQString CommandConf::getTalkerCode()
     {
         // Must contain either text or file parameter, or StdIn checkbox must be checked,
         // otherwise, does nothing!
-        if ((url.contains("%t") > 0) || (url.contains("%f") > 0) || m_widget->stdInButton->isChecked())
+        if ((url.tqcontains("%t") > 0) || (url.tqcontains("%f") > 0) || m_widget->stdInButton->isChecked())
         {
             return TQString(
                 "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                 "<prosody volume=\"%4\" rate=\"%5\" />"
                 "<kttsd synthesizer=\"%6\" />")
-                .arg(m_languageCode)
-                .arg("fixed")
-                .arg("neutral")
-                .arg("medium")
-                .arg("medium")
-                .arg("Command");
+                .tqarg(m_languageCode)
+                .tqarg("fixed")
+                .tqarg("neutral")
+                .tqarg("medium")
+                .tqarg("medium")
+                .tqarg("Command");
         }
     }
-    return TQString::null;
+    return TQString();
 }
 
 void CommandConf::slotCommandTest_clicked()
@@ -203,7 +203,7 @@ void CommandConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     TQFile::remove(m_waveFile);
-    m_waveFile = TQString::null;
+    m_waveFile = TQString();
     if (m_progressDlg) m_progressDlg->close();
 }
 

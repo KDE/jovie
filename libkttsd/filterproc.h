@@ -25,7 +25,7 @@
 #ifndef _FILTERPROC_H_
 #define _FILTERPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqobject.h>
 #include <tqstringlist.h>
 
@@ -36,9 +36,10 @@
 class TalkerCode;
 class KConfig;
 
-class KDE_EXPORT KttsFilterProc : virtual public QObject
+class KDE_EXPORT KttsFilterProc : virtual public TQObject
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     enum FilterState {
@@ -51,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    KttsFilterProc( TQObject *parent, const char *name );
+    KttsFilterProc( TQObject *tqparent, const char *name );
 
     /**
      * Destructor.

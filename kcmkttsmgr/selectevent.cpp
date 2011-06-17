@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqcombobox.h>
 
 // KDE includes
@@ -36,8 +36,8 @@
 #include "utils.h"
 #include "selectevent.h"
 
-SelectEvent::SelectEvent(TQWidget* parent, const char* name, WFlags fl, const TQString& initEventSrc)
-    : SelectEventWidget(parent,name,fl)
+SelectEvent::SelectEvent(TQWidget* tqparent, const char* name, WFlags fl, const TQString& initEventSrc)
+    : SelectEventWidget(tqparent,name,fl)
 {
     // Load list of event sources (applications).
     TQStringList fullpaths =
@@ -61,13 +61,13 @@ SelectEvent::SelectEvent(TQWidget* parent, const char* name, WFlags fl, const TQ
         if ( !relativePath.isEmpty() )
         {
             KConfig* config = new KConfig(relativePath, true, false, "data");
-            config->setGroup( TQString::fromLatin1("!Global!") );
-            TQString icon = config->readEntry(TQString::fromLatin1("IconName"),
-                TQString::fromLatin1("misc"));
-            TQString description = config->readEntry( TQString::fromLatin1("Comment"),
+            config->setGroup( TQString::tqfromLatin1("!Global!") );
+            TQString icon = config->readEntry(TQString::tqfromLatin1("IconName"),
+                TQString::tqfromLatin1("misc"));
+            TQString description = config->readEntry( TQString::tqfromLatin1("Comment"),
                 i18n("No description available") );
             delete config;
-            int index = relativePath.find( '/' );
+            int index = relativePath.tqfind( '/' );
             TQString appname;
             if ( index >= 0 )
                 appname = relativePath.left( index );
@@ -89,7 +89,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     eventsListView->clear();
     TQListViewItem* item = 0;
     TQString eventSrc = m_eventSrcNames[index];
-    TQString configFilename = eventSrc + TQString::fromLatin1( "/eventsrc" );
+    TQString configFilename = eventSrc + TQString::tqfromLatin1( "/eventsrc" );
     KConfig* config = new KConfig( configFilename, true, false, "data" );
     TQStringList eventNames = config->groupList();
     uint eventNamesCount = eventNames.count();
@@ -99,8 +99,8 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
         if ( eventName != "!Global!" )
         {
             config->setGroup( eventName );
-            TQString eventDesc = config->readEntry( TQString::fromLatin1( "Comment" ),
-                config->readEntry( TQString::fromLatin1( "Name" )));
+            TQString eventDesc = config->readEntry( TQString::tqfromLatin1( "Comment" ),
+                config->readEntry( TQString::tqfromLatin1( "Name" )));
             if ( !item )
                 item = new KListViewItem( eventsListView, eventDesc, eventName );
             else
@@ -110,7 +110,7 @@ void SelectEvent::slotEventSrcComboBox_activated(int index)
     delete config;
     eventsListView->sort();
     item = eventsListView->lastChild();
-    TQString eventDesc = i18n("All other %1 events").arg(eventSrcComboBox->currentText());
+    TQString eventDesc = i18n("All other %1 events").tqarg(eventSrcComboBox->currentText());
     if ( !item )
         item = new KListViewItem( eventsListView, eventDesc, "default" );
     else
@@ -129,18 +129,18 @@ TQString SelectEvent::getEvent()
     if ( item )
         return item->text(1);
     else
-        return TQString::null;
+        return TQString();
 }
 
 // returns e.g. "kwin/eventsrc" from a given path
 // "/opt/kde3/share/apps/kwin/eventsrc"
 TQString SelectEvent::makeRelative( const TQString& fullPath )
 {
-    int slash = fullPath.findRev( '/' ) - 1;
-    slash = fullPath.findRev( '/', slash );
+    int slash = fullPath.tqfindRev( '/' ) - 1;
+    slash = fullPath.tqfindRev( '/', slash );
 
     if ( slash < 0 )
-        return TQString::null;
+        return TQString();
 
     return fullPath.mid( slash+1 );
 }

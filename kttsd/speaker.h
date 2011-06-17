@@ -23,7 +23,7 @@
 #ifndef _SPEAKER_H_
 #define _SPEAKER_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqobject.h>
 #include <tqvaluevector.h>
 #include <tqevent.h>
@@ -109,8 +109,9 @@ const int timerInterval = 500;
  * This class is in charge of getting the messages, warnings and text from
  * the queue and call the plug ins function to actually speak the texts.
  */
-class Speaker : public QObject{
+class Speaker : public TQObject{
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
@@ -118,7 +119,7 @@ class Speaker : public QObject{
          * Calls load plug ins
          */
         Speaker(SpeechData* speechData, TalkerMgr* talkerMgr,
-                TQObject *parent = 0, const char *name = 0);
+                TQObject *tqparent = 0, const char *name = 0);
 
         /**
          * Destructor
@@ -429,7 +430,7 @@ class Speaker : public QObject{
         bool isSsml(const TQString &text);
 
         /**
-        * Determines the initial state of an utterance.  If the utterance contains
+        * Determines the initial state of an utterance.  If the utterance tqcontains
         * SSML, the state is set to usWaitingTransform.  Otherwise, if the plugin
         * supports async synthesis, sets to usWaitingSynth, otherwise usWaitingSay.
         * If an utterance has already been transformed, usWaitingTransform is

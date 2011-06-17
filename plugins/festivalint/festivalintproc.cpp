@@ -24,7 +24,7 @@
 // C++ includes.
 #include <math.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqstringlist.h>
 #include <tqthread.h>
@@ -43,8 +43,8 @@
 #include "festivalintproc.moc"
 
 /** Constructor */
-FestivalIntProc::FestivalIntProc( TQObject* parent, const char* name, const TQStringList& ) : 
-    PlugInProc( parent, name ){
+FestivalIntProc::FestivalIntProc( TQObject* tqparent, const char* name, const TQStringList& ) : 
+    PlugInProc( tqparent, name ){
     // kdDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
     m_ready = true;
     m_writingStdin = false;
@@ -113,7 +113,7 @@ bool FestivalIntProc::init(KConfig *config, const TQString &configGroup)
 */
 void FestivalIntProc::sayText(const TQString &text)
 {
-    synth(m_festivalExePath, text, TQString::null, m_voiceCode, m_time, m_pitch, m_volume,
+    synth(m_festivalExePath, text, TQString(), m_voiceCode, m_time, m_pitch, m_volume,
         m_languageCode, m_codec);
 }
 
@@ -144,7 +144,7 @@ bool FestivalIntProc::queryVoices(const TQString &festivalExePath)
     // kdDebug() << "FestivalIntProc::queryVoices: Running" << endl;
     if (m_state != psIdle && m_waitingQueryVoices && m_waitingStop) return false;
     // Start Festival if not already running.
-    startEngine(festivalExePath, TQString::null, m_languageCode, m_codec);
+    startEngine(festivalExePath, TQString(), m_languageCode, m_codec);
     // Set state, waiting for voice codes list from Festival.
     m_waitingQueryVoices = true;
     // Voice rab_diphone is needed in order to support SSML.
@@ -196,7 +196,7 @@ void FestivalIntProc::startEngine(const TQString &festivalExePath, const TQStrin
     if (!m_festProc->isRunning())
     {
         // kdDebug() << "FestivalIntProc::startEngine: Starting Festival process" << endl;
-        m_runningVoiceCode = TQString::null;
+        m_runningVoiceCode = TQString();
         m_runningTime = 100;
         m_runningPitch = 100;
         m_ready = false;
@@ -257,7 +257,7 @@ void FestivalIntProc::synth(
     // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
         TQString timeMsg;
-        if (voiceCode.contains("_hts") > 0)
+        if (voiceCode.tqcontains("_hts") > 0)
         {
             // Map 50% to 200% onto 0 to 1000.
             // slider = alpha * (log(percent)-log(50))
@@ -268,11 +268,11 @@ void FestivalIntProc::synth(
             slider = slider - 500;
             // Map -500 to 500 onto 0.15 to -0.15.
             float stretchValue = -float(slider) * 0.15 / 500.0;
-            timeMsg = TQString("(set! hts_duration_stretch %1)").arg(
+            timeMsg = TQString("(set! hts_duration_stretch %1)").tqarg(
                     stretchValue, 0, 'f', 3);
         }
         else
-            timeMsg = TQString("(Parameter.set 'Duration_Stretch %1)").arg(
+            timeMsg = TQString("(Parameter.set 'Duration_Stretch %1)").tqarg(
                 1.0/(float(time)/100.0), 0, 'f', 2);
         sendToFestival(timeMsg);
         m_runningTime = time;
@@ -292,7 +292,7 @@ void FestivalIntProc::synth(
         }
         TQString pitchMsg = TQString(
             "(set! int_lr_params '((target_f0_mean %1) (target_f0_std 14)"
-            "(model_f0_mean 170) (model_f0_std 34)))").arg(pitchValue, 0, 10);
+            "(model_f0_mean 170) (model_f0_std 34)))").tqarg(pitchValue, 0, 10);
         sendToFestival(pitchMsg);
         m_runningPitch = pitch;
     }
@@ -304,14 +304,14 @@ void FestivalIntProc::synth(
     int len = saidText.length();
     while (len > c_tooLong)
     {
-        len = saidText.findRev(", ", len - (c_tooLong * 2 / 3), true);
+        len = saidText.tqfindRev(", ", len - (c_tooLong * 2 / 3), true);
         if (len != -1)
         {
             TQString c = saidText.mid(len+2, 1);
             if (c != c.upper())
             {
-                saidText.replace(len, 2, ". ");
-                saidText.replace(len+2, 1, c.upper());
+                saidText.tqreplace(len, 2, ". ");
+                saidText.tqreplace(len+2, 1, c.upper());
                 kdDebug() << "FestivalIntProc::synth: Splitting long sentence at " << len << endl;
                 // kdDebug() << saidText << endl;
             }
@@ -319,17 +319,17 @@ void FestivalIntProc::synth(
     }
 
     // Encode quotation characters.
-    saidText.replace("\\\"", "#!#!");
-    saidText.replace("\"", "\\\"");
-    saidText.replace("#!#!", "\\\"");
+    saidText.tqreplace("\\\"", "#!#!");
+    saidText.tqreplace("\"", "\\\"");
+    saidText.tqreplace("#!#!", "\\\"");
     // Remove certain comment characters.
-    saidText.replace("--", "");
+    saidText.tqreplace("--", "");
 
     // Ok, let's rock.
     if (synthFilename.isNull())
     {
         m_state = psSaying;
-        m_synthFilename = TQString::null;
+        m_synthFilename = TQString();
         // kdDebug() << "FestivalIntProc::synth: Saying text: '" << saidText << "' using Festival plug in with voice "
         //    << voiceCode << endl;
         saidText = "(SayText \"" + saidText + "\")";
@@ -500,9 +500,9 @@ void FestivalIntProc::slotProcessExited(KProcess*)
 
 void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     // kdDebug() << "FestivalIntProc::slotReceivedStdout: Received from Festival: " << buf << endl;
-    bool promptSeen = (buf.contains("festival>") > 0);
+    bool promptSeen = (buf.tqcontains("festival>") > 0);
     bool emitQueryVoicesFinished = false;
     TQStringList voiceCodesList;
     if (m_waitingQueryVoices && m_outputQueue.isEmpty())
@@ -515,7 +515,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 		} else {
 			if (buf.left(1) == "(")
 			{
-				int rightParen = buf.find(')');
+				int rightParen = buf.tqfind(')');
 				if (rightParen > 0)
 				{
 					m_waitingQueryVoices = false;
@@ -562,14 +562,14 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     if (emitQueryVoicesFinished)
     {
         // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting queryVoicesFinished" << endl;
-        m_supportsSSML = (voiceCodesList.contains("rab_diphone")) ? ssYes : ssNo;
+        m_supportsSSML = (voiceCodesList.tqcontains("rab_diphone")) ? ssYes : ssNo;
         emit queryVoicesFinished(voiceCodesList);
     }
 }
 
 void FestivalIntProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "FestivalIntProc::slotReceivedStderr: Received error from Festival: " << buf << endl;
 }
 
@@ -620,7 +620,7 @@ void FestivalIntProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = TQString::null;
+        m_synthFilename = TQString();
     }
 }
 

@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqfile.h>
 #include <tqregexp.h>
 
@@ -44,8 +44,8 @@
 /**
  * Constructor.
  */
-XmlTransformerProc::XmlTransformerProc( TQObject *parent, const char *name, const TQStringList& ) :
-    KttsFilterProc(parent, name)
+XmlTransformerProc::XmlTransformerProc( TQObject *tqparent, const char *name, const TQStringList& ) :
+    KttsFilterProc(tqparent, name)
 {
     m_xsltProc = 0;
 }
@@ -198,7 +198,7 @@ bool XmlTransformerProc::init(KConfig* config, const TQString& configGroup)
         found = false;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( appIdStr.contains(m_appIdList[ndx]) )
+            if ( appIdStr.tqcontains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;
@@ -227,7 +227,7 @@ bool XmlTransformerProc::init(KConfig* config, const TQString& configGroup)
     // This will change & inside a CDATA section, which is not good, and also within comments and
     // processing instructions, which is OK because we don't speak those anyway.
     TQString text = inputText;
-    text.replace(TQRegExp("&(?!amp;)"),"&amp;");
+    text.tqreplace(TQRegExp("&(?!amp;)"),"&amp;");
     *wstream << text;
     inFile.close();
 #if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)
@@ -282,7 +282,7 @@ void XmlTransformerProc::processOutput()
 
     if (exitStatus != 0)
     {
-        kdDebug() << "XmlTransformerProc::processOutput: xsltproc abnormal exit.  Status = " << exitStatus << endl;
+        kdDebug() << "XmlTransformerProc::processOutput: xsltproc abnormal exit.  tqStatus = " << exitStatus << endl;
         m_state = fsFinished;
         TQFile::remove(m_outFilename);
         emit filteringFinished();
@@ -346,7 +346,7 @@ void XmlTransformerProc::processOutput()
 /*virtual*/ void XmlTransformerProc::ackFinished()
 {
     m_state = fsIdle;
-    m_text = TQString::null;
+    m_text = TQString();
 }
 
 /**
@@ -373,13 +373,13 @@ void XmlTransformerProc::slotProcessExited(KProcess*)
 
 void XmlTransformerProc::slotReceivedStdout(KProcess*, char* /*buffer*/, int /*buflen*/)
 {
-    // TQString buf = TQString::fromLatin1(buffer, buflen);
+    // TQString buf = TQString::tqfromLatin1(buffer, buflen);
     // kdDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf << endl;
 }
 
 void XmlTransformerProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf << endl;
 }
 

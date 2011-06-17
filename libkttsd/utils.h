@@ -43,9 +43,9 @@ public:
     /** 
      * Check if an XML document has a certain DOCTYPE.
      * @param xmldoc             The document to check for the doctype.
-     * @param name                The doctype name to check for. Pass TQString::null to not check the name.
-     * @param publicId           The public ID to check for. Pass TQString::null to not check the ID.
-     * @param systemId          The system ID to check for. Pass TQString::null to not check the ID.
+     * @param name                The doctype name to check for. Pass TQString() to not check the name.
+     * @param publicId           The public ID to check for. Pass TQString() to not check the ID.
+     * @param systemId          The system ID to check for. Pass TQString() to not check the ID.
      * @returns                         true if the parameters match the doctype, false otherwise.
      */
     static bool hasDoctype(const TQString &xmldoc, const TQString &name/*, const TQString &publicId, const TQString &systemId*/);

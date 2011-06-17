@@ -45,7 +45,7 @@
 #ifndef _SBDPROC_H_
 #define _SBDPROC_H_
 
-// Qt includes.
+// TQt includes.
 #include <tqobject.h>
 #include <tqstringlist.h>
 #include <tqthread.h>
@@ -60,15 +60,16 @@ class KConfig;
 class TQDomElement;
 class TQDomNode;
 
-class SbdThread: public TQObject, public QThread
+class SbdThread: public TQObject, public TQThread
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
          * Constructor.
          */
-        SbdThread( TQObject *parent = 0, const char *name = 0);
+        SbdThread( TQObject *tqparent = 0, const char *name = 0);
 
         /**
          * Destructor.
@@ -203,7 +204,7 @@ class SbdThread: public TQObject, public QThread
         TQString startSentence();
         // Ends a sentence and appends a Tab.
         TQString endSentence();
-        // Parses a node of the SSML tree and recursively parses its children.
+        // Parses a node of the SSML tree and recursively parses its tqchildren.
         // Returns the filtered text with each sentence a complete ssml tree.
         TQString parseSsmlNode( TQDomNode& n, const TQString& re );
 
@@ -240,12 +241,13 @@ class SbdThread: public TQObject, public QThread
 class SbdProc : virtual public KttsFilterProc
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         /**
          * Constructor.
          */
-        SbdProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
+        SbdProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
          * Destructor.

@@ -37,12 +37,13 @@ class KTextEdit;
 class KttsJobMgrFactory : public KLibFactory
 {
     Q_OBJECT
+  TQ_OBJECT
 public:
     KttsJobMgrFactory() {};
     virtual ~KttsJobMgrFactory();
 
-    virtual TQObject* createObject(TQObject* parent = 0, const char* name = 0,
-                            const char* classname = "TQObject",
+    virtual TQObject* createObject(TQObject* tqparent = 0, const char* name = 0,
+                            const char* classname = TQOBJECT_OBJECT_NAME_STRING,
                             const TQStringList &args = TQStringList());
 
     static KInstance *instance();
@@ -58,8 +59,9 @@ class KttsJobMgrPart:
     virtual public KSpeechSink
 {
     Q_OBJECT
+  TQ_OBJECT
 public:
-    KttsJobMgrPart(TQWidget *parent, const char *name);
+    KttsJobMgrPart(TQWidget *tqparent, const char *name);
     virtual ~KttsJobMgrPart();
 
 protected:
@@ -288,9 +290,10 @@ private:
 class KttsJobMgrBrowserExtension : public KParts::BrowserExtension
 {
     Q_OBJECT
+  TQ_OBJECT
     friend class KttsJobMgrPart;
 public:
-    KttsJobMgrBrowserExtension(KttsJobMgrPart *parent);
+    KttsJobMgrBrowserExtension(KttsJobMgrPart *tqparent);
     virtual ~KttsJobMgrBrowserExtension();
 };
 

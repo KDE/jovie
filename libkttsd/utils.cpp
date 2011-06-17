@@ -41,7 +41,7 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
-        int xmlStatementEnd = doc.find("?>");
+        int xmlStatementEnd = doc.tqfind("?>");
         if(xmlStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -51,7 +51,7 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
     }
     // Take off leading comments, if they exist.
     while(doc.startsWith("<!--") || doc.startsWith(" <!--")) {
-        int commentStatementEnd = doc.find("-->");
+        int commentStatementEnd = doc.tqfind("-->");
         if(commentStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -61,7 +61,7 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
     }
     // Take off the doctype statement if it exists.
     while(doc.startsWith("<!DOCTYPE") || doc.startsWith(" <!DOCTYPE")) {
-        int doctypeStatementEnd = doc.find(">");
+        int doctypeStatementEnd = doc.tqfind(">");
         if(doctypeStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -76,9 +76,9 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
 /** 
  * Check if an XML document has a certain DOCTYPE.
  * @param xmldoc             The document to check for the doctype.
- * @param name               The doctype name to check for. Pass TQString::null to not check the name.
- * @param publicId           The public ID to check for. Pass TQString::null to not check the ID.
- * @param systemId           The system ID to check for. Pass TQString::null to not check the ID.
+ * @param name               The doctype name to check for. Pass TQString() to not check the name.
+ * @param publicId           The public ID to check for. Pass TQString() to not check the ID.
+ * @param systemId           The system ID to check for. Pass TQString() to not check the ID.
  * @returns                  True if the parameters match the doctype, false otherwise.
 */
 bool KttsUtils::hasDoctype(const TQString &xmldoc, const TQString &name/*, const TQString &publicId, const TQString &systemId*/) {
@@ -88,7 +88,7 @@ bool KttsUtils::hasDoctype(const TQString &xmldoc, const TQString &name/*, const
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
-        int xmlStatementEnd = doc.find("?>");
+        int xmlStatementEnd = doc.tqfind("?>");
         if(xmlStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
@@ -99,7 +99,7 @@ bool KttsUtils::hasDoctype(const TQString &xmldoc, const TQString &name/*, const
     }
     // Take off leading comments, if they exist.
     while(doc.startsWith("<!--")) {
-        int commentStatementEnd = doc.find("-->");
+        int commentStatementEnd = doc.tqfind("-->");
         if(commentStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;

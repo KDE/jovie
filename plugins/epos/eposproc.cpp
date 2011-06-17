@@ -25,7 +25,7 @@
 // C++ includes.
 #include <math.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqstringlist.h>
 #include <tqtextcodec.h>
@@ -43,8 +43,8 @@
 #include "eposproc.moc"
 
 /** Constructor */
-EposProc::EposProc( TQObject* parent, const char* name, const TQStringList& ) : 
-    PlugInProc( parent, name ){
+EposProc::EposProc( TQObject* tqparent, const char* name, const TQStringList& ) : 
+    PlugInProc( tqparent, name ){
     kdDebug() << "EposProc::EposProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;
@@ -72,11 +72,11 @@ bool EposProc::init(KConfig* config, const TQString& configGroup)
     config->setGroup(configGroup);
     m_eposServerExePath = config->readEntry("EposServerExePath", "epos");
     m_eposClientExePath = config->readEntry("EposClientExePath", "say");
-    m_eposLanguage = config->readEntry("Language", TQString::null);
+    m_eposLanguage = config->readEntry("Language", TQString());
     m_time = config->readNumEntry("time", 100);
     m_pitch = config->readNumEntry("pitch", 100);
-    m_eposServerOptions = config->readEntry("EposServerOptions", TQString::null);
-    m_eposClientOptions = config->readEntry("EposClientOptions", TQString::null);
+    m_eposServerOptions = config->readEntry("EposServerOptions", TQString());
+    m_eposClientOptions = config->readEntry("EposClientOptions", TQString());
     kdDebug() << "EposProc::init: path to epos server: " << m_eposServerExePath << endl;
     kdDebug() << "EposProc::init: path to epos client: " << m_eposClientExePath << endl;
 
@@ -109,7 +109,7 @@ bool EposProc::init(KConfig* config, const TQString& configGroup)
 */
 void EposProc::sayText(const TQString &text)
 {
-    synth(text, TQString::null, m_eposServerExePath, m_eposClientExePath,
+    synth(text, TQString(), m_eposServerExePath, m_eposClientExePath,
         m_eposServerOptions, m_eposClientOptions,
         m_codec, m_eposLanguage, m_time, m_pitch);
 }
@@ -210,7 +210,7 @@ void EposProc::synth(
     *m_eposProc << eposClientExePath;
     // Language.
     if (!eposLanguage.isEmpty())
-        *m_eposProc << TQString("--language=%1").arg(eposLanguage);
+        *m_eposProc << TQString("--language=%1").tqarg(eposLanguage);
     // Rate (speed).
     // Map 50% to 200% onto 0 to 1000.
     // slider = alpha * (log(percent)-log(50))
@@ -221,10 +221,10 @@ void EposProc::synth(
     slider = slider - 500;
     // Map -500 to 500 onto 45 to -45 then shift to 130 to 40 (85 midpoint).
     float stretchValue = (-float(slider) * 45.0 / 500.0) + 85.0;
-    TQString timeMsg = TQString("--init_t=%1").arg(stretchValue, 0, 'f', 3);
+    TQString timeMsg = TQString("--init_t=%1").tqarg(stretchValue, 0, 'f', 3);
     *m_eposProc << timeMsg;
     // Pitch.  Map 50% to 200% onto 50 to 200.  easy.
-    TQString pitchMsg = TQString("--init_f=%1").arg(pitch);
+    TQString pitchMsg = TQString("--init_f=%1").tqarg(pitch);
     *m_eposProc << pitchMsg;
     // Output file.
     if (!suggestedFilename.isEmpty()) 
@@ -326,13 +326,13 @@ void EposProc::slotProcessExited(KProcess*)
 
 void EposProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "EposProc::slotReceivedStdout: Received output from Epos: " << buf << endl;
 }
 
 void EposProc::slotReceivedStderr(KProcess*, char* buffer, int buflen)
 {
-    TQString buf = TQString::fromLatin1(buffer, buflen);
+    TQString buf = TQString::tqfromLatin1(buffer, buflen);
     kdDebug() << "EposProc::slotReceivedStderr: Received error from Epos: " << buf << endl;
 }
 
@@ -365,7 +365,7 @@ void EposProc::ackFinished()
     if (m_state == psFinished)
     {
         m_state = psIdle;
-        m_synthFilename = TQString::null;
+        m_synthFilename = TQString();
     }
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SbdConfWidget</class>
 <author>Gary Cramblitt &lt;garycramblitt@comcast.net&gt;</author>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>SbdConfWidget</cstring>
     </property>
@@ -25,7 +25,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="TQLabel" row="0" column="0">
             <property name="name">
                 <cstring>textLabel1</cstring>
             </property>
@@ -33,22 +33,22 @@
                 <string>&lt;b&gt;WARNING: This filter is a key component of the KTTS system. Please read the KTTS Handbook before modifying these settings.&lt;/b&gt;</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
+        <widget class="TQLayoutWidget" row="1" column="0">
             <property name="name">
-                <cstring>layout3</cstring>
+                <cstring>tqlayout3</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="TQLabel">
                     <property name="name">
                         <cstring>nameLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Name:</string>
                     </property>
-                    <property name="alignment">
+                    <property name="tqalignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
@@ -72,22 +72,22 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
+        <widget class="TQLayoutWidget" row="2" column="0">
             <property name="name">
-                <cstring>layout17</cstring>
+                <cstring>tqlayout17</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="TQLabel">
                     <property name="name">
                         <cstring>reLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Sentence boundary regular expression:</string>
                     </property>
-                    <property name="alignment">
+                    <property name="tqalignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
@@ -116,22 +116,22 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="3" column="0">
+        <widget class="TQLayoutWidget" row="3" column="0">
             <property name="name">
-                <cstring>layout17_2</cstring>
+                <cstring>tqlayout17_2</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="TQLabel">
                     <property name="name">
                         <cstring>sbLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Replacement sentence boundary:</string>
                     </property>
-                    <property name="alignment">
+                    <property name="tqalignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
@@ -152,7 +152,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox" row="4" column="0">
+        <widget class="TQGroupBox" row="4" column="0">
             <property name="name">
                 <cstring>applyGroupBox</cstring>
             </property>
@@ -166,22 +166,22 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0">
+                <widget class="TQLayoutWidget" row="0" column="0">
                     <property name="name">
-                        <cstring>layout11</cstring>
+                        <cstring>tqlayout11</cstring>
                     </property>
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>languageLabel</cstring>
                             </property>
                             <property name="text">
                                 <string>&amp;Language is:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
@@ -192,14 +192,14 @@
                                 <comment>What's this text</comment>
                             </property>
                         </widget>
-                        <widget class="QLabel">
+                        <widget class="TQLabel">
                             <property name="name">
                                 <cstring>appIdLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Application &amp;ID contains:</string>
+                                <string>Application &amp;ID tqcontains:</string>
                             </property>
-                            <property name="alignment">
+                            <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
                             </property>
                             <property name="buddy" stdset="0">
@@ -211,17 +211,17 @@
                         </widget>
                     </vbox>
                 </widget>
-                <widget class="QLayoutWidget" row="0" column="1">
+                <widget class="TQLayoutWidget" row="0" column="1">
                     <property name="name">
-                        <cstring>layout13</cstring>
+                        <cstring>tqlayout13</cstring>
                     </property>
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <widget class="TQLayoutWidget">
                             <property name="name">
-                                <cstring>layout12</cstring>
+                                <cstring>tqlayout12</cstring>
                             </property>
                             <hbox>
                                 <property name="name">
@@ -263,9 +263,9 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QLayoutWidget" row="5" column="0">
+        <widget class="TQLayoutWidget" row="5" column="0">
             <property name="name">
-                <cstring>layout6</cstring>
+                <cstring>tqlayout6</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -347,7 +347,7 @@
     <tabstop>languageBrowseButton</tabstop>
     <tabstop>appIdLineEdit</tabstop>
 </tabstops>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

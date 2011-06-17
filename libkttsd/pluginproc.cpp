@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// Qt includes. 
+// TQt includes. 
 #include <tqstring.h>
 #include <tqtextcodec.h>
 
@@ -31,7 +31,7 @@
 /**
 * Constructor
 */
-PlugInProc::PlugInProc( TQObject *parent, const char *name) : TQObject(parent, name){
+PlugInProc::PlugInProc( TQObject *tqparent, const char *name) : TQObject(tqparent, name){
     // kdDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 
@@ -79,7 +79,7 @@ void PlugInProc::synthText(const TQString& /*text*/, const TQString& /*suggested
 *
 * The plugin must not re-use the filename.
 */
-TQString PlugInProc::getFilename() { return TQString::null; }
+TQString PlugInProc::getFilename() { return TQString(); }
 
 /**
 * Stop current operation (saying or synthesizing text).

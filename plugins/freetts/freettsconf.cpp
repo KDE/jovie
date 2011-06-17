@@ -15,7 +15,7 @@
  *																					 *
  ***************************************************************************/
 
-// Qt includes. 
+// TQt includes. 
 #include <tqlayout.h>
 #include <tqlabel.h>
 #include <tqstring.h>
@@ -40,18 +40,18 @@
 #include "freettsconfigwidget.h"
 
 /** Constructor */
-FreeTTSConf::FreeTTSConf( TQWidget* parent, const char* name, const TQStringList&/*args*/) : 
-	PlugInConf( parent, name ) {
+FreeTTSConf::FreeTTSConf( TQWidget* tqparent, const char* name, const TQStringList&/*args*/) : 
+	PlugInConf( tqparent, name ) {
 	
 	// kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
 	m_freettsProc = 0;
         m_progressDlg = 0;
 	
-	TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+	TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
 								KDialog::spacingHint(), "FreeTTSConfigWidgetLayout");
-	layout->setAlignment (Qt::AlignTop);
+	tqlayout->tqsetAlignment (TQt::AlignTop);
 	m_widget = new FreeTTSConfWidget(this, "FreeTTSConfigWidget");
-	layout->addWidget(m_widget);
+	tqlayout->addWidget(m_widget);
 		
 	defaults();
 	
@@ -72,11 +72,11 @@ void FreeTTSConf::load(KConfig *config, const TQString &configGroup) {
 	// kdDebug() << "FreeTTSConf::load: Running" << endl;
 
 	config->setGroup(configGroup);
-        TQString freeTTSJar = config->readEntry("FreeTTSJarPath", TQString::null);
+        TQString freeTTSJar = config->readEntry("FreeTTSJarPath", TQString());
         if (freeTTSJar.isEmpty())
         {
             config->setGroup("FreeTTS");
-            freeTTSJar = config->readEntry("FreeTTSJarPath", TQString::null);
+            freeTTSJar = config->readEntry("FreeTTSJarPath", TQString());
         }
 	if (freeTTSJar.isEmpty())
 	    freeTTSJar = getLocation("freetts.jar");
@@ -119,15 +119,15 @@ TQString FreeTTSConf::getTalkerCode()
                     "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"
                     "<prosody volume=\"%4\" rate=\"%5\" />"
                     "<kttsd synthesizer=\"%6\" />")
-                    .arg(m_languageCode)
-                    .arg("fixed")
-                    .arg("neutral")
-                    .arg("medium")
-                    .arg("medium")
-                    .arg("FreeTTS");
+                    .tqarg(m_languageCode)
+                    .tqarg("fixed")
+                    .tqarg("neutral")
+                    .tqarg("medium")
+                    .tqarg("medium")
+                    .tqarg("FreeTTS");
         }
     }
-    return TQString::null;
+    return TQString();
 }
 
 // TQString FreeTTSConf::getLocation(const TQString &name) {
@@ -216,7 +216,7 @@ void FreeTTSConf::slotSynthFinished()
     // Player object deletes the wave file when done.
     if (m_player) m_player->play(m_waveFile);
     TQFile::remove(m_waveFile);
-    m_waveFile = TQString::null;
+    m_waveFile = TQString();
     if (m_progressDlg) m_progressDlg->close();
 }
 

@@ -28,9 +28,10 @@
 class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginViewInterface
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
-        KateKttsdPlugin( TQObject *parent = 0,
+        KateKttsdPlugin( TQObject *tqparent = 0,
                          const char* name = 0,
                          const TQStringList &args = TQStringList() );
         virtual ~KateKttsdPlugin();
@@ -45,6 +46,7 @@ class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginVi
 class KateKttsdPluginView : public TQObject, public KXMLGUIClient
 {
     Q_OBJECT
+  TQ_OBJECT
 
     public:
         KateKttsdPluginView( KTextEditor::View *view, const char *name=0 );

@@ -21,7 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ******************************************************************************/
 
-// Qt includes.
+// TQt includes.
 #include <tqstring.h>
 #include <tqhbox.h>
 #include <tqlayout.h>
@@ -49,17 +49,17 @@
 /**
 * Constructor 
 */
-TalkerChooserConf::TalkerChooserConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(parent, name)
+TalkerChooserConf::TalkerChooserConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(tqparent, name)
 {
     // kdDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
 
     // Create configuration widget.
-    TQVBoxLayout *layout = new TQVBoxLayout(this, KDialog::marginHint(),
+    TQVBoxLayout *tqlayout = new TQVBoxLayout(this, KDialog::marginHint(),
         KDialog::spacingHint(), "TalkerChooserConfigWidgetLayout");
-    layout->setAlignment (Qt::AlignTop);
+    tqlayout->tqsetAlignment (TQt::AlignTop);
     m_widget = new TalkerChooserConfWidget(this, "TalkerChooserConfigWidget");
-    layout->addWidget(m_widget);
+    tqlayout->addWidget(m_widget);
 
     // Determine if kdeutils Regular Expression Editor is installed.
     m_reEditorInstalled = !KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty();
@@ -147,7 +147,7 @@ void TalkerChooserConf::save(KConfig* config, const TQString& configGroup){
     config->setGroup( configGroup );
     config->writeEntry( "UserFilterName", m_widget->nameLineEdit->text() );
     config->writeEntry( "MatchRegExp", m_widget->reLineEdit->text() );
-    config->writeEntry( "AppIDs", m_widget->appIdLineEdit->text().replace(" ", "") );
+    config->writeEntry( "AppIDs", m_widget->appIdLineEdit->text().tqreplace(" ", "") );
     config->writeEntry( "TalkerCode", m_talkerCode.getTalkerCode());
 }
 
@@ -167,7 +167,7 @@ void TalkerChooserConf::defaults(){
     // Default App ID is blank.
     m_widget->appIdLineEdit->setText( "" );
     // Default to using default Talker.
-    m_talkerCode = TalkerCode( TQString::null, false );
+    m_talkerCode = TalkerCode( TQString(), false );
     m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
 }
 
@@ -188,11 +188,11 @@ bool TalkerChooserConf::supportsMultiInstance() { return true; }
  */
 TQString TalkerChooserConf::userPlugInName()
 {
-    if (m_widget->talkerLineEdit->text().isEmpty()) return TQString::null;
+    if (m_widget->talkerLineEdit->text().isEmpty()) return TQString();
     if (m_widget->appIdLineEdit->text().isEmpty() &&
-        m_widget->reLineEdit->text().isEmpty()) return TQString::null;
+        m_widget->reLineEdit->text().isEmpty()) return TQString();
     TQString instName = m_widget->nameLineEdit->text();
-    if (instName.isEmpty()) return TQString::null;
+    if (instName.isEmpty()) return TQString();
     return instName;
 }
 
@@ -260,10 +260,10 @@ void TalkerChooserConf::slotSaveButton_clicked()
 
 void TalkerChooserConf::slotClearButton_clicked()
 {
-    m_widget->nameLineEdit->setText( TQString::null );
-    m_widget->reLineEdit->setText( TQString::null );
-    m_widget->appIdLineEdit->setText( TQString::null );
-    m_talkerCode = TalkerCode( TQString::null, false );
+    m_widget->nameLineEdit->setText( TQString() );
+    m_widget->reLineEdit->setText( TQString() );
+    m_widget->appIdLineEdit->setText( TQString() );
+    m_talkerCode = TalkerCode( TQString(), false );
     m_widget->talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AddTalkerWidget</class>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>AddTalkerWidget</cstring>
     </property>
@@ -19,7 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup" row="0" column="0">
+        <widget class="TQButtonGroup" row="0" column="0">
             <property name="name">
                 <cstring>buttonGroup2</cstring>
             </property>
@@ -80,21 +80,21 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>351</width>
                             <height>21</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLabel" row="2" column="0">
+                <widget class="TQLabel" row="2" column="0">
                     <property name="name">
                         <cstring>synthesizerLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Synthesizer:</string>
                     </property>
-                    <property name="alignment">
+                    <property name="tqalignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
@@ -115,7 +115,7 @@
                     <property name="sizeType">
                         <enum>Fixed</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>25</width>
                             <height>20</height>
@@ -132,7 +132,7 @@
                     <property name="sizeType">
                         <enum>Fixed</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>30</width>
                             <height>20</height>
@@ -149,7 +149,7 @@
                     <property name="sizeType">
                         <enum>Fixed</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>30</width>
                             <height>20</height>
@@ -166,14 +166,14 @@
                     <property name="sizeType">
                         <enum>Fixed</enum>
                     </property>
-                    <property name="sizeHint">
+                    <property name="tqsizeHint">
                         <size>
                             <width>25</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLabel" row="0" column="2" rowspan="1" colspan="3">
+                <widget class="TQLabel" row="0" column="2" rowspan="1" colspan="3">
                     <property name="name">
                         <cstring>showAllLabel</cstring>
                     </property>
@@ -185,21 +185,21 @@
                     <property name="text">
                         <string>Show All</string>
                     </property>
-                    <property name="alignment">
+                    <property name="tqalignment">
                         <set>AlignVCenter|AlignLeft</set>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>The radio buttons below determine which box shows all possibilities.  The box to the left of the checked button shows all possibilities.  The box to the left of the unchecked box only shows those possibilities that match the other box.</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="TQLabel" row="1" column="0">
                     <property name="name">
                         <cstring>languageLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Language:</string>
                     </property>
-                    <property name="alignment">
+                    <property name="tqalignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
@@ -210,7 +210,7 @@
                         <comment>What's this text</comment>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="1" column="3">
+                <widget class="TQRadioButton" row="1" column="3">
                     <property name="name">
                         <cstring>languageRadioButton</cstring>
                     </property>
@@ -227,7 +227,7 @@
                         <string>Check to list all the possible languages in the Language box at the left.  When a language has been chosen, the Synthesizer box will show only those synthesizers that can speak in the chosen language.</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="2" column="3">
+                <widget class="TQRadioButton" row="2" column="3">
                     <property name="name">
                         <cstring>synthesizerRadioButton</cstring>
                     </property>
@@ -252,7 +252,7 @@
     <tabstop>synthesizerSelection</tabstop>
     <tabstop>languageRadioButton</tabstop>
 </tabstops>
-<layoutdefaults spacing="6" margin="11"/>
+<tqlayoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

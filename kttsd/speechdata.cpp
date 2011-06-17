@@ -25,7 +25,7 @@
 // C++ includes.
 #include <stdlib.h>
 
-// Qt includes.
+// TQt includes.
 #include <tqregexp.h>
 #include <tqpair.h>
 #include <tqvaluelist.h>
@@ -156,8 +156,8 @@ void SpeechData::loadNotifyEventsFromFile( const TQString& filename, bool clear)
     {
         notifyDefaultPresent = NotifyPresent::Passive;
         notifyDefaultOptions.action = NotifyAction::SpeakMsg;
-        notifyDefaultOptions.talker = TQString::null;
-        notifyDefaultOptions.customMsg = TQString::null;
+        notifyDefaultOptions.talker = TQString();
+        notifyDefaultOptions.customMsg = TQString();
         notifyAppMap.clear();
     }
 
@@ -195,7 +195,7 @@ void SpeechData::loadNotifyEventsFromFile( const TQString& filename, bool clear)
             notifyEventMap[ event ] = notifyOptions;
             notifyAppMap[ eventSrc ] = notifyEventMap;
         } else {
-            notifyOptions.eventName = TQString::null;
+            notifyOptions.eventName = TQString();
             notifyDefaultPresent = NotifyPresent::present( event );
             notifyDefaultOptions = notifyOptions;
         }
@@ -423,24 +423,24 @@ TQStringList SpeechData::parseText(const TQString &text, const TQCString &appId 
     }
     // See if app has specified a custom sentence delimiter and use it, otherwise use default.
     TQRegExp sentenceDelimiter;
-    if (sentenceDelimiters.find(appId) != sentenceDelimiters.end())
+    if (sentenceDelimiters.tqfind(appId) != sentenceDelimiters.end())
         sentenceDelimiter = TQRegExp(sentenceDelimiters[appId]);
     else
         sentenceDelimiter = TQRegExp("([\\.\\?\\!\\:\\;]\\s)|(\\n *\\n)");
     TQString temp = text;
     // Replace spaces, tabs, and formfeeds with a single space.
-    temp.replace(TQRegExp("[ \\t\\f]+"), " ");
+    temp.tqreplace(TQRegExp("[ \\t\\f]+"), " ");
     // Replace sentence delimiters with tab.
-    temp.replace(sentenceDelimiter, "\\1\t");
+    temp.tqreplace(sentenceDelimiter, "\\1\t");
     // Replace remaining newlines with spaces.
-    temp.replace("\n"," ");
-    temp.replace("\r"," ");
+    temp.tqreplace("\n"," ");
+    temp.tqreplace("\r"," ");
     // Remove leading spaces.
-    temp.replace(TQRegExp("\\t +"), "\t");
+    temp.tqreplace(TQRegExp("\\t +"), "\t");
     // Remove trailing spaces.
-    temp.replace(TQRegExp(" +\\t"), "\t");
+    temp.tqreplace(TQRegExp(" +\\t"), "\t");
     // Remove blank lines.
-    temp.replace(TQRegExp("\t\t+"),"\t");
+    temp.tqreplace(TQRegExp("\t\t+"),"\t");
     // Split into sentences.
     TQStringList tempList = TQStringList::split("\t", temp, false);
 
@@ -695,7 +695,7 @@ int SpeechData::getJobPartNumFromSeq(const mlJob& job, const int seq)
 void SpeechData::deleteExpiredJobs(const uint finishedJobNum)
 {
     // Save current pointer.
-    typedef QPair<TQCString, uint> removedJob;
+    typedef TQPair<TQCString, uint> removedJob;
     typedef TQValueList<removedJob> removedJobsList;
     removedJobsList removedJobs;
     // Walk through jobs and delete any other finished jobs.
@@ -1032,7 +1032,7 @@ void SpeechData::moveTextLater(const uint jobNum)
     if (job)
     {
         // Get index of the job.
-        uint index = textJobs.findRef(job);
+        uint index = textJobs.tqfindRef(job);
         // Move job down one position in the queue.
         // kdDebug() << "In SpeechData::moveTextLater, moving jobNum " << movedJobNum << endl;
         if (textJobs.insert(index + 2, job)) textJobs.take(index);
@@ -1149,7 +1149,7 @@ void SpeechData::startJobFiltering(mlJob* job, const TQString& text, bool noSBD)
     // Get TalkerCode structure of closest matching Talker.
     pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
     // Pass Sentence Boundary regular expression (if app overrode default);
-    if (sentenceDelimiters.find(job->appId) != sentenceDelimiters.end())
+    if (sentenceDelimiters.tqfind(job->appId) != sentenceDelimiters.end())
         pooledFilterMgr->filterMgr->setSbRegExp(sentenceDelimiters[job->appId]);
     pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, job->appId);
 }
