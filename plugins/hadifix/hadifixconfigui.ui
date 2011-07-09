@@ -673,7 +673,7 @@
     <function specifier="non virtual" returnType="TQString">getVoiceFilename()</function>
     <function specifier="non virtual" returnType="bool">isMaleVoice()</function>
 </functions>
-<tqlayoutdefaults spacing="6" margin="11"/>
+<layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kpushbutton.h</includehint>

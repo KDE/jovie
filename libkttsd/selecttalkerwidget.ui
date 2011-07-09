@@ -559,7 +559,7 @@
     <tabstop>useSpecificTalkerRadioButton</tabstop>
     <tabstop>talkersListView</tabstop>
 </tabstops>
-<tqlayoutdefaults spacing="6" margin="0"/>
+<layoutdefaults spacing="6" margin="0"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

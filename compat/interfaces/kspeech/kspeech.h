@@ -755,7 +755,7 @@ class KSpeech : virtual public DCOPObject {
           @endverbatim
         *
         * which replaces all sentence delimiters with a tab, but
-        * preserving the first capture text (first tqparenthesis).  In other
+        * preserving the first capture text (first parenthesis).  In other
         * words, the sentence punctuation is preserved.
         * The tab is later used to separate the text into sentences.
         *

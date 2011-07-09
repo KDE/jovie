@@ -2543,23 +2543,23 @@ TQListViewItem* KCMKttsMgr::addNotifyItem(
     TQString talkerName = talkerCode.getTranslatedDescription();
     if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
     {
-        TQListViewItem* tqparentItem = lv->tqfindItem(eventSrcName, nlvcEventSrcName);
-        if (!tqparentItem)
+        TQListViewItem* parentItem = lv->tqfindItem(eventSrcName, nlvcEventSrcName);
+        if (!parentItem)
         {
             item = lv->lastItem();
             if (!item)
-                tqparentItem = new KListViewItem(lv, eventSrcName, TQString(), TQString(),
+                parentItem = new KListViewItem(lv, eventSrcName, TQString(), TQString(),
                     eventSrc);
             else
-                tqparentItem = new KListViewItem(lv, item, eventSrcName, TQString(), TQString(),
+                parentItem = new KListViewItem(lv, item, eventSrcName, TQString(), TQString(),
                     eventSrc);
             if ( !iconName.isEmpty() )
-                tqparentItem->setPixmap( nlvcEventSrcName, SmallIcon( iconName ) );
+                parentItem->setPixmap( nlvcEventSrcName, SmallIcon( iconName ) );
         }
         // No duplicates.
         item = lv->tqfindItem( event, nlvcEvent );
-        if ( !item || item->tqparent() != tqparentItem )
-            item = new KListViewItem(tqparentItem, eventName, actionDisplayName, talkerName,
+        if ( !item || item->tqparent() != parentItem )
+            item = new KListViewItem(parentItem, eventName, actionDisplayName, talkerName,
                 eventSrc, event, actionName, talkerCode.getTalkerCode());
         if ( action == NotifyAction::DoNotSpeak )
             item->setPixmap( nlvcActionName, SmallIcon( "nospeak" ) );
@@ -2644,11 +2644,11 @@ void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 {
     TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (!item) return;
-    TQListViewItem* tqparentItem = item->tqparent();
+    TQListViewItem* parentItem = item->tqparent();
     delete item;
-    if (tqparentItem)
+    if (parentItem)
     {
-        if (tqparentItem->childCount() == 0) delete tqparentItem;
+        if (parentItem->childCount() == 0) delete parentItem;
     }
     slotNotifyListView_selectionChanged();
     configChanged();

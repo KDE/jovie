@@ -347,7 +347,7 @@
     <tabstop>languageBrowseButton</tabstop>
     <tabstop>appIdLineEdit</tabstop>
 </tabstops>
-<tqlayoutdefaults spacing="6" margin="11"/>
+<layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

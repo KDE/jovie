@@ -143,10 +143,10 @@ KttsToolTip::KttsToolTip ( TQWidget* tqparent ) : TQToolTip(tqparent)
 {
     Q_UNUSED(p);
 
-    if (!tqparentWidget()->inherits("KttsMgrTray"))
+    if (!parentWidget()->inherits("KttsMgrTray"))
         return;
 
-    KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(tqparentWidget());
+    KttsMgrTray* kttsMgrTray = dynamic_cast<KttsMgrTray*>(parentWidget());
 
     TQRect r(kttsMgrTray->tqgeometry());
     if ( !r.isValid() )
@@ -224,7 +224,7 @@ void KttsMgrTray::textFinished(const TQCString& /*appId*/, uint /*jobNum*/)
 void KttsMgrTray::exitWhenFinishedSpeaking()
 {
     // kdDebug() << "KttsMgrTray::exitWhenFinishedSpeaking: running" << endl;
-    if ( tqparentWidget()->isShown() ) return;
+    if ( parentWidget()->isShown() ) return;
     TQString jobNums = getTextJobNumbers();
     TQStringList jobNumsList = TQStringList::split(jobNums, ",");
     uint jobNumsListCount = jobNumsList.count();

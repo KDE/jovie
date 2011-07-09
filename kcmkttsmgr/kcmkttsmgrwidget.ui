@@ -1894,7 +1894,7 @@
 <Q_SLOTS>
     <slot access="private">slotConfigChanged()</slot>
 </Q_SLOTS>
-<tqlayoutdefaults spacing="6" margin="6"/>
+<layoutdefaults spacing="6" margin="6"/>
 <includehints>
     <includehint>kcmodule.h</includehint>
     <includehint>klistview.h</includehint>
