@@ -2,7 +2,7 @@ project(kttsd)
 
 if (Q_WS_X11)
   macro_optional_find_package(Speechd)
-  macro_log_feature(SPEECHD_FOUND "speechd" "Speech Dispatcher provides a high-level device independent layer for speech synthesis" "http://www.freebsoft.org/speechd" TRUE "" "Jovie requires speech dispatcher.")
+  macro_log_feature(SPEECHD_FOUND "speechd" "Speech Dispatcher provides a high-level device independent layer for speech synthesis" "http://www.freebsoft.org/speechd" FALSE "" "Jovie requires speech dispatcher.")
 
   if (SPEECHD_FOUND)
     configure_file (config-jovie.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-jovie.h )
