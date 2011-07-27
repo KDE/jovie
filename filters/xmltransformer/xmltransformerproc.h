@@ -30,10 +30,11 @@
 
 // KTTS includes.
 #include "filterproc.h"
+#include "talkercode.h"
 
 class K3Process;
 
-class XmlTransformerProc : virtual public KttsFilterProc
+class XmlTransformerProc : public KttsFilterProc
 {
     Q_OBJECT
 
