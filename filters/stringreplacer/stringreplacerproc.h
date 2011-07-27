@@ -34,7 +34,7 @@
 // KTTS includes.
 #include "filterproc.h"
 
-class StringReplacerProc : virtual public KttsFilterProc
+class StringReplacerProc : public KttsFilterProc
 {
     Q_OBJECT
 

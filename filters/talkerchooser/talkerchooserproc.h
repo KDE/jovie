@@ -32,7 +32,7 @@
 #include "filterproc.h"
 #include "talkercode.h"
 
-class TalkerChooserProc : virtual public KttsFilterProc
+class TalkerChooserProc : public KttsFilterProc
 {
     Q_OBJECT
 

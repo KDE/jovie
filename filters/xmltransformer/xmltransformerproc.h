@@ -33,7 +33,7 @@
 
 class K3Process;
 
-class XmlTransformerProc : virtual public KttsFilterProc
+class XmlTransformerProc : public KttsFilterProc
 {
     Q_OBJECT
 
