@@ -68,7 +68,7 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& arg
     substLView->verticalHeader()->hide();
     substLView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
-    connect(nameLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(nameLineEdit, SIGNAL(textChanged(QString)),
         this, SLOT(configChanged()));
     connect(languageBrowseButton, SIGNAL(clicked()),
         this, SLOT(slotLanguageBrowseButton_clicked()));
@@ -88,9 +88,9 @@ StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& arg
         this, SLOT(slotSaveButton_clicked()));
     connect(clearButton, SIGNAL(clicked()),
         this, SLOT(slotClearButton_clicked()));
-    connect(substLView, SIGNAL(currentItemChanged(QTableWidgetItem *, QTableWidgetItem *)),
+    connect(substLView, SIGNAL(currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)),
         this, SLOT(enableDisableButtons()));
-    connect(appIdLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(appIdLineEdit, SIGNAL(textChanged(QString)),
         this, SLOT(configChanged()));
 
     // Determine if kdeutils Regular Expression Editor is installed.
@@ -535,8 +535,8 @@ void StringReplacerConf::addOrEditSubstitution(bool isAdd)
         m_editWidget->substLineEdit->setText( substLView->item(row, 3)->text() );
     }
     // The match box may not be blank.
-    connect( m_editWidget->matchLineEdit, SIGNAL(textChanged(const QString&)),
-         this, SLOT(slotMatchLineEdit_textChanged(const QString&)) );
+    connect( m_editWidget->matchLineEdit, SIGNAL(textChanged(QString)),
+         this, SLOT(slotMatchLineEdit_textChanged(QString)) );
     connect( m_editWidget->regexpRadioButton, SIGNAL(clicked()),
          this, SLOT(slotTypeButtonGroup_clicked()) );
     connect( m_editWidget->wordRadioButton, SIGNAL(clicked()),

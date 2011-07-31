@@ -56,17 +56,17 @@ XmlTransformerConf::XmlTransformerConf( QWidget *parent, const QVariantList &arg
     defaults();
 
     // Connect signals.
-    connect( nameLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( nameLineEdit, SIGNAL(textChanged(QString)),
          this, SLOT(configChanged()));
-    connect( xsltPath, SIGNAL(textChanged(const QString&)),
+    connect( xsltPath, SIGNAL(textChanged(QString)),
          this, SLOT(configChanged()) );
-    connect( xsltprocPath, SIGNAL(textChanged(const QString&)),
+    connect( xsltprocPath, SIGNAL(textChanged(QString)),
          this, SLOT(configChanged()) );
-    connect( rootElementLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( rootElementLineEdit, SIGNAL(textChanged(QString)),
          this, SLOT(configChanged()) );
-    connect( doctypeLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( doctypeLineEdit, SIGNAL(textChanged(QString)),
          this, SLOT(configChanged()) );
-    connect( appIdLineEdit, SIGNAL(textChanged(const QString&)),
+    connect( appIdLineEdit, SIGNAL(textChanged(QString)),
          this, SLOT(configChanged()) );
 }
 

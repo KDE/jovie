@@ -265,8 +265,8 @@ Speaker::Speaker() :
 {
     // kDebug() << "Running: Speaker::Speaker()";
     // Connect ServiceUnregistered signal from DBUS so we know when apps have exited.
-    connect (QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
-        this, SLOT(slotServiceUnregistered(const QString&)));
+    connect (QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(QString)),
+        this, SLOT(slotServiceUnregistered(QString)));
 }
 
 Speaker::~Speaker(){

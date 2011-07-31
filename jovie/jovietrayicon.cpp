@@ -91,8 +91,8 @@ JovieTrayIcon::JovieTrayIcon(QWidget *parent)
         i18n("&About Jovie"), this, SLOT(aboutSelected()));
     act->setIcon(KIcon( QLatin1String( "preferences-desktop-text-to-speech" )));
 
-    connect(this, SIGNAL(activateRequested(bool, const QPoint &)),
-                  SLOT(slotActivateRequested(bool, const QPoint &)));
+    connect(this, SIGNAL(activateRequested(bool,QPoint)),
+                  SLOT(slotActivateRequested(bool,QPoint)));
     connect(contextMenu(), SIGNAL(aboutToShow()),
                   SLOT(contextMenuAboutToShow()));
 }

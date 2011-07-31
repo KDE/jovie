@@ -60,13 +60,13 @@ TalkerChooserConf::TalkerChooserConf( QWidget *parent, const QVariantList & args
     m_reEditorInstalled = !KServiceTypeTrader::self()->query(QLatin1String( "KRegExpEditor/KRegExpEditor" )).isEmpty();
     reEditorButton->setEnabled(m_reEditorInstalled);
 
-    connect(nameLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(nameLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(configChanged()));
-    connect(reLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(reLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(configChanged()));
     connect(reEditorButton, SIGNAL(clicked()),
             this, SLOT(slotReEditorButton_clicked()));
-    connect(appIdLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(appIdLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(configChanged()));
     connect(talkerButton, SIGNAL(clicked()),
             this, SLOT(slotTalkerButton_clicked()));

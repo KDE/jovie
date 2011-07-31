@@ -231,10 +231,10 @@ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talk
     m_state = fsFiltering;
     connect(m_xsltProc, SIGNAL(processExited(K3Process*)),
             this, SLOT(slotProcessExited(K3Process*)));
-    connect(m_xsltProc, SIGNAL(receivedStdout(K3Process*, char*, int)),
-            this, SLOT(slotReceivedStdout(K3Process*, char*, int)));
-    connect(m_xsltProc, SIGNAL(receivedStderr(K3Process*, char*, int)),
-            this, SLOT(slotReceivedStderr(K3Process*, char*, int)));
+    connect(m_xsltProc, SIGNAL(receivedStdout(K3Process*,char*,int)),
+            this, SLOT(slotReceivedStdout(K3Process*,char*,int)));
+    connect(m_xsltProc, SIGNAL(receivedStderr(K3Process*,char*,int)),
+            this, SLOT(slotReceivedStderr(K3Process*,char*,int)));
     if (!m_xsltProc->start(K3Process::NotifyOnExit,
          static_cast<K3Process::Communication>(K3Process::Stdout | K3Process::Stderr)))
     {

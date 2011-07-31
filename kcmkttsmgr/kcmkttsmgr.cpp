@@ -273,8 +273,8 @@ KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
     // Connect the signals from the KCMKtssMgrWidget to this class.
 
     // General tab.
-    connect (enableJovieCheckBox, SIGNAL (toggled (bool)),
-             SLOT (slotEnableJovie_toggled (bool)));
+    connect (enableJovieCheckBox, SIGNAL (toggled(bool)),
+             SLOT (slotEnableJovie_toggled(bool)));
 
     // Talker tab.
     connect (addTalkerButton, SIGNAL (clicked()),
@@ -287,7 +287,7 @@ KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
              this, SLOT (slotRemoveTalkerButton_clicked()));
     connect (configureTalkerButton, SIGNAL (clicked()),
              this, SLOT (slotConfigureTalkerButton_clicked()));
-    connect (talkersView, SIGNAL (clicked (const QModelIndex &)),
+    connect (talkersView, SIGNAL (clicked(QModelIndex)),
              this, SLOT (updateTalkerButtons()));
 
     // Filter tab.
@@ -301,14 +301,14 @@ KCMKttsMgr::KCMKttsMgr (QWidget *parent, const QVariantList &) :
              this, SLOT (slotRemoveFilterButton_clicked()));
     connect (configureFilterButton, SIGNAL (clicked()),
              this, SLOT (slotConfigureFilterButton_clicked()));
-    connect (filtersView, SIGNAL (clicked (const QModelIndex &)),
+    connect (filtersView, SIGNAL (clicked(QModelIndex)),
              this, SLOT (updateFilterButtons()));
-    connect (filtersView, SIGNAL (clicked (const QModelIndex &)),
-             this, SLOT (slotFilterListView_clicked (const QModelIndex &)));
+    connect (filtersView, SIGNAL (clicked(QModelIndex)),
+             this, SLOT (slotFilterListView_clicked(QModelIndex)));
 
 
     // Others.
-    connect (mainTab, SIGNAL (currentChanged (int)),
+    connect (mainTab, SIGNAL (currentChanged(int)),
              this, SLOT (slotTabChanged()));
 
     // See if Jovie is already running, and if so, create jobs tab.
@@ -1106,10 +1106,10 @@ void KCMKttsMgr::jovieStarted()
                  this, SLOT (jovieStarted()));
         connect (m_kspeech, SIGNAL (kttsdExiting()),
                  this, SLOT (jovieExiting()));
-        connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceUnregistered (const QString &)),
-                 this, SLOT (slotServiceUnregistered (const QString &)));
-        connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceOwnerChanged (const QString &, const QString &, const QString &)),
-                 this, SLOT (slotServiceOwnerChanged (const QString &, const QString &, const QString &)));
+        connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceUnregistered(QString)),
+                 this, SLOT (slotServiceUnregistered(QString)));
+        connect (QDBusConnection::sessionBus().interface(), SIGNAL (serviceOwnerChanged(QString,QString,QString)),
+                 this, SLOT (slotServiceOwnerChanged(QString,QString,QString)));
 
         kttsdVersion->setText (i18n ("Jovie Version: %1", m_kspeech->version()));
 
@@ -1268,7 +1268,7 @@ void KCMKttsMgr::configureFilter()
     m_configDlg->setMainWidget (m_loadedFilterPlugIn);
     m_configDlg->setHelp (QLatin1String( "configure-filter" ), QLatin1String( "jovie" ));
     m_configDlg->enableButtonOk (false);
-    connect (m_loadedFilterPlugIn, SIGNAL (changed (bool)), this, SLOT (slotConfigFilterDlg_ConfigChanged()));
+    connect (m_loadedFilterPlugIn, SIGNAL (changed(bool)), this, SLOT (slotConfigFilterDlg_ConfigChanged()));
     connect (m_configDlg, SIGNAL (defaultClicked()), this, SLOT (slotConfigFilterDlg_DefaultClicked()));
     connect (m_configDlg, SIGNAL (cancelClicked()), this, SLOT (slotConfigFilterDlg_CancelClicked()));
     // Display the dialog.

@@ -46,7 +46,7 @@ TalkerWidget::TalkerWidget(QWidget* parent)
 {
     mUi = new Ui::TalkerWidget;
     mUi->setupUi(this);
-    connect(mUi->nameEdit, SIGNAL(textEdited(const QString&)),
+    connect(mUi->nameEdit, SIGNAL(textEdited(QString)),
             this, SIGNAL(talkerChanged()));
     connect(mUi->AvailableTalkersTable, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(talkerChanged()));

@@ -237,7 +237,7 @@ bool SSMLConvert::transform(const QString &text, const QString &xsltFilename) {
     // kDebug() << "SSMLConvert::transform: executing command: " <<
     //     m_xsltProc->args() << endl;
 
-    connect(m_xsltProc, SIGNAL(finished(int, QProcess::ExitStatus)),
+    connect(m_xsltProc, SIGNAL(finished(int,QProcess::ExitStatus)),
         this, SLOT(slotProcessExited()));
     if (!m_xsltProc->execute(QLatin1String("xsltproc"), args))
     {
