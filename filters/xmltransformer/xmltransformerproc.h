@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    XmlTransformerProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
+    XmlTransformerProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.

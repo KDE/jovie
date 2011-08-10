@@ -67,8 +67,8 @@ public:
     virtual void setPeriods(uint periods) {Q_UNUSED(periods); }
 
 protected:
-    Player(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList() ) :
-        TQObject(tqparent, name) {
+    Player(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList() ) :
+        TQObject(parent, name) {
         Q_UNUSED(args);
     }
 

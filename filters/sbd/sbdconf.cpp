@@ -56,8 +56,8 @@
 /**
 * Constructor 
 */
-SbdConf::SbdConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(tqparent, name)
+SbdConf::SbdConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(parent, name)
 {
     // kdDebug() << "SbdConf::SbdConf: Running" << endl;
 

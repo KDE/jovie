@@ -36,8 +36,8 @@
 #include "fliteproc.moc"
  
 /** Constructor */
-FliteProc::FliteProc( TQObject* tqparent, const char* name, const TQStringList& ) : 
-    PlugInProc( tqparent, name ){
+FliteProc::FliteProc( TQObject* parent, const char* name, const TQStringList& ) : 
+    PlugInProc( parent, name ){
     kdDebug() << "FliteProc::FliteProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;

@@ -47,7 +47,7 @@ class EposConf : public PlugInConf {
 
     public:
         /** Constructor */
-        EposConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        EposConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~EposConf();

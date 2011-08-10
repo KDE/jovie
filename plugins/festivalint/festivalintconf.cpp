@@ -57,8 +57,8 @@
 #include "festivalintconf.moc"
 
 /** Constructor */
-FestivalIntConf::FestivalIntConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(tqparent, name)
+FestivalIntConf::FestivalIntConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(parent, name)
 {
     // kdDebug() << "FestivalIntConf::FestivalIntConf: Running" << endl;
     m_festProc = 0;

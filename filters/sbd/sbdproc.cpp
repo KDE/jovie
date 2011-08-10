@@ -41,8 +41,8 @@
 /**
  * Constructor.
  */
-SbdThread::SbdThread( TQObject *tqparent, const char *name ) :
-    TQObject( tqparent, name ),
+SbdThread::SbdThread( TQObject *parent, const char *name ) :
+    TQObject( parent, name ),
     TQThread()
 {
 }
@@ -562,11 +562,11 @@ bool SbdThread::event ( TQEvent * e )
 /**
  * Constructor.
  */
-SbdProc::SbdProc( TQObject *tqparent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterProc(tqparent, name) 
+SbdProc::SbdProc( TQObject *parent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterProc(parent, name) 
 {
     // kdDebug() << "SbdProc::SbdProc: Running" << endl;
-    m_sbdThread = new SbdThread( tqparent, *name + "_thread" );
+    m_sbdThread = new SbdThread( parent, *name + "_thread" );
     connect( m_sbdThread, TQT_SIGNAL(filteringFinished()), this, TQT_SLOT(slotSbdThreadFilteringFinished()) );
 }
 

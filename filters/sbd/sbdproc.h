@@ -69,7 +69,7 @@ class SbdThread: public TQObject, public TQThread
         /**
          * Constructor.
          */
-        SbdThread( TQObject *tqparent = 0, const char *name = 0);
+        SbdThread( TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor.
@@ -247,7 +247,7 @@ class SbdProc : virtual public KttsFilterProc
         /**
          * Constructor.
          */
-        SbdProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
+        SbdProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
          * Destructor.

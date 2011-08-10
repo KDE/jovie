@@ -135,7 +135,7 @@ int main (int argc, char *argv[])
 
 /*  KttsToolTip class */
 
-KttsToolTip::KttsToolTip ( TQWidget* tqparent ) : TQToolTip(tqparent)
+KttsToolTip::KttsToolTip ( TQWidget* parent ) : TQToolTip(parent)
 {
 }
 
@@ -163,10 +163,10 @@ KttsToolTip::KttsToolTip ( TQWidget* tqparent ) : TQToolTip(tqparent)
 
 /*  KttsMgrTray class */
 
-KttsMgrTray::KttsMgrTray(TQWidget *tqparent):
+KttsMgrTray::KttsMgrTray(TQWidget *parent):
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kkttsmgr_kspeechsink"),
-    KSystemTray(tqparent, "kttsmgrsystemtray")
+    KSystemTray(parent, "kttsmgrsystemtray")
 {
     TQPixmap icon = KGlobal::iconLoader()->loadIcon("kttsd", KIcon::Small);
     setPixmap (icon);
@@ -200,7 +200,7 @@ KttsMgrTray::KttsMgrTray(TQWidget *tqparent):
             "textFinished(TQCString,uint)",
             false);
         // Install an event filter so we can check when KTTSMgr becomes inconified to the systray.
-        tqparent->installEventFilter(this);
+        parent->installEventFilter(this);
     }
 }
 

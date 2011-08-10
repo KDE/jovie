@@ -215,7 +215,7 @@ class KDE_EXPORT PlugInConf : public TQWidget{
         /**
         * Constructor 
         */
-        PlugInConf( TQWidget *tqparent = 0, const char *name = 0);
+        PlugInConf( TQWidget *parent = 0, const char *name = 0);
 
         /**
         * Destructor 

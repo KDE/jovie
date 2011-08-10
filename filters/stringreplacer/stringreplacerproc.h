@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    StringReplacerProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
+    StringReplacerProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.

@@ -36,7 +36,7 @@
 /**
 * Constructor 
 */
-PlugInConf::PlugInConf( TQWidget *tqparent, const char *name) : TQWidget(tqparent, name){
+PlugInConf::PlugInConf( TQWidget *parent, const char *name) : TQWidget(parent, name){
     kdDebug() << "PlugInConf::PlugInConf: Running" << endl;
     KGlobal::locale()->insertCatalogue("kttsd");
     TQString systemPath(getenv("PATH"));

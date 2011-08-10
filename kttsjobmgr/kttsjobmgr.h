@@ -42,7 +42,7 @@ public:
     KttsJobMgrFactory() {};
     virtual ~KttsJobMgrFactory();
 
-    virtual TQObject* createObject(TQObject* tqparent = 0, const char* name = 0,
+    virtual TQObject* createObject(TQObject* parent = 0, const char* name = 0,
                             const char* classname = TQOBJECT_OBJECT_NAME_STRING,
                             const TQStringList &args = TQStringList());
 
@@ -61,7 +61,7 @@ class KttsJobMgrPart:
     Q_OBJECT
   TQ_OBJECT
 public:
-    KttsJobMgrPart(TQWidget *tqparent, const char *name);
+    KttsJobMgrPart(TQWidget *parent, const char *name);
     virtual ~KttsJobMgrPart();
 
 protected:
@@ -293,7 +293,7 @@ class KttsJobMgrBrowserExtension : public KParts::BrowserExtension
   TQ_OBJECT
     friend class KttsJobMgrPart;
 public:
-    KttsJobMgrBrowserExtension(KttsJobMgrPart *tqparent);
+    KttsJobMgrBrowserExtension(KttsJobMgrPart *parent);
     virtual ~KttsJobMgrBrowserExtension();
 };
 

@@ -31,7 +31,7 @@
 /**
 * Constructor
 */
-PlugInProc::PlugInProc( TQObject *tqparent, const char *name) : TQObject(tqparent, name){
+PlugInProc::PlugInProc( TQObject *parent, const char *name) : TQObject(parent, name){
     // kdDebug() << "PlugInProc::PlugInProc: Running" << endl;
 }
 

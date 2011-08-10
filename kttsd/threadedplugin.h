@@ -45,7 +45,7 @@ class ThreadedPlugIn : public PlugInProc, public TQThread
         /**
         * Constructor.
         */
-        ThreadedPlugIn(PlugInProc* plugin, TQObject *tqparent = 0, const char *name = 0);
+        ThreadedPlugIn(PlugInProc* plugin, TQObject *parent = 0, const char *name = 0);
 
         /**
         * Destructor.

@@ -242,7 +242,7 @@ class KDE_EXPORT PlugInProc : virtual public TQObject{
         /**
         * Constructor.
         */
-        PlugInProc( TQObject *tqparent = 0, const char *name = 0);
+        PlugInProc( TQObject *parent = 0, const char *name = 0);
 
         /**
         * Destructor.

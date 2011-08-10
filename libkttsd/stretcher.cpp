@@ -34,8 +34,8 @@
 /**
  * Constructor.
  */
-Stretcher::Stretcher(TQObject *tqparent, const char *name) :
-    TQObject(tqparent, name)
+Stretcher::Stretcher(TQObject *parent, const char *name) :
+    TQObject(parent, name)
 {
     m_state = 0;
     m_stretchProc = 0;

@@ -45,14 +45,14 @@
 #include "selecttalkerdlg.moc"
 
 SelectTalkerDlg::SelectTalkerDlg(
-    TQWidget* tqparent,
+    TQWidget* parent,
     const char* name,
     const TQString& caption,
     const TQString& talkerCode,
     bool runningTalkers) :
 
     KDialogBase(
-        tqparent,
+        parent,
         name,
         true,
         caption,

@@ -42,7 +42,7 @@
 /**
 * Constructor 
 */
-KttsFilterConf::KttsFilterConf( TQWidget *tqparent, const char *name) : TQWidget(tqparent, name){
+KttsFilterConf::KttsFilterConf( TQWidget *parent, const char *name) : TQWidget(parent, name){
     // kdDebug() << "KttsFilterConf::KttsFilterConf: Running" << endl;
     TQString systemPath(getenv("PATH"));
     // kdDebug() << "Path is " << systemPath << endl;

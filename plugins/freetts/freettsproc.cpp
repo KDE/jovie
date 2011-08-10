@@ -27,8 +27,8 @@
 #include "freettsproc.h" 
 
 /** Constructor */
-FreeTTSProc::FreeTTSProc( TQObject* tqparent, const char* name, const TQStringList& /*args*/) : 
-	PlugInProc( tqparent, name ) {
+FreeTTSProc::FreeTTSProc( TQObject* parent, const char* name, const TQStringList& /*args*/) : 
+	PlugInProc( parent, name ) {
 	kdDebug() << "Running: FreeTTSProc::FreeTTSProc" << endl;
 	m_state = psIdle;
 	m_waitingStop = false;

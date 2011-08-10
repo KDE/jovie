@@ -49,7 +49,7 @@ class KTTSD : public TQObject, virtual public KSpeech
         * Create objects, speechData and speaker.
         * Start thread
         */
-        KTTSD(const TQCString& objId, TQObject *tqparent=0, const char *name=0);
+        KTTSD(const TQCString& objId, TQObject *parent=0, const char *name=0);
 
         /**
         * Destructor.
@@ -638,7 +638,7 @@ class kspeech : public TQObject, virtual public KSpeech
 
     public:
         // Constructor.
-        kspeech(const TQCString& objId, TQObject *tqparent=0, const char *name=0);
+        kspeech(const TQCString& objId, TQObject *parent=0, const char *name=0);
 
         // Destructor.
         ~kspeech();

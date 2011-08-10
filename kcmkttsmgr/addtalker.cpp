@@ -34,8 +34,8 @@
 // KTTS includes.
 #include "addtalker.h"
 
-AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* tqparent, const char* name, WFlags fl)
-    : AddTalkerWidget(tqparent,name,fl)
+AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* parent, const char* name, WFlags fl)
+    : AddTalkerWidget(parent,name,fl)
 {
     // Build maps.
     setSynthToLangMap(synthToLangMap);

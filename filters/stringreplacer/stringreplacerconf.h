@@ -49,7 +49,7 @@ class StringReplacerConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        StringReplacerConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
+        StringReplacerConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

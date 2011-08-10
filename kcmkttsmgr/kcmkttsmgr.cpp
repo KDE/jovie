@@ -104,10 +104,10 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kttsd, KCMKttsMgrFactory("kttsd") )
 * Makes the list of plug ins.
 * And the languages acording to the plug ins.
 */
-KCMKttsMgr::KCMKttsMgr(TQWidget *tqparent, const char *name, const TQStringList &) :
+KCMKttsMgr::KCMKttsMgr(TQWidget *parent, const char *name, const TQStringList &) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kcmkttsmgr_kspeechsink"),
-    KCModule(KCMKttsMgrFactory::instance(), tqparent, name)
+    KCModule(KCMKttsMgrFactory::instance(), parent, name)
 {
     // kdDebug() << "KCMKttsMgr contructor running." << endl;
 
@@ -2396,7 +2396,7 @@ void KCMKttsMgr::slotNotifyListView_selectionChanged()
             bool defaultItem = ( item->text(nlvcEventSrc) == "default" );
             m_kttsmgrw->notifyRemoveButton->setEnabled( !defaultItem );
         } else {
-            bool defaultItem = ( item->tqparent()->text(nlvcEventSrc) == "default" );
+            bool defaultItem = ( item->parent()->text(nlvcEventSrc) == "default" );
             m_kttsmgrw->notifyPresentComboBox->setEnabled( defaultItem );
             if ( defaultItem )
                 m_kttsmgrw->notifyPresentComboBox->setCurrentItem( NotifyPresent::present( item->text( nlvcEvent ) ) );
@@ -2558,7 +2558,7 @@ TQListViewItem* KCMKttsMgr::addNotifyItem(
         }
         // No duplicates.
         item = lv->findItem( event, nlvcEvent );
-        if ( !item || item->tqparent() != parentItem )
+        if ( !item || item->parent() != parentItem )
             item = new KListViewItem(parentItem, eventName, actionDisplayName, talkerName,
                 eventSrc, event, actionName, talkerCode.getTalkerCode());
         if ( action == NotifyAction::DoNotSpeak )
@@ -2644,7 +2644,7 @@ void KCMKttsMgr::slotNotifyRemoveButton_clicked()
 {
     TQListViewItem* item = m_kttsmgrw->notifyListView->selectedItem();
     if (!item) return;
-    TQListViewItem* parentItem = item->tqparent();
+    TQListViewItem* parentItem = item->parent();
     delete item;
     if (parentItem)
     {
@@ -2688,16 +2688,16 @@ void KCMKttsMgr::slotNotifySaveButton_clicked()
 
 // ----------------------------------------------------------------------------
 
-KttsCheckListItem::KttsCheckListItem( TQListView *tqparent, TQListViewItem *after,
+KttsCheckListItem::KttsCheckListItem( TQListView *parent, TQListViewItem *after,
     const TQString &text, Type tt,
     KCMKttsMgr* kcmkttsmgr ) :
-        TQCheckListItem(tqparent, after, text, tt),
+        TQCheckListItem(parent, after, text, tt),
         m_kcmkttsmgr(kcmkttsmgr) { }
 
-KttsCheckListItem::KttsCheckListItem( TQListView *tqparent,
+KttsCheckListItem::KttsCheckListItem( TQListView *parent,
     const TQString &text, Type tt,
     KCMKttsMgr* kcmkttsmgr ) :
-        TQCheckListItem(tqparent, text, tt),
+        TQCheckListItem(parent, text, tt),
         m_kcmkttsmgr(kcmkttsmgr) { }
 
 /*virtual*/ void KttsCheckListItem::stateChange(bool)

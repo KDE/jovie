@@ -36,8 +36,8 @@
 #include "utils.h"
 #include "selectevent.h"
 
-SelectEvent::SelectEvent(TQWidget* tqparent, const char* name, WFlags fl, const TQString& initEventSrc)
-    : SelectEventWidget(tqparent,name,fl)
+SelectEvent::SelectEvent(TQWidget* parent, const char* name, WFlags fl, const TQString& initEventSrc)
+    : SelectEventWidget(parent,name,fl)
 {
     // Load list of event sources (applications).
     TQStringList fullpaths =

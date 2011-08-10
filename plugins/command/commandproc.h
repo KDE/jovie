@@ -33,7 +33,7 @@ class CommandProc : public PlugInProc{
 
     public:
         /** Constructor */
-        CommandProc( TQObject* tqparent = 0, const char* name = 0,
+        CommandProc( TQObject* parent = 0, const char* name = 0,
             const TQStringList &args = TQStringList());
 
         /** Destructor */

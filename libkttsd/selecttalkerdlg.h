@@ -47,7 +47,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
     public:
         /**
          * Constructor.
-         * @param tqparent                The tqparent for this dialog.
+         * @param parent                The parent for this dialog.
          * @param name                  Name for this dialog.
          * @param caption               Displayed title for this dialog.
          * @param talkerCode            A suggested starting Talker Code.
@@ -56,7 +56,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialogBase
          *                              (which may not yet have been Applied).
          */
         SelectTalkerDlg(
-            TQWidget* tqparent = 0,
+            TQWidget* parent = 0,
             const char* name = "selecttalkerdialog",
             const TQString& caption = i18n("Select Talker"),
             const TQString& talkerCode = TQString(),

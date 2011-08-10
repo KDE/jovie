@@ -203,8 +203,8 @@ class HadifixConfPrivate {
 };
 
 /** Constructor */
-HadifixConf::HadifixConf( TQWidget* tqparent, const char* name, const TQStringList &) : 
-   PlugInConf( tqparent, name ){
+HadifixConf::HadifixConf( TQWidget* parent, const char* name, const TQStringList &) : 
+   PlugInConf( parent, name ){
    // kdDebug() << "HadifixConf::HadifixConf: Running" << endl;
    TQVBoxLayout *tqlayout = new TQVBoxLayout (this, KDialog::marginHint(), KDialog::spacingHint(), "CommandConfigWidgetLayout");
    tqlayout->tqsetAlignment (TQt::AlignTop); 

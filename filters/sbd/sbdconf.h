@@ -49,7 +49,7 @@ class SbdConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        SbdConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
+        SbdConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

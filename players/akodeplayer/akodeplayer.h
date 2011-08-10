@@ -34,7 +34,7 @@ class KDE_EXPORT aKodePlayer : public Player
   TQ_OBJECT
 
 public:
-    aKodePlayer(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList());
+    aKodePlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     virtual ~aKodePlayer();
 
     // virtual void play(const FileHandle &file = FileHandle::null());

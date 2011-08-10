@@ -44,8 +44,8 @@
 /**
  * Constructor.
  */
-StringReplacerProc::StringReplacerProc( TQObject *tqparent, const char *name, const TQStringList& ) :
-    KttsFilterProc(tqparent, name)
+StringReplacerProc::StringReplacerProc( TQObject *parent, const char *name, const TQStringList& ) :
+    KttsFilterProc(parent, name)
 {
 }
 

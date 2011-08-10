@@ -43,8 +43,8 @@
 #include "festivalintproc.moc"
 
 /** Constructor */
-FestivalIntProc::FestivalIntProc( TQObject* tqparent, const char* name, const TQStringList& ) : 
-    PlugInProc( tqparent, name ){
+FestivalIntProc::FestivalIntProc( TQObject* parent, const char* name, const TQStringList& ) : 
+    PlugInProc( parent, name ){
     // kdDebug() << "FestivalIntProc::FestivalIntProc: Running" << endl;
     m_ready = true;
     m_writingStdin = false;

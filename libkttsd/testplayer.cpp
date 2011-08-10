@@ -44,9 +44,9 @@
 /**
  * Constructor.
  */
-TestPlayer::TestPlayer(TQObject *tqparent, const char *name,
+TestPlayer::TestPlayer(TQObject *parent, const char *name,
     const int playerOption, const float audioStretchFactor, const TQString &sinkName) :
-    TQObject(tqparent, name)
+    TQObject(parent, name)
 {
     m_playerOption = playerOption;
     m_audioStretchFactor = audioStretchFactor;

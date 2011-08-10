@@ -42,8 +42,8 @@
 #include "fliteconf.moc"
 
 /** Constructor */
-FliteConf::FliteConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(tqparent, name)
+FliteConf::FliteConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(parent, name)
 {
     // kdDebug() << "FliteConf::FliteConf: Running" << endl;
     m_fliteProc = 0;

@@ -75,8 +75,8 @@ class HadifixProcPrivate {
 };
 
 /** Constructor */
-HadifixProc::HadifixProc( TQObject* tqparent, const char* name, const TQStringList &) : 
-   PlugInProc( tqparent, name ){
+HadifixProc::HadifixProc( TQObject* parent, const char* name, const TQStringList &) : 
+   PlugInProc( parent, name ){
    // kdDebug() << "HadifixProc::HadifixProc: Running" << endl;
    d = 0;
 }

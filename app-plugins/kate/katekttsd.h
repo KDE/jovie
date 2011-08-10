@@ -31,7 +31,7 @@ class KateKttsdPlugin : public KTextEditor::Plugin, public KTextEditor::PluginVi
   TQ_OBJECT
 
     public:
-        KateKttsdPlugin( TQObject *tqparent = 0,
+        KateKttsdPlugin( TQObject *parent = 0,
                          const char* name = 0,
                          const TQStringList &args = TQStringList() );
         virtual ~KateKttsdPlugin();

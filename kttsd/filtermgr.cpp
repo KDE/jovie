@@ -37,8 +37,8 @@
 /**
  * Constructor.
  */
-FilterMgr::FilterMgr( TQObject *tqparent, const char *name) :
-    KttsFilterProc(tqparent, name) 
+FilterMgr::FilterMgr( TQObject *parent, const char *name) :
+    KttsFilterProc(parent, name) 
 {
     // kdDebug() << "FilterMgr::FilterMgr: Running" << endl;
     m_state = fsIdle;

@@ -43,8 +43,8 @@
 #include "eposproc.moc"
 
 /** Constructor */
-EposProc::EposProc( TQObject* tqparent, const char* name, const TQStringList& ) : 
-    PlugInProc( tqparent, name ){
+EposProc::EposProc( TQObject* parent, const char* name, const TQStringList& ) : 
+    PlugInProc( parent, name ){
     kdDebug() << "EposProc::EposProc: Running" << endl;
     m_state = psIdle;
     m_waitingStop = false;

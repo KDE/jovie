@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    KttsFilterProc( TQObject *tqparent, const char *name );
+    KttsFilterProc( TQObject *parent, const char *name );
 
     /**
      * Destructor.

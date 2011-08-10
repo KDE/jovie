@@ -119,7 +119,7 @@ class Speaker : public TQObject{
          * Calls load plug ins
          */
         Speaker(SpeechData* speechData, TalkerMgr* talkerMgr,
-                TQObject *tqparent = 0, const char *name = 0);
+                TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor

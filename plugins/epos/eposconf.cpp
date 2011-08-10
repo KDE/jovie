@@ -48,8 +48,8 @@
 #include "eposconf.moc"
 
 /** Constructor */
-EposConf::EposConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(tqparent, name)
+EposConf::EposConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(parent, name)
 {
     // kdDebug() << "EposConf::EposConf: Running" << endl;
     m_eposProc = 0;

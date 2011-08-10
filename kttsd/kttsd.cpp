@@ -49,9 +49,9 @@
 * Note that most of the real tts work occurs in Speaker.
 */
 
-KTTSD::KTTSD(const TQCString& objId, TQObject *tqparent, const char *name) :
+KTTSD::KTTSD(const TQCString& objId, TQObject *parent, const char *name) :
     DCOPObject(objId),
-    TQObject(tqparent, name)
+    TQObject(parent, name)
 {
     // kdDebug() << "KTTSD::KTTSD Running" << endl;
     m_speaker = 0;
@@ -1096,9 +1096,9 @@ TQString KTTSD::fixNullString(const TQString &talker) const
 // kspeech is obsolete.  Applications should use KSpeech instead.
 
 // Constructor.
-kspeech::kspeech(const TQCString& objId, TQObject *tqparent, const char *name) :
+kspeech::kspeech(const TQCString& objId, TQObject *parent, const char *name) :
     DCOPObject(objId),
-    TQObject(tqparent, name),
+    TQObject(parent, name),
     m_kttsd("KSpeech")
 {
 }

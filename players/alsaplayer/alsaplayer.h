@@ -69,7 +69,7 @@ class KDE_EXPORT AlsaPlayer : public Player, TQThread
   TQ_OBJECT
 
 public:
-    AlsaPlayer(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList());
+    AlsaPlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     ~AlsaPlayer();
 
     virtual void startPlay(const TQString& file);

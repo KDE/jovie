@@ -37,7 +37,7 @@ class FreeTTSConf : public PlugInConf {
 	
 	public:
 		/** Constructor */
-		FreeTTSConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+		FreeTTSConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 		
 		/** Destructor */
 		~FreeTTSConf();

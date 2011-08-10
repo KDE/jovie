@@ -49,8 +49,8 @@
 /**
 * Constructor 
 */
-TalkerChooserConf::TalkerChooserConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(tqparent, name)
+TalkerChooserConf::TalkerChooserConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(parent, name)
 {
     // kdDebug() << "TalkerChooserConf::TalkerChooserConf: Running" << endl;
 

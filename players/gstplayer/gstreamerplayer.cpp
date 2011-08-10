@@ -29,8 +29,8 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GStreamerPlayer::GStreamerPlayer(TQObject* tqparent, const char* name, const TQStringList& args) :
-    Player(tqparent, name, args),
+GStreamerPlayer::GStreamerPlayer(TQObject* parent, const char* name, const TQStringList& args) :
+    Player(parent, name, args),
     m_initialized(false),
     m_pipeline(0),
     m_source(0),

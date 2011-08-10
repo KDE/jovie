@@ -40,8 +40,8 @@
 #include "freettsconfigwidget.h"
 
 /** Constructor */
-FreeTTSConf::FreeTTSConf( TQWidget* tqparent, const char* name, const TQStringList&/*args*/) : 
-	PlugInConf( tqparent, name ) {
+FreeTTSConf::FreeTTSConf( TQWidget* parent, const char* name, const TQStringList&/*args*/) : 
+	PlugInConf( parent, name ) {
 	
 	// kdDebug() << "FreeTTSConf::FreeTTSConf: Running" << endl;
 	m_freettsProc = 0;

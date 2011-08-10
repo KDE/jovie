@@ -31,7 +31,7 @@ class GStreamerPlayer : public Player
   TQ_OBJECT
 
 public:
-    GStreamerPlayer(TQObject* tqparent = 0, const char* name = 0, const TQStringList& args=TQStringList());
+    GStreamerPlayer(TQObject* parent = 0, const char* name = 0, const TQStringList& args=TQStringList());
     virtual ~GStreamerPlayer();
 
     // virtual void play(const FileHandle &file = FileHandle::null());

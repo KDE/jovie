@@ -44,8 +44,8 @@
 /**
  * Constructor.
  */
-XmlTransformerProc::XmlTransformerProc( TQObject *tqparent, const char *name, const TQStringList& ) :
-    KttsFilterProc(tqparent, name)
+XmlTransformerProc::XmlTransformerProc( TQObject *parent, const char *name, const TQStringList& ) :
+    KttsFilterProc(parent, name)
 {
     m_xsltProc = 0;
 }

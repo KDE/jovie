@@ -128,8 +128,8 @@ TQString AlsaPlayer::timestamp() const
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-AlsaPlayer::AlsaPlayer(TQObject* tqparent, const char* name, const TQStringList& args) : 
-    Player(tqparent, name, args),
+AlsaPlayer::AlsaPlayer(TQObject* parent, const char* name, const TQStringList& args) : 
+    Player(parent, name, args),
     m_currentVolume(1.0),
     m_pcmName("default"),
     m_defPeriodSize(128),

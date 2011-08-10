@@ -34,7 +34,7 @@ public:
 	/**
 	* Constructor
 	*/
-	FreeTTSProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+	FreeTTSProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
 	/**
 	* Destructor

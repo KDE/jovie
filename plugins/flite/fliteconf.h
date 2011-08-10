@@ -46,7 +46,7 @@ class FliteConf : public PlugInConf {
 
     public:
         /** Constructor */
-        FliteConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        FliteConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~FliteConf();

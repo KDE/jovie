@@ -40,7 +40,7 @@ class CommandConf : public PlugInConf {
 
     public:
         /** Constructor */
-        CommandConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        CommandConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~CommandConf();

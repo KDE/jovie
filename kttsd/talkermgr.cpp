@@ -37,8 +37,8 @@
 /**
  * Constructor.
  */
-TalkerMgr::TalkerMgr(TQObject *tqparent, const char *name) :
-    TQObject( tqparent, name )
+TalkerMgr::TalkerMgr(TQObject *parent, const char *name) :
+    TQObject( parent, name )
 {
     m_loadedPlugIns.setAutoDelete(true);
 }

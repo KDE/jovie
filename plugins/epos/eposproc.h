@@ -43,7 +43,7 @@ class EposProc : public PlugInProc{
         /**
          * Constructor
          */
-        EposProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        EposProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor

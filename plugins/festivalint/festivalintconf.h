@@ -60,7 +60,7 @@ class FestivalIntConf : public PlugInConf {
 
     public:
         /** Constructor */
-        FestivalIntConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        FestivalIntConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~FestivalIntConf();

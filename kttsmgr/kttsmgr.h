@@ -39,7 +39,7 @@
 class KttsToolTip: public TQToolTip
 {
     public:
-        KttsToolTip ( TQWidget* tqparent );
+        KttsToolTip ( TQWidget* parent );
 
     protected:
         virtual void maybeTip ( const TQPoint & p );
@@ -51,7 +51,7 @@ class KttsMgrTray: public KSystemTray, public KSpeech_stub, virtual public KSpee
   TQ_OBJECT
 
     public:
-        KttsMgrTray(TQWidget *tqparent=0);
+        KttsMgrTray(TQWidget *parent=0);
         ~KttsMgrTray();
 
         void setExitWhenFinishedSpeaking();

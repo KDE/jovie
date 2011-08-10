@@ -59,8 +59,8 @@
 /**
 * Constructor 
 */
-StringReplacerConf::StringReplacerConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(tqparent, name),
+StringReplacerConf::StringReplacerConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(parent, name),
     m_editDlg(0),
     m_editWidget(0)
 {

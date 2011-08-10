@@ -39,8 +39,8 @@
 #include "commandproc.moc"
 
 /** Constructor */
-CommandProc::CommandProc( TQObject* tqparent, const char* name, const TQStringList& /*args*/) : 
-    PlugInProc( tqparent, name )
+CommandProc::CommandProc( TQObject* parent, const char* name, const TQStringList& /*args*/) : 
+    PlugInProc( parent, name )
 {
     kdDebug() << "CommandProc::CommandProc: Running" << endl;
     m_commandProc = 0;

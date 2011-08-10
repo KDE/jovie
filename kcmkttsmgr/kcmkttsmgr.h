@@ -58,7 +58,7 @@ class KCMKttsMgr :
   TQ_OBJECT
 
     public:
-        KCMKttsMgr(TQWidget *tqparent, const char *name, const TQStringList &);
+        KCMKttsMgr(TQWidget *parent, const char *name, const TQStringList &);
 
         ~KCMKttsMgr();
 
@@ -514,10 +514,10 @@ class KCMKttsMgr :
 class KttsCheckListItem : public TQCheckListItem
 {
     public:
-        KttsCheckListItem( TQListView *tqparent,
+        KttsCheckListItem( TQListView *parent,
             const TQString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
-        KttsCheckListItem( TQListView *tqparent, TQListViewItem *after,
+        KttsCheckListItem( TQListView *parent, TQListViewItem *after,
             const TQString &text, Type tt = RadioButtonController,
             KCMKttsMgr* kcmkttsmgr = 0);
 

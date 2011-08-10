@@ -207,8 +207,8 @@
  *     "kttsd", object "KSpeech".
  *
    @verbatim
-     MyPart::MyPart(TQWidget *tqparent, const char *name) :
-        KParts::ReadOnlyPart(tqparent, name),
+     MyPart::MyPart(TQWidget *parent, const char *name) :
+        KParts::ReadOnlyPart(parent, name),
         DCOPStub("kttsd", "KSpeech") {
    @endverbatim
  *
@@ -293,8 +293,8 @@
  *     receiving object.
  *
    @verbatim
-     MyPart::MyPart(TQWidget *tqparent, const char *name) :
-         KParts::ReadOnlyPart(tqparent, name),
+     MyPart::MyPart(TQWidget *parent, const char *name) :
+         KParts::ReadOnlyPart(parent, name),
          DCOPObject("mypart_kspeechsink") {
    @endverbatim
  *

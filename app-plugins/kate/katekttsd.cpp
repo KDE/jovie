@@ -38,8 +38,8 @@
 
 K_EXPORT_COMPONENT_FACTORY( ktexteditor_kttsd, KGenericFactory<KateKttsdPlugin>( "ktexteditor_kttsd" ) )
 
-KateKttsdPlugin::KateKttsdPlugin( TQObject *tqparent, const char* name, const TQStringList& )
-    : KTextEditor::Plugin ( (KTextEditor::Document*) tqparent, name )
+KateKttsdPlugin::KateKttsdPlugin( TQObject *parent, const char* name, const TQStringList& )
+    : KTextEditor::Plugin ( (KTextEditor::Document*) parent, name )
 {
 }
 
@@ -80,7 +80,7 @@ KateKttsdPluginView::KateKttsdPluginView( KTextEditor::View *view, const char *n
 
 void KateKttsdPluginView::slotReadOut()
 {
-    KTextEditor::View *v = (KTextEditor::View*)tqparent();
+    KTextEditor::View *v = (KTextEditor::View*)parent();
     KTextEditor::SelectionInterface *si = KTextEditor::selectionInterface( v->document() );
     TQString text;
 

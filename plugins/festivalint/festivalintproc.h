@@ -47,7 +47,7 @@ class FestivalIntProc : public PlugInProc{
         /**
          * Constructor
          */
-        FestivalIntProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        FestivalIntProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor

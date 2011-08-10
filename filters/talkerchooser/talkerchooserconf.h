@@ -51,7 +51,7 @@ class TalkerChooserConf : public KttsFilterConf
         /**
         * Constructor 
         */
-        TalkerChooserConf( TQWidget *tqparent, const char *name, const TQStringList &args = TQStringList() );
+        TalkerChooserConf( TQWidget *parent, const char *name, const TQStringList &args = TQStringList() );
 
         /**
         * Destructor 

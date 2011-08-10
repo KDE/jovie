@@ -46,7 +46,7 @@ class FilterMgr : public KttsFilterProc
         /**
          * Constructor.
          */
-        FilterMgr(TQObject *tqparent = 0, const char *name = 0);
+        FilterMgr(TQObject *parent = 0, const char *name = 0);
 
         /**
          * Destructor.

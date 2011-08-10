@@ -41,7 +41,7 @@ class FliteProc : public PlugInProc{
         /**
          * Constructor
          */
-        FliteProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        FliteProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /**
          * Destructor

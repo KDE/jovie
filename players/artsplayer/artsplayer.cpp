@@ -40,8 +40,8 @@
 // public methods
 ////////////////////////////////////////////////////////////////////////////////
 
-ArtsPlayer::ArtsPlayer(TQObject* tqparent, const char* name, const TQStringList& args) : 
-    Player(tqparent, name, args),
+ArtsPlayer::ArtsPlayer(TQObject* parent, const char* name, const TQStringList& args) : 
+    Player(parent, name, args),
     m_dispatcher(0),
     m_server(0),
     m_factory(0),

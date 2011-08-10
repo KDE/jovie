@@ -33,8 +33,8 @@
 * Constructor.
 */
 ThreadedPlugIn::ThreadedPlugIn(PlugInProc* plugin, 
-    TQObject *tqparent /*= 0*/, const char *name /*= 0*/):
-    PlugInProc(tqparent, name),
+    TQObject *parent /*= 0*/, const char *name /*= 0*/):
+    PlugInProc(parent, name),
     TQThread(),
     m_plugin(plugin),
     m_filename(TQString()),

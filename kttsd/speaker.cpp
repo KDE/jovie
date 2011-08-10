@@ -107,8 +107,8 @@
 * Loads plugins.
 */
 Speaker::Speaker( SpeechData*speechData, TalkerMgr* talkerMgr,
-    TQObject *tqparent, const char *name) :
-    TQObject(tqparent, name), 
+    TQObject *parent, const char *name) :
+    TQObject(parent, name), 
     m_speechData(speechData),
     m_talkerMgr(talkerMgr)
 {

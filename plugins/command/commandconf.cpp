@@ -41,8 +41,8 @@
 #include "commandconf.h"
 
 /** Constructor */
-CommandConf::CommandConf( TQWidget* tqparent, const char* name, const TQStringList& /*args*/) :
-    PlugInConf(tqparent, name)
+CommandConf::CommandConf( TQWidget* parent, const char* name, const TQStringList& /*args*/) :
+    PlugInConf(parent, name)
 {
     // kdDebug() << "CommandConf::CommandConf: Running" << endl;
     m_commandProc = 0;

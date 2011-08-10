@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    TalkerMgr(TQObject *tqparent = 0, const char *name = 0);
+    TalkerMgr(TQObject *parent = 0, const char *name = 0);
 
     /**
      * Destructor.

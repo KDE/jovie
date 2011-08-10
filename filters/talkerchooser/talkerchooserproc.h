@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    TalkerChooserProc( TQObject *tqparent, const char *name, const TQStringList &args = TQStringList() );
+    TalkerChooserProc( TQObject *parent, const char *name, const TQStringList &args = TQStringList() );
 
     /**
      * Destructor.

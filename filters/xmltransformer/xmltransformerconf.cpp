@@ -43,8 +43,8 @@
 /**
 * Constructor 
 */
-XmlTransformerConf::XmlTransformerConf( TQWidget *tqparent, const char *name, const TQStringList& /*args*/) :
-    KttsFilterConf(tqparent, name)
+XmlTransformerConf::XmlTransformerConf( TQWidget *parent, const char *name, const TQStringList& /*args*/) :
+    KttsFilterConf(parent, name)
 {
     // kdDebug() << "XmlTransformerConf::XmlTransformerConf: Running" << endl;
 

@@ -65,10 +65,10 @@ KttsJobMgrFactory::~KttsJobMgrFactory()
     s_instance = 0;
 }
 
-TQObject *KttsJobMgrFactory::createObject(TQObject *tqparent, const char *name, const char*,
+TQObject *KttsJobMgrFactory::createObject(TQObject *parent, const char *name, const char*,
                                const TQStringList& )
 {
-    TQObject *obj = new KttsJobMgrPart((TQWidget*)tqparent, name);
+    TQObject *obj = new KttsJobMgrPart((TQWidget*)parent, name);
     emit objectCreated(obj);
     return obj;
 }
@@ -86,10 +86,10 @@ KAboutData *KttsJobMgrFactory::aboutData()
   return about;
 }
 
-KttsJobMgrPart::KttsJobMgrPart(TQWidget *tqparent, const char *name) :
+KttsJobMgrPart::KttsJobMgrPart(TQWidget *parent, const char *name) :
     DCOPStub("kttsd", "KSpeech"),
     DCOPObject("kttsjobmgr_kspeechsink"),
-    KParts::ReadOnlyPart(TQT_TQOBJECT(tqparent), name)
+    KParts::ReadOnlyPart(TQT_TQOBJECT(parent), name)
 {
     // Initialize some variables.
     m_selectOnTextSet = false;
@@ -101,7 +101,7 @@ KttsJobMgrPart::KttsJobMgrPart(TQWidget *tqparent, const char *name) :
     KGlobal::locale()->insertCatalogue("kttsd");
 
     // Create a TQVBox to host everything.
-    TQVBox* vBox = new TQVBox(tqparent);
+    TQVBox* vBox = new TQVBox(parent);
     vBox->setMargin(6);
 
     // Create a splitter to contain the Job List View and the current sentence.
@@ -1013,8 +1013,8 @@ ASYNC KttsJobMgrPart::textRemoved(const TQCString&, const uint jobNum)
     autoSelectInJobListView();
 }
 
-KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *tqparent)
-    : KParts::BrowserExtension(tqparent, "KttsJobMgrBrowserExtension")
+KttsJobMgrBrowserExtension::KttsJobMgrBrowserExtension(KttsJobMgrPart *parent)
+    : KParts::BrowserExtension(parent, "KttsJobMgrBrowserExtension")
 {
 }
 

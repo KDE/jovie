@@ -38,7 +38,7 @@ class HadifixProc : public PlugInProc{
     };
     
     /** Constructor */
-    HadifixProc( TQObject* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+    HadifixProc( TQObject* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
     
     /** Destructor */
     ~HadifixProc();

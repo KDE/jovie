@@ -16,7 +16,7 @@ class HadifixConf : public PlugInConf {
 
     public:
         /** Constructor */
-        HadifixConf( TQWidget* tqparent = 0, const char* name = 0, const TQStringList &args = TQStringList());
+        HadifixConf( TQWidget* parent = 0, const char* name = 0, const TQStringList &args = TQStringList());
 
         /** Destructor */
         ~HadifixConf();
