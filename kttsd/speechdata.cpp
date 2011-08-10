@@ -423,24 +423,24 @@ TQStringList SpeechData::parseText(const TQString &text, const TQCString &appId 
     }
     // See if app has specified a custom sentence delimiter and use it, otherwise use default.
     TQRegExp sentenceDelimiter;
-    if (sentenceDelimiters.tqfind(appId) != sentenceDelimiters.end())
+    if (sentenceDelimiters.find(appId) != sentenceDelimiters.end())
         sentenceDelimiter = TQRegExp(sentenceDelimiters[appId]);
     else
         sentenceDelimiter = TQRegExp("([\\.\\?\\!\\:\\;]\\s)|(\\n *\\n)");
     TQString temp = text;
     // Replace spaces, tabs, and formfeeds with a single space.
-    temp.tqreplace(TQRegExp("[ \\t\\f]+"), " ");
+    temp.replace(TQRegExp("[ \\t\\f]+"), " ");
     // Replace sentence delimiters with tab.
-    temp.tqreplace(sentenceDelimiter, "\\1\t");
+    temp.replace(sentenceDelimiter, "\\1\t");
     // Replace remaining newlines with spaces.
-    temp.tqreplace("\n"," ");
-    temp.tqreplace("\r"," ");
+    temp.replace("\n"," ");
+    temp.replace("\r"," ");
     // Remove leading spaces.
-    temp.tqreplace(TQRegExp("\\t +"), "\t");
+    temp.replace(TQRegExp("\\t +"), "\t");
     // Remove trailing spaces.
-    temp.tqreplace(TQRegExp(" +\\t"), "\t");
+    temp.replace(TQRegExp(" +\\t"), "\t");
     // Remove blank lines.
-    temp.tqreplace(TQRegExp("\t\t+"),"\t");
+    temp.replace(TQRegExp("\t\t+"),"\t");
     // Split into sentences.
     TQStringList tempList = TQStringList::split("\t", temp, false);
 
@@ -1032,7 +1032,7 @@ void SpeechData::moveTextLater(const uint jobNum)
     if (job)
     {
         // Get index of the job.
-        uint index = textJobs.tqfindRef(job);
+        uint index = textJobs.findRef(job);
         // Move job down one position in the queue.
         // kdDebug() << "In SpeechData::moveTextLater, moving jobNum " << movedJobNum << endl;
         if (textJobs.insert(index + 2, job)) textJobs.take(index);
@@ -1149,7 +1149,7 @@ void SpeechData::startJobFiltering(mlJob* job, const TQString& text, bool noSBD)
     // Get TalkerCode structure of closest matching Talker.
     pooledFilterMgr->talkerCode = m_talkerMgr->talkerToTalkerCode(job->talker);
     // Pass Sentence Boundary regular expression (if app overrode default);
-    if (sentenceDelimiters.tqfind(job->appId) != sentenceDelimiters.end())
+    if (sentenceDelimiters.find(job->appId) != sentenceDelimiters.end())
         pooledFilterMgr->filterMgr->setSbRegExp(sentenceDelimiters[job->appId]);
     pooledFilterMgr->filterMgr->asyncConvert(text, pooledFilterMgr->talkerCode, job->appId);
 }

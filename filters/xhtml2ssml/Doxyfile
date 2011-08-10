@@ -17,7 +17,7 @@ ABBREVIATE_BRIEF       = "The $name class" \
                          is \
                          provides \
                          specifies \
-                         tqcontains \
+                         contains \
                          represents \
                          a \
                          an \

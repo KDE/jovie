@@ -205,7 +205,7 @@ int TalkerMgr::talkerToPluginIndex(const TQString& talker) const
 {
     // kdDebug() << "TalkerMgr::talkerToPluginIndex: matching talker " << talker << " to closest matching plugin." << endl;
     // If we have a cached match, return that.
-    if (m_talkerToPlugInCache.tqcontains(talker))
+    if (m_talkerToPlugInCache.contains(talker))
         return m_talkerToPlugInCache[talker];
     else
     {
@@ -223,7 +223,7 @@ int TalkerMgr::talkerToPluginIndex(const TQString& talker) const
  * If a plugin has not been loaded to match the talker, returns the default
  * plugin.
  *
- * TODO: When picking a talker, %KTTSD will automatically determine if text tqcontains
+ * TODO: When picking a talker, %KTTSD will automatically determine if text contains
  * markup and pick a talker that supports that markup, if available.  This
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
@@ -244,7 +244,7 @@ PlugInProc* TalkerMgr::talkerToPlugin(const TQString& talker) const
  *
  * The returned TalkerCode is a copy and should be destroyed by caller.
  *
- * TODO: When picking a talker, %KTTSD will automatically determine if text tqcontains
+ * TODO: When picking a talker, %KTTSD will automatically determine if text contains
  * markup and pick a talker that supports that markup, if available.  This
  * overrides all other attributes, i.e, it is treated as an automatic "top priority"
  * attribute.
@@ -325,7 +325,7 @@ bool TalkerMgr::autoconfigureTalker(const TQString& langCode, KConfig* config)
     {
         // See if this plugin supports the desired language.
         TQStringList languageCodes = offers[i]->property("X-KDE-Languages").toStringList();
-        if (languageCodes.tqcontains(languageCode))
+        if (languageCodes.contains(languageCode))
         {
             TQString desktopEntryName = offers[i]->desktopEntryName();
 

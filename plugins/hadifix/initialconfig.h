@@ -100,7 +100,7 @@ TQStringList findVoices(TQString mbrolaExec, const TQString &hadifixDataPath) {
    // 2b) search near the hadifix data path
    info.setFile(hadifixDataPath + "../../mbrola");
    TQString mbrolaPath = info.dirPath (true) + "/mbrola";
-   if (!list.tqcontains(mbrolaPath))
+   if (!list.contains(mbrolaPath))
       list += mbrolaPath;
 
    // 2c) broaden the search by adding subdirs (with a depth of 2)

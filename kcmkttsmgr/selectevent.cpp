@@ -67,7 +67,7 @@ SelectEvent::SelectEvent(TQWidget* tqparent, const char* name, WFlags fl, const 
             TQString description = config->readEntry( TQString::tqfromLatin1("Comment"),
                 i18n("No description available") );
             delete config;
-            int index = relativePath.tqfind( '/' );
+            int index = relativePath.find( '/' );
             TQString appname;
             if ( index >= 0 )
                 appname = relativePath.left( index );
@@ -136,8 +136,8 @@ TQString SelectEvent::getEvent()
 // "/opt/kde3/share/apps/kwin/eventsrc"
 TQString SelectEvent::makeRelative( const TQString& fullPath )
 {
-    int slash = fullPath.tqfindRev( '/' ) - 1;
-    slash = fullPath.tqfindRev( '/', slash );
+    int slash = fullPath.findRev( '/' ) - 1;
+    slash = fullPath.findRev( '/', slash );
 
     if ( slash < 0 )
         return TQString();

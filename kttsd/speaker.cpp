@@ -926,7 +926,7 @@ bool Speaker::isSsml(const TQString &text)
 }
 
 /**
- * Determines the initial state of an utterance.  If the utterance tqcontains
+ * Determines the initial state of an utterance.  If the utterance contains
  * SSML, the state is set to usWaitingTransform.  Otherwise, if the plugin
  * supports async synthesis, sets to usWaitingSynth, otherwise usWaitingSay.
  * If an utterance has already been transformed, usWaitingTransform is

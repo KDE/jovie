@@ -72,8 +72,8 @@ bool CommandProc::init(KConfig *config, const TQString &configGroup){
     m_stdin = config->readBoolEntry("StdIn", true);
     m_language = config->readEntry("LanguageCode", "en");
 
-    // Support separate synthesis if the TTS command tqcontains %w macro.
-    m_supportsSynth = (m_ttsCommand.tqcontains("%w"));
+    // Support separate synthesis if the TTS command contains %w macro.
+    m_supportsSynth = (m_ttsCommand.contains("%w"));
 
     TQString codecString = config->readEntry("Codec", "Local");
     m_codec = codecNameToCodec(codecString);
@@ -147,7 +147,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
     TQString escText = KShellProcess::quote(text);
 
     // 1.c) create a temporary file for the text, if %f macro is used.
-    if (command.tqcontains("%f"))
+    if (command.contains("%f"))
     {
         KTempFile tempFile(locateLocal("tmp", "commandplugin-"), ".txt");
         TQTextStream* fs = tempFile.textStream();
@@ -162,7 +162,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
     TQValueStack<bool> stack;
     bool issinglequote=false;
     bool isdoublequote=false;
-    int notqreplace=0;
+    int noreplace=0;
     TQRegExp re_noquote("(\"|'|\\\\|`|\\$\\(|\\$\\{|\\(|\\{|\\)|\\}|%%|%t|%f|%l|%w)");
     TQRegExp re_singlequote("('|%%|%t|%f|%l|%w)");
     TQRegExp re_doublequote("(\"|\\\\|`|\\$\\(|\\$\\{|%%|%t|%f|%l|%w)");
@@ -178,18 +178,18 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
         {
             // assert(isdoublequote == false)
             stack.push(isdoublequote);
-            if (notqreplace > 0)
+            if (noreplace > 0)
                 // count nested braces when within ${...}
-                notqreplace++;
+                noreplace++;
             i++;
         }
         else if (command[i]=='$')
         {
             stack.push(isdoublequote);
             isdoublequote = false;
-            if ((notqreplace > 0) || (command[i+1]=='{'))
+            if ((noreplace > 0) || (command[i+1]=='{'))
                 // count nested braces when within ${...}
-                notqreplace++;
+                noreplace++;
             i+=2;
         }
         else if ((command[i]==')') || (command[i]=='}'))
@@ -199,9 +199,9 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
                 isdoublequote = stack.pop();
             else
                 qWarning("Parse error.");
-            if (notqreplace > 0)
+            if (noreplace > 0)
                 // count nested braces when within ${...}
-                notqreplace--;
+                noreplace--;
             i++;
         }
         else if (command[i]=='\'')
@@ -219,7 +219,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
         else if (command[i]=='`')
         {
             // Replace all `...` with safer $(...)
-            command.tqreplace (i, 1, "$(");
+            command.replace (i, 1, "$(");
             TQRegExp re_backticks("(`|\\\\`|\\\\\\\\|\\\\\\$)");
             for (	int i2=re_backticks.search(command,i+2);
                 i2!=-1;
@@ -228,7 +228,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
             {
                 if (command[i2] == '`')
                 {
-                    command.tqreplace (i2, 1, ")");
+                    command.replace (i2, 1, ")");
                     i2=command.length(); // leave loop
                 }
                 else
@@ -239,7 +239,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
             }
             // Leave i unchanged! We need to process "$("
         }
-        else if (notqreplace == 0) // do not replace macros within ${...}
+        else if (noreplace == 0) // do not replace macros within ${...}
         {
             TQString match, v;
 
@@ -269,7 +269,7 @@ void CommandProc::synth(const TQString& inputText, const TQString& suggestedFile
             else if (issinglequote)
                 v="'"+v+"'";
 
-            command.tqreplace (i, match.length(), v);
+            command.replace (i, match.length(), v);
             i+=v.length();
         }
         else

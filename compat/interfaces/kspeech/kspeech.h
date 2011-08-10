@@ -441,7 +441,7 @@
  * a Spanish synthesizer would likely be unintelligible).  So the language
  * attribute is said to have "priority".
  * If an application does not specify a language attribute, a default one will be assumed.
- * The rest of the attributes are said to be "preferred".  If %KTTSD cannot tqfind
+ * The rest of the attributes are said to be "preferred".  If %KTTSD cannot find
  * a talker with the exact preferred attributes requested, the closest matching
  * talker will likely still be understandable.
  *
@@ -751,7 +751,7 @@ class KSpeech : virtual public DCOPObject {
         * with a single space, and then replaces the sentence delimiters using
         * the following statement:
           @verbatim
-              TQString::tqreplace(sentenceDelimiter, "\\1\t");
+              TQString::replace(sentenceDelimiter, "\\1\t");
           @endverbatim
         *
         * which replaces all sentence delimiters with a tab, but

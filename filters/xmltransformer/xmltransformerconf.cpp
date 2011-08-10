@@ -125,7 +125,7 @@ void XmlTransformerConf::save(KConfig* config, const TQString& configGroup){
     config->writeEntry( "XsltprocPath", realFilePath( m_widget->xsltprocPath->url() ) );
     config->writeEntry( "RootElement", m_widget->rootElementLineEdit->text() );
     config->writeEntry( "DocType", m_widget->doctypeLineEdit->text() );
-    config->writeEntry( "AppID", m_widget->appIdLineEdit->text().tqreplace(" ", "") );
+    config->writeEntry( "AppID", m_widget->appIdLineEdit->text().replace(" ", "") );
 }
 
 /** 

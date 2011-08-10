@@ -107,7 +107,7 @@ bool TalkerChooserProc::init(KConfig* config, const TQString& configGroup){
 {
     if ( !m_re.isEmpty() )
     {
-        int pos = inputText.tqfind( TQRegExp(m_re) );
+        int pos = inputText.find( TQRegExp(m_re) );
         if ( pos < 0 ) return inputText;
     }
     // If appId doesn't match, return input unmolested.
@@ -119,7 +119,7 @@ bool TalkerChooserProc::init(KConfig* config, const TQString& configGroup){
         TQString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( appIdStr.tqcontains(m_appIdList[ndx]) )
+            if ( appIdStr.contains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;

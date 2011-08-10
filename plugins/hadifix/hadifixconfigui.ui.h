@@ -53,14 +53,14 @@ void HadifixConfigUI::init () {
 
 void HadifixConfigUI::addVoice (const TQString &filename, bool isMale) {
    if (isMale) {
-      if (!maleVoices.tqcontains(filename)) {
+      if (!maleVoices.contains(filename)) {
          int id = voiceCombo->count();
          maleVoices.insert (filename, id);
          voiceCombo->insertItem (male, filename, id);
       }
    }
    else {
-      if (!femaleVoices.tqcontains(filename)) {
+      if (!femaleVoices.contains(filename)) {
          int id = voiceCombo->count();
          femaleVoices.insert (filename, id);
          voiceCombo->insertItem (female, filename, id);
@@ -93,7 +93,7 @@ TQString HadifixConfigUI::getVoiceFilename() {
    int curr = voiceCombo->currentItem();
 
    TQString filename = voiceCombo->text(curr);
-   if (defaultVoices.tqcontains(curr))
+   if (defaultVoices.contains(curr))
       filename = defaultVoices[curr];
 
    return filename;
@@ -103,7 +103,7 @@ bool HadifixConfigUI::isMaleVoice() {
    int curr = voiceCombo->currentItem();
    TQString filename = getVoiceFilename();
 
-   if (maleVoices.tqcontains(filename))
+   if (maleVoices.contains(filename))
       return maleVoices[filename] == curr;
    else
       return false;

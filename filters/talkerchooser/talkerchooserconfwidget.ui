@@ -84,7 +84,7 @@
                                 <cstring>reLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Te&amp;xt tqcontains:</string>
+                                <string>Te&amp;xt contains:</string>
                             </property>
                             <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>
@@ -102,7 +102,7 @@
                                 <cstring>appIdLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Application &amp;ID tqcontains:</string>
+                                <string>Application &amp;ID contains:</string>
                             </property>
                             <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>

@@ -123,9 +123,9 @@ int main(int argc, char *argv[])
                         TalkerCode* talkerCode = new TalkerCode( talker );
                         text = plugIn->convert( text, talkerCode, appId );
                         if ( args->isSet("break") ) 
-                            text.tqreplace( "\t", "\\t" );
+                            text.replace( "\t", "\\t" );
                         else
-                            text.tqreplace( "\t", "" );
+                            text.replace( "\t", "" );
                         cout << text.latin1() << endl;
                         delete config;
                         delete plugIn;

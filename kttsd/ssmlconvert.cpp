@@ -66,10 +66,10 @@ void SSMLConvert::setTalkers(const TQStringList &talkers) {
 TQString SSMLConvert::extractTalker(const TQString &talkercode) {
     TQString t = talkercode.section("synthesizer=", 1, 1);
     t = t.section('"', 1, 1);
-    if(t.tqcontains("flite"))
+    if(t.contains("flite"))
         return "flite";
     else
-        return t.left(t.tqfind(" ")).lower();
+        return t.left(t.find(" ")).lower();
 }
 
 /**
@@ -132,7 +132,7 @@ TQString SSMLConvert::appropriateTalker(const TQString &text) const {
         TQString lang = root.attribute("xml:lang");
         kdDebug() << "SSMLConvert::appropriateTalker: xml:lang found (" << lang << ")" << endl;
         /// If it is set to en*, then match all english speakers. They all sound the same anyways.
-        if(lang.tqcontains("en-")) {
+        if(lang.contains("en-")) {
             kdDebug() << "SSMLConvert::appropriateTalker: English" << endl;
             lang = "en";
         }

@@ -46,7 +46,7 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* tqparent, const ch
     // Default to user's desktop language.
     TQString languageCode = KGlobal::locale()->defaultLanguage();
     // If there is not a synth that supports the locale, try stripping country code.
-    if (!m_langToSynthMap.tqcontains(languageCode))
+    if (!m_langToSynthMap.contains(languageCode))
     {
         TQString countryCode;
         TQString charSet;
@@ -55,7 +55,7 @@ AddTalker::AddTalker(SynthToLangMap synthToLangMap, TQWidget* tqparent, const ch
         languageCode = twoAlpha;
     }
     // If there is still not a synth that supports the language code, default to "other".
-    if (!m_langToSynthMap.tqcontains(languageCode)) languageCode = "other";
+    if (!m_langToSynthMap.contains(languageCode)) languageCode = "other";
 
     // Select the language in the language combobox.
     TQString language = languageCodeToLanguage(languageCode);

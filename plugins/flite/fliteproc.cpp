@@ -129,11 +129,11 @@ void FliteProc::synth(
     // Encode quotation characters.
     TQString saidText = text;
 /*
-    saidText.tqreplace("\\\"", "#!#!");
-    saidText.tqreplace("\"", "\\\"");
-    saidText.tqreplace("#!#!", "\\\"");
+    saidText.replace("\\\"", "#!#!");
+    saidText.replace("\"", "\\\"");
+    saidText.replace("#!#!", "\\\"");
     // Remove certain comment characters.
-    saidText.tqreplace("--", "");
+    saidText.replace("--", "");
     saidText = "\"" + saidText + "\"";
 */
     saidText += "\n";

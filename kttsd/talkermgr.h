@@ -95,7 +95,7 @@ public:
      *
      * The returned TalkerCode is a copy and should be destroyed by caller.
      *
-     * TODO: When picking a talker, %KTTSD will automatically determine if text tqcontains
+     * TODO: When picking a talker, %KTTSD will automatically determine if text contains
      * markup and pick a talker that supports that markup, if available.  This
      * overrides all other attributes, i.e, it is treated as an automatic "top priority"
      * attribute.

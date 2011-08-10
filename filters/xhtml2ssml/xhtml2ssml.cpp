@@ -97,7 +97,7 @@ bool XHTMLToSSMLParser::readFileConfigEntry(const TQString &line) {
     // break into TQStringList
     // the second parameter to split is the string, with all space simplified and all space around the : removed, i.e
     //  "something     :      somethingelse"   ->  "something:somethingelse"
-    TQStringList keyvalue = TQStringList::split(":", line.simplifyWhiteSpace().tqreplace(" :", ":").tqreplace(": ", ":"));
+    TQStringList keyvalue = TQStringList::split(":", line.simplifyWhiteSpace().replace(" :", ":").replace(": ", ":"));
     if(keyvalue.count() != 2)
         return false;
     m_xhtml2ssml[keyvalue[0]] = keyvalue[1];

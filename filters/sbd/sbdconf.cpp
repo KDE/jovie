@@ -156,7 +156,7 @@ void SbdConf::save(KConfig* config, const TQString& configGroup){
     config->writeEntry("SentenceDelimiterRegExp", m_widget->reLineEdit->text() );
     config->writeEntry("SentenceBoundary", m_widget->sbLineEdit->text() );
     config->writeEntry("LanguageCodes", m_languageCodeList );
-    config->writeEntry("AppID", m_widget->appIdLineEdit->text().tqreplace(" ", "") );
+    config->writeEntry("AppID", m_widget->appIdLineEdit->text().replace(" ", "") );
 }
 
 /** 
@@ -257,7 +257,7 @@ void SbdConf::slotLanguageBrowseButton_clicked()
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
         TQListViewItem* item = new KListViewItem(langLView, language, locale);
-        if (m_languageCodeList.tqcontains(locale)) item->setSelected(true);
+        if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
     langLView->setSorting(0);

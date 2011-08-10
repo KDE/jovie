@@ -430,7 +430,7 @@ void KCMKttsMgr::load()
     loadNotifyEventsFromFile( locateLocal("config", "kttsd_notifyevents.xml"), true );
     slotNotifyEnableCheckBox_toggled( m_kttsmgrw->notifyEnableCheckBox->isChecked() );
     // Auto-expand and position on the Default item.
-    TQListViewItem* item = m_kttsmgrw->notifyListView->tqfindItem( "default", nlvcEventSrc );
+    TQListViewItem* item = m_kttsmgrw->notifyListView->findItem( "default", nlvcEventSrc );
     if ( item )
         if ( item->childCount() > 0 ) item = item->firstChild();
     if ( item ) m_kttsmgrw->notifyListView->ensureItemVisible( item );
@@ -542,7 +542,7 @@ void KCMKttsMgr::load()
         // All plugins support "Other".
         // TODO: Eventually, this should not be necessary, since all plugins will know
         // the languages they support and report them in call to getSupportedLanguages().
-        if (!languageCodes.tqcontains("other")) languageCodes.append("other");
+        if (!languageCodes.contains("other")) languageCodes.append("other");
 
         // Add supported language codes to synthesizer-to-language map.
         m_synthToLangMap[synthName] = languageCodes;
@@ -822,7 +822,7 @@ void KCMKttsMgr::save()
         if (groupName.left(7) == "Talker_")
         {
             TQString groupTalkerID = groupName.mid(7);
-            if (!talkerIDsList.tqcontains(groupTalkerID)) m_config->deleteGroup(groupName);
+            if (!talkerIDsList.contains(groupTalkerID)) m_config->deleteGroup(groupName);
         }
     }
 
@@ -862,7 +862,7 @@ void KCMKttsMgr::save()
         if (groupName.left(7) == "Filter_")
         {
             TQString groupFilterID = groupName.mid(7);
-            if (!filterIDsList.tqcontains(groupFilterID)) m_config->deleteGroup(groupName);
+            if (!filterIDsList.contains(groupFilterID)) m_config->deleteGroup(groupName);
         }
     }
 
@@ -1400,7 +1400,7 @@ void KCMKttsMgr::addFilter( bool sbd)
     {
         if (item->text(flvcMultiInstance) == "T")
         {
-            if (!filterPlugInNames.tqcontains(item->text(flvcPlugInName)))
+            if (!filterPlugInNames.contains(item->text(flvcPlugInName)))
                 filterPlugInNames.append(item->text(flvcPlugInName));
         }
         item = item->nextSibling();
@@ -2482,9 +2482,9 @@ void KCMKttsMgr::slotNotifyTestButton_clicked()
                 break;
             case NotifyAction::SpeakCustom:
                 msg = m_kttsmgrw->notifyMsgLineEdit->text();
-                msg.tqreplace("%a", i18n("sample application"));
-                msg.tqreplace("%e", i18n("sample event"));
-                msg.tqreplace("%m", i18n("sample notification message"));
+                msg.replace("%a", i18n("sample application"));
+                msg.replace("%e", i18n("sample event"));
+                msg.replace("%m", i18n("sample notification message"));
                 break;
         }
         if (!msg.isEmpty()) sayMessage(msg, item->text(nlvcTalker));
@@ -2543,7 +2543,7 @@ TQListViewItem* KCMKttsMgr::addNotifyItem(
     TQString talkerName = talkerCode.getTranslatedDescription();
     if (!eventSrcName.isEmpty() && !eventName.isEmpty() && !actionName.isEmpty() && !talkerName.isEmpty())
     {
-        TQListViewItem* parentItem = lv->tqfindItem(eventSrcName, nlvcEventSrcName);
+        TQListViewItem* parentItem = lv->findItem(eventSrcName, nlvcEventSrcName);
         if (!parentItem)
         {
             item = lv->lastItem();
@@ -2557,7 +2557,7 @@ TQListViewItem* KCMKttsMgr::addNotifyItem(
                 parentItem->setPixmap( nlvcEventSrcName, SmallIcon( iconName ) );
         }
         // No duplicates.
-        item = lv->tqfindItem( event, nlvcEvent );
+        item = lv->findItem( event, nlvcEvent );
         if ( !item || item->tqparent() != parentItem )
             item = new KListViewItem(parentItem, eventName, actionDisplayName, talkerName,
                 eventSrc, event, actionName, talkerCode.getTalkerCode());
@@ -2599,7 +2599,7 @@ void KCMKttsMgr::slotNotifyAddButton_clicked()
     int action = NotifyAction::DoNotSpeak;
     TQString msg;
     TalkerCode talkerCode;
-    item = lv->tqfindItem( "default", nlvcEventSrc );
+    item = lv->findItem( "default", nlvcEventSrc );
     if ( item )
     {
         if ( item->childCount() > 0 ) item = item->firstChild();

@@ -215,7 +215,7 @@
                                 <cstring>appIdLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>and Application &amp;ID tqcontains:</string>
+                                <string>and Application &amp;ID contains:</string>
                             </property>
                             <property name="tqalignment">
                                 <set>AlignVCenter|AlignRight</set>

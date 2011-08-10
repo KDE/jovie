@@ -277,8 +277,8 @@ TQString SbdThread::makeSentence( const TQString& text )
     if ( !e.isEmpty() ) s += e;
     // Escape ampersands and less thans.
     TQString newText = text;
-    newText.tqreplace(TQRegExp("&(?!amp;)"), "&amp;");
-    newText.tqreplace(TQRegExp("<(?!lt;)"), "&lt;");
+    newText.replace(TQRegExp("&(?!amp;)"), "&amp;");
+    newText.replace(TQRegExp("<(?!lt;)"), "&lt;");
     s += newText;
     if ( !e.isEmpty() ) s += "</emphasis>";
     if ( !p.isEmpty() ) s += "</prosody>";
@@ -351,7 +351,7 @@ TQString SbdThread::parseSsmlNode( TQDomNode& n, const TQString& re )
         case TQDomNode::TextNode: {                  // = 3
             TQString s = parsePlainText( n.toText().data(), re );
             // TQString d = s;
-            // d.tqreplace("\t", "\\t");
+            // d.replace("\t", "\\t");
             // kdDebug() << "SbdThread::parseSsmlNode: parsedPlainText = [" << d << "]" << endl;
             TQStringList sentenceList = TQStringList::split( '\t', s, false );
             int lastNdx = sentenceList.count() - 1;
@@ -457,13 +457,13 @@ TQString SbdThread::parseCode( const TQString& inputText )
 {
     TQString temp = inputText;
     // Replace newlines with tabs.
-    temp.tqreplace("\n","\t");
+    temp.replace("\n","\t");
     // Remove leading spaces.
-    temp.tqreplace(TQRegExp("\\t +"), "\t");
+    temp.replace(TQRegExp("\\t +"), "\t");
     // Remove trailing spaces.
-    temp.tqreplace(TQRegExp(" +\\t"), "\t");
+    temp.replace(TQRegExp(" +\\t"), "\t");
     // Remove blank lines.
-    temp.tqreplace(TQRegExp("\t\t+"),"\t");
+    temp.replace(TQRegExp("\t\t+"),"\t");
     return temp;
 }
 
@@ -474,16 +474,16 @@ TQString SbdThread::parsePlainText( const TQString& inputText, const TQString& r
     TQRegExp sentenceDelimiter = TQRegExp( re );
     TQString temp = inputText;
     // Replace sentence delimiters with tab.
-    temp.tqreplace(sentenceDelimiter, m_configuredSentenceBoundary);
+    temp.replace(sentenceDelimiter, m_configuredSentenceBoundary);
     // Replace remaining newlines with spaces.
-    temp.tqreplace("\n"," ");
-    temp.tqreplace("\r"," ");
+    temp.replace("\n"," ");
+    temp.replace("\r"," ");
     // Remove leading spaces.
-    temp.tqreplace(TQRegExp("\\t +"), "\t");
+    temp.replace(TQRegExp("\\t +"), "\t");
     // Remove trailing spaces.
-    temp.tqreplace(TQRegExp(" +\\t"), "\t");
+    temp.replace(TQRegExp(" +\\t"), "\t");
     // Remove blank lines.
-    temp.tqreplace(TQRegExp("\t\t+"),"\t");
+    temp.replace(TQRegExp("\t\t+"),"\t");
     return temp;
 }
 
@@ -503,7 +503,7 @@ TQString SbdThread::parsePlainText( const TQString& inputText, const TQString& r
     {
         // Examine just the first 500 chars to see if it is code.
         TQString p = m_text.left( 500 );
-        if ( p.tqcontains( TQRegExp( "(/\\*)|(if\\b\\()|(^#include\\b)" ) ) )
+        if ( p.contains( TQRegExp( "(/\\*)|(if\\b\\()|(^#include\\b)" ) ) )
             textType = ttCode;
         else
             textType = ttPlain;
@@ -515,7 +515,7 @@ TQString SbdThread::parsePlainText( const TQString& inputText, const TQString& r
     if ( re.isEmpty() ) re = m_configuredRe;
 
     // Replace spaces, tabs, and formfeeds with a single space.
-    m_text.tqreplace(TQRegExp("[ \\t\\f]+"), " ");
+    m_text.replace(TQRegExp("[ \\t\\f]+"), " ");
 
     // Perform the filtering based on type of text.
     switch ( textType )
@@ -603,7 +603,7 @@ bool SbdProc::init(KConfig* config, const TQString& configGroup){
     m_configuredRe = config->readEntry( "SentenceDelimiterRegExp", "([\\.\\?\\!\\:\\;])(\\s|$|(\\n *\\n))" );
     m_sbdThread->setConfiguredSbRegExp( m_configuredRe );
     TQString sb = config->readEntry( "SentenceBoundary", "\\1\t" );
-    sb.tqreplace( "\\t", "\t" );
+    sb.replace( "\\t", "\t" );
     m_sbdThread->setConfiguredSentenceBoundary( sb );
     m_appIdList = config->readListEntry( "AppID" );
     m_languageCodeList = config->readListEntry( "LanguageCodes" );
@@ -672,14 +672,14 @@ bool SbdProc::init(KConfig* config, const TQString& configGroup){
         TQString languageCode = talkerCode->languageCode();
         // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
         // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
-        if ( !m_languageCodeList.tqcontains( languageCode ) )
+        if ( !m_languageCodeList.contains( languageCode ) )
         {
             if ( !talkerCode->countryCode().isEmpty() )
             {
                 languageCode += '_' + talkerCode->countryCode();
                 // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
                 // " if language code " << languageCode << " matches " << m_languageCodeList << endl;
-                if ( !m_languageCodeList.tqcontains( languageCode ) ) return false;
+                if ( !m_languageCodeList.contains( languageCode ) ) return false;
             } else return false;
         }
     }
@@ -692,7 +692,7 @@ bool SbdProc::init(KConfig* config, const TQString& configGroup){
         TQString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( appIdStr.tqcontains(m_appIdList[ndx]) )
+            if ( appIdStr.contains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;

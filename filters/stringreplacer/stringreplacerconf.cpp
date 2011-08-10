@@ -308,7 +308,7 @@ TQString StringReplacerConf::saveToFile(const TQString& filename)
     }
 
     // Application ID
-    TQString appId = m_widget->appIdLineEdit->text().tqreplace(" ", "");
+    TQString appId = m_widget->appIdLineEdit->text().replace(" ", "");
     if ( !appId.isEmpty() )
     {
         TQStringList appIdList = TQStringList::split(",", appId);
@@ -442,7 +442,7 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
         if (!countryCode.isEmpty()) language +=
             " (" + KGlobal::locale()->twoAlphaToCountryName(countryCode)+")";
         item = new KListViewItem(langLView, language, locale);
-        if (m_languageCodeList.tqcontains(locale)) item->setSelected(true);
+        if (m_languageCodeList.contains(locale)) item->setSelected(true);
     }
     // Sort by language.
     langLView->setSorting(0);
@@ -488,11 +488,11 @@ void StringReplacerConf::slotLanguageBrowseButton_clicked()
     if (m_languageCodeList.count() > 1) language = i18n("Multiple Languages");
     if ( !s1.isEmpty() )
     {
-        s2.tqreplace( s1, language );
-        s2.tqreplace( i18n("Multiple Languages"), language );
+        s2.replace( s1, language );
+        s2.replace( i18n("Multiple Languages"), language );
     }
-    s2.tqreplace(" ()", "");
-    if ( !s2.tqcontains("(") && !language.isEmpty() ) s2 += " (" + language + ")";
+    s2.replace(" ()", "");
+    if ( !s2.contains("(") && !language.isEmpty() ) s2 += " (" + language + ")";
     m_widget->nameLineEdit->setText(s2);
     configChanged();
 }

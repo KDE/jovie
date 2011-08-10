@@ -121,7 +121,7 @@ TQString CommandConf::getTalkerCode()
     {
         // Must contain either text or file parameter, or StdIn checkbox must be checked,
         // otherwise, does nothing!
-        if ((url.tqcontains("%t") > 0) || (url.tqcontains("%f") > 0) || m_widget->stdInButton->isChecked())
+        if ((url.contains("%t") > 0) || (url.contains("%f") > 0) || m_widget->stdInButton->isChecked())
         {
             return TQString(
                 "<voice lang=\"%1\" name=\"%2\" gender=\"%3\" />"

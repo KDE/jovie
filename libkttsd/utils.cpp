@@ -41,7 +41,7 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
-        int xmlStatementEnd = doc.tqfind("?>");
+        int xmlStatementEnd = doc.find("?>");
         if(xmlStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -51,7 +51,7 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
     }
     // Take off leading comments, if they exist.
     while(doc.startsWith("<!--") || doc.startsWith(" <!--")) {
-        int commentStatementEnd = doc.tqfind("-->");
+        int commentStatementEnd = doc.find("-->");
         if(commentStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -61,7 +61,7 @@ bool KttsUtils::hasRootElement(const TQString &xmldoc, const TQString &elementNa
     }
     // Take off the doctype statement if it exists.
     while(doc.startsWith("<!DOCTYPE") || doc.startsWith(" <!DOCTYPE")) {
-        int doctypeStatementEnd = doc.tqfind(">");
+        int doctypeStatementEnd = doc.find(">");
         if(doctypeStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
             return false;
@@ -88,7 +88,7 @@ bool KttsUtils::hasDoctype(const TQString &xmldoc, const TQString &name/*, const
     if(doc.startsWith("<?xml")) {
         // Look for ?> and strip everything off from there to the start - effectively removing
         // <?xml...?>
-        int xmlStatementEnd = doc.tqfind("?>");
+        int xmlStatementEnd = doc.find("?>");
         if(xmlStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;
@@ -99,7 +99,7 @@ bool KttsUtils::hasDoctype(const TQString &xmldoc, const TQString &name/*, const
     }
     // Take off leading comments, if they exist.
     while(doc.startsWith("<!--")) {
-        int commentStatementEnd = doc.tqfind("-->");
+        int commentStatementEnd = doc.find("-->");
         if(commentStatementEnd == -1) {
             kdDebug() << "KttsUtils::hasDoctype: Bad XML file syntax\n";
             return false;

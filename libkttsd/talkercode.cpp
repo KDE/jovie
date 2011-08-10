@@ -304,7 +304,7 @@ void TalkerCode::normalize()
 void TalkerCode::parseTalkerCode(const TQString &talkerCode)
 {
     TQString fullLanguageCode;
-    if (talkerCode.tqcontains("\""))
+    if (talkerCode.contains("\""))
     {
         fullLanguageCode = talkerCode.section("lang=", 1, 1);
         fullLanguageCode = fullLanguageCode.section('"', 1, 1);

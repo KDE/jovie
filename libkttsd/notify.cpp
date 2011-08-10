@@ -68,7 +68,7 @@ static void notifyaction_init()
 /*static*/ int NotifyAction::action( const TQString& actionName )
 {
     notifyaction_init();
-    return s_actionNames->tqfindIndex( actionName );
+    return s_actionNames->findIndex( actionName );
 }
 
 /*static*/ TQString NotifyAction::actionDisplayName( const int action )
@@ -126,7 +126,7 @@ static void notifypresent_init()
 /*static*/ int NotifyPresent::present( const TQString& presentName )
 {
     notifypresent_init();
-    return s_presentNames->tqfindIndex( presentName );
+    return s_presentNames->findIndex( presentName );
 }
 
 /*static*/ TQString NotifyPresent::presentDisplayName( const int present )

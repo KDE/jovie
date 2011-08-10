@@ -893,16 +893,16 @@ void KTTSD::notificationSignal( const TQString& event, const TQString& fromApp,
             TQString msg;
             TQString talker;
             // Check for app-specific action.
-            if ( m_speechData->notifyAppMap.tqcontains( fromApp ) )
+            if ( m_speechData->notifyAppMap.contains( fromApp ) )
             {
                 NotifyEventMap notifyEventMap = m_speechData->notifyAppMap[ fromApp ];
-                if ( notifyEventMap.tqcontains( event ) )
+                if ( notifyEventMap.contains( event ) )
                 {
                     found = true;
                     notifyOptions = notifyEventMap[ event ];
                 } else {
                     // Check for app-specific default.
-                    if ( notifyEventMap.tqcontains( "default" ) )
+                    if ( notifyEventMap.contains( "default" ) )
                     {
                         found = true;
                         notifyOptions = notifyEventMap[ "default" ];
@@ -965,14 +965,14 @@ void KTTSD::notificationSignal( const TQString& event, const TQString& fromApp,
                         break;
                     case NotifyAction::SpeakCustom:
                         msg = notifyOptions.customMsg;
-                        msg.tqreplace( "%a", fromApp );
-                        msg.tqreplace( "%m", text );
-                        if ( msg.tqcontains( "%e" ) )
+                        msg.replace( "%a", fromApp );
+                        msg.replace( "%m", text );
+                        if ( msg.contains( "%e" ) )
                         {
                             if ( notifyOptions.eventName.isEmpty() )
-                                msg.tqreplace( "%e", NotifyEvent::getEventName( fromApp, event ) );
+                                msg.replace( "%e", NotifyEvent::getEventName( fromApp, event ) );
                             else
-                                msg.tqreplace( "%e", notifyOptions.eventName );
+                                msg.replace( "%e", notifyOptions.eventName );
                         }
                         break;
                 }

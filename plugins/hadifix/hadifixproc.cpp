@@ -377,9 +377,9 @@ HadifixProc::VoiceGender HadifixProc::determineGender(TQString mbrola, TQString 
    else {
       if (output != 0)
          *output = speech.stdOut;
-      if (speech.stdOut.tqcontains("female", false))
+      if (speech.stdOut.contains("female", false))
          result = FemaleGender;
-      else if (speech.stdOut.tqcontains("male", false))
+      else if (speech.stdOut.contains("male", false))
          result = MaleGender;
       else
          result = NoGender;

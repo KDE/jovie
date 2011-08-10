@@ -257,7 +257,7 @@ void FestivalIntProc::synth(
     // If we just started Festival, or rate changed, tell festival.
     if (m_runningTime != time) {
         TQString timeMsg;
-        if (voiceCode.tqcontains("_hts") > 0)
+        if (voiceCode.contains("_hts") > 0)
         {
             // Map 50% to 200% onto 0 to 1000.
             // slider = alpha * (log(percent)-log(50))
@@ -304,14 +304,14 @@ void FestivalIntProc::synth(
     int len = saidText.length();
     while (len > c_tooLong)
     {
-        len = saidText.tqfindRev(", ", len - (c_tooLong * 2 / 3), true);
+        len = saidText.findRev(", ", len - (c_tooLong * 2 / 3), true);
         if (len != -1)
         {
             TQString c = saidText.mid(len+2, 1);
             if (c != c.upper())
             {
-                saidText.tqreplace(len, 2, ". ");
-                saidText.tqreplace(len+2, 1, c.upper());
+                saidText.replace(len, 2, ". ");
+                saidText.replace(len+2, 1, c.upper());
                 kdDebug() << "FestivalIntProc::synth: Splitting long sentence at " << len << endl;
                 // kdDebug() << saidText << endl;
             }
@@ -319,11 +319,11 @@ void FestivalIntProc::synth(
     }
 
     // Encode quotation characters.
-    saidText.tqreplace("\\\"", "#!#!");
-    saidText.tqreplace("\"", "\\\"");
-    saidText.tqreplace("#!#!", "\\\"");
+    saidText.replace("\\\"", "#!#!");
+    saidText.replace("\"", "\\\"");
+    saidText.replace("#!#!", "\\\"");
     // Remove certain comment characters.
-    saidText.tqreplace("--", "");
+    saidText.replace("--", "");
 
     // Ok, let's rock.
     if (synthFilename.isNull())
@@ -502,7 +502,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 {
     TQString buf = TQString::tqfromLatin1(buffer, buflen);
     // kdDebug() << "FestivalIntProc::slotReceivedStdout: Received from Festival: " << buf << endl;
-    bool promptSeen = (buf.tqcontains("festival>") > 0);
+    bool promptSeen = (buf.contains("festival>") > 0);
     bool emitQueryVoicesFinished = false;
     TQStringList voiceCodesList;
     if (m_waitingQueryVoices && m_outputQueue.isEmpty())
@@ -515,7 +515,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
 		} else {
 			if (buf.left(1) == "(")
 			{
-				int rightParen = buf.tqfind(')');
+				int rightParen = buf.find(')');
 				if (rightParen > 0)
 				{
 					m_waitingQueryVoices = false;
@@ -562,7 +562,7 @@ void FestivalIntProc::slotReceivedStdout(KProcess*, char* buffer, int buflen)
     if (emitQueryVoicesFinished)
     {
         // kdDebug() << "FestivalIntProc::slotReceivedStdout: emitting queryVoicesFinished" << endl;
-        m_supportsSSML = (voiceCodesList.tqcontains("rab_diphone")) ? ssYes : ssNo;
+        m_supportsSSML = (voiceCodesList.contains("rab_diphone")) ? ssYes : ssNo;
         emit queryVoicesFinished(voiceCodesList);
     }
 }

@@ -198,7 +198,7 @@ bool XmlTransformerProc::init(KConfig* config, const TQString& configGroup)
         found = false;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( appIdStr.tqcontains(m_appIdList[ndx]) )
+            if ( appIdStr.contains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;
@@ -227,7 +227,7 @@ bool XmlTransformerProc::init(KConfig* config, const TQString& configGroup)
     // This will change & inside a CDATA section, which is not good, and also within comments and
     // processing instructions, which is OK because we don't speak those anyway.
     TQString text = inputText;
-    text.tqreplace(TQRegExp("&(?!amp;)"),"&amp;");
+    text.replace(TQRegExp("&(?!amp;)"),"&amp;");
     *wstream << text;
     inFile.close();
 #if KDE_VERSION >= KDE_MAKE_VERSION (3,3,0)

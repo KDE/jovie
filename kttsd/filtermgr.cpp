@@ -116,8 +116,8 @@ bool FilterMgr::init(KConfig *config, const TQString& /*configGroup*/)
                     filterProc->init( config, groupName );
                     m_filterList.append( filterProc );
                 }
-                if (config->readEntry("DocType").tqcontains("html") ||
-                    config->readEntry("RootElement").tqcontains("html"))
+                if (config->readEntry("DocType").contains("html") ||
+                    config->readEntry("RootElement").contains("html"))
                     m_supportsHTML = true;
             }
         }

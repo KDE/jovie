@@ -490,7 +490,7 @@ void KttsJobMgrPart::slot_job_change_talker()
     {
         TQString talkerID = item->text(jlvcTalkerID);
         TQStringList talkerIDs = m_talkerCodesToTalkerIDs.values();
-        int ndx = talkerIDs.tqfindIndex(talkerID);
+        int ndx = talkerIDs.findIndex(talkerID);
         TQString talkerCode;
         if (ndx >= 0) talkerCode = m_talkerCodesToTalkerIDs.keys()[ndx];
         SelectTalkerDlg dlg(widget(), "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
@@ -632,7 +632,7 @@ int KttsJobMgrPart::getCurrentJobPartCount()
 */
 TQListViewItem* KttsJobMgrPart::findItemByJobNum(const uint jobNum)
 {
-    return m_jobListView->tqfindItem(TQString::number(jobNum), jlvcJobNum);
+    return m_jobListView->findItem(TQString::number(jobNum), jlvcJobNum);
 }
 
 /**
@@ -746,7 +746,7 @@ void KttsJobMgrPart::autoSelectInJobListView()
 TQString KttsJobMgrPart::cachedTalkerCodeToTalkerID(const TQString& talkerCode)
 {
     // If in the cache, return that.
-    if (m_talkerCodesToTalkerIDs.tqcontains(talkerCode))
+    if (m_talkerCodesToTalkerIDs.contains(talkerCode))
         return m_talkerCodesToTalkerIDs[talkerCode];
     else
     {

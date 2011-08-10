@@ -180,14 +180,14 @@ bool StringReplacerProc::init(KConfig* config, const TQString& configGroup){
         TQString languageCode = talkerCode->languageCode();
         // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
         //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
-        if ( !m_languageCodeList.tqcontains( languageCode ) )
+        if ( !m_languageCodeList.contains( languageCode ) )
         {
             if ( !talkerCode->countryCode().isEmpty() )
             {
                 languageCode += '_' + talkerCode->countryCode();
                 // kdDebug() << "StringReplacerProc::convert: converting " << inputText << 
                 //    " if language code " << languageCode << " matches " << m_languageCodeList << endl;
-                if ( !m_languageCodeList.tqcontains( languageCode ) ) return inputText;
+                if ( !m_languageCodeList.contains( languageCode ) ) return inputText;
             } else return inputText;
         }
     }
@@ -200,7 +200,7 @@ bool StringReplacerProc::init(KConfig* config, const TQString& configGroup){
         TQString appIdStr = appId;
         for ( uint ndx=0; ndx < m_appIdList.count(); ++ndx )
         {
-            if ( appIdStr.tqcontains(m_appIdList[ndx]) )
+            if ( appIdStr.contains(m_appIdList[ndx]) )
             {
                 found = true;
                 break;
@@ -217,7 +217,7 @@ bool StringReplacerProc::init(KConfig* config, const TQString& configGroup){
     for ( int index = 0; index < listCount; ++index )
     {
         //kdDebug() << "newtext = " << newText << " matching " << m_matchList[index].pattern() << " replacing with " << m_substList[index] << endl;
-        newText.tqreplace( m_matchList[index], m_substList[index] );
+        newText.replace( m_matchList[index], m_substList[index] );
     }
     m_wasModified = true;
     return newText;
