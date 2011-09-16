@@ -14,7 +14,7 @@ set(testfilter_SRCS main.cpp )
 
 kde4_add_executable(testfilter TEST ${testfilter_SRCS})
 
-target_link_libraries(testfilter  ${KDE4_KDECORE_LIBS} kttsd )
+target_link_libraries(testfilter  ${KDE4_KDEUI_LIBS} kttsd )
 
 
 ########### install files ###############
