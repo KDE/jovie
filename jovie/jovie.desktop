@@ -5,6 +5,7 @@ Icon=preferences-desktop-text-to-speech
 ServiceTypes=DBUS/Text-to-Speech
 X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
+GenericName=Text To Speech Service
 Name=Jovie
 Name[bg]=Jovie
 Name[bs]=Jovie
