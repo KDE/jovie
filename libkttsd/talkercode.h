@@ -1,10 +1,10 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Object containing a Talker Code and providing convenience
   functions for manipulating Talker Codes.
-  For an explanation of what a Talker Code is, see speech.h. 
+  For an explanation of what a Talker Code is, see speech.h.
   -------------------
-  Copyright: (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 

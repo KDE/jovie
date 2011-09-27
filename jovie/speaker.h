@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Speaker class.
-  
+
   This class is in charge of getting the messages, warnings and text from
   the queue and calling speech-dispatcher to actually speak the texts.
   -------------------
@@ -36,7 +36,7 @@
 #include <kspeech.h>
 
 // KTTSD includes.
-#include "config-jovie.h"
+#include <config-jovie.h>
 #ifdef OPENTTS_FOUND
 #include <opentts/libopentts.h>
 #elif defined(SPEECHD_FOUND)
@@ -78,7 +78,7 @@ public:
     * Destructor.
     */
     ~Speaker();
-    
+
     /**
     * (re)initializes the filtermgr
     */
@@ -163,18 +163,18 @@ public:
      * If there is no message being spoken, does nothing. (It doesn't touch the messages waiting in queues).
      */
     void stop();
-    
+
     /**
      * Stops the currently spoken message from this connection (if there is any) and discards all the
      * queued messages from this connection.
      */
     void cancel();
-    
+
     /**
     * Pauses the speech.
     */
     void pause();
-    
+
     /**
     * Resumes the speech.
     */
@@ -184,7 +184,7 @@ public:
      * Get the output modules available from speech-dispatcher
      */
     QStringList outputModules();
-    
+
     /**
      * Get the languages available for the given output module
      */
@@ -193,7 +193,7 @@ public:
     void setSpeed(int speed);
     void setPitch(int pitch);
     void setVolume(int volume);
-    
+
     void setOutputModule(const QString & module);
     void setLanguage(const QString & language);
     void setVoiceType(int voiceType);

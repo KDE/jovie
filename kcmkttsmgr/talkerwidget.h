@@ -3,7 +3,7 @@
   rate, and pitch. Uses talkerwidget.ui.
 
   -------------------
-  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright 2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
 
   This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,7 @@ public:
     */
     TalkerCode getTalkerCode() const;
 
-    
+
 Q_SIGNALS:
     void talkerChanged();
 

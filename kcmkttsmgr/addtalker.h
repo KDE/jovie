@@ -2,8 +2,8 @@
   Dialog to allow user to add a new Talker by selecting a language and synthesizer
   (button).  Uses addtalkerwidget.ui.
   -------------------
-  Copyright: (C) 2004 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright: (C) 2009 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright 2004 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright 2009 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 

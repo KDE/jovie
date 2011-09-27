@@ -1,8 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Generic String Replacement Filter Configuration class.
   -------------------
-  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
-  Copyright: (C) 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright 2005 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright 2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
   Original author: Gary Cramblitt <garycramblitt@comcast.net>
 
@@ -377,7 +377,7 @@ QString StringReplacerConf::substitutionTypeToString(const int substitutionType)
 
 void StringReplacerConf::slotLanguageBrowseButton_clicked()
 {
-    SelectLanguageDlg* dlg = new SelectLanguageDlg(
+    QPointer<SelectLanguageDlg> dlg = new SelectLanguageDlg(
         this,
         i18n("Select Languages"),
         QStringList(m_languageCodeList),

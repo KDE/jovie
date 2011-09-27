@@ -194,12 +194,13 @@ void TalkerChooserConf::slotReEditorButton_clicked()
 void TalkerChooserConf::slotTalkerButton_clicked()
 {
     QString talkerCode = m_talkerCode.getTalkerCode();
-    SelectTalkerDlg dlg( this, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true );
-    int dlgResult = dlg.exec();
+    QPointer<SelectTalkerDlg> dlg = new SelectTalkerDlg(this, "selecttalkerdialog", i18n("Select Talker"), talkerCode, true);
+    int dlgResult = dlg->exec();
     if ( dlgResult != KDialog::Accepted ) return;
-    m_talkerCode = TalkerCode( dlg.getSelectedTalkerCode(), false );
+    m_talkerCode = TalkerCode( dlg->getSelectedTalkerCode(), false );
     talkerLineEdit->setText( m_talkerCode.getTranslatedDescription() );
     configChanged();
+    delete dlg;
 }
 
 void TalkerChooserConf::slotLoadButton_clicked()

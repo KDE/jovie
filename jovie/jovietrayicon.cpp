@@ -1,8 +1,8 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
-  KTTSMgr System Tray Application
+  Jovie System Tray Application
   -------------------------------
-  Copyright: (C) 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
-  Copyright: (C) 2010 by Jeremy Whiting <jpwhiting@kde.org>
+  Copyright 2004-2006 by Gary Cramblitt <garycramblitt@comcast.net>
+  Copyright 2010 by Jeremy Whiting <jpwhiting@kde.org>
   -------------------
 
   This program is free software; you can redistribute it and/or modify
