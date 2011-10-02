@@ -8,14 +8,20 @@
   (C) 2004 by Paul Giannaros <ceruleanblaze@gmail.com>
   -------------------
   Original author: Paul Giannaros <ceruleanblaze@gmail.com>
-******************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; version 2 of the License.               *
- *                                                                         *
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) version 3.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ***************************************************************************/
 
 #include "xmlelement.h"
@@ -82,7 +88,7 @@ XMLElement XMLElement::fromQString(const QString &str) {
     QStringList sections = str.split( ' ');
     QString tagname = sections[0];
     XMLElement e(tagname.latin1());
-    
+
     sections.pop_front();
     // Loop over the remaining strings which are attributes="values"
     if(sections.count()) {

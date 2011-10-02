@@ -3,18 +3,23 @@
 
   Parses a piece of XHTML markup and converts into SSML.
   -------------------
-  Copyright:
-  (C) 2004 by Paul Giannaros <ceruleanblaze@gmail.com>
+  Copyright 2004 by Paul Giannaros <ceruleanblaze@gmail.com>
   -------------------
   Original author: Paul Giannaros <ceruleanblaze@gmail.com>
-******************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; version 2 of the License.               *
- *                                                                         *
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) version 3.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ***************************************************************************/
 
 #include "xhtml2ssml.h"
@@ -42,7 +47,7 @@ bool XHTMLToSSMLParser::startDocument() {
     while(!stream.atEnd()) {
         linestatus = readFileConfigEntry(stream.readLine());
         // If there's some syntactical error in the file then return false.
-        if(!linestatus) 
+        if(!linestatus)
             return false;
         /// Maybe call processEvents() to prevent GUI blockages?
     }
@@ -57,7 +62,7 @@ bool XHTMLToSSMLParser::startElement(const QString &, const QString &, const QSt
             attributes += " " + atts.qName(i) + "=\"" + atts.value(i) + "\"";
     }
     QString fromelement = qName + attributes;
-    // If this element is one of the keys that was specified in the configuration file, get what it should be converted to and 
+    // If this element is one of the keys that was specified in the configuration file, get what it should be converted to and
     // append to the output string.
     QString toelement = m_xhtml2ssml[fromelement];
     if(toelement)

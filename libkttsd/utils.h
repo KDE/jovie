@@ -11,10 +11,11 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; version 2 of the License.               *
- *              							   *
+ *   the Free Software Foundation; version 2 of the License or             *
+ *   (at your option) version 3.                                           *
+ *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -31,7 +32,7 @@ public:
     /// Destructor
     ~KttsUtils();
 
-    /** 
+    /**
      * Check if an XML document has a certain root element.
      * @param xmldoc                 The document to check for the element.
      * @param elementName      The element to check for in the document.
@@ -39,7 +40,7 @@ public:
      */
     static bool hasRootElement(const QString &xmldoc, const QString &elementName);
 
-    /** 
+    /**
      * Check if an XML document has a certain DOCTYPE.
      * @param xmldoc             The document to check for the doctype.
      * @param name                The doctype name to check for. Pass QString() to not check the name.
