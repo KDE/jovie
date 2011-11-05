@@ -57,6 +57,7 @@ int main (int argc, char *argv[]){
     //KUniqueApplication::setOrganizationDomain("kde.org");
     //KUniqueApplication::setApplicationName("jovie");
     KUniqueApplication app;
+    app.setQuitOnLastWindowClosed(false);
 
     if (!KUniqueApplication::start()) {
         kDebug() << "Jovie is already running";
@@ -70,7 +71,7 @@ int main (int argc, char *argv[]){
 
     if (QDBusConnection::sessionBus().interface()->registerService(QLatin1String( "org.kde.kttsd" ))
         != QDBusConnectionInterface::ServiceRegistered) {
-        kDebug() << "Could not register on KSpeech";
+        kDebug() << "Could not register on kttsd";
     }
 
     KCrash::setFlags(KCrash::AutoRestart);

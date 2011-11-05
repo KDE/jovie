@@ -31,7 +31,7 @@
 #include <kstatusnotifieritem.h>
 
 class QEvent;
-class QAction;
+class KAction;
 
 class JovieTrayIcon: public KStatusNotifierItem
 {
@@ -53,18 +53,19 @@ class JovieTrayIcon: public KStatusNotifierItem
         void resumeSelected();
         void repeatSelected();
         void configureSelected();
+        void configureKeysSelected();
         void aboutSelected();
         void helpSelected();
 
     private:
         void setupIcons();
 
-        QAction* actStop;
-        QAction* actPause;
-        QAction* actResume;
-        QAction* actRepeat;
-        QAction* actSpeakClipboard;
-        QAction* actConfigure;
+        KAction* actStop;
+        KAction* actPause;
+        KAction* actResume;
+        KAction* actRepeat;
+        KAction* actSpeakClipboard;
+        KAction* actConfigure;
 };
 
 #endif    // _JOVIETRAYICON_H

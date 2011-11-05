@@ -34,17 +34,21 @@
 #include <QDBusConnectionInterface>
 
 // KDE includes.
-#include <kuniqueapplication.h>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kdebug.h>
-#include <ksystemtrayicon.h>
-#include <kmenu.h>
+#include <kactioncollection.h>
 #include <kaboutapplicationdialog.h>
-#include <ktoolinvocation.h>
-#include <klocale.h>
-#include <kicon.h>
+#include <kaboutdata.h>
+#include <kaction.h>
+#include <kcmdlineargs.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <kicon.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kshortcutsdialog.h>
+#include <ksystemtrayicon.h>
+#include <kstandardaction.h>
+#include <ktoolinvocation.h>
+#include <kuniqueapplication.h>
 
 /* ------------------  JovieTrayIcon class ----------------------- */
 
@@ -62,39 +66,55 @@ JovieTrayIcon::JovieTrayIcon(QWidget *parent)
     setIconByName(QLatin1String( "preferences-desktop-text-to-speech" ));
 
     // Set up menu.
-    QAction *act;
+    actStop = actionCollection()->addAction(QLatin1String("stop"), this, SLOT(stopSelected()));
+    actStop->setIcon(KIcon(QLatin1String("media-playback-stop")));
+    actStop->setText(i18n("&Stop/Delete"));
+    actStop->setGlobalShortcut(KShortcut());
+    contextMenu()->addAction(actStop);
 
-    actStop = contextMenu()->addAction (
-        i18n("&Stop/Delete"), this, SLOT(stopSelected()));
-    actStop->setIcon(KIcon( QLatin1String( "media-playback-stop" )));
-    actPause = contextMenu()->addAction (
-        i18n("&Pause"), this, SLOT(pauseSelected()));
+    actPause = actionCollection()->addAction(QLatin1String("pause"), this, SLOT(pauseSelected()));
     actPause->setIcon(KIcon( QLatin1String( "media-playback-pause" )));
-    actResume = contextMenu()->addAction (
-        i18n("&Resume"), this, SLOT(resumeSelected()));
-    actResume->setIcon(KIcon( QLatin1String( "media-playback-start" )));
-    actRepeat = contextMenu()->addAction (
-        i18n("R&epeat"), this, SLOT(repeatSelected()));
-    actRepeat->setIcon(KIcon( QLatin1String( "view-refresh" )));
-    act = contextMenu()->addSeparator();
-    actSpeakClipboard = contextMenu()->addAction (
-        i18n("Spea&k Clipboard Contents"), this, SLOT(speakClipboardSelected()));
-    act->setIcon(KIcon( QLatin1String( "klipper" )));
-    actConfigure = contextMenu()->addAction (
-        i18n("&Configure"), this, SLOT(configureSelected()));
-    actConfigure->setIcon(KIcon( QLatin1String( "configure" )));
-    act = contextMenu()->addSeparator();
-    act = contextMenu()->addAction (
-        i18n("Jovie &Handbook"), this, SLOT(helpSelected()));
-    act->setIcon(KIcon( QLatin1String( "help-contents" )));
-    act = contextMenu()->addAction (
-        i18n("&About Jovie"), this, SLOT(aboutSelected()));
-    act->setIcon(KIcon( QLatin1String( "preferences-desktop-text-to-speech" )));
+    actPause->setText(i18n("&Pause"));
+    actPause->setGlobalShortcut(KShortcut());
+    contextMenu()->addAction(actPause);
+
+    actResume = actionCollection()->addAction(QLatin1String("resume"), this, SLOT(resumeSelected()));
+    actResume->setIcon(KIcon(QLatin1String( "media-playback-start" )));
+    actResume->setText(i18n("&Resume"));
+    actResume->setGlobalShortcut(KShortcut());
+    contextMenu()->addAction(actResume);
+
+    actRepeat = actionCollection()->addAction(QLatin1String("repeat"), this, SLOT(repeatSelected()));
+    actRepeat->setIcon(KIcon(QLatin1String( "view-refresh" )));
+    actRepeat->setText(i18n("R&epeat"));
+    actRepeat->setGlobalShortcut(KShortcut());
+    contextMenu()->addAction(actRepeat);
+
+    (void)contextMenu()->addSeparator();
+
+    actSpeakClipboard = actionCollection()->addAction(QLatin1String("speakclipboard"),
+                        this, SLOT(speakClipboardSelected()));
+    actSpeakClipboard->setIcon(KIcon(QLatin1String( "klipper" )));
+    actSpeakClipboard->setText(i18n("Spea&k Clipboard Contents"));
+    actSpeakClipboard->setGlobalShortcut(KShortcut());
+    contextMenu()->addAction (actSpeakClipboard);
+
+    actConfigure = KStandardAction::preferences(this, SLOT(configureSelected()), contextMenu());
+    contextMenu()->addAction(actConfigure);
+
+    contextMenu()->addAction(
+        KStandardAction::keyBindings(this, SLOT(configureKeysSelected()), contextMenu()));
+
+    (void)contextMenu()->addSeparator();
+    (void)contextMenu()->addAction(
+        KStandardAction::helpContents(this, SLOT(helpSelected()), contextMenu()));
+    (void)contextMenu()->addAction (
+        KStandardAction::aboutApp(this, SLOT(aboutSelected()), contextMenu()));
 
     connect(this, SIGNAL(activateRequested(bool,QPoint)),
-                  SLOT(slotActivateRequested(bool,QPoint)));
+            SLOT(slotActivateRequested(bool,QPoint)));
     connect(contextMenu(), SIGNAL(aboutToShow()),
-                  SLOT(contextMenuAboutToShow()));
+            SLOT(contextMenuAboutToShow()));
 }
 
 JovieTrayIcon::~JovieTrayIcon()
@@ -165,6 +185,11 @@ void JovieTrayIcon::configureSelected()
     QStringList lst;
     lst << QLatin1String( "kcmkttsd" ) << QLatin1String( "--caption" ) << i18n("KDE Text-to-Speech");
     QProcess::startDetached(QLatin1String( "kcmshell4" ),lst);
+}
+
+void JovieTrayIcon::configureKeysSelected()
+{
+    KShortcutsDialog::configure( actionCollection() );
 }
 
 #include "jovietrayicon.moc"
