@@ -151,6 +151,13 @@ StartupWMClass=
 
 Categories=Qt;KDE;X-KDE-settings-accessibility;
 X-KDE-Keywords=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
+X-KDE-Keywords[ca]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,a,veu,pronunciació,sintetitzador,síntesi,festival,ordre,freetts,proklam,via,veu
+X-KDE-Keywords[kk]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
+X-KDE-Keywords[nl]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,tekst,naar,spraak,spreken,synthesizer,synth,festival,commando,freetts,proklam,via,stem
+X-KDE-Keywords[pt_BR]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,texto,para fala,voz,sintetizador,sintetizar,festival,comando,freetts,proklam,via,voice
+X-KDE-Keywords[sv]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,till,tal,läsa,syntes,synt,festival,kommando,freetts,proklam,via,röst
+X-KDE-Keywords[uk]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,текст,синтез,вимова,виголошення,синтезатор,команда,голос,голосовий
+X-KDE-Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
 
 X-KDE-SubstituteUID=false
 Terminal=false
