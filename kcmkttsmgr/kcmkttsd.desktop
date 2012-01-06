@@ -155,6 +155,7 @@ X-KDE-Keywords[bg]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,s
 X-KDE-Keywords[ca]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,a,veu,pronunciació,sintetitzador,síntesi,festival,ordre,freetts,proklam,via,veu
 X-KDE-Keywords[cs]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,do,mluvy,mluvit,syntéza,synth,festival,command,freetts,proklam,via,hlas
 X-KDE-Keywords[da]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,tekst,til,tale,tal,synthesizer,synth,festival,kommando,freetts,proklam,via,stemme
+X-KDE-Keywords[el]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,κείμενο,σε,ομιλία,εκφώνηση,synthesizer,synth,festival,εντολή,freetts,proklam,μέσω,φωνή
 X-KDE-Keywords[es]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,texto a voz,habla,sintetizador,sint,festival,orden,freetts,proklam,via,voice
 X-KDE-Keywords[et]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,tekst,kõneks,kõne,süntesaator,festival,käsk,freetts,proklam,hääl
 X-KDE-Keywords[ga]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,téacs,go,caint,abair,sintéiseoir,sintéis,festival,ordú,freetts,proklam,via,guth,glór
@@ -169,6 +170,7 @@ X-KDE-Keywords[pt_BR]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,texto,para fala,voz
 X-KDE-Keywords[sv]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,till,tal,läsa,syntes,synt,festival,kommando,freetts,proklam,via,röst
 X-KDE-Keywords[uk]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,текст,синтез,вимова,виголошення,синтезатор,команда,голос,голосовий
 X-KDE-Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
+X-KDE-Keywords[zh_CN]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,语音,声音,命令,文本,说话,语音合成,合成,合成器
 X-KDE-Keywords[zh_TW]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
 
 X-KDE-SubstituteUID=false
