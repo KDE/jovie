@@ -8,6 +8,7 @@ X-KDE-StartupNotify=false
 GenericName=Text To Speech Service
 GenericName[bg]=Услуга за екранен четец
 GenericName[ca]=Servei de text a veu
+GenericName[ca@valencia]=Servei de text a veu
 GenericName[cs]=Služba hlasové syntézy
 GenericName[da]=Tekst til tale-tjeneste
 GenericName[de]=Sprachausgabedienst

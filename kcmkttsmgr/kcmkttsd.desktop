@@ -153,6 +153,7 @@ Categories=Qt;KDE;X-KDE-settings-accessibility;
 X-KDE-Keywords=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
 X-KDE-Keywords[bg]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,говор,синтезатор,текст,четец
 X-KDE-Keywords[ca]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,a,veu,pronunciació,sintetitzador,síntesi,festival,ordre,freetts,proklam,via,veu
+X-KDE-Keywords[ca@valencia]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,a,veu,pronunciació,sintetitzador,síntesi,festival,orde,freetts,proklam,via,veu
 X-KDE-Keywords[cs]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,do,mluvy,mluvit,syntéza,synth,festival,command,freetts,proklam,via,hlas
 X-KDE-Keywords[da]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,tekst,til,tale,tal,synthesizer,synth,festival,kommando,freetts,proklam,via,stemme
 X-KDE-Keywords[el]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,κείμενο,σε,ομιλία,εκφώνηση,synthesizer,synth,festival,εντολή,freetts,proklam,μέσω,φωνή
