@@ -100,20 +100,13 @@
 
 class SpeakerPrivate
 {
-    SpeakerPrivate() :
+    SpeakerPrivate(Speaker *parent) :
         connection(NULL),
-        filterMgr(NULL),
-        config(NULL)
+        filterMgr(new FilterMgr()),
+        config(new KConfig(QLatin1String( "kttsdrc" ))),
+        q(parent)
     {
-        if (!ConnectToSpeechd()) {
-            kDebug() << "connection: " << connection;
-            kError() << "could not get a connection to speech-dispatcher"<< endl;
-        }
-
-        filterMgr = new FilterMgr();
         filterMgr->init();
-
-        config = new KConfig(QLatin1String( "kttsdrc" ));
     }
 
     ~SpeakerPrivate()
@@ -163,6 +156,9 @@ protected:
                 modulenames++;
                 kDebug() << "added module " << outputModules.last();
             }
+
+            readTalkerData();
+
             retval = true;
         }
         return retval;
@@ -177,12 +173,14 @@ protected:
 
     void readTalkerData()
     {
+        config->reparseConfiguration();
         // Iterate through list of the TalkerCode IDs.
         KConfigGroup ttsconfig(config, "General");
         QStringList talkerIDsList = ttsconfig.readEntry("TalkerIDs", QStringList());
         // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList;
         if (!talkerIDsList.isEmpty())
         {
+            TalkerCode defaultTalker;
             QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
             for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
             {
@@ -191,10 +189,19 @@ protected:
                 KConfigGroup talkGroup(config, "Talkers");
                 QString talkerCode = talkGroup.readEntry(talkerID);
                 TalkerCode tc = TalkerCode(talkerCode, true);
+                if (defaultTalker.name().isEmpty())
+                    defaultTalker = tc;
                 kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode;
                 //tc.setId(talkerID);
                 // do something with the talker codes read in
             }
+
+            q->setOutputModule(defaultTalker.outputModule());
+            q->setLanguage(defaultTalker.language());
+            q->setVoiceType(defaultTalker.voiceType());
+            q->setVolume(defaultTalker.volume());
+            q->setPitch(defaultTalker.pitch());
+            q->setSpeed(defaultTalker.rate());
         }
     }
 
@@ -220,6 +227,7 @@ protected:
     */
     KConfig *config;
 
+    Speaker *q;
 };
 
 /* Public Methods ==========================================================*/
@@ -261,8 +269,13 @@ void Speaker::speechdCallback(size_t msg_id, size_t /*client_id*/, SPDNotificati
 }
 
 Speaker::Speaker() :
-    d(new SpeakerPrivate())
+    d(new SpeakerPrivate(this))
 {
+    if (!d->ConnectToSpeechd())
+    {
+        kDebug() << "connection: " << d->connection;
+        kError() << "could not get a connection to speech-dispatcher"<< endl;
+    }
     // kDebug() << "Running: Speaker::Speaker()";
     // Connect ServiceUnregistered signal from DBUS so we know when apps have exited.
     connect (QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(QString)),
@@ -282,6 +295,9 @@ void Speaker::init()
     delete d->filterMgr;
     d->filterMgr = new FilterMgr();
     d->filterMgr->init();
+
+    // Reread config setting the top voice if there is one.
+    d->readTalkerData();
 }
 
 AppData* Speaker::getAppData(const QString& appId) const
