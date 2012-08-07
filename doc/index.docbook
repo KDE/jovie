@@ -45,7 +45,7 @@ thanks ;-).
 <!-- than English, change the language above ONLY, not here -->
 <book id="jovie" lang="&language;">
 
-<book id="jovie"info>
+<bookinfo>
 <title>The &jovie; Handbook</title>
 
 <authorgroup>
