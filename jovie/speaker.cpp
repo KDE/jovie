@@ -454,7 +454,8 @@ int Speaker::findJobNumByAppId(const QString& appId) const
         return getAppData(appId)->lastJobNum();
 }
 
-void Speaker::requestExit(){
+void Speaker::requestExit()
+{
     // kDebug() << "Speaker::requestExit: Running";
     //d->exitRequested = true;
 }
@@ -466,7 +467,7 @@ bool Speaker::isSpeaking()
 
 void Speaker::setTalker(int jobNum, const QString &talker)
 {
-    kDebug() << "this is not implemented yet in speech-dispatcher";
+    kDebug() << "Speaker::setTalker this is not implemented yet in speech-dispatcher";
 }
 
 QStringList Speaker::outputModules()
@@ -490,7 +491,8 @@ QStringList Speaker::outputModules()
 QStringList Speaker::languagesByModule(const QString & module)
 {
     QStringList languages;
-    if (d->connection && spd_set_output_module(d->connection, module.toUtf8().data()) == 0)
+    if (d->connection && module != QLatin1String("dummy") &&
+        spd_set_output_module(d->connection, module.toUtf8().data()) == 0)
     {
         SPDVoice ** voices = spd_list_synthesis_voices(d->connection);
         while (voices != NULL && voices[0] != NULL)
