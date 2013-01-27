@@ -140,45 +140,7 @@ void KttsJobMgr::load()
 
 void KttsJobMgr::slot_speak_clipboard()
 {
-    // kDebug() << "KttsJobMgr::slot_speak_clipboard: running";
-
-    // Get the clipboard object.
-    QClipboard *cb = QApplication::clipboard();
-
-    // Copy text from the clipboard.
-    QString text;
-    KSpeech::SayOptions sayOptions = KSpeech::soNone;
-    const QMimeData* data = cb->mimeData();
-    if (data)
-    {
-        if (data->hasFormat(QLatin1String( "text/html" )))
-        {
-            // if (m_kspeech->supportsMarkup(NULL, KSpeech::mtHtml))
-                text = data->html();
-                sayOptions = KSpeech::soHtml;
-        }
-        if (data->hasFormat(QLatin1String( "text/ssml" )))
-        {
-            // if (m_kspeech->supportsMarkup(NULL, KSpeech::mtSsml))
-            {
-                QByteArray d = data->data(QLatin1String( "text/ssml" ));
-                text = QLatin1String(d);
-                sayOptions = KSpeech::soSsml;
-            }
-        }
-    }
-    if (text.isEmpty()) {
-        text = cb->text();
-        sayOptions = KSpeech::soPlainText;
-    }
-
-    // Speak it.
-    if ( !text.isEmpty() )
-    {
-        m_kspeech->say(text, sayOptions);
-        // int jobNum = m_kspeech->say(text, sayOptions);
-        // kDebug() << "KttsJobMgr::slot_speak_clipboard: started jobNum " << jobNum;
-    }
+    m_kspeech->sayClipboard();
 }
 
 void KttsJobMgr::slot_speak_file()

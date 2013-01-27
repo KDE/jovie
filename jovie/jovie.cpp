@@ -249,8 +249,9 @@ int Jovie::sayClipboard()
     if (!text.isNull())
     {
         return Speaker::Instance()->say(callingAppId(), text, 0);
-    } else
+    } else {
         return 0;
+    }
 }
 
 QStringList Jovie::outputModules()
