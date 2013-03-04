@@ -12,7 +12,7 @@ kde4_add_plugin(jovie_xmltransformerplugin ${jovie_xmltransformerplugin_PART_SRC
 
 
 
-target_link_libraries(jovie_xmltransformerplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} kttsd )
+target_link_libraries(jovie_xmltransformerplugin  ${KDE4_KIO_LIBS} kttsd )
 
 install(TARGETS jovie_xmltransformerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
