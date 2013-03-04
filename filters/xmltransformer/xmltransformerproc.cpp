@@ -37,7 +37,6 @@
 #include <kconfiggroup.h>
 #include <ktemporaryfile.h>
 #include <kstandarddirs.h>
-#include <k3process.h>
 #include <kdebug.h>
 
 // KTTS includes.
@@ -220,23 +219,24 @@ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talk
     m_outFilename = outFile.fileName();
 
     /// Spawn an xsltproc process to apply our stylesheet to input file.
-    m_xsltProc = new K3Process;
+    m_xsltProc = new KProcess;
+    m_xsltProc->setOutputChannelMode(KProcess::SeparateChannels);
     *m_xsltProc << m_xsltprocPath;
-    *m_xsltProc << "-o" << m_outFilename  << "--novalid"
+    *m_xsltProc << QLatin1String("-o") << m_outFilename  << QLatin1String("--novalid")
             << m_xsltFilePath << m_inFilename;
     // Warning: This won't compile under KDE 3.2.  See FreeTTS::argsToStringList().
     // kDebug() << "SSMLConvert::transform: executing command: " <<
     //     m_xsltProc->args() << endl;
 
     m_state = fsFiltering;
-    connect(m_xsltProc, SIGNAL(processExited(K3Process*)),
-            this, SLOT(slotProcessExited(K3Process*)));
-    connect(m_xsltProc, SIGNAL(receivedStdout(K3Process*,char*,int)),
-            this, SLOT(slotReceivedStdout(K3Process*,char*,int)));
-    connect(m_xsltProc, SIGNAL(receivedStderr(K3Process*,char*,int)),
-            this, SLOT(slotReceivedStderr(K3Process*,char*,int)));
-    if (!m_xsltProc->start(K3Process::NotifyOnExit,
-         static_cast<K3Process::Communication>(K3Process::Stdout | K3Process::Stderr)))
+    connect(m_xsltProc, SIGNAL(finished(int,QProcess::ExitStatus)),
+            this, SLOT(slotProcessExited(int,QProcess::ExitStatus)));
+    connect(m_xsltProc, SIGNAL(readyReadStandardOutput()),
+            this, SLOT(slotReceivedStdout()));
+    connect(m_xsltProc, SIGNAL(readyReadStandardError()),
+            this, SLOT(slotReceivedStderr()));
+    m_xsltProc->start();
+    if (!m_xsltProc->waitForStarted())
     {
         kDebug() << "XmlTransformerProc::convert: Error starting xsltproc";
         m_state = fsIdle;
@@ -251,8 +251,8 @@ void XmlTransformerProc::processOutput()
     QFile::remove(m_inFilename);
 
     int exitStatus = 11;
-    if (m_xsltProc->normalExit())
-        exitStatus = m_xsltProc->exitStatus();
+    if (m_xsltProc->exitStatus() == QProcess::NormalExit)
+        exitStatus = m_xsltProc->exitCode();
     else
         kDebug() << "XmlTransformerProc::processOutput: xsltproc was killed.";
 
@@ -297,9 +297,9 @@ void XmlTransformerProc::processOutput()
 {
     if (m_xsltProc)
     {
-        if (m_xsltProc->isRunning())
+        if (m_xsltProc->state() != QProcess::NotRunning)
         {
-            if ( !m_xsltProc->wait( 15 ) )
+            if ( !m_xsltProc->waitForFinished( 15 ) )
             {
                 m_xsltProc->kill();
                 kDebug() << "XmlTransformerProc::waitForFinished: After waiting 15 seconds, xsltproc process seems to hung.  Killing it.";
@@ -344,21 +344,21 @@ void XmlTransformerProc::processOutput()
  */
 /*virtual*/ bool XmlTransformerProc::wasModified() { return m_wasModified; }
 
-void XmlTransformerProc::slotProcessExited(K3Process*)
+void XmlTransformerProc::slotProcessExited(int /*exitCode*/, QProcess::ExitStatus /*exitStatus*/)
 {
     // kDebug() << "XmlTransformerProc::slotProcessExited: xsltproc has exited.";
     processOutput();
 }
 
-void XmlTransformerProc::slotReceivedStdout(K3Process*, char* /*buffer*/, int /*buflen*/)
+void XmlTransformerProc::slotReceivedStdout()
 {
     // QString buf = QString::fromLatin1(buffer, buflen);
     // kDebug() << "XmlTransformerProc::slotReceivedStdout: Received from xsltproc: " << buf;
 }
 
-void XmlTransformerProc::slotReceivedStderr(K3Process*, char* buffer, int buflen)
+void XmlTransformerProc::slotReceivedStderr()
 {
-    QString buf = QString::fromLatin1(buffer, buflen);
-    kDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf;
+    // QString buf = QString::fromLatin1(buffer, buflen);
+    // kDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf;
 }
 

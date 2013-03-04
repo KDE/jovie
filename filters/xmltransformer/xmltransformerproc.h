@@ -28,11 +28,12 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
+// KDE includes.
+#include <kprocess.h>
+
 // KTTS includes.
 #include "filterproc.h"
 #include "talkercode.h"
-
-class K3Process;
 
 class XmlTransformerProc : public KttsFilterProc
 {
@@ -132,9 +133,9 @@ public:
     virtual bool wasModified();
 
 private slots:
-    void slotProcessExited(K3Process*);
-    void slotReceivedStdout(K3Process* proc, char* buffer, int buflen);
-    void slotReceivedStderr(K3Process* proc, char* buffer, int buflen);
+    void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
+    void slotReceivedStdout();
+    void slotReceivedStderr();
 
 private:
     // Process output when xsltproc exits.
@@ -151,7 +152,7 @@ private:
     // Processing state.
     int m_state;
     // xsltproc process.
-    K3Process* m_xsltProc;
+    KProcess* m_xsltProc;
     // Input and Output filenames.
     QString m_inFilename;
     QString m_outFilename;
