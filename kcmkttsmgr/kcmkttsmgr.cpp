@@ -739,7 +739,7 @@ void KCMKttsMgr::slotAddTalkerButton_clicked()
         m_talkerListModel.appendRow (code);
 
         // Make sure visible.
-        const QModelIndex modelIndex = m_talkerListModel.index (m_talkerListModel.rowCount(),
+        const QModelIndex modelIndex = m_talkerListModel.index (m_talkerListModel.rowCount() - 1,
                                        0, QModelIndex());
         talkersView->scrollTo (modelIndex);
 
