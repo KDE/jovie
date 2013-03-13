@@ -39,7 +39,6 @@
 // KDE includes.
 #include <kcmodule.h>
 #include <kdebug.h>
-#include <kparts/part.h>
 
 // KTTS includes.
 #include "talkercode.h"

@@ -25,7 +25,7 @@
 #include <kcmdlineargs.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kparts/componentfactory.h>
+#include <kservicetypetrader.h>
 
 #include "filterproc.h"
 #include "talkercode.h"

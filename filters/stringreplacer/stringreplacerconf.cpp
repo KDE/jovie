@@ -43,7 +43,6 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kregexpeditorinterface.h>
-#include <kparts/componentfactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <khbox.h>

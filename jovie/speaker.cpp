@@ -36,12 +36,12 @@
 #include <QtCore/QDir>
 #include <QtGui/QApplication>
 #include <QtDBus/QtDBus>
+#include <QtXml/QDomDocument>
 
 // KDE includes.
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kparts/componentfactory.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kservicetypetrader.h>

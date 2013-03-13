@@ -48,7 +48,6 @@
 #include <ktextedit.h>
 #include <kvbox.h>
 #include <kdemacros.h>
-#include <kparts/genericfactory.h>
 #include <kspeech.h>
 
 // KTTS includes.

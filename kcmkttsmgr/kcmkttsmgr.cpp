@@ -48,7 +48,6 @@
 #include <QtGui/QMenu>
 
 // KDE includes.
-#include <kparts/componentfactory.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kicon.h>
@@ -65,6 +64,7 @@
 #include <kspeech.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kservicetypetrader.h>
 
 // KTTS includes.
 #include "talkercode.h"
