@@ -9,7 +9,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-find_path(SPEECHD_INCLUDE_DIR libspeechd.h)
+find_path(SPEECHD_INCLUDE_DIR libspeechd.h PATH_SUFFIXES speech-dispatcher)
 
 find_library(SPEECHD_LIBRARIES NAMES speechd)
 
