@@ -1,6 +1,4 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/jovie/libkttsd ${CMAKE_BINARY_DIR}/jovie/libkttsd )
-
 
 ########### next target ###############
 

@@ -4,8 +4,6 @@ add_subdirectory( stringreplacer )
 add_subdirectory( xmltransformer ) 
 add_subdirectory( talkerchooser ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/jovie/libkttsd  )
-
 
 ########### next target ###############
 
