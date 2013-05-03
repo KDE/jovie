@@ -1,8 +1,6 @@
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2404)
 
-include_directories( ${CMAKE_SOURCE_DIR}/jovie/libkttsd ${CMAKE_BINARY_DIR}/jovie/libkttsd )
-
 
 ########### next target ###############
 

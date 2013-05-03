@@ -1,5 +1,5 @@
 
-include_directories( /usr/local/include ${CMAKE_SOURCE_DIR}/jovie/libkttsd ${SPEECHD_INCLUDE_DIR} )
+include_directories( ${SPEECHD_INCLUDE_DIR} )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2400)
 

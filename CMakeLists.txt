@@ -20,7 +20,7 @@ if (Q_WS_X11)
   if (SPEECHD_FOUND)
     configure_file (config-jovie.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-jovie.h )
 
-    include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libkttsd ${CMAKE_CURRENT_SOURCE_DIR}/libkttsd)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/libkttsd ${CMAKE_CURRENT_SOURCE_DIR}/libkttsd)
 
     add_subdirectory( doc )
     add_subdirectory( libkttsd )
