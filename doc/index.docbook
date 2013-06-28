@@ -385,14 +385,10 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
         </textobject>
     </mediaobjectco>
 </screenshot>
-<!--FIXME 4.10 Output Module / Language drop down boxes
-but 4.11 a list of all language / Synthesizer installed, even if only one Speaker defined
-what should joe user do with the list entries? 
-  -->
 <para>
 <calloutlist>
 <callout arearefs="pt-jobmgr-1"><para>The controls here allow you to change attributes of
-  the currently speaking voice.</para></callout>
+  the currently speaking voice. Note this only works if you have no voices configured in the Talkers tab.</para></callout>
 <callout arearefs="pt-jobmgr-2"><para>The buttons in this row permit you to stop,
 cancel, pause and resume the current text job.</para></callout>
 <callout arearefs="pt-jobmgr-3"><para>The buttons in this row permit
