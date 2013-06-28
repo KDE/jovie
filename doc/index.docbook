@@ -1,44 +1,13 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&jovie;">
-  <!ENTITY package "kdeaccessibility">
+  <!ENTITY package "jovie">
   <!ENTITY mbrola "<application>MBROLA</application>">
   <!ENTITY qdbus "<application>qdbus</application>">
   <!ENTITY % imageobjectco.module "INCLUDE">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
 ]>
-<!-- Note to translators: KTTSD is meant to be built under KDE
-     versions 3.2 and later.  Please avoid entities that won't
-     be defined under those KDE versions.  Thanks.
--->
-
-<!-- kdoctemplate v0.9 January 10 2003
-     Changes to comments to clarify entity usage January 10 2003
-     Minor update to "Credits and Licenses" section on August 24, 2000
-     Removed "Revision history" section on 22 January 2001
-     Changed to Installation/Help menu entities 18 October 2001
-     Other minor cleanup and changes 18 October 2001
-     FPI change and minor changes November 2002 -->
-
-<!--
-This template was designed by: David Rugge davidrugge@mindspring.com
-with lots of help from: Eric Bischoff ebisch@cybercable.tm.fr
-and Frederik Fouvry fouvry@sfs.nphil.uni-tuebingen.de
-of the KDE DocBook team.
-
-You may freely use this template for writing any sort of KDE documentation.
-If you have any changes or improvements, please let us know.
-
-Remember:
-- in XML, the case of the <tags> and attributes is relevant ;
-- also, quote all attributes.
-
-Please don't forget to remove all these comments in your final documentation,
-thanks ;-).
--->
-
-<!-- ................................................................ -->
 
 <!-- The language must NOT be changed here. -->
 <!-- If you are writing original documentation in a language other -->
@@ -50,12 +19,6 @@ thanks ;-).
 
 <authorgroup>
 <author>
-<!-- This is just put in as an example.  For real documentation, please
-     define a general entity in entities/contributor.entities, e.g.
-<!ENTITY George.N.Ugnacious "<personname><firstname>George</firstname><othername>N.</othername><surname>Ugnacious</surname></personname>">
-<!ENTITY George.N.Ugnacious.mail "<email>gnu@kde.org</email>">
-and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
- -->
 <personname>
 <firstname>Jeremy</firstname>
 <surname>Whiting</surname>
@@ -83,20 +46,12 @@ and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
 <year>2004-2005</year>
 <holder>Gary R. Cramblitt</holder>
 </copyright>
-<!-- Translators: put here the copyright notice of the translation -->
-<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook
-     and in the FDL itself on how to use it. -->
+
 <legalnotice>&FDLNotice;</legalnotice>
 
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (YYYY-MM-DD) and of the version
-(V.MM.LL), it could be used by automation scripts.
-Do NOT change these in the translation. -->
 
-<date>2010-05-31</date>
-<releaseinfo>0.6 (&kde; 4.5)</releaseinfo>
+<date>2013-06-23</date>
+<releaseinfo>0.6 (&kde; 4.11)</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -135,24 +90,8 @@ Please at least include KDE, the KDE package it is in, the name
 
 </bookinfo>
 
-<!-- The contents of the documentation begin here.  Label
-each chapter so with the id attribute. This is necessary for two reasons: it
-allows you to easily reference the chapter from other chapters of your
-document, and if there is no ID, the name of the generated HTML files will vary
-from time to time making it hard to manage for maintainers and for the CVS
-system. Any chapter labelled (OPTIONAL) may be left out at the author's
-discretion. Other chapters should not be left out in order to maintain a
-consistent documentation style across all KDE apps. -->
-
-<!-- ====================================================================== -->
-
 <chapter id="introduction">
 <title>Introduction</title>
-
-<!-- The introduction chapter contains a brief introduction for the
-application that explains what it does and where to report
-problems. Basically a long version of the abstract.  Don't include a
-revision history. (see installation appendix comment) -->
 
 <para>&jovie; is a subsystem within &kde; for producing
 Text-to-Speech (TTS).  It provides a common API for &kde; programmers to give
@@ -446,7 +385,10 @@ the <guilabel>Jobs</guilabel> screen appears.</para>
         </textobject>
     </mediaobjectco>
 </screenshot>
-
+<!--FIXME 4.10 Output Module / Language drop down boxes
+but 4.11 a list of all language / Synthesizer installed, even if only one Speaker defined
+what should joe user do with the list entries? 
+  -->
 <para>
 <calloutlist>
 <callout arearefs="pt-jobmgr-1"><para>The controls here allow you to change attributes of
@@ -865,7 +807,7 @@ of this handbook.  If you have the &kde; Regular Expression editor installed,
 there is a button available on the <guilabel>Add</guilabel> or
 <guilabel>Edit</guilabel> screens that will assist you at
 constructing regular expressions.  The &kde; Regular Expression Editor is part
-of the <command>kdeutils</command> package.</para>
+of the Utils Git module in playground.</para>
 
 <para>&jovie; comes with a few word list files, including a list
 of emoticons, such as ":-)", some abbreviations typically used in IRC or
@@ -1161,18 +1103,12 @@ radio button.</para></tip>
 </chapter>
 
 <!-- ====================================================================== -->
-
+<!-- 
 <chapter id="commands">
 <title>Command Reference</title>
 
-<!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of the
-application windows and their menubar and toolbar commands for easy reference.
-Also include any keys that have a special function but have no equivalent in the
-menus or toolbars. This may not be necessary for small apps or apps with no tool
-or menu bars. -->
-
 <para>TODO</para>
-<!-- Context Menu 
+Context Menu 
 Stop/Delete
 Pause
 Resume
@@ -1182,56 +1118,9 @@ Configure
 Jovie Handbook
 About Jovie
 Quit Ctrl+Q
--->
+
 </chapter>
-
-<!--
-
-<sect1 id="kapp-mainwindow">
-<title>The main &jovie; window</title>
-
-<sect2>
-<title>The File Menu</title>
-<para>
-<variablelist>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>New</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Creates a new document</action></para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Save</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Saves the document</action></para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Quit</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Quits</action> &jovie;</para></listitem>
-</varlistentry>
-</variablelist>
-</para>
-
-</sect2>
-
 -->
-
-<!-- ====================================================================== -->
 
 <chapter id="developers">
 <title>Developer's Guide to &jovie;</title>
@@ -1300,16 +1189,6 @@ commands,</para>
 
 <chapter id="faq">
 <title>Questions and Answers</title>
-
-<!-- (OPTIONAL but recommended) This chapter should include all of the silly
-(and not-so-silly) newbie questions that fill up your mailbox. This chapter
-should be reserved for BRIEF questions and answers! If one question uses more
-than a page or so then it should probably be part of the
-"Using this Application" chapter instead. You should use links to
-cross-reference questions to the parts of your documentation that answer them.
-This is also a great place to provide pointers to other FAQ's if your users
-must do some complicated configuration on other programs in order for your
-application work. -->
 
 &reporting.bugs;
 &updating.documentation;
@@ -1383,11 +1262,6 @@ or characters are causing problems, a String Replacer filter might help.
 
 <chapter id="credits">
 
-<!-- Include credits for the programmers, documentation writers, and
-contributors here. The license for your software should then be included below
-the credits with a reference to the appropriate license file included in the KDE
-distribution. -->
-
 <title>Credits and License</title>
 
 <para>
@@ -1421,13 +1295,6 @@ Documentation Copyright &copy; 2009 Jeremy Whiting <email>jpwhiting@kde.org</ema
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
 &underFDL;               <!-- FDL: do not remove -->
-
-<!-- Determine which license your application is licensed under,
-     and delete all the remaining licenses below:
-
-     (NOTE:  All documentation are licensed under the FDL,
-     regardless of what license the application uses) -->
-
 &underGPL;           <!-- GPL License -->
 
 <note><para>Speech synthesis engines used by &jovie; have their own
@@ -1447,15 +1314,11 @@ Some voices also have their own licensing.</para></note>
 <sect1 id="getting-kapp">
 <title>How to obtain &jovie;</title>
 
-<!-- This first entity contains boiler plate for applications that are
-part of KDE CVS.  You should remove it if you are releasing your
-application -->
-
 <para>
 &install.intro.documentation;
 </para>
 
-<para>Debian Install Command: <command>apt-get install kdeaccessibility</command></para>
+<para>Debian Install Command: <command>apt-get install jovie</command></para>
 
 <note>
 <para>You will find links to source and binary packages
@@ -1463,11 +1326,11 @@ on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
 &kde; Accessibility</ulink> web site (http://accessibility.kde.org).</para>
 
 <para>If you have access to the &kde; code repository, you can download &jovie;
-by checking out the <command>kdeaccessibility</command> module.  &jovie;
+by checking out the <command>jovie</command> archiv.  &jovie;
 will be found in the <filename class="directory">jovie</filename> folder.  You can also
-download tarballs of the kdeaccessibility source code from
-<ulink url="ftp://ftp.kde.org/pub/kde/">
-ftp://ftp.kde.org/pub/kde/</ulink></para>
+download tarballs of the &jovie; source code from
+<ulink url="http://download.kde.org/stable/">
+http://download.kde.org/stable/</ulink></para>
 </note>
 
 </sect1>
@@ -1482,7 +1345,7 @@ ftp://ftp.kde.org/pub/kde/</ulink></para>
 
 <para>
 <itemizedlist>
-<listitem><para>&kde; version 4.4 or later.</para></listitem>
+<listitem><para>&kde; version 4.8 or later.</para></listitem>
 <listitem><para>speech-dispatcher version 0.67 or later.</para></listitem>
 <listitem><para>A speech synthesizer.  The following synthesizers
 and spoken languages are currently supported.</para>
@@ -1559,14 +1422,8 @@ xsltproc with the command <command>apt-get install xsltproc</command>.</para>
 <sect1 id="compilation">
 <title>Compilation and Installation</title>
 
-<!-- This entity contains the boilerplate text for standard -->
-<!-- compilation instructions.  If your application requires any -->
-<!-- special handling, remove it, and replace with your own text. -->
-
-<!-- &install.compile.documentation; -->
-
 <para>In order to compile &jovie;, you must have a
-recent (&kde; 4.4 or greater) copy of the &kde; development files,
+recent (&kde; 4.8 or greater) copy of the &kde; development files,
 including kdelibs and the development files for speech-dispatcher.</para>
 
 <para>If you downloaded the &jovie; source from the
@@ -1575,7 +1432,7 @@ tarball, use the following commands to compile and install.
 </para>
 
 <programlisting>
-cd kdeaccessibility
+cd jovie
 mkdir build
 cd build
 cmake ../
