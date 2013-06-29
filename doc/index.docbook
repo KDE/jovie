@@ -1322,11 +1322,10 @@ on the <ulink url="http://accessibility.kde.org/developer/kttsd/">
 &kde; Accessibility</ulink> web site (http://accessibility.kde.org).</para>
 
 <para>If you have access to the &kde; code repository, you can download &jovie;
-by checking out the <command>jovie</command> archiv.  &jovie;
+by checking out the <command>jovie</command> archive.  &jovie;
 will be found in the <filename class="directory">jovie</filename> folder.  You can also
 download tarballs of the &jovie; source code from
-<ulink url="http://download.kde.org/stable/">
-http://download.kde.org/stable/</ulink></para>
+<ulink url="http://download.kde.org/stable/">http://download.kde.org/stable/</ulink></para>
 </note>
 
 </sect1>
