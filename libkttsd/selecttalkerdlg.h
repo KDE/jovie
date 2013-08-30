@@ -53,7 +53,7 @@ class KDE_EXPORT SelectTalkerDlg : public KDialog
          *                              KTTSD.  If false, lists Talkers in the KTTSMgr Talker tab
          *                              (which may not yet have been Applied).
          */
-        SelectTalkerDlg(
+        explicit SelectTalkerDlg(
             QWidget* parent = 0,
             const char* name = "selecttalkerdialog",
             const QString& caption = i18n("Select Talker"),

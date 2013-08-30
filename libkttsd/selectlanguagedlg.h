@@ -61,7 +61,7 @@ class KDE_EXPORT SelectLanguageDlg : public KDialog
          * @param blankMode             If 1, a blank row is displayed in the
          *                              list and user may choose it.
          */
-        SelectLanguageDlg(
+        explicit SelectLanguageDlg(
             QWidget* parent = 0,
             const QString& caption = i18n("Select Language"),
             const QStringList& languageCodes = QStringList(),

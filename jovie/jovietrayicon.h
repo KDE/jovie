@@ -38,7 +38,7 @@ class JovieTrayIcon: public KStatusNotifierItem
     Q_OBJECT
 
     public:
-        JovieTrayIcon(QWidget *parent=0);
+        explicit JovieTrayIcon(QWidget *parent=0);
         ~JovieTrayIcon();
 
     protected Q_SLOTS:

@@ -42,7 +42,7 @@ public:
     * Constructs a new AppData object for the given DBUS AppId.
     * @param appId          DBUS sender id.
     */
-    AppData(const QString& appId);
+    explicit AppData(const QString& appId);
     
     /**
     * Destructor.

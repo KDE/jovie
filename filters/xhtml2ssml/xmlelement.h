@@ -35,7 +35,7 @@ typedef QMap<QString, QString> AttributeToValueMap;
 class XMLElement {
 public:
     XMLElement();
-    XMLElement(const QString &name);
+    explicit XMLElement(const QString &name);
     ~XMLElement();
 
     /// Copy constructor

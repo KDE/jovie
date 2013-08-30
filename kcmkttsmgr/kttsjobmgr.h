@@ -48,7 +48,7 @@ class KttsJobMgr:
 {
     Q_OBJECT
 public:
-    KttsJobMgr(QWidget *parent = 0);
+    explicit KttsJobMgr(QWidget *parent = 0);
     virtual ~KttsJobMgr();
 
     /** apply current settings, i.e. tell speech-dispatcher what to do */
