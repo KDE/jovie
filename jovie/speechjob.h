@@ -55,7 +55,7 @@ class SpeechJob : public QObject {
     Q_PROPERTY(QByteArray serialize READ serialize)
 
 public:
-    SpeechJob(KSpeech::JobPriority priority=KSpeech::jpText);
+    explicit SpeechJob(KSpeech::JobPriority priority=KSpeech::jpText);
     ~SpeechJob();
     
     /** Job number. */

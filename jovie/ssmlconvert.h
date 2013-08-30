@@ -43,7 +43,7 @@ class SSMLConvert : public QObject {
 public:
     /** Constructors */
     SSMLConvert();
-    SSMLConvert(const QStringList &talkers);
+    explicit SSMLConvert(const QStringList &talkers);
     /** Destructor   */
     virtual ~SSMLConvert();
 
