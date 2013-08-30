@@ -30,6 +30,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtCore/QEvent>
 #include <QtCore/QProcess>
+#include <QtCore/QPointer>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 
@@ -149,8 +150,10 @@ void JovieTrayIcon::speakClipboardSelected()
 
 void JovieTrayIcon::aboutSelected()
 {
-    KAboutApplicationDialog aboutDlg(KGlobal::mainComponent().aboutData());
-    aboutDlg.exec();
+    QPointer<KAboutApplicationDialog> aboutDlg = 
+      new KAboutApplicationDialog(KGlobal::mainComponent().aboutData());
+    aboutDlg->exec();
+    delete aboutDlg;
 }
 
 void JovieTrayIcon::helpSelected()
