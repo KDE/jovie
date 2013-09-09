@@ -315,7 +315,7 @@ See <xref linkend="jobmgr" />.
 
 
 <sect1 id="general">
-<title>Starting Jovie and Setting General Options</title>
+<title>Starting &jovie; and Setting General Options</title>
 
 <para>Once you have configured at least one talker,
 you can start the &kde; Text-to-Speech System.  Click on the
@@ -346,9 +346,9 @@ screen appears.  You can also set some general options on this screen.
 <para>
 <calloutlist>
 <callout arearefs="pt-gen-1"><para>Check this box to activate the &jovie; system.
-This starts the &kde; TTS Daemon (Jovie).  If Jovie starts successfully,
+This starts the &kde; TTS Daemon (&jovie;).  If Jovie starts successfully,
 the <guilabel>Jobs</guilabel> tab will appear.
-Once Jovie has been started, you can begin creating and speaking text jobs.
+Once &jovie; has been started, you can begin creating and speaking text jobs.
 See <xref linkend="jobmgr" />.  Unchecking will stop Jovie and deactivate the &kde; TTS system.
 </para></callout>
 <callout arearefs="pt-gen-6"><para>Be sure to click here to save your settings.</para></callout>
@@ -400,7 +400,7 @@ all changes to settings on other screens are applied (if any).</para></callout>
 </calloutlist>
 </para>
 
-<note><para>The <guilabel>Jobs</guilabel> tab only appears when Jovie is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
+<note><para>The <guilabel>Jobs</guilabel> tab only appears when &jovie; is running.  If you do not see the <guilabel>Jobs</guilabel> tab, click on the
 <guilabel>General</guilabel> tab and check the
 <guilabel>Enable Text-to-Speech (Jovie)</guilabel> box.</para>
 </note>
