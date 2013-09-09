@@ -48,6 +48,7 @@
 
 // Jovie includes.
 #include "talkermgr.h"
+#include "talkercode.h"
 // define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
 #define spd_debug spd_debug2
 #include "speaker.h"
@@ -135,6 +136,16 @@ QString Jovie::defaultTalker()
 void Jovie::setDefaultTalker(const QString &defaultTalker)
 {
     Speaker::Instance()->getAppData(callingAppId())->setDefaultTalker(defaultTalker);
+}
+
+void Jovie::setCurrentTalker(const TalkerCode &talker)
+{
+    Speaker::Instance()->setOutputModule(talker.outputModule());
+    Speaker::Instance()->setLanguage(TalkerCode::languageCodeToLanguage(talker.language()));
+    Speaker::Instance()->setVoiceType(talker.voiceType());
+    Speaker::Instance()->setVolume(talker.volume());
+    Speaker::Instance()->setSpeed(talker.rate());
+    Speaker::Instance()->setPitch(talker.pitch());
 }
 
 int Jovie::defaultPriority()

@@ -36,6 +36,7 @@
 #include <kspeech.h>
 
 class JoviePrivate;
+class TalkerCode;
 
 /**
 * Jovie -- the KDE Text-to-Speech API.
@@ -100,6 +101,12 @@ public Q_SLOTS: // METHODS
     * @param defaultTalker      Default talker.  Example: "en".
     */
     void setDefaultTalker(const QString &defaultTalker);
+
+    /**
+    * Sets the current talker for all applications.
+    * @param talker TalkerCode representing wanted options
+    */
+    void setCurrentTalker(const TalkerCode &talker);
 
     /**
     * Returns the default priority for speech jobs submitted by the application.
