@@ -29,7 +29,8 @@
 // KDE includes.
 #include <kmenu.h>
 #include <kstatusnotifieritem.h>
-
+#include "talkercode.h"
+#include "talkerlistmodel.h"
 class QEvent;
 class KAction;
 
@@ -44,6 +45,7 @@ class JovieTrayIcon: public KStatusNotifierItem
     protected Q_SLOTS:
         void slotActivateRequested(bool active, const QPoint &pos);
         virtual void contextMenuAboutToShow();
+        void slotUpdateTalkersMenu();
 
     private slots:
 
@@ -56,16 +58,18 @@ class JovieTrayIcon: public KStatusNotifierItem
         void configureKeysSelected();
         void aboutSelected();
         void helpSelected();
-
+        void talkerSelected();
     private:
         void setupIcons();
-
         KAction* actStop;
         KAction* actPause;
         KAction* actResume;
         KAction* actRepeat;
         KAction* actSpeakClipboard;
         KAction* actConfigure;
+        QMenu* talkersMenu;
+        QVector<KAction*>* talkersActions;
+    friend class Jovie;
 };
 
 #endif    // _JOVIETRAYICON_H

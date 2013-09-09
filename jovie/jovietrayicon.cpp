@@ -100,6 +100,12 @@ JovieTrayIcon::JovieTrayIcon(QWidget *parent)
     actSpeakClipboard->setGlobalShortcut(KShortcut());
     contextMenu()->addAction (actSpeakClipboard);
 
+    talkersMenu = new QMenu(i18n("Select Talker"));
+    talkersActions = new QVector<KAction*>();
+    contextMenu()->addMenu(talkersMenu);
+
+    slotUpdateTalkersMenu();
+
     actConfigure = KStandardAction::preferences(this, SLOT(configureSelected()), contextMenu());
     contextMenu()->addAction(actConfigure);
 
@@ -120,6 +126,31 @@ JovieTrayIcon::JovieTrayIcon(QWidget *parent)
 
 JovieTrayIcon::~JovieTrayIcon()
 {
+}
+
+void JovieTrayIcon::slotUpdateTalkersMenu(){
+    talkersMenu->clear();
+    
+    // Object for the KTTSD configuration.
+    KConfig *m_config = new KConfig (QLatin1String( "kttsdrc" ));
+
+    // Load existing Talkers into Talker List.
+    TalkerListModel m_talkerListModel;
+    m_talkerListModel.loadTalkerCodesFromConfig (m_config);
+
+    TalkerCode::TalkerCodeList list= m_talkerListModel.datastore();
+
+    for (int i=0;i<list.size();i++) {
+       TalkerCode talkerCode=list.at(i);
+       KAction* act=new KAction(this);
+       act->setText(talkerCode.name());
+       act->setProperty("talkercode",talkerCode.getTalkerCode());
+       connect(act,SIGNAL(triggered()),this,SLOT(talkerSelected()));
+       talkersActions->push_back(act);
+       talkersMenu->addAction(act);
+    }
+
+    delete m_config;
 }
 
 void JovieTrayIcon::slotActivateRequested(bool active, const QPoint &pos)
@@ -146,6 +177,14 @@ void JovieTrayIcon::contextMenuAboutToShow()
 void JovieTrayIcon::speakClipboardSelected()
 {
     Jovie::Instance()->sayClipboard();
+}
+
+void JovieTrayIcon::talkerSelected()
+{
+    KAction* act=(KAction*)QObject::sender ();
+    TalkerCode talkerCode;
+    talkerCode.setTalkerCode(act->property("talkercode").toString());
+    Jovie::Instance()->setCurrentTalker(talkerCode);
 }
 
 void JovieTrayIcon::aboutSelected()

@@ -52,6 +52,7 @@
 // define spd_debug here to avoid a link error in speech-dispatcher 0.6.7's header file for now
 #define spd_debug spd_debug2
 #include "speaker.h"
+#include "jovietrayicon.h"
 
 #include "kspeechadaptor.h"
 
@@ -61,10 +62,12 @@ class JoviePrivate
 {
     JoviePrivate()
     {
+        trayIcon = new JovieTrayIcon();
     }
 
     ~JoviePrivate()
     {
+        delete trayIcon;
     }
 
     friend class Jovie;
@@ -74,6 +77,12 @@ protected:
     * The DBUS sender ID of last application to call KTTSD.
     */
     QString callingAppId;
+    
+    /*
+    * The tray icon.
+    */
+    JovieTrayIcon *trayIcon;
+  
 };
 
 /* Jovie Class ========================================================= */
@@ -493,6 +502,8 @@ void Jovie::reinit()
     if (ready()) {
         QDBusConnection::sessionBus().registerObject(QLatin1String( "/KSpeech" ), this, QDBusConnection::ExportAdaptors);
     }
+    
+    d->trayIcon->slotUpdateTalkersMenu();
 }
 
 void Jovie::setCallingAppId(const QString& appId)

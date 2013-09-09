@@ -35,7 +35,6 @@
 
 // KTTSD includes.
 #include "jovie.h"
-#include "jovietrayicon.h"
 
 int main (int argc, char *argv[]){
     KAboutData aboutdata("jovie", 0, ki18n("Jovie"),
@@ -47,6 +46,7 @@ int main (int argc, char *argv[]){
     aboutdata.addAuthor(ki18n("Gunnar Schmi Dt"), ki18n("Contributor"),"gunnar@schmi-dt.de");
     aboutdata.addAuthor(ki18n("Olaf Schmidt"), ki18n("Contributor"),"ojschmidt@kde.org");
     aboutdata.addAuthor(ki18n("Paul Giannaros"), ki18n("Contributor"), "ceruleanblaze@gmail.com");
+    aboutdata.addAuthor(ki18n("Simion Ploscariu"), ki18n("Contributor"), "simion314@gmail.com");
     aboutdata.addCredit(ki18n("Jorge Luis Arzola"), ki18n("Testing"), "arzolacub@hotmail.com");
     aboutdata.addCredit(ki18n("David Powell"), ki18n("Testing"), "achiestdragon@gmail.com");
     aboutdata.setProgramIconName(QLatin1String( "preferences-desktop-text-to-speech" ));
@@ -82,8 +82,6 @@ int main (int argc, char *argv[]){
     kDebug() << "main: Creating Jovie Service";
     Jovie* service = Jovie::Instance();
     service->init();
-
-    JovieTrayIcon* tray = new JovieTrayIcon();
 
     // kDebug() << "Entering event loop.";
     return app.exec();
