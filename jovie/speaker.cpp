@@ -180,7 +180,6 @@ protected:
         // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList;
         if (!talkerIDsList.isEmpty())
         {
-            TalkerCode defaultTalker;
             QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
             for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
             {
@@ -195,6 +194,7 @@ protected:
                 //tc.setId(talkerID);
                 // do something with the talker codes read in
             }
+            currentTalker = defaultTalker;
 
             q->setOutputModule(defaultTalker.outputModule());
             q->setLanguage(defaultTalker.language());
@@ -228,6 +228,18 @@ protected:
     KConfig *config;
 
     Speaker *q;
+    
+    /**
+    * Keeps track of the default talker in the configuration file
+    * for easy switching back to it.
+    */
+    TalkerCode defaultTalker;
+    
+    /**
+    * Keeps track of the current talker information to give back to any users
+    * and to know if we need to change the talker based on a filter's results.
+    */
+    TalkerCode currentTalker;
 };
 
 /* Public Methods ==========================================================*/
@@ -362,6 +374,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 
     AppData* appData = getAppData(appId);
     KSpeech::JobPriority priority = appData->defaultPriority();
+    TalkerCode talkerCode = d->defaultTalker;
     //kDebug() << "Speaker::say priority = " << priority;
     //kDebug() << "Running: Speaker::say appId = " << appId << " text = " << text;
     //QString talker = appData->defaultTalker();
@@ -387,9 +400,21 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
     }
 
     if (appData->filteringOn()) {
-        filteredText = d->filterMgr->convert(text, NULL, appId);
+        filteredText = d->filterMgr->convert(text, &talkerCode, appId);
     }
 
+    // Change the voice to the talkerCode from the filter if needed.
+    if (talkerCode != d->currentTalker)
+    {
+        kDebug() << "Changing language from " << d->currentTalker.getTranslatedDescription() <<
+                 " to " << talkerCode.getTranslatedDescription();
+        setOutputModule(talkerCode.outputModule());
+        setLanguage(TalkerCode::languageCodeToLanguage(talkerCode.language()));
+        setVoiceType(talkerCode.voiceType());
+        setVolume(talkerCode.volume());
+        setSpeed(talkerCode.rate());
+        setPitch(talkerCode.pitch());
+    }
     emit newJobFiltered(text, filteredText);
 
     while (jobNum == -1 && d->connection != NULL)
@@ -509,75 +534,81 @@ void Speaker::setSpeed(int speed)
 {
     if (d->connection) {
         spd_set_voice_rate(d->connection, speed);
+        d->currentTalker.setRate(speed);
     }
 }
 
 int Speaker::speed()
 {
-    return 0;
+    return d->currentTalker.rate();
 }
 
 void Speaker::setPitch(int pitch)
 {
     if (d->connection) {
         spd_set_voice_pitch(d->connection, pitch);
+        d->currentTalker.setPitch(pitch);
     }
 }
 
 int Speaker::pitch()
 {
-    return 0;
+    return d->currentTalker.pitch();
 }
 
 void Speaker::setVolume(int volume)
 {
     if (d->connection) {
         spd_set_volume(d->connection, volume);
+        d->currentTalker.setVolume(volume);
     }
 }
 
 int Speaker::volume()
 {
-    return 0;
+    return d->currentTalker.volume();
 }
 
 void Speaker::setOutputModule(const QString & module)
 {
     if (d->connection) {
         int result = spd_set_output_module(d->connection, module.toUtf8().data());
+        d->currentTalker.setOutputModule(module);
         // discard result for now, TODO: add error reporting
     }
 }
 
 QString Speaker::outputModule()
 {
-    return QString();
+    return d->currentTalker.outputModule();
 }
 
 void Speaker::setLanguage(const QString & language)
 {
     if (d->connection) {
         int result = spd_set_language(d->connection, language.toUtf8().data());
+        d->currentTalker.setLanguage(language);
         // discard result for now, TODO: add error reporting
     }
 }
 
 QString Speaker::language()
 {
-    return QString();
+    return d->currentTalker.language();
 }
 
 void Speaker::setVoiceType(int voiceType)
 {
     if (d->connection) {
         int result = spd_set_voice_type(d->connection, SPDVoiceType(voiceType));
+        d->currentTalker.setVoiceType(voiceType);
         // discard result for now, TODO: add error reporting
     }
 }
 
 int Speaker::voiceType()
 {
-    return 0;
+    return d->currentTalker.voiceType();
 }
 
 void Speaker::stop()
