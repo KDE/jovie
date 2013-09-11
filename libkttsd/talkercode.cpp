@@ -106,19 +106,27 @@ QString TalkerCode::getTalkerCode() const
  */
 QString TalkerCode::getTranslatedDescription() const
 {
-    QString code = m_language;
-    bool prefer;
-    //QString fullLangCode = m_language;
-    //if (!fullLangCode.isEmpty()) code = languageCodeToLanguage( fullLangCode );
-    // TODO: The PlugInName is always English.  Need a way to convert this to a translated
-    // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
-    // from the config file).
-    if (!m_outputModule.isEmpty()) code += QLatin1Char( ' ' ) + stripPrefer(m_outputModule, prefer);
-    //if (!m_voiceType.isEmpty()) code += ' ' + stripPrefer(m_voiceType, prefer);
-    //if (!m_volume.isEmpty()) code += ' ' + translatedVolume(stripPrefer(m_volume, prefer));
-    //if (!m_rate.isEmpty()) code += ' ' + translatedRate(stripPrefer(m_rate, prefer));
-    code = code.trimmed();
-    if (code.isEmpty()) code = i18nc("Default language code", "default");
+    QString code;
+    if (!m_name.isEmpty())
+    {
+        code = m_name;
+    }
+    else
+    {
+        code = m_language;
+        bool prefer;
+        QString fullLangCode = m_language;
+        if (!fullLangCode.isEmpty()) code = languageCodeToLanguage( fullLangCode );
+        // TODO: The PlugInName is always English.  Need a way to convert this to a translated
+        // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
+        // from the config file).
+        if (!m_outputModule.isEmpty()) code += QLatin1Char( ' ' ) + stripPrefer(m_outputModule, prefer);
+        code += QLatin1Char(' ') + translatedVoiceType(m_voiceType);
+        code += QString(QLatin1String(" volume: %1 rate: %2")).arg(m_volume).arg(m_rate);
+        code = code.trimmed();
+    }
+    if (code.isEmpty())
+        code = i18nc("Default language code", "default");
     return code;
 }
 
@@ -334,4 +342,24 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
         preferred = false;
         return code;
     }
+}
+
+bool TalkerCode::operator==(TalkerCode &other) const
+{
+    return m_language == other.language() &&
+           m_voiceType == other.voiceType() &&
+           m_rate == other.rate() &&
+           m_volume == other.volume() &&
+           m_pitch == other.pitch() &&
+           m_outputModule == other.outputModule();
+}
+
+bool TalkerCode::operator!=(TalkerCode &other) const
+{
+    return m_language != other.language() ||
+           m_voiceType != other.voiceType() ||
+           m_rate != other.rate() ||
+           m_volume != other.volume() ||
+           m_pitch != other.pitch() ||
+           m_outputModule != other.outputModule();
 }
