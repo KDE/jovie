@@ -129,7 +129,6 @@ JovieTrayIcon::~JovieTrayIcon()
 
 void JovieTrayIcon::slotUpdateTalkersMenu(){
     talkersMenu->clear();
-    talkersActions.clear();
     
     // Object for the KTTSD configuration.
     KConfig config(QLatin1String( "kttsdrc" ));
@@ -146,7 +145,6 @@ void JovieTrayIcon::slotUpdateTalkersMenu(){
        act->setText(talkerCode.name());
        act->setProperty("talkercode",talkerCode.getTalkerCode());
        connect(act,SIGNAL(triggered()),this,SLOT(talkerSelected()));
-       talkersActions.push_back(act);
        talkersMenu->addAction(act);
     }
 }

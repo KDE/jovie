@@ -68,7 +68,6 @@ class JovieTrayIcon: public KStatusNotifierItem
         KAction* actSpeakClipboard;
         KAction* actConfigure;
         QMenu* talkersMenu;
-        QVector<KAction*> talkersActions;
     friend class Jovie;
 };
 
