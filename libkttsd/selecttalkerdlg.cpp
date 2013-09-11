@@ -115,7 +115,7 @@ SelectTalkerDlg::SelectTalkerDlg(
     connect(m_widget->useSpecificTalkerRadioButton, SIGNAL(clicked()),
             this, SLOT(configChanged()));
 
-    connect(m_widget->talkersView, SIGNAL(clicked()),
+    connect(m_widget->talkersView, SIGNAL(clicked(QModelIndex)),
             this, SLOT(slotTalkersView_clicked()));
 
     m_widget->talkersView->setMinimumHeight( 120 );
@@ -141,6 +141,7 @@ void SelectTalkerDlg::slotTalkersView_clicked()
     QModelIndex modelIndex = m_widget->talkersView->currentIndex();
     if (!modelIndex.isValid()) return;
     if (!m_widget->useSpecificTalkerRadioButton->isChecked()) return;
+    m_talkerCode = m_talkerListModel->getRow(modelIndex.row());
     configChanged();
 }
 
