@@ -374,7 +374,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
 
     AppData* appData = getAppData(appId);
     KSpeech::JobPriority priority = appData->defaultPriority();
-    TalkerCode talkerCode = d->defaultTalker;
+    TalkerCode talkerCode = d->currentTalker;
     //kDebug() << "Speaker::say priority = " << priority;
     //kDebug() << "Running: Speaker::say appId = " << appId << " text = " << text;
     //QString talker = appData->defaultTalker();
