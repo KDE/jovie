@@ -50,6 +50,9 @@ class KDE_EXPORT TalkerCode
          */
         ~TalkerCode();
 
+        bool operator==(TalkerCode &other) const;
+        bool operator!=(TalkerCode &other) const;
+
         typedef QList<TalkerCode> TalkerCodeList;
 
         /**
