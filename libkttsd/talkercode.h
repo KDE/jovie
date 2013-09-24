@@ -33,6 +33,8 @@
 // KDE includes.
 #include <kdemacros.h>
 
+class TalkerCodePrivate;
+
 class KDE_EXPORT TalkerCode
 {
     public:
@@ -40,15 +42,18 @@ class KDE_EXPORT TalkerCode
          * Constructor.
          */
         explicit TalkerCode(const QString &code=QString(), bool normal=false);
+        
         /**
          * Copy Constructor.
          */
-        explicit TalkerCode(TalkerCode* talker, bool normal=false);
+        TalkerCode(const TalkerCode& other);
 
         /**
          * Destructor.
          */
         ~TalkerCode();
+
+        TalkerCode &operator=(const TalkerCode &other);
 
         bool operator==(TalkerCode &other) const;
         bool operator!=(TalkerCode &other) const;
@@ -58,12 +63,13 @@ class KDE_EXPORT TalkerCode
         /**
          * Properties.
          */
-        QString name() const;           /* name         */
+        QString name() const;           /* user given name         */
         QString language() const;       /* lang="xx"    */
         int voiceType() const;          /* voiceType="xxx" equivalent to SPDVoiceType enumeration */
         int volume() const;             /* volume="xxx" */
         int rate() const;               /* rate="xxx"   */
         int pitch() const;              /* pitch="xxx"  */
+        QString voiceName() const;      /* voice name from synthesizer */
         QString outputModule() const;         /* synthesizer="xxx" */
 
         /**
@@ -77,6 +83,7 @@ class KDE_EXPORT TalkerCode
         void setVolume(int volume);
         void setRate(int rate);
         void setPitch(int pitch);
+        void setVoiceName(const QString &voiceName);
         void setOutputModule(const QString &moduleName);
 
         /**
@@ -156,13 +163,7 @@ class KDE_EXPORT TalkerCode
          */
         void parseTalkerCode(const QString &talkerCode);
 
-        QString m_name;           /* name="xxx"        */
-        QString m_language;       /* lang="xx"         */
-        int m_voiceType;          /* voiceType="xxx"   */
-        int m_volume;             /* volume="xxx"      */
-        int m_rate;               /* rate="xxx"        */
-        int m_pitch;              /* pitch="xxx"       */
-        QString m_outputModule;   /* synthesizer="xxx" */
+        TalkerCodePrivate * const d;
 };
 
 #endif      // TALKERCODE_H

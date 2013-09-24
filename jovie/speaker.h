@@ -184,11 +184,9 @@ public:
      * Get the output modules available from speech-dispatcher
      */
     QStringList outputModules();
-
-    /**
-     * Get the languages available for the given output module
-     */
     QStringList languagesByModule(const QString & module);
+
+    QStringList getPossibleTalkers();
 
     void setSpeed(int speed);
     void setPitch(int pitch);
@@ -197,6 +195,7 @@ public:
     void setOutputModule(const QString & module);
     void setLanguage(const QString & language);
     void setVoiceType(int voiceType);
+    void setVoiceName(const QString & voiceName);
 
     int speed();
     int pitch();
@@ -204,6 +203,7 @@ public:
     QString outputModule();
     QString language();
     int voiceType();
+    QString voiceName();
 
 signals:
     /**
@@ -224,11 +224,6 @@ private:
     Speaker();
 
     /**
-    * get the list of available modules that are configured in speech-dispatcher
-    */
-    QStringList moduleNames();
-
-    /**
     * Determines whether the given text is SSML markup.
     */
     bool isSsml(const QString &text);
@@ -243,7 +238,7 @@ private:
     QStringList parseText(const QString &text, const QString &appId);
 
 private:
-    SpeakerPrivate* d;
+    SpeakerPrivate* const d;
     static Speaker * m_instance;
 };
 

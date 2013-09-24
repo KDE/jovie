@@ -284,6 +284,11 @@ QStringList Jovie::languagesByModule(const QString & module)
     return Speaker::Instance()->languagesByModule(module);
 }
 
+QStringList Jovie::getPossibleTalkers()
+{
+    return Speaker::Instance()->getPossibleTalkers();
+}
+
 void Jovie::setSpeed(int speed)
 {
     if (speed < -100 || speed > 100) {

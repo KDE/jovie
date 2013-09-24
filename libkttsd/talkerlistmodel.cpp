@@ -156,9 +156,10 @@ void TalkerListModel::setDatastore(TalkerCode::TalkerCodeList talkers)
 
 TalkerCode TalkerListModel::getRow(int row) const
 {
+    TalkerCode code;
     if (row < 0 || row >= rowCount())
-        return TalkerCode();
-    return m_talkerCodes[row];
+        return code;
+    return m_talkerCodes.at(row);
 }
 
 bool TalkerListModel::appendRow(TalkerCode& talker)
@@ -206,7 +207,7 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
             kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID;
             KConfigGroup talkGroup(c, "Talkers");
             QString talkerCode = talkGroup.readEntry(talkerID);
-            TalkerCode tc = TalkerCode(talkerCode, true);
+            TalkerCode tc(talkerCode, true);
             kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode;
             //tc.setId(talkerID);
             appendRow(tc);

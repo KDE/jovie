@@ -329,11 +329,6 @@ bool Speaker::isSsml(const QString &text)
     return (root.tagName() == QLatin1String( "speak" ));
 }
 
-QStringList Speaker::moduleNames()
-{
-    return d->outputModules;
-}
-
 QStringList Speaker::parseText(const QString &text, const QString &appId /*=NULL*/)
 {
     // There has to be a better way
@@ -409,7 +404,15 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
         kDebug() << "Changing language from " << d->currentTalker.getTranslatedDescription() <<
                  " to " << talkerCode.getTranslatedDescription();
         setOutputModule(talkerCode.outputModule());
-        setLanguage(TalkerCode::languageCodeToLanguage(talkerCode.language()));
+        // If there's a voiceName, use it, otherwise just use the language
+        if (!talkerCode.voiceName().isEmpty())
+        {
+            setVoiceName(talkerCode.voiceName());
+        }
+        else
+        {
+            setLanguage(TalkerCode::languageCodeToLanguage(talkerCode.language()));
+        }
         setVoiceType(talkerCode.voiceType());
         setVolume(talkerCode.volume());
         setSpeed(talkerCode.rate());
@@ -497,20 +500,7 @@ void Speaker::setTalker(int jobNum, const QString &talker)
 
 QStringList Speaker::outputModules()
 {
-    QStringList modules;
-
-    if (d->connection) {
-        char ** modulenames = spd_list_modules(d->connection);
-        while (modulenames != NULL && modulenames[0] != NULL)
-        {
-            modules << QLatin1String( modulenames[0] );
-            ++modulenames;
-        }
-    }
-    else {
-        // emit some error message
-    }
-    return modules;
+    return d->outputModules;
 }
 
 QStringList Speaker::languagesByModule(const QString & module)
@@ -528,6 +518,32 @@ QStringList Speaker::languagesByModule(const QString & module)
         }
     }
     return languages;
+}
+
+QStringList Speaker::getPossibleTalkers()
+{
+    QStringList talkers;
+
+    foreach (const QString &module, d->outputModules)
+    {
+        if (d->connection &&
+                spd_set_output_module(d->connection, module.toUtf8().data()) == 0)
+        {
+            SPDVoice ** voices = spd_list_synthesis_voices(d->connection);
+            kDebug() << "Got voices for output module " << module;
+            while (voices != NULL && voices[0] != NULL)
+            {
+                TalkerCode code;
+                code.setOutputModule(module);
+                code.setVoiceName(QLatin1String(voices[0]->name));
+                code.setLanguage(QLatin1String(voices[0]->language));
+                talkers.append (code.getTalkerCode());
+                ++voices;
+            }
+        }
+    }
+    
+    return talkers;
 }
 
 void Speaker::setSpeed(int speed)
@@ -581,6 +597,19 @@ void Speaker::setOutputModule(const QString & module)
 QString Speaker::outputModule()
 {
     return d->currentTalker.outputModule();
+}
+
+void Speaker::setVoiceName(const QString & voiceName)
+{
+    if (d->connection) {
+        int result = spd_set_synthesis_voice(d->connection, voiceName.toUtf8().data());
+        d->currentTalker.setVoiceName(voiceName);
+    }
+}
+
+QString Speaker::voiceName()
+{
+    return d->currentTalker.voiceName();
 }
 
 void Speaker::setLanguage(const QString & language)

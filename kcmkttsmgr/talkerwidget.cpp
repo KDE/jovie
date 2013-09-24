@@ -40,6 +40,7 @@
 
 const int kLanguageColumn = 0;
 const int kSynthesizerColumn = 1;
+const int kVoiceNameColumn = 2;
 
 TalkerWidget::TalkerWidget(QWidget* parent)
     : QWidget(parent)
@@ -72,30 +73,35 @@ TalkerWidget::TalkerWidget(QWidget* parent)
 
     QTableWidgetItem * defaultItem = 0;
 
-    foreach (const QString & module, m_outputModules)
+    QStringList possibleTalkers = kspeech->getPossibleTalkers();
+    foreach (const QString & talkerString, possibleTalkers)
     {
-        QStringList languages = kspeech->languagesByModule(module);
+        TalkerCode code(talkerString);
+        kDebug() << "Adding talker to talker widget with value " << talkerString;
 
-        foreach (const QString & language, languages)
+        int rowcount = mUi->AvailableTalkersTable->rowCount();
+        mUi->AvailableTalkersTable->setRowCount(rowcount + 1);
+
+        // set the synthesizer item
+        QTableWidgetItem * item = new QTableWidgetItem(code.outputModule());
+        mUi->AvailableTalkersTable->setItem(rowcount, kSynthesizerColumn, item);
+
+        // set the voice name item
+        item = new QTableWidgetItem(code.voiceName());
+        item->setToolTip(code.voiceName());
+        mUi->AvailableTalkersTable->setItem(rowcount, kVoiceNameColumn, item);
+        
+        QString language = code.language();
+        QString langName = TalkerCode::languageCodeToLanguage(language);
+        if (language == languageCode)
         {
-            int rowcount = mUi->AvailableTalkersTable->rowCount();
-            mUi->AvailableTalkersTable->setRowCount(rowcount + 1);
-
-            // set the synthesizer item
-            QTableWidgetItem * item = new QTableWidgetItem(module);
-            mUi->AvailableTalkersTable->setItem(rowcount, kSynthesizerColumn, item);
-
-            QString langName = TalkerCode::languageCodeToLanguage(language);
-            if (language == languageCode)
-            {
-                defaultItem = item;
-            }
-
-            // set the language name item
-            item = new QTableWidgetItem(langName.isEmpty() ? language : langName);
-            item->setToolTip(language);
-            mUi->AvailableTalkersTable->setItem(rowcount, kLanguageColumn, item);
+            defaultItem = item;
         }
+
+        // set the language name item
+        item = new QTableWidgetItem(langName.isEmpty() ? language : langName);
+        item->setToolTip(language);
+        mUi->AvailableTalkersTable->setItem(rowcount, kLanguageColumn, item);
     }
 
     // turn sorting on now that the table is populated

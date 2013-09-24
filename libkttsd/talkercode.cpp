@@ -35,10 +35,35 @@
 #include <kdebug.h>
 #include <kservicetypetrader.h>
 
+class TalkerCodePrivate
+{
+public:
+    TalkerCodePrivate(TalkerCode *parent)
+        :q(parent)
+    {
+    }
+
+    ~TalkerCodePrivate()
+    {
+    }
+    
+    QString name;           /* name="xxx"        */
+    QString language;       /* lang="xx"         */
+    int voiceType;          /* voiceType="xxx"   */
+    int volume;             /* volume="xxx"      */
+    int rate;               /* rate="xxx"        */
+    int pitch;              /* pitch="xxx"       */
+    QString voiceName;      /* voiceName="xxx"   */
+    QString outputModule;   /* synthesizer="xxx" */
+
+    TalkerCode *q;
+};
+
 /**
  * Constructor.
  */
 TalkerCode::TalkerCode(const QString &code/*=QString()*/, bool normal /*=false*/)
+:d(new TalkerCodePrivate(this))
 {
     if (!code.isEmpty())
         parseTalkerCode(code);
@@ -49,42 +74,122 @@ TalkerCode::TalkerCode(const QString &code/*=QString()*/, bool normal /*=false*/
 /**
  * Copy Constructor.
  */
-TalkerCode::TalkerCode(TalkerCode* talker, bool normal /*=false*/)
+TalkerCode::TalkerCode(const TalkerCode& other)
+:d(new TalkerCodePrivate(this))
 {
-    m_name = talker->name();
-    m_language = talker->language();
-    m_voiceType = talker->voiceType();
-    m_volume = talker->volume();
-    m_rate = talker->rate();
-    m_pitch = talker->pitch();
-    m_outputModule = talker->outputModule();
-    //if (normal)
-    //    normalize();
+    d->name = other.name();
+    d->language = other.language();
+    d->voiceType = other.voiceType();
+    d->volume = other.volume();
+    d->rate = other.rate();
+    d->pitch = other.pitch();
+    d->voiceName = other.voiceName();
+    d->outputModule = other.outputModule();
 }
 
 /**
  * Destructor.
  */
-TalkerCode::~TalkerCode() { }
+TalkerCode::~TalkerCode()
+{
+    delete d;
+}
+
+TalkerCode &TalkerCode::operator=(const TalkerCode &other)
+{
+    d->name = other.name();
+    d->language = other.language();
+    d->voiceType = other.voiceType();
+    d->volume = other.volume();
+    d->rate = other.rate();
+    d->pitch = other.pitch();
+    d->voiceName = other.voiceName();
+    d->outputModule = other.outputModule();
+    return *this;
+}
 
 /**
  * Properties.
  */
-QString TalkerCode::name() const { return m_name; }
-QString TalkerCode::language() const { return m_language; }
-int TalkerCode::voiceType() const { return m_voiceType; }
-int TalkerCode::volume() const { return m_volume; }
-int TalkerCode::rate() const { return m_rate; }
-int TalkerCode::pitch() const { return m_pitch; }
-QString TalkerCode::outputModule() const { return m_outputModule; }
+QString TalkerCode::name() const
+{
+    return d->name;
+}
 
-void TalkerCode::setName(const QString &name) { m_name = name; }
-void TalkerCode::setLanguage(const QString &language) { m_language = language; }
-void TalkerCode::setVoiceType(int voiceType) { m_voiceType = voiceType; }
-void TalkerCode::setVolume(int volume) { m_volume = volume; }
-void TalkerCode::setRate(int rate) { m_rate = rate; }
-void TalkerCode::setPitch(int pitch) { m_pitch = pitch; }
-void TalkerCode::setOutputModule(const QString &moduleName) { m_outputModule = moduleName; }
+QString TalkerCode::language() const
+{
+    return d->language;
+}
+
+int TalkerCode::voiceType() const
+{
+    return d->voiceType;
+}
+
+int TalkerCode::volume() const
+{
+    return d->volume;
+}
+
+int TalkerCode::rate() const
+{
+    return d->rate;
+}
+
+int TalkerCode::pitch() const
+{
+    return d->pitch;
+}
+
+QString TalkerCode::voiceName() const
+{
+    return d->voiceName;
+}
+
+QString TalkerCode::outputModule() const
+{
+    return d->outputModule;
+}
+
+void TalkerCode::setName(const QString &name)
+{
+    d->name = name;
+}
+
+void TalkerCode::setLanguage(const QString &language)
+{
+    d->language = language;
+}
+
+void TalkerCode::setVoiceType(int voiceType)
+{
+    d->voiceType = voiceType;
+}
+
+void TalkerCode::setVolume(int volume)
+{
+    d->volume = volume;
+}
+
+void TalkerCode::setRate(int rate)
+{
+    d->rate = rate;
+}
+
+void TalkerCode::setPitch(int pitch)
+{
+    d->pitch = pitch;
+}
+
+void TalkerCode::setVoiceName(const QString &voiceName)
+{
+    d->voiceName = voiceName;
+}
+
+void TalkerCode::setOutputModule(const QString &moduleName)
+{
+    d->outputModule = moduleName;
+}
 
 /**
  * The Talker Code returned in XML format.
@@ -96,8 +201,17 @@ void TalkerCode::setTalkerCode(const QString& code)
 
 QString TalkerCode::getTalkerCode() const
 {
-    QString code = QString(QLatin1String( "<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\" voiceType=\"%4\">" )).arg(m_name).arg(m_language).arg(m_outputModule).arg(m_voiceType);
-    code += QString(QLatin1String( "<prosody volume=\"%1\" rate=\"%2\" pitch=\"%3\" /></voice>" )).arg(m_volume).arg(m_rate).arg(m_pitch);
+    QString xml(QLatin1String("<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\""
+                              " voiceName=\"%4\" voiceType=\"%5\">"
+                              "<prosody volume=\"%6\" rate=\"%7\" pitch=\"%8\" /></voice>"));
+    QString code = xml.arg(d->name)
+                   .arg(d->language)
+                   .arg(d->outputModule)
+                   .arg(d->voiceName)
+                   .arg(d->voiceType)
+                   .arg(d->volume)
+                   .arg(d->rate)
+                   .arg(d->pitch);
     return code;
 }
 
@@ -107,22 +221,22 @@ QString TalkerCode::getTalkerCode() const
 QString TalkerCode::getTranslatedDescription() const
 {
     QString code;
-    if (!m_name.isEmpty())
+    if (!d->name.isEmpty())
     {
-        code = m_name;
+        code = d->name;
     }
     else
     {
-        code = m_language;
+        code = d->language;
         bool prefer;
-        QString fullLangCode = m_language;
+        QString fullLangCode = d->language;
         if (!fullLangCode.isEmpty()) code = languageCodeToLanguage( fullLangCode );
         // TODO: The PlugInName is always English.  Need a way to convert this to a translated
         // name (possibly via DesktopEntryNameToName, but to do that, we need the desktopEntryName
         // from the config file).
-        if (!m_outputModule.isEmpty()) code += QLatin1Char( ' ' ) + stripPrefer(m_outputModule, prefer);
-        code += QLatin1Char(' ') + translatedVoiceType(m_voiceType);
-        code += QString(QLatin1String(" volume: %1 rate: %2")).arg(m_volume).arg(m_rate);
+        if (!d->outputModule.isEmpty()) code += QLatin1Char( ' ' ) + stripPrefer(d->outputModule, prefer);
+        code += QLatin1Char(' ') + translatedVoiceType(d->voiceType);
+        code += QString(QLatin1String(" volume: %1 rate: %2")).arg(d->volume).arg(d->rate);
         code = code.trimmed();
     }
     if (code.isEmpty())
@@ -202,27 +316,28 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     QDomElement voice = doc.firstChildElement(QLatin1String( "voice" ));
     if (!voice.isNull())
     {
-        m_name = voice.attribute(QLatin1String( "name" ));
-        m_language = voice.attribute(QLatin1String( "lang" ));
-        m_outputModule = voice.attribute(QLatin1String( "outputModule" ));
+        d->name = voice.attribute(QLatin1String( "name" ));
+        d->language = voice.attribute(QLatin1String( "lang" ));
+        d->outputModule = voice.attribute(QLatin1String( "outputModule" ));
+        d->voiceName = voice.attribute(QLatin1String( "voiceName" ));
         bool result = false;
-        m_voiceType = voice.attribute(QLatin1String( "voiceType" )).toInt(&result);
+        d->voiceType = voice.attribute(QLatin1String( "voiceType" )).toInt(&result);
         if (!result)
-            m_voiceType = 1;
+            d->voiceType = 1;
 
         QDomElement prosody = voice.firstChildElement(QLatin1String( "prosody" ));
         if (!prosody.isNull())
         {
             bool result = false;
-            m_volume = prosody.attribute(QLatin1String( "volume" )).toInt(&result);
+            d->volume = prosody.attribute(QLatin1String( "volume" )).toInt(&result);
             if (!result)
-                m_volume = 0;
-            m_rate = prosody.attribute(QLatin1String( "rate" )).toInt(&result);
+                d->volume = 0;
+            d->rate = prosody.attribute(QLatin1String( "rate" )).toInt(&result);
             if (!result)
-                m_rate = 0;
-            m_pitch = prosody.attribute(QLatin1String( "pitch" )).toInt(&result);
+                d->rate = 0;
+            d->pitch = prosody.attribute(QLatin1String( "pitch" )).toInt(&result);
             if (!result)
-                m_pitch = 0;
+                d->pitch = 0;
         }
         else
         {
@@ -266,7 +381,7 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
     for (int ndx = 0; ndx < talkersCount; ++ndx)
     {
         priorityMatch[ndx] = 0;
-        // kDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << m_loadedPlugIns[ndx].parsedTalkerCode.languageCode();
+        // kDebug() << "Comparing language code " << parsedTalkerCode.languageCode() << " to " << d->loadedPlugIns[ndx].parsedTalkerCode.languageCode();
     }
     // Determine the maximum number of priority attributes that were matched.
     int maxPriority = -1;
@@ -346,20 +461,22 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
 
 bool TalkerCode::operator==(TalkerCode &other) const
 {
-    return m_language == other.language() &&
-           m_voiceType == other.voiceType() &&
-           m_rate == other.rate() &&
-           m_volume == other.volume() &&
-           m_pitch == other.pitch() &&
-           m_outputModule == other.outputModule();
+    return d->language == other.language() &&
+           d->voiceType == other.voiceType() &&
+           d->rate == other.rate() &&
+           d->volume == other.volume() &&
+           d->pitch == other.pitch() &&
+           d->voiceName == other.voiceName() &&
+           d->outputModule == other.outputModule();
 }
 
 bool TalkerCode::operator!=(TalkerCode &other) const
 {
-    return m_language != other.language() ||
-           m_voiceType != other.voiceType() ||
-           m_rate != other.rate() ||
-           m_volume != other.volume() ||
-           m_pitch != other.pitch() ||
-           m_outputModule != other.outputModule();
+    return d->language != other.language() ||
+           d->voiceType != other.voiceType() ||
+           d->rate != other.rate() ||
+           d->volume != other.volume() ||
+           d->pitch != other.pitch() ||
+           d->voiceName != other.voiceName() ||
+           d->outputModule != other.outputModule();
 }

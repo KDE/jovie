@@ -285,7 +285,14 @@ public Q_SLOTS: // METHODS
 
     QStringList outputModules();
     QStringList languagesByModule(const QString & module);
-
+    
+    /**
+     * Get all possible talkers supported by speech-dispatcher configuration
+     *
+     * @returns QStringList of talkercodes
+     */
+    QStringList getPossibleTalkers();
+    
     // runtime slots to change the current speech configuration
     void setSpeed(int speed);
     int speed();
