@@ -51,6 +51,7 @@
 // KTTS includes.
 #include "selectlanguagedlg.h"
 #include "filterconf.h"
+#include "cdataescaper.h"
 
 StringReplacerConf::StringReplacerConf( QWidget *parent, const QVariantList& args ) :
     KttsFilterConf(parent, args),
@@ -209,8 +210,17 @@ QString StringReplacerConf::loadFromFile( const QString& filename, bool clear)
             QDomElement prop = propNode.toElement();
             if (prop.tagName() == QLatin1String( "type" )) wordType = prop.text();
             if (prop.tagName() == QLatin1String( "case" )) matchCase = prop.text();
-            if (prop.tagName() == QLatin1String( "match" )) match = prop.text();
-            if (prop.tagName() == QLatin1String( "subst" )) subst = prop.text();
+            if (prop.tagName() == QLatin1String( "match" ))
+            {
+                match = prop.text();
+                cdataUnescape( &match );
+            }
+
+            if (prop.tagName() == QLatin1String( "subst" ))
+            {
+                subst = prop.text();
+                cdataUnescape( &subst );
+            }
         }
         QString wordTypeStr =
             (wordType==QLatin1String( "RegExp" )?i18nc("Abbreviation for 'Regular Expression'", "RegExp"):i18n("Word"));
@@ -310,12 +320,17 @@ QString StringReplacerConf::saveToFile(const QString& filename)
 
         propTag = doc.createElement( QLatin1String( "match" ) );
         wordTag.appendChild( propTag);
-        t = doc.createCDATASection( substLView->item(row, 2)->text() );
+        QString s = substLView->item(row, 2)->text();
+        cdataEscape( &s );
+        t = doc.createCDATASection( s );
         propTag.appendChild( t );
 
         propTag = doc.createElement( QLatin1String( "subst" ) );
         wordTag.appendChild( propTag);
-        t = doc.createCDATASection( substLView->item(row, 3)->text() );
+        s = substLView->item(row, 3)->text();
+        cdataEscape( &s );
+        t = doc.createCDATASection( s );
+
         propTag.appendChild( t );
     }
 

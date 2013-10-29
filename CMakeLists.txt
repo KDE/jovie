@@ -6,6 +6,11 @@ find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 include (MacroLibrary)
 
+find_package( Qt4 REQUIRED QT_USE_QT* )
+include( ${QT_USE_FILE} )
+
+enable_testing()
+
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
 add_definitions( -DQT_NO_CAST_TO_ASCII )
