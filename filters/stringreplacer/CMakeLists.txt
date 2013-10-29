@@ -2,7 +2,9 @@
 
 ########### next target ###############
 
-set(jovie_stringreplacerplugin_PART_SRCS stringreplacerconf.cpp stringreplacerproc.cpp stringreplacerplugin.cpp )
+set(jovie_stringreplacerplugin_PART_SRCS
+    stringreplacerconf.cpp stringreplacerproc.cpp
+    stringreplacerplugin.cpp cdataescaper.cpp)
 
 kde4_add_ui_files(jovie_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
 
@@ -14,6 +16,18 @@ target_link_libraries(jovie_stringreplacerplugin  ${KDE4_KIO_LIBS} ${QT_QTXML_LI
 
 install(TARGETS jovie_stringreplacerplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
+########### test cdata escaper ##########
+
+set(test_cdataescaper_SRCS testcdataescaper.cpp cdataescaper.cpp)
+kde4_add_unit_test(
+    test_cdataescaper TESTNAME jovie-cdata_esecaper
+    ${test_cdataescaper_SRCS}
+)
+target_link_libraries(test_cdataescaper
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+)
 
 ########### install files ###############
 

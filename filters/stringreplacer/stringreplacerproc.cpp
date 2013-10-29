@@ -40,6 +40,7 @@
 // KTTS includes.
 #include "filterproc.h"
 #include "talkercode.h"
+#include "cdataescaper.h"
 
 /**
  * Constructor.
@@ -129,9 +130,17 @@ bool StringReplacerProc::init(KConfig* c, const QString& configGroup){
             QDomNode propNode = propList.item(propIndex);
             QDomElement prop = propNode.toElement();
             if (prop.tagName() == QLatin1String( "type" )) wordType = prop.text();
-	    if (prop.tagName() == QLatin1String( "case" )) matchCase = prop.text();
-            if (prop.tagName() == QLatin1String( "match" )) match = prop.text();
-            if (prop.tagName() == QLatin1String( "subst" )) subst = prop.text();
+            if (prop.tagName() == QLatin1String( "case" )) matchCase = prop.text();
+            if (prop.tagName() == QLatin1String( "match" ))
+            {
+                match = prop.text();
+                cdataUnescape( &match );
+            }
+            if (prop.tagName() == QLatin1String( "subst" ))
+            {
+                subst = prop.text();
+                cdataUnescape( &subst );
+            }
         }
         // Build Regular Expression for each word's match string.
         QRegExp rx;
