@@ -305,7 +305,7 @@ QString StringReplacerConf::saveToFile(const QString& filename)
         propTag = doc.createElement( QLatin1String( "case" ) );
         wordTag.appendChild( propTag);
         t = doc.createTextNode(
-            substLView->item(row, 2)->text()==i18nc("Yes or no", "Yes")?QLatin1String( "Yes" ):QLatin1String( "No" ) );
+            substLView->item(row, 1)->text()==i18nc("Yes or no", "Yes")?QLatin1String( "Yes" ):QLatin1String( "No" ) );
         propTag.appendChild( t );
 
         propTag = doc.createElement( QLatin1String( "match" ) );
