@@ -26,7 +26,6 @@ target_link_libraries(jovie_bin
     ${SPEECHD_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KUTILS_LIBS}
     ${KDE4_KIO_LIBS}
     kttsd )
 
