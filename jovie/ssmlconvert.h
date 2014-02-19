@@ -23,14 +23,6 @@
 #ifndef SSMLCONVERT_H
 #define SSMLCONVERT_H
 
-/**
- * SsmlConvert class: 
- * Receives a QStringList of talkers and, based on that information, 
- * evaluates received SSML to discover which of the given talkers best
- * suits it. It can then convert the given SSML into a format understandable
- * by the talker.
- */
-
 // Qt includes
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
@@ -38,6 +30,14 @@
 class QProcess;
 class QString;
 
+/**
+  * @class SsmlConvert
+ *
+ * Receives a QStringList of talkers and, based on that information, 
+ * evaluates received SSML to discover which of the given talkers best
+ * suits it. It can then convert the given SSML into a format understandable
+ * by the talker.
+ */
 class SSMLConvert : public QObject {
     Q_OBJECT
 public:

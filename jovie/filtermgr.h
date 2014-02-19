@@ -37,6 +37,13 @@ class TalkerCode;
 
 typedef QList<KttsFilterProc*> FilterList;
 
+/**
+ * @class FilterMgr
+ *
+ * Manager for filter objects. Loads and configures filters that have been
+ * set up by the user as per the config file. Also filters text to bee spoken
+ * by running it through all the configured filters.
+ */
 class FilterMgr : public KttsFilterProc
 {
     Q_OBJECT

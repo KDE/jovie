@@ -34,6 +34,11 @@
 class QEvent;
 class KAction;
 
+/**
+ * @class JovieTrayIcon
+ *
+ * Tray Icon object for Jovie application.
+ */
 class JovieTrayIcon: public KStatusNotifierItem
 {
     Q_OBJECT

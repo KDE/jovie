@@ -35,6 +35,12 @@ typedef QList<int> TJobList;
 typedef TJobList* TJobListPtr;
 
 class AppDataPrivate;
+
+/**
+ * @class AppData
+ *
+ * Object to represent options chosen by a given application for interacting with Jovie.
+ */
 class AppData
 {
 public:

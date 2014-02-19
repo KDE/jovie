@@ -36,6 +36,12 @@
 // KTTS includes.
 #include "talkercode.h"
 
+/**
+ * @class TalkerMgr
+ *
+ * Manager for configured talkers. Loads and configures talkers that have been
+ * set up by the user as per the config file.
+ */
 class TalkerMgr: public QObject
 {
     Q_OBJECT

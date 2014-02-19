@@ -57,11 +57,15 @@
 //    TalkerCode* talkerCode;     /* TalkerCode object passed to FilterMgr. */
 //};
 
-/**
- * This class is in charge of getting the messages, warnings and text from
- * the queue and call the plug ins function to actually speak the texts.
- */
 class SpeakerPrivate;
+
+/**
+ * @class Speaker
+ *
+ * This class is in charge of getting the messages, warnings and text from
+ * the queue and calling speech-dispatcher to actually speak the texts. All
+ * interaction with speech-dispatcher happens through this class.
+ */
 class Speaker : public QObject
 {
 Q_OBJECT
