@@ -51,6 +51,9 @@
 #include <ktoolinvocation.h>
 #include <kuniqueapplication.h>
 
+// libkttsd includes.
+#include <talkercode.h>
+
 /* ------------------  JovieTrayIcon class ----------------------- */
 
 JovieTrayIcon::JovieTrayIcon(QWidget *parent)
@@ -134,10 +137,7 @@ void JovieTrayIcon::slotUpdateTalkersMenu(){
     KConfig config(QLatin1String( "kttsdrc" ));
 
     // Load existing Talkers into Talker List.
-    TalkerListModel talkerListModel;
-    talkerListModel.loadTalkerCodesFromConfig(&config);
-
-    TalkerCode::TalkerCodeList list = talkerListModel.datastore();
+    TalkerCode::TalkerCodeList list = TalkerCode::loadTalkerCodesFromConfig(&config);
 
     for (int i=0;i<list.size();i++) {
        TalkerCode talkerCode=list.at(i);

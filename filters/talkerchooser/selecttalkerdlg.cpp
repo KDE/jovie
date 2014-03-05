@@ -89,7 +89,7 @@ SelectTalkerDlg::SelectTalkerDlg(
 
     //cb = m_widget->synthComboBox;
     //cb->addItem( QString() );
-	//KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
+    //KService::List offers = KServiceTypeTrader::self()->query("KTTSD/SynthPlugin");
     //for(int i=0; i < offers.count() ; ++i)
     //    cb->addItem(offers[i]->name());
 

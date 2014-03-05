@@ -36,6 +36,9 @@
 #include "kdebug.h"
 #include "kconfiggroup.h"
 
+// libkttsd includes
+#include "talkercode.h"
+
 // ----------------------------------------------------------------------------
 
 enum Columns {
@@ -194,23 +197,10 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
 {
     // Clear the model and view.
     clear();
-    // Iterate through list of the TalkerCode IDs.
-    KConfigGroup config(c, "General");
-    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList());
-    // kDebug() << "TalkerListModel::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList;
-    if (!talkerIDsList.isEmpty())
+    
+    TalkerCode::TalkerCodeList list = TalkerCode::loadTalkerCodesFromConfig(c);
+    Q_FOREACH(TalkerCode code, list)
     {
-        QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
-        for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
-        {
-            QString talkerID = *it;
-            kDebug() << "TalkerListWidget::loadTalkerCodes: talkerID = " << talkerID;
-            KConfigGroup talkGroup(c, "Talkers");
-            QString talkerCode = talkGroup.readEntry(talkerID);
-            TalkerCode tc(talkerCode, true);
-            kDebug() << "TalkerCodeWidget::loadTalkerCodes: talkerCode = " << talkerCode;
-            //tc.setId(talkerID);
-            appendRow(tc);
-        }
+        appendRow(code);
     }
 }

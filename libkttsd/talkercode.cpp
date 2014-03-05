@@ -30,6 +30,8 @@
 #include <QtXml/QDomDocument>
 
 // KDE includes.
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -106,6 +108,30 @@ TalkerCode &TalkerCode::operator=(const TalkerCode &other)
     d->voiceName = other.voiceName();
     d->outputModule = other.outputModule();
     return *this;
+}
+
+TalkerCode::TalkerCodeList TalkerCode::loadTalkerCodesFromConfig(KConfig* c)
+{
+    TalkerCodeList list;
+    // Iterate through list of the TalkerCode IDs.
+    KConfigGroup config(c, "General");
+    QStringList talkerIDsList = config.readEntry("TalkerIDs", QStringList());
+    // kDebug() << "TalkerCode::loadTalkerCodesFromConfig: talkerIDsList = " << talkerIDsList;
+    if (!talkerIDsList.isEmpty())
+    {
+        QStringList::ConstIterator itEnd = talkerIDsList.constEnd();
+        for (QStringList::ConstIterator it = talkerIDsList.constBegin(); it != itEnd; ++it)
+        {
+            QString talkerID = *it;
+            kDebug() << "TalkerCode::loadTalkerCodesFromConfig: talkerID = " << talkerID;
+            KConfigGroup talkGroup(c, "Talkers");
+            QString talkerCode = talkGroup.readEntry(talkerID);
+            TalkerCode tc(talkerCode, true);
+            kDebug() << "TalkerCode::loadTalkerCodesFromConfig: talkerCode = " << talkerCode;
+            list.append(tc);
+        }
+    }
+    return list;
 }
 
 /**

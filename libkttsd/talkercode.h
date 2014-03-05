@@ -33,6 +33,7 @@
 // KDE includes.
 #include <kdemacros.h>
 
+class KConfig;
 class TalkerCodePrivate;
 
 class KDE_EXPORT TalkerCode
@@ -59,6 +60,12 @@ class KDE_EXPORT TalkerCode
         bool operator!=(TalkerCode &other) const;
 
         typedef QList<TalkerCode> TalkerCodeList;
+
+        /**
+        *   Loads the TalkerCodes into a TalkerCodeList from the config file.
+        *   @param config                   Pointer to KConfig object holding the config file info.
+        */
+        static TalkerCodeList loadTalkerCodesFromConfig(KConfig* config);
 
         /**
          * Properties.
