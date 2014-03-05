@@ -5,11 +5,7 @@ set(kttsd_LIB_SRCS
    talkercode.cpp 
    filterproc.cpp 
    filterconf.cpp 
-   talkerlistmodel.cpp 
-   selecttalkerdlg.cpp ) 
-
-kde4_add_ui_files(kttsd_LIB_SRCS selecttalkerwidget.ui )
-
+   talkerlistmodel.cpp ) 
 
 kde4_add_library(kttsd SHARED ${kttsd_LIB_SRCS})
 
