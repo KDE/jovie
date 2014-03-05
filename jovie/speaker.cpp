@@ -49,7 +49,6 @@
 //#include <kio/job.h>
 
 // KTTS includes.
-#include "utils.h"
 #include "talkercode.h"
 
 // KTTSD includes.

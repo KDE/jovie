@@ -6,8 +6,7 @@ set(kttsd_LIB_SRCS
    filterproc.cpp 
    filterconf.cpp 
    talkerlistmodel.cpp 
-   selecttalkerdlg.cpp 
-   selectlanguagedlg.cpp) 
+   selecttalkerdlg.cpp ) 
 
 kde4_add_ui_files(kttsd_LIB_SRCS selecttalkerwidget.ui )
 

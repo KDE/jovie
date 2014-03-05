@@ -41,7 +41,6 @@
 
 // KTTS includes.
 #include "filterproc.h"
-#include "utils.h"
 
 /**
  * Constructor.

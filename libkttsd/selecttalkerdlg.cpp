@@ -42,7 +42,6 @@
 #include <kservicetypetrader.h>
 
 // KTTS includes.
-#include "utils.h"
 #include "talkerlistmodel.h"
 #include "selecttalkerdlg.moc"
 

@@ -69,7 +69,6 @@
 // KTTS includes.
 #include "talkercode.h"
 #include "filterconf.h"
-#include "utils.h"
 #include "kttsjobmgr.h"
 
 // Some constants.

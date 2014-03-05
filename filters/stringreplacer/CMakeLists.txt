@@ -3,8 +3,11 @@
 ########### next target ###############
 
 set(jovie_stringreplacerplugin_PART_SRCS
-    stringreplacerconf.cpp stringreplacerproc.cpp
-    stringreplacerplugin.cpp cdataescaper.cpp)
+    selectlanguagedlg.cpp
+    stringreplacerconf.cpp 
+    stringreplacerproc.cpp
+    stringreplacerplugin.cpp 
+    cdataescaper.cpp)
 
 kde4_add_ui_files(jovie_stringreplacerplugin_PART_SRCS stringreplacerconfwidget.ui editreplacementwidget.ui )
 
