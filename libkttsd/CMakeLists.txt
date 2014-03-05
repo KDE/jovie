@@ -5,7 +5,6 @@ set(kttsd_LIB_SRCS
    talkercode.cpp 
    filterproc.cpp 
    filterconf.cpp 
-   utils.cpp 
    talkerlistmodel.cpp 
    selecttalkerdlg.cpp 
    selectlanguagedlg.cpp) 

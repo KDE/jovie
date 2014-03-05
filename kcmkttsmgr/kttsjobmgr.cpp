@@ -52,7 +52,6 @@
 
 // KTTS includes.
 #include "talkercode.h"
-#include "selecttalkerdlg.h"
 #include "talkerwidget.h"
 
 KttsJobMgr::KttsJobMgr(QWidget *parent) :

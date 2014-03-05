@@ -141,6 +141,22 @@ private:
     // Process output when xsltproc exits.
     void processOutput();
 
+    /**
+     * Check if an XML document has a certain root element.
+     * @param xmldoc                 The document to check for the element.
+     * @param elementName      The element to check for in the document.
+     * @returns                             true if the root element exists in the document, false otherwise.
+     */
+    bool hasRootElement(const QString &xmldoc, const QString &elementName);
+  
+    /**
+     * Check if an XML document has a certain DOCTYPE.
+     * @param xmldoc             The document to check for the doctype.
+     * @param name                The doctype name to check for. Pass QString() to not check the name.
+     * @returns                         true if the parameters match the doctype, false otherwise.
+     */
+    bool hasDoctype(const QString &xmldoc, const QString &name);
+  
     // If not empty, only apply to text queued by an applications containing one of these strings.
     QStringList m_appIdList;
     // If not empty, only apply to XML that has the specified root element.

@@ -140,7 +140,7 @@ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talk
         // kDebug() << "XmlTransformerProc::asyncConvert:: searching for root elements " << m_rootElementList;
         for ( int ndx=0; ndx < m_rootElementList.count(); ++ndx )
         {
-            if ( KttsUtils::hasRootElement( inputText, m_rootElementList[ndx] ) )
+            if ( hasRootElement( inputText, m_rootElementList[ndx] ) )
             {
                 found = true;
                 break;
@@ -156,7 +156,7 @@ bool XmlTransformerProc::asyncConvert(const QString& inputText, TalkerCode* talk
     {
         for ( int ndx=0; ndx < m_doctypeList.count(); ++ndx )
         {
-            if ( KttsUtils::hasDoctype( inputText, m_doctypeList[ndx] ) )
+            if ( hasDoctype( inputText, m_doctypeList[ndx] ) )
             {
                 found = true;
                 break;
@@ -362,3 +362,79 @@ void XmlTransformerProc::slotReceivedStderr()
     // kDebug() << "XmlTransformerProc::slotReceivedStderr: Received error from xsltproc: " << buf;
 }
 
+/**
+ * Check if an XML document has a certain root element.
+ * @param xmldoc             The document to check for the element.
+ * @param elementName        The element to check for in the document.
+ * @returns                  True if the root element exists in the document, false otherwise.
+*/
+bool XmlTransformerProc::hasRootElement(const QString &xmldoc, const QString &elementName) {
+    // Strip all whitespace and go from there.
+    QString doc = xmldoc.simplified();
+    // Take off the <?xml...?> if it exists
+    if(doc.startsWith(QLatin1String("<?xml"))) {
+        // Look for ?> and strip everything off from there to the start - effectively removing
+        // <?xml...?>
+        int xmlStatementEnd = doc.indexOf(QLatin1String( "?>" ));
+        if(xmlStatementEnd == -1) {
+            kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            return false;
+        }
+        xmlStatementEnd += 2;  // len '?>' == 2
+        doc = doc.right(doc.length() - xmlStatementEnd);
+    }
+    // Take off leading comments, if they exist.
+    while(doc.startsWith(QLatin1String("<!--")) || doc.startsWith(QLatin1String(" <!--"))) {
+        int commentStatementEnd = doc.indexOf(QLatin1String( "-->" ));
+        if(commentStatementEnd == -1) {
+            kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            return false;
+        }
+        commentStatementEnd += 3; // len '>' == 2
+        doc = doc.right(doc.length() - commentStatementEnd);
+    }
+    // Take off the doctype statement if it exists.
+    while(doc.startsWith(QLatin1String("<!DOCTYPE")) || doc.startsWith(QLatin1String(" <!DOCTYPE"))) {
+        int doctypeStatementEnd = doc.indexOf(QLatin1Char( '>' ));
+        if(doctypeStatementEnd == -1) {
+            kDebug() << "KttsUtils::hasRootElement: Bad XML file syntax\n";
+            return false;
+        }
+        doctypeStatementEnd += 1; // len '>' == 2
+        doc = doc.right(doc.length() - doctypeStatementEnd);
+    }
+    // We should (hopefully) be left with the root element.
+    return (doc.startsWith(QString(QLatin1Char( '<' ) + elementName)) || doc.startsWith(QString(QLatin1String( " <" ) + elementName)));
+}
+
+bool XmlTransformerProc::hasDoctype(const QString &xmldoc, const QString &name) {
+    // Strip all whitespace and go from there.
+    QString doc = xmldoc.trimmed();
+    // Take off the <?xml...?> if it exists
+    if(doc.startsWith(QLatin1String("<?xml"))) {
+        // Look for ?> and strip everything off from there to the start - effectively removing
+        // <?xml...?>
+        int xmlStatementEnd = doc.indexOf(QLatin1String( "?>" ));
+        if(xmlStatementEnd == -1) {
+            kDebug() << "XmlTransformerProc::hasDoctype: Bad XML file syntax\n";
+            return false;
+        }
+        xmlStatementEnd += 2;  // len '?>' == 2
+        doc = doc.right(doc.length() - xmlStatementEnd);
+        doc = doc.trimmed();
+    }
+    // Take off leading comments, if they exist.
+    while(doc.startsWith(QLatin1String("<!--"))) {
+        int commentStatementEnd = doc.indexOf(QLatin1String( "-->" ));
+        if(commentStatementEnd == -1) {
+            kDebug() << "XmlTransformerProc::hasDoctype: Bad XML file syntax\n";
+            return false;
+        }
+        commentStatementEnd += 3; // len '>' == 2
+        doc = doc.right(doc.length() - commentStatementEnd);
+        doc = doc.trimmed();
+    }
+    // Match the doctype statement if it exists.
+    // kDebug() << "XmlTransformerProc::hasDoctype: searching " << doc.left(20) << "... for " << "<!DOCTYPE " << name;
+    return (doc.startsWith(QString(QLatin1String( "<!DOCTYPE " ) + name)));
+}
