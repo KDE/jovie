@@ -153,13 +153,14 @@ QString KttsFilterConf::getLocation(const QString &name) {
 
 /*static*/ QString KttsFilterConf::realFilePath(const QString &filename)
 {
-    char realpath_buffer[MAXPATHLEN + 1];
-    memset(realpath_buffer, 0, MAXPATHLEN + 1);
+    char *realpath_buffer;
 
     /* If the path contains symlinks, get the real name */
-    if (realpath( QFile::encodeName(filename).data(), realpath_buffer) != 0) {
+    if ((realpath_buffer = realpath( QFile::encodeName(filename).data(), NULL)) != NULL) {
         //succes, use result from realpath
-        return QFile::decodeName(realpath_buffer);
+        QString result = QFile::decodeName(realpath_buffer);
+        free(realpath_buffer);
+        return result;
     }
     return filename;
 }
