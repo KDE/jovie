@@ -43,7 +43,7 @@ class KDE_EXPORT TalkerCode
          * Constructor.
          */
         explicit TalkerCode(const QString &code=QString(), bool normal=false);
-        
+
         /**
          * Copy Constructor.
          */
@@ -78,6 +78,11 @@ class KDE_EXPORT TalkerCode
         int pitch() const;              /* pitch="xxx"  */
         QString voiceName() const;      /* voice name from synthesizer */
         QString outputModule() const;         /* synthesizer="xxx" */
+        int punctuation() const;
+
+        // Convenience method to get the punctuation
+        // in a string "All", "None" or "Some"
+        QString punctuationName() const;
 
         /**
          * Returns the language code plus country code (if any).
@@ -92,6 +97,7 @@ class KDE_EXPORT TalkerCode
         void setPitch(int pitch);
         void setVoiceName(const QString &voiceName);
         void setOutputModule(const QString &moduleName);
+        void setPunctuation(int value);
 
         /**
          * Sets the language code and country code (if given).
@@ -171,6 +177,7 @@ class KDE_EXPORT TalkerCode
         void parseTalkerCode(const QString &talkerCode);
 
         TalkerCodePrivate * const d;
+
 };
 
 #endif      // TALKERCODE_H

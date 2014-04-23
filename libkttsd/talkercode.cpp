@@ -37,6 +37,8 @@
 #include <kdebug.h>
 #include <kservicetypetrader.h>
 
+#include <libspeechd.h>
+
 class TalkerCodePrivate
 {
 public:
@@ -48,7 +50,7 @@ public:
     ~TalkerCodePrivate()
     {
     }
-    
+
     QString name;           /* name="xxx"        */
     QString language;       /* lang="xx"         */
     int voiceType;          /* voiceType="xxx"   */
@@ -57,8 +59,10 @@ public:
     int pitch;              /* pitch="xxx"       */
     QString voiceName;      /* voiceName="xxx"   */
     QString outputModule;   /* synthesizer="xxx" */
-
+    int punctuation;        /* punctuation="xxx" */
     TalkerCode *q;
+
+
 };
 
 /**
@@ -87,6 +91,7 @@ TalkerCode::TalkerCode(const TalkerCode& other)
     d->pitch = other.pitch();
     d->voiceName = other.voiceName();
     d->outputModule = other.outputModule();
+    d->punctuation = other.punctuation();
 }
 
 /**
@@ -107,6 +112,7 @@ TalkerCode &TalkerCode::operator=(const TalkerCode &other)
     d->pitch = other.pitch();
     d->voiceName = other.voiceName();
     d->outputModule = other.outputModule();
+    d->punctuation = other.punctuation();
     return *this;
 }
 
@@ -176,6 +182,37 @@ QString TalkerCode::outputModule() const
 {
     return d->outputModule;
 }
+/* function to get the punctuation*/
+int TalkerCode::punctuation() const
+{
+    return d->punctuation;
+}
+
+QString TalkerCode::punctuationName() const
+{
+    QString name;
+    switch (d->punctuation)
+    {
+        case SPD_PUNCT_ALL:
+            name = i18n("All");
+            break;
+        case SPD_PUNCT_SOME:
+            name = i18n("Some");
+            break;
+        case SPD_PUNCT_NONE:
+            name = i18n("None");
+            break;
+    }
+    return name;
+}
+
+/* function to set the punctuation*/
+
+void TalkerCode::setPunctuation(int value)
+{
+    d->punctuation=value;
+}
+
 
 void TalkerCode::setName(const QString &name)
 {
@@ -225,11 +262,12 @@ void TalkerCode::setTalkerCode(const QString& code)
     parseTalkerCode(code);
 }
 
+
 QString TalkerCode::getTalkerCode() const
 {
     QString xml(QLatin1String("<voice name=\"%1\" lang=\"%2\" outputModule=\"%3\""
-                              " voiceName=\"%4\" voiceType=\"%5\">"
-                              "<prosody volume=\"%6\" rate=\"%7\" pitch=\"%8\" /></voice>"));
+                              " voiceName=\"%4\" voiceType=\"%5\" >"
+                              "<prosody volume=\"%6\" rate=\"%7\" pitch=\"%8\" punctuation=\"%9\"/></voice>"));
     QString code = xml.arg(d->name)
                    .arg(d->language)
                    .arg(d->outputModule)
@@ -237,7 +275,8 @@ QString TalkerCode::getTalkerCode() const
                    .arg(d->voiceType)
                    .arg(d->volume)
                    .arg(d->rate)
-                   .arg(d->pitch);
+                   .arg(d->pitch)
+                   .arg(d->punctuation);
     return code;
 }
 
@@ -364,6 +403,9 @@ void TalkerCode::parseTalkerCode(const QString &talkerCode)
             d->pitch = prosody.attribute(QLatin1String( "pitch" )).toInt(&result);
             if (!result)
                 d->pitch = 0;
+            d->punctuation = prosody.attribute(QLatin1String("punctuation")).toInt(&result);
+            if (!result)
+                d->punctuation = SPD_PUNCT_NONE; // Default to no punctuation
         }
         else
         {
@@ -493,7 +535,8 @@ bool TalkerCode::operator==(TalkerCode &other) const
            d->volume == other.volume() &&
            d->pitch == other.pitch() &&
            d->voiceName == other.voiceName() &&
-           d->outputModule == other.outputModule();
+           d->outputModule == other.outputModule() &&
+           d->punctuation == other.punctuation();
 }
 
 bool TalkerCode::operator!=(TalkerCode &other) const
@@ -504,5 +547,6 @@ bool TalkerCode::operator!=(TalkerCode &other) const
            d->volume != other.volume() ||
            d->pitch != other.pitch() ||
            d->voiceName != other.voiceName() ||
-           d->outputModule != other.outputModule();
+           d->outputModule != other.outputModule() ||
+           d->punctuation != other.punctuation();
 }

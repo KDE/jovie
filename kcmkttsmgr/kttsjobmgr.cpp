@@ -130,6 +130,7 @@ void KttsJobMgr::save()
     m_kspeech->setOutputModule(talker.outputModule());
     kDebug() << "setting language to " << talker.language();
     m_kspeech->setLanguage(talker.language());
+    m_kspeech->setPunctuationType(talker.punctuation());
 }
 
 void KttsJobMgr::load()

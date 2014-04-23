@@ -1,6 +1,6 @@
 /***************************************************** vim:set ts=4 sw=4 sts=4:
   Jovie (KDE Text to Speech)
-  
+
   The KDE Text-to-Speech API.
   ------------------------------
   Copyright:
@@ -85,7 +85,7 @@ public Q_SLOTS: // METHODS
     /**
     * Sets a friendly display name for the application.
     * @param applicationName    Friendly name for the application.
-    */    
+    */
     void setApplicationName(const QString &applicationName);
 
     /**
@@ -171,7 +171,7 @@ public Q_SLOTS: // METHODS
     * @see defaultTalker
     */
     bool autoConfigureTalkersOn();
-    
+
     /** Sets whether KTTSD will automatically attempt to configure new
     * talkers to meet required talker attributes.
     * @param autoConfigureTalkersOn True to enable auto configuration.
@@ -183,7 +183,7 @@ public Q_SLOTS: // METHODS
     * @return               True if application is paused.
     */
     bool isApplicationPaused();
-    
+
     /**
     * Returns the full path name to XSLT file used to convert HTML
     * markup to speakable form.
@@ -279,20 +279,20 @@ public Q_SLOTS: // METHODS
     */
     void resume();
 
-    
+
     void stop();
     void cancel();
 
     QStringList outputModules();
     QStringList languagesByModule(const QString & module);
-    
+
     /**
      * Get all possible talkers supported by speech-dispatcher configuration
      *
      * @returns QStringList of talkercodes
      */
     QStringList getPossibleTalkers();
-    
+
     // runtime slots to change the current speech configuration
     void setSpeed(int speed);
     int speed();
@@ -305,6 +305,8 @@ public Q_SLOTS: // METHODS
     void setLanguage(const QString & language);
     void setVoiceType(int voiceType);
     int voiceType();
+
+    void setPunctuationType(int punctuation);
 
     /**
     * Removes the specified job.  If the job is speaking, it is stopped.
@@ -493,7 +495,7 @@ public Q_SLOTS: // METHODS
     *
     * Since there is only one ScreenReaderOutput, this method is meaningless
     * for ScreenReaderOutput jobs.
-    */    
+    */
     void moveJobLater(int jobNum);
 
     /**
@@ -511,7 +513,7 @@ public Q_SLOTS: // METHODS
     *
     * Since ScreenReaderOutput jobs are not split into sentences, this method
     * is meaningless for ScreenReaderOutput jobs.
-    */    
+    */
     int moveRelSentence(int jobNum, int n);
 
     /**
@@ -578,19 +580,19 @@ private slots:
     void slotJobStateChanged(const QString& appId, int jobNum, KSpeech::JobState state);
     void slotMarker(const QString& appId, int jobNum, KSpeech::MarkerType markerType, const QString& markerData);
     void slotFilteringFinished();
-    
+
 private:
     /**
     * The DBUS connection name of the last application that called KTTSD.
     */
     QString callingAppId();
-    
+
     /*
     * Checks if KTTSD is ready to speak and at least one talker is configured.
     * If not, user is prompted to display the configuration dialog.
     */
     bool ready();
-    
+
     /**
     * Create and initialize the Configuration Data object.
     */

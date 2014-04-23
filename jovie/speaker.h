@@ -200,6 +200,7 @@ public:
     void setLanguage(const QString & language);
     void setVoiceType(int voiceType);
     void setVoiceName(const QString & voiceName);
+    void setPunctuationType(int punctuation);
 
     int speed();
     int pitch();

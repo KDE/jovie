@@ -77,12 +77,12 @@ protected:
     * The DBUS sender ID of last application to call KTTSD.
     */
     QString callingAppId;
-    
+
     /*
     * The tray icon.
     */
     JovieTrayIcon *trayIcon;
-  
+
 };
 
 /* Jovie Class ========================================================= */
@@ -354,6 +354,11 @@ int Jovie::voiceType()
     return Speaker::Instance()->voiceType();
 }
 
+void Jovie::setPunctuationType(int punctuation)
+{
+    Speaker::Instance()->setPunctuationType(punctuation);
+}
+
 void Jovie::stop()
 {
     Speaker::Instance()->stop();
@@ -507,7 +512,7 @@ void Jovie::reinit()
     if (ready()) {
         QDBusConnection::sessionBus().registerObject(QLatin1String( "/KSpeech" ), this, QDBusConnection::ExportAdaptors);
     }
-    
+
     d->trayIcon->slotUpdateTalkersMenu();
 }
 

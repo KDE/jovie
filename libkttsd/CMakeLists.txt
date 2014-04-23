@@ -1,4 +1,6 @@
 
+include_directories( ${SPEECHD_INCLUDE_DIR} )
+
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=2405)
 
 set(kttsd_LIB_SRCS
@@ -10,6 +12,7 @@ set(kttsd_LIB_SRCS
 kde4_add_library(kttsd SHARED ${kttsd_LIB_SRCS})
 
 target_link_libraries(kttsd
+    ${SPEECHD_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KUTILS_LIBS}

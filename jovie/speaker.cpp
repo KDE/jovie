@@ -201,6 +201,7 @@ protected:
             q->setVolume(defaultTalker.volume());
             q->setPitch(defaultTalker.pitch());
             q->setSpeed(defaultTalker.rate());
+	    q->setPunctuationType(defaultTalker.punctuation());
         }
     }
 
@@ -227,13 +228,13 @@ protected:
     KConfig *config;
 
     Speaker *q;
-    
+
     /**
     * Keeps track of the default talker in the configuration file
     * for easy switching back to it.
     */
     TalkerCode defaultTalker;
-    
+
     /**
     * Keeps track of the current talker information to give back to any users
     * and to know if we need to change the talker based on a filter's results.
@@ -416,6 +417,7 @@ int Speaker::say(const QString& appId, const QString& text, int sayOptions)
         setVolume(talkerCode.volume());
         setSpeed(talkerCode.rate());
         setPitch(talkerCode.pitch());
+	setPunctuationType(talkerCode.punctuation());
     }
     emit newJobFiltered(text, filteredText);
 
@@ -541,7 +543,7 @@ QStringList Speaker::getPossibleTalkers()
             }
         }
     }
-    
+
     return talkers;
 }
 
@@ -611,6 +613,14 @@ QString Speaker::voiceName()
     return d->currentTalker.voiceName();
 }
 
+void Speaker::setPunctuationType(int punctuation)
+{
+    if(d->connection && punctuation >= SPD_PUNCT_ALL && punctuation <= SPD_PUNCT_SOME){
+        int result = spd_set_punctuation(d->connection, SPDPunctuation(punctuation));
+    }
+}
+
+
 void Speaker::setLanguage(const QString & language)
 {
     if (d->connection) {
@@ -631,8 +641,10 @@ void Speaker::setVoiceType(int voiceType)
         int result = spd_set_voice_type(d->connection, SPDVoiceType(voiceType));
         d->currentTalker.setVoiceType(voiceType);
         // discard result for now, TODO: add error reporting
+
     }
 }
+
 
 int Speaker::voiceType()
 {

@@ -49,6 +49,7 @@ enum Columns {
     kVolumeColumn,
     kRateColumn,
     kPitchColumn,
+    kPunctuationColumn,
     kColumnCount
 };
 
@@ -80,7 +81,7 @@ QModelIndex TalkerListModel::index(int row, int column, const QModelIndex &paren
         return QModelIndex();
 }
 
-QModelIndex TalkerListModel::parent(const QModelIndex & index ) const 
+QModelIndex TalkerListModel::parent(const QModelIndex & index ) const
 {
     Q_UNUSED(index);
     return QModelIndex();
@@ -114,6 +115,7 @@ QVariant TalkerListModel::dataColumn(const TalkerCode& talkerCode, int column) c
         case kVolumeColumn:    return talkerCode.volume(); break;
         case kRateColumn:      return talkerCode.rate(); break;
         case kPitchColumn:     return talkerCode.pitch(); break;
+        case kPunctuationColumn: return talkerCode.punctuationName(); break;
     }
     return QVariant();
 }
@@ -138,6 +140,7 @@ QVariant TalkerListModel::headerData(int section, Qt::Orientation orientation, i
             case kVolumeColumn:    return i18nc("Volume of noise", "Volume"); break;
             case kRateColumn:      return i18n("Speed"); break;
             case kPitchColumn:     return i18n("Pitch"); break;
+            case kPunctuationColumn: return i18n("Punctuation"); break;
         };
 
     return QVariant();
@@ -197,7 +200,7 @@ void TalkerListModel::loadTalkerCodesFromConfig(KConfig* c)
 {
     // Clear the model and view.
     clear();
-    
+
     TalkerCode::TalkerCodeList list = TalkerCode::loadTalkerCodesFromConfig(c);
     Q_FOREACH(TalkerCode code, list)
     {

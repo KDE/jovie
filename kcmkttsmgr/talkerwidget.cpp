@@ -59,6 +59,8 @@ TalkerWidget::TalkerWidget(QWidget* parent)
             this, SIGNAL(talkerChanged()));
     connect(mUi->speedSlider, SIGNAL(valueChanged(int)),
             this, SIGNAL(talkerChanged()));
+    connect(mUi->punctuationComboBox,SIGNAL(currentIndexChanged(int)),
+            this,SIGNAL(talkerChanged()));
 
     org::kde::KSpeech* kspeech = new OrgKdeKSpeechInterface(QLatin1String( "org.kde.KSpeech" ), QLatin1String( "/KSpeech" ), QDBusConnection::sessionBus());
 
@@ -90,7 +92,7 @@ TalkerWidget::TalkerWidget(QWidget* parent)
         item = new QTableWidgetItem(code.voiceName());
         item->setToolTip(code.voiceName());
         mUi->AvailableTalkersTable->setItem(rowcount, kVoiceNameColumn, item);
-        
+
         QString language = code.language();
         QString langName = TalkerCode::languageCodeToLanguage(language);
         if (language == languageCode)
@@ -134,6 +136,7 @@ void TalkerWidget::setTalkerCode(const TalkerCode &talker)
     mUi->volumeSlider->setValue(talker.volume());
     mUi->speedSlider->setValue(talker.rate());
     mUi->pitchSlider->setValue(talker.pitch());
+    mUi->punctuationComboBox->setCurrentIndex(talker.punctuation());
 
     // Then we need to find the row in the availabletalkerstable that matches
     // the talker's language and output module.
@@ -170,6 +173,7 @@ TalkerCode TalkerWidget::getTalkerCode() const
         retval.setRate(mUi->speedSlider->value());
         retval.setPitch(mUi->pitchSlider->value());
         retval.setOutputModule(mUi->AvailableTalkersTable->item(row, kSynthesizerColumn)->text());
+        retval.setPunctuation(mUi->punctuationComboBox->currentIndex());
     }
     return retval;
 }
