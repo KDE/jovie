@@ -1,5 +1,5 @@
 # find speech-dispatcher library and header if available
-# Copyright (c) 2009, Jeremy Whiting <jeremy@scitools.com>
+# Copyright (c) 2009, Jeremy Whiting <jpwhiting@kde.org>
 # Copyright (c) 2011, Raphael Kubo da Costa <kubito@gmail.com>
 # This module defines
 #  SPEECHD_INCLUDE_DIR, where to find libspeechd.h
