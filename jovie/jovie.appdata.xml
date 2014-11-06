@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>jovie.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Jovie</name>
+  <summary>KDE Text To Speech Daemon</summary>
+  <description>
+    <p>
+      Jovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech.
+      Jovie is currently under development and aims to become the standard subsystem for all KDE applications
+      to provide speech output.
+    </p>
+    <p>User Features:</p>
+    <ul>
+      <li>
+        Speak any text from the KDE clipboard.
+      </li>
+      <li>
+        Speak any plain text file.
+      </li>
+      <li>
+        Speak all or any portion of a text file from Kate,
+        including instances where Kate isembedded in another KDE application.
+      </li>
+      <li>
+        Speak all or any portion of an HTML page from Konqueror.
+      </li>
+      <li>
+        Use as the speech backend for KMouth and KSayIt.
+      </li>
+      <li>
+        Speak KDE notifications (KNotify).
+      </li>
+      <li>
+        User-configurable filters for substituting misspoken words, choosing speech synthesizers,
+        and transforming XHMTL/XML documents.
+      </li>
+    </ul>
+    <p>Programmer Features:</p>
+    <ul>
+      <li>
+        Priority system for screen reader outputs, warnings and messages, while still playing regular texts.
+      </li>
+      <li>
+        Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.
+      </li>
+      <li>
+        Provide a lightweight and easily usableinterface for applications to generate speech output.
+      </li>
+      <li>
+        Applications need not be concerned about contention over the speech device.
+      </li>
+      <li>
+        Asynchronous to prevent system blocking.
+      </li>
+    </ul>
+  </description>
+  <url type="homepage">http://accessibility.kde.org/developer/kttsd/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=jovie</url>
+  <url type="help">http://docs.kde.org/stable/en/kdeaccessibility/jovie/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/jovie.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>jovie</binary>
+  </provides>
+</component>
