@@ -21,7 +21,7 @@
       </li>
       <li>
         Speak all or any portion of a text file from Kate,
-        including instances where Kate isembedded in another KDE application.
+        including instances where Kate is embedded in another KDE application.
       </li>
       <li>
         Speak all or any portion of an HTML page from Konqueror.
@@ -46,7 +46,7 @@
         Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.
       </li>
       <li>
-        Provide a lightweight and easily usableinterface for applications to generate speech output.
+        Provide a lightweight and easily usable interface for applications to generate speech output.
       </li>
       <li>
         Applications need not be concerned about contention over the speech device.
