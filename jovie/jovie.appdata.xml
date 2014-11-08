@@ -1,59 +1,95 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>jovie.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Jovie</name>
+  <name xml:lang="pt">Jovie</name>
+  <name xml:lang="uk">Jovie</name>
+  <name xml:lang="x-test">xxJoviexx</name>
   <summary>KDE Text To Speech Daemon</summary>
+  <summary xml:lang="uk">Фонова служба синтезу мовлення з тексту KDE</summary>
+  <summary xml:lang="x-test">xxKDE Text To Speech Daemonxx</summary>
   <description>
     <p>
       Jovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech.
       Jovie is currently under development and aims to become the standard subsystem for all KDE applications
       to provide speech output.
     </p>
+    <p xml:lang="uk">Система озвучення тексту KDE Jovie є підсистемою стільничного середовища KDE, яку призначено для перетворення текстової інформації на звукову. Розробка Jovie триває. Метою удосконалення програми є створення стандартної підсистеми для усіх програм KDE, яка б забезпечувала озвучення потрібних даних.</p>
+    <p xml:lang="x-test">xxJovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.xx</p>
     <p>User Features:</p>
+    <p xml:lang="uk">Можливості для користувачів:</p>
+    <p xml:lang="x-test">xxUser Features:xx</p>
     <ul>
       <li>
         Speak any text from the KDE clipboard.
       </li>
+      <li xml:lang="uk">Озвучення будь-якого тексту з буфера обміну даними KDE.</li>
+      <li xml:lang="x-test">xxSpeak any text from the KDE clipboard.xx</li>
       <li>
         Speak any plain text file.
       </li>
+      <li xml:lang="uk">Озвучення будь-якого звичайного текстового файла.</li>
+      <li xml:lang="x-test">xxSpeak any plain text file.xx</li>
       <li>
         Speak all or any portion of a text file from Kate,
         including instances where Kate is embedded in another KDE application.
       </li>
+      <li xml:lang="uk">Озвучення усього текстового документа або будь-якої його позначеної частини у Kate, зокрема екземплярів Kate, вбудованих до інших програм KDE.</li>
       <li>
         Speak all or any portion of an HTML page from Konqueror.
       </li>
+      <li xml:lang="uk">Озвучення усієї сторінки або будь-якої позначеної частини сторінки HTML у Konqueror.</li>
+      <li xml:lang="x-test">xxSpeak all or any portion of an HTML page from Konqueror.xx</li>
       <li>
         Use as the speech backend for KMouth and KSayIt.
       </li>
+      <li xml:lang="uk">Використання як модуля озвучення тексту у KMouth та KSayIt.</li>
+      <li xml:lang="x-test">xxUse as the speech backend for KMouth and KSayIt.xx</li>
       <li>
         Speak KDE notifications (KNotify).
       </li>
+      <li xml:lang="uk">Озвучення сповіщень KDE (KNotify).</li>
+      <li xml:lang="x-test">xxSpeak KDE notifications (KNotify).xx</li>
       <li>
         User-configurable filters for substituting misspoken words, choosing speech synthesizers,
         and transforming XHMTL/XML documents.
       </li>
+      <li xml:lang="uk">Налаштовані користувачем фільтри заміни слів, що вимовляються неправильно, вибір синтезаторів мовлення та перетворення документів XHMTL/XML.</li>
+      <li xml:lang="x-test">xxUser-configurable filters for substituting misspoken words, choosing speech synthesizers, and transforming XHMTL/XML documents.xx</li>
     </ul>
     <p>Programmer Features:</p>
+    <p xml:lang="uk">Можливості для програмістів:</p>
+    <p xml:lang="x-test">xxProgrammer Features:xx</p>
     <ul>
       <li>
         Priority system for screen reader outputs, warnings and messages, while still playing regular texts.
       </li>
+      <li xml:lang="pt">Um sistema de prioridades para o resultado do leitor do ecrã, dos avisos e das mensagens, enquanto reproduz à mesma os textos normais.</li>
+      <li xml:lang="uk">Система пріоритетів для виводу екранного засобу для читання, показ попереджень і повідомлень без переривання читання звичайних текстів.</li>
+      <li xml:lang="x-test">xxPriority system for screen reader outputs, warnings and messages, while still playing regular texts.xx</li>
       <li>
         Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.
       </li>
+      <li xml:lang="uk">Підтримка синтезу мовлення з командного рядка (або за допомогою скриптів оболонки) з використанням інструменту qdbus.</li>
+      <li xml:lang="x-test">xxPermit generation of speech from the command line (or via shell scripts) using the qdbus utility.xx</li>
       <li>
         Provide a lightweight and easily usable interface for applications to generate speech output.
       </li>
+      <li xml:lang="uk">Легкий і простий у користуванні інтерфейс для програм, які створюють інформацію, яку слід озвучити.</li>
       <li>
         Applications need not be concerned about contention over the speech device.
       </li>
+      <li xml:lang="pt">As aplicações não precisam de se preocupar com a contenção sobre o dispositivo de voz.</li>
+      <li xml:lang="uk">Програмам не потрібно самостійно вирішувати проблеми конкуренції у боротьбі за пристрій виведення звуку.</li>
+      <li xml:lang="x-test">xxApplications need not be concerned about contention over the speech device.xx</li>
       <li>
         Asynchronous to prevent system blocking.
       </li>
+      <li xml:lang="pt">Assíncrono, para evitar o bloqueio do sistema.</li>
+      <li xml:lang="uk">Асинхронна робота для запобігання блокуванню системи.</li>
+      <li xml:lang="x-test">xxAsynchronous to prevent system blocking.xx</li>
     </ul>
   </description>
   <url type="homepage">http://accessibility.kde.org/developer/kttsd/</url>
