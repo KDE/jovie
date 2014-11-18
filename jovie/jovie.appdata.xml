@@ -7,6 +7,7 @@
   <name xml:lang="cs">Jovie</name>
   <name xml:lang="de">Jovie</name>
   <name xml:lang="es">Jovie</name>
+  <name xml:lang="fi">Jovie</name>
   <name xml:lang="nl">Jovie</name>
   <name xml:lang="pl">Jovie</name>
   <name xml:lang="pt">Jovie</name>
@@ -21,6 +22,7 @@
   <summary>KDE Text To Speech Daemon</summary>
   <summary xml:lang="de">Der KDE-Dämon für Sprachausgabe</summary>
   <summary xml:lang="es">Demonio de conversión de texto a voz de KDE</summary>
+  <summary xml:lang="fi">KDE:n puhesyntetisaattoripalvelu</summary>
   <summary xml:lang="nl">Daemon van KDE voor tekst naar spraak</summary>
   <summary xml:lang="pl">Usługa tekstu-na-mowę KDE</summary>
   <summary xml:lang="pt">Serviço de Texto-para-Fala do KDE</summary>
@@ -53,6 +55,7 @@
     <p>User Features:</p>
     <p xml:lang="de">Eigenschaften für Benutzer:</p>
     <p xml:lang="es">Funcionalidades para los usuarios:</p>
+    <p xml:lang="fi">Ominaisuuksia käyttäjille:</p>
     <p xml:lang="nl">Mogelijkheden voor de gebruiker:</p>
     <p xml:lang="pl">Możliwości użytkownika:</p>
     <p xml:lang="pt">Funcionalidades do Utilizador:</p>
@@ -69,6 +72,7 @@
         Speak any text from the KDE clipboard.
       </li>
       <li xml:lang="es">Conversión de texto a voz de cualquier texto del portapapeles.</li>
+      <li xml:lang="fi">Puhuu minkä tahansa tekstin KDE:n leikepöydältä.</li>
       <li xml:lang="nl">Spreek elke tekst vanuit het KDE klembord uit.</li>
       <li xml:lang="pl">Wypowiadanie dowolnego tekstu ze schowka KDE.</li>
       <li xml:lang="pt">Falar qualquer texto na área de transferência do KDE.</li>
@@ -84,6 +88,7 @@
         Speak any plain text file.
       </li>
       <li xml:lang="es">Convertir a voz cualquier archivo de texto sin formato.</li>
+      <li xml:lang="fi">Puhuu minkä tahansa muotoilemattoman tekstitiedoston.</li>
       <li xml:lang="nl">Spreek uit elk plat tekstbestand.</li>
       <li xml:lang="pl">Wypowiadanie dowolnego zwykłego pliku tekstowego.</li>
       <li xml:lang="pt">Falar qualquer ficheiro de texto simples.</li>
@@ -100,6 +105,7 @@
         including instances where Kate is embedded in another KDE application.
       </li>
       <li xml:lang="es">Convertir a voz todo un archivo de texto de Kate o cualquier parte de él, incluidas las instancias de Kate que estén integradas en otra aplicación de KDE.</li>
+      <li xml:lang="fi">Puhuu Katessa auki olevan tekstin kokonaisuudessaan tai osan siitä, silloinkin, kun Kate on upotettuna toisessa KDE-sovelluksessa.</li>
       <li xml:lang="nl">Spreek alles of een gedeelte uit van een tekstbestand vanuit Kate, inclusief exemplaren waar Kate is ingebed in andere KDE toepassing.</li>
       <li xml:lang="pl">Wypowiadanie całego tekstu lub tylko jego części z edytora Kate, uwzględniając w tym przypadek gdy Kate jest osadzony w innym programie KDE.</li>
       <li xml:lang="pt">Falar toda ou uma parte de um ficheiro do Kate, incluindo as instâncias em que o Kate está incorporado noutra aplicação do KDE.</li>
@@ -115,6 +121,7 @@
         Speak all or any portion of an HTML page from Konqueror.
       </li>
       <li xml:lang="es">Convertir a texto cualquier página HTML o parte de ella en Konqueror.</li>
+      <li xml:lang="fi">Puhuu Konquerorissa auki olevan HTML-sivun kokonaisuudessaan tai osan siitä.</li>
       <li xml:lang="nl">Spreek alles of een gedeelte van een HTML pagina in Konqueror uit.</li>
       <li xml:lang="pl">Wypowiadanie całego tekstu strony HTML lub tylko jej części z Konquerora.</li>
       <li xml:lang="pt">Falar toda ou uma parte de uma página em HTML no Konqueror.</li>
@@ -130,6 +137,7 @@
         Use as the speech backend for KMouth and KSayIt.
       </li>
       <li xml:lang="es">Utilizarlo como motor de conversión de texto a voz para KMouth y KSaylt.</li>
+      <li xml:lang="fi">Toimii puheen taustajärjestelmänä KMouthille ja KSayItille.</li>
       <li xml:lang="nl">Als de spraakbackend voor KMouth en KSayIt.</li>
       <li xml:lang="pl">Wykorzystywany jako silnik mowy dla KMouth oraz KSayIt.</li>
       <li xml:lang="pt">Usar como infra-estrutura de fala para o KMouth e o KSayIt.</li>
@@ -145,6 +153,7 @@
         Speak KDE notifications (KNotify).
       </li>
       <li xml:lang="es">Convertir a voz las notificaciones de KDE (Knotify).</li>
+      <li xml:lang="fi">Puhuu KDE-ilmoitukset (KNotify).</li>
       <li xml:lang="nl">Spreek KDE meldingen uit (KNotify).</li>
       <li xml:lang="pl">Wypowiadanie powiadomień KDE (KNotify).</li>
       <li xml:lang="pt">Falar as notificações do KDE (KNotify).</li>
@@ -177,6 +186,7 @@
     <p>Programmer Features:</p>
     <p xml:lang="de">Eigenschaften für Programmierer:</p>
     <p xml:lang="es">Funcionalidades para los programadores:</p>
+    <p xml:lang="fi">Ominaisuuksia ohjelmoijille:</p>
     <p xml:lang="nl">Mogelijkheden voor de programmeur:</p>
     <p xml:lang="pl">Możliwości programisty:</p>
     <p xml:lang="pt">Funcionalidades do Programador:</p>
