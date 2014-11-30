@@ -6,6 +6,7 @@
   <name>Jovie</name>
   <name xml:lang="cs">Jovie</name>
   <name xml:lang="de">Jovie</name>
+  <name xml:lang="en-GB">Jovie</name>
   <name xml:lang="es">Jovie</name>
   <name xml:lang="fi">Jovie</name>
   <name xml:lang="it">Jovie</name>
@@ -14,6 +15,7 @@
   <name xml:lang="pt">Jovie</name>
   <name xml:lang="pt-BR">Jovie</name>
   <name xml:lang="sk">Jovie</name>
+  <name xml:lang="sl">Jovie</name>
   <name xml:lang="sr">Џови</name>
   <name xml:lang="sr-Latn">Džovi</name>
   <name xml:lang="sr-ijekavian">Џови</name>
@@ -22,6 +24,7 @@
   <name xml:lang="x-test">xxJoviexx</name>
   <summary>KDE Text To Speech Daemon</summary>
   <summary xml:lang="de">Der KDE-Dämon für Sprachausgabe</summary>
+  <summary xml:lang="en-GB">KDE Text To Speech Daemon</summary>
   <summary xml:lang="es">Demonio de conversión de texto a voz de KDE</summary>
   <summary xml:lang="fi">KDE:n puhesyntetisaattoripalvelu</summary>
   <summary xml:lang="it">Il demone di pronuncia di KDE</summary>
@@ -30,6 +33,7 @@
   <summary xml:lang="pt">Serviço de Texto-para-Fala do KDE</summary>
   <summary xml:lang="pt-BR">Serviço do sintetizador de voz do KDE</summary>
   <summary xml:lang="sk">Démon textu na reč pre KDE</summary>
+  <summary xml:lang="sl">Ozadnji program za besedilo-v-govor za KDE</summary>
   <summary xml:lang="sr">КДЕ‑ов демон за текст‑у‑говор</summary>
   <summary xml:lang="sr-Latn">KDE‑ov demon za tekst‑u‑govor</summary>
   <summary xml:lang="sr-ijekavian">КДЕ‑ов демон за текст‑у‑говор</summary>
@@ -42,6 +46,7 @@
       Jovie is currently under development and aims to become the standard subsystem for all KDE applications
       to provide speech output.
     </p>
+    <p xml:lang="en-GB">Jovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.</p>
     <p xml:lang="es">Jovie es un subsistema del escritorio KDE para la conversión de texto a voz. Jovie está actualmente en desarrollo y su objetivo es convertirse en el subsistema estándar para que todas las aplicaciones de KDE puedan proporcionar salida de voz.</p>
     <p xml:lang="it">La pronuncia Jovie per KDE è un sottosistema nel desktop di KDE per la conversione del testo in parlato. Jovie è attualmente in fase di sviluppo e punta a diventare il sottosistema standard per il parlato in tutte le applicazioni di KDE.</p>
     <p xml:lang="nl">Jovie KDE voor tekst naar spraak is een subsysteem in het KDE bureaublad voor conversie van tekst naar spraak. Jovie is nog in ontwikkeling en richt zich erop het standaard subsysteem te worden voor alle KDE toepassingen om spraakuitvoer te leveren.</p>
@@ -49,6 +54,7 @@
     <p xml:lang="pt">O Sistema de KDE Texto-para-Fala do KDE, o Jovie, é um sub-sistema dentro do ambiente de trabalho KDE para a conversão de texto para fala audível. O Jovie está de momento em desenvolvimento e pretende tornar-se o sub-sistema padrão para todas as aplicações do KDE fornecerem resultados em voz sintetizada.</p>
     <p xml:lang="pt-BR">Sistema de KDE Texto para Fala do KDE, o Jovie, é um subsistema dentro do ambiente de trabalho KDE para a conversão de texto para fala audível. O Jovie está em desenvolvimento e pretende tornar-se o subsistema padrão para todos os aplicativos do KDE fornecerem resultados em voz sintetizada.</p>
     <p xml:lang="sk">KDE text na reč Jovie je subsystém v KDE na konverziu textu na hovorenú reč. Jovie je aktuálne vo vývoji a jeho cieľom je stať sa štandardným subsystémom pre všetky KDE aplikácie na poskytnutie hovoreného výstupu.</p>
+    <p xml:lang="sl">Jovie, besedilo-v-govor za KDE, je podsistem namizja KDE za pretvorbo besedila v govor. Jovie se trenutno razvija in bo morda nekoč postal standardni podsistem za ponujanje izhoda govora za vse programe KDE.</p>
     <p xml:lang="sr">Џови је подсистем за текст‑у‑говор у оквиру КДЕ површи, који претвара текст у чујни говор. Тренутно је у развоју, а тежи томе да постане стандардни подсистем за све КДЕ програме којима треба излаз говора.</p>
     <p xml:lang="sr-Latn">Džovi je podsistem za tekst‑u‑govor u okviru KDE površi, koji pretvara tekst u čujni govor. Trenutno je u razvoju, a teži tome da postane standardni podsistem za sve KDE programe kojima treba izlaz govora.</p>
     <p xml:lang="sr-ijekavian">Џови је подсистем за текст‑у‑говор у оквиру КДЕ површи, који претвара текст у чујни говор. Тренутно је у развоју, а тежи томе да постане стандардни подсистем за све КДЕ програме којима треба излаз говора.</p>
@@ -57,6 +63,7 @@
     <p xml:lang="x-test">xxJovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.xx</p>
     <p>User Features:</p>
     <p xml:lang="de">Eigenschaften für Benutzer:</p>
+    <p xml:lang="en-GB">User Features:</p>
     <p xml:lang="es">Funcionalidades para los usuarios:</p>
     <p xml:lang="fi">Ominaisuuksia käyttäjille:</p>
     <p xml:lang="it">Funzionalità per gli utenti:</p>
@@ -65,6 +72,7 @@
     <p xml:lang="pt">Funcionalidades do Utilizador:</p>
     <p xml:lang="pt-BR">Recursos para o usuário:</p>
     <p xml:lang="sk">Používateľské funkcie:</p>
+    <p xml:lang="sl">Zmožnosti za uporabnike:</p>
     <p xml:lang="sr">Корисничке могућности:</p>
     <p xml:lang="sr-Latn">Korisničke mogućnosti:</p>
     <p xml:lang="sr-ijekavian">Корисничке могућности:</p>
@@ -75,6 +83,7 @@
       <li>
         Speak any text from the KDE clipboard.
       </li>
+      <li xml:lang="en-GB">Speak any text from the KDE clipboard.</li>
       <li xml:lang="es">Conversión de texto a voz de cualquier texto del portapapeles.</li>
       <li xml:lang="fi">Puhuu minkä tahansa tekstin KDE:n leikepöydältä.</li>
       <li xml:lang="it">Pronuncia qualsiasi testo negli appunti di KDE.</li>
@@ -83,6 +92,7 @@
       <li xml:lang="pt">Falar qualquer texto na área de transferência do KDE.</li>
       <li xml:lang="pt-BR">Falar qualquer texto a partir da área de transferência do KDE.</li>
       <li xml:lang="sk">Povedať ľubovoľný text z KDE schránky.</li>
+      <li xml:lang="sl">Izgovorjava kateregakoli besedila iz odložišča za KDE.</li>
       <li xml:lang="sr">Изговарање било каквог текста из КДЕ клипборда.</li>
       <li xml:lang="sr-Latn">Izgovaranje bilo kakvog teksta iz KDE klipborda.</li>
       <li xml:lang="sr-ijekavian">Изговарање било каквог текста из КДЕ клипборда.</li>
@@ -92,6 +102,7 @@
       <li>
         Speak any plain text file.
       </li>
+      <li xml:lang="en-GB">Speak any plain text file.</li>
       <li xml:lang="es">Convertir a voz cualquier archivo de texto sin formato.</li>
       <li xml:lang="fi">Puhuu minkä tahansa muotoilemattoman tekstitiedoston.</li>
       <li xml:lang="it">Pronuncia qualsiasi file di testo.</li>
@@ -100,6 +111,7 @@
       <li xml:lang="pt">Falar qualquer ficheiro de texto simples.</li>
       <li xml:lang="pt-BR">Falar qualquer arquivo de texto simples.</li>
       <li xml:lang="sk">Povedať ľubovoľný čistý textový súbor.</li>
+      <li xml:lang="sl">Izgovorjava katerekoli besedilne datoteke.</li>
       <li xml:lang="sr">Изговарање било каквог текстуалног фајла.</li>
       <li xml:lang="sr-Latn">Izgovaranje bilo kakvog tekstualnog fajla.</li>
       <li xml:lang="sr-ijekavian">Изговарање било каквог текстуалног фајла.</li>
@@ -110,6 +122,7 @@
         Speak all or any portion of a text file from Kate,
         including instances where Kate is embedded in another KDE application.
       </li>
+      <li xml:lang="en-GB">Speak all or any portion of a text file from Kate, including instances where Kate is embedded in another KDE application.</li>
       <li xml:lang="es">Convertir a voz todo un archivo de texto de Kate o cualquier parte de él, incluidas las instancias de Kate que estén integradas en otra aplicación de KDE.</li>
       <li xml:lang="fi">Puhuu Katessa auki olevan tekstin kokonaisuudessaan tai osan siitä, silloinkin, kun Kate on upotettuna toisessa KDE-sovelluksessa.</li>
       <li xml:lang="it">Pronuncia tutto o parte di un testo in Kate, inclusi i casi in cui Kate sia incorporato in un'altra applicazione di KDE.</li>
@@ -118,6 +131,7 @@
       <li xml:lang="pt">Falar toda ou uma parte de um ficheiro do Kate, incluindo as instâncias em que o Kate está incorporado noutra aplicação do KDE.</li>
       <li xml:lang="pt-BR">Falar tudo ou uma parte de um arquivo de texto a partir do Kate, incluindo as instâncias em que o Kate está incorporado em outro aplicativo do KDE.</li>
       <li xml:lang="sk">Povedať všetky alebo časť z textu z Kate, vrátane inštancií, kde je Kate vložené v inej KDE aplikácii.</li>
+      <li xml:lang="sl">Izgovorjava kateregakoli dela besedilne datoteke odprte v programu Kate ali odprte v delu Kate vgrajenemu v drugi program KDE.</li>
       <li xml:lang="sr">Изговарање целог текста из Кејт, или дела текста, укључујући случајеве где је Кејт угнежђена компонента другог КДЕ програма.</li>
       <li xml:lang="sr-Latn">Izgovaranje celog teksta iz Kate, ili dela teksta, uključujući slučajeve gde je Kate ugnežđena komponenta drugog KDE programa.</li>
       <li xml:lang="sr-ijekavian">Изговарање целог текста из Кејт, или дела текста, укључујући случајеве где је Кејт угнежђена компонента другог КДЕ програма.</li>
@@ -127,6 +141,7 @@
       <li>
         Speak all or any portion of an HTML page from Konqueror.
       </li>
+      <li xml:lang="en-GB">Speak all or any portion of an HTML page from Konqueror.</li>
       <li xml:lang="es">Convertir a texto cualquier página HTML o parte de ella en Konqueror.</li>
       <li xml:lang="fi">Puhuu Konquerorissa auki olevan HTML-sivun kokonaisuudessaan tai osan siitä.</li>
       <li xml:lang="it">Pronuncia tutto o parte del testo di una pagina HTML in Konqueror.</li>
@@ -135,6 +150,7 @@
       <li xml:lang="pt">Falar toda ou uma parte de uma página em HTML no Konqueror.</li>
       <li xml:lang="pt-BR">Falar tudo ou uma parte de uma página em HTML a partir do Konqueror.</li>
       <li xml:lang="sk">Povedať celú alebo časť HTML stránky z Konquerora.</li>
+      <li xml:lang="sl">Izgovorjava kateregakoli dela strani HTML v Konqueror-ju.</li>
       <li xml:lang="sr">Изговарање целе ХТМЛ странице, или њеног дела, из К‑освајача.</li>
       <li xml:lang="sr-Latn">Izgovaranje cele HTML stranice, ili njenog dela, iz K‑osvajača.</li>
       <li xml:lang="sr-ijekavian">Изговарање целе ХТМЛ странице, или њеног дела, из К‑освајача.</li>
@@ -144,6 +160,7 @@
       <li>
         Use as the speech backend for KMouth and KSayIt.
       </li>
+      <li xml:lang="en-GB">Use as the speech backend for KMouth and KSayIt.</li>
       <li xml:lang="es">Utilizarlo como motor de conversión de texto a voz para KMouth y KSaylt.</li>
       <li xml:lang="fi">Toimii puheen taustajärjestelmänä KMouthille ja KSayItille.</li>
       <li xml:lang="it">Usa il motore di pronuncia di KMouth e KSayIt.</li>
@@ -152,6 +169,7 @@
       <li xml:lang="pt">Usar como infra-estrutura de fala para o KMouth e o KSayIt.</li>
       <li xml:lang="pt-BR">Usar como infraestrutura de fala para o KMouth e o KSayIt.</li>
       <li xml:lang="sk">Použitie ako backend reči pre KMouth a KSayIt.</li>
+      <li xml:lang="sl">Ponuja zaledje za govor za programa KMouth in KSayIt.</li>
       <li xml:lang="sr">Користи се као позадина за говор у К‑устима и К‑изговору.</li>
       <li xml:lang="sr-Latn">Koristi se kao pozadina za govor u K‑ustima i K‑izgovoru.</li>
       <li xml:lang="sr-ijekavian">Користи се као позадина за говор у К‑устима и К‑изговору.</li>
@@ -161,6 +179,7 @@
       <li>
         Speak KDE notifications (KNotify).
       </li>
+      <li xml:lang="en-GB">Speak KDE notifications (KNotify).</li>
       <li xml:lang="es">Convertir a voz las notificaciones de KDE (Knotify).</li>
       <li xml:lang="fi">Puhuu KDE-ilmoitukset (KNotify).</li>
       <li xml:lang="it">Pronuncia le notifiche di KDE (KNotify).</li>
@@ -169,6 +188,7 @@
       <li xml:lang="pt">Falar as notificações do KDE (KNotify).</li>
       <li xml:lang="pt-BR">Falar as notificações do KDE (KNotify).</li>
       <li xml:lang="sk">Povedať KDE upozornenia (KNotify).</li>
+      <li xml:lang="sl">Izgovorjava obvestil za KDE (KNotify).</li>
       <li xml:lang="sr">Изговарање КДЕ обавештења (К‑обавештења).</li>
       <li xml:lang="sr-Latn">Izgovaranje KDE obaveštenja (K‑obaveštenja).</li>
       <li xml:lang="sr-ijekavian">Изговарање КДЕ обавештења (К‑обавјештења).</li>
@@ -180,6 +200,7 @@
         and transforming XHMTL/XML documents.
       </li>
       <li xml:lang="de">Einstellbare Filter, um falsch ausgesprochene Worte zu ersetzen, Sprachsynthesizer auszuwählen und XML-Dokumente umzuwandeln.</li>
+      <li xml:lang="en-GB">User-configurable filters for substituting misspoken words, choosing speech synthesisers, and transforming XHMTL/XML documents.</li>
       <li xml:lang="es">Filtros configurables por el usuario para sustituir palabras pronunciadas incorrectamente, eligiendo sintetizadores de voz y transformando documentos XHTML/XML.</li>
       <li xml:lang="it">Filtri configurabili dall'utente per sostituire le parole pronunciate male, scegliere i sintetizzatori vocali, e trasformare i documenti XHTML/XML.</li>
       <li xml:lang="nl">Door gebruiker ingestelde filters voor substitueren van verkeerd uitgesproken woorden, met het kiezen van spraaksynthesizers en transformeren van XHMTL/XML documenten.</li>
@@ -187,6 +208,7 @@
       <li xml:lang="pt">Filtros configurados pelo utilizador para substituir as palavras erradas, escolher os sintetizadores de fala e transformar os documentos de XHMTL/XML.</li>
       <li xml:lang="pt-BR">Filtros configuráveis pelo usuário para substituir as palavras erradas, escolher os sintetizadores de voz e transformar os documentos em XML/XHTML.</li>
       <li xml:lang="sk">Používateľom nastaviteľné filtre na náhradu zle povedaných slov, výber syntetizátora reči a transformovanie XHTML/XML dokumentov.</li>
+      <li xml:lang="sl">Uporabniško določeni filtri za zamenjavo napačno izgovorjenih besed, izbor sintetizatorjev govora in pretvorba dokumentov XHTML/XML.</li>
       <li xml:lang="sr">Подесиви филтери за смењивање лоше изговорених речи, избор синтетизатора говора, трансформисање ИксХТМЛ/ИксМЛ докумената.</li>
       <li xml:lang="sr-Latn">Podesivi filteri za smenjivanje loše izgovorenih reči, izbor sintetizatora govora, transformisanje XHTML/XML dokumenata.</li>
       <li xml:lang="sr-ijekavian">Подесиви филтери за смењивање лоше изговорених речи, избор синтетизатора говора, трансформисање ИксХТМЛ/ИксМЛ докумената.</li>
@@ -196,6 +218,7 @@
     </ul>
     <p>Programmer Features:</p>
     <p xml:lang="de">Eigenschaften für Programmierer:</p>
+    <p xml:lang="en-GB">Programmer Features:</p>
     <p xml:lang="es">Funcionalidades para los programadores:</p>
     <p xml:lang="fi">Ominaisuuksia ohjelmoijille:</p>
     <p xml:lang="it">Funzionalità per i programmatori:</p>
@@ -204,6 +227,7 @@
     <p xml:lang="pt">Funcionalidades do Programador:</p>
     <p xml:lang="pt-BR">Recursos para o programador:</p>
     <p xml:lang="sk">Funkcie programátora:</p>
+    <p xml:lang="sl">Zmožnosti za programerje:</p>
     <p xml:lang="sr">Програмерске могућности:</p>
     <p xml:lang="sr-Latn">Programerske mogućnosti:</p>
     <p xml:lang="sr-ijekavian">Програмерске могућности:</p>
@@ -215,6 +239,7 @@
         Priority system for screen reader outputs, warnings and messages, while still playing regular texts.
       </li>
       <li xml:lang="de">Prioritätssystem für die Ausgabe von Screen-Readern, Warnungen und Nachrichten, während andere Texte vorgelesen werden.</li>
+      <li xml:lang="en-GB">Priority system for screen reader outputs, warnings and messages, while still playing regular texts.</li>
       <li xml:lang="es">Sistema de prioridades para la salida del lector de pantalla, advertencias y mensajes mientras aún se están reproduciendo archivos normales.</li>
       <li xml:lang="it">Sistema di priorità per gli output di lettura a schermo, gli avvertimenti e i messaggi, durante la riproduzione di testi normali.</li>
       <li xml:lang="nl">Prioriteitssysteem voor uitvoer van schermlezers, waarschuwingen en meldingen, terwijl reguliere teksten worden afgespeeld.</li>
@@ -222,6 +247,7 @@
       <li xml:lang="pt">Um sistema de prioridades para o resultado do leitor do ecrã, dos avisos e das mensagens, enquanto reproduz à mesma os textos normais.</li>
       <li xml:lang="pt-BR">Um sistema de prioridades para o resultado do leitor da tela, dos avisos e das mensagens, enquanto reproduz ainda os textos normais.</li>
       <li xml:lang="sk">Systém priorít pre výstupy čítania na obrazovke, upozornenia a správy, počas stáleho prehrávania normálnych textov.</li>
+      <li xml:lang="sl">Prednostni sistem za izhode, opozorila in sporočila bralnika zaslona, medtem ko se predvajajo običajna besedila.</li>
       <li xml:lang="sr">Систем приоритета за излазе читача текста, упозорења и поруке, док се и даље читају обични текстови.</li>
       <li xml:lang="sr-Latn">Sistem prioriteta za izlaze čitača teksta, upozorenja i poruke, dok se i dalje čitaju obični tekstovi.</li>
       <li xml:lang="sr-ijekavian">Систем приоритета за излазе читача текста, упозорења и поруке, док се и даље читају обични текстови.</li>
@@ -232,6 +258,7 @@
         Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.
       </li>
       <li xml:lang="de">Ermöglicht die Erzeugung von Sprachausgaben auf der Befehlszeile (oder mit Shell-Skripten) über das qdbus-Hilfsprogramm.</li>
+      <li xml:lang="en-GB">Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.</li>
       <li xml:lang="es">Permitir la generación de voz a partir de la línea de órdenes (o a través de scripts del intérprete de órdenes) mediante la utilidad qdbus.</li>
       <li xml:lang="it">Permette la generazione di parlato dalla riga di comando (o attraverso script della shell) usando il programma qdbus.</li>
       <li xml:lang="nl">Sta generatie van spraak toe vanaf de commandoregel (of via shell-scripts) met gebruik van het qdbus hulpmiddel.</li>
@@ -239,6 +266,7 @@
       <li xml:lang="pt">Permitir a geração de fala a partir da linha de comandos (ou por programas da consola), usando o utilitário 'qdbus'.</li>
       <li xml:lang="pt-BR">Permite a geração de fala a partir da linha de comando (ou através de scripts), usando o utilitário qdbus.</li>
       <li xml:lang="sk">Povolí generovanie reči z príkazového riadku (alebo cez shell skripty) pomocou nástroja qdbus.</li>
+      <li xml:lang="sl">Omogoča ustvarjanje govora iz ukazne vrstice (ali lupinskih skriptov) s pomočjo pripomočka qdbus.</li>
       <li xml:lang="sr">Генерисање говора из командне линије (или скрипте шкољке) преко алатке <command>qdbus</command>.</li>
       <li xml:lang="sr-Latn">Generisanje govora iz komandne linije (ili skripte školjke) preko alatke <command>qdbus</command>.</li>
       <li xml:lang="sr-ijekavian">Генерисање говора из командне линије (или скрипте шкољке) преко алатке <command>qdbus</command>.</li>
@@ -249,6 +277,7 @@
         Provide a lightweight and easily usable interface for applications to generate speech output.
       </li>
       <li xml:lang="de">Stellt für Anwendungen eine einfach zu benutzende Schnittstelle für die Sprachausgabe bereit.</li>
+      <li xml:lang="en-GB">Provide a lightweight and easily usable interface for applications to generate speech output.</li>
       <li xml:lang="es">Proporcionar una interfaz ligera y sencilla de utilizar para que las aplicaciones generen salida de voz.</li>
       <li xml:lang="it">Fornisce un'interfaccia leggera e facile da usare per far generare output parlato alle applicazioni.</li>
       <li xml:lang="nl">Lever een lichtgewicht en gemakkelijk te gebruiken interface voor toepassingen om spraakuitvoer te genereren.</li>
@@ -256,6 +285,7 @@
       <li xml:lang="pt">Oferece uma interface leve e fácil de usar para as aplicações gerarem conteúdos falados.</li>
       <li xml:lang="pt-BR">Oferece uma interface leve e fácil de usar para os aplicativos gerarem conteúdos falados.</li>
       <li xml:lang="sk">Poskytuje ľahké a jednoducho použiteľné rozhranie pre aplikácie na generovanie hovoreného výstupu.</li>
+      <li xml:lang="sl">Ponuja sistemsko nezahteven vmesnik programov za ustvarjanje izhoda govora, ki ga je enostavno uporabljati.</li>
       <li xml:lang="sr">Лагано и лако употребљиво сучеље за програме који треба да генеришу излаз говора.</li>
       <li xml:lang="sr-Latn">Lagano i lako upotrebljivo sučelje za programe koji treba da generišu izlaz govora.</li>
       <li xml:lang="sr-ijekavian">Лагано и лако употребљиво сучеље за програме који треба да генеришу излаз говора.</li>
@@ -266,6 +296,7 @@
         Applications need not be concerned about contention over the speech device.
       </li>
       <li xml:lang="de">Anwendungen müssen keine Einzelheiten über das Sprachausgabegerät wissen.</li>
+      <li xml:lang="en-GB">Applications need not be concerned about contention over the speech device.</li>
       <li xml:lang="es">Las aplicaciones no tienen que preocuparse sobre disputas sobre el dispositivo de voz.</li>
       <li xml:lang="it">Le applicazioni non devono preoccuparsi di contendersi il dispositivo di pronuncia.</li>
       <li xml:lang="nl">Toepassingen moeten zich geen zorgen maken over twist over het spraakapparaat.</li>
@@ -273,6 +304,7 @@
       <li xml:lang="pt">As aplicações não precisam de se preocupar com a contenção sobre o dispositivo de voz.</li>
       <li xml:lang="pt-BR">Os aplicativos não precisam se preocupar com a contenção sobre o dispositivo de voz.</li>
       <li xml:lang="sk">Aplikácie sa nemusia starať o zariadenie na hovorenie.</li>
+      <li xml:lang="sl">Programi se ne potrebujejo ukvarjati s spori glede naprave za govor.</li>
       <li xml:lang="sr">Програми не морају да се брину око надметања над уређајем за говор.</li>
       <li xml:lang="sr-Latn">Programi ne moraju da se brinu oko nadmetanja nad uređajem za govor.</li>
       <li xml:lang="sr-ijekavian">Програми не морају да се брину око надметања над уређајем за говор.</li>
@@ -283,6 +315,7 @@
         Asynchronous to prevent system blocking.
       </li>
       <li xml:lang="de">Asynchron zur Vermeidung von Systemblockaden.</li>
+      <li xml:lang="en-GB">Asynchronous to prevent system blocking.</li>
       <li xml:lang="es">Asíncrono para evitar que se bloquee el sistema.</li>
       <li xml:lang="it">Asincrono per evitare il blocco del sistema.</li>
       <li xml:lang="nl">Asynchroon om blokkering in het systeem te voorkomen.</li>
@@ -290,6 +323,7 @@
       <li xml:lang="pt">Assíncrono, para evitar o bloqueio do sistema.</li>
       <li xml:lang="pt-BR">Assíncrono, para evitar o bloqueio do sistema.</li>
       <li xml:lang="sk">Asynchrónne na zabránenie blokovania systému.</li>
+      <li xml:lang="sl">Asinhroni način, ki prepreči zaustavitev sistema.</li>
       <li xml:lang="sr">Асинхрон рад, да се избегне блокирање система.</li>
       <li xml:lang="sr-Latn">Asinhron rad, da se izbegne blokiranje sistema.</li>
       <li xml:lang="sr-ijekavian">Асинхрон рад, да се избегне блокирање система.</li>
