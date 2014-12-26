@@ -77,6 +77,7 @@ Name[tr]=Metin Okuma
 Name[ug]=تېكىستتىن ئاۋازغا
 Name[uk]=Синтез мовлення з тексту
 Name[vi]=Văn bản sang Tiếng nói
+Name[x-test]=xxText-to-Speechxx
 Name[zh_CN]=语音合成(TTS)
 Name[zh_TW]=文字轉語音
 Comment=Text-to-Speech Control Module
@@ -142,6 +143,7 @@ Comment[tr]=Metin Okuma Kontrol Modülü
 Comment[ug]=تېكىستتىن ئاۋازغا تىزگىن بۆلىكى
 Comment[uk]=Модуль керування синтезом мовлення з тексту
 Comment[vi]=Mô đun Điều khiển Văn bản sang Tiếng nói
+Comment[x-test]=xxText-to-Speech Control Modulexx
 Comment[zh_CN]=语音合成(TTS)控制模块
 Comment[zh_TW]=文字轉語音控制模組
 
@@ -188,6 +190,7 @@ X-KDE-Keywords[sr@latin]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,s
 X-KDE-Keywords[sv]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,till,tal,läsa,syntes,synt,festival,kommando,freetts,proklam,via,röst
 X-KDE-Keywords[tr]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
 X-KDE-Keywords[uk]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,текст,синтез,вимова,виголошення,синтезатор,команда,голос,голосовий
+X-KDE-Keywords[x-test]=xxkttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voicexx
 X-KDE-Keywords[zh_CN]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice,语音,声音,命令,文本,说话,语音合成,合成,合成器
 X-KDE-Keywords[zh_TW]=kttsd,kcmkttsmgr,kttsmgr,tts,ttsd,ktts,text,to,speech,speak,synthesizer,synth,festival,command,freetts,proklam,via,voice
 
