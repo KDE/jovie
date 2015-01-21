@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Jovie</name>
+  <name xml:lang="bg">Jovie</name>
   <name xml:lang="ca">Jovie</name>
   <name xml:lang="cs">Jovie</name>
   <name xml:lang="de">Jovie</name>
@@ -26,6 +27,7 @@
   <name xml:lang="x-test">xxJoviexx</name>
   <name xml:lang="zh-TW">Jovie</name>
   <summary>KDE Text To Speech Daemon</summary>
+  <summary xml:lang="bg">Програма на KDE за изговаряне на текст</summary>
   <summary xml:lang="ca">El dimoni de text-a-veu del KDE</summary>
   <summary xml:lang="de">Der KDE-Dämon für Sprachausgabe</summary>
   <summary xml:lang="en-GB">KDE Text To Speech Daemon</summary>
@@ -71,6 +73,7 @@
     <p xml:lang="x-test">xxJovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.xx</p>
     <p xml:lang="zh-TW">Jovie KDE 文字轉語音系統是 KDE 內的一個子系統，可以將文字轉換成語音。Jovie 目前還在開發中，希望能變成所有 KDE 應用程式的標準子系統，提供應用程式的語音輸出。</p>
     <p>User Features:</p>
+    <p xml:lang="bg">Потребителски възможности:</p>
     <p xml:lang="ca">Característiques per als usuaris:</p>
     <p xml:lang="de">Eigenschaften für Benutzer:</p>
     <p xml:lang="en-GB">User Features:</p>
@@ -95,6 +98,7 @@
       <li>
         Speak any text from the KDE clipboard.
       </li>
+      <li xml:lang="bg">Изговаряне на текст от временния буфер на KDE.</li>
       <li xml:lang="ca">Pronuncia qualsevol text des del porta-retalls del KDE.</li>
       <li xml:lang="en-GB">Speak any text from the KDE clipboard.</li>
       <li xml:lang="es">Conversión de texto a voz de cualquier texto del portapapeles.</li>
@@ -117,6 +121,7 @@
       <li>
         Speak any plain text file.
       </li>
+      <li xml:lang="bg">Изговаряне на текстов файл.</li>
       <li xml:lang="ca">Pronuncia qualsevol fitxer de text net.</li>
       <li xml:lang="en-GB">Speak any plain text file.</li>
       <li xml:lang="es">Convertir a voz cualquier archivo de texto sin formato.</li>
@@ -140,6 +145,7 @@
         Speak all or any portion of a text file from Kate,
         including instances where Kate is embedded in another KDE application.
       </li>
+      <li xml:lang="bg">Изговаряне на всичко или част от текстов файл от Kate, включително когато Kate е вградено в друга програма на KDE.</li>
       <li xml:lang="ca">Pronuncia tot o qualsevol porció d'un fitxer de text des del Kate, incloent les instàncies en les que el Kate estigui incrustat en una altra aplicació del KDE.</li>
       <li xml:lang="en-GB">Speak all or any portion of a text file from Kate, including instances where Kate is embedded in another KDE application.</li>
       <li xml:lang="es">Convertir a voz todo un archivo de texto de Kate o cualquier parte de él, incluidas las instancias de Kate que estén integradas en otra aplicación de KDE.</li>
@@ -162,6 +168,7 @@
       <li>
         Speak all or any portion of an HTML page from Konqueror.
       </li>
+      <li xml:lang="bg">Изговаряне на всичко или част от HTML страница в Konqueror.</li>
       <li xml:lang="ca">Pronuncia tot o qualsevol porció d'una pàgina HTML des del Konqueror.</li>
       <li xml:lang="en-GB">Speak all or any portion of an HTML page from Konqueror.</li>
       <li xml:lang="es">Convertir a texto cualquier página HTML o parte de ella en Konqueror.</li>
@@ -184,6 +191,7 @@
       <li>
         Use as the speech backend for KMouth and KSayIt.
       </li>
+      <li xml:lang="bg">Използване като ядро за KMouth и KSayIt.</li>
       <li xml:lang="ca">Ús com a dorsal de veu pel KMouth i el KSayIt.</li>
       <li xml:lang="en-GB">Use as the speech backend for KMouth and KSayIt.</li>
       <li xml:lang="es">Utilizarlo como motor de conversión de texto a voz para KMouth y KSaylt.</li>
@@ -206,6 +214,7 @@
       <li>
         Speak KDE notifications (KNotify).
       </li>
+      <li xml:lang="bg">Изговаряне на уведомления в KDE (KNotify).</li>
       <li xml:lang="ca">Pronuncia les notifications del KDE (KNotify).</li>
       <li xml:lang="en-GB">Speak KDE notifications (KNotify).</li>
       <li xml:lang="es">Convertir a voz las notificaciones de KDE (Knotify).</li>
@@ -250,6 +259,7 @@
       <li xml:lang="zh-TW">使用者設定過濾器，可替換念錯的單字，選擇語音合成器，並轉換 XHTML/XML 文件。</li>
     </ul>
     <p>Programmer Features:</p>
+    <p xml:lang="bg">Програмистки възможности:</p>
     <p xml:lang="ca">Característiques per als programadors:</p>
     <p xml:lang="de">Eigenschaften für Programmierer:</p>
     <p xml:lang="en-GB">Programmer Features:</p>
@@ -362,6 +372,7 @@
       <li>
         Asynchronous to prevent system blocking.
       </li>
+      <li xml:lang="bg">Асинхронно за предотвратяване блокиране на системата.</li>
       <li xml:lang="ca">Asincronisme per a prevenir blocats del sistema.</li>
       <li xml:lang="de">Asynchron zur Vermeidung von Systemblockaden.</li>
       <li xml:lang="en-GB">Asynchronous to prevent system blocking.</li>
