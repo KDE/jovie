@@ -166,7 +166,7 @@
       </li>
       <li xml:lang="bg">Изговаряне на всичко или част от текстов файл от Kate, включително когато Kate е вградено в друга програма на KDE.</li>
       <li xml:lang="bs">Izgovori dio teksta iz Kate, uključujući instance kada je Kate ugrađen u drugu KDE aplikaciju.</li>
-      <li xml:lang="ca">Pronuncia tot o qualsevol porció d'un fitxer de text des del Kate, incloent les instàncies en les que el Kate estigui incrustat en una altra aplicació del KDE.</li>
+      <li xml:lang="ca">Pronuncia tot o qualsevol porció d'un fitxer de text des del Kate, incloent-hi les instàncies en les quals el Kate estigui incrustat en una altra aplicació del KDE.</li>
       <li xml:lang="en-GB">Speak all or any portion of a text file from Kate, including instances where Kate is embedded in another KDE application.</li>
       <li xml:lang="es">Convertir a voz todo un archivo de texto de Kate o cualquier parte de él, incluidas las instancias de Kate que estén integradas en otra aplicación de KDE.</li>
       <li xml:lang="fi">Puhuu Katessa auki olevan tekstin kokonaisuudessaan tai osan siitä, silloinkin, kun Kate on upotettuna toisessa KDE-sovelluksessa.</li>
@@ -244,7 +244,7 @@
       </li>
       <li xml:lang="bg">Изговаряне на уведомления в KDE (KNotify).</li>
       <li xml:lang="bs">Izgovori KDE notifikacije (KNotify).</li>
-      <li xml:lang="ca">Pronuncia les notifications del KDE (KNotify).</li>
+      <li xml:lang="ca">Pronuncia les notificacions del KDE (KNotify).</li>
       <li xml:lang="de">KDE-Benachrichtigungen vorlesen (KNotify).</li>
       <li xml:lang="en-GB">Speak KDE notifications (KNotify).</li>
       <li xml:lang="es">Convertir a voz las notificaciones de KDE (Knotify).</li>
@@ -348,7 +348,7 @@
         Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.
       </li>
       <li xml:lang="bs">Dopusti generisanje govora iz komandne linije (ili shell skripte) koristeći qdbus alat.</li>
-      <li xml:lang="ca">Permet la generació de veu des de la línia d'ordres (o a través d'scripts shell) usant la utilitat qdbus.</li>
+      <li xml:lang="ca">Permet la generació de veu des de la línia d'ordres (o a través de scripts de l'intèrpret d'ordres) usant la utilitat qdbus.</li>
       <li xml:lang="de">Ermöglicht die Erzeugung von Sprachausgaben auf der Befehlszeile (oder mit Shell-Skripten) über das qdbus-Hilfsprogramm.</li>
       <li xml:lang="en-GB">Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.</li>
       <li xml:lang="es">Permitir la generación de voz a partir de la línea de órdenes (o a través de scripts del intérprete de órdenes) mediante la utilidad qdbus.</li>
@@ -373,7 +373,7 @@
         Provide a lightweight and easily usable interface for applications to generate speech output.
       </li>
       <li xml:lang="bs">Pruža lagan i lako upotrebljiv interfejs za aplikacije da generiše izlaz govora</li>
-      <li xml:lang="ca">Proveeix una interfície lleugera i fàcil d'usar per a que les aplicacions generin sortides de veu.</li>
+      <li xml:lang="ca">Proveeix una interfície lleugera i fàcil d'usar per a què les aplicacions generin sortides de veu.</li>
       <li xml:lang="de">Stellt für Anwendungen eine einfach zu benutzende Schnittstelle für die Sprachausgabe bereit.</li>
       <li xml:lang="en-GB">Provide a lightweight and easily usable interface for applications to generate speech output.</li>
       <li xml:lang="es">Proporcionar una interfaz ligera y sencilla de utilizar para que las aplicaciones generen salida de voz.</li>
