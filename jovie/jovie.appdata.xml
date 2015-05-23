@@ -114,6 +114,7 @@
       <li xml:lang="bg">Изговаряне на текст от временния буфер на KDE.</li>
       <li xml:lang="bs">Izgovori neki tekst iz KD klipborda</li>
       <li xml:lang="ca">Pronuncia qualsevol text des del porta-retalls del KDE.</li>
+      <li xml:lang="de">Liest beliebigen Text aus der KDE-Zwischenablage vor.</li>
       <li xml:lang="en-GB">Speak any text from the KDE clipboard.</li>
       <li xml:lang="es">Conversión de texto a voz de cualquier texto del portapapeles.</li>
       <li xml:lang="fi">Puhuu minkä tahansa tekstin KDE:n leikepöydältä.</li>
@@ -140,6 +141,7 @@
       <li xml:lang="bg">Изговаряне на текстов файл.</li>
       <li xml:lang="bs">Izgovori prostu tekst datoteku</li>
       <li xml:lang="ca">Pronuncia qualsevol fitxer de text net.</li>
+      <li xml:lang="de">Liest beliebige Textdateien ohne Formatierung vor.</li>
       <li xml:lang="en-GB">Speak any plain text file.</li>
       <li xml:lang="es">Convertir a voz cualquier archivo de texto sin formato.</li>
       <li xml:lang="fi">Puhuu minkä tahansa muotoilemattoman tekstitiedoston.</li>
@@ -193,6 +195,7 @@
       <li xml:lang="bg">Изговаряне на всичко или част от HTML страница в Konqueror.</li>
       <li xml:lang="bs">Izgovori neki dio HTML strane iz Konqueror</li>
       <li xml:lang="ca">Pronuncia tot o qualsevol porció d'una pàgina HTML des del Konqueror.</li>
+      <li xml:lang="de">Liest eine HTML-Seite in Konqueror ganz oder teilweise vor.</li>
       <li xml:lang="en-GB">Speak all or any portion of an HTML page from Konqueror.</li>
       <li xml:lang="es">Convertir a texto cualquier página HTML o parte de ella en Konqueror.</li>
       <li xml:lang="fi">Puhuu Konquerorissa auki olevan HTML-sivun kokonaisuudessaan tai osan siitä.</li>
@@ -219,6 +222,7 @@
       <li xml:lang="bg">Използване като ядро за KMouth и KSayIt.</li>
       <li xml:lang="bs">Koristi kao govornu pozadinu za KMouth i KSayIt.</li>
       <li xml:lang="ca">Ús com a dorsal de veu pel KMouth i el KSayIt.</li>
+      <li xml:lang="de">Kann als Sprachmodul für KMouth und KSayIt benutzt werden.</li>
       <li xml:lang="en-GB">Use as the speech backend for KMouth and KSayIt.</li>
       <li xml:lang="es">Utilizarlo como motor de conversión de texto a voz para KMouth y KSaylt.</li>
       <li xml:lang="fi">Toimii puheen taustajärjestelmänä KMouthille ja KSayItille.</li>
@@ -245,7 +249,7 @@
       <li xml:lang="bg">Изговаряне на уведомления в KDE (KNotify).</li>
       <li xml:lang="bs">Izgovori KDE notifikacije (KNotify).</li>
       <li xml:lang="ca">Pronuncia les notificacions del KDE (KNotify).</li>
-      <li xml:lang="de">KDE-Benachrichtigungen vorlesen (KNotify).</li>
+      <li xml:lang="de">Liest KDE-Benachrichtigungen vor (KNotify).</li>
       <li xml:lang="en-GB">Speak KDE notifications (KNotify).</li>
       <li xml:lang="es">Convertir a voz las notificaciones de KDE (Knotify).</li>
       <li xml:lang="fi">Puhuu KDE-ilmoitukset (KNotify).</li>
