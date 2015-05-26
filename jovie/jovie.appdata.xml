@@ -25,6 +25,7 @@
   <name xml:lang="sr-ijekavian">Џови</name>
   <name xml:lang="sr-ijekavianlatin">Džovi</name>
   <name xml:lang="sv">Jovie</name>
+  <name xml:lang="tr">Jovie</name>
   <name xml:lang="uk">Jovie</name>
   <name xml:lang="x-test">xxJoviexx</name>
   <name xml:lang="zh-TW">Jovie</name>
@@ -49,6 +50,7 @@
   <summary xml:lang="sr-ijekavian">КДЕ‑ов демон за текст‑у‑говор</summary>
   <summary xml:lang="sr-ijekavianlatin">KDE‑ov demon za tekst‑u‑govor</summary>
   <summary xml:lang="sv">KDE:s text till tal-demon</summary>
+  <summary xml:lang="tr">KDE Metin Okuma Servisi</summary>
   <summary xml:lang="uk">Фонова служба синтезу мовлення з тексту KDE</summary>
   <summary xml:lang="x-test">xxKDE Text To Speech Daemonxx</summary>
   <summary xml:lang="zh-TW">KDE 文字轉語音伺服程式</summary>
@@ -75,6 +77,7 @@
     <p xml:lang="sr-ijekavian">Џови је подсистем за текст‑у‑говор у оквиру КДЕ површи, који претвара текст у чујни говор. Тренутно је у развоју, а тежи томе да постане стандардни подсистем за све КДЕ програме којима треба излаз говора.</p>
     <p xml:lang="sr-ijekavianlatin">Džovi je podsistem za tekst‑u‑govor u okviru KDE površi, koji pretvara tekst u čujni govor. Trenutno je u razvoju, a teži tome da postane standardni podsistem za sve KDE programe kojima treba izlaz govora.</p>
     <p xml:lang="sv">Jovie KDE text-till-tal är ett delsystem i KDE:s skrivbord för konvertering av text till hörbart tal. Jovie är för närvarande under utveckling, med målet att bli standarddelsystem i alla KDE-program för att tillhandahålla talad utmatning.</p>
+    <p xml:lang="tr">Jovie KDE Metin Okuması metinlerin sese dönüştürülmesinin bir alt sistemidir. Jovie halen geliştirilmektedir ve tüm KDE uygulamalarının ses çıktısı üretmesi için kullanılması planlanmaktadır.</p>
     <p xml:lang="uk">Система озвучення тексту KDE Jovie є підсистемою стільничного середовища KDE, яку призначено для перетворення текстової інформації на звукову. Розробка Jovie триває. Метою удосконалення програми є створення стандартної підсистеми для усіх програм KDE, яка б забезпечувала озвучення потрібних даних.</p>
     <p xml:lang="x-test">xxJovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.xx</p>
     <p xml:lang="zh-TW">Jovie KDE 文字轉語音系統是 KDE 內的一個子系統，可以將文字轉換成語音。Jovie 目前還在開發中，希望能變成所有 KDE 應用程式的標準子系統，提供應用程式的語音輸出。</p>
@@ -99,6 +102,7 @@
     <p xml:lang="sr-ijekavian">Корисничке могућности:</p>
     <p xml:lang="sr-ijekavianlatin">Korisničke mogućnosti:</p>
     <p xml:lang="sv">Användarfunktioner:</p>
+    <p xml:lang="tr">Kullanım Özellikleri:</p>
     <p xml:lang="uk">Можливості для користувачів:</p>
     <p xml:lang="x-test">xxUser Features:xx</p>
     <p xml:lang="zh-TW">使用者功能：</p>
@@ -126,6 +130,7 @@
       <li xml:lang="sr-ijekavian">Изговарање било каквог текста из КДЕ клипборда.</li>
       <li xml:lang="sr-ijekavianlatin">Izgovaranje bilo kakvog teksta iz KDE klipborda.</li>
       <li xml:lang="sv">Läs upp vilken text som helst från KDE:s klippbord.</li>
+      <li xml:lang="tr">KDE geçici taşıma panosundan herhangi bir metni okuma.</li>
       <li xml:lang="uk">Озвучення будь-якого тексту з буфера обміну даними KDE.</li>
       <li xml:lang="x-test">xxSpeak any text from the KDE clipboard.xx</li>
       <li xml:lang="zh-TW">唸出 KDE 剪貼簿中的內容。</li>
@@ -152,6 +157,7 @@
       <li xml:lang="sr-ijekavian">Изговарање било каквог текстуалног фајла.</li>
       <li xml:lang="sr-ijekavianlatin">Izgovaranje bilo kakvog tekstualnog fajla.</li>
       <li xml:lang="sv">Läs upp vilken vanlig textfil som helst.</li>
+      <li xml:lang="tr">Herhangi bir düz metin dosyasını okuma.</li>
       <li xml:lang="uk">Озвучення будь-якого звичайного текстового файла.</li>
       <li xml:lang="x-test">xxSpeak any plain text file.xx</li>
       <li xml:lang="zh-TW">念出任何純文字檔的內容。</li>
@@ -178,6 +184,7 @@
       <li xml:lang="sr-ijekavian">Изговарање целог текста из Кејт, или дела текста, укључујући случајеве где је Кејт угнежђена компонента другог КДЕ програма.</li>
       <li xml:lang="sr-ijekavianlatin">Izgovaranje celog teksta iz Kate, ili dela teksta, uključujući slučajeve gde je Kate ugnežđena komponenta drugog KDE programa.</li>
       <li xml:lang="sv">Läs upp hela eller delar av en textfil i Kate, inklusive fall då Kate är inbäddad i ett annat KDE-program.</li>
+      <li xml:lang="tr">Başka bir KDE uygulamasına gömülü olsa bile Kate içinden bir metin dosyasının tamamını veya bir bölümünü okuma.</li>
       <li xml:lang="uk">Озвучення усього текстового документа або будь-якої його позначеної частини у Kate, зокрема екземплярів Kate, вбудованих до інших програм KDE.</li>
       <li xml:lang="x-test">xxSpeak all or any portion of a text file from Kate, including instances where Kate is embedded in another KDE application.xx</li>
       <li xml:lang="zh-TW">念出 Kate 中所有或部份文字檔的內容，包括嵌在其他 KDE 應用程式中的 Kate 實體。</li>
@@ -204,6 +211,7 @@
       <li xml:lang="sr-ijekavian">Изговарање целе ХТМЛ странице, или њеног дела, из К‑освајача.</li>
       <li xml:lang="sr-ijekavianlatin">Izgovaranje cele HTML stranice, ili njenog dela, iz K‑osvajača.</li>
       <li xml:lang="sv">Läs upp hela eller delar av en HTML-sida i Konqueror.</li>
+      <li xml:lang="tr">Konqueror içinden bir HTML dosyasının tamamını veya bir bölümünü okuma.</li>
       <li xml:lang="uk">Озвучення усієї сторінки або будь-якої позначеної частини сторінки HTML у Konqueror.</li>
       <li xml:lang="x-test">xxSpeak all or any portion of an HTML page from Konqueror.xx</li>
       <li xml:lang="zh-TW">念出 Konqueror 中所有或部份 HTML 頁面內容。</li>
@@ -230,6 +238,7 @@
       <li xml:lang="sr-ijekavian">Користи се као позадина за говор у К‑устима и К‑изговору.</li>
       <li xml:lang="sr-ijekavianlatin">Koristi se kao pozadina za govor u K‑ustima i K‑izgovoru.</li>
       <li xml:lang="sv">Använd som bakgrundsprogram för tal i Kmouth och Ksayit.</li>
+      <li xml:lang="tr">KMouth ve KSayIt için okuma arkaucu olarak kullanılma.</li>
       <li xml:lang="uk">Використання як модуля озвучення тексту у KMouth та KSayIt.</li>
       <li xml:lang="x-test">xxUse as the speech backend for KMouth and KSayIt.xx</li>
       <li xml:lang="zh-TW">做為 KMouth 或 KSayIt 的語音後端介面。</li>
@@ -256,6 +265,7 @@
       <li xml:lang="sr-ijekavian">Изговарање КДЕ обавештења (К‑обавјештења).</li>
       <li xml:lang="sr-ijekavianlatin">Izgovaranje KDE obaveštenja (K‑obavještenja).</li>
       <li xml:lang="sv">Talade meddelanden (Knotify).</li>
+      <li xml:lang="tr">KDE bildirimlerini okuma (KNotify).</li>
       <li xml:lang="uk">Озвучення сповіщень KDE (KNotify).</li>
       <li xml:lang="x-test">xxSpeak KDE notifications (KNotify).xx</li>
       <li xml:lang="zh-TW">念出 KDE 通知（KNotify）。</li>
@@ -281,6 +291,7 @@
       <li xml:lang="sr-ijekavian">Подесиви филтери за смењивање лоше изговорених речи, избор синтетизатора говора, трансформисање ИксХТМЛ/ИксМЛ докумената.</li>
       <li xml:lang="sr-ijekavianlatin">Podesivi filteri za smenjivanje loše izgovorenih reči, izbor sintetizatora govora, transformisanje XHTML/XML dokumenata.</li>
       <li xml:lang="sv">Filter som kan anpassas av användaren för att ersätta feluttalade ord, välja talsyntes och omvandla XHTML- eller XML-dokument.</li>
+      <li xml:lang="tr">Hatalı telaffuz edilen kelimeleri değiştirmek, konuşma sentezleyicisini seçme ve XHTML/XML belgelerini dönüştürme için kullanıcı tanımlı süzgeçler oluşturabilme. </li>
       <li xml:lang="uk">Налаштовані користувачем фільтри заміни слів, що вимовляються неправильно, вибір синтезаторів мовлення та перетворення документів XHMTL/XML.</li>
       <li xml:lang="x-test">xxUser-configurable filters for substituting misspoken words, choosing speech synthesizers, and transforming XHMTL/XML documents.xx</li>
       <li xml:lang="zh-TW">使用者設定過濾器，可替換念錯的單字，選擇語音合成器，並轉換 XHTML/XML 文件。</li>
@@ -306,6 +317,7 @@
     <p xml:lang="sr-ijekavian">Програмерске могућности:</p>
     <p xml:lang="sr-ijekavianlatin">Programerske mogućnosti:</p>
     <p xml:lang="sv">Programmeringsfunktioner:</p>
+    <p xml:lang="tr">Programlayıcı Özellikleri:</p>
     <p xml:lang="uk">Можливості для програмістів:</p>
     <p xml:lang="x-test">xxProgrammer Features:xx</p>
     <p xml:lang="zh-TW">程式開發者功能：</p>
@@ -331,6 +343,7 @@
       <li xml:lang="sr-ijekavian">Систем приоритета за излазе читача текста, упозорења и поруке, док се и даље читају обични текстови.</li>
       <li xml:lang="sr-ijekavianlatin">Sistem prioriteta za izlaze čitača teksta, upozorenja i poruke, dok se i dalje čitaju obični tekstovi.</li>
       <li xml:lang="sv">Prioriteringssystem för skärmläsningsutmatning, varningar och meddelanden, medan uppläsning av vanlig text pågår.</li>
+      <li xml:lang="tr">Normal metin çalınırken ekran okuma çıktıları, uyarı ve iletileri okumak için öncelik sistemi.</li>
       <li xml:lang="uk">Система пріоритетів для виводу екранного засобу для читання, показ попереджень і повідомлень без переривання читання звичайних текстів.</li>
       <li xml:lang="x-test">xxPriority system for screen reader outputs, warnings and messages, while still playing regular texts.xx</li>
       <li xml:lang="zh-TW">當讀取一般正常文字時，從螢幕讀取輸出、警告與訊息的優先權系統。</li>
@@ -355,6 +368,7 @@
       <li xml:lang="sr-ijekavian">Генерисање говора из командне линије (или скрипте шкољке) преко алатке <command>qdbus</command>.</li>
       <li xml:lang="sr-ijekavianlatin">Generisanje govora iz komandne linije (ili skripte školjke) preko alatke <command>qdbus</command>.</li>
       <li xml:lang="sv">Tillåter att skapa tal från kommandoraden (eller via skalskript) med verktyget qdbus.</li>
+      <li xml:lang="tr">qdbus aracını kullanarak komut satırından (veya kabuk betikleri ile) konuşma oluşturabilme.</li>
       <li xml:lang="uk">Підтримка синтезу мовлення з командного рядка (або за допомогою скриптів оболонки) з використанням інструменту qdbus.</li>
       <li xml:lang="x-test">xxPermit generation of speech from the command line (or via shell scripts) using the qdbus utility.xx</li>
       <li xml:lang="zh-TW">允許用 qdbus 從命令列（或 shell 文稿）產生語音。</li>
@@ -379,6 +393,7 @@
       <li xml:lang="sr-ijekavian">Лагано и лако употребљиво сучеље за програме који треба да генеришу излаз говора.</li>
       <li xml:lang="sr-ijekavianlatin">Lagano i lako upotrebljivo sučelje za programe koji treba da generišu izlaz govora.</li>
       <li xml:lang="sv">Tillhandahåller en lättviktig och lättanvänt gränssnitt för program att skapa talad utmatning.</li>
+      <li xml:lang="tr">Uygulamaların konuşma çıktısı üretebilmesi için hafif ve kolay kullanılabilir bir arayüz sağlar.</li>
       <li xml:lang="uk">Легкий і простий у користуванні інтерфейс для програм, які створюють інформацію, яку слід озвучити.</li>
       <li xml:lang="x-test">xxProvide a lightweight and easily usable interface for applications to generate speech output.xx</li>
       <li xml:lang="zh-TW">提供應用程式一個輕量易用的介面來產生語音輸出。</li>
@@ -403,6 +418,7 @@
       <li xml:lang="sr-ijekavian">Програми не морају да се брину око надметања над уређајем за говор.</li>
       <li xml:lang="sr-ijekavianlatin">Programi ne moraju da se brinu oko nadmetanja nad uređajem za govor.</li>
       <li xml:lang="sv">Program behöver inte bekymra sig om konflikt över uppläsningsenheten.</li>
+      <li xml:lang="tr">Uygulamaların konuşma aygıtını düşünmeden geliştirilmesini sağlar.</li>
       <li xml:lang="uk">Програмам не потрібно самостійно вирішувати проблеми конкуренції у боротьбі за пристрій виведення звуку.</li>
       <li xml:lang="x-test">xxApplications need not be concerned about contention over the speech device.xx</li>
       <li xml:lang="zh-TW">應用程式不需要管語音裝置的細節。</li>
@@ -428,6 +444,7 @@
       <li xml:lang="sr-ijekavian">Асинхрон рад, да се избегне блокирање система.</li>
       <li xml:lang="sr-ijekavianlatin">Asinhron rad, da se izbegne blokiranje sistema.</li>
       <li xml:lang="sv">Asynkront för att förhindra att systemet blockeras.</li>
+      <li xml:lang="tr">Sistemin tıkanmasını önlemek için eşzamansız çalışır.</li>
       <li xml:lang="uk">Асинхронна робота для запобігання блокуванню системи.</li>
       <li xml:lang="x-test">xxAsynchronous to prevent system blocking.xx</li>
       <li xml:lang="zh-TW">非同步模式，避免系統被卡住。</li>
