@@ -175,6 +175,7 @@
       <li xml:lang="bg">Изговаряне на всичко или част от текстов файл от Kate, включително когато Kate е вградено в друга програма на KDE.</li>
       <li xml:lang="bs">Izgovori dio teksta iz Kate, uključujući instance kada je Kate ugrađen u drugu KDE aplikaciju.</li>
       <li xml:lang="ca">Pronuncia tot o qualsevol porció d'un fitxer de text des del Kate, incloent-hi les instàncies en les quals el Kate estigui incrustat en una altra aplicació del KDE.</li>
+      <li xml:lang="de">Vorlesen von Texten (oder Teilen davon) im Texteditor Kate, auch wenn Kate in andere KDE-Anwendungen eingebettet ist.</li>
       <li xml:lang="en-GB">Speak all or any portion of a text file from Kate, including instances where Kate is embedded in another KDE application.</li>
       <li xml:lang="es">Convertir a voz todo un archivo de texto de Kate o cualquier parte de él, incluidas las instancias de Kate que estén integradas en otra aplicación de KDE.</li>
       <li xml:lang="fi">Puhuu Katessa auki olevan tekstin kokonaisuudessaan tai osan siitä, silloinkin, kun Kate on upotettuna toisessa KDE-sovelluksessa.</li>
