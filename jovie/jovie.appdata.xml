@@ -68,6 +68,7 @@
     <p xml:lang="de">Das KDE-Sprachausgabesystem Jovie ist ein Dienst für die KDE-Arbeitsumgebung zur Umwandlung von Text in hörbare Sprache. Jovie wird zurzeit noch entwickelt, um das Standardsystem für alle KDE-Anwendungen zur Sprachausgabe zu werden.</p>
     <p xml:lang="en-GB">Jovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.</p>
     <p xml:lang="es">Jovie es un subsistema del escritorio KDE para la conversión de texto a voz. Jovie está actualmente en desarrollo y su objetivo es convertirse en el subsistema estándar para que todas las aplicaciones de KDE puedan proporcionar salida de voz.</p>
+    <p xml:lang="fi">Jovie, KDE:n puhesyntetisaattoripalvelu, on KDE:n työpöydän osajärjestelmä, joka muuntaa tekstiä puheeksi. Jovie on parhaillaan kehitteillä, ja sen tavoitteena on tulla KDE-ohjelmien vakiotavaksi tuottaa puhetta.</p>
     <p xml:lang="fr">La synthèse vocale Jovie de KDE est un sous-système du bureau KDE qui permet de convertir du texte sous une forme audible. Jovie est actuellement en cours de développement et souhaite devenir le sous-système standard de synthèse vocale pour toutes les applications KDE.</p>
     <p xml:lang="gl">Jovie é un subsistema do escritorio de KDE para converter texto en voz. Jovie está en desenvolvemento e pretende converterse no subsistema estándar de todos os programas de KDE para fornecer saída de voz.</p>
     <p xml:lang="it">La pronuncia Jovie per KDE è un sottosistema nel desktop di KDE per la conversione del testo in parlato. Jovie è attualmente in fase di sviluppo e punta a diventare il sottosistema standard per il parlato in tutte le applicazioni di KDE.</p>
@@ -291,6 +292,7 @@
       <li xml:lang="de">Einstellbare Filter, um falsch ausgesprochene Worte zu ersetzen, Sprachsynthesizer auszuwählen und XML-Dokumente umzuwandeln.</li>
       <li xml:lang="en-GB">User-configurable filters for substituting misspoken words, choosing speech synthesisers, and transforming XHMTL/XML documents.</li>
       <li xml:lang="es">Filtros configurables por el usuario para sustituir palabras pronunciadas incorrectamente, eligiendo sintetizadores de voz y transformando documentos XHTML/XML.</li>
+      <li xml:lang="fi">Käyttäjän säädettävissä olevat suodattimet väärin lausuttujen sanojen korvaamiseen, puhesyntetisaattorien valintaan ja XHTML/XML-tiedostojen muuntamiseen.</li>
       <li xml:lang="fr">Filtres configurables par l'utilisateur pour la substitution de mots mal prononcés, choix du synthétiseur vocal et transformation de documents XHTML/XML.</li>
       <li xml:lang="gl">Filtros personalizábeis para substituír palabras mal pronunciadas, escoller sintetizadores de voz, e transformar documentos XHTML ou XML.</li>
       <li xml:lang="it">Filtri configurabili dall'utente per sostituire le parole pronunciate male, scegliere i sintetizzatori vocali, e trasformare i documenti XHTML/XML.</li>
@@ -345,6 +347,7 @@
       <li xml:lang="de">Prioritätssystem für die Ausgabe von Screen-Readern, Warnungen und Nachrichten, während andere Texte vorgelesen werden.</li>
       <li xml:lang="en-GB">Priority system for screen reader outputs, warnings and messages, while still playing regular texts.</li>
       <li xml:lang="es">Sistema de prioridades para la salida del lector de pantalla, advertencias y mensajes mientras aún se están reproduciendo archivos normales.</li>
+      <li xml:lang="fi">Priorisoi näytönlukijan ulostuloa, varoituksia ja viestejä, mutta toistaa silti myös tavallisia tekstejä.</li>
       <li xml:lang="fr">Système de priorité pour les sorties de lecteurs d'écran, alertes et messages pendant la lecture normale de textes.</li>
       <li xml:lang="gl">Sistema de prioridades para saídas de lectores de pantalla, avisos e mensaxes, sen impedir a reprodución de texto normal.</li>
       <li xml:lang="it">Sistema di priorità per gli output di lettura a schermo, gli avvertimenti e i messaggi, durante la riproduzione di testi normali.</li>
@@ -371,6 +374,7 @@
       <li xml:lang="de">Ermöglicht die Erzeugung von Sprachausgaben auf der Befehlszeile (oder mit Shell-Skripten) über das qdbus-Hilfsprogramm.</li>
       <li xml:lang="en-GB">Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.</li>
       <li xml:lang="es">Permitir la generación de voz a partir de la línea de órdenes (o a través de scripts del intérprete de órdenes) mediante la utilidad qdbus.</li>
+      <li xml:lang="fi">Mahdollistaa äänen tuottamisen komentoriviltä (tai komentojonoilla) käyttäen qdbus-työkalua.</li>
       <li xml:lang="fr">Permet la création d'une synthèse vocale en ligne de commande (ou par un script Shell) grâce à l'utilitaire qdbus.</li>
       <li xml:lang="gl">Permite a xeración de voz desde a liña de ordes (ou mediante scripts da shell) mediante a ferramenta «qdbus».</li>
       <li xml:lang="it">Permette la generazione di parlato dalla riga di comando (o attraverso script della shell) usando il programma qdbus.</li>
@@ -397,6 +401,7 @@
       <li xml:lang="de">Stellt für Anwendungen eine einfach zu benutzende Schnittstelle für die Sprachausgabe bereit.</li>
       <li xml:lang="en-GB">Provide a lightweight and easily usable interface for applications to generate speech output.</li>
       <li xml:lang="es">Proporcionar una interfaz ligera y sencilla de utilizar para que las aplicaciones generen salida de voz.</li>
+      <li xml:lang="fi">Tarjoaa sovelluksille kevyen ja helppokäyttöisen rajapinnan, joilla ne voivat tuottaa puhetta.</li>
       <li xml:lang="fr">Fournit une interface légère et facilement utilisable pour la génération d'une synthèse vocale par les applications.</li>
       <li xml:lang="gl">Fornece unha interface lixeira e fácil de usar para que os programas xeren saída de voz.</li>
       <li xml:lang="it">Fornisce un'interfaccia leggera e facile da usare per far generare output parlato alle applicazioni.</li>
@@ -423,6 +428,7 @@
       <li xml:lang="de">Anwendungen müssen keine Einzelheiten über das Sprachausgabegerät wissen.</li>
       <li xml:lang="en-GB">Applications need not be concerned about contention over the speech device.</li>
       <li xml:lang="es">Las aplicaciones no tienen que preocuparse sobre disputas sobre el dispositivo de voz.</li>
+      <li xml:lang="fi">Ohjelmien ei tarvitse huolehtia puhelaitteen yhteisestä käytöstä.</li>
       <li xml:lang="fr">Les applications n'ont pas à se soucier d'un conflit autour du périphérique de synthèse vocale.</li>
       <li xml:lang="gl">Os programas non necesitan preocuparse sobre disputas polo dispositivo de voz.</li>
       <li xml:lang="it">Le applicazioni non devono preoccuparsi di contendersi il dispositivo di pronuncia.</li>
@@ -450,6 +456,7 @@
       <li xml:lang="de">Asynchron zur Vermeidung von Systemblockaden.</li>
       <li xml:lang="en-GB">Asynchronous to prevent system blocking.</li>
       <li xml:lang="es">Asíncrono para evitar que se bloquee el sistema.</li>
+      <li xml:lang="fi">Asynkroninen, jotta Jovie ei estä muun järjestelmän toimintaa.</li>
       <li xml:lang="fr">Asynchrone pour éviter le blocage du système.</li>
       <li xml:lang="gl">É asíncrono para evitar bloquear o sistema.</li>
       <li xml:lang="it">Asincrono per evitare il blocco del sistema.</li>
