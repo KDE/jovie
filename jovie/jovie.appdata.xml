@@ -12,6 +12,7 @@
   <name xml:lang="de">Jovie</name>
   <name xml:lang="en-GB">Jovie</name>
   <name xml:lang="es">Jovie</name>
+  <name xml:lang="et">Jovie</name>
   <name xml:lang="fi">Jovie</name>
   <name xml:lang="fr">Jovie</name>
   <name xml:lang="gl">Jovie</name>
@@ -38,6 +39,7 @@
   <summary xml:lang="de">Der KDE-Dämon für Sprachausgabe</summary>
   <summary xml:lang="en-GB">KDE Text To Speech Daemon</summary>
   <summary xml:lang="es">Demonio de conversión de texto a voz de KDE</summary>
+  <summary xml:lang="et">KDE teksti ettelugemise deemon</summary>
   <summary xml:lang="fi">KDE:n puhesyntetisaattoripalvelu</summary>
   <summary xml:lang="fr">Démon de synthèse vocale de KDE</summary>
   <summary xml:lang="gl">Servizo de texto-para-voz de KDE</summary>
@@ -68,6 +70,7 @@
     <p xml:lang="de">Das KDE-Sprachausgabesystem Jovie ist ein Dienst für die KDE-Arbeitsumgebung zur Umwandlung von Text in hörbare Sprache. Jovie wird zurzeit noch entwickelt, um das Standardsystem für alle KDE-Anwendungen zur Sprachausgabe zu werden.</p>
     <p xml:lang="en-GB">Jovie KDE Text-to-Speech is a subsystem within the KDE desktop for conversion of text to audible speech. Jovie is currently under development and aims to become the standard subsystem for all KDE applications to provide speech output.</p>
     <p xml:lang="es">Jovie es un subsistema del escritorio KDE para la conversión de texto a voz. Jovie está actualmente en desarrollo y su objetivo es convertirse en el subsistema estándar para que todas las aplicaciones de KDE puedan proporcionar salida de voz.</p>
+    <p xml:lang="et">Jovie KDE teksti ettelugemise deemon on KDE töölaua allsüsteem teksti muutmiseks kõneks. Praegu jõudsalt arendatava Jovie eesmärk on saada kõigi KDE rakenduste standardseks allsüsteemiks, mis tagab neile kõneväljundi võimaluse.</p>
     <p xml:lang="fi">Jovie, KDE:n puhesyntetisaattoripalvelu, on KDE:n työpöydän osajärjestelmä, joka muuntaa tekstiä puheeksi. Jovie on parhaillaan kehitteillä, ja sen tavoitteena on tulla KDE-ohjelmien vakiotavaksi tuottaa puhetta.</p>
     <p xml:lang="fr">La synthèse vocale Jovie de KDE est un sous-système du bureau KDE qui permet de convertir du texte sous une forme audible. Jovie est actuellement en cours de développement et souhaite devenir le sous-système standard de synthèse vocale pour toutes les applications KDE.</p>
     <p xml:lang="gl">Jovie é un subsistema do escritorio de KDE para converter texto en voz. Jovie está en desenvolvemento e pretende converterse no subsistema estándar de todos os programas de KDE para fornecer saída de voz.</p>
@@ -94,6 +97,7 @@
     <p xml:lang="de">Eigenschaften für Benutzer:</p>
     <p xml:lang="en-GB">User Features:</p>
     <p xml:lang="es">Funcionalidades para los usuarios:</p>
+    <p xml:lang="et">Kasutajate võimalused:</p>
     <p xml:lang="fi">Ominaisuuksia käyttäjille:</p>
     <p xml:lang="fr">Fonctionnalités pour l'utilisateur :</p>
     <p xml:lang="gl">Funcionalidades para usuarios:</p>
@@ -123,6 +127,7 @@
       <li xml:lang="de">Liest beliebigen Text aus der KDE-Zwischenablage vor.</li>
       <li xml:lang="en-GB">Speak any text from the KDE clipboard.</li>
       <li xml:lang="es">Conversión de texto a voz de cualquier texto del portapapeles.</li>
+      <li xml:lang="et">Lasta kõnelda suvalist teksti KDE lõikepuhvrist</li>
       <li xml:lang="fi">Puhuu minkä tahansa tekstin KDE:n leikepöydältä.</li>
       <li xml:lang="fr">Lire n'importe quel texte du presse-papier.</li>
       <li xml:lang="gl">Ler calquera texto do portapapeis de KDE.</li>
@@ -151,6 +156,7 @@
       <li xml:lang="de">Liest beliebige Textdateien ohne Formatierung vor.</li>
       <li xml:lang="en-GB">Speak any plain text file.</li>
       <li xml:lang="es">Convertir a voz cualquier archivo de texto sin formato.</li>
+      <li xml:lang="et">Lasta kõnelda suvalist lihttekstifaili</li>
       <li xml:lang="fi">Puhuu minkä tahansa muotoilemattoman tekstitiedoston.</li>
       <li xml:lang="fr">Lire n'importe quel fichier de texte brut.</li>
       <li xml:lang="gl">Ler calquera ficheiro de texto simple.</li>
@@ -180,6 +186,7 @@
       <li xml:lang="de">Vorlesen von Texten (oder Teilen davon) im Texteditor Kate, auch wenn Kate in andere KDE-Anwendungen eingebettet ist.</li>
       <li xml:lang="en-GB">Speak all or any portion of a text file from Kate, including instances where Kate is embedded in another KDE application.</li>
       <li xml:lang="es">Convertir a voz todo un archivo de texto de Kate o cualquier parte de él, incluidas las instancias de Kate que estén integradas en otra aplicación de KDE.</li>
+      <li xml:lang="et">Lasta kõnelda täielikult või osaliselt Kates avatud tekstifaili, sealhulgas juhul, kui Kate on lõimitud mõnda muusse KDE rakendusse</li>
       <li xml:lang="fi">Puhuu Katessa auki olevan tekstin kokonaisuudessaan tai osan siitä, silloinkin, kun Kate on upotettuna toisessa KDE-sovelluksessa.</li>
       <li xml:lang="fr">Lire l'ensemble ou une partie d'un fichier texte dans Kate, notamment lorsque Kate est intégré dans d'autres applications KDE.</li>
       <li xml:lang="gl">Ler un ficheiro desde Kate, total ou parcialmente, incluíndo casos nos que Kate estea incrustado noutro programa de KDE.</li>
@@ -208,6 +215,7 @@
       <li xml:lang="de">Liest eine HTML-Seite in Konqueror ganz oder teilweise vor.</li>
       <li xml:lang="en-GB">Speak all or any portion of an HTML page from Konqueror.</li>
       <li xml:lang="es">Convertir a texto cualquier página HTML o parte de ella en Konqueror.</li>
+      <li xml:lang="et">Lasta kõnelda täielikult või osaliselt Konqueroris avatud HTML-lehekülge</li>
       <li xml:lang="fi">Puhuu Konquerorissa auki olevan HTML-sivun kokonaisuudessaan tai osan siitä.</li>
       <li xml:lang="fr">Lire l'ensemble ou une partie d'une page HTML dans Konqueror.</li>
       <li xml:lang="gl">Ler páxinas web desde Konqueror, total ou parcialmente.</li>
@@ -236,6 +244,7 @@
       <li xml:lang="de">Kann als Sprachmodul für KMouth und KSayIt benutzt werden.</li>
       <li xml:lang="en-GB">Use as the speech backend for KMouth and KSayIt.</li>
       <li xml:lang="es">Utilizarlo como motor de conversión de texto a voz para KMouth y KSaylt.</li>
+      <li xml:lang="et">Toimida KMouthi ja KSayIti kõne-taustaprogrammina</li>
       <li xml:lang="fi">Toimii puheen taustajärjestelmänä KMouthille ja KSayItille.</li>
       <li xml:lang="fr">Utilisation comme moteur de synthèse vocal pour KMouth ou KSayIt.</li>
       <li xml:lang="gl">Usar como motor de voz para KMouth e KSayIt.</li>
@@ -264,6 +273,7 @@
       <li xml:lang="de">Liest KDE-Benachrichtigungen vor (KNotify).</li>
       <li xml:lang="en-GB">Speak KDE notifications (KNotify).</li>
       <li xml:lang="es">Convertir a voz las notificaciones de KDE (Knotify).</li>
+      <li xml:lang="et">Lasta kõnelda KDE märguandeid (KNotify)</li>
       <li xml:lang="fi">Puhuu KDE-ilmoitukset (KNotify).</li>
       <li xml:lang="fr">Lire les notifications de KDE (KNotify).</li>
       <li xml:lang="gl">Ler notificacións de KDE (KNotify).</li>
@@ -292,6 +302,7 @@
       <li xml:lang="de">Einstellbare Filter, um falsch ausgesprochene Worte zu ersetzen, Sprachsynthesizer auszuwählen und XML-Dokumente umzuwandeln.</li>
       <li xml:lang="en-GB">User-configurable filters for substituting misspoken words, choosing speech synthesisers, and transforming XHMTL/XML documents.</li>
       <li xml:lang="es">Filtros configurables por el usuario para sustituir palabras pronunciadas incorrectamente, eligiendo sintetizadores de voz y transformando documentos XHTML/XML.</li>
+      <li xml:lang="et">Seadistatavad filtrid valesti kõneldud sõnade asendamiseks, kõnesüntesaatori valimiseks ja XHMTL/XML-dokumentide transformeerimiseks.</li>
       <li xml:lang="fi">Käyttäjän säädettävissä olevat suodattimet väärin lausuttujen sanojen korvaamiseen, puhesyntetisaattorien valintaan ja XHTML/XML-tiedostojen muuntamiseen.</li>
       <li xml:lang="fr">Filtres configurables par l'utilisateur pour la substitution de mots mal prononcés, choix du synthétiseur vocal et transformation de documents XHTML/XML.</li>
       <li xml:lang="gl">Filtros personalizábeis para substituír palabras mal pronunciadas, escoller sintetizadores de voz, e transformar documentos XHTML ou XML.</li>
@@ -319,6 +330,7 @@
     <p xml:lang="de">Eigenschaften für Programmierer:</p>
     <p xml:lang="en-GB">Programmer Features:</p>
     <p xml:lang="es">Funcionalidades para los programadores:</p>
+    <p xml:lang="et">Programmeerija võimalused:</p>
     <p xml:lang="fi">Ominaisuuksia ohjelmoijille:</p>
     <p xml:lang="fr">Fonctionnalités pour programmeurs :</p>
     <p xml:lang="gl">Funcionalidades para programadores:</p>
@@ -347,6 +359,7 @@
       <li xml:lang="de">Prioritätssystem für die Ausgabe von Screen-Readern, Warnungen und Nachrichten, während andere Texte vorgelesen werden.</li>
       <li xml:lang="en-GB">Priority system for screen reader outputs, warnings and messages, while still playing regular texts.</li>
       <li xml:lang="es">Sistema de prioridades para la salida del lector de pantalla, advertencias y mensajes mientras aún se están reproduciendo archivos normales.</li>
+      <li xml:lang="et">Suurepärane süsteem ekraanilugeja väljundi, hoiatuste ja teadete jaoks, mis suudab esitada ka tavalist teksti.</li>
       <li xml:lang="fi">Priorisoi näytönlukijan ulostuloa, varoituksia ja viestejä, mutta toistaa silti myös tavallisia tekstejä.</li>
       <li xml:lang="fr">Système de priorité pour les sorties de lecteurs d'écran, alertes et messages pendant la lecture normale de textes.</li>
       <li xml:lang="gl">Sistema de prioridades para saídas de lectores de pantalla, avisos e mensaxes, sen impedir a reprodución de texto normal.</li>
@@ -374,6 +387,7 @@
       <li xml:lang="de">Ermöglicht die Erzeugung von Sprachausgaben auf der Befehlszeile (oder mit Shell-Skripten) über das qdbus-Hilfsprogramm.</li>
       <li xml:lang="en-GB">Permit generation of speech from the command line (or via shell scripts) using the qdbus utility.</li>
       <li xml:lang="es">Permitir la generación de voz a partir de la línea de órdenes (o a través de scripts del intérprete de órdenes) mediante la utilidad qdbus.</li>
+      <li xml:lang="et">Kõne tekitamise võimalus käsurealt (või shelliskriptiga) qdbusi tööriista vahendusel.</li>
       <li xml:lang="fi">Mahdollistaa äänen tuottamisen komentoriviltä (tai komentojonoilla) käyttäen qdbus-työkalua.</li>
       <li xml:lang="fr">Permet la création d'une synthèse vocale en ligne de commande (ou par un script Shell) grâce à l'utilitaire qdbus.</li>
       <li xml:lang="gl">Permite a xeración de voz desde a liña de ordes (ou mediante scripts da shell) mediante a ferramenta «qdbus».</li>
@@ -401,6 +415,7 @@
       <li xml:lang="de">Stellt für Anwendungen eine einfach zu benutzende Schnittstelle für die Sprachausgabe bereit.</li>
       <li xml:lang="en-GB">Provide a lightweight and easily usable interface for applications to generate speech output.</li>
       <li xml:lang="es">Proporcionar una interfaz ligera y sencilla de utilizar para que las aplicaciones generen salida de voz.</li>
+      <li xml:lang="et">Lihtne ja väike liides rakendustele kõneväljundi tekitamiseks.</li>
       <li xml:lang="fi">Tarjoaa sovelluksille kevyen ja helppokäyttöisen rajapinnan, joilla ne voivat tuottaa puhetta.</li>
       <li xml:lang="fr">Fournit une interface légère et facilement utilisable pour la génération d'une synthèse vocale par les applications.</li>
       <li xml:lang="gl">Fornece unha interface lixeira e fácil de usar para que os programas xeren saída de voz.</li>
@@ -428,6 +443,7 @@
       <li xml:lang="de">Anwendungen müssen keine Einzelheiten über das Sprachausgabegerät wissen.</li>
       <li xml:lang="en-GB">Applications need not be concerned about contention over the speech device.</li>
       <li xml:lang="es">Las aplicaciones no tienen que preocuparse sobre disputas sobre el dispositivo de voz.</li>
+      <li xml:lang="et">Rakendused ei pruugi muret tunda kõneseadme pärast.</li>
       <li xml:lang="fi">Ohjelmien ei tarvitse huolehtia puhelaitteen yhteisestä käytöstä.</li>
       <li xml:lang="fr">Les applications n'ont pas à se soucier d'un conflit autour du périphérique de synthèse vocale.</li>
       <li xml:lang="gl">Os programas non necesitan preocuparse sobre disputas polo dispositivo de voz.</li>
@@ -456,6 +472,7 @@
       <li xml:lang="de">Asynchron zur Vermeidung von Systemblockaden.</li>
       <li xml:lang="en-GB">Asynchronous to prevent system blocking.</li>
       <li xml:lang="es">Asíncrono para evitar que se bloquee el sistema.</li>
+      <li xml:lang="et">Asünkroonsus süsteemi blokeerimise vältimiseks.</li>
       <li xml:lang="fi">Asynkroninen, jotta Jovie ei estä muun järjestelmän toimintaa.</li>
       <li xml:lang="fr">Asynchrone pour éviter le blocage du système.</li>
       <li xml:lang="gl">É asíncrono para evitar bloquear o sistema.</li>
