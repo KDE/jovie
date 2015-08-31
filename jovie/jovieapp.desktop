@@ -101,4 +101,5 @@ Comment[uk]=Служба KDE синтезу мовлення з тексту
 Comment[x-test]=xxKDE Text To Speech Servicexx
 Comment[zh_CN]=KDE 文本到语音服务
 Comment[zh_TW]=KDE 文字轉語音服務
+GenericName=Text To Speech Service
 Categories=Qt;KDE;Utility;Accessibility;
