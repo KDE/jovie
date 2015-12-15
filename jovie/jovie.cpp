@@ -266,7 +266,7 @@ int Jovie::sayClipboard()
     QString text = cb->text();
 
     // Speak it.
-    if (!text.isNull())
+    if (!(text.isNull() || text.isEmpty()))
     {
         return Speaker::Instance()->say(callingAppId(), text, 0);
     } else {
