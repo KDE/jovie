@@ -20,6 +20,7 @@
   <name xml:lang="it">Jovie</name>
   <name xml:lang="ko">Jovie</name>
   <name xml:lang="nl">Jovie</name>
+  <name xml:lang="nn">Jovie</name>
   <name xml:lang="pl">Jovie</name>
   <name xml:lang="pt">Jovie</name>
   <name xml:lang="pt-BR">Jovie</name>
@@ -49,6 +50,7 @@
   <summary xml:lang="it">Il demone di pronuncia di KDE</summary>
   <summary xml:lang="ko">KDE 텍스트 음성 변환 데몬</summary>
   <summary xml:lang="nl">Daemon van KDE voor tekst naar spraak</summary>
+  <summary xml:lang="nn">Tekst-til-tale-teneste for KDE</summary>
   <summary xml:lang="pl">Usługa tekstu-na-mowę KDE</summary>
   <summary xml:lang="pt">Serviço de Texto-para-Fala do KDE</summary>
   <summary xml:lang="pt-BR">Serviço do sintetizador de voz do KDE</summary>
@@ -82,6 +84,7 @@
     <p xml:lang="it">La pronuncia Jovie per KDE è un sottosistema nel desktop di KDE per la conversione del testo in parlato. Jovie è attualmente in fase di sviluppo e punta a diventare il sottosistema standard per il parlato in tutte le applicazioni di KDE.</p>
     <p xml:lang="ko">Jovie는 KDE 음성 합성 하위 시스템입니다. Jovie는 현재 개발 중이며 KDE 프로그램의 음성 합성 표준 하위 시스템을 목표로 합니다.</p>
     <p xml:lang="nl">Jovie KDE voor tekst naar spraak is een subsysteem in het KDE bureaublad voor conversie van tekst naar spraak. Jovie is nog in ontwikkeling en richt zich erop het standaard subsysteem te worden voor alle KDE toepassingen om spraakuitvoer te leveren.</p>
+    <p xml:lang="nn">Jovie KDE tekst-til-tale er eit undersystem av KDE-skrivebordet for omgjering av tekst til menneskeleg tale. Jovie er under aktiv utvikling, og målet er å verta standardsystemet for tekst til tale for alle KDE-programma som treng det.</p>
     <p xml:lang="pl">Tekst-na-mowę Jovie dla KDE jest podsystemem na pulpicie KDE do przekształcania tekstu na rozpoznawalną mowę. Jovie jest obecnie w trakcie rozwoju, a celem jest stanie się standardowym podsystemem dla wszystkich programów KDE przy dostarczaniu mowy.</p>
     <p xml:lang="pt">O Sistema de KDE Texto-para-Fala do KDE, o Jovie, é um sub-sistema dentro do ambiente de trabalho KDE para a conversão de texto para fala audível. O Jovie está de momento em desenvolvimento e pretende tornar-se o sub-sistema padrão para todas as aplicações do KDE fornecerem resultados em voz sintetizada.</p>
     <p xml:lang="pt-BR">Sistema de KDE Texto para Fala do KDE, o Jovie, é um subsistema dentro do ambiente de trabalho KDE para a conversão de texto para fala audível. O Jovie está em desenvolvimento e pretende tornar-se o subsistema padrão para todos os aplicativos do KDE fornecerem resultados em voz sintetizada.</p>
@@ -111,6 +114,7 @@
     <p xml:lang="it">Funzionalità per gli utenti:</p>
     <p xml:lang="ko">사용자 기능:</p>
     <p xml:lang="nl">Mogelijkheden voor de gebruiker:</p>
+    <p xml:lang="nn">Brukarfunksjonar:</p>
     <p xml:lang="pl">Możliwości użytkownika:</p>
     <p xml:lang="pt">Funcionalidades do Utilizador:</p>
     <p xml:lang="pt-BR">Recursos para o usuário:</p>
@@ -143,6 +147,7 @@
       <li xml:lang="it">Pronuncia qualsiasi testo negli appunti di KDE.</li>
       <li xml:lang="ko">KDE 클립보드의 텍스트를 읽어 줍니다.</li>
       <li xml:lang="nl">Spreek elke tekst vanuit het KDE klembord uit.</li>
+      <li xml:lang="nn">Les opp tekst frå utklippstavla.</li>
       <li xml:lang="pl">Wypowiadanie dowolnego tekstu ze schowka KDE.</li>
       <li xml:lang="pt">Falar qualquer texto na área de transferência do KDE.</li>
       <li xml:lang="pt-BR">Falar qualquer texto a partir da área de transferência do KDE.</li>
@@ -174,6 +179,7 @@
       <li xml:lang="it">Pronuncia qualsiasi file di testo.</li>
       <li xml:lang="ko">일반 텍스트 파일을 읽어 줍니다.</li>
       <li xml:lang="nl">Spreek uit elk plat tekstbestand.</li>
+      <li xml:lang="nn">Les opp tekst frå tekstfiler.</li>
       <li xml:lang="pl">Wypowiadanie dowolnego zwykłego pliku tekstowego.</li>
       <li xml:lang="pt">Falar qualquer ficheiro de texto simples.</li>
       <li xml:lang="pt-BR">Falar qualquer arquivo de texto simples.</li>
@@ -206,6 +212,7 @@
       <li xml:lang="it">Pronuncia tutto o parte di un testo in Kate, inclusi i casi in cui Kate sia incorporato in un'altra applicazione di KDE.</li>
       <li xml:lang="ko">다른 KDE 프로그램에 연동된 Kate를 포함한 모든 Kate에서 연 텍스트 파일의 일부를 읽어 줍니다.</li>
       <li xml:lang="nl">Spreek alles of een gedeelte uit van een tekstbestand vanuit Kate, inclusief exemplaren waar Kate is ingebed in andere KDE toepassing.</li>
+      <li xml:lang="nn">Les opp (delar av) tekst i programmet Kate, òg når Kate er innebygd i andre KDE-program.</li>
       <li xml:lang="pl">Wypowiadanie całego tekstu lub tylko jego części z edytora Kate, uwzględniając w tym przypadek gdy Kate jest osadzony w innym programie KDE.</li>
       <li xml:lang="pt">Falar toda ou uma parte de um ficheiro do Kate, incluindo as instâncias em que o Kate está incorporado noutra aplicação do KDE.</li>
       <li xml:lang="pt-BR">Falar tudo ou uma parte de um arquivo de texto a partir do Kate, incluindo as instâncias em que o Kate está incorporado em outro aplicativo do KDE.</li>
@@ -237,6 +244,7 @@
       <li xml:lang="it">Pronuncia tutto o parte del testo di una pagina HTML in Konqueror.</li>
       <li xml:lang="ko">Konqueror에서 연 HTML 페이지를 읽어 줍니다.</li>
       <li xml:lang="nl">Spreek alles of een gedeelte van een HTML pagina in Konqueror uit.</li>
+      <li xml:lang="nn">Les opp (delar av) HTML-sider i nettlesaren Konqueror.</li>
       <li xml:lang="pl">Wypowiadanie całego tekstu strony HTML lub tylko jej części z Konquerora.</li>
       <li xml:lang="pt">Falar toda ou uma parte de uma página em HTML no Konqueror.</li>
       <li xml:lang="pt-BR">Falar tudo ou uma parte de uma página em HTML a partir do Konqueror.</li>
@@ -268,6 +276,7 @@
       <li xml:lang="it">Usa il motore di pronuncia di KMouth e KSayIt.</li>
       <li xml:lang="ko">KMouth 및 KSayIt의 음성 합성 백엔드입니다.</li>
       <li xml:lang="nl">Als de spraakbackend voor KMouth en KSayIt.</li>
+      <li xml:lang="nn">Bruk som tekst-til-tale-motor for KMouth og KSayit.</li>
       <li xml:lang="pl">Wykorzystywany jako silnik mowy dla KMouth oraz KSayIt.</li>
       <li xml:lang="pt">Usar como infra-estrutura de fala para o KMouth e o KSayIt.</li>
       <li xml:lang="pt-BR">Usar como infraestrutura de fala para o KMouth e o KSayIt.</li>
@@ -299,6 +308,7 @@
       <li xml:lang="it">Pronuncia le notifiche di KDE (KNotify).</li>
       <li xml:lang="ko">KDE 알림(KNotify)을 읽어 줍니다.</li>
       <li xml:lang="nl">Spreek KDE meldingen uit (KNotify).</li>
+      <li xml:lang="nn">Les opp KDE-varslingar (KNotify).</li>
       <li xml:lang="pl">Wypowiadanie powiadomień KDE (KNotify).</li>
       <li xml:lang="pt">Falar as notificações do KDE (KNotify).</li>
       <li xml:lang="pt-BR">Falar as notificações do KDE (KNotify).</li>
@@ -330,6 +340,7 @@
       <li xml:lang="it">Filtri configurabili dall'utente per sostituire le parole pronunciate male, scegliere i sintetizzatori vocali, e trasformare i documenti XHTML/XML.</li>
       <li xml:lang="ko">잘못 읽은 단어, 음성 합성기 선택, XHTML/XML 문서 변환 필터를 지원합니다.</li>
       <li xml:lang="nl">Door gebruiker ingestelde filters voor substitueren van verkeerd uitgesproken woorden, met het kiezen van spraaksynthesizers en transformeren van XHMTL/XML documenten.</li>
+      <li xml:lang="nn">Brukardefinerte filter for utbyting av feiluttalte ord, val av talesyntese og transformering av XHTML- og XML-dokument.</li>
       <li xml:lang="pl">Filtry ustawialne przez użytkownika do podmieniania źle wypowiedzianych słów, wybierania syntetyzatorów mowy oraz przekształcania dokumentów XHTML/XML.</li>
       <li xml:lang="pt">Filtros configurados pelo utilizador para substituir as palavras erradas, escolher os sintetizadores de fala e transformar os documentos de XHMTL/XML.</li>
       <li xml:lang="pt-BR">Filtros configuráveis pelo usuário para substituir as palavras erradas, escolher os sintetizadores de voz e transformar os documentos em XML/XHTML.</li>
@@ -360,6 +371,7 @@
     <p xml:lang="it">Funzionalità per i programmatori:</p>
     <p xml:lang="ko">프로그래머 기능:</p>
     <p xml:lang="nl">Mogelijkheden voor de programmeur:</p>
+    <p xml:lang="nn">Programmeringsfunksjonar:</p>
     <p xml:lang="pl">Możliwości programisty:</p>
     <p xml:lang="pt">Funcionalidades do Programador:</p>
     <p xml:lang="pt-BR">Recursos para o programador:</p>
@@ -391,6 +403,7 @@
       <li xml:lang="it">Sistema di priorità per gli output di lettura a schermo, gli avvertimenti e i messaggi, durante la riproduzione di testi normali.</li>
       <li xml:lang="ko">스크린 리더 출력, 경고 및 메시지와 일반 텍스트의 우선 순위를 다르게 줄 수 있습니다.</li>
       <li xml:lang="nl">Prioriteitssysteem voor uitvoer van schermlezers, waarschuwingen en meldingen, terwijl reguliere teksten worden afgespeeld.</li>
+      <li xml:lang="nn">Prioritetssystem for skjermlesarar, åtvaringar og andre varslingar, samtidig som vanleg tekst vert lesen opp.</li>
       <li xml:lang="pl">System priorytetów dla wyjść czytników ekranowych, ostrzeżeń i wiadomości, przy ciągłym odtwarzaniu zwykłych tekstów.</li>
       <li xml:lang="pt">Um sistema de prioridades para o resultado do leitor do ecrã, dos avisos e das mensagens, enquanto reproduz à mesma os textos normais.</li>
       <li xml:lang="pt-BR">Um sistema de prioridades para o resultado do leitor da tela, dos avisos e das mensagens, enquanto reproduz ainda os textos normais.</li>
@@ -421,6 +434,7 @@
       <li xml:lang="it">Permette la generazione di parlato dalla riga di comando (o attraverso script della shell) usando il programma qdbus.</li>
       <li xml:lang="ko">qdbus 유틸리티를 사용하여 명령행 및 셸 스크립트에서 텍스트를 읽어 줍니다.</li>
       <li xml:lang="nl">Sta generatie van spraak toe vanaf de commandoregel (of via shell-scripts) met gebruik van het qdbus hulpmiddel.</li>
+      <li xml:lang="nn">Mogleg å laga tale via kommandolinja (eller via skalskript) med «qdbus»-verktøyet.</li>
       <li xml:lang="pl">Możliwości generowania mowy z wiersza poleceń (lub poprzez skrypty powłoki) przy użyciu narzędzia qdbus.</li>
       <li xml:lang="pt">Permitir a geração de fala a partir da linha de comandos (ou por programas da consola), usando o utilitário 'qdbus'.</li>
       <li xml:lang="pt-BR">Permite a geração de fala a partir da linha de comando (ou através de scripts), usando o utilitário qdbus.</li>
@@ -451,6 +465,7 @@
       <li xml:lang="it">Fornisce un'interfaccia leggera e facile da usare per far generare output parlato alle applicazioni.</li>
       <li xml:lang="ko">프로그램에 음성 합성을 추가하는 인터페이스를 지원합니다.</li>
       <li xml:lang="nl">Lever een lichtgewicht en gemakkelijk te gebruiken interface voor toepassingen om spraakuitvoer te genereren.</li>
+      <li xml:lang="nn">Enkelt og brukarvennleg grensesnitt for program å bruka til talesyntese.</li>
       <li xml:lang="pl">Dostarczenie lekkiego i łatwo używalnego interfejsu dla programów generujących mowę.</li>
       <li xml:lang="pt">Oferece uma interface leve e fácil de usar para as aplicações gerarem conteúdos falados.</li>
       <li xml:lang="pt-BR">Oferece uma interface leve e fácil de usar para os aplicativos gerarem conteúdos falados.</li>
@@ -481,6 +496,7 @@
       <li xml:lang="it">Le applicazioni non devono preoccuparsi di contendersi il dispositivo di pronuncia.</li>
       <li xml:lang="ko">프로그램에서 음성 합성 장치를 제어할 필요가 없습니다.</li>
       <li xml:lang="nl">Toepassingen moeten zich geen zorgen maken over twist over het spraakapparaat.</li>
+      <li xml:lang="nn">Program treng ikkje handtera konkurranse om bruk av talesynteseeininga.</li>
       <li xml:lang="pl">Programy nie muszą uwzględniać treści trafiającej do urządzenia mowy.</li>
       <li xml:lang="pt">As aplicações não precisam de se preocupar com a contenção sobre o dispositivo de voz.</li>
       <li xml:lang="pt-BR">Os aplicativos não precisam se preocupar com a contenção sobre o dispositivo de voz.</li>
@@ -512,6 +528,7 @@
       <li xml:lang="it">Asincrono per evitare il blocco del sistema.</li>
       <li xml:lang="ko">시스템 병목을 막기 위해서 비동기식으로 작동합니다.</li>
       <li xml:lang="nl">Asynchroon om blokkering in het systeem te voorkomen.</li>
+      <li xml:lang="nn">Asynkront, for å hindra systemblokkering.</li>
       <li xml:lang="pl">Asynchroniczność jako sposób na uniknięcie blokowania systemu.</li>
       <li xml:lang="pt">Assíncrono, para evitar o bloqueio do sistema.</li>
       <li xml:lang="pt-BR">Assíncrono, para evitar o bloqueio do sistema.</li>
