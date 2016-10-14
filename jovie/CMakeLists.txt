@@ -35,5 +35,5 @@ install(TARGETS jovie_bin  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES SSMLtoPlainText.xsl  DESTINATION  ${DATA_INSTALL_DIR}/jovie/xslt/ )
 install( FILES jovie.desktop kttsd.desktop DESTINATION  ${SERVICES_INSTALL_DIR} )
-install( PROGRAMS jovieapp.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
-install( FILES jovie.appdata.xml DESTINATION  ${SHARE_INSTALL_PREFIX}/appdata/ )
+install( PROGRAMS org.kde.jovie.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
+install( FILES org.kde.jovie.appdata.xml DESTINATION  ${SHARE_INSTALL_PREFIX}/metainfo/ )
