@@ -458,10 +458,10 @@
       <li xml:lang="ru">Возможность запуска синтеза речи из командной строки (или из сценариев оболочки UNIX и пакетных файлов Windows) через D-Bus.</li>
       <li xml:lang="sk">Povolí generovanie reči z príkazového riadku (alebo cez shell skripty) pomocou nástroja qdbus.</li>
       <li xml:lang="sl">Omogoča ustvarjanje govora iz ukazne vrstice (ali lupinskih skriptov) s pomočjo pripomočka qdbus.</li>
-      <li xml:lang="sr">Генерисање говора из командне линије (или скрипте шкољке) преко алатке <command>qdbus</command>.</li>
-      <li xml:lang="sr-Latn">Generisanje govora iz komandne linije (ili skripte školjke) preko alatke <command>qdbus</command>.</li>
-      <li xml:lang="sr-ijekavian">Генерисање говора из командне линије (или скрипте шкољке) преко алатке <command>qdbus</command>.</li>
-      <li xml:lang="sr-ijekavianlatin">Generisanje govora iz komandne linije (ili skripte školjke) preko alatke <command>qdbus</command>.</li>
+      <li xml:lang="sr">Генерисање говора из командне линије (или скрипте шкољке) преко алатке qdbus.</li>
+      <li xml:lang="sr-Latn">Generisanje govora iz komandne linije (ili skripte školjke) preko alatke qdbus.</li>
+      <li xml:lang="sr-ijekavian">Генерисање говора из командне линије (или скрипте шкољке) преко алатке qdbus.</li>
+      <li xml:lang="sr-ijekavianlatin">Generisanje govora iz komandne linije (ili skripte školjke) preko alatke qdbus.</li>
       <li xml:lang="sv">Tillåter att skapa tal från kommandoraden (eller via skalskript) med verktyget qdbus.</li>
       <li xml:lang="uk">Підтримка синтезу мовлення з командного рядка (або за допомогою скриптів оболонки) з використанням інструменту qdbus.</li>
       <li xml:lang="x-test">xxPermit generation of speech from the command line (or via shell scripts) using the qdbus utility.xx</li>
