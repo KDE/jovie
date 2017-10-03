@@ -284,7 +284,7 @@
       <li xml:lang="et">Toimida KMouthi ja KSayIti kõne-taustaprogrammina</li>
       <li xml:lang="fi">Toimii puheen taustajärjestelmänä KMouthille ja KSayItille.</li>
       <li xml:lang="fr">Utilisation comme moteur de synthèse vocal pour KMouth ou KSayIt.</li>
-      <li xml:lang="gl">Usar como motor de voz para KMouth e KSayIt.</li>
+      <li xml:lang="gl">Usar como infraestrutura de voz para KMouth e KSayIt.</li>
       <li xml:lang="it">Usa il motore di pronuncia di KMouth e KSayIt.</li>
       <li xml:lang="ko">KMouth 및 KSayIt의 음성 합성 백엔드입니다.</li>
       <li xml:lang="nl">Als de spraakbackend voor KMouth en KSayIt.</li>
